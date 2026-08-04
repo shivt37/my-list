@@ -485,7 +485,7 @@ function renderScraper() {
         '<div class="right-col">' +
           '<div class="info">' +
             (editing
-              ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')">'
+              ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
               : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
             '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
               '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
@@ -501,8 +501,8 @@ function renderScraper() {
             '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
           '</div>' +
         '</div>' +
-        '<div class="url-row"><input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL"></div>' +
       '</div>' +
+      '<div class="url-row"><input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL"></div>' +
       '<div class="card-error" id="cardError-' + i + '"></div>' +
     '</div>';
   }).join('');
