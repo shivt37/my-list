@@ -6,4 +6,4 @@ compatibility_flags = ["nodejs_compat"]
 # UI-editable config + last-30 scrape run history live in KV.
 [[kv_namespaces]]
 binding = "STORE"
-id = "3JvBvRuBfYvB6MjzMornj9EQpxhq9W7vXP"
+id = "36b7763e6e31445696e1a773c44de7a3"
