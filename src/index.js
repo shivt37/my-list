@@ -4,7 +4,7 @@
 // schedules are the workflows' own cron lines, edited on github.com.
 
 import { loadConfig } from "./config.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, configureResponse, githubPagesCatalogUrl, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, configureResponse, CATALOG_RE } from "./routes.js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -69,24 +69,6 @@ export default {
 
     if (pathname === "/runs" && request.method === "POST") {
       return handleRunsPost(env, request);
-    }
-
-    // TEMP DEBUG PROBE — remove after diagnosis
-    if (pathname === "/probe-fetch") {
-      const out = {};
-      try {
-        const res = await fetch(githubPagesCatalogUrl(env, "mdb_scrape_jlnflfil"), { cf: { cacheTtl: 300 } });
-        out.ok = res.ok;
-        out.status = res.status;
-        out.contentType = res.headers.get("content-type");
-        const text = await res.text();
-        out.bodyLen = text.length;
-        out.bodyHead = text.slice(0, 60);
-      } catch (e) {
-        out.error = String(e);
-        out.errorName = e?.name;
-      }
-      return json(out);
     }
 
     return json({ error: "Not found" }, 404);

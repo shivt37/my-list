@@ -41,7 +41,7 @@ function html(body, extraHeaders = {}) {
 export const CATALOG_RE = /^\/catalog\/([^/]+)\/([^/]+?)(?:\/(.*))?\.json$/;
 
 export function githubPagesCatalogUrl(env, catalogId) {
-  return `${env.GITHUB_PAGES_BASE}/${catalogId}.json`;
+  return `${env.GITHUB_PAGES_BASE}/data/${catalogId}.json`;
 }
 
 // Configure page returns a full Response (html helper lives here too).
