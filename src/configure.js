@@ -21,20 +21,20 @@ export function buildConfigurePage(origin, config) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ── RESET + TOKENS ── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  input, button, select, textarea { font-family: inherit; }
+  input, button, select, textarea { font: inherit; }
 
   :root {
     --bg: #050508;
-    --bg-soft: #0a0a10;
     --surface: #0c0c13;
     --surface2: #13131d;
     --surface3: #1a1a26;
     --border: #1b1b26;
-    --border-bright: #262635;
+    --border2: #262635;
     --text: #e8edf4;
-    --text-dim: #a5aebc;
-    --text-muted: #6b7385;
+    --dim: #a5aebc;
+    --muted: #6b7385;
     --accent: #06b6d4;
     --accent-dim: rgba(6,182,212,0.10);
     --accent-glow: rgba(6,182,212,0.18);
@@ -43,11 +43,9 @@ export function buildConfigurePage(origin, config) {
     --danger-bg: rgba(255,95,102,0.10);
     --danger-border: rgba(255,95,102,0.30);
     --ok: #34d399;
-    --radius: 9px;
-    --radius-lg: 14px;
+    --r: 9px;
+    --r2: 14px;
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --shadow-card: 0 1px 0 rgba(255,255,255,0.02) inset, 0 8px 28px -18px rgba(0,0,0,0.85);
-    --shadow-pop: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
 
   html, body {
@@ -58,7 +56,6 @@ export function buildConfigurePage(origin, config) {
     min-height: 100vh;
     line-height: 1.5;
   }
-
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background:
@@ -67,68 +64,164 @@ export function buildConfigurePage(origin, config) {
   }
   body > * { position: relative; z-index: 1; }
 
-  ::selection { background: var(--accent-dim); color: var(--accent); }
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border-bright); border: 2px solid var(--bg); border-radius: 6px; }
-  ::-webkit-scrollbar-thumb:hover { background: #32324a; }
+  /* Selection stays neutral — no accent tint on highlight. */
+  ::selection { background: #262635; color: #e8edf4; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
   /* ── HEADER ── */
   header {
     border-bottom: 1px solid var(--border);
     padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(5,5,8,0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    z-index: 100;
   }
+  .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
-  .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; color: var(--text); }
 
-  button.btn-save {
-    padding: 8px 18px; border-radius: var(--radius); border: 1px solid var(--accent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 86%, #ffffff), var(--accent));
-    color: #040507; font-size: 13px; font-weight: 600;
-    cursor: pointer; flex-shrink: 0;
+  /* ── BUTTONS (solid accent, no color-mix) ── */
+  button {
+    padding: 9px 16px; border-radius: var(--r); border: 1px solid var(--accent);
+    background: var(--accent); color: #040507;
+    font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
     box-shadow: 0 0 14px -4px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.22) inset;
-    letter-spacing: 0.01em;
     transition: filter 0.15s, box-shadow 0.15s, transform 0.1s;
   }
-  button.btn-save:hover { filter: brightness(1.1); box-shadow: 0 0 22px -4px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.22) inset; }
-  button.btn-save:active { transform: translateY(1px); }
-  button.btn-save:disabled { opacity: 0.55; cursor: default; filter: none; box-shadow: none; }
-
-  .btn-icon {
-    background: var(--surface); border: 1px solid var(--border-bright); color: var(--text-dim);
-    font-size: 16px; cursor: pointer; padding: 7px 9px; border-radius: var(--radius);
-    display: flex; align-items: center; justify-content: center;
-    transition: color 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+  button:hover { filter: brightness(1.1); }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: 0.55; cursor: default; filter: none; box-shadow: none; }
+  button.secondary {
+    background: var(--surface2); border-color: var(--border2); color: var(--text); font-weight: 500;
   }
-  .btn-icon:hover { color: var(--text); border-color: var(--accent); box-shadow: 0 0 12px -6px var(--accent-glow); }
-  .btn-icon:disabled { opacity: 0.5; cursor: default; }
-  .btn-icon:disabled:hover { color: var(--text-dim); border-color: var(--border-bright); box-shadow: none; }
-
-  #refreshBtn svg { transition: transform 0.15s; }
+  button.secondary:hover { background: var(--surface3); filter: none; }
+  button.danger {
+    background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);
+    padding: 6px 10px; font-size: 11px; font-weight: 500; box-shadow: none;
+  }
+  button.danger:hover { background: rgba(255,95,102,0.18); border-color: var(--danger); filter: none; }
+  button.btn-save { padding: 8px 18px; }
+  .btn-icon {
+    background: var(--surface); border: 1px solid var(--border2); color: var(--dim);
+    font-size: 16px; cursor: pointer; padding: 7px 9px; border-radius: var(--r);
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .btn-icon:hover { color: var(--text); border-color: var(--accent); }
   #refreshBtn.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* ── MAIN ── */
+  main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  p.sub { color: var(--dim); margin: 0 0 14px; font-size: 12px; }
+  #status { font-size: 12px; min-height: 16px; margin: 6px 0 14px; }
+  #status.error { color: var(--danger); }
+  #status.ok { color: var(--ok); }
+
+  /* ── INPUTS + SELECTS — explicit dark, can never render white ── */
+  input {
+    background: #0c0c13; color: #e8edf4;
+    border: 1px solid var(--border2); border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; outline: none;
+    transition: border-color 0.12s, box-shadow 0.12s;
+  }
+  input::placeholder { color: var(--muted); }
+  input:hover { border-color: #2f2f42; }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+
+  select {
+    appearance: none; -webkit-appearance: none;
+    background-color: #0c0c13; color: #e8edf4;
+    border: 1px solid var(--border2); border-radius: 8px;
+    padding: 8px 28px 8px 10px; font-size: 13px; cursor: pointer; outline: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7385' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+    transition: border-color 0.12s, box-shadow 0.12s;
+  }
+  select:hover { border-color: #2f2f42; }
+  select:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+  select option { background: #0c0c13; color: #e8edf4; }
+
+  /* ── SCRAPER TAB ── */
+  .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+
+  .create-list-section { margin-bottom: 18px; }
+  .btn-create-list {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 11px 16px; border-radius: var(--r);
+    border: 1px dashed var(--border2); background: transparent;
+    color: var(--dim); font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .create-list-row .name-input { flex: 1 1 150px; min-width: 0; }
+  .create-list-row .url-input { flex: 3 1 280px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; }
+  .create-list-row button { flex-shrink: 0; }
+
+  .list-card {
+    background: linear-gradient(180deg, var(--surface), #0a0a10);
+    border: 1px solid var(--border); border-radius: var(--r2); padding: 12px;
+    margin-bottom: 10px; display: flex; flex-direction: column;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset, 0 8px 28px -18px rgba(0,0,0,0.85);
+    transition: border-color 0.15s, opacity 0.15s;
+  }
+  .list-card:hover { border-color: #242436; }
+  .list-card.disabled { opacity: 0.6; }
+
+  .card-top { display: flex; gap: 12px; align-items: flex-start; }
+  .toggle-col { flex-shrink: 0; padding-top: 2px; }
+  .toggle { position: relative; display: inline-block; width: 38px; height: 22px; cursor: pointer; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--border2);
+    border-radius: 999px; transition: background 0.15s, border-color 0.15s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; width: 16px; height: 16px; left: 2px; top: 2px;
+    border-radius: 50%; background: var(--muted); transition: transform 0.15s, background 0.15s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent-dim); border-color: var(--accent); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
+
+  .right-col { flex: 1; min-width: 0; }
+  .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .name-static {
+    font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .name-static:hover { color: var(--accent); }
+  .name-edit { font-size: 13px; padding: 3px 8px; }
+  .id-chip {
+    font-size: 10px; color: var(--muted); background: var(--surface2);
+    border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px;
+    font-family: ui-monospace, monospace; flex-shrink: 0;
+  }
+
+  .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .card-controls .url-input {
+    flex: 1; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
+    padding: 7px 9px; border-radius: 7px;
+  }
+  .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
+  .card-controls .max-pages { width: 60px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
+  .card-controls button { flex-shrink: 0; }
+  .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
+  .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
   /* ── ACCENT POPUP ── */
   .accent-popup-wrap { position: relative; }
   .accent-popup {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
-    background: var(--surface); border: 1px solid var(--border-bright); border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
     padding: 14px; z-index: 200; width: 220px; max-width: calc(100vw - 32px);
-    box-shadow: var(--shadow-pop);
+    box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .accent-popup.visible { display: block; }
-  .accent-popup-title { font-size: 11px; font-weight: 500; color: var(--text-dim); margin-bottom: 10px; }
+  .accent-popup-title { font-size: 11px; font-weight: 500; color: var(--dim); margin-bottom: 10px; }
   .swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
   .swatch {
     width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
@@ -137,160 +230,27 @@ export function buildConfigurePage(origin, config) {
   .swatch:hover { transform: scale(1.15); }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
 
-  /* ── MENU (tmdb-worker parity) ── */
+  /* ── MENU ── */
   .menu-popup-wrap { position: relative; }
   .menu-popup {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
-    background: var(--surface); border: 1px solid var(--border-bright); border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
     padding: 6px; z-index: 200; width: 200px; max-width: calc(100vw - 32px);
-    box-shadow: var(--shadow-pop);
+    box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .menu-popup.visible { display: block; }
   .menu-item {
     display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
-    font-size: 12.5px; color: var(--text-dim); cursor: pointer; transition: background 0.1s, color 0.1s;
+    font-size: 12.5px; color: var(--dim); cursor: pointer; transition: background 0.1s, color 0.1s;
   }
   .menu-item svg { flex-shrink: 0; }
   .menu-item:hover { background: var(--surface2); color: var(--text); }
   .menu-item.active { background: var(--accent-dim); color: var(--accent); }
   .menu-item.disabled { opacity: 0.4; cursor: default; }
-  .menu-item.disabled:hover { background: none; color: var(--text-dim); }
-  .menu-soon { margin-left: auto; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .menu-item.disabled:hover { background: none; color: var(--dim); }
+  .menu-soon { margin-left: auto; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 
-  /* ── MAIN ── */
-  main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
-  h1 { font-size: 18px; margin-bottom: 4px; }
-  p.sub { color: var(--text-dim); margin: 0 0 12px; font-size: 12px; }
-
-  button {
-    padding: 10px 16px; border-radius: var(--radius); border: 1px solid var(--accent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 86%, #ffffff), var(--accent));
-    color: #040507; font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
-    box-shadow: 0 0 14px -4px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.22) inset;
-    transition: filter 0.15s, box-shadow 0.15s, transform 0.1s;
-  }
-  button:hover { filter: brightness(1.1); box-shadow: 0 0 22px -4px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.22) inset; }
-  button:active { transform: translateY(1px); }
-  button.secondary {
-    background: var(--surface2); border-color: var(--border-bright); color: var(--text);
-    font-weight: 500; box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
-  }
-  button.secondary:hover { background: var(--surface3); filter: none; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset; }
-  button.danger {
-    background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);
-    padding: 6px 10px; font-size: 11px; font-weight: 500; box-shadow: none;
-  }
-  button.danger:hover { background: rgba(255,95,102,0.18); filter: none; border-color: var(--danger); box-shadow: none; }
-
-  /* ── SCRAPER TAB (tmdb-worker parity) ── */
-  .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
-
-  .search-input {
-    width: 100%; background: var(--surface); border: 1px solid var(--border-bright);
-    color: var(--text); font-size: 13px; padding: 10px 12px; border-radius: var(--radius);
-    outline: none; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
-  }
-  .search-input::placeholder { color: var(--text-muted); }
-  .search-input:hover { border-color: #2f2f42; }
-  .search-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent-dim), 0 0 22px -6px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.02) inset;
-    background: #0d0d15;
-  }
-
-  select {
-    background: #000000; color: var(--text); border: 1px solid var(--border-bright); border-radius: 6px;
-    padding: 6px 8px; font-size: 11px; max-width: 100%; cursor: pointer;
-    transition: border-color 0.12s;
-  }
-  select:hover { border-color: #32324a; }
-  select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
-  select option { background: var(--surface); }
-
-  .create-list-section { margin-bottom: 18px; }
-  .btn-create-list {
-    display: flex; align-items: center; gap: 8px; width: 100%; justify-content: center;
-    padding: 11px 16px; border-radius: var(--radius); border: 1px dashed var(--border-bright);
-    background: transparent; color: var(--text-dim); font-size: 13px; font-weight: 500; cursor: pointer;
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-  }
-  .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-  .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .create-list-row .search-input.name-input { flex: 1 1 140px; min-width: 0; }
-  .create-list-row .search-input.url-input { flex: 3 1 260px; min-width: 0; font-family: ui-monospace, monospace; }
-  .create-list-row select { flex-shrink: 0; }
-  .create-list-row button { flex-shrink: 0; }
-
-  .list-card {
-    background: linear-gradient(180deg, var(--surface), #0a0a10);
-    border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px;
-    margin-bottom: 10px; display: flex; flex-direction: column;
-    box-shadow: var(--shadow-card);
-    transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
-  }
-  .list-card:hover { border-color: #242436; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 14px 34px -18px rgba(0,0,0,0.9); }
-  .list-card.disabled { opacity: 0.6; }
-
-  .card-top { display: flex; gap: 12px; align-items: flex-start; }
-  .toggle-col { flex-shrink: 0; padding-top: 2px; }
-
-  .toggle {
-    position: relative; display: inline-block; width: 38px; height: 22px; cursor: pointer; flex-shrink: 0;
-  }
-  .toggle input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider {
-    position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--border-bright);
-    border-radius: 999px; transition: background 0.15s, border-color 0.15s;
-  }
-  .toggle-slider::before {
-    content: ''; position: absolute; width: 16px; height: 16px; left: 2px; top: 2px;
-    border-radius: 50%; background: var(--text-muted); transition: transform 0.15s, background 0.15s;
-  }
-  .toggle input:checked + .toggle-slider { background: var(--accent-dim); border-color: var(--accent); }
-  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
-
-  .right-col { flex: 1; min-width: 0; }
-  .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .info .name-static { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .name-edit {
-    width: 100%; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--accent);
-    background: #0d0d15; color: var(--text); font-size: 13px; font-weight: 400; outline: none;
-    box-shadow: 0 0 0 1px var(--accent-dim), 0 0 16px -8px var(--accent-glow);
-  }
-  .name-static { font-size: 13px; font-weight: 600; color: var(--text); }
-
-  .id-chip {
-    font-size: 10px; color: var(--text-muted); background: var(--surface2);
-    border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px; font-family: ui-monospace, monospace;
-  }
-
-  .card .controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .card .controls .url-input {
-    flex: 1; min-width: 0; background: #000000; border: 1px solid var(--border-bright);
-    color: var(--text); font-size: 11px; padding: 6px 8px; border-radius: 6px; outline: none;
-    font-family: ui-monospace, monospace; transition: border-color 0.12s;
-  }
-  .card .controls .url-input:hover { border-color: #32324a; }
-  .card .controls .url-input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
-  .card .controls .max-pages {
-    background: #000000; border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 11px; padding: 6px 8px; border-radius: 6px; outline: none; width: 56px; flex-shrink: 0;
-    font-family: ui-monospace, monospace; transition: border-color 0.12s;
-  }
-  .card .controls .max-pages:hover { border-color: #32324a; }
-  .card .controls .max-pages:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
-  .card .controls button { flex-shrink: 0; }
-
-  .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
-
-  .empty { color: var(--text-muted); text-align: center; padding: 16px 0; font-size: 13px; }
-
-  /* ── STATUS / CONFIRM MODAL ── */
-  #status { font-size: 12px; min-height: 16px; margin: 6px 0 14px; }
-  #status.error { color: var(--danger); }
-  #status.ok { color: var(--ok); }
-
+  /* ── CONFIRM MODAL ── */
   .confirm-backdrop {
     position: fixed; inset: 0; background: rgba(3,3,6,0.72); display: none;
     backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
@@ -299,27 +259,23 @@ export function buildConfigurePage(origin, config) {
   .confirm-backdrop.visible { display: flex; }
   .confirm-modal {
     background: linear-gradient(180deg, var(--surface), #0a0a10);
-    border: 1px solid var(--border-bright); border-radius: var(--radius-lg);
+    border: 1px solid var(--border2); border-radius: var(--r2);
     padding: 20px; width: 100%; max-width: 360px;
     box-shadow: 0 28px 60px -16px rgba(0,0,0,0.9);
   }
   .confirm-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-  .confirm-body { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; margin-bottom: 18px; }
+  .confirm-body { font-size: 12.5px; color: var(--dim); line-height: 1.5; margin-bottom: 18px; }
   .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
   .confirm-actions button { padding: 8px 14px; font-size: 12.5px; }
 
-  /* Tablet: ≤900px */
+  /* ── RESPONSIVE ── */
   @media (max-width: 900px) { main { padding: 20px; } }
-
-  /* Tablet+: card-top becomes a row — info + controls side by side */
   @media (min-width: 560px) {
     .card-top { align-items: center; }
-    .card .right-col { flex-direction: row; align-items: center; }
-    .card .info { flex: 1 1 160px; min-width: 0; }
-    .card .controls { flex-shrink: 0; margin-left: auto; }
+    .right-col { display: flex; flex-direction: row; align-items: center; gap: 10px; }
+    .info { flex: 1 1 160px; }
+    .card-controls { flex-shrink: 0; margin-left: auto; }
   }
-
-  /* Mobile: ≤640px */
   @media (max-width: 640px) {
     header { padding: 10px 14px; }
     .header-title { font-size: 13px; }
@@ -327,41 +283,36 @@ export function buildConfigurePage(origin, config) {
     button.btn-save { padding: 6px 11px; font-size: 11px; }
     .btn-icon { padding: 6px 8px; }
     main { padding: 14px 12px 56px; }
-    .create-list-row { flex-wrap: wrap; gap: 6px; }
-    .create-list-row .search-input { flex: 1 1 100%; }
+    .create-list-row { gap: 6px; }
+    .create-list-row input { flex: 1 1 100%; }
     .create-list-row button { flex: 1 1 auto; }
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
     .card-top { gap: 9px; }
-    .card .right-col { gap: 6px; }
-    .card .info .name-static { font-size: 12px; }
-    .card .controls { flex-wrap: wrap; }
-    .card .controls .url-input { flex: 1 1 100%; }
-    .card .controls select { flex: 1 1 auto; }
-    .id-chip { font-size: 9px; }
-    select { font-size: 10px; padding: 5px 6px; }
+    .name-static { font-size: 12px; }
+    .card-controls { flex-wrap: wrap; }
+    .card-controls .url-input { flex: 1 1 100%; }
+    select { font-size: 12px; padding-top: 6px; padding-bottom: 6px; }
     button.danger { padding: 5px 8px; font-size: 10px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
     .swatch { width: 24px; height: 24px; }
     .menu-popup { right: -14px; width: 180px; padding: 5px; }
     .menu-item { padding: 8px 9px; font-size: 12px; }
   }
-
-  /* Very small: ≤380px */
   @media (max-width: 380px) {
-    .card .right-col { gap: 6px; }
-    .card .controls { flex-wrap: wrap; }
-    .card .controls select { flex: 1 1 100%; }
+    .right-col { gap: 6px; }
+    .card-controls { flex-wrap: wrap; }
+    .card-controls select { flex: 1 1 100%; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-title" id="headerTitle">my-list</div>
+  <div class="header-title">my-list</div>
   <div class="header-actions">
     <button class="btn-save" id="saveBtn">Save</button>
-    <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh — regenerate all enabled lists in the current module">
+    <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh — regenerate all enabled lists">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
     </button>
     <div class="accent-popup-wrap">
@@ -400,8 +351,8 @@ export function buildConfigurePage(origin, config) {
 </header>
 
 <main>
-  <h1 id="pageTitle">MDBList Scraper</h1>
-  <p class="sub" id="pageSub">Paste mdblist.com listing URLs, pick the type, and they become Stremio catalogs. Data lives in <code>data/</code> on GitHub Pages.</p>
+  <h1>MDBList Scraper</h1>
+  <p class="sub">Paste mdblist.com listing URLs, pick the type, and they become Stremio catalogs. Data lives in <code>data/</code> on GitHub Pages.</p>
   <div id="status"></div>
   <div id="tabHost"></div>
 </main>
@@ -440,7 +391,7 @@ function escapeAttr(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-// ─── Accent colour (localStorage-persisted, like the tmdb page) ───
+// ─── Accent colour (localStorage-persisted) ───
 const ACCENT_COLORS = {
   '#fb923c': { dim: 0.10, glow: 0.18 }, // Amber
   '#f59e0b': { dim: 0.10, glow: 0.18 }, // Gold
@@ -533,7 +484,7 @@ function renderScraper() {
               : '<span class="name-static" onclick="startNameEdit(' + i + ')">' + escapeAttr(l.name) + '</span>') +
             '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
           '</div>' +
-          '<div class="controls">' +
+          '<div class="card-controls">' +
             '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
             '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
               '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
@@ -555,8 +506,8 @@ function renderScraper() {
         'Add List' +
       '</button>' +
       '<div class="create-list-row" id="createListRow" style="display:none">' +
-        '<input class="search-input name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
-        '<input class="search-input url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
+        '<input class="name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
+        '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
         '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
         '<button onclick="confirmCreateList()">Add</button>' +
         '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +

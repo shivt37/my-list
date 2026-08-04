@@ -33,9 +33,9 @@ check("create section before first card", (() => {
   return kids.indexOf("create-list-section") !== -1 &&
          kids.indexOf("create-list-section") < kids.indexOf("list-card");
 })());
-check("cards use controls layout", doc.querySelectorAll(".list-card .controls").length === doc.querySelectorAll(".list-card").length);
+check("cards use controls layout", doc.querySelectorAll(".list-card .card-controls").length === doc.querySelectorAll(".list-card").length);
 check("card has url input + type select + max-pages + delete", (() => {
-  const row = doc.querySelector(".list-card .controls");
+  const row = doc.querySelector(".list-card .card-controls");
   return row && row.querySelector("input.url-input") &&
          row.querySelector("select") &&
          row.querySelector("input.max-pages") &&
