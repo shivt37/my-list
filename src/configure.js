@@ -106,8 +106,10 @@ export function buildConfigurePage(origin, config) {
     transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
   .btn-icon:hover { color: var(--text); border-color: var(--accent); }
-  #refreshBtn.spinning svg { animation: refresh-spin 0.9s linear infinite; }
+  #refreshBtn.spinning svg, .card-refresh.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .card-refresh { padding: 5px 6px; }
+  .card-refresh svg { display: block; }
 
   /* ── MAIN ── */
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
@@ -397,6 +399,17 @@ export function buildConfigurePage(origin, config) {
   </div>
 </div>
 
+<div class="confirm-backdrop" id="refreshOneConfirmBackdrop">
+  <div class="confirm-modal">
+    <div class="confirm-title">Refresh this list?</div>
+    <div class="confirm-body" id="refreshOneConfirmBody"></div>
+    <div class="confirm-actions">
+      <button class="secondary" onclick="closeRefreshOneConfirm()">Cancel</button>
+      <button id="confirmRefreshOneBtn">Refresh list</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const ORIGIN = ${JSON.stringify(origin)};
 let state = ${initial};
@@ -404,6 +417,7 @@ let state = ${initial};
 // ─── Scraper module state ───
 let listNameEditIndex = -1;
 let pendingDeleteIndex = -1;
+let pendingRefreshIndex = -1;
 
 function escapeAttr(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -513,6 +527,9 @@ function renderScraper() {
         '</select>' +
         '<span class="pages-label">pages:</span>' +
         '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
+        '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+        '</button>' +
         '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
       '</div>' +
       '<div class="card-error" id="cardError-' + i + '"></div>' +
@@ -691,6 +708,38 @@ async function confirmRefresh() {
   }
 }
 
+function askRefresh(i) {
+  const l = state.scraper.lists[i];
+  if (!l) return;
+  pendingRefreshIndex = i;
+  document.getElementById('refreshOneConfirmBody').textContent =
+    '"' + l.name + '" will be re-scraped now (headless Chromium on GitHub Actions). This can take a few minutes. Are you sure?';
+  document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
+}
+function closeRefreshOneConfirm() { document.getElementById('refreshOneConfirmBackdrop').classList.remove('visible'); pendingRefreshIndex = -1; }
+async function confirmRefreshOne() {
+  const i = pendingRefreshIndex;
+  pendingRefreshIndex = -1;
+  closeRefreshOneConfirm();
+  if (i < 0 || !state.scraper.lists[i]) return;
+  const btn = document.querySelector('#card-' + i + ' .card-refresh');
+  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
+  try {
+    const res = await fetch(ORIGIN + '/trigger-refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: state.scraper.lists[i].id }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    setStatus('"' + state.scraper.lists[i].name + '" refresh dispatched — regenerating just that list.', 'ok');
+  } catch (e) {
+    setStatus('Refresh failed: ' + e.message, 'error');
+  } finally {
+    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+  }
+}
+
 function openStatus() { window.open(ORIGIN + '/status', '_blank'); }
 
 document.getElementById('saveBtn').onclick = saveAll;
@@ -698,6 +747,7 @@ document.getElementById('menuBtn').onclick = toggleMenu;
 document.getElementById('accentBtn').onclick = toggleAccentPopup;
 document.getElementById('confirmRefreshBtn').onclick = confirmRefresh;
 document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
+document.getElementById('confirmRefreshOneBtn').onclick = confirmRefreshOne;
 
 initSwatches();
 renderScraper();

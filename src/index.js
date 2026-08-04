@@ -64,7 +64,7 @@ export default {
     }
 
     if (pathname === "/trigger-refresh" && request.method === "POST") {
-      return handleTriggerRefresh(env);
+      return handleTriggerRefresh(env, request);
     }
 
     if (pathname === "/runs" && request.method === "POST") {

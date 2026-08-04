@@ -202,17 +202,37 @@ export async function handleExportConfig(env) {
   return json(cfg);
 }
 
-export async function handleTriggerRefresh(env) {
+export async function handleTriggerRefresh(env, request) {
   const cfg = await loadConfig(env.STORE);
-  const enabled = cfg.scraper.lists.filter((l) => l.enabled);
+
+  // Optional { id } body → refresh a single list instead of all enabled.
+  let singleId = null;
+  if (request && request.method === "POST") {
+    try {
+      const text = await request.text();
+      if (text) singleId = (JSON.parse(text).id ?? null);
+    } catch {
+      singleId = null;
+    }
+  }
+  let targets;
+  if (singleId) {
+    const list = cfg.scraper.lists.find((l) => l.id === singleId);
+    if (!list) return json({ error: "Unknown list id." }, 404);
+    if (!list.enabled) return json({ error: "That list is disabled — enable it first." }, 400);
+    targets = [list];
+  } else {
+    targets = cfg.scraper.lists.filter((l) => l.enabled);
+  }
+
   const result = await dispatchScraperWorkflow(env, {
-    lists: enabled.map((l) => l.id),
+    lists: targets.map((l) => l.id),
     action: "scrape",
   });
   if (!result.dispatched) {
     return json({ error: "GitHub Actions isn't configured on this worker yet (missing GH_TOKEN/GH_REPO/GH_WORKFLOW)." }, 501);
   }
-  return json({ ok: true, lists: enabled.map((l) => l.id) });
+  return json({ ok: true, lists: targets.map((l) => l.id) });
 }
 
 // POST /runs — called by scripts/scrape.mjs after each list scrape to
