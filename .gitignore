@@ -4,3 +4,7 @@ dev-dist/
 debug/
 scratch/
 .DS_Store
+
+# local test scripts (not part of deploy or scrape)
+scripts/dry-test.mjs
+scripts/verify-ui.mjs
