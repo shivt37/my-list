@@ -137,23 +137,22 @@ export function buildConfigurePage(origin, config) {
   .swatch:hover { transform: scale(1.15); }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
 
-  /* ── MENU ── */
+  /* ── MENU (tmdb-worker parity) ── */
   .menu-popup-wrap { position: relative; }
   .menu-popup {
-    display: none; position: absolute; right: 0; top: calc(100% + 8px);
-    background: var(--surface2); border: 1px solid var(--border-bright);
-    border-radius: var(--radius); min-width: 180px; overflow: hidden;
-    box-shadow: var(--shadow-pop); z-index: 200;
+    display: none; position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--surface); border: 1px solid var(--border-bright); border-radius: 10px;
+    padding: 6px; z-index: 200; width: 200px; max-width: calc(100vw - 32px);
+    box-shadow: var(--shadow-pop);
   }
   .menu-popup.visible { display: block; }
   .menu-item {
-    padding: 10px 14px; cursor: pointer; color: var(--text-dim); font-size: 13px;
-    display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border);
-    transition: background 0.1s, color 0.1s;
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
+    font-size: 12.5px; color: var(--text-dim); cursor: pointer; transition: background 0.1s, color 0.1s;
   }
-  .menu-item:last-child { border-bottom: none; }
-  .menu-item:hover { background: var(--surface3); color: var(--text); }
-  .menu-item.active { color: var(--accent); font-weight: 600; }
+  .menu-item svg { flex-shrink: 0; }
+  .menu-item:hover { background: var(--surface2); color: var(--text); }
+  .menu-item.active { background: var(--accent-dim); color: var(--accent); }
   .menu-item.disabled { opacity: 0.4; cursor: default; }
   .menu-item.disabled:hover { background: none; color: var(--text-dim); }
   .menu-soon { margin-left: auto; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
@@ -161,7 +160,7 @@ export function buildConfigurePage(origin, config) {
   /* ── MAIN ── */
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
   h1 { font-size: 18px; margin-bottom: 4px; }
-  p.sub { color: var(--text-dim); margin: 0 0 20px; font-size: 12px; }
+  p.sub { color: var(--text-dim); margin: 0 0 12px; font-size: 12px; }
 
   button {
     padding: 10px 16px; border-radius: var(--radius); border: 1px solid var(--accent);
@@ -255,11 +254,10 @@ export function buildConfigurePage(origin, config) {
   .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .info .name-static { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .name-edit {
-    background: transparent; border: 1px solid transparent; color: var(--text);
-    font-size: 13px; font-weight: 600; padding: 2px 6px; border-radius: 6px; min-width: 0; flex: 0 1 auto;
+    width: 100%; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--accent);
+    background: #0d0d15; color: var(--text); font-size: 13px; font-weight: 400; outline: none;
+    box-shadow: 0 0 0 1px var(--accent-dim), 0 0 16px -8px var(--accent-glow);
   }
-  .name-edit:hover { border-color: var(--border-bright); }
-  .name-edit:focus { outline: none; border-color: var(--accent); background: var(--surface2); }
   .name-static { font-size: 13px; font-weight: 600; color: var(--text); }
 
   .id-chip {
@@ -348,6 +346,13 @@ export function buildConfigurePage(origin, config) {
     .menu-popup { right: -14px; width: 180px; padding: 5px; }
     .menu-item { padding: 8px 9px; font-size: 12px; }
   }
+
+  /* Very small: ≤380px */
+  @media (max-width: 380px) {
+    .card .right-col { gap: 6px; }
+    .card .controls { flex-wrap: wrap; }
+    .card .controls select { flex: 1 1 100%; }
+  }
 </style>
 </head>
 <body>
@@ -373,10 +378,22 @@ export function buildConfigurePage(origin, config) {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div class="menu-popup" id="menuPopup">
-        <div class="menu-item active" data-module="scraper" onclick="activateModule('scraper')">MDBList Scraper</div>
-        <div class="menu-item disabled" onclick="soon()">MDBList Official List<span class="menu-soon">soon</span></div>
-        <div class="menu-item disabled" onclick="soon()">Simkl List<span class="menu-soon">soon</span></div>
-        <div class="menu-item disabled" onclick="soon()">TMDB List<span class="menu-soon">soon</span></div>
+        <div class="menu-item active" data-module="scraper" onclick="activateModule('scraper')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          MDBList Scraper
+        </div>
+        <div class="menu-item disabled" onclick="soon()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          MDBList Official List<span class="menu-soon">soon</span>
+        </div>
+        <div class="menu-item disabled" onclick="soon()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>
+          Simkl List<span class="menu-soon">soon</span>
+        </div>
+        <div class="menu-item disabled" onclick="soon()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
+          TMDB List<span class="menu-soon">soon</span>
+        </div>
       </div>
     </div>
   </div>
