@@ -184,22 +184,40 @@ export function buildConfigurePage(origin, config) {
   button.danger:hover { background: rgba(255,95,102,0.18); filter: none; border-color: var(--danger); box-shadow: none; }
 
   /* ── SCRAPER TAB ── */
-  .scraper-section { margin-bottom: 16px; }
-  .add-list-btn {
+  .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+
+  .create-list-section { margin-bottom: 18px; }
+  .btn-create-list {
     display: flex; align-items: center; gap: 8px; width: 100%; justify-content: center;
     padding: 11px 16px; border-radius: var(--radius); border: 1px dashed var(--border-bright);
     background: transparent; color: var(--text-dim); font-size: 13px; font-weight: 500; cursor: pointer;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
-  .add-list-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-  .add-list-row { display: flex; gap: 8px; }
-  .add-list-row .text-input { flex: 1; min-width: 0; }
+  .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .create-list-row input {
+    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
+    font-size: 12px; padding: 8px 10px; border-radius: var(--radius); outline: none;
+    font-family: inherit; transition: border-color 0.15s;
+  }
+  .create-list-row input:focus { border-color: var(--accent); }
+  .create-list-row input::placeholder { color: var(--text-muted); }
+  .create-list-row .name-input { flex: 1 1 140px; min-width: 0; }
+  .create-list-row .url-input { flex: 3 1 260px; min-width: 0; font-family: ui-monospace, monospace; }
+  .create-list-row select {
+    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
+    font-size: 12px; padding: 8px 10px; border-radius: var(--radius); outline: none; cursor: pointer;
+  }
+  .create-list-row select:focus { border-color: var(--accent); }
+  .create-list-row button { flex-shrink: 0; }
 
   .list-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-    padding: 16px 18px; margin-bottom: 12px; box-shadow: var(--shadow-card);
+    background: linear-gradient(180deg, var(--surface), #0a0a10);
+    border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px;
+    margin-bottom: 10px; box-shadow: var(--shadow-card);
     transition: border-color 0.15s, opacity 0.15s;
   }
+  .list-card:hover { border-color: #242436; }
   .list-card.disabled { opacity: 0.6; }
 
   .card-top { display: flex; gap: 12px; align-items: flex-start; }
@@ -221,40 +239,39 @@ export function buildConfigurePage(origin, config) {
   .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
-  .info { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .info { display: flex; align-items: center; gap: 8px; }
   .name-edit {
     background: transparent; border: 1px solid transparent; color: var(--text);
-    font-size: 15px; font-weight: 600; padding: 2px 6px; border-radius: 6px; min-width: 0; flex: 0 1 auto;
+    font-size: 13px; font-weight: 600; padding: 2px 6px; border-radius: 6px; min-width: 0; flex: 0 1 auto;
   }
   .name-edit:hover { border-color: var(--border-bright); }
   .name-edit:focus { outline: none; border-color: var(--accent); background: var(--surface2); }
-  .name-static { font-size: 15px; font-weight: 600; color: var(--text); }
+  .name-static { font-size: 13px; font-weight: 600; color: var(--text); }
 
   .id-chip {
-    font-size: 11px; color: var(--text-muted); background: var(--surface2);
-    border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px; font-family: ui-monospace, monospace;
+    font-size: 10px; color: var(--text-muted); background: var(--surface2);
+    border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px; font-family: ui-monospace, monospace;
   }
 
-  .fields { display: grid; grid-template-columns: 1fr 180px; gap: 10px; margin-top: 12px; align-items: end; }
-  .field { display: flex; flex-direction: column; gap: 4px; }
-  .field label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .field .text-input {
+  .card-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+  .card-row .url-input {
+    flex: 1; min-width: 0; background: var(--surface2); border: 1px solid var(--border-bright);
+    color: var(--text); font-size: 11px; padding: 6px 8px; border-radius: 7px; outline: none;
+    font-family: ui-monospace, monospace; transition: border-color 0.15s;
+  }
+  .card-row .url-input:focus { border-color: var(--accent); }
+  .card-row select {
     background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 12px; padding: 8px 10px; border-radius: var(--radius); width: 100%;
-    outline: none; transition: border-color 0.15s, box-shadow 0.15s;
-    font-family: ui-monospace, monospace;
+    font-size: 11px; padding: 6px 8px; border-radius: 7px; outline: none; cursor: pointer; flex-shrink: 0;
   }
-  .field .text-input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
-  .field .text-input::placeholder { color: var(--text-muted); }
-
-  .field select, .add-list-row select {
+  .card-row select:focus { border-color: var(--accent); }
+  .card-row .max-pages {
     background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 12px; padding: 8px 10px; border-radius: var(--radius); width: 100%; outline: none; cursor: pointer;
+    font-size: 11px; padding: 6px 8px; border-radius: 7px; outline: none; width: 56px; flex-shrink: 0;
+    font-family: ui-monospace, monospace; transition: border-color 0.15s;
   }
-  .field select:focus, .add-list-row select:focus { border-color: var(--accent); }
-
-  .controls { display: flex; gap: 8px; margin-top: 12px; }
-  .controls .status-btn { margin-left: auto; }
+  .card-row .max-pages:focus { border-color: var(--accent); }
+  .card-row button.danger { flex-shrink: 0; }
 
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
 
@@ -282,7 +299,8 @@ export function buildConfigurePage(origin, config) {
   @media (max-width: 720px) {
     main { padding: 16px 14px 60px; }
     header { padding: 10px 14px; }
-    .fields { grid-template-columns: 1fr; }
+    .card-row { flex-wrap: wrap; }
+    .card-row .url-input { flex: 1 1 100%; }
   }
 </style>
 </head>
@@ -452,34 +470,36 @@ function renderScraper() {
               : '<span class="name-static" onclick="startNameEdit(' + i + ')">' + escapeAttr(l.name) + '</span>') +
             '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
           '</div>' +
-          '<div class="fields">' +
-            '<div class="field"><label>URL (mdblist listing)</label><input class="text-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false"></div>' +
-            '<div class="field"><label>Type</label><select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
+          '<div class="card-row">' +
+            '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
+            '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
               '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
               '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
-            '</select></div>' +
-            '<div class="field"><label>Max Pages</label><input class="text-input" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)"></div>' +
-            '<div class="field"><label>Status</label><button class="secondary status-btn" onclick="openStatus()">Status</button></div>' +
+            '</select>' +
+            '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
+            '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
           '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="controls">' +
-        '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
       '</div>' +
       '<div class="card-error" id="cardError-' + i + '"></div>' +
     '</div>';
   }).join('');
 
-  const addRow = '<div class="scraper-section"><button class="add-list-btn" id="addListBtn" onclick="showAddRow()">+ Add List</button>' +
-    '<div class="add-list-row" id="addListRow" style="display:none">' +
-      '<input class="text-input" id="addNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
-      '<input class="text-input" id="addUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
-      '<select id="addTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
-      '<button onclick="confirmAddList()">Add</button>' +
-      '<button class="secondary" onclick="hideAddRow()">Cancel</button>' +
-    '</div></div>';
+  const createRow =
+    '<div class="create-list-section">' +
+      '<button class="btn-create-list" id="createListBtn" onclick="showCreateRow()">+ Add List</button>' +
+      '<div class="create-list-row" id="createListRow" style="display:none">' +
+        '<input class="name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
+        '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
+        '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+        '<button onclick="confirmCreateList()">Add</button>' +
+        '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +
+      '</div>' +
+    '</div>';
 
-  host.innerHTML = (cards || '<div class="empty">No scraper lists yet. Add one below.</div>') + addRow;
+  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+
+  host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet — add one above.</div>');
   if (listNameEditIndex >= 0 && listNameEditIndex < lists.length) {
     const el = document.getElementById('nameInput-' + listNameEditIndex);
     if (el) { el.focus(); el.select(); }
@@ -515,19 +535,19 @@ function saveName(i) {
 }
 function cancelName(i) { listNameEditIndex = -1; renderScraper(); }
 
-function showAddRow() {
-  document.getElementById('addListBtn').style.display = 'none';
-  document.getElementById('addListRow').style.display = 'flex';
-  document.getElementById('addNameInput').focus();
+function showCreateRow() {
+  document.getElementById('createListBtn').style.display = 'none';
+  document.getElementById('createListRow').style.display = 'flex';
+  document.getElementById('createNameInput').focus();
 }
-function hideAddRow() {
-  document.getElementById('addListBtn').style.display = 'flex';
-  document.getElementById('addListRow').style.display = 'none';
+function hideCreateRow() {
+  document.getElementById('createListBtn').style.display = 'flex';
+  document.getElementById('createListRow').style.display = 'none';
 }
-async function confirmAddList() {
-  const name = document.getElementById('addNameInput').value.trim();
-  const url = document.getElementById('addUrlInput').value.trim();
-  const type = document.getElementById('addTypeSelect').value;
+async function confirmCreateList() {
+  const name = document.getElementById('createNameInput').value.trim();
+  const url = document.getElementById('createUrlInput').value.trim();
+  const type = document.getElementById('createTypeSelect').value;
   if (!name) { setStatus('List needs a name.', 'error'); return; }
   if (!url) { setStatus('Paste an mdblist.com listing URL.', 'error'); return; }
   const expectedPath = type === 'series' ? '/shows/' : '/movies/';
@@ -541,7 +561,7 @@ async function confirmAddList() {
   }
   const id = await randomId(url);
   state.scraper.lists.push({ id, name, url, type, maxPages: 3, enabled: true });
-  hideAddRow();
+  hideCreateRow();
   renderScraper();
   setStatus('List added. Press Save to keep it.', 'ok');
 }
@@ -626,7 +646,7 @@ async function confirmRefresh() {
   }
 }
 
-function openStatus() { window.location.href = ORIGIN + '/status'; }
+function openStatus() { window.open(ORIGIN + '/status', '_blank'); }
 
 document.getElementById('saveBtn').onclick = saveAll;
 document.getElementById('menuBtn').onclick = toggleMenu;
