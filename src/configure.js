@@ -206,6 +206,7 @@ export function buildConfigurePage(origin, config) {
   }
 
   .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .card-controls .url-input { margin-right: 8px; }
   .card-controls .url-input {
     flex: 0 1 40%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
     padding: 7px 9px; border-radius: 7px;
