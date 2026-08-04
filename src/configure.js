@@ -402,7 +402,7 @@ function initSwatches() {
   let saved = '#06b6d4';
   try { saved = localStorage.getItem(ACCENT_STORAGE_KEY) || '#06b6d4'; } catch (e) {}
   row.innerHTML = Object.keys(ACCENT_COLORS).map(hex =>
-    '<div class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" onclick="selectAccent(\'' + hex + '\')"></div>'
+    '<div class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" onclick="selectAccent(\\\'' + hex + '\\\')"></div>'
   ).join('');
   applyAccent(saved);
 }
@@ -448,17 +448,17 @@ function renderScraper() {
         '<div class="right-col">' +
           '<div class="info">' +
             (editing
-              ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\'Enter\')saveName(' + i + ');if(event.key===\'Escape\')cancelName(' + i + ')">'
+              ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')">'
               : '<span class="name-static" onclick="startNameEdit(' + i + ')">' + escapeAttr(l.name) + '</span>') +
             '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
           '</div>' +
           '<div class="fields">' +
-            '<div class="field"><label>URL (mdblist listing)</label><input class="text-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \'url\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false"></div>' +
-            '<div class="field"><label>Type</label><select onchange="updateList(' + i + ', \'type\', this.value)">' +
+            '<div class="field"><label>URL (mdblist listing)</label><input class="text-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false"></div>' +
+            '<div class="field"><label>Type</label><select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
               '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
               '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
             '</select></div>' +
-            '<div class="field"><label>Max Pages</label><input class="text-input" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \'maxPages\', this.value)"></div>' +
+            '<div class="field"><label>Max Pages</label><input class="text-input" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)"></div>' +
             '<div class="field"><label>Status</label><button class="secondary status-btn" onclick="openStatus()">Status</button></div>' +
           '</div>' +
         '</div>' +
@@ -524,7 +524,7 @@ function hideAddRow() {
   document.getElementById('addListBtn').style.display = 'flex';
   document.getElementById('addListRow').style.display = 'none';
 }
-function confirmAddList() {
+async function confirmAddList() {
   const name = document.getElementById('addNameInput').value.trim();
   const url = document.getElementById('addUrlInput').value.trim();
   const type = document.getElementById('addTypeSelect').value;
