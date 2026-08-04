@@ -167,43 +167,48 @@ export function buildConfigurePage(origin, config) {
   .list-card.disabled { opacity: 0.6; }
 
   .card-top { display: flex; gap: 12px; align-items: flex-start; }
-  .toggle-col { flex-shrink: 0; padding-top: 2px; }
-  .toggle { position: relative; display: inline-block; width: 38px; height: 22px; cursor: pointer; }
+  .toggle-col { flex-shrink: 0; padding-top: 3px; }
+  .toggle { position: relative; display: inline-block; width: 32px; height: 18px; cursor: pointer; }
   .toggle input { opacity: 0; width: 0; height: 0; }
   .toggle-slider {
     position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--border2);
     border-radius: 999px; transition: background 0.15s, border-color 0.15s;
   }
   .toggle-slider::before {
-    content: ''; position: absolute; width: 16px; height: 16px; left: 2px; top: 2px;
+    content: ''; position: absolute; width: 12px; height: 12px; left: 2px; top: 2px;
     border-radius: 50%; background: var(--muted); transition: transform 0.15s, background 0.15s;
   }
   .toggle input:checked + .toggle-slider { background: var(--accent-dim); border-color: var(--accent); }
-  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(14px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
   .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .name-static {
-    font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--text);
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  .name-static:hover { color: var(--accent); }
   .name-edit { font-size: 13px; padding: 3px 8px; }
+  .icon-btn {
+    display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+    border: 1px solid var(--border2); border-radius: 6px; color: var(--muted); cursor: pointer; flex-shrink: 0;
+    background: transparent; transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .icon-btn:hover { color: var(--text); border-color: #3a3a52; background: var(--surface2); }
   .id-chip {
     font-size: 10px; color: var(--muted); background: var(--surface2);
     border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px;
     font-family: ui-monospace, monospace; flex-shrink: 0;
   }
 
-  .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .card-controls .url-row { flex: 1 1 100%; min-width: 0; }
-  .card-controls .url-input {
-    width: 100%; font-family: ui-monospace, monospace; font-size: 12px;
-    padding: 7px 9px; border-radius: 7px;
-  }
+  .card-controls { display: flex; gap: 8px; align-items: center; }
   .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
   .card-controls .max-pages { width: 60px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
   .card-controls button { flex-shrink: 0; }
+  .url-row { margin-top: 10px; }
+  .url-row .url-input {
+    width: 100%; font-family: ui-monospace, monospace; font-size: 12px;
+    padding: 7px 9px; border-radius: 7px;
+  }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
@@ -267,10 +272,9 @@ export function buildConfigurePage(origin, config) {
   @media (max-width: 900px) { main { padding: 20px; } }
   @media (min-width: 560px) {
     .card-top { align-items: center; }
-    .right-col { display: flex; flex-direction: row; align-items: center; gap: 10px; }
-    .info { flex: 1 1 160px; }
-    .card-controls { flex-wrap: wrap; }
-    .card-controls .url-row { flex: 1 1 100%; }
+    .right-col { display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 0; }
+    .info { flex: 1 1 160px; min-width: 0; }
+    .card-controls { flex-shrink: 0; margin-left: auto; }
   }
   @media (max-width: 640px) {
     header { padding: 10px 14px; }
@@ -285,11 +289,16 @@ export function buildConfigurePage(origin, config) {
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
     .card-top { gap: 9px; }
+    .toggle { width: 30px; height: 17px; }
+    .toggle-slider::before { width: 11px; height: 11px; }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(13px); }
     .name-static { font-size: 12px; }
-    .card-controls { flex-wrap: wrap; }
-    .card-controls .url-row { flex: 1 1 100%; }
-    select { font-size: 12px; padding-top: 6px; padding-bottom: 6px; }
+    .icon-btn { width: 20px; height: 20px; }
+    .icon-btn svg { width: 12px; height: 12px; }
+    select { font-size: 10px; padding: 5px 6px; }
+    .card-controls .max-pages { font-size: 11px; padding: 5px 6px; }
     button.danger { padding: 5px 8px; font-size: 10px; }
+    .url-row { margin-top: 9px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
     .swatch { width: 24px; height: 24px; }
     .menu-popup { right: -14px; width: 180px; padding: 5px; }
@@ -477,11 +486,13 @@ function renderScraper() {
           '<div class="info">' +
             (editing
               ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')">'
-              : '<span class="name-static" onclick="startNameEdit(' + i + ')">' + escapeAttr(l.name) + '</span>') +
+              : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
+            '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
+            '</span>' +
             '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
           '</div>' +
           '<div class="card-controls">' +
-            '<div class="url-row"><input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL"></div>' +
             '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
               '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
               '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
@@ -490,6 +501,7 @@ function renderScraper() {
             '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
           '</div>' +
         '</div>' +
+        '<div class="url-row"><input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL"></div>' +
       '</div>' +
       '<div class="card-error" id="cardError-' + i + '"></div>' +
     '</div>';

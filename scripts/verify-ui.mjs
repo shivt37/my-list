@@ -35,11 +35,13 @@ check("create section before first card", (() => {
 })());
 check("cards use controls layout", doc.querySelectorAll(".list-card .card-controls").length === doc.querySelectorAll(".list-card").length);
 check("card has url input + type select + max-pages + delete", (() => {
-  const row = doc.querySelector(".list-card .card-controls");
-  return row && row.querySelector("input.url-input") &&
+  const card = doc.querySelector(".list-card");
+  const row = card.querySelector(".card-controls");
+  return card.querySelector(".url-row input.url-input") &&
          row.querySelector("select") &&
          row.querySelector("input.max-pages") &&
-         row.querySelector("button.danger");
+         row.querySelector("button.danger") &&
+         card.querySelector(".icon-btn");
 })());
 check("empty state absent with lists", !doc.querySelector(".empty"));
 check("save/menu/accent bound", !!w.saveAll && !!w.toggleMenu && !!w.toggleAccentPopup);
