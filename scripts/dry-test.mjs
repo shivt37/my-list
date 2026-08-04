@@ -145,6 +145,13 @@ async function freshEnv() {
   assert.equal(man.catalogs.length, 3);
   assert.deepEqual(man.types, ["movie", "series"]);
   check("buildManifest lists 3 enabled catalogs", () => {});
+
+  // every catalog declares the skip extra so Stremio paginates past item 100
+  for (const c of man.catalogs) {
+    assert.deepEqual(c.extra, [{ name: "skip", isRequired: false }]);
+    assert.ok("name" in c && "id" in c && "type" in c, "catalog has name/id/type");
+  }
+  check("manifest catalogs declare skip extra (name/id/type order)", () => {});
 }
 
 {
