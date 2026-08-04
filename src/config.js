@@ -31,7 +31,9 @@ export function emptyConfig() {
 // only pagination params get overridden at scrape time).
 const SEED_LISTS = [
   {
-    id: null, // assigned by caller (randomScraperId)
+    // Pinned to the ID the data file was first committed under — once a
+    // scraper write lands in data/<id>.json that id is forever.
+    id: "mdb_scrape_1djyii3b",
     name: "Latest Movie(digital releases)",
     url: "https://mdblist.com/movies/?q_title=&q_sort=releasedigital&q_sortorder=asc&q_current_page=0&actor=&director=&yearf=&yeart=&yearr=365&yearu=0&q_score_input=1&q_score_input_max=100&q_rogerebert_input=0.0&q_rogerebert_input_max=4.0&q_imdbrating_input=4.0&q_imdbrating_input_max=10.0&q_imdbvotes_input=400&q_traktrating_input=0&q_traktrating_input_max=100&q_traktvotes_input=0&q_tmdbrating_input=0&q_tmdbrating_input_max=100&q_tmdbvotes_input=1&q_letterrating_input=0.0&q_letterrating_input_max=5.0&q_lettervotes_input=0&q_metacriticsrating_input=0&q_metacriticsrating_input_max=100&q_metacriticsvotes_input=0&q_tomatoesrating_input=0&q_tomatoesrating_input_max=100&q_tomatoesvotes_input=0&q_audiencerating_input=0&q_audiencerating_input_max=100&q_audiencevotes_input=0&q_anidbrating_input=0.0&q_anidbrating_input_max=10.0&q_anidbvotes_input=0&parental_nudity_min_i=0&parental_nudity_i=5&parental_violence_min_i=0&parental_violence_i=5&parental_language_min_i=0&parental_language_i=5&parental_drinking_min_i=0&parental_drinking_i=5&q_score_average=on&tmdbid_hide=on&q_genre_exclude=documentary&q_genre_exclude=game-show&q_genre_exclude=home-and-garden&q_genre_exclude=news&q_genre_exclude=reality&q_genre_exclude=reality-tv&q_genre_exclude=special-interest&q_genre_exclude=sporting-event&q_genre_exclude=talk-show&q_genre_exclude=tv-movie&q_status=released&q_release=4&release_regions=&release_days_past=&release_days_future=&q_language_x=ml&q_language_x=ta&q_language_x=te&q_country=&q_country_x=mx%2Cpk%2Ckr%2Cru%2Ctr%2Ccn%2Ceg%2Cbd%2Ctw%2Cid&budget=&revenue=&production_country=&production_country_exclude=&q_runtime_min=&q_runtime_max=&q_list=&q_listx=&q_tagx=10979&q_tagx=124256&q_tagx=295269&q_tagx=295272&q_theater=&q_region=US%2CCA%2CIN&q_provider_x=11&q_provider_x=73&q_provider_x=212&q_provider_x=232&q_provider_x=257&q_provider_x=528&q_limit=200&q_watched=&q_trakt_list_name=&q_trakt_list_desc=",
     type: "movie",
@@ -39,7 +41,7 @@ const SEED_LISTS = [
     enabled: true,
   },
   {
-    id: null,
+    id: "mdb_scrape_cwqwfd58",
     name: "r/movieleaks Movie",
     url: "https://mdblist.com/movies/?q_title=&q_sort=&q_sortorder=asc&q_current_page=0&actor=&director=&yearf=&yeart=&yearr=&yearu=&q_score_input=0&q_score_input_max=100&q_rogerebert_input=0.0&q_rogerebert_input_max=4.0&q_imdbrating_input=0.0&q_imdbrating_input_max=10.0&q_imdbvotes_input=0&q_traktrating_input=0&q_traktrating_input_max=100&q_traktvotes_input=0&q_tmdbrating_input=0&q_tmdbrating_input_max=100&q_tmdbvotes_input=0&q_letterrating_input=0.0&q_letterrating_input_max=5.0&q_lettervotes_input=0&q_metacriticsrating_input=0&q_metacriticsrating_input_max=100&q_metacriticsvotes_input=0&q_tomatoesrating_input=0&q_tomatoesrating_input_max=100&q_audiencerating_input=0&q_audiencerating_input_max=100&q_anidbrating_input=0.0&q_anidbrating_input_max=10.0&q_anidbvotes_input=0&parental_nudity_min_i=0&parental_nudity_i=5&parental_violence_min_i=0&parental_violence_i=5&parental_language_min_i=0&parental_language_i=5&parental_drinking_min_i=0&parental_drinking_i=5&release_regions=&release_days_past=&release_days_future=&q_country=&q_country_x=&budget=&revenue=&production_country=&production_country_exclude=&q_runtime_min=&q_runtime_max=&q_list=79&q_listx=&q_theater=&q_region=US&q_limit=&q_watched=&q_trakt_list_name=&q_trakt_list_desc=",
     type: "movie",
@@ -47,7 +49,7 @@ const SEED_LISTS = [
     enabled: true,
   },
   {
-    id: null,
+    id: "mdb_scrape_ogu4jkeo",
     name: "Latest Shows",
     url: "https://mdblist.com/shows/?q_title=&q_sort=released&q_sortorder=asc&q_current_page=0&actor=&director=&yearf=&yeart=&yearr=&yearu=0&q_score_input=1&q_score_input_max=100&q_rogerebert_input=0.0&q_rogerebert_input_max=4.0&q_imdbrating_input=4.0&q_imdbrating_input_max=10.0&q_imdbvotes_input=400&q_traktrating_input=0&q_traktrating_input_max=100&q_traktvotes_input=0&q_tmdbrating_input=0&q_tmdbrating_input_max=100&q_tmdbvotes_input=0&q_letterrating_input=0.0&q_letterrating_input_max=5.0&q_lettervotes_input=0&q_metacriticsrating_input=0&q_metacriticsrating_input_max=100&q_metacriticsvotes_input=0&q_tomatoesrating_input=0&q_tomatoesrating_input_max=100&q_audiencerating_input=0&q_audiencerating_input_max=100&q_anidbrating_input=0.0&q_anidbrating_input_max=10.0&q_anidbvotes_input=0&parental_nudity_min_i=0&parental_nudity_i=5&parental_violence_min_i=0&parental_violence_i=5&parental_language_min_i=0&parental_language_i=5&parental_drinking_min_i=0&parental_drinking_i=5&q_score_average=on&q_genre_exclude=anime&q_genre_exclude=children&q_genre_exclude=holiday&q_genre_exclude=home-and-garden&q_genre_exclude=music&q_genre_exclude=musical&q_genre_exclude=news&q_genre_exclude=reality&q_genre_exclude=reality-tv&q_genre_exclude=short&q_genre_exclude=soap&q_genre_exclude=special-interest&q_genre_exclude=sport&q_genre_exclude=sporting-event&q_genre_exclude=talk-show&q_status=returning+series&q_status=ended&q_status=canceled&q_status=pilot&q_status=continuing&last_aired=&q_language_x=ml&q_language_x=te&q_country=&q_country_x=pk%2Csa&production_country=&production_country_exclude=&q_runtime_min=&q_runtime_max=&q_eruntime_min=&q_eruntime_max=&q_list=&q_listx=&q_network_x=YouTube&q_region=US%2CCA%2CIN&q_provider_x=11&q_provider_x=192&q_provider_x=232&q_limit=200&q_watched=&q_trakt_list_name=&q_trakt_list_desc=",
     type: "series",
@@ -56,13 +58,12 @@ const SEED_LISTS = [
   },
 ];
 
-// Assign a permanent id to each seeded list — derived from the URL so
-// the ID matches whatever the scraper wrote to data/. On subsequent
-// loads the existing config wins, so the ids never change.
+// Assign each seeded list its pinned id (matching the data file already
+// committed under that id). On subsequent loads the existing config
+// wins, so the ids never change.
 export function seedScraperDefaults(cfg) {
   if (cfg.scraper && Array.isArray(cfg.scraper.lists) && cfg.scraper.lists.length > 0) return cfg;
-  const seeded = SEED_LISTS.map((s) => ({ ...s, id: randomScraperId(s.url) }));
-  return { ...cfg, scraper: { lists: seeded } };
+  return { ...cfg, scraper: { lists: SEED_LISTS.map((s) => ({ ...s })) } };
 }
 
 export function migrateConfig(raw) {
@@ -96,17 +97,16 @@ export async function loadConfig(kv) {
   const cfg = seedScraperDefaults(migrated);
 
   // One-shot healing: if any persisted list matches a seed entry by URL
-  // but carries a non-deterministic ID (e.g. random IDs from before this
-  // code shipped), rewrite it to the deterministic URL-derived ID so it
-  // matches the file the scraper wrote to data/.
+  // but carries a different id (e.g. a random id from before the seed
+  // list pinned its ids), rewrite it to the pinned id so it matches the
+  // file the scraper wrote to data/.
   let healed = false;
   if (!wasSeeded) {
     const seedByUrl = new Map(SEED_LISTS.map((s) => [s.url, s]));
     cfg.scraper.lists = cfg.scraper.lists.map((l) => {
       const seed = seedByUrl.get(l.url);
       if (!seed) return l;
-      const wantId = randomScraperId(l.url);
-      if (l.id !== wantId) { healed = true; return { ...l, id: wantId }; }
+      if (l.id !== seed.id) { healed = true; return { ...l, id: seed.id }; }
       return l;
     });
   }
