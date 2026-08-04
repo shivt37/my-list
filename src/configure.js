@@ -216,7 +216,7 @@ export function buildConfigurePage(origin, config) {
   }
   .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
   .pages-label { font-size: 11px; color: var(--muted); flex-shrink: 0; }
-  .card-controls .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
+  .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
   .card-controls button { flex-shrink: 0; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
@@ -291,9 +291,11 @@ export function buildConfigurePage(origin, config) {
     main { padding: 14px 12px 56px; }
     .create-list-row { gap: 6px; }
     .create-list-row .name-input,
-    .create-list-row .url-input,
-    .create-list-row select,
-    .create-list-row .max-pages { flex: 1 1 100%; }
+    .create-list-row .url-input { flex: 1 1 100%; }
+    .create-list-row .type-pages { flex: 1 1 100%; display: flex; gap: 6px; align-items: center; }
+    .create-list-row select { flex: 1 1 60%; min-width: 0; }
+    .create-list-row .pages-label { flex-shrink: 0; }
+    .create-list-row .max-pages { flex: 1 1 auto; }
     .create-list-row button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
@@ -524,9 +526,11 @@ function renderScraper() {
       '<div class="create-list-row" id="createListRow" style="display:none">' +
         '<input class="name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
         '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
-        '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
-        '<span class="pages-label">pages:</span>' +
-        '<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3">' +
+        '<span class="type-pages">' +
+          '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+          '<span class="pages-label">pages:</span>' +
+          '<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3">' +
+        '</span>' +
         '<button onclick="confirmCreateList()">Add</button>' +
         '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +
       '</div>' +
