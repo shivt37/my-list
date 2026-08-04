@@ -159,9 +159,10 @@ export function buildConfigurePage(origin, config) {
   }
   .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
   .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .create-list-row .name-input { flex: 1 1 150px; min-width: 0; }
-  .create-list-row .url-input { flex: 3 1 280px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; }
-  .create-list-row button { flex-shrink: 0; }
+  .create-list-row .name-input { flex: 1 1 150px; min-width: 0; font-size: 12px; padding: 7px 9px; }
+  .create-list-row .url-input { flex: 3 1 280px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
+  .create-list-row select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; }
+  .create-list-row button { flex-shrink: 0; padding: 7px 14px; font-size: 12px; }
 
   .list-card {
     background: var(--surface);
@@ -289,8 +290,10 @@ export function buildConfigurePage(origin, config) {
     .btn-icon { padding: 6px 8px; }
     main { padding: 14px 12px 56px; }
     .create-list-row { gap: 6px; }
-    .create-list-row input { flex: 1 1 100%; }
-    .create-list-row button { flex: 1 1 auto; }
+    .create-list-row .name-input,
+    .create-list-row .url-input,
+    .create-list-row select { flex: 1 1 100%; }
+    .create-list-row button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
     .card-top { gap: 9px; }
