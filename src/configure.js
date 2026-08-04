@@ -292,7 +292,8 @@ export function buildConfigurePage(origin, config) {
     .create-list-row { gap: 6px; }
     .create-list-row .name-input,
     .create-list-row .url-input,
-    .create-list-row select { flex: 1 1 100%; }
+    .create-list-row select,
+    .create-list-row .max-pages { flex: 1 1 100%; }
     .create-list-row button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
@@ -524,6 +525,8 @@ function renderScraper() {
         '<input class="name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
         '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
         '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+        '<span class="pages-label">pages:</span>' +
+        '<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3">' +
         '<button onclick="confirmCreateList()">Add</button>' +
         '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +
       '</div>' +
@@ -593,7 +596,10 @@ async function confirmCreateList() {
     return;
   }
   const id = await randomId(url);
-  state.scraper.lists.push({ id, name, url, type, maxPages: 3, enabled: true });
+  const pagesInput = document.getElementById('createPagesInput');
+  const n = pagesInput ? parseInt(pagesInput.value, 10) : NaN;
+  const maxPages = Number.isFinite(n) ? Math.min(50, Math.max(1, n)) : 3;
+  state.scraper.lists.push({ id, name, url, type, maxPages, enabled: true });
   hideCreateRow();
   renderScraper();
   setStatus('List added. Press Save to keep it.', 'ok');
