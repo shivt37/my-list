@@ -539,7 +539,8 @@ function confirmAddList() {
     setStatus('A list with that name already exists.', 'error');
     return;
   }
-  state.scraper.lists.push({ id: randomId(), name, url, type, maxPages: 3, enabled: true });
+  const id = await randomId(url);
+  state.scraper.lists.push({ id, name, url, type, maxPages: 3, enabled: true });
   hideAddRow();
   renderScraper();
   setStatus('List added. Press Save to keep it.', 'ok');
@@ -562,11 +563,19 @@ function confirmDelete() {
   renderScraper();
 }
 
-function randomId() {
+// IDs are derived from the URL — must match the server's
+// randomScraperId() (sha256 → first 8 hex nibbles mapped to alphabet).
+// Hashing in the browser via SubtleCrypto so client + server agree.
+async function randomId(seedUrl) {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let s = '';
-  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
-  return 'mdb_scrape_' + s;
+  if (!seedUrl) return 'mdb_scrape_' + Math.random().toString(36).slice(2, 10);
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(seedUrl));
+  const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  let out = '';
+  for (let i = 0; i < 8; i++) {
+    out += chars[parseInt(hex[i], 16) % chars.length];
+  }
+  return 'mdb_scrape_' + out;
 }
 
 // ─── Save (hash-compare → dispatch changed lists only) ───
