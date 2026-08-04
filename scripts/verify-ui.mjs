@@ -34,11 +34,12 @@ check("create section before first card", (() => {
          kids.indexOf("create-list-section") < kids.indexOf("list-card");
 })());
 check("cards use controls layout", doc.querySelectorAll(".list-card .card-controls").length === doc.querySelectorAll(".list-card").length);
-check("card has url input + type select + max-pages + delete", (() => {
+check("card has url input + type select + pages label + max-pages + delete", (() => {
   const card = doc.querySelector(".list-card");
   const row = card.querySelector(".card-controls");
-  return card.querySelector(".url-row input.url-input") &&
+  return row.querySelector(".url-input") &&
          row.querySelector("select") &&
+         row.querySelector(".pages-label") &&
          row.querySelector("input.max-pages") &&
          row.querySelector("button.danger") &&
          card.querySelector(".icon-btn");

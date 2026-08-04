@@ -125,6 +125,10 @@ export function buildConfigurePage(origin, config) {
   input::placeholder { color: var(--muted); }
   input:hover { border-color: #2f2f42; }
   input:focus { border-color: var(--accent); }
+  /* No native spin arrows on number inputs */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 
   select {
     appearance: none; -webkit-appearance: none;
@@ -201,15 +205,15 @@ export function buildConfigurePage(origin, config) {
     font-family: ui-monospace, monospace; flex-shrink: 0;
   }
 
-  .card-controls { display: flex; gap: 8px; align-items: center; }
-  .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
-  .card-controls .max-pages { width: 60px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
-  .card-controls button { flex-shrink: 0; }
-  .url-row { margin-top: 10px; }
-  .url-row .url-input {
-    width: 100%; font-family: ui-monospace, monospace; font-size: 12px;
+  .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .card-controls .url-input {
+    flex: 0 1 40%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
     padding: 7px 9px; border-radius: 7px;
   }
+  .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
+  .pages-label { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+  .card-controls .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
+  .card-controls button { flex-shrink: 0; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
@@ -273,9 +277,6 @@ export function buildConfigurePage(origin, config) {
   @media (max-width: 900px) { main { padding: 20px; } }
   @media (min-width: 560px) {
     .card-top { align-items: center; }
-    .right-col { display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 0; }
-    .info { flex: 1 1 160px; min-width: 0; }
-    .card-controls { flex-shrink: 0; margin-left: auto; }
   }
   @media (max-width: 640px) {
     header { padding: 10px 14px; }
@@ -296,10 +297,12 @@ export function buildConfigurePage(origin, config) {
     .name-static { font-size: 12px; }
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
-    select { font-size: 10px; padding: 5px 6px; }
+    .card-controls { flex-wrap: wrap; }
+    .card-controls .url-input { flex: 1 1 100%; }
+    select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
+    .pages-label { font-size: 10px; }
     .card-controls .max-pages { font-size: 11px; padding: 5px 6px; }
     button.danger { padding: 5px 8px; font-size: 10px; }
-    .url-row { margin-top: 9px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
     .swatch { width: 24px; height: 24px; }
     .menu-popup { right: -14px; width: 180px; padding: 5px; }
@@ -483,27 +486,26 @@ function renderScraper() {
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="card-' + i + '">' +
       '<div class="card-top">' +
         '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleList(' + i + ')"><span class="toggle-slider"></span></label></div>' +
-        '<div class="right-col">' +
-          '<div class="info">' +
-            (editing
-              ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
-              : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-            '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
-              '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
-            '</span>' +
-            '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
-          '</div>' +
-          '<div class="card-controls">' +
-            '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
-              '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
-              '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
-            '</select>' +
-            '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
-            '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
-          '</div>' +
+        '<div class="info">' +
+          (editing
+            ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
+            : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
+          '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
+          '</span>' +
+          '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
         '</div>' +
       '</div>' +
-      '<div class="url-row"><input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL"></div>' +
+      '<div class="card-controls">' +
+        '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
+        '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
+          '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
+          '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
+        '</select>' +
+        '<span class="pages-label">pages:</span>' +
+        '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
+        '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
+      '</div>' +
       '<div class="card-error" id="cardError-' + i + '"></div>' +
     '</div>';
   }).join('');
