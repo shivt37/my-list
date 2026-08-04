@@ -111,7 +111,7 @@ export function buildConfigurePage(origin, config) {
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
   h1 { font-size: 18px; margin-bottom: 4px; }
   p.sub { color: var(--dim); margin: 0 0 14px; font-size: 12px; }
-  #status { font-size: 12px; min-height: 16px; margin: 6px 0 14px; }
+  #status { font-size: 12px; min-height: 16px; margin: 0 0 14px; }
   #status.error { color: var(--danger); }
   #status.ok { color: var(--ok); }
 
@@ -146,6 +146,7 @@ export function buildConfigurePage(origin, config) {
 
   /* ── SCRAPER TAB ── */
   .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .scraper-toolbar button.secondary { padding: 6px 12px; font-size: 11px; font-weight: 500; }
 
   .create-list-section { margin-bottom: 18px; }
   .btn-create-list {
@@ -172,18 +173,18 @@ export function buildConfigurePage(origin, config) {
 
   .card-top { display: flex; gap: 12px; align-items: flex-start; }
   .toggle-col { flex-shrink: 0; padding-top: 3px; }
-  .toggle { position: relative; display: inline-block; width: 32px; height: 18px; cursor: pointer; }
+  .toggle { position: relative; display: inline-block; width: 28px; height: 16px; cursor: pointer; }
   .toggle input { opacity: 0; width: 0; height: 0; }
   .toggle-slider {
     position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--border2);
     border-radius: 999px; transition: background 0.15s, border-color 0.15s;
   }
   .toggle-slider::before {
-    content: ''; position: absolute; width: 12px; height: 12px; left: 2px; top: 2px;
+    content: ''; position: absolute; width: 10px; height: 10px; left: 2px; top: 2px;
     border-radius: 50%; background: var(--muted); transition: transform 0.15s, background 0.15s;
   }
   .toggle input:checked + .toggle-slider { background: var(--accent-dim); border-color: var(--accent); }
-  .toggle input:checked + .toggle-slider::before { transform: translateX(14px); background: var(--accent); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(12px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
   .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
@@ -206,7 +207,7 @@ export function buildConfigurePage(origin, config) {
   }
 
   .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .card-controls .url-input { margin-right: 8px; }
+  .card-controls .url-input { margin-right: 60px; }
   .card-controls .url-input {
     flex: 0 1 40%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
     padding: 7px 9px; border-radius: 7px;
@@ -292,9 +293,9 @@ export function buildConfigurePage(origin, config) {
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
     .card-top { gap: 9px; }
-    .toggle { width: 30px; height: 17px; }
-    .toggle-slider::before { width: 11px; height: 11px; }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(13px); }
+    .toggle { width: 26px; height: 15px; }
+    .toggle-slider::before { width: 9px; height: 9px; }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(11px); }
     .name-static { font-size: 12px; }
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
@@ -319,7 +320,7 @@ export function buildConfigurePage(origin, config) {
 <body>
 
 <header>
-  <div class="header-title">my-list</div>
+  <div class="header-title" id="headerTitle">MDBList Scraper</div>
   <div class="header-actions">
     <button class="btn-save" id="saveBtn">Save</button>
     <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh — regenerate all enabled lists">
@@ -361,8 +362,6 @@ export function buildConfigurePage(origin, config) {
 </header>
 
 <main>
-  <h1>MDBList Scraper</h1>
-  <p class="sub">Paste mdblist.com listing URLs, pick the type, and they become Stremio catalogs. Data lives in <code>data/</code> on GitHub Pages.</p>
   <div id="status"></div>
   <div id="tabHost"></div>
 </main>
@@ -526,6 +525,7 @@ function renderScraper() {
       '</div>' +
     '</div>';
 
+  document.getElementById('headerTitle').textContent = 'MDBList Scraper';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet — add one above.</div>');
