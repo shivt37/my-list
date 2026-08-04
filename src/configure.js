@@ -186,6 +186,7 @@ export function buildConfigurePage(origin, config) {
   .name-static {
     font-size: 13px; font-weight: 600; color: var(--text);
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    max-width: 300px;
   }
   .name-edit { font-size: 13px; padding: 3px 8px; }
   .icon-btn {
@@ -273,7 +274,7 @@ export function buildConfigurePage(origin, config) {
   @media (min-width: 560px) {
     .card-top { align-items: center; }
     .right-col { display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 0; }
-    .info { flex: 1 1 260px; min-width: 0; }
+    .info { flex: 1 1 160px; min-width: 0; }
     .card-controls { flex-shrink: 0; margin-left: auto; }
   }
   @media (max-width: 640px) {
