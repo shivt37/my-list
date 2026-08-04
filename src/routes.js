@@ -36,8 +36,8 @@ export function githubPagesCatalogUrl(env, catalogId) {
 }
 
 // Configure page returns a full Response (html helper lives here too).
-export function configureResponse(env, config) {
-  return html(buildConfigurePage(env.ORIGIN || `https://${env.ADDON_NAME}.workers.dev`, config));
+export function configureResponse(env, origin, config) {
+  return html(buildConfigurePage(origin, config));
 }
 
 export function toIST(ms) {

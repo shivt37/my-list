@@ -3,7 +3,7 @@
 
 const GH_API = "https://api.github.com";
 
-export async function dispatchScraperWorkflow(env, { lists = [], action = "scrape" } = {}) {
+export async function dispatchScraperWorkflow(env, { lists = [], action = "scrape", deleteIds = [] } = {}) {
   if (!env.GH_TOKEN || !env.GH_REPO || !env.GH_WORKFLOW) {
     return { dispatched: false, reason: "GH_TOKEN/GH_REPO/GH_WORKFLOW not configured" };
   }
@@ -16,7 +16,11 @@ export async function dispatchScraperWorkflow(env, { lists = [], action = "scrap
     },
     body: JSON.stringify({
       ref: env.GH_REF || "main",
-      inputs: { lists: lists.join(","), action },
+      inputs: {
+        lists: lists.join(","),
+        action,
+        ...(deleteIds.length > 0 && { delete_ids: deleteIds.join(",") }),
+      },
     }),
   });
   if (res.status !== 204) {

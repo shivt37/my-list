@@ -36,7 +36,7 @@ export default {
 
     if (pathname === "/configure") {
       const cfg = await loadConfig(env.STORE);
-      return configureResponse(env, cfg);
+      return configureResponse(env, url.origin, cfg);
     }
 
     if (pathname === "/manifest.json") {
