@@ -7,3 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 [[kv_namespaces]]
 binding = "STORE"
 id = "36b7763e6e31445696e1a773c44de7a3"
+
+[vars]
+# Base URL of the GitHub Pages site hosting data/<id>.json catalog files.
+GITHUB_PAGES_BASE = "https://shivt37.github.io/my-list"

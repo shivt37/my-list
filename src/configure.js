@@ -159,7 +159,7 @@ export function buildConfigurePage(origin, config) {
   .menu-soon { margin-left: auto; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
 
   /* ── MAIN ── */
-  main { max-width: 1200px; margin: 0 auto; padding: 24px 32px 80px; }
+  main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
   h1 { font-size: 18px; margin-bottom: 4px; }
   p.sub { color: var(--text-dim); margin: 0 0 20px; font-size: 12px; }
 
@@ -183,8 +183,31 @@ export function buildConfigurePage(origin, config) {
   }
   button.danger:hover { background: rgba(255,95,102,0.18); filter: none; border-color: var(--danger); box-shadow: none; }
 
-  /* ── SCRAPER TAB ── */
+  /* ── SCRAPER TAB (tmdb-worker parity) ── */
   .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+
+  .search-input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border-bright);
+    color: var(--text); font-size: 13px; padding: 10px 12px; border-radius: var(--radius);
+    outline: none; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-input:hover { border-color: #2f2f42; }
+  .search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-dim), 0 0 22px -6px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.02) inset;
+    background: #0d0d15;
+  }
+
+  select {
+    background: #000000; color: var(--text); border: 1px solid var(--border-bright); border-radius: 6px;
+    padding: 6px 8px; font-size: 11px; max-width: 100%; cursor: pointer;
+    transition: border-color 0.12s;
+  }
+  select:hover { border-color: #32324a; }
+  select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+  select option { background: var(--surface); }
 
   .create-list-section { margin-bottom: 18px; }
   .btn-create-list {
@@ -195,29 +218,19 @@ export function buildConfigurePage(origin, config) {
   }
   .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
   .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .create-list-row input {
-    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 12px; padding: 8px 10px; border-radius: var(--radius); outline: none;
-    font-family: inherit; transition: border-color 0.15s;
-  }
-  .create-list-row input:focus { border-color: var(--accent); }
-  .create-list-row input::placeholder { color: var(--text-muted); }
-  .create-list-row .name-input { flex: 1 1 140px; min-width: 0; }
-  .create-list-row .url-input { flex: 3 1 260px; min-width: 0; font-family: ui-monospace, monospace; }
-  .create-list-row select {
-    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 12px; padding: 8px 10px; border-radius: var(--radius); outline: none; cursor: pointer;
-  }
-  .create-list-row select:focus { border-color: var(--accent); }
+  .create-list-row .search-input.name-input { flex: 1 1 140px; min-width: 0; }
+  .create-list-row .search-input.url-input { flex: 3 1 260px; min-width: 0; font-family: ui-monospace, monospace; }
+  .create-list-row select { flex-shrink: 0; }
   .create-list-row button { flex-shrink: 0; }
 
   .list-card {
     background: linear-gradient(180deg, var(--surface), #0a0a10);
     border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px;
-    margin-bottom: 10px; box-shadow: var(--shadow-card);
-    transition: border-color 0.15s, opacity 0.15s;
+    margin-bottom: 10px; display: flex; flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
   }
-  .list-card:hover { border-color: #242436; }
+  .list-card:hover { border-color: #242436; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 14px 34px -18px rgba(0,0,0,0.9); }
   .list-card.disabled { opacity: 0.6; }
 
   .card-top { display: flex; gap: 12px; align-items: flex-start; }
@@ -239,7 +252,8 @@ export function buildConfigurePage(origin, config) {
   .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
-  .info { display: flex; align-items: center; gap: 8px; }
+  .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .info .name-static { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .name-edit {
     background: transparent; border: 1px solid transparent; color: var(--text);
     font-size: 13px; font-weight: 600; padding: 2px 6px; border-radius: 6px; min-width: 0; flex: 0 1 auto;
@@ -253,54 +267,86 @@ export function buildConfigurePage(origin, config) {
     border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px; font-family: ui-monospace, monospace;
   }
 
-  .card-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
-  .card-row .url-input {
-    flex: 1; min-width: 0; background: var(--surface2); border: 1px solid var(--border-bright);
-    color: var(--text); font-size: 11px; padding: 6px 8px; border-radius: 7px; outline: none;
-    font-family: ui-monospace, monospace; transition: border-color 0.15s;
+  .card .controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .card .controls .url-input {
+    flex: 1; min-width: 0; background: #000000; border: 1px solid var(--border-bright);
+    color: var(--text); font-size: 11px; padding: 6px 8px; border-radius: 6px; outline: none;
+    font-family: ui-monospace, monospace; transition: border-color 0.12s;
   }
-  .card-row .url-input:focus { border-color: var(--accent); }
-  .card-row select {
-    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 11px; padding: 6px 8px; border-radius: 7px; outline: none; cursor: pointer; flex-shrink: 0;
+  .card .controls .url-input:hover { border-color: #32324a; }
+  .card .controls .url-input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+  .card .controls .max-pages {
+    background: #000000; border: 1px solid var(--border-bright); color: var(--text);
+    font-size: 11px; padding: 6px 8px; border-radius: 6px; outline: none; width: 56px; flex-shrink: 0;
+    font-family: ui-monospace, monospace; transition: border-color 0.12s;
   }
-  .card-row select:focus { border-color: var(--accent); }
-  .card-row .max-pages {
-    background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text);
-    font-size: 11px; padding: 6px 8px; border-radius: 7px; outline: none; width: 56px; flex-shrink: 0;
-    font-family: ui-monospace, monospace; transition: border-color 0.15s;
-  }
-  .card-row .max-pages:focus { border-color: var(--accent); }
-  .card-row button.danger { flex-shrink: 0; }
+  .card .controls .max-pages:hover { border-color: #32324a; }
+  .card .controls .max-pages:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+  .card .controls button { flex-shrink: 0; }
 
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
 
-  .empty { color: var(--text-muted); text-align: center; padding: 32px 0; font-size: 13px; }
+  .empty { color: var(--text-muted); text-align: center; padding: 16px 0; font-size: 13px; }
 
   /* ── STATUS / CONFIRM MODAL ── */
-  #status {
-    padding: 10px 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 13px; display: none;
-  }
-  #status.ok { display: block; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: var(--ok); }
-  #status.error { display: block; background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger); }
+  #status { font-size: 12px; min-height: 16px; margin: 6px 0 14px; }
+  #status.error { color: var(--danger); }
+  #status.ok { color: var(--ok); }
 
   .confirm-backdrop {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 300;
+    position: fixed; inset: 0; background: rgba(3,3,6,0.72); display: none;
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    align-items: center; justify-content: center; z-index: 300; padding: 20px;
   }
   .confirm-backdrop.visible { display: flex; }
   .confirm-modal {
-    background: var(--surface2); border: 1px solid var(--border-bright); border-radius: var(--radius-lg);
-    padding: 20px; width: 400px; max-width: 92vw; box-shadow: var(--shadow-pop);
+    background: linear-gradient(180deg, var(--surface), #0a0a10);
+    border: 1px solid var(--border-bright); border-radius: var(--radius-lg);
+    padding: 20px; width: 100%; max-width: 360px;
+    box-shadow: 0 28px 60px -16px rgba(0,0,0,0.9);
   }
-  .confirm-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-  .confirm-body { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; line-height: 1.6; }
+  .confirm-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .confirm-body { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; margin-bottom: 18px; }
   .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .confirm-actions button { padding: 8px 14px; font-size: 12.5px; }
 
-  @media (max-width: 720px) {
-    main { padding: 16px 14px 60px; }
+  /* Tablet: ≤900px */
+  @media (max-width: 900px) { main { padding: 20px; } }
+
+  /* Tablet+: card-top becomes a row — info + controls side by side */
+  @media (min-width: 560px) {
+    .card-top { align-items: center; }
+    .card .right-col { flex-direction: row; align-items: center; }
+    .card .info { flex: 1 1 160px; min-width: 0; }
+    .card .controls { flex-shrink: 0; margin-left: auto; }
+  }
+
+  /* Mobile: ≤640px */
+  @media (max-width: 640px) {
     header { padding: 10px 14px; }
-    .card-row { flex-wrap: wrap; }
-    .card-row .url-input { flex: 1 1 100%; }
+    .header-title { font-size: 13px; }
+    .header-actions { gap: 6px; }
+    button.btn-save { padding: 6px 11px; font-size: 11px; }
+    .btn-icon { padding: 6px 8px; }
+    main { padding: 14px 12px 56px; }
+    .create-list-row { flex-wrap: wrap; gap: 6px; }
+    .create-list-row .search-input { flex: 1 1 100%; }
+    .create-list-row button { flex: 1 1 auto; }
+    .btn-create-list { font-size: 12px; padding: 10px 14px; }
+    .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
+    .card-top { gap: 9px; }
+    .card .right-col { gap: 6px; }
+    .card .info .name-static { font-size: 12px; }
+    .card .controls { flex-wrap: wrap; }
+    .card .controls .url-input { flex: 1 1 100%; }
+    .card .controls select { flex: 1 1 auto; }
+    .id-chip { font-size: 9px; }
+    select { font-size: 10px; padding: 5px 6px; }
+    button.danger { padding: 5px 8px; font-size: 10px; }
+    .accent-popup { right: -14px; width: 190px; padding: 12px; }
+    .swatch { width: 24px; height: 24px; }
+    .menu-popup { right: -14px; width: 180px; padding: 5px; }
+    .menu-item { padding: 8px 9px; font-size: 12px; }
   }
 </style>
 </head>
@@ -440,7 +486,7 @@ function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
   if (m !== 'scraper') { soon(); return; }
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === 'scraper'));
-  render();
+  renderScraper();
 }
 document.addEventListener('click', (e) => {
   const popup = document.getElementById('menuPopup');
@@ -470,7 +516,7 @@ function renderScraper() {
               : '<span class="name-static" onclick="startNameEdit(' + i + ')">' + escapeAttr(l.name) + '</span>') +
             '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
           '</div>' +
-          '<div class="card-row">' +
+          '<div class="controls">' +
             '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
             '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
               '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
@@ -487,10 +533,13 @@ function renderScraper() {
 
   const createRow =
     '<div class="create-list-section">' +
-      '<button class="btn-create-list" id="createListBtn" onclick="showCreateRow()">+ Add List</button>' +
+      '<button class="btn-create-list" id="createListBtn" onclick="showCreateRow()">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+        'Add List' +
+      '</button>' +
       '<div class="create-list-row" id="createListRow" style="display:none">' +
-        '<input class="name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
-        '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
+        '<input class="search-input name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
+        '<input class="search-input url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
         '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
         '<button onclick="confirmCreateList()">Add</button>' +
         '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +
