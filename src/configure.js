@@ -9,7 +9,9 @@ function escapeAttr(s) {
 }
 
 export function buildConfigurePage(origin, config) {
-  const initial = JSON.stringify(config);
+  // </script> can escape the inline state blob (V8 JSON.stringify does not
+  // escape <), so hard-escape it before embedding.
+  const initial = JSON.stringify(config).replace(/</g, "\\u003c");
   return `<!DOCTYPE html>
 <html lang="en">
 <head>

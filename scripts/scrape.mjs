@@ -78,9 +78,13 @@ async function postRuns(runs) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ runs }),
     });
-    if (!res.ok) console.warn(`  [runs] POST failed: HTTP ${res.status}`);
+    if (!res.ok) {
+      console.warn(`  [runs] POST failed: HTTP ${res.status}`);
+      process.exitCode = 1;
+    }
   } catch (e) {
     console.warn(`  [runs] POST failed: ${e.message}`);
+    process.exitCode = 1;
   }
 }
 
@@ -213,7 +217,7 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
     try {
       await page.waitForSelector(linkSelector, { timeout: 20000 });
     } catch (e) {
-      console.log(`[waitForSelector] ${type} links not found within 20s, continuing...`);
+      throw new Error(`${type} links not found within 20s — page may be blocked or slow`);
     }
 
     const label = `page-${type}-p${pageIdx}`;
@@ -380,11 +384,17 @@ async function main() {
       const startedAt = Date.now();
       const run = { catalog_id: list.id, started_at: startedAt, status: "failed" };
       try {
-        // Sanity check: /shows/ URL must pair with type series, /movies/ with movie.
+        // Sanity check: must be an mdblist.com listing URL matching the type.
         const expectedPath = list.type === "series" ? "/shows/" : "/movies/";
-        if (!list.url || !list.url.includes(expectedPath)) {
+        let parsed;
+        try {
+          parsed = new URL(list.url);
+        } catch {
+          throw new Error(`List "${list.name}" has an invalid URL — check the configure page.`);
+        }
+        if (parsed.hostname !== "mdblist.com" || !parsed.pathname.startsWith(expectedPath)) {
           throw new Error(
-            `List "${list.name}" has type="${list.type}" but url is missing or doesn't contain "${expectedPath}" — check the configure page.`
+            `List "${list.name}" has type="${list.type}" but url isn't mdblist.com${expectedPath} (got ${parsed.hostname}${parsed.pathname}) — check the configure page.`
           );
         }
 

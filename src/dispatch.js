@@ -24,8 +24,7 @@ export async function dispatchScraperWorkflow(env, { lists = [], action = "scrap
     }),
   });
   if (res.status !== 204) {
-    const text = await res.text();
-    return { dispatched: false, reason: `GitHub API ${res.status}: ${text}` };
+    return { dispatched: false, reason: `GitHub API returned ${res.status}` };
   }
   return { dispatched: true, lists, action };
 }

@@ -24,7 +24,7 @@ export default {
     const { pathname } = url;
 
     if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: corsHeaders });
+      return new Response(null, { status: 204, headers: { ...corsHeaders, "Access-Control-Allow-Methods": "GET, POST, OPTIONS" } });
     }
 
     if (pathname === "/" || pathname === "") {

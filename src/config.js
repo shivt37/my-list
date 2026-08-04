@@ -7,6 +7,10 @@ import { createHash } from "node:crypto";
 const CONFIG_KEY = "config";
 const RUNS_KEY = "runs:scraper";
 const RUNS_MAX = 30;
+// One-shot healing marker — once set, seed-URL lists never get their ids
+// rewritten again (rewriting a user-added list's id mid-save makes the
+// diff see it as removed+added and delete the seeded data file).
+const HEALED_KEY = "healed";
 const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 // Seeded IDs are derived from the listing URL (first 8 hex of sha256),
@@ -71,8 +75,8 @@ export function migrateConfig(raw) {
   const lists = Array.isArray(src.lists) ? src.lists : [];
   const migrated = lists.map((l) => ({
     id: typeof l.id === "string" && l.id.startsWith("mdb_scrape_") ? l.id : randomScraperId(l.url),
-    name: String(l.name || "").trim() || "Untitled",
-    url: String(l.url || ""),
+    name: String(l.name || "").trim().slice(0, 200) || "Untitled",
+    url: String(l.url || "").slice(0, 2000),
     type: l.type === "series" ? "series" : "movie",
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
@@ -91,7 +95,12 @@ export function listContentHash(list) {
 }
 
 export async function loadConfig(kv) {
-  const raw = await kv.get(CONFIG_KEY, "json");
+  let raw = null;
+  try {
+    raw = await kv.get(CONFIG_KEY, "json");
+  } catch {
+    raw = null; // corrupt KV value → fall back to seeds rather than 500
+  }
   const migrated = migrateConfig(raw);
   const wasSeeded = !(raw && raw.scraper && Array.isArray(raw.scraper.lists) && raw.scraper.lists.length > 0);
   const cfg = seedScraperDefaults(migrated);
@@ -99,9 +108,12 @@ export async function loadConfig(kv) {
   // One-shot healing: if any persisted list matches a seed entry by URL
   // but carries a different id (e.g. a random id from before the seed
   // list pinned its ids), rewrite it to the pinned id so it matches the
-  // file the scraper wrote to data/.
+  // file the scraper wrote to data/. Runs once ever (HEALED_KEY), so a
+  // user re-adding a seed URL later keeps their own id and never gets it
+  // rewritten mid-save.
   let healed = false;
-  if (!wasSeeded) {
+  const alreadyHealed = !!(await kv.get(HEALED_KEY));
+  if (!wasSeeded && !alreadyHealed) {
     const seedByUrl = new Map(SEED_LISTS.map((s) => [s.url, s]));
     cfg.scraper.lists = cfg.scraper.lists.map((l) => {
       const seed = seedByUrl.get(l.url);
@@ -117,6 +129,7 @@ export async function loadConfig(kv) {
   // the config.
   if ((wasSeeded && cfg.scraper.lists.length > 0) || healed) {
     await kv.put(CONFIG_KEY, JSON.stringify(cfg));
+    if (healed) await kv.put(HEALED_KEY, "1");
   }
   return cfg;
 }

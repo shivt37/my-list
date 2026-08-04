@@ -16,14 +16,23 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "content-type",
 };
 
-function json(body, extraHeaders = {}) {
+function json(body, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(body, null, 2), {
+    status,
     headers: { "content-type": "application/json", ...corsHeaders, ...extraHeaders },
   });
 }
 
 function html(body, extraHeaders = {}) {
-  return new Response(body, { headers: { "content-type": "text/html; charset=utf-8", ...corsHeaders, ...extraHeaders } });
+  return new Response(body, {
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "x-content-type-options": "nosniff",
+      "content-security-policy": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'",
+      ...corsHeaders,
+      ...extraHeaders,
+    },
+  });
 }
 
 // Stremio pagination arrives as /catalog/<type>/<id>/skip=N.json — the
@@ -98,7 +107,7 @@ export async function handleCatalog(env, type, catalogId, skip) {
 
   const rows = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
   const slice = rows.slice(skip, skip + 100);
-  return json({ metas: slice.map(rowToMeta) }, { "cache-control": "public, max-age=300" });
+  return json({ metas: slice.map(rowToMeta) }, 200, { "cache-control": "public, max-age=300" });
 }
 
 export async function handleStatus(env) {
@@ -125,7 +134,8 @@ export async function handleSaveConfig(env, request) {
     if (!body || !body.scraper || !Array.isArray(body.scraper.lists)) {
       return json({ error: "Invalid config body — expected { scraper: { lists: [] } }" }, 400);
     }
-    // Guard against concurrent writes clobbering each other.
+    // Note: read-modify-write has no lock — concurrent saves can clobber
+    // each other. Accepted for a single-operator admin page.
     const current = await loadConfig(env.STORE);
     const incoming = migrateConfig(body);
 
@@ -154,8 +164,6 @@ export async function handleSaveConfig(env, request) {
     }
     const deleteIds = removed.map((l) => l.id);
 
-    await saveConfig(env.STORE, incoming);
-
     let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
     if (dispatch.length > 0 || deleteIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
@@ -164,6 +172,13 @@ export async function handleSaveConfig(env, request) {
         ...(deleteIds.length > 0 && { deleteIds }),
       });
     }
+    if ((dispatch.length > 0 || deleteIds.length > 0) && !dispatchResult.dispatched) {
+      // Don't persist a config whose workflow dispatch failed — the on-disk
+      // data files would go stale with no way to regenerate them.
+      return json({ ok: false, error: "Save rejected — GitHub dispatch failed: " + dispatchResult.reason }, 502);
+    }
+
+    await saveConfig(env.STORE, incoming);
 
     return json({
       ok: true,
@@ -174,7 +189,7 @@ export async function handleSaveConfig(env, request) {
       github: dispatchResult,
     });
   } catch (e) {
-    return json({ error: "Save failed: " + e.message }, 500);
+    return json({ error: "Save failed." }, 500);
   }
 }
 
@@ -204,6 +219,9 @@ export async function handleRunsPost(env, request) {
     if (!body || !Array.isArray(body.runs)) {
       return json({ error: "Expected { runs: [...] }" }, 400);
     }
+    if (body.runs.length > 50) {
+      return json({ error: "Too many run records in one request (max 50)." }, 400);
+    }
     const now = Date.now();
     for (const r of body.runs) {
       const run = {
@@ -220,7 +238,7 @@ export async function handleRunsPost(env, request) {
     }
     return json({ ok: true });
   } catch (e) {
-    return json({ error: "Failed to record runs: " + e.message }, 500);
+    return json({ error: "Failed to record runs." }, 500);
   }
 }
 
