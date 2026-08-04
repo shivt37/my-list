@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1785857573786,
+  "scraped_at": 1785867339980,
   "items": [
     {
       "slug": "38vwp-evil-dead-burn?cache=1",
@@ -1045,16 +1045,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "3p5l3-over-your-dead-body?cache=1",
-      "imdb_id": "tt34685692",
-      "title": "Over Your Dead Body",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "kZCauMzAt9eMAhLMopCqnFw1Q5k.jpg",
-      "description": "A dysfunctional couple head to a remote cabin to \"reconnect\", but each has secret intentions to kill the other.",
-      "digital_release_date": null
-    },
-    {
       "slug": "2ue3y-desert-warrior?cache=1",
       "imdb_id": "tt13570066",
       "title": "Desert Warrior",
@@ -1442,6 +1432,16 @@
       "score": 4,
       "poster_path": "7yy4cVr9obHOZC9lj3uct4DwDEn.jpg",
       "description": "North America has been divided into four main quadrants. A power-hungry corporation has taken over the conventional prison system and made criminals the new law enforcers.  The owner of that corporation, nanoscientist Eion Prescott, created a nano-virus called Onyx. Which is distributed through deadly watches to criminals. First, infecting them. Then, forcing them into eliminating each other for freedom. Who can topple the corporation's entire system from within?",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3g6sr-seven-snipers?cache=1",
+      "imdb_id": "tt36926359",
+      "title": "Seven Snipers",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "pK6tGCG6UAgUT5FTq3ylGErHxQQ.jpg",
+      "description": "When a former elite sniper is hunted down by the ruthless warlord who once held her captive, she must fight to the death to protect the daughter she has raised in hiding, on a remote Australian farm.",
       "digital_release_date": null
     }
   ]
