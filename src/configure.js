@@ -111,7 +111,8 @@ export function buildConfigurePage(origin, config) {
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
   h1 { font-size: 18px; margin-bottom: 4px; }
   p.sub { color: var(--dim); margin: 0 0 14px; font-size: 12px; }
-  #status { font-size: 12px; min-height: 16px; margin: 0 0 14px; }
+  #status { font-size: 12px; margin: 0 0 14px; }
+  #status:empty { display: none; }
   #status.error { color: var(--danger); }
   #status.ok { color: var(--ok); }
 
