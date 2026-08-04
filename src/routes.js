@@ -63,7 +63,12 @@ export function toIST(ms) {
 export async function buildManifest(env) {
   const cfg = await loadConfig(env.STORE);
   const enabled = cfg.scraper.lists.filter((l) => l.enabled);
-  const catalogs = enabled.map((l) => ({ type: l.type, id: l.id, name: l.name }));
+  const catalogs = enabled.map((l) => ({
+    name: l.name,
+    id: l.id,
+    type: l.type,
+    extra: [{ name: "skip", isRequired: false }],
+  }));
   return {
     id: ADDON_ID,
     version: ADDON_VERSION,
