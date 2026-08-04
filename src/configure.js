@@ -56,17 +56,13 @@ export function buildConfigurePage(origin, config) {
     min-height: 100vh;
     line-height: 1.5;
   }
-  body::before {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background:
-      radial-gradient(90rem 34rem at 50% -12rem, rgba(6,182,212,0.055), transparent 62%),
-      radial-gradient(70rem 30rem at 85% 115%, rgba(96,92,255,0.04), transparent 60%);
-  }
   body > * { position: relative; z-index: 1; }
 
   /* Selection stays neutral — no accent tint on highlight. */
   ::selection { background: #262635; color: #e8edf4; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  /* One focus line only: inputs shift border color, no stacked outline ring. */
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
 
   /* ── HEADER ── */
   header {
@@ -86,8 +82,7 @@ export function buildConfigurePage(origin, config) {
     padding: 9px 16px; border-radius: var(--r); border: 1px solid var(--accent);
     background: var(--accent); color: #040507;
     font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
-    box-shadow: 0 0 14px -4px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.22) inset;
-    transition: filter 0.15s, box-shadow 0.15s, transform 0.1s;
+    transition: filter 0.15s, transform 0.1s;
   }
   button:hover { filter: brightness(1.1); }
   button:active { transform: translateY(1px); }
@@ -129,7 +124,7 @@ export function buildConfigurePage(origin, config) {
   }
   input::placeholder { color: var(--muted); }
   input:hover { border-color: #2f2f42; }
-  input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+  input:focus { border-color: var(--accent); }
 
   select {
     appearance: none; -webkit-appearance: none;
@@ -142,7 +137,7 @@ export function buildConfigurePage(origin, config) {
     transition: border-color 0.12s, box-shadow 0.12s;
   }
   select:hover { border-color: #2f2f42; }
-  select:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+  select:focus { border-color: var(--accent); }
   select option { background: #0c0c13; color: #e8edf4; }
 
   /* ── SCRAPER TAB ── */
@@ -163,10 +158,9 @@ export function buildConfigurePage(origin, config) {
   .create-list-row button { flex-shrink: 0; }
 
   .list-card {
-    background: linear-gradient(180deg, var(--surface), #0a0a10);
+    background: var(--surface);
     border: 1px solid var(--border); border-radius: var(--r2); padding: 12px;
     margin-bottom: 10px; display: flex; flex-direction: column;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset, 0 8px 28px -18px rgba(0,0,0,0.85);
     transition: border-color 0.15s, opacity 0.15s;
   }
   .list-card:hover { border-color: #242436; }
@@ -202,8 +196,9 @@ export function buildConfigurePage(origin, config) {
   }
 
   .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .card-controls .url-row { flex: 1 1 100%; min-width: 0; }
   .card-controls .url-input {
-    flex: 1; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
+    width: 100%; font-family: ui-monospace, monospace; font-size: 12px;
     padding: 7px 9px; border-radius: 7px;
   }
   .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
@@ -274,7 +269,8 @@ export function buildConfigurePage(origin, config) {
     .card-top { align-items: center; }
     .right-col { display: flex; flex-direction: row; align-items: center; gap: 10px; }
     .info { flex: 1 1 160px; }
-    .card-controls { flex-shrink: 0; margin-left: auto; }
+    .card-controls { flex-wrap: wrap; }
+    .card-controls .url-row { flex: 1 1 100%; }
   }
   @media (max-width: 640px) {
     header { padding: 10px 14px; }
@@ -291,7 +287,7 @@ export function buildConfigurePage(origin, config) {
     .card-top { gap: 9px; }
     .name-static { font-size: 12px; }
     .card-controls { flex-wrap: wrap; }
-    .card-controls .url-input { flex: 1 1 100%; }
+    .card-controls .url-row { flex: 1 1 100%; }
     select { font-size: 12px; padding-top: 6px; padding-bottom: 6px; }
     button.danger { padding: 5px 8px; font-size: 10px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
@@ -485,7 +481,7 @@ function renderScraper() {
             '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
           '</div>' +
           '<div class="card-controls">' +
-            '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
+            '<div class="url-row"><input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL"></div>' +
             '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
               '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
               '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
