@@ -15,7 +15,7 @@ export function buildConfigurePage(origin, config) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#050508">
 <title>my-list — Configure</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,23 +26,25 @@ export function buildConfigurePage(origin, config) {
   input, button, select, textarea { font: inherit; }
 
   :root {
-    --bg: #000000;
-    --surface: #0a0a0a;
-    --surface2: #141414;
-    --surface3: #1a1a1a;
-    --border: #1f1f1f;
-    --border2: #2a2a2a;
-    --text: #e6edf3;
-    --dim: #9da7b3;
-    --muted: #6e7681;
+    --bg: #050508;
+    --surface: #0c0c13;
+    --surface2: #13131d;
+    --surface3: #1a1a26;
+    --border: #1b1b26;
+    --border2: #262635;
+    --text: #e8edf4;
+    --dim: #a5aebc;
+    --muted: #6b7385;
     --accent: #06b6d4;
     --accent-dim: rgba(6,182,212,0.10);
     --accent-glow: rgba(6,182,212,0.18);
     --accent-soft: rgba(6,182,212,0.06);
-    --danger: #b91c1c;
+    --danger: #ff5f66;
+    --danger-bg: rgba(255,95,102,0.10);
+    --danger-border: rgba(255,95,102,0.30);
     --ok: #34d399;
-    --r: 8px;
-    --r2: 10px;
+    --r: 9px;
+    --r2: 14px;
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
@@ -57,7 +59,7 @@ export function buildConfigurePage(origin, config) {
   body > * { position: relative; z-index: 1; }
 
   /* Selection stays neutral — no accent tint on highlight. */
-  ::selection { background: var(--border2); color: var(--text); }
+  ::selection { background: #262635; color: #e8edf4; }
   /* One focus line only: inputs shift border color, no stacked outline ring. */
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   input:focus, select:focus { outline: none; border-color: var(--accent); }
@@ -65,43 +67,43 @@ export function buildConfigurePage(origin, config) {
   /* ── HEADER ── */
   header {
     border-bottom: 1px solid var(--border);
-    padding: 14px 24px;
+    padding: 12px 24px;
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 100;
-    background: var(--bg);
+    background: rgba(5,5,8,0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
-  .header-title { font-weight: 600; font-size: 16px; letter-spacing: 0.02em; color: var(--text); }
+  .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
 
   /* ── BUTTONS (solid accent, no color-mix) ── */
   button {
-    padding: 10px 16px; border-radius: var(--r); border: 1px solid var(--accent);
-    background: var(--accent); color: #000;
-    font-size: 13px; font-weight: 500; cursor: pointer; flex-shrink: 0;
-    transition: filter 0.15s;
+    padding: 9px 16px; border-radius: var(--r); border: 1px solid var(--accent);
+    background: var(--accent); color: #040507;
+    font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+    transition: filter 0.15s, transform 0.1s;
   }
   button:hover { filter: brightness(1.1); }
-  button:disabled { opacity: 0.6; cursor: default; filter: none; }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: 0.55; cursor: default; filter: none; box-shadow: none; }
   button.secondary {
-    background: var(--surface2); border-color: var(--border2); color: var(--text);
+    background: var(--surface2); border-color: var(--border2); color: var(--text); font-weight: 500;
   }
   button.secondary:hover { background: var(--surface3); filter: none; }
   button.danger {
-    background: var(--danger); border-color: var(--danger); color: #fff;
-    padding: 6px 10px; font-size: 11px; font-weight: 400;
+    background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);
+    padding: 6px 10px; font-size: 11px; font-weight: 500; box-shadow: none;
   }
-  button.danger:hover { filter: brightness(1.15); }
-  button.btn-save { padding: 8px 16px; }
+  button.danger:hover { background: rgba(255,95,102,0.18); border-color: var(--danger); filter: none; }
+  button.btn-save { padding: 8px 18px; }
   .btn-icon {
-    background: transparent; border: 1px solid var(--border2); color: var(--dim);
+    background: var(--surface); border: 1px solid var(--border2); color: var(--dim);
     font-size: 16px; cursor: pointer; padding: 7px 9px; border-radius: var(--r);
     display: flex; align-items: center; justify-content: center;
-    transition: color 0.15s, border-color 0.15s;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
-  .btn-icon:hover { color: var(--text); border-color: var(--dim); }
-  .btn-icon:disabled { opacity: 0.5; cursor: default; }
-  .btn-icon:disabled:hover { color: var(--dim); border-color: var(--border2); }
-  #refreshBtn svg { transition: transform 0.15s; }
+  .btn-icon:hover { color: var(--text); border-color: var(--accent); }
   #refreshBtn.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
@@ -115,28 +117,28 @@ export function buildConfigurePage(origin, config) {
 
   /* ── INPUTS + SELECTS — explicit dark, can never render white ── */
   input {
-    background: var(--surface); color: var(--text);
-    border: 1px solid var(--border2); border-radius: var(--r);
+    background: #0c0c13; color: #e8edf4;
+    border: 1px solid var(--border2); border-radius: 8px;
     padding: 8px 10px; font-size: 13px; outline: none;
-    transition: border-color 0.12s;
+    transition: border-color 0.12s, box-shadow 0.12s;
   }
   input::placeholder { color: var(--muted); }
-  input:hover { border-color: var(--dim); }
+  input:hover { border-color: #2f2f42; }
   input:focus { border-color: var(--accent); }
 
   select {
     appearance: none; -webkit-appearance: none;
-    background-color: var(--surface); color: var(--text);
-    border: 1px solid var(--border2); border-radius: var(--r);
+    background-color: #0c0c13; color: #e8edf4;
+    border: 1px solid var(--border2); border-radius: 8px;
     padding: 8px 28px 8px 10px; font-size: 13px; cursor: pointer; outline: none;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236e7681' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7385' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 9px center;
-    transition: border-color 0.12s;
+    transition: border-color 0.12s, box-shadow 0.12s;
   }
-  select:hover { border-color: var(--dim); }
+  select:hover { border-color: #2f2f42; }
   select:focus { border-color: var(--accent); }
-  select option { background: var(--surface); color: var(--text); }
+  select option { background: #0c0c13; color: #e8edf4; }
 
   /* ── SCRAPER TAB ── */
   .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
@@ -149,7 +151,7 @@ export function buildConfigurePage(origin, config) {
     color: var(--dim); font-size: 13px; font-weight: 500; cursor: pointer;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
-  .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
   .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .create-list-row .name-input { flex: 1 1 150px; min-width: 0; }
   .create-list-row .url-input { flex: 3 1 280px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; }
@@ -159,8 +161,9 @@ export function buildConfigurePage(origin, config) {
     background: var(--surface);
     border: 1px solid var(--border); border-radius: var(--r2); padding: 12px;
     margin-bottom: 10px; display: flex; flex-direction: column;
-    transition: opacity 0.15s;
+    transition: border-color 0.15s, opacity 0.15s;
   }
+  .list-card:hover { border-color: #242436; }
   .list-card.disabled { opacity: 0.6; }
 
   .card-top { display: flex; gap: 12px; align-items: flex-start; }
@@ -176,20 +179,20 @@ export function buildConfigurePage(origin, config) {
     border-radius: 50%; background: var(--muted); transition: transform 0.15s, background 0.15s;
   }
   .toggle input:checked + .toggle-slider { background: var(--accent-dim); border-color: var(--accent); }
-  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
   .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .name-static {
-    font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .name-static:hover { color: var(--accent); }
   .name-edit { font-size: 13px; padding: 3px 8px; }
   .id-chip {
-    font-size: 9.5px; color: var(--muted); background: var(--surface2);
-    border: 1px solid var(--border2); padding: 1.5px 6px; border-radius: 4px;
-    font-family: ui-monospace, monospace; flex-shrink: 0; letter-spacing: 0.01em;
+    font-size: 10px; color: var(--muted); background: var(--surface2);
+    border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px;
+    font-family: ui-monospace, monospace; flex-shrink: 0;
   }
 
   .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
@@ -210,16 +213,17 @@ export function buildConfigurePage(origin, config) {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
     background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
     padding: 14px; z-index: 200; width: 220px; max-width: calc(100vw - 32px);
+    box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .accent-popup.visible { display: block; }
   .accent-popup-title { font-size: 11px; font-weight: 500; color: var(--dim); margin-bottom: 10px; }
   .swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
   .swatch {
-    width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+    width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
     border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
   }
-  .swatch:hover { transform: scale(1.1); }
-  .swatch.selected { border-color: var(--text); box-shadow: 0 0 0 1px rgba(255,255,255,0.15); }
+  .swatch:hover { transform: scale(1.15); }
+  .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
 
   /* ── MENU ── */
   .menu-popup-wrap { position: relative; }
@@ -227,6 +231,7 @@ export function buildConfigurePage(origin, config) {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
     background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
     padding: 6px; z-index: 200; width: 200px; max-width: calc(100vw - 32px);
+    box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .menu-popup.visible { display: block; }
   .menu-item {
@@ -242,7 +247,8 @@ export function buildConfigurePage(origin, config) {
 
   /* ── CONFIRM MODAL ── */
   .confirm-backdrop {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.72); display: none;
+    position: fixed; inset: 0; background: rgba(3,3,6,0.72); display: none;
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
     align-items: center; justify-content: center; z-index: 300; padding: 20px;
   }
   .confirm-backdrop.visible { display: flex; }
@@ -250,6 +256,7 @@ export function buildConfigurePage(origin, config) {
     background: var(--surface);
     border: 1px solid var(--border2); border-radius: var(--r2);
     padding: 20px; width: 100%; max-width: 360px;
+    box-shadow: 0 28px 60px -16px rgba(0,0,0,0.9);
   }
   .confirm-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
   .confirm-body { font-size: 12.5px; color: var(--dim); line-height: 1.5; margin-bottom: 18px; }
@@ -503,13 +510,7 @@ function renderScraper() {
       '</div>' +
     '</div>';
 
-  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">' +
-    '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px">' +
-      '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>' +
-      '<polyline points="15 3 21 3 21 9"></polyline>' +
-      '<line x1="10" y1="14" x2="21" y2="3"></line>' +
-    '</svg>' +
-    'Status</button></div>';
+  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet — add one above.</div>');
   if (listNameEditIndex >= 0 && listNameEditIndex < lists.length) {
