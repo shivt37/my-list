@@ -90,7 +90,6 @@ function rowToMeta(row) {
         ? row.poster_path
         : `https://image.tmdb.org/t/p/w500/${row.poster_path}`
       : undefined,
-    description: row.description || undefined,
     releaseInfo: row.year ? String(row.year) : undefined,
     imdbRating: row.score ? (row.score / 10).toFixed(1) : undefined,
   };
