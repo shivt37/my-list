@@ -96,7 +96,7 @@ export async function handleCatalog(env, type, catalogId, skip) {
     return json({ metas: [] });
   }
 
-  const rows = Array.isArray(data) ? data : data.metas ? [] : [];
+  const rows = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
   const slice = rows.slice(skip, skip + 100);
   return json({ metas: slice.map(rowToMeta) }, { "cache-control": "public, max-age=300" });
 }

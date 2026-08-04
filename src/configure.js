@@ -119,6 +119,24 @@ export function buildConfigurePage(origin, config) {
   #refreshBtn.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+  /* ── ACCENT POPUP ── */
+  .accent-popup-wrap { position: relative; }
+  .accent-popup {
+    display: none; position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--surface); border: 1px solid var(--border-bright); border-radius: 10px;
+    padding: 14px; z-index: 200; width: 220px; max-width: calc(100vw - 32px);
+    box-shadow: var(--shadow-pop);
+  }
+  .accent-popup.visible { display: block; }
+  .accent-popup-title { font-size: 11px; font-weight: 500; color: var(--text-dim); margin-bottom: 10px; }
+  .swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .swatch {
+    width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+    border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
+  }
+  .swatch:hover { transform: scale(1.15); }
+  .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
+
   /* ── MENU ── */
   .menu-popup-wrap { position: relative; }
   .menu-popup {
@@ -277,6 +295,15 @@ export function buildConfigurePage(origin, config) {
     <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh — regenerate all enabled lists in the current module">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
     </button>
+    <div class="accent-popup-wrap">
+      <button class="btn-icon" id="accentBtn" title="Accent colour">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9c0-1.66-1.34-3-3-3h-2a3 3 0 0 1-2.12-5.12C14.6 3.1 14.5 2.6 14.5 2c0-1.66.5-3 1.5-4.5"/></svg>
+      </button>
+      <div class="accent-popup" id="accentPopup">
+        <div class="accent-popup-title">Accent Colour</div>
+        <div class="swatch-row" id="swatchRow"></div>
+      </div>
+    </div>
     <div class="menu-popup-wrap">
       <button class="btn-icon" id="menuBtn" title="Menu">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -332,6 +359,55 @@ function escapeAttr(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// ─── Accent colour (localStorage-persisted, like the tmdb page) ───
+const ACCENT_COLORS = {
+  '#fb923c': { dim: 0.10, glow: 0.18 }, // Amber
+  '#f59e0b': { dim: 0.10, glow: 0.18 }, // Gold
+  '#f43f5e': { dim: 0.10, glow: 0.18 }, // Rose
+  '#e63d64': { dim: 0.10, glow: 0.18 }, // Magenta
+  '#60a5fa': { dim: 0.10, glow: 0.18 }, // Sky Blue
+  '#38bdf8': { dim: 0.10, glow: 0.18 }, // Ice Blue
+  '#818cf8': { dim: 0.10, glow: 0.18 }, // Indigo
+  '#5550f7': { dim: 0.10, glow: 0.18 }, // Violet
+  '#06b6d4': { dim: 0.10, glow: 0.18 }, // Cyan (default)
+  '#19be81': { dim: 0.10, glow: 0.18 }, // Emerald
+  '#e2e8f0': { dim: 0.08, glow: 0.14 }, // Pure White
+  '#94a3b8': { dim: 0.08, glow: 0.14 }, // Slate
+};
+const ACCENT_STORAGE_KEY = 'mylist_accent';
+
+function hexToRgb(hex) {
+  return parseInt(hex.slice(1,3), 16) + ',' + parseInt(hex.slice(3,5), 16) + ',' + parseInt(hex.slice(5,7), 16);
+}
+
+function applyAccent(hex) {
+  if (!hex || !ACCENT_COLORS[hex]) hex = '#06b6d4';
+  const { dim, glow } = ACCENT_COLORS[hex];
+  const rgb = hexToRgb(hex);
+  const root = document.documentElement;
+  root.style.setProperty('--accent', hex);
+  root.style.setProperty('--accent-dim', 'rgba(' + rgb + ',' + dim + ')');
+  root.style.setProperty('--accent-glow', 'rgba(' + rgb + ',' + glow + ')');
+  root.style.setProperty('--accent-soft', 'rgba(' + rgb + ',0.06)');
+}
+
+function selectAccent(hex) {
+  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('selected', s.dataset.accent === hex));
+  applyAccent(hex);
+  try { localStorage.setItem(ACCENT_STORAGE_KEY, hex); } catch (e) {}
+}
+
+function initSwatches() {
+  const row = document.getElementById('swatchRow');
+  let saved = '#06b6d4';
+  try { saved = localStorage.getItem(ACCENT_STORAGE_KEY) || '#06b6d4'; } catch (e) {}
+  row.innerHTML = Object.keys(ACCENT_COLORS).map(hex =>
+    '<div class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" onclick="selectAccent(\'' + hex + '\')"></div>'
+  ).join('');
+  applyAccent(saved);
+}
+
+function toggleAccentPopup() { document.getElementById('accentPopup').classList.toggle('visible'); }
 function setStatus(msg, kind) {
   const el = document.getElementById('status');
   el.textContent = msg;
@@ -352,6 +428,11 @@ document.addEventListener('click', (e) => {
   const popup = document.getElementById('menuPopup');
   if (popup.classList.contains('visible') && !document.getElementById('menuBtn').contains(e.target) && !popup.contains(e.target)) {
     popup.classList.remove('visible');
+  }
+  const accentPopup = document.getElementById('accentPopup');
+  const accentWrap = e.target.closest('.accent-popup-wrap');
+  if (accentPopup.classList.contains('visible') && !accentWrap) {
+    accentPopup.classList.remove('visible');
   }
 });
 
@@ -540,9 +621,11 @@ function openStatus() { window.location.href = ORIGIN + '/status'; }
 
 document.getElementById('saveBtn').onclick = saveAll;
 document.getElementById('menuBtn').onclick = toggleMenu;
+document.getElementById('accentBtn').onclick = toggleAccentPopup;
 document.getElementById('confirmRefreshBtn').onclick = confirmRefresh;
 document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
 
+initSwatches();
 renderScraper();
 </script>
 </body>
