@@ -106,7 +106,7 @@ export async function handleStatus(env) {
   const runs = await getRuns(env.STORE);
   const byId = new Map(cfg.scraper.lists.map((l) => [l.id, l]));
   const out = runs.slice(0, 30).map((r) => ({
-    id: r.id,
+    catalog_id: r.catalog_id,
     catalog_name: byId.has(r.catalog_id) ? byId.get(r.catalog_id).name : r.catalog_id,
     pages_scraped: r.pages_scraped,
     movies_found: r.movies_found,
