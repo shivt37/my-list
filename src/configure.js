@@ -253,7 +253,7 @@ export function buildConfigurePage(origin, config) {
   }
   .confirm-backdrop.visible { display: flex; }
   .confirm-modal {
-    background: linear-gradient(180deg, var(--surface), #0a0a10);
+    background: var(--surface);
     border: 1px solid var(--border2); border-radius: var(--r2);
     padding: 20px; width: 100%; max-width: 360px;
     box-shadow: 0 28px 60px -16px rgba(0,0,0,0.9);
