@@ -29,7 +29,7 @@ function html(body, extraHeaders = {}) {
 // Stremio pagination arrives as /catalog/<type>/<id>/skip=N.json — the
 // trailing segment is part of the id token, so handle it like the old
 // worker did.
-const CATALOG_RE = /^\/catalog\/([^/]+)\/([^/]+?)(?:\/(.*))?\.json$/;
+export const CATALOG_RE = /^\/catalog\/([^/]+)\/([^/]+?)(?:\/(.*))?\.json$/;
 
 export function githubPagesCatalogUrl(env, catalogId) {
   return `${env.GITHUB_PAGES_BASE}/${catalogId}.json`;
