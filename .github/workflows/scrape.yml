@@ -1,0 +1,83 @@
+name: Scrape MDBList lists
+
+on:
+  schedule:
+    # Every 12 hours (UTC). Edit this line on github.com to change the
+    # schedule — no worker-side timing involved.
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+    inputs:
+      lists:
+        description: "List ids to scrape (comma-separated, blank = all enabled)"
+        required: false
+        default: ""
+      action:
+        description: "scrape (default) or scrape_delete"
+        required: false
+        default: "scrape"
+      delete_ids:
+        description: "List ids whose data files should be deleted (comma-separated)"
+        required: false
+        default: ""
+      debug:
+        description: "Dump page HTML/screenshots for troubleshooting"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: my-list-scrape
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: scripts
+        run: npm ci
+
+      - name: Run scraper
+        working-directory: scripts
+        env:
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
+        run: |
+          ARGS="--action=${{ github.event.inputs.action || 'scrape' }}"
+          if [ -n "${{ github.event.inputs.lists }}" ]; then
+            ARGS="$ARGS --lists=${{ github.event.inputs.lists }}"
+          fi
+          if [ -n "${{ github.event.inputs.delete_ids }}" ]; then
+            ARGS="$ARGS --delete-ids=${{ github.event.inputs.delete_ids }}"
+          fi
+          if [ "${{ github.event.inputs.debug }}" = "true" ]; then
+            ARGS="$ARGS --debug"
+          fi
+          node scrape.mjs $ARGS
+
+      - name: Commit data changes
+        run: |
+          git config user.name "my-list-bot"
+          git config user.email "my-list-bot@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes — skipping commit."
+          else
+            git commit -m "chore(data): refresh scraper lists [skip ci]"
+            git push
+          fi
+
+      - name: Upload debug artifacts
+        if: ${{ github.event.inputs.debug == 'true' || failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-debug-${{ github.run_id }}
+          path: scripts/debug/*
+          if-no-files-found: ignore
+          retention-days: 7

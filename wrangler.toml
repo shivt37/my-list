@@ -1,0 +1,8 @@
+name = "my-list"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# UI-editable config + last-30 scrape run history live in KV.
+[[kv_namespaces]]
+binding = "STORE"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
