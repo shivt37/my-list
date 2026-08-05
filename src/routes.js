@@ -136,11 +136,13 @@ function rowToMetaOfficial(row) {
   };
 }
 
+// Simkl data files (simkl_arriving_today_*.json) carry { id, name } per
+// item, not the scraper's imdb_id/title shape - id/name pass through.
 function rowToMetaSimkl(row) {
   return {
-    id: row.imdb_id,
+    id: row.id || row.imdb_id,
     type: "series",
-    name: row.title,
+    name: row.name || row.title,
     poster: row.poster || undefined,
     description: row.description || undefined,
   };
