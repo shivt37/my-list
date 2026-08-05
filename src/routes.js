@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS } from "./config.js";
+import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
 
@@ -13,6 +13,7 @@ export const ADDON_DESCRIPTION = "Community-built catalogs: MDBList scraper list
 
 // Official module's workflow file - separate cron from the scraper's.
 export const OFFICIAL_WORKFLOW = "official.yml";
+export const SIMKL_WORKFLOW = "simkl.yml";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -77,11 +78,17 @@ export function toIST(ms) {
 export async function buildManifest(env) {
   const cfg = await loadConfig(env.STORE);
   const enabled = cfg.scraper.lists.filter((l) => l.enabled);
-  // Scraper lists first, then official lists (only their enabled slugs).
+  // Scraper lists first, then official lists (only their enabled slugs),
+  // then simkl lists. Simkl catalogs declare no skip extra - they're
+  // single-shot arrival listings, not paginated.
   const enabledOfficial = new Set(cfg.official.lists.filter((l) => l.enabled).map((l) => l.slug));
   const officialCatalogs = OFFICIAL_CATALOGS
     .filter((c) => enabledOfficial.has(c.slug))
     .map((c) => ({ name: c.name, id: c.id, type: c.type, extra: [{ name: "skip", isRequired: false }] }));
+  const enabledSimkl = new Set(cfg.simkl.lists.filter((l) => l.enabled).map((l) => l.slug));
+  const simklCatalogs = SIMKL_CATALOGS
+    .filter((c) => enabledSimkl.has(c.slug))
+    .map((c) => ({ name: c.name, id: c.id, type: c.type, extra: [] }));
   const catalogs = [
     ...enabled.map((l) => ({
       name: l.name,
@@ -90,6 +97,7 @@ export async function buildManifest(env) {
       extra: [{ name: "skip", isRequired: false }],
     })),
     ...officialCatalogs,
+    ...simklCatalogs,
   ];
   return {
     id: ADDON_ID,
@@ -128,16 +136,27 @@ function rowToMetaOfficial(row) {
   };
 }
 
+function rowToMetaSimkl(row) {
+  return {
+    id: row.imdb_id,
+    type: "series",
+    name: row.title,
+    poster: row.poster || undefined,
+    description: row.description || undefined,
+  };
+}
+
 export async function handleCatalog(env, catalogType, catalogId, skip) {
   const cfg = await loadConfig(env.STORE);
   const official = OFFICIAL_CATALOGS.find((c) => c.id === catalogId);
+  const simkl = SIMKL_CATALOGS.find((c) => c.id === catalogId);
   const list = cfg.scraper.lists.find((l) => l.id === catalogId);
-  const metaOf = official ? rowToMetaOfficial : rowToMeta;
+  const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : rowToMeta;
 
-  // Unknown id, or an id whose module is disabled → empty, but still 200.
+  // Unknown id / an id whose module is disabled → empty, but still 200.
   // (The manifest controls what Stremio can reach; a stale request after a
   // disable must not 404 the whole chain.)
-  if (!official && !list) return json({ metas: [] });
+  if (!official && !simkl && !list) return json({ metas: [] });
 
   let data;
   try {
@@ -156,15 +175,21 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
 export async function handleStatus(env, request) {
   const page = request && new URL(request.url).searchParams.get("page");
   const official = page === "official";
+  const simkl = page === "simkl";
   const cfg = await loadConfig(env.STORE);
-  const runs = official ? await getRuns(env.STORE, "runs:official") : await getRuns(env.STORE, "runs:scraper");
+  const runs = official
+    ? await getRuns(env.STORE, "runs:official")
+    : simkl
+      ? await getRuns(env.STORE, SIMKL_RUNS_KEY)
+      : await getRuns(env.STORE, "runs:scraper");
   const listById = new Map(cfg.scraper.lists.map((l) => [l.id, l.name]));
   const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, c.name]));
-  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? r.catalog_id;
+  const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, c.name]));
+  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? r.catalog_id;
   const out = runs.slice(0, 30).map((r) => ({
     catalog_name: nameFor(r),
     catalog_id: r.catalog_id,
-    ...(official ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
+    ...(official || simkl ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
     triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
     movies_found: r.movies_found,
     status: r.status,
@@ -236,12 +261,40 @@ export async function handleSaveConfig(env, request) {
       return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
     }
 
-    // Official toggles surface to the UI but trigger no dispatch - a
-    // toggle only changes the manifest, no data file to regenerate.
+    // Official toggles surface to the UI but never dispatch - a toggle
+    // only changes the manifest, no data file to regenerate.
     const prevOffById = new Map(current.official.lists.map((l) => [l.slug, l]));
     const officialChanged = incoming.official.lists
       .filter((l) => prevOffById.has(l.slug) && prevOffById.get(l.slug).enabled !== l.enabled)
       .map((l) => l.name);
+
+    // Simkl: an enabled toggle OR a filter edit changes what the next
+    // refresh writes, so both dispatch the simkl workflow. Only the
+    // enabled kinds dispatch - a disabled list's filter is inert.
+    const prevSimById = new Map(current.simkl.lists.map((l) => [l.slug, l]));
+    const simklChanged = incoming.simkl.lists.filter((l) => {
+      const prev = prevSimById.get(l.slug);
+      if (!prev) return true;
+      return prev.enabled !== l.enabled || JSON.stringify(prev.filter) !== JSON.stringify(l.filter);
+    });
+    const simklDispatchKinds = simklChanged.filter((l) => l.enabled).map((l) => l.slug);
+
+    // Update the shared dispatchResult for the response's `github` field:
+    // if only simkl changed, its dispatch is the interesting one.
+    if (simklDispatchKinds.length > 0 && dispatch.length === 0 && deleteIds.length === 0) {
+      dispatchResult = { dispatched: false, reason: "no dispatch needed" };
+    }
+
+    if (simklDispatchKinds.length > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
+        inputs: { kinds: simklDispatchKinds.join(",") },
+      });
+      if (!dispatchResult.dispatched) {
+        await saveConfig(env.STORE, current);
+        return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
 
     return json({
       ok: true,
@@ -250,6 +303,7 @@ export async function handleSaveConfig(env, request) {
       removed: removed.map((l) => l.name),
       dispatch: dispatch.map((l) => ({ id: l.id, name: l.name })),
       officialChanged,
+      simklChanged: simklChanged.map((l) => l.name),
       github: dispatchResult,
     });
   } catch (e) {
@@ -279,7 +333,7 @@ export async function handleTriggerRefresh(env, request) {
       if (text) {
         const parsed = JSON.parse(text);
         singleId = parsed.id ?? null;
-        page = parsed.page === "official" ? "official" : null;
+        page = parsed.page === "official" || parsed.page === "simkl" ? parsed.page : null;
       }
     } catch {
       singleId = null;
@@ -306,6 +360,26 @@ export async function handleTriggerRefresh(env, request) {
       return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
     }
     return json({ ok: true, lists: slugs, workflow: OFFICIAL_WORKFLOW });
+  }
+
+  // Simkl page-scoped refresh: one kind refresh → one simkl list; no id →
+  // all enabled simkl lists.
+  if (page === "simkl") {
+    const enabledQ = cfg.simkl.lists.filter((l) => l.enabled);
+    if (singleId) {
+      const list = enabledQ.find((l) => l.slug === singleId);
+      if (!list) return json({ error: "Unknown or disabled simkl list." }, 404);
+    }
+    const kinds = singleId ? [singleId] : enabledQ.map((l) => l.slug);
+    const result = await dispatchScraperWorkflow(env, {
+      workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
+      // simkl.yml declares a `kinds` input, not lists/action.
+      inputs: { kinds: kinds.join(",") },
+    });
+    if (!result.dispatched) {
+      return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
+    }
+    return json({ ok: true, lists: kinds, workflow: SIMKL_WORKFLOW });
   }
 
   // Scraper page default (no body / no page): all enabled scraper lists.

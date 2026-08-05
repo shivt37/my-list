@@ -229,6 +229,28 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
+  /* ── SIMKL FILTER EDITOR ── */
+  .simkl-filter { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .filter-line { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .filter-top { margin-top: 2px; }
+  .filter-label { font-size: 11px; font-weight: 500; color: var(--dim); flex-shrink: 0; width: 130px; }
+  .filter-line .url-input { flex: 1 1 100%; min-width: 0; font-size: 12px; padding: 6px 9px; border-radius: 7px; }
+  .filter-check { accent-color: var(--accent); }
+  .filter-line .secondary { flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
+  .tier-table { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .tier-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .tier-num {
+    flex: 1 1 90px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
+    padding: 6px 9px; border-radius: 7px;
+  }
+  .tier-row .danger { flex-shrink: 0; padding: 6px 10px; font-size: 12px; }
+  @media (max-width: 600px) {
+    .filter-label { width: auto; }
+    .filter-line { flex-wrap: wrap; }
+    .tier-row { flex-wrap: wrap; }
+    .tier-num { flex: 1 1 44%; }
+  }
+
   /* ── ACCENT POPUP ── */
   .accent-popup-wrap { position: relative; }
   .accent-popup {
@@ -366,9 +388,9 @@ export function buildConfigurePage(origin, config, adminSecret) {
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
           MDBList Official List
         </div>
-        <div class="menu-item disabled" onclick="soon()">
+        <div class="menu-item" data-module="simkl" onclick="activateModule('simkl')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>
-          Simkl List<span class="menu-soon">soon</span>
+          Simkl List
         </div>
         <div class="menu-item disabled" onclick="soon()">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
@@ -494,11 +516,13 @@ let activeModule = 'scraper';
 const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
-  if (m !== 'scraper' && m !== 'official') { soon(); return; }
+  if (m !== 'scraper' && m !== 'official' && m !== 'simkl') { soon(); return; }
   activeModule = m;
   try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));
-  if (m === 'scraper') renderScraper(); else renderOfficial();
+  if (m === 'scraper') renderScraper();
+  else if (m === 'official') renderOfficial();
+  else renderSimkl();
 }
 document.addEventListener('click', (e) => {
   const popup = document.getElementById('menuPopup');
@@ -688,7 +712,7 @@ function renderOfficial() {
         '</div>' +
       '</div>' +
       '<div class="card-controls">' +
-        '<span class="official-hint">Movies + Shows, refreshed every 12 hours via MDBList API</span>' +
+        '<span class="official-hint">Series, refreshed every 12 hours via SIMKL calendar API</span>' +
         '<span class="card-actions official-actions">' +
           '<button class="btn-icon card-refresh" onclick="askOfficialRefresh(' + i + ')" title="Refresh this official list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
@@ -721,6 +745,97 @@ function askOfficialRefresh(i) {
   document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
 }
 
+function askSimklRefresh(i) {
+  const l = state.simkl.lists[i];
+  if (!l) return;
+  pendingRefreshIndex = i;
+  document.getElementById('refreshOneConfirmBody').textContent =
+    '"' + l.name + '" will be re-fetched from the SIMKL calendar API now on GitHub Actions. This takes a few seconds. Are you sure?';
+  document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
+}
+
+// ─── Simkl module tab ───
+function renderSimkl() {
+  const host = document.getElementById('tabHost');
+  const lists = state.simkl.lists;
+  const cards = lists.map((l, i) => {
+    const f = l.filter || {};
+    const tiers = (f.rating_tiers || []).map((t, ti) =>
+      '<div class="tier-row">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="min" value="' + (t.min_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="max" value="' + (t.max_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'max_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="1" placeholder="votes" value="' + (t.min_votes ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_votes\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="sec." value="' + (t.min_secondary_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_secondary_rating\\\',this.value)">' +
+        '<button class="danger" onclick="removeTier(' + i + ',' + ti + ')">−</button>' +
+      '</div>'
+    ).join('') || '<div class="empty">No rating tiers.</div>';
+
+    return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="socard-' + i + '">' +
+      '<div class="card-top">' +
+        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleSimkl(' + i + ')"><span class="toggle-slider"></span></label></div>' +
+        '<div class="info">' +
+          '<span class="name-static">' + escapeAttr(l.name) + '</span>' +
+          '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
+        '</div>' +
+        '<span class="card-actions official-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askSimklRefresh(' + i + ')" title="Refresh this simkl list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+          '</button>' +
+        '</span>' +
+      '</div>' +
+      '<div class="simkl-filter" id="simfilter-' + i + '">' +
+        '<div class="filter-line"><label class="filter-label">Rating source</label><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div>' +
+        '<div class="filter-line"><label class="filter-label"><input type="checkbox" class="filter-check" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"> Rating filter</label></div>' +
+        '<div class="filter-line"><label class="filter-label">Exclude genres</label><input class="url-input" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News" ></div>' +
+        '<div class="filter-line"><label class="filter-label">Include countries</label><input class="url-input" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb" ></div>' +
+        '<div class="filter-line"><label class="filter-label">Exclude countries</label><input class="url-input" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp" ></div>' +
+        '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div>' +
+        '<div class="tier-table">' + tiers + '</div>' +
+      '</div>' +
+      '<div class="card-error" id="socardError-' + i + '"></div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('headerTitle').textContent = 'Simkl List';
+  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+
+  host.innerHTML = toolbar + '<div class="official-note">The 2 fixed SIMKL Arriving Today lists. Filters are typed below and applied on the next refresh.</div>' + (cards || '<div class="empty">No simkl lists.</div>');
+}
+
+function toggleSimkl(i) {
+  const l = state.simkl.lists[i];
+  if (!l) return;
+  l.enabled = !l.enabled;
+  renderSimkl();
+}
+
+function setCsv(i, key, value) {
+  const l = state.simkl.lists[i];
+  if (!l) return;
+  l.filter[key] = value.split(',').map(s => s.trim()).filter(Boolean);
+}
+
+function setTier(i, ti, field, value) {
+  const l = state.simkl.lists[i];
+  if (!l) return;
+  const n = parseFloat(value);
+  l.filter.rating_tiers[ti][field] = Number.isFinite(n) ? n : undefined;
+}
+
+function addTier(i) {
+  state.simkl.lists[i].filter.rating_tiers.push({ min_rating: null, max_rating: null, min_votes: null, min_secondary_rating: null });
+  renderSimkl();
+}
+
+function removeTier(i, ti) {
+  state.simkl.lists[i].filter.rating_tiers.splice(ti, 1);
+  renderSimkl();
+}
+
+function toggleRatingEnabled(i, checked) {
+  state.simkl.lists[i].filter.rating_filter_enabled = checked;
+}
+
 // ─── Save (hash-compare → dispatch changed lists only) ───
 async function saveAll() {
   // Global save: one config blob, both pages. The scraper page still
@@ -737,17 +852,30 @@ async function saveAll() {
   const btn = document.getElementById('saveBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
+    // Drop blank tier fields so empty inputs persist as absent keys, not nulls.
+    const simklClone = JSON.parse(JSON.stringify(state.simkl));
+    for (const l of simklClone.lists) {
+      l.filter.rating_tiers = l.filter.rating_tiers.map((t) => {
+        const out = {};
+        for (const k of ['min_rating', 'max_rating', 'min_votes', 'min_secondary_rating']) {
+          if (t[k] != null && Number.isFinite(Number(t[k]))) out[k] = Number(t[k]);
+        }
+        return out;
+      });
+    }
     const res = await fetch(ORIGIN + '/save-config', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
-      body: JSON.stringify(state),
+      body: JSON.stringify({ ...state, simkl: simklClone }),
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    const officialChanges = (activeModule === 'official' && data.officialChanged && data.officialChanged.length)
+    const moduleChanges = activeModule === 'official' && data.officialChanged && data.officialChanged.length
       ? 'Official toggles saved: ' + data.officialChanged.join(', ') + '. '
-      : '';
-    setStatus(officialChanges +
+      : activeModule === 'simkl' && data.simklChanged && data.simklChanged.length
+        ? 'Simkl filters saved: ' + data.simklChanged.join(', ') + '. '
+        : '';
+    setStatus(moduleChanges +
       (data.dispatch && data.dispatch.length
         ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
         : 'Saved (no content change - nothing regenerated).'), 'ok');
@@ -759,11 +887,17 @@ async function saveAll() {
 }
 
 function openRefreshConfirm() {
-  const official = activeModule === 'official';
-  document.getElementById('refreshAllTitle').textContent = official ? 'Refresh all official lists?' : 'Refresh all scraper lists?';
-  document.getElementById('refreshAllBody').textContent = official
-    ? 'This re-fetches every enabled official list (movies + shows) right now from the MDBList API on GitHub Actions. It takes about a minute. Are you sure?'
-    : 'This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?';
+  const m = activeModule;
+  if (m === 'official') {
+    document.getElementById('refreshAllTitle').textContent = 'Refresh all official lists?';
+    document.getElementById('refreshAllBody').textContent = 'This re-fetches every enabled official list (movies + shows) right now from the MDBList API on GitHub Actions. It takes about a minute. Are you sure?';
+  } else if (m === 'simkl') {
+    document.getElementById('refreshAllTitle').textContent = 'Refresh all simkl lists?';
+    document.getElementById('refreshAllBody').textContent = 'This re-fetches every enabled SIMKL Arriving Today list right now from the SIMKL calendar API on GitHub Actions. It takes a few seconds. Are you sure?';
+  } else {
+    document.getElementById('refreshAllTitle').textContent = 'Refresh all scraper lists?';
+    document.getElementById('refreshAllBody').textContent = 'This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?';
+  }
   document.getElementById('refreshConfirmBackdrop').classList.add('visible');
 }
 function closeRefreshConfirm() { document.getElementById('refreshConfirmBackdrop').classList.remove('visible'); }
@@ -781,9 +915,12 @@ async function confirmRefresh() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    setStatus(activeModule === 'official'
+    const msg = activeModule === 'official'
       ? 'Refresh dispatched - GitHub Actions is regenerating all enabled official lists (movies + shows).'
-      : 'Refresh dispatched - GitHub Actions is regenerating all enabled lists.', 'ok');
+      : activeModule === 'simkl'
+        ? 'Refresh dispatched - GitHub Actions is regenerating all enabled SIMKL lists.'
+        : 'Refresh dispatched - GitHub Actions is regenerating all enabled lists.';
+    setStatus(msg, 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
   } finally {
@@ -805,23 +942,26 @@ async function confirmRefreshOne() {
   pendingRefreshIndex = -1;
   closeRefreshOneConfirm();
   if (i < 0) return;
-  const official = activeModule === 'official';
-  const list = official ? state.official.lists[i] : state.scraper.lists[i];
+  const m = activeModule;
+  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : state.scraper.lists[i];
   if (!list) return;
-  const cardSel = (official ? '#ocard-' + i : '#card-' + i) + ' .card-refresh';
+  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : '#card-' + i) + ' .card-refresh';
   const btn = document.querySelector(cardSel);
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
   try {
-    // Page-scoped: official tab sends page=official + the slug, scraper
-    // tab sends the list id (defaults to the scraper page).
+    // Page-scoped: official tab sends page=official + the slug, simkl tab
+    // sends page=simkl + the kind, scraper tab sends the list id
+    // (defaults to the scraper page).
+    const body = m === 'official' ? { page: 'official', id: list.slug } : m === 'simkl' ? { page: 'simkl', id: list.slug } : { id: list.id };
     const res = await fetch(ORIGIN + '/trigger-refresh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
-      body: JSON.stringify(official ? { page: 'official', id: list.slug } : { id: list.id }),
+      body: JSON.stringify(body),
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    setStatus('"' + list.name + '" refresh dispatched - regenerating just that ' + (official ? 'official list (movies + shows).' : 'list.'), 'ok');
+    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : 'list.';
+    setStatus('"' + list.name + '" refresh dispatched - regenerating just that ' + tail, 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
   } finally {
@@ -830,7 +970,8 @@ async function confirmRefreshOne() {
 }
 
 function openStatus() {
-  window.open(ORIGIN + '/status?page=' + (activeModule === 'official' ? 'official' : 'scraper'), '_blank');
+  const p = activeModule === 'official' ? 'official' : activeModule === 'simkl' ? 'simkl' : 'scraper';
+  window.open(ORIGIN + '/status?page=' + p, '_blank');
 }
 
 document.getElementById('saveBtn').onclick = saveAll;

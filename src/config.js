@@ -9,15 +9,19 @@ import { createHash } from "node:crypto";
 const CONFIG_KEY = "config";
 const RUNS_SCRAPER_KEY = "runs:scraper";
 const RUNS_OFFICIAL_KEY = "runs:official";
+const RUNS_SIMKL_KEY = "runs:simkl";
 const RUNS_MAX = 30;
 const HEALED_KEY = "healed";
 const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 export function runsKeyFor(catalogId) {
-  return catalogId.startsWith("mdboff_") ? RUNS_OFFICIAL_KEY : RUNS_SCRAPER_KEY;
+  if (catalogId.startsWith("mdboff_")) return RUNS_OFFICIAL_KEY;
+  if (catalogId.startsWith("simkl_")) return RUNS_SIMKL_KEY;
+  return RUNS_SCRAPER_KEY;
 }
 
 export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
+export const SIMKL_RUNS_KEY = RUNS_SIMKL_KEY;
 
 // Seeded IDs are derived from the listing URL (first 8 hex of sha256),
 // so the ID the config shows is the ID the scraper writes under - even
@@ -33,7 +37,73 @@ export function randomScraperId(seedUrl) {
 }
 
 export function emptyConfig() {
-  return { scraper: { lists: [] }, official: { lists: [] } };
+  return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] } };
+}
+
+// The two fixed SIMKL Arriving Today lists. Slugs are permanent - they
+// produce the catalog / data file ids simkl_arriving_today_<series|anime>.
+// Each list carries its own filter block (genre/country excludes + rating
+// tiers) which the operator edits from the configure page. rating_source
+// is structural (series = IMDb, anime = MAL - the SIMKL API serves both),
+// not operator-editable. min_secondary_rating always tests the Simkl
+// rating. Defaults lifted verbatim from the legacy mdblist-simkl worker.
+export const SIMKL_LISTS = [
+  {
+    slug: "series",
+    name: "Arriving Today - Episodes & Premieres",
+    enabled: true,
+    filter: {
+      rating_source: "imdb",
+      rating_filter_enabled: true,
+      exclude_genres: ["Talk Show", "Reality", "Sport", "News", "Soap", "Documentary", "Home and Garden", "Food", "Podcast", "Game Show"],
+      include_countries: [],
+      exclude_countries: ["cn", "kr", "pt", "jp"],
+      rating_tiers: [
+        { min_rating: 7.0, min_votes: 500 },
+        { min_rating: 6.0, max_rating: 6.9, min_votes: 5000 },
+      ],
+    },
+  },
+  {
+    slug: "anime",
+    name: "Anime Arriving Today - Episodes & Premieres",
+    enabled: true,
+    filter: {
+      rating_source: "mal",
+      rating_filter_enabled: true,
+      exclude_genres: [],
+      include_countries: [],
+      exclude_countries: ["cn"],
+      rating_tiers: [
+        { min_rating: 8.0, min_votes: 0 },
+        { min_rating: 7.0, max_rating: 7.9, min_votes: 5000 },
+        { min_rating: 7.0, max_rating: 7.9, min_secondary_rating: 8.0 },
+      ],
+    },
+  },
+];
+
+export const SIMKL_CATALOGS = SIMKL_LISTS.map((s) => ({
+  id: `simkl_arriving_today_${s.slug}`,
+  slug: s.slug,
+  name: s.name,
+  type: "series",
+}));
+
+export function simklDefaults() {
+  return SIMKL_LISTS.map((s) => ({
+    slug: s.slug,
+    name: s.name,
+    enabled: s.enabled,
+    filter: {
+      rating_source: s.filter.rating_source,
+      rating_filter_enabled: s.filter.rating_filter_enabled,
+      exclude_genres: [...s.filter.exclude_genres],
+      include_countries: [...s.filter.include_countries],
+      exclude_countries: [...s.filter.exclude_countries],
+      rating_tiers: s.filter.rating_tiers.map((t) => ({ ...t })),
+    },
+  }));
 }
 
 // The three MDBList official lists. Slugs are fixed forever - they produce
@@ -105,6 +175,51 @@ export function migrateOfficial(raw) {
     .map((l) => ({ slug: l.slug, name: l.name, enabled: l.enabled !== false }));
 }
 
+// A tier passes only when EVERY field defined on it holds; omitted fields
+// are unset. Any ONE tier admitting the title. Numeric strings are coerced
+// (the configure page sends numbers, but corrupted KV may not). Blank tiers
+// are dropped entirely - an empty tier {} would vacuously pass every title
+// and bypass the filter.
+export function normalizeTiers(raw) {
+  const out = [];
+  if (!Array.isArray(raw)) return out;
+  for (const t of raw) {
+    if (!t || typeof t !== "object") continue;
+    const tier = {};
+    for (const k of ["min_rating", "max_rating", "min_votes", "min_secondary_rating"]) {
+      const n = Number(t[k]);
+      if (Number.isFinite(n)) tier[k] = n;
+    }
+    if (Object.keys(tier).length > 0) out.push(tier);
+  }
+  return out;
+}
+
+export function normalizeSimklList(raw) {
+  const def = SIMKL_LISTS.find((s) => s.slug === raw?.slug);
+  if (!def) return null;
+  const filter = raw?.filter && typeof raw.filter === "object" ? raw.filter : {};
+  const toArr = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim()) : []);
+  return {
+    slug: def.slug,
+    name: def.name,
+    enabled: raw?.enabled !== false,
+    filter: {
+      rating_source: def.filter.rating_source,
+      rating_filter_enabled: filter.rating_filter_enabled !== false,
+      exclude_genres: toArr(filter.exclude_genres),
+      include_countries: toArr(filter.include_countries),
+      exclude_countries: toArr(filter.exclude_countries),
+      rating_tiers: normalizeTiers(filter.rating_tiers),
+    },
+  };
+}
+
+export function migrateSimkl(raw) {
+  const rawLists = Array.isArray(raw?.simkl?.lists) ? raw.simkl.lists : [];
+  return rawLists.map(normalizeSimklList).filter(Boolean);
+}
+
 export function migrateConfig(raw) {
   const src = (raw && raw.scraper) || {};
   const lists = Array.isArray(src.lists) ? src.lists : [];
@@ -120,7 +235,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) } };
+  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw) } };
 }
 
 // Fields that affect the scraped data file: url, maxPages, enabled.
@@ -162,6 +277,26 @@ export async function loadConfig(kv) {
     // Always exactly 3 - a truncated/extra list here must not silently
     // drop or duplicate a fixed catalog.
     cfg.official.lists = known.size === kept.length ? kept : officialDefaults();
+  }
+
+  // Normalize the simkl section to exactly the 2 known slugs with their
+  // default filter blocks. Missing simkl key → defaults; known slugs keep
+  // their persisted enabled flag + edited filters; unknown slugs dropped.
+  if (!Array.isArray(cfg.simkl?.lists) || cfg.simkl.lists.length === 0) {
+    cfg.simkl = { lists: simklDefaults() };
+  } else {
+    const kept = cfg.simkl.lists
+      .map(normalizeSimklList)
+      .filter(Boolean)
+      .map((l) => ({ slug: l.slug, name: l.name, enabled: l.enabled, filter: l.filter }));
+    const knownCount = new Set(simklDefaults().map((s) => s.slug)).size;
+    // Always exactly 2 - a truncated/extra list must not silently drop or
+    // duplicate a fixed catalog, or a half-migrated filter block persist.
+    if (kept.length === knownCount && new Set(kept.map((l) => l.slug)).size === knownCount) {
+      cfg.simkl.lists = kept;
+    } else {
+      cfg.simkl.lists = simklDefaults();
+    }
   }
 
   // One-shot healing: if any persisted list matches a seed entry by URL
