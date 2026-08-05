@@ -276,9 +276,10 @@ export async function handleTriggerRefresh(env, request) {
     }
     const slugs = singleId ? [singleId] : enabledQ.map((l) => l.slug);
     const result = await dispatchScraperWorkflow(env, {
-      lists: slugs,
-      action: "official",
       workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
+      // official.yml declares a `slugs` input, not lists/action — GitHub
+      // rejects inputs that the target workflow doesn't define (422).
+      inputs: { slugs: slugs.join(",") },
     });
     if (!result.dispatched) {
       return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
