@@ -108,7 +108,7 @@ export function buildConfigurePage(origin, config) {
   .btn-icon:hover { color: var(--text); border-color: var(--accent); }
   #refreshBtn.spinning svg, .card-refresh.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .card-refresh { padding: 5px 6px; margin-left: 40px; }
+  .card-refresh { padding: 5px 6px; }
   .card-refresh svg { display: block; }
 
   /* ── MAIN ── */
@@ -308,10 +308,13 @@ export function buildConfigurePage(origin, config) {
     .toggle-slider::before { width: 9px; height: 9px; }
     .toggle input:checked + .toggle-slider::before { transform: translateX(11px); }
     .name-static { font-size: 12px; }
+    .id-chip { display: none; }
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
     .card-controls { flex-wrap: wrap; }
-    .card-controls .url-input { flex: 1 1 100%; }
+    .card-controls .card-refresh,
+    .card-controls button.danger { margin-left: auto; }
+    .card-controls .url-input { flex: 1 1 100%; margin-right: 0; }
     select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
     .pages-label { font-size: 10px; }
     .card-controls .max-pages { font-size: 11px; padding: 5px 6px; }
