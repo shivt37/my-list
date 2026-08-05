@@ -41,6 +41,8 @@ function arg(name) {
   return found ? found.slice(prefix.length) : undefined;
 }
 
+const slugsArg = arg("slugs");
+
 // Worker is the source of truth for enabled slugs - a disabled list is not
 // refreshed. Falls back to all slugs when the worker is unreachable so a
 // worker outage can't silently stop the refresh.
