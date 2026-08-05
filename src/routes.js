@@ -281,7 +281,7 @@ export async function handleTriggerRefresh(env, request) {
       workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
     });
     if (!result.dispatched) {
-      return json({ error: "GitHub Actions isn't configured on this worker yet (missing GH_TOKEN/GH_REPO)." }, 501);
+      return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
     }
     return json({ ok: true, lists: slugs, workflow: OFFICIAL_WORKFLOW });
   }
@@ -302,7 +302,7 @@ export async function handleTriggerRefresh(env, request) {
     action: "scrape",
   });
   if (!result.dispatched) {
-    return json({ error: "GitHub Actions isn't configured on this worker yet (missing GH_TOKEN/GH_REPO/GH_WORKFLOW)." }, 501);
+    return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
   }
   return json({ ok: true, lists: targets.map((l) => l.id) });
 }
