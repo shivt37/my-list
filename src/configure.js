@@ -223,6 +223,7 @@ export function buildConfigurePage(origin, config) {
   .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
   .card-controls button { flex-shrink: 0; }
   .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
+  .official-actions { margin-left: 60px; }
   .official-hint { font-size: 11px; color: var(--muted); flex: 1 1 60%; min-width: 0; }
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
@@ -684,7 +685,7 @@ function renderOfficial() {
       '</div>' +
       '<div class="card-controls">' +
         '<span class="official-hint">Movies + Shows, refreshed every 12 hours via MDBList API</span>' +
-        '<span class="card-actions">' +
+        '<span class="card-actions official-actions">' +
           '<button class="btn-icon card-refresh" onclick="askOfficialRefresh(' + i + ')" title="Refresh this official list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
