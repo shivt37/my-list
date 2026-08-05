@@ -414,7 +414,7 @@ export function buildConfigurePage(origin, config) {
 </div>
 
 <script>
-const ORIGIN = ${JSON.stringify(origin)};
+const ORIGIN = ${JSON.stringify(origin).replace(/</g, "\\u003c")};
 let state = ${initial};
 
 // ─── Scraper module state ───

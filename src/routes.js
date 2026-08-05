@@ -28,7 +28,7 @@ function html(body, extraHeaders = {}) {
     headers: {
       "content-type": "text/html; charset=utf-8",
       "x-content-type-options": "nosniff",
-      "content-security-policy": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'",
+      "content-security-policy": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
       ...corsHeaders,
       ...extraHeaders,
     },
@@ -250,13 +250,13 @@ export async function handleRunsPost(env, request) {
     for (const r of body.runs) {
       const run = {
         id: now + Math.floor(Math.random() * 1000),
-        catalog_id: r.catalog_id,
-        started_at: r.started_at ?? now,
-        finished_at: r.finished_at ?? now,
-        pages_scraped: r.pages_scraped ?? 0,
-        movies_found: r.movies_found ?? 0,
-        status: r.status ?? "failed",
-        error_message: r.error_message ?? null,
+        catalog_id: String(r.catalog_id ?? "").slice(0, 64),
+        started_at: Number.isFinite(r.started_at) ? r.started_at : now,
+        finished_at: Number.isFinite(r.finished_at) ? r.finished_at : now,
+        pages_scraped: Number.isInteger(r.pages_scraped) && r.pages_scraped >= 0 ? r.pages_scraped : 0,
+        movies_found: Number.isInteger(r.movies_found) && r.movies_found >= 0 ? r.movies_found : 0,
+        status: r.status === "success" ? "success" : "failed",
+        error_message: typeof r.error_message === "string" ? r.error_message.slice(0, 500) : null,
       };
       await addRun(env.STORE, run);
     }

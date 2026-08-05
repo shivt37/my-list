@@ -74,7 +74,11 @@ export function migrateConfig(raw) {
   const src = (raw && raw.scraper) || {};
   const lists = Array.isArray(src.lists) ? src.lists : [];
   const migrated = lists.map((l) => ({
-    id: typeof l.id === "string" && l.id.startsWith("mdb_scrape_") ? l.id : randomScraperId(l.url),
+    // No path separators or traversal — a crafted id like
+    // "mdb_scrape_a/../../../x" would otherwise reach scrape.mjs and
+    // writeCatalog/deleteCatalog's join() and escape data/. Looseness
+    // on the tail keeps legacy ids (healing) intact while blocking / \ ..
+    id: typeof l.id === "string" && /^mdb_scrape_[A-Za-z0-9_-]{1,32}$/.test(l.id) ? l.id : randomScraperId(l.url),
     name: String(l.name || "").trim().slice(0, 200) || "Untitled",
     url: String(l.url || "").slice(0, 2000),
     type: l.type === "series" ? "series" : "movie",
@@ -102,8 +106,13 @@ export async function loadConfig(kv) {
     raw = null; // corrupt KV value → fall back to seeds rather than 500
   }
   const migrated = migrateConfig(raw);
-  const wasSeeded = !(raw && raw.scraper && Array.isArray(raw.scraper.lists) && raw.scraper.lists.length > 0);
-  const cfg = seedScraperDefaults(migrated);
+  // Seed only when the KV key was genuinely absent — an operator who
+  // saved an empty list (deleted every list) must keep it empty, not
+  // have the seeds re-appear on the next read.
+  const wasSeeded = raw === null;
+  const cfg = wasSeeded && migrated.scraper.lists.length === 0
+    ? seedScraperDefaults(migrated)
+    : migrated;
 
   // One-shot healing: if any persisted list matches a seed entry by URL
   // but carries a different id (e.g. a random id from before the seed

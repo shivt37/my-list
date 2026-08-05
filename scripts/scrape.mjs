@@ -359,6 +359,14 @@ async function main() {
   const targets = requestedIds ? lists.filter((l) => requestedIds.includes(l.id)) : lists;
   const enabledTargets = targets.filter((l) => l.enabled);
 
+  // Pure delete (action=scrape_delete with no --lists) must not also
+  // re-scrape every enabled list — the empty list arg races the workflow
+  // into "all lists".
+  if (action === "scrape_delete" && !requestedIds) {
+    console.log("Delete-only run — no lists to scrape.");
+    process.exit(0);
+  }
+
   if (enabledTargets.length === 0) {
     console.log("No enabled lists to scrape.");
     process.exit(0);
@@ -410,7 +418,7 @@ async function main() {
 
         writeCatalog(list, deduped);
 
-        run.status = deduped.length > 0 ? "success" : "failed";
+        run.status = deduped.length > 0 && !errors.length ? "success" : "failed";
         run.finished_at = Date.now();
         run.pages_scraped = pagesScraped;
         run.movies_found = deduped.length;
@@ -438,7 +446,7 @@ async function main() {
 
   console.log("\nSummary:", JSON.stringify(results, null, 2));
 
-  const failed = results.filter((r) => r.error);
+  const failed = results.filter((r) => r.error || (r.errors && r.errors.length));
   if (failed.length) process.exit(1);
 }
 
