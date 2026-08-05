@@ -193,13 +193,13 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .toggle input:checked + .toggle-slider::before { transform: translateX(12px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
-  .info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .info { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
   .name-static {
     font-size: 13px; font-weight: 600; color: var(--text);
+    flex: 1 1 auto; min-width: 0;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    max-width: 300px;
   }
-  .name-edit { font-size: 13px; padding: 3px 8px; }
+  .name-edit { flex: 1 1 auto; min-width: 0; font-size: 13px; padding: 3px 8px; }
   .icon-btn {
     display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;
     border: 1px solid var(--border2); border-radius: 6px; color: var(--muted); cursor: pointer; flex-shrink: 0;
@@ -230,13 +230,20 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
   /* ── SIMKL FILTER EDITOR ── */
-  .simkl-filter { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
-  .filter-line { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .filter-top { margin-top: 2px; }
-  .filter-label { font-size: 11px; font-weight: 500; color: var(--dim); flex-shrink: 0; width: 130px; }
-  .filter-line .url-input { flex: 1 1 100%; min-width: 0; font-size: 12px; padding: 6px 9px; border-radius: 7px; }
+  .simkl-filter {
+    margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;
+    display: grid; grid-template-columns: 132px 1fr; gap: 10px;
+  }
+  /* Filter fields sit in a 2-col grid (text column + value column) - the
+     CSV inputs never stretch full width, so a long genre list stays a
+     contained field instead of a full-bleed strip. Mobile stacks 1-col. */
+  .filter-line { display: contents; }
+  .filter-label { font-size: 11px; font-weight: 500; color: var(--dim); }
+  .filter-value { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .filter-value .url-input { flex: 1 1 100%; min-width: 0; font-size: 12px; padding: 6px 9px; border-radius: 7px; }
   .filter-check { accent-color: var(--accent); }
-  .filter-line .secondary { flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
+  .filter-top { display: contents; }
+  .filter-top .secondary { justify-self: start; flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
   .tier-table { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
   .tier-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
   .tier-num {
@@ -245,8 +252,8 @@ export function buildConfigurePage(origin, config, adminSecret) {
   }
   .tier-row .danger { flex-shrink: 0; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
-    .filter-label { width: auto; }
-    .filter-line { flex-wrap: wrap; }
+    .simkl-filter { grid-template-columns: 1fr; }
+    .filter-value { flex-wrap: wrap; }
     .tier-row { flex-wrap: wrap; }
     .tier-num { flex: 1 1 44%; }
   }
@@ -792,12 +799,12 @@ function renderSimkl() {
         '</span>' +
       '</div>' +
       '<div class="simkl-filter" id="simfilter-' + i + '">' +
-        '<div class="filter-line"><label class="filter-label">Rating source</label><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div>' +
-        '<div class="filter-line"><label class="filter-label"><input type="checkbox" class="filter-check" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"> Rating filter</label></div>' +
-        '<div class="filter-line"><label class="filter-label">Exclude genres</label><input class="url-input" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News" ></div>' +
-        '<div class="filter-line"><label class="filter-label">Include countries</label><input class="url-input" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb" ></div>' +
-        '<div class="filter-line"><label class="filter-label">Exclude countries</label><input class="url-input" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp" ></div>' +
-        '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div>' +
+        '<div class="filter-line"><span class="filter-label">Rating source</span><div class="filter-value"><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div></div>' +
+        '<div class="filter-line"><span class="filter-label">Rating filter</span><div class="filter-value"><input type="checkbox" class="filter-check" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"></div></div>' +
+        '<div class="filter-line"><label class="filter-label" for="sfGenres-' + i + '">Exclude genres</label><div class="filter-value"><input class="url-input" id="sfGenres-' + i + '" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News"></div></div>' +
+        '<div class="filter-line"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
+        '<div class="filter-line"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
+        '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><div class="filter-value"><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div></div>' +
         '<div class="tier-table">' + tiers + '</div>' +
       '</div>' +
       '<div class="card-error" id="socardError-' + i + '"></div>' +
