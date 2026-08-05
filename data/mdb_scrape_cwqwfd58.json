@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_cwqwfd58",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1785867353061,
+  "scraped_at": 1785904657181,
   "items": [
+    {
+      "slug": "41mtw-dose?cache=1",
+      "imdb_id": "tt38573318",
+      "title": "Dose",
+      "year": 2026,
+      "score": 1,
+      "poster_path": "wuEQbDF5jHaOOAMGiXWmDRz9imG.jpg",
+      "description": "Bodies begin to pile up in a hospital meant to save lives, forcing a doctor with a troubled past to confront buried secrets when a woman from his past returns. As the investigation deepens, each revelation becomes more dangerous than the last.",
+      "digital_release_date": null
+    },
     {
       "slug": "40qak-lockbox?cache=1",
       "imdb_id": "tt37369064",
@@ -40,7 +50,7 @@
       "title": "Evil Dead Burn",
       "year": 2026,
       "score": 6,
-      "poster_path": "ztadKzIIR0ERYqpHteaPFtk7inP.jpg",
+      "poster_path": "uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
       "description": "After her husband's abrupt death, Alice seeks solace with his remaining family — descendants of a leading researcher on demonic possession. As her in-laws transform one by one into creatures that feed on fear, she comes to discover that the vows she took in life survive even in death.",
       "digital_release_date": null
     },
@@ -740,7 +750,7 @@
       "title": "The Devil Wears Prada 2",
       "year": 2026,
       "score": 7,
-      "poster_path": "fCAURTUx3YfsJ8k9I0UamjSILiR.jpg",
+      "poster_path": "xTI42pmsP5EDnvsNJPEDubwWBQO.jpg",
       "description": "Andy Sachs returns to Runway as Miranda Priestly navigates a new media landscape and Runway's position within. The duo reconnect with former assistant Emily Charlton, now the head of a luxury brand that possesses funding which could ensure Runway's survival.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 4,
       "poster_path": "c9h2p2qBSb5ThgBtNPWZNQDqvEX.jpg",
       "description": "In a series of cheap, locally produced TV commercials, small business owners rival the looming threat of Buffet Infinity. As Buffet Infinity endlessly expands and grows, engulfing everything in its path, a sinister conspiracy unfolds at the margins, and unfathomable powers begin to seep into the vulnerable community of Westridge County, Alberta.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "5agg-project-hail-mary?cache=1",
-      "imdb_id": "tt12042730",
-      "title": "Project Hail Mary",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "yihdXomYb5kTeSivtFndMy5iDmf.jpg",
-      "description": "Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction.",
       "digital_release_date": null
     }
   ]

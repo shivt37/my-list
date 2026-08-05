@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1785867339980,
+  "scraped_at": 1785904646777,
   "items": [
     {
       "slug": "38vwp-evil-dead-burn?cache=1",
@@ -10,8 +10,18 @@
       "title": "Evil Dead Burn",
       "year": 2026,
       "score": 6,
-      "poster_path": "ztadKzIIR0ERYqpHteaPFtk7inP.jpg",
+      "poster_path": "uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
       "description": "After her husband's abrupt death, Alice seeks solace with his remaining family — descendants of a leading researcher on demonic possession. As her in-laws transform one by one into creatures that feed on fear, she comes to discover that the vows she took in life survive even in death.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3yggr-another-world?cache=1",
+      "imdb_id": "tt36639436",
+      "title": "Another World",
+      "year": 2025,
+      "score": 7,
+      "poster_path": "xASHAAVfLCUNOSQcxM5xtp8cRqo.jpg",
+      "description": "After death, before reincarnation, the souls of the deceased transit through a fantastical realm known as, Another World. Gudo is a spirit that helps to guide these transient souls to their reincarnation. While guiding a young girl named Yuri, he learns that humans have emotions that he does not understand. Tasked by Goddess Mira to help Yuri control her rage and prevent her transformation into a monster, Gudo embarks on a perilous mission.",
       "digital_release_date": null
     },
     {
@@ -380,7 +390,7 @@
       "title": "The Devil Wears Prada 2",
       "year": 2026,
       "score": 7,
-      "poster_path": "fCAURTUx3YfsJ8k9I0UamjSILiR.jpg",
+      "poster_path": "xTI42pmsP5EDnvsNJPEDubwWBQO.jpg",
       "description": "Andy Sachs returns to Runway as Miranda Priestly navigates a new media landscape and Runway's position within. The duo reconnect with former assistant Emily Charlton, now the head of a luxury brand that possesses funding which could ensure Runway's survival.",
       "digital_release_date": null
     },
@@ -410,7 +420,7 @@
       "title": "Raja Shivaji",
       "year": 2026,
       "score": 4,
-      "poster_path": "9e2Wc6sbeU1YdBWLJIDyMcEWrN2.jpg",
+      "poster_path": "hljQF3Ly6PzQe7iaNs9fmFuBYWj.jpg",
       "description": "Chronicles the rise of young Shivaji Bhonsale, who challenged the might of established empires to found the Maratha kingdom and lay the groundwork for 'Swarajya' (self-rule) during a turbulent period of Indian history.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 4,
       "poster_path": "7yy4cVr9obHOZC9lj3uct4DwDEn.jpg",
       "description": "North America has been divided into four main quadrants. A power-hungry corporation has taken over the conventional prison system and made criminals the new law enforcers.  The owner of that corporation, nanoscientist Eion Prescott, created a nano-virus called Onyx. Which is distributed through deadly watches to criminals. First, infecting them. Then, forcing them into eliminating each other for freedom. Who can topple the corporation's entire system from within?",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3g6sr-seven-snipers?cache=1",
-      "imdb_id": "tt36926359",
-      "title": "Seven Snipers",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "pK6tGCG6UAgUT5FTq3ylGErHxQQ.jpg",
-      "description": "When a former elite sniper is hunted down by the ruthless warlord who once held her captive, she must fight to the death to protect the daughter she has raised in hiding, on a remote Australian farm.",
       "digital_release_date": null
     }
   ]
