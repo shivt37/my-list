@@ -278,7 +278,7 @@ export async function handleTriggerRefresh(env, request) {
     const result = await dispatchScraperWorkflow(env, {
       lists: slugs,
       action: "official",
-      workflow: "official.yml",
+      workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
     });
     if (!result.dispatched) {
       return json({ error: "GitHub Actions isn't configured on this worker yet (missing GH_TOKEN/GH_REPO)." }, 501);

@@ -8,7 +8,7 @@ const GH_API = "https://api.github.com";
 export async function dispatchScraperWorkflow(env, { lists = [], action = "scrape", deleteIds = [], workflow } = {}) {
   const wf = workflow || env.GH_WORKFLOW;
   if (!env.GH_TOKEN || !env.GH_REPO || !wf) {
-    return { dispatched: false, reason: workflow ? "GH_TOKEN/GH_REPO not configured" : "GH_TOKEN/GH_REPO/GH_WORKFLOW not configured" };
+    return { dispatched: false, reason: "GH_TOKEN/GH_REPO/GH_WORKFLOW not configured" };
   }
   const res = await fetch(`${GH_API}/repos/${env.GH_REPO}/actions/workflows/${wf}/dispatches`, {
     method: "POST",

@@ -11,3 +11,9 @@ id = "36b7763e6e31445696e1a773c44de7a3"
 [vars]
 # Base URL of the GitHub Pages site hosting data/<id>.json catalog files.
 GITHUB_PAGES_BASE = "https://shivt37.github.io/my-list"
+# GitHub Actions dispatch: repo + workflow file names. The token itself is
+# NOT here — set GH_TOKEN as a Cloudflare secret (dashboard or
+# `wrangler secret put GH_TOKEN`).
+GH_REPO = "shivt37/my-list"
+GH_WORKFLOW = "scrape.yml"
+GH_OFFICIAL_WORKFLOW = "official.yml"
