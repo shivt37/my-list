@@ -108,7 +108,7 @@ export function buildConfigurePage(origin, config) {
   .btn-icon:hover { color: var(--text); border-color: var(--accent); }
   #refreshBtn.spinning svg, .card-refresh.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .card-refresh { padding: 5px 6px; }
+  .card-refresh { padding: 5px 6px; margin-left: 40px; }
   .card-refresh svg { display: block; }
 
   /* ── MAIN ── */
@@ -169,7 +169,7 @@ export function buildConfigurePage(origin, config) {
   .create-list-row button { flex-shrink: 0; padding: 7px 14px; font-size: 12px; }
 
   .list-card {
-    background: var(--surface);
+    background: #161616;
     border: 1px solid var(--border); border-radius: var(--r2); padding: 12px;
     margin-bottom: 10px; display: flex; flex-direction: column;
     transition: border-color 0.15s, opacity 0.15s;
