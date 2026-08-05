@@ -148,7 +148,7 @@ async function postRuns(runs) {
 }
 
 export async function main({
-  slugsArg: rawSlugs,
+  slugsArg: rawSlugs = slugsArg,
   fetchConfig = enabledSlugs,
   fetchApi = fetchAllItems,
   recordRuns = postRuns,
