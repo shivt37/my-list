@@ -2,14 +2,17 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig } from "./config.js";
+import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
 
 export const ADDON_ID = "com.mylist";
 export const ADDON_NAME = "my-list";
 export const ADDON_VERSION = "0.1.0";
-export const ADDON_DESCRIPTION = "Community-built catalogs: MDBList scraper lists (phase 1).";
+export const ADDON_DESCRIPTION = "Community-built catalogs: MDBList scraper lists + MDBList official lists.";
+
+// Official module's workflow file — separate cron from the scraper's.
+export const OFFICIAL_WORKFLOW = "official.yml";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -63,12 +66,20 @@ export function toIST(ms) {
 export async function buildManifest(env) {
   const cfg = await loadConfig(env.STORE);
   const enabled = cfg.scraper.lists.filter((l) => l.enabled);
-  const catalogs = enabled.map((l) => ({
-    name: l.name,
-    id: l.id,
-    type: l.type,
-    extra: [{ name: "skip", isRequired: false }],
-  }));
+  // Scraper lists first, then official lists (only their enabled slugs).
+  const enabledOfficial = new Set(cfg.official.lists.filter((l) => l.enabled).map((l) => l.slug));
+  const officialCatalogs = OFFICIAL_CATALOGS
+    .filter((c) => enabledOfficial.has(c.slug))
+    .map((c) => ({ name: c.name, id: c.id, type: c.type, extra: [{ name: "skip", isRequired: false }] }));
+  const catalogs = [
+    ...enabled.map((l) => ({
+      name: l.name,
+      id: l.id,
+      type: l.type,
+      extra: [{ name: "skip", isRequired: false }],
+    })),
+    ...officialCatalogs,
+  ];
   return {
     id: ADDON_ID,
     version: ADDON_VERSION,
@@ -95,10 +106,27 @@ function rowToMeta(row) {
   };
 }
 
-export async function handleCatalog(env, type, catalogId, skip) {
+function rowToMetaOfficial(row) {
+  return {
+    id: row.imdb_id,
+    type: row.type,
+    name: row.title,
+    poster: row.poster || undefined,
+    releaseInfo: row.year ? String(row.year) : undefined,
+    imdbRating: row.imdb_rating ? (row.imdb_rating / 10).toFixed(1) : undefined,
+  };
+}
+
+export async function handleCatalog(env, catalogType, catalogId, skip) {
   const cfg = await loadConfig(env.STORE);
+  const official = OFFICIAL_CATALOGS.find((c) => c.id === catalogId);
   const list = cfg.scraper.lists.find((l) => l.id === catalogId);
-  if (!list) return json({ metas: [] });
+  const metaOf = official ? rowToMetaOfficial : rowToMeta;
+
+  // Unknown id, or an id whose module is disabled → empty, but still 200.
+  // (The manifest controls what Stremio can reach; a stale request after a
+  // disable must not 404 the whole chain.)
+  if (!official && !list) return json({ metas: [] });
 
   let data;
   try {
@@ -111,15 +139,19 @@ export async function handleCatalog(env, type, catalogId, skip) {
 
   const rows = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
   const slice = rows.slice(skip, skip + 100);
-  return json({ metas: slice.map(rowToMeta) }, 200, { "cache-control": "public, max-age=300" });
+  return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType })) }, 200, { "cache-control": "public, max-age=300" });
 }
 
-export async function handleStatus(env) {
+export async function handleStatus(env, request) {
+  const page = request && new URL(request.url).searchParams.get("page");
+  const official = page === "official";
   const cfg = await loadConfig(env.STORE);
-  const runs = await getRuns(env.STORE);
-  const byId = new Map(cfg.scraper.lists.map((l) => [l.id, l]));
+  const runs = official ? await getRuns(env.STORE, "runs:official") : await getRuns(env.STORE, "runs:scraper");
+  const listById = new Map(cfg.scraper.lists.map((l) => [l.id, l.name]));
+  const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, c.name]));
+  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? r.catalog_id;
   const out = runs.slice(0, 30).map((r) => ({
-    catalog_name: byId.has(r.catalog_id) ? byId.get(r.catalog_id).name : r.catalog_id,
+    catalog_name: nameFor(r),
     catalog_id: r.catalog_id,
     pages_scraped: r.pages_scraped,
     movies_found: r.movies_found,
@@ -162,6 +194,9 @@ export async function handleSaveConfig(env, request) {
       if (!nextById.has(l.id)) removed.push(l);
     }
 
+    // Scraper module regenerates via the scraper workflow. Official module
+    // has no data files to delete (fixeds slugs) — a toggle just changes
+    // the manifest; nothing to dispatch.
     const dispatch = [];
     for (const l of [...changed, ...added]) {
       if (l.enabled) dispatch.push(l);
@@ -184,12 +219,20 @@ export async function handleSaveConfig(env, request) {
 
     await saveConfig(env.STORE, incoming);
 
+    // Official toggles surface to the UI but trigger no dispatch — a
+    // toggle only changes the manifest, no data file to regenerate.
+    const prevOffById = new Map(current.official.lists.map((l) => [l.slug, l]));
+    const officialChanged = incoming.official.lists
+      .filter((l) => prevOffById.has(l.slug) && prevOffById.get(l.slug).enabled !== l.enabled)
+      .map((l) => l.name);
+
     return json({
       ok: true,
       changed: changed.map((l) => l.name),
       added: added.map((l) => l.name),
       removed: removed.map((l) => l.name),
       dispatch: dispatch.map((l) => ({ id: l.id, name: l.name })),
+      officialChanged,
       github: dispatchResult,
     });
   } catch (e) {
@@ -206,15 +249,44 @@ export async function handleTriggerRefresh(env, request) {
   const cfg = await loadConfig(env.STORE);
 
   // Optional { id } body → refresh a single list instead of all enabled.
+  // Optional { page } body → scope the refresh to one module.
   let singleId = null;
+  let page = null;
   if (request && request.method === "POST") {
     try {
       const text = await request.text();
-      if (text) singleId = (JSON.parse(text).id ?? null);
+      if (text) {
+        const parsed = JSON.parse(text);
+        singleId = parsed.id ?? null;
+        page = parsed.page === "official" ? "official" : null;
+      }
     } catch {
       singleId = null;
+      page = null;
     }
   }
+
+  // Official page-scoped refresh: one slug refresh → one official list
+  // (movies + shows); no id → all enabled official lists.
+  if (page === "official") {
+    const enabledQ = cfg.official.lists.filter((l) => l.enabled);
+    if (singleId) {
+      const list = enabledQ.find((l) => l.slug === singleId);
+      if (!list) return json({ error: "Unknown or disabled official list." }, 404);
+    }
+    const slugs = singleId ? [singleId] : enabledQ.map((l) => l.slug);
+    const result = await dispatchScraperWorkflow(env, {
+      lists: slugs,
+      action: "official",
+      workflow: "official.yml",
+    });
+    if (!result.dispatched) {
+      return json({ error: "GitHub Actions isn't configured on this worker yet (missing GH_TOKEN/GH_REPO)." }, 501);
+    }
+    return json({ ok: true, lists: slugs, workflow: OFFICIAL_WORKFLOW });
+  }
+
+  // Scraper page default (no body / no page): all enabled scraper lists.
   let targets;
   if (singleId) {
     const list = cfg.scraper.lists.find((l) => l.id === singleId);
@@ -235,8 +307,10 @@ export async function handleTriggerRefresh(env, request) {
   return json({ ok: true, lists: targets.map((l) => l.id) });
 }
 
-// POST /runs — called by scripts/scrape.mjs after each list scrape to
-// record the run in worker KV (status page reads from here).
+// POST /runs — called by scripts/scrape.mjs (and scripts/official.mjs)
+// after each list scrape to record the run in worker KV (status page
+// reads from here). Runs are keyed by catalog-id prefix: mdboff_* →
+// runs:official, everything else → runs:scraper.
 export async function handleRunsPost(env, request) {
   try {
     const body = await request.json();
@@ -258,11 +332,10 @@ export async function handleRunsPost(env, request) {
         status: r.status === "success" ? "success" : "failed",
         error_message: typeof r.error_message === "string" ? r.error_message.slice(0, 500) : null,
       };
-      await addRun(env.STORE, run);
+      await addRun(env.STORE, run, runsKeyFor(run.catalog_id));
     }
     return json({ ok: true });
   } catch (e) {
     return json({ error: "Failed to record runs." }, 500);
   }
 }
-

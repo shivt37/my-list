@@ -1,17 +1,23 @@
 // Config + scrape-run-history storage in KV (binding STORE).
 // Scraper module: each list = { id, name, url, type, maxPages, enabled }.
 // id = mdb_scrape_<8 random alnum chars>, generated once at creation, permanent.
+// Official module: 3 fixed MDBList official lists, never editable/deletable,
+// only enabled-toggled. Their catalog files live in data/mdboff_*_*.json.
 
 import { createHash } from "node:crypto";
 
 const CONFIG_KEY = "config";
-const RUNS_KEY = "runs:scraper";
+const RUNS_SCRAPER_KEY = "runs:scraper";
+const RUNS_OFFICIAL_KEY = "runs:official";
 const RUNS_MAX = 30;
-// One-shot healing marker — once set, seed-URL lists never get their ids
-// rewritten again (rewriting a user-added list's id mid-save makes the
-// diff see it as removed+added and delete the seeded data file).
 const HEALED_KEY = "healed";
 const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+export function runsKeyFor(catalogId) {
+  return catalogId.startsWith("mdboff_") ? RUNS_OFFICIAL_KEY : RUNS_SCRAPER_KEY;
+}
+
+export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
 
 // Seeded IDs are derived from the listing URL (first 8 hex of sha256),
 // so the ID the config shows is the ID the scraper writes under — even
@@ -27,8 +33,22 @@ export function randomScraperId(seedUrl) {
 }
 
 export function emptyConfig() {
-  return { scraper: { lists: [] } };
+  return { scraper: { lists: [] }, official: { lists: [] } };
 }
+
+// The three MDBList official lists. Slugs are fixed forever — they produce
+// the catalog / data file ids mdboff_<slug>_<movie|show>. Users can only
+// enable/disable; there is no delete, edit, or add.
+export const OFFICIAL_LISTS = [
+  { slug: "popular", name: "Popular" },
+  { slug: "justwatch-streaming-charts", name: "JustWatch Streaming Charts" },
+  { slug: "moviemeter", name: "MovieMeter" },
+];
+
+export const OFFICIAL_CATALOGS = OFFICIAL_LISTS.flatMap((o) => [
+  { id: `mdboff_${o.slug}_movie`, slug: o.slug, name: `${o.name} — Movies`, type: "movie" },
+  { id: `mdboff_${o.slug}_show`, slug: o.slug, name: `${o.name} — Shows`, type: "series" },
+]);
 
 // Source URLs for the three pre-seeded scraper lists — lifted verbatim
 // from the old repo's scraper/catalogs.json (filters stay byte-identical;
@@ -70,6 +90,21 @@ export function seedScraperDefaults(cfg) {
   return { ...cfg, scraper: { lists: SEED_LISTS.map((s) => ({ ...s })) } };
 }
 
+export function officialDefaults() {
+  return OFFICIAL_LISTS.map((o) => ({ slug: o.slug, name: o.name, enabled: true }));
+}
+
+// Persisted official section: only the 3 fixed slugs, only their enabled
+// flag survives. Slug must be one of the knowns or it's dropped (extras,
+// renames, stale entries all fall away here).
+export function migrateOfficial(raw) {
+  const rawLists = Array.isArray(raw?.official?.lists) ? raw.official.lists : [];
+  const map = new Map(OFFICIAL_LISTS.map((o) => [o.slug, true]));
+  return rawLists
+    .filter((l) => l && typeof l.slug === "string" && map.has(l.slug))
+    .map((l) => ({ slug: l.slug, name: l.name, enabled: l.enabled !== false }));
+}
+
 export function migrateConfig(raw) {
   const src = (raw && raw.scraper) || {};
   const lists = Array.isArray(src.lists) ? src.lists : [];
@@ -85,7 +120,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated } };
+  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) } };
 }
 
 // Fields that affect the scraped data file: url, maxPages, enabled.
@@ -113,6 +148,21 @@ export async function loadConfig(kv) {
   const cfg = wasSeeded && migrated.scraper.lists.length === 0
     ? seedScraperDefaults(migrated)
     : migrated;
+
+  // Normalize the official section to exactly the 3 known slugs. Missing
+  // official key (old saved configs) → defaults; known slugs keep their
+  // persisted enabled flag; unknown/stale slugs get dropped.
+  const known = new Map(officialDefaults().map((o) => [o.slug, o]));
+  if (!Array.isArray(cfg.official?.lists) || cfg.official.lists.length === 0) {
+    cfg.official = { lists: officialDefaults() };
+  } else {
+    const kept = cfg.official.lists
+      .filter((l) => l && typeof l.slug === "string" && known.has(l.slug))
+      .map((l) => ({ slug: known.get(l.slug).slug, name: known.get(l.slug).name, enabled: l.enabled !== false }));
+    // Always exactly 3 — a truncated/extra list here must not silently
+    // drop or duplicate a fixed catalog.
+    cfg.official.lists = known.size === kept.length ? kept : officialDefaults();
+  }
 
   // One-shot healing: if any persisted list matches a seed entry by URL
   // but carries a different id (e.g. a random id from before the seed
@@ -147,14 +197,15 @@ export async function saveConfig(kv, cfg) {
   await kv.put(CONFIG_KEY, JSON.stringify(cfg));
 }
 
-// ---- scrape-run history (last 30, most recent first) ----
+// ---- scrape-run history (last 30 per module, most recent first) ----
+// Scraper runs live under runs:scraper, official runs under runs:official.
 
-export async function addRun(kv, run) {
-  const runs = (await kv.get(RUNS_KEY, "json")) || [];
+export async function addRun(kv, run, key = RUNS_SCRAPER_KEY) {
+  const runs = (await kv.get(key, "json")) || [];
   runs.unshift(run);
-  await kv.put(RUNS_KEY, JSON.stringify(runs.slice(0, RUNS_MAX)));
+  await kv.put(key, JSON.stringify(runs.slice(0, RUNS_MAX)));
 }
 
-export async function getRuns(kv) {
-  return (await kv.get(RUNS_KEY, "json")) || [];
+export async function getRuns(kv, key = RUNS_SCRAPER_KEY) {
+  return (await kv.get(key, "json")) || [];
 }

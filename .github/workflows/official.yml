@@ -1,0 +1,57 @@
+name: Refresh MDBList official lists
+
+on:
+  schedule:
+    # Every 12 hours (UTC). Edit this line on github.com to change the
+    # schedule — per-page cron, separate from scrape.yml.
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: "Official slugs to refresh (comma-separated, blank = all)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  official:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: my-list-scrape
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run official lists fetcher
+        working-directory: scripts
+        env:
+          MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.slugs }}" ]; then
+            ARGS="--slugs=${{ github.event.inputs.slugs }}"
+          fi
+          node official.mjs $ARGS
+
+      - name: Commit data changes
+        run: |
+          git config user.name "my-list-bot"
+          git config user.email "my-list-bot@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes — skipping commit."
+          else
+            git commit -m "chore(data): refresh official lists [skip ci]"
+            # Rebase onto whatever landed (worker deploy commits, manual
+            # pushes) — a bare push races and loses this run's data.
+            git pull --rebase
+            git push
+          fi

@@ -52,7 +52,7 @@ export default {
     }
 
     if (pathname === "/status") {
-      return handleStatus(env);
+      return handleStatus(env, request);
     }
 
     if (pathname === "/save-config" && request.method === "POST") {

@@ -223,6 +223,8 @@ export function buildConfigurePage(origin, config) {
   .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
   .card-controls button { flex-shrink: 0; }
   .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
+  .official-hint { font-size: 11px; color: var(--muted); flex: 1 1 60%; min-width: 0; }
+  .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
@@ -358,9 +360,9 @@ export function buildConfigurePage(origin, config) {
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           MDBList Scraper
         </div>
-        <div class="menu-item disabled" onclick="soon()">
+        <div class="menu-item" data-module="official" onclick="activateModule('official')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-          MDBList Official List<span class="menu-soon">soon</span>
+          MDBList Official List
         </div>
         <div class="menu-item disabled" onclick="soon()">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>
@@ -382,8 +384,8 @@ export function buildConfigurePage(origin, config) {
 
 <div class="confirm-backdrop" id="refreshConfirmBackdrop">
   <div class="confirm-modal">
-    <div class="confirm-title">Refresh all scraper lists?</div>
-    <div class="confirm-body">This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?</div>
+    <div class="confirm-title" id="refreshAllTitle">Refresh all scraper lists?</div>
+    <div class="confirm-body" id="refreshAllBody">This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?</div>
     <div class="confirm-actions">
       <button class="secondary" onclick="closeRefreshConfirm()">Cancel</button>
       <button id="confirmRefreshBtn">Refresh all</button>
@@ -485,11 +487,13 @@ function soon() { setStatus('That module is coming soon — only the MDBList Scr
 
 // ─── Menu ───
 function toggleMenu() { document.getElementById('menuPopup').classList.toggle('visible'); }
+let activeModule = 'scraper';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
-  if (m !== 'scraper') { soon(); return; }
-  document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === 'scraper'));
-  renderScraper();
+  if (m !== 'scraper' && m !== 'official') { soon(); return; }
+  activeModule = m;
+  document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));
+  if (m === 'scraper') renderScraper(); else renderOfficial();
 }
 document.addEventListener('click', (e) => {
   const popup = document.getElementById('menuPopup');
@@ -665,8 +669,58 @@ async function randomId(seedUrl) {
   return 'mdb_scrape_' + out;
 }
 
+// ─── Official module tab ───
+function renderOfficial() {
+  const host = document.getElementById('tabHost');
+  const lists = state.official.lists;
+  const cards = lists.map((l, i) => {
+    return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="ocard-' + i + '">' +
+      '<div class="card-top">' +
+        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleOfficial(' + i + ')"><span class="toggle-slider"></span></label></div>' +
+        '<div class="info">' +
+          '<span class="name-static">' + escapeAttr(l.name) + '</span>' +
+          '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card-controls">' +
+        '<span class="official-hint">Movies + Shows, refreshed every 12 hours via MDBList API</span>' +
+        '<span class="card-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askOfficialRefresh(' + i + ')" title="Refresh this official list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+          '</button>' +
+        '</span>' +
+      '</div>' +
+      '<div class="card-error" id="ocardError-' + i + '"></div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('headerTitle').textContent = 'MDBList Official List';
+  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+
+  host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added, renamed or deleted — only enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
+}
+
+function toggleOfficial(i) {
+  const l = state.official.lists[i];
+  if (!l) return;
+  l.enabled = !l.enabled;
+  renderOfficial();
+}
+
+function askOfficialRefresh(i) {
+  const l = state.official.lists[i];
+  if (!l) return;
+  pendingRefreshIndex = i;
+  document.getElementById('refreshOneConfirmBody').textContent =
+    '"' + l.name + '" (movies + shows) will be re-fetched from the MDBList API now on GitHub Actions. This can take a minute. Are you sure?';
+  document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
+}
+
 // ─── Save (hash-compare → dispatch changed lists only) ───
 async function saveAll() {
+  // Global save: one config blob, both pages. The scraper page still
+  // guards its own input before persisting; the official page has no
+  // free-form input to validate.
   if (state.scraper.lists.length === 0) {
     setStatus('Add at least one scraper list first.', 'error');
     return;
@@ -685,9 +739,13 @@ async function saveAll() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    setStatus(data.dispatch && data.dispatch.length
-      ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
-      : 'Saved (no content change — nothing regenerated).', 'ok');
+    const officialChanges = (activeModule === 'official' && data.officialChanged && data.officialChanged.length)
+      ? 'Official toggles saved: ' + data.officialChanged.join(', ') + '. '
+      : '';
+    setStatus(officialChanges +
+      (data.dispatch && data.dispatch.length
+        ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
+        : 'Saved (no content change — nothing regenerated).'), 'ok');
   } catch (e) {
     setStatus('Save failed: ' + e.message, 'error');
   } finally {
@@ -695,17 +753,32 @@ async function saveAll() {
   }
 }
 
-function openRefreshConfirm() { document.getElementById('refreshConfirmBackdrop').classList.add('visible'); }
+function openRefreshConfirm() {
+  const official = activeModule === 'official';
+  document.getElementById('refreshAllTitle').textContent = official ? 'Refresh all official lists?' : 'Refresh all scraper lists?';
+  document.getElementById('refreshAllBody').textContent = official
+    ? 'This re-fetches every enabled official list (movies + shows) right now from the MDBList API on GitHub Actions. It takes about a minute. Are you sure?'
+    : 'This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?';
+  document.getElementById('refreshConfirmBackdrop').classList.add('visible');
+}
 function closeRefreshConfirm() { document.getElementById('refreshConfirmBackdrop').classList.remove('visible'); }
 async function confirmRefresh() {
   closeRefreshConfirm();
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning'); btn.disabled = true;
   try {
-    const res = await fetch(ORIGIN + '/trigger-refresh', { method: 'POST' });
+    // Page-scoped: scraper tab refreshes scraper lists only, official tab
+    // refreshes official lists only.
+    const res = await fetch(ORIGIN + '/trigger-refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: activeModule }),
+    });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    setStatus('Refresh dispatched — GitHub Actions is regenerating all enabled lists.', 'ok');
+    setStatus(activeModule === 'official'
+      ? 'Refresh dispatched — GitHub Actions is regenerating all enabled official lists (movies + shows).'
+      : 'Refresh dispatched — GitHub Actions is regenerating all enabled lists.', 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
   } finally {
@@ -726,18 +799,24 @@ async function confirmRefreshOne() {
   const i = pendingRefreshIndex;
   pendingRefreshIndex = -1;
   closeRefreshOneConfirm();
-  if (i < 0 || !state.scraper.lists[i]) return;
-  const btn = document.querySelector('#card-' + i + ' .card-refresh');
+  if (i < 0) return;
+  const official = activeModule === 'official';
+  const list = official ? state.official.lists[i] : state.scraper.lists[i];
+  if (!list) return;
+  const cardSel = (official ? '#ocard-' + i : '#card-' + i) + ' .card-refresh';
+  const btn = document.querySelector(cardSel);
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
   try {
+    // Page-scoped: official tab sends page=official + the slug, scraper
+    // tab sends the list id (defaults to the scraper page).
     const res = await fetch(ORIGIN + '/trigger-refresh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: state.scraper.lists[i].id }),
+      body: JSON.stringify(official ? { page: 'official', id: list.slug } : { id: list.id }),
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    setStatus('"' + state.scraper.lists[i].name + '" refresh dispatched — regenerating just that list.', 'ok');
+    setStatus('"' + list.name + '" refresh dispatched — regenerating just that ' + (official ? 'official list (movies + shows).' : 'list.'), 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
   } finally {
@@ -745,7 +824,9 @@ async function confirmRefreshOne() {
   }
 }
 
-function openStatus() { window.open(ORIGIN + '/status', '_blank'); }
+function openStatus() {
+  window.open(ORIGIN + '/status?page=' + (activeModule === 'official' ? 'official' : 'scraper'), '_blank');
+}
 
 document.getElementById('saveBtn').onclick = saveAll;
 document.getElementById('menuBtn').onclick = toggleMenu;
