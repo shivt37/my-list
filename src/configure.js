@@ -490,10 +490,12 @@ function soon() { setStatus('That module is coming soon — only the MDBList Scr
 // ─── Menu ───
 function toggleMenu() { document.getElementById('menuPopup').classList.toggle('visible'); }
 let activeModule = 'scraper';
+const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
   if (m !== 'scraper' && m !== 'official') { soon(); return; }
   activeModule = m;
+  try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));
   if (m === 'scraper') renderScraper(); else renderOfficial();
 }
@@ -838,7 +840,9 @@ document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
 document.getElementById('confirmRefreshOneBtn').onclick = confirmRefreshOne;
 
 initSwatches();
-renderScraper();
+let savedModule = 'scraper';
+try { savedModule = localStorage.getItem(MODULE_KEY) || 'scraper'; } catch (e) {}
+if (savedModule !== 'scraper') activateModule(savedModule); else renderScraper();
 </script>
 </body>
 </html>`;
