@@ -222,6 +222,7 @@ export function buildConfigurePage(origin, config) {
   .pages-label { font-size: 11px; color: var(--muted); flex-shrink: 0; }
   .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
   .card-controls button { flex-shrink: 0; }
+  .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
@@ -312,8 +313,7 @@ export function buildConfigurePage(origin, config) {
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
     .card-controls { flex-wrap: wrap; }
-    .card-controls .card-refresh,
-    .card-controls button.danger { margin-left: auto; }
+    .card-actions { margin-left: auto; }
     .card-controls .url-input { flex: 1 1 100%; margin-right: 0; }
     select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
     .pages-label { font-size: 10px; }
@@ -530,10 +530,12 @@ function renderScraper() {
         '</select>' +
         '<span class="pages-label">pages:</span>' +
         '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
-        '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
-          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
-        '</button>' +
-        '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
+        '<span class="card-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+          '</button>' +
+          '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
+        '</span>' +
       '</div>' +
       '<div class="card-error" id="cardError-' + i + '"></div>' +
     '</div>';
