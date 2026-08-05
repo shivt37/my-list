@@ -316,6 +316,7 @@ export function buildConfigurePage(origin, config) {
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
     .card-controls { flex-wrap: wrap; }
+    .official-hint { flex: 1 1 0; }
     .card-actions { margin-left: auto; }
     .card-controls .url-input { flex: 1 1 100%; margin-right: 0; }
     select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
