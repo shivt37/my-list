@@ -14,7 +14,7 @@ const corsHeaders = {
 function json(body, status = 200, extraHeaders = {}) {
   return new Response(typeof body === "string" ? body : JSON.stringify(body, null, 2), {
     status,
-    headers: { "content-type": "application/json", ...corsHeaders, ...extraHeaders },
+    headers: { "content-type": "application/json", "x-content-type-options": "nosniff", ...corsHeaders, ...extraHeaders },
   });
 }
 
@@ -60,7 +60,7 @@ export default {
     }
 
     if (pathname === "/export-config") {
-      return handleExportConfig(env);
+      return handleExportConfig(env, request);
     }
 
     if (pathname === "/trigger-refresh" && request.method === "POST") {

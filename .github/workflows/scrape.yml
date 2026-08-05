@@ -33,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     concurrency:
+      # Shared with official.yml - both write data/ and POST run records, so
+      # they serialize. Without this the KV read-modify-write in addRun and
+      # the data-commit step could race and lose runs.
       group: my-list-scrape
       cancel-in-progress: false
     steps:
@@ -50,19 +53,23 @@ jobs:
         working-directory: scripts
         env:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
           MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
         run: |
-          ARGS="--action=${{ github.event.inputs.action || 'scrape' }}"
+          # Inputs flow via env, not inline shell - the bash array quoting
+          # keeps a crafted lists/delete_ids value from injecting into the
+          # shell.
+          ARGS=("--action=${{ github.event.inputs.action || 'scrape' }}")
           if [ -n "${{ github.event.inputs.lists }}" ]; then
-            ARGS="$ARGS --lists=${{ github.event.inputs.lists }}"
+            ARGS+=("--lists=${{ github.event.inputs.lists }}")
           fi
           if [ -n "${{ github.event.inputs.delete_ids }}" ]; then
-            ARGS="$ARGS --delete-ids=${{ github.event.inputs.delete_ids }}"
+            ARGS+=("--delete-ids=${{ github.event.inputs.delete_ids }}")
           fi
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            ARGS="$ARGS --debug"
+            ARGS+=("--debug")
           fi
-          node scrape.mjs $ARGS
+          node scrape.mjs "${ARGS[@]}"
 
       - name: Commit data changes
         run: |

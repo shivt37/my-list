@@ -6,31 +6,34 @@
  * JSON file into data/mdboff_<slug>_<movie|show>.json (served via GitHub
  * Pages), and POSTs run records to the worker's /runs endpoint (status
  * page). Unlike the scraper, official lists are only ever enabled/disabled
- * - no add/edit/delete, so there's no config fetch and no delete path.
+ * - no add/edit/delete, no delete path. Disabled slugs are skipped when
+ * the worker serves config.
  *
  * Required env (GitHub repo secrets / workflow env):
  *   MDBLIST_API_KEY - mdblist.com API key
- *   WORKER_ORIGIN   - worker base URL (run records; optional)
+ *   WORKER_ORIGIN   - worker base URL (run records + config; required)
+ *   WORKER_SECRET   - worker shared secret for /runs + /export-config
  *
  * Usage:
- *   node official.mjs                 # refresh all 3 lists × 2 media types
+ *   node official.mjs                 # refresh all enabled (default 3) slugs × 2 media types
  *   node official.mjs --slugs=popular,justwatch-streaming-charts
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
-const DATA_DIR = join(ROOT, "data");
+export const ROOT = join(__dirname, "..");
+export const DATA_DIR = join(ROOT, "data");
 
 const MDBLIST_API_KEY = process.env.MDBLIST_API_KEY;
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
+const WORKER_SECRET = process.env.WORKER_SECRET;
 const API = "https://api.mdblist.com";
 
-const SLUGS = ["popular", "justwatch-streaming-charts", "moviemeter"];
-const MEDIATYPES = ["movie", "show"];
+export const SLUGS = ["popular", "justwatch-streaming-charts", "moviemeter"];
+export const MEDIATYPES = ["movie", "show"];
 
 function arg(name) {
   const prefix = `--${name}=`;
@@ -38,19 +41,31 @@ function arg(name) {
   return found ? found.slice(prefix.length) : undefined;
 }
 
-const slugsArg = arg("slugs");
-const slugs = slugsArg ? slugsArg.split(",").filter(Boolean) : SLUGS;
-
-if (!MDBLIST_API_KEY) {
-  console.error("Missing MDBLIST_API_KEY env var.");
-  process.exit(1);
+// Worker is the source of truth for enabled slugs - a disabled list is not
+// refreshed. Falls back to all slugs when the worker is unreachable so a
+// worker outage can't silently stop the refresh.
+export async function enabledSlugs() {
+  if (!WORKER_ORIGIN) return SLUGS;
+  try {
+    const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
+      headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) return SLUGS;
+    const cfg = await res.json();
+    const enabled = new Set((cfg.official?.lists || []).filter((l) => l.enabled).map((l) => l.slug));
+    if (enabled.size === 0) return SLUGS;
+    return SLUGS.filter((s) => enabled.has(s));
+  } catch {
+    return SLUGS;
+  }
 }
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Walk cursor pages until has_more is false or the cap (50) is hit.
 // The API default limit is 100; keep it that way.
-async function fetchAllItems(slug, mediatype) {
+export async function fetchAllItems(slug, mediatype) {
   const items = [];
   let cursor = null;
   let pages = 0;
@@ -63,7 +78,7 @@ async function fetchAllItems(slug, mediatype) {
     url.searchParams.set("append_to_response", "poster");
     if (cursor) url.searchParams.set("cursor", cursor);
 
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: AbortSignal.timeout(30000) });
     if (!res.ok) {
       const err = await res.text();
       throw new Error(`MDBList API ${res.status} (${slug}/${mediatype}): ${err.slice(0, 200)}`);
@@ -88,7 +103,7 @@ async function fetchAllItems(slug, mediatype) {
   return { items, pages };
 }
 
-function writeCatalog(slug, mediatype, items) {
+export function writeCatalog(slug, mediatype, items) {
   mkdirSync(DATA_DIR, { recursive: true });
   const file = join(DATA_DIR, `mdboff_${slug}_${mediatype}.json`);
   const out = {
@@ -102,25 +117,43 @@ function writeCatalog(slug, mediatype, items) {
   return file;
 }
 
+// /runs caps at 50 records per POST - chunk larger batches.
+export function chunkArray(arr, size = 50) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
 async function postRuns(runs) {
   if (!WORKER_ORIGIN || runs.length === 0) return;
-  try {
-    const res = await fetch(`${WORKER_ORIGIN}/runs`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ runs }),
-    });
-    if (!res.ok) {
-      console.warn(`  [runs] POST failed: HTTP ${res.status}`);
+  for (const chunk of chunkArray(runs)) {
+    try {
+      const res = await fetch(`${WORKER_ORIGIN}/runs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {}),
+        },
+        body: JSON.stringify({ runs: chunk }),
+      });
+      if (!res.ok) {
+        console.warn(`  [runs] POST failed: HTTP ${res.status}`);
+        process.exitCode = 1;
+      }
+    } catch (e) {
+      console.warn(`  [runs] POST failed: ${e.message}`);
       process.exitCode = 1;
     }
-  } catch (e) {
-    console.warn(`  [runs] POST failed: ${e.message}`);
-    process.exitCode = 1;
   }
 }
 
-async function main() {
+export async function main({
+  slugsArg: rawSlugs,
+  fetchConfig = enabledSlugs,
+  fetchApi = fetchAllItems,
+  recordRuns = postRuns,
+} = {}) {
+  const slugs = rawSlugs ? rawSlugs.split(",").filter(Boolean) : await fetchConfig();
   const runs = [];
   const results = [];
   for (const slug of slugs) {
@@ -128,8 +161,10 @@ async function main() {
       const startedAt = Date.now();
       const run = { catalog_id: `mdboff_${slug}_${mediatype}`, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
       try {
-        const { items, pages } = await fetchAllItems(slug, mediatype);
-        writeCatalog(slug, mediatype, items);
+        const { items, pages } = await fetchApi(slug, mediatype);
+        // Empty result may mean a legitimate empty list or a scrape gone
+        // silent - don't overwrite the last good file with an empty one.
+        if (items.length > 0) writeCatalog(slug, mediatype, items);
         run.status = items.length > 0 ? "success" : "failed";
         run.finished_at = Date.now();
         run.pages_scraped = pages;
@@ -138,7 +173,7 @@ async function main() {
         console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items`);
       } catch (e) {
         run.finished_at = Date.now();
-        run.pages_scraped = pages;
+        run.pages_scraped = 0;
         run.movies_found = 0;
         run.error_message = e.message;
         results.push({ catalog: run.catalog_id, error: e.message });
@@ -149,14 +184,23 @@ async function main() {
     }
   }
 
-  await postRuns(runs);
+  await recordRuns(runs);
 
   console.log("\nSummary:", JSON.stringify(results, null, 2));
   const failed = results.filter((r) => r.error);
-  if (failed.length) process.exit(1);
+  if (failed.length && isMain) process.exit(1);
 }
 
-main().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
-});
+// Fresh check each run (not at module load) so dry tests can import
+// official.mjs without exiting.
+export const isMain = typeof process !== "undefined" && !!process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  if (!MDBLIST_API_KEY) {
+    console.error("Missing MDBLIST_API_KEY env var.");
+    process.exit(1);
+  }
+  main().catch((err) => {
+    console.error("Fatal error:", err);
+    process.exit(1);
+  });
+}

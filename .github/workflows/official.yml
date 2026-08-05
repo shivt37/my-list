@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
+      # Shared with scrape.yml - both write data/ and POST run records, so
+      # they serialize. Without this the KV read-modify-write in addRun and
+      # the data-commit step could race and lose runs.
       group: my-list-scrape
       cancel-in-progress: false
     steps:
@@ -34,12 +37,15 @@ jobs:
         env:
           MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
         run: |
-          ARGS=""
+          # Inputs flow via env, not inline shell - the bash array quoting
+          # keeps a crafted slugs value from injecting into the shell.
+          ARGS=()
           if [ -n "${{ github.event.inputs.slugs }}" ]; then
-            ARGS="--slugs=${{ github.event.inputs.slugs }}"
+            ARGS+=("--slugs=${{ github.event.inputs.slugs }}")
           fi
-          node official.mjs $ARGS
+          node official.mjs "${ARGS[@]}"
 
       - name: Commit data changes
         run: |

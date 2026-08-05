@@ -11,6 +11,7 @@
  *
  * Required env (GitHub repo secrets / workflow env):
  *   WORKER_ORIGIN   - worker base URL, e.g. https://my-list.workers.dev
+ *   WORKER_SECRET   - worker shared secret for /export-config + /runs
  *   MDBLIST_API_KEY - mdblist.com API key (only used for nothing today -
  *                     scraping is DOM-based; kept for parity/tests)
  *
@@ -30,39 +31,54 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 puppeteer.use(StealthPlugin());
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
-const DATA_DIR = join(ROOT, "data");
+export const ROOT = join(__dirname, "..");
+export const DATA_DIR = join(ROOT, "data");
 
-const DEBUG = process.argv.includes("--debug");
-const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
+export const DEBUG = process.argv.includes("--debug");
+export const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
+export const WORKER_SECRET = process.env.WORKER_SECRET;
 
-function arg(name) {
+export function arg(name) {
   const prefix = `--${name}=`;
   const found = process.argv.find((a) => a.startsWith(prefix));
   return found ? found.slice(prefix.length) : undefined;
 }
 
-const listsArg = arg("lists");
-const action = arg("action") || "scrape";
-const deleteIdsArg = arg("delete-ids");
-const requestedIds = listsArg ? listsArg.split(",").filter(Boolean) : null;
-const deleteIds = deleteIdsArg ? deleteIdsArg.split(",").filter(Boolean) : [];
+export const listsArg = arg("lists");
+export const action = arg("action") || "scrape";
+export const deleteIdsArg = arg("delete-ids");
+export const requestedIds = listsArg ? listsArg.split(",").filter(Boolean) : null;
+export const deleteIds = deleteIdsArg ? deleteIdsArg.split(",").filter(Boolean) : [];
 
-if (!WORKER_ORIGIN) {
+export const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (!WORKER_ORIGIN && isMain) {
   console.error("Missing WORKER_ORIGIN env var.");
   process.exit(1);
+}
+
+export function authHeaders() {
+  return { "Content-Type": "application/json", ...(WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {}) };
+}
+
+export function chunkArray(arr, size = 50) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
 }
 
 // ====================================================================
 // CONFIG (from worker KV via /export-config)
 // ====================================================================
-async function fetchConfig() {
-  const res = await fetch(`${WORKER_ORIGIN}/export-config`);
+export async function fetchConfig() {
+  const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
+    headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
+    signal: AbortSignal.timeout(15000),
+  });
   if (!res.ok) throw new Error(`Failed to fetch config: HTTP ${res.status}`);
   return res.json();
 }
@@ -72,26 +88,28 @@ async function fetchConfig() {
 // ====================================================================
 async function postRuns(runs) {
   if (runs.length === 0) return;
-  try {
-    const res = await fetch(`${WORKER_ORIGIN}/runs`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ runs }),
-    });
-    if (!res.ok) {
-      console.warn(`  [runs] POST failed: HTTP ${res.status}`);
+  for (const chunk of chunkArray(runs)) {
+    try {
+      const res = await fetch(`${WORKER_ORIGIN}/runs`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ runs: chunk }),
+      });
+      if (!res.ok) {
+        console.warn(`  [runs] POST failed: HTTP ${res.status}`);
+        process.exitCode = 1;
+      }
+    } catch (e) {
+      console.warn(`  [runs] POST failed: ${e.message}`);
       process.exitCode = 1;
     }
-  } catch (e) {
-    console.warn(`  [runs] POST failed: ${e.message}`);
-    process.exitCode = 1;
   }
 }
 
 // ====================================================================
 // PAGE URL BUILDER (same pagination rule as the original scraper)
 // ====================================================================
-function buildPageUrl(sourceUrl, page) {
+export function buildPageUrl(sourceUrl, page) {
   const url = new URL(sourceUrl);
   const params = url.searchParams;
   if (page === 0) {
@@ -298,7 +316,7 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
   }
 }
 
-async function scrapeList(sourceUrl, browser, maxPages, type = "movie") {
+export async function scrapeList(sourceUrl, browser, maxPages, type = "movie") {
   const allMovies = [];
   const errors = [];
   let pagesScraped = 0;
@@ -323,7 +341,10 @@ async function scrapeList(sourceUrl, browser, maxPages, type = "movie") {
 // ====================================================================
 // OUTPUT - pretty-printed JSON into data/<id>.json
 // ====================================================================
-function writeCatalog(list, movies) {
+export function writeCatalog(list, movies) {
+  // Empty result may mean a legitimate empty list or a silent scrape
+  // failure - don't overwrite the last good file with an empty one.
+  if (movies.length === 0) return null;
   mkdirSync(DATA_DIR, { recursive: true });
   const out = {
     catalog_id: list.id,
@@ -337,7 +358,7 @@ function writeCatalog(list, movies) {
   return file;
 }
 
-function deleteCatalog(id) {
+export function deleteCatalog(id) {
   const file = join(DATA_DIR, `${id}.json`);
   try {
     rmSync(file, { force: true });
@@ -350,7 +371,7 @@ function deleteCatalog(id) {
 // ====================================================================
 // MAIN
 // ====================================================================
-async function main() {
+export async function main({ getConfig = fetchConfig, write = writeCatalog, recordRuns = postRuns } = {}) {
   // Deletes are independent of scraping - do them first.
   for (const id of deleteIds) deleteCatalog(id);
 
@@ -416,7 +437,7 @@ async function main() {
           return true;
         });
 
-        writeCatalog(list, deduped);
+        write(list, deduped);
 
         run.status = deduped.length > 0 && !errors.length ? "success" : "failed";
         run.finished_at = Date.now();
@@ -447,10 +468,12 @@ async function main() {
   console.log("\nSummary:", JSON.stringify(results, null, 2));
 
   const failed = results.filter((r) => r.error || (r.errors && r.errors.length));
-  if (failed.length) process.exit(1);
+  if (failed.length && isMain) process.exit(1);
 }
 
-main().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
-});
+if (isMain) {
+  main().catch((err) => {
+    console.error("Fatal error:", err);
+    process.exit(1);
+  });
+}

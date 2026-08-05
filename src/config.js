@@ -113,7 +113,7 @@ export function migrateConfig(raw) {
     // "mdb_scrape_a/../../../x" would otherwise reach scrape.mjs and
     // writeCatalog/deleteCatalog's join() and escape data/. Looseness
     // on the tail keeps legacy ids (healing) intact while blocking / \ ..
-    id: typeof l.id === "string" && /^mdb_scrape_[A-Za-z0-9_-]{1,32}$/.test(l.id) ? l.id : randomScraperId(l.url),
+    id: typeof l.id === "string" && /^mdb_scrape_[A-Za-z0-9_-]{1,32}$/.test(l.id) ? l.id : randomScraperId(l.url || l.name || "unnamed"),
     name: String(l.name || "").trim().slice(0, 200) || "Untitled",
     url: String(l.url || "").slice(0, 2000),
     type: l.type === "series" ? "series" : "movie",

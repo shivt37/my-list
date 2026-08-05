@@ -8,7 +8,7 @@ function escapeAttr(s) {
   return String(s ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export function buildConfigurePage(origin, config) {
+export function buildConfigurePage(origin, config, adminSecret) {
   // </script> can escape the inline state blob (V8 JSON.stringify does not
   // escape <), so hard-escape it before embedding.
   const initial = JSON.stringify(config).replace(/</g, "\\u003c");
@@ -419,6 +419,7 @@ export function buildConfigurePage(origin, config) {
 
 <script>
 const ORIGIN = ${JSON.stringify(origin).replace(/</g, "\\u003c")};
+const ADMIN_SECRET = ${JSON.stringify(adminSecret || "").replace(/</g, "\\u003c")};
 let state = ${initial};
 
 // ─── Scraper module state ───
@@ -738,7 +739,7 @@ async function saveAll() {
   try {
     const res = await fetch(ORIGIN + '/save-config', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
       body: JSON.stringify(state),
     });
     const data = await res.json();
@@ -775,7 +776,7 @@ async function confirmRefresh() {
     // refreshes official lists only.
     const res = await fetch(ORIGIN + '/trigger-refresh', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
       body: JSON.stringify({ page: activeModule }),
     });
     const data = await res.json();
@@ -815,7 +816,7 @@ async function confirmRefreshOne() {
     // tab sends the list id (defaults to the scraper page).
     const res = await fetch(ORIGIN + '/trigger-refresh', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
       body: JSON.stringify(official ? { page: 'official', id: list.slug } : { id: list.id }),
     });
     const data = await res.json();

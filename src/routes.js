@@ -16,14 +16,25 @@ export const OFFICIAL_WORKFLOW = "official.yml";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "content-type",
+  "Access-Control-Allow-Headers": "content-type, x-admin-secret",
 };
 
 function json(body, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(body, null, 2), {
     status,
-    headers: { "content-type": "application/json", ...corsHeaders, ...extraHeaders },
+    headers: { "content-type": "application/json", "x-content-type-options": "nosniff", ...corsHeaders, ...extraHeaders },
   });
+}
+
+// Shared secret gates every mutating route. The configure page embeds it
+// (it only blocks scripts on other origins, not determined callers - the
+// honest ceiling without Turnstile); the GitHub Actions scripts pass it via
+// env. Not a strong security boundary, raises the bar for drive-by abuse.
+export function requireAdmin(request, env) {
+  const secret = env.ADMIN_SECRET;
+  if (!secret) return null;
+  if (request && request.headers.get("x-admin-secret") === secret) return null;
+  return json({ error: "Unauthorized" }, 401);
 }
 
 function html(body, extraHeaders = {}) {
@@ -49,7 +60,7 @@ export function githubPagesCatalogUrl(env, catalogId) {
 
 // Configure page returns a full Response (html helper lives here too).
 export function configureResponse(env, origin, config) {
-  return html(buildConfigurePage(origin, config));
+  return html(buildConfigurePage(origin, config, env.ADMIN_SECRET));
 }
 
 export function toIST(ms) {
@@ -166,6 +177,8 @@ export async function handleStatus(env, request) {
 }
 
 export async function handleSaveConfig(env, request) {
+  const guard = requireAdmin(request, env);
+  if (guard) return guard;
   try {
     const body = await request.json();
     if (!body || !body.scraper || !Array.isArray(body.scraper.lists)) {
@@ -205,6 +218,10 @@ export async function handleSaveConfig(env, request) {
     const deleteIds = removed.map((l) => l.id);
 
     let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
+    // Persist before dispatching so the workflow's /export-config read
+    // sees the new config, then roll back on dispatch failure to preserve
+    // the old reject-on-failure semantics.
+    await saveConfig(env.STORE, incoming);
     if (dispatch.length > 0 || deleteIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         lists: dispatch.map((l) => l.id),
@@ -213,12 +230,11 @@ export async function handleSaveConfig(env, request) {
       });
     }
     if ((dispatch.length > 0 || deleteIds.length > 0) && !dispatchResult.dispatched) {
-      // Don't persist a config whose workflow dispatch failed - the on-disk
+      // Don't keep a config whose workflow dispatch failed - the on-disk
       // data files would go stale with no way to regenerate them.
+      await saveConfig(env.STORE, current);
       return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
     }
-
-    await saveConfig(env.STORE, incoming);
 
     // Official toggles surface to the UI but trigger no dispatch - a
     // toggle only changes the manifest, no data file to regenerate.
@@ -241,12 +257,16 @@ export async function handleSaveConfig(env, request) {
   }
 }
 
-export async function handleExportConfig(env) {
+export async function handleExportConfig(env, request) {
+  const guard = requireAdmin(request, env);
+  if (guard) return guard;
   const cfg = await loadConfig(env.STORE);
   return json(cfg);
 }
 
 export async function handleTriggerRefresh(env, request) {
+  const guard = requireAdmin(request, env);
+  if (guard) return guard;
   const cfg = await loadConfig(env.STORE);
 
   // Optional { id } body → refresh a single list instead of all enabled.
@@ -314,6 +334,8 @@ export async function handleTriggerRefresh(env, request) {
 // reads from here). Runs are keyed by catalog-id prefix: mdboff_* →
 // runs:official, everything else → runs:scraper.
 export async function handleRunsPost(env, request) {
+  const guard = requireAdmin(request, env);
+  if (guard) return guard;
   try {
     const body = await request.json();
     if (!body || !Array.isArray(body.runs)) {

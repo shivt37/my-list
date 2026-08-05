@@ -30,7 +30,8 @@ export async function dispatchScraperWorkflow(env, { lists = [], action = "scrap
     }),
   });
   if (res.status !== 204) {
-    return { dispatched: false, reason: `GitHub API returned ${res.status}` };
+    const detail = (await res.text()).slice(0, 200);
+    return { dispatched: false, reason: `GitHub API returned ${res.status}${detail ? ": " + detail : ""}` };
   }
   return { dispatched: true, lists, action, workflow: wf };
 }
