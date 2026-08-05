@@ -621,16 +621,19 @@ function toggleList(i) {
   renderScraper();
 }
 
-// Inline rename: name/type only touch the manifest (built live from
+// Inline rename: name only touches the manifest (built live from
 // config), never the data file - so renaming must NOT trigger a regen.
-function startNameEdit(i) { listNameEditIndex = i; renderScraper(); }
+// Works on both scraper and simkl cards.
+function startNameEdit(i) { listNameEditIndex = i; rerenderActive(); }
 function saveName(i) {
+  const lists = activeModule === 'simkl' ? state.simkl.lists : state.scraper.lists;
   const el = document.getElementById('nameInput-' + i);
-  if (el && el.value.trim()) state.scraper.lists[i].name = el.value.trim();
+  if (el && el.value.trim()) lists[i].name = el.value.trim();
   listNameEditIndex = -1;
-  renderScraper();
+  rerenderActive();
 }
-function cancelName(i) { listNameEditIndex = -1; renderScraper(); }
+function cancelName(i) { listNameEditIndex = -1; rerenderActive(); }
+function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else renderScraper(); }
 
 function showCreateRow() {
   document.getElementById('createListBtn').style.display = 'none';
@@ -774,7 +777,12 @@ function renderSimkl() {
       '<div class="card-top">' +
         '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleSimkl(' + i + ')"><span class="toggle-slider"></span></label></div>' +
         '<div class="info">' +
-          '<span class="name-static">' + escapeAttr(l.name) + '</span>' +
+          (listNameEditIndex === i
+            ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
+            : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
+          '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
+          '</span>' +
           '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
         '</div>' +
         '<span class="card-actions official-actions">' +
