@@ -53,7 +53,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function fetchAllItems(slug, mediatype) {
   const items = [];
   let cursor = null;
+  let pages = 0;
   for (let page = 0; page < 50; page++) {
+    pages++;
     const url = new URL(`${API}/lists/official/${slug}/items`);
     url.searchParams.set("apikey", MDBLIST_API_KEY);
     url.searchParams.set("limit", "100");
@@ -83,7 +85,7 @@ async function fetchAllItems(slug, mediatype) {
     cursor = data.pagination?.next_cursor || null;
     if (!cursor || !data.pagination?.has_more) break;
   }
-  return items;
+  return { items, pages };
 }
 
 function writeCatalog(slug, mediatype, items) {
@@ -126,17 +128,17 @@ async function main() {
       const startedAt = Date.now();
       const run = { catalog_id: `mdboff_${slug}_${mediatype}`, started_at: startedAt, status: "failed" };
       try {
-        const items = await fetchAllItems(slug, mediatype);
+        const { items, pages } = await fetchAllItems(slug, mediatype);
         writeCatalog(slug, mediatype, items);
         run.status = items.length > 0 ? "success" : "failed";
         run.finished_at = Date.now();
-        run.pages_scraped = 1;
+        run.pages_scraped = pages;
         run.movies_found = items.length;
         results.push({ catalog: run.catalog_id, moviesFound: items.length });
         console.log(`[${run.catalog_id}] ${run.status} — ${items.length} items`);
       } catch (e) {
         run.finished_at = Date.now();
-        run.pages_scraped = 0;
+        run.pages_scraped = pages;
         run.movies_found = 0;
         run.error_message = e.message;
         results.push({ catalog: run.catalog_id, error: e.message });

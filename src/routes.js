@@ -153,7 +153,7 @@ export async function handleStatus(env, request) {
   const out = runs.slice(0, 30).map((r) => ({
     catalog_name: nameFor(r),
     catalog_id: r.catalog_id,
-    pages_scraped: r.pages_scraped,
+    ...(official ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
     movies_found: r.movies_found,
     status: r.status,
     error_message: r.error_message ?? null,
