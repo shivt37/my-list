@@ -224,7 +224,7 @@ export function buildConfigurePage(origin, config) {
   .card-controls button { flex-shrink: 0; }
   .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
   .official-actions { margin-left: 60px; }
-  .official-hint { font-size: 11px; color: var(--muted); flex: 1 1 60%; min-width: 0; }
+  .official-hint { font-size: 11px; color: var(--muted); flex: 0 1 auto; min-width: 0; }
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
