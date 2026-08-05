@@ -18,7 +18,7 @@ export function buildConfigurePage(origin, config) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050508">
-<title>my-list — Configure</title>
+<title>my-list - Configure</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@ export function buildConfigurePage(origin, config) {
   }
   body > * { position: relative; z-index: 1; }
 
-  /* Selection stays neutral — no accent tint on highlight. */
+  /* Selection stays neutral - no accent tint on highlight. */
   ::selection { background: #262635; color: #e8edf4; }
   /* One focus line only: inputs shift border color, no stacked outline ring. */
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -120,7 +120,7 @@ export function buildConfigurePage(origin, config) {
   #status.error { color: var(--danger); }
   #status.ok { color: var(--ok); }
 
-  /* ── INPUTS + SELECTS — explicit dark, can never render white ── */
+  /* ── INPUTS + SELECTS - explicit dark, can never render white ── */
   input {
     background: #0c0c13; color: #e8edf4;
     border: 1px solid var(--border2); border-radius: 8px;
@@ -341,7 +341,7 @@ export function buildConfigurePage(origin, config) {
   <div class="header-title" id="headerTitle">MDBList Scraper</div>
   <div class="header-actions">
     <button class="btn-save" id="saveBtn">Save</button>
-    <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh — regenerate all enabled lists">
+    <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh - regenerate all enabled lists">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
     </button>
     <div class="accent-popup-wrap">
@@ -485,7 +485,7 @@ function setStatus(msg, kind) {
   el.className = kind || '';
 }
 
-function soon() { setStatus('That module is coming soon — only the MDBList Scraper tab is live right now.', 'error'); }
+function soon() { setStatus('That module is coming soon - only the MDBList Scraper tab is live right now.', 'error'); }
 
 // ─── Menu ───
 function toggleMenu() { document.getElementById('menuPopup').classList.toggle('visible'); }
@@ -556,7 +556,7 @@ function renderScraper() {
         'Add List' +
       '</button>' +
       '<div class="create-list-row" id="createListRow" style="display:none">' +
-        '<input class="name-input" id="createNameInput" placeholder="Name — e.g. Latest Movie" spellcheck="false">' +
+        '<input class="name-input" id="createNameInput" placeholder="Name - e.g. Latest Movie" spellcheck="false">' +
         '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
         '<span class="type-pages">' +
           '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
@@ -571,7 +571,7 @@ function renderScraper() {
   document.getElementById('headerTitle').textContent = 'MDBList Scraper';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
-  host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet — add one above.</div>');
+  host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet - add one above.</div>');
   if (listNameEditIndex >= 0 && listNameEditIndex < lists.length) {
     const el = document.getElementById('nameInput-' + listNameEditIndex);
     if (el) { el.focus(); el.select(); }
@@ -597,7 +597,7 @@ function toggleList(i) {
 }
 
 // Inline rename: name/type only touch the manifest (built live from
-// config), never the data file — so renaming must NOT trigger a regen.
+// config), never the data file - so renaming must NOT trigger a regen.
 function startNameEdit(i) { listNameEditIndex = i; renderScraper(); }
 function saveName(i) {
   const el = document.getElementById('nameInput-' + i);
@@ -658,7 +658,7 @@ function confirmDelete() {
   renderScraper();
 }
 
-// IDs are derived from the URL — must match the server's
+// IDs are derived from the URL - must match the server's
 // randomScraperId() (sha256 → first 8 hex nibbles mapped to alphabet).
 // Hashing in the browser via SubtleCrypto so client + server agree.
 async function randomId(seedUrl) {
@@ -701,7 +701,7 @@ function renderOfficial() {
   document.getElementById('headerTitle').textContent = 'MDBList Official List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
-  host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added, renamed or deleted — only enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
+  host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added, renamed or deleted - only enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
 }
 
 function toggleOfficial(i) {
@@ -749,7 +749,7 @@ async function saveAll() {
     setStatus(officialChanges +
       (data.dispatch && data.dispatch.length
         ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
-        : 'Saved (no content change — nothing regenerated).'), 'ok');
+        : 'Saved (no content change - nothing regenerated).'), 'ok');
   } catch (e) {
     setStatus('Save failed: ' + e.message, 'error');
   } finally {
@@ -781,8 +781,8 @@ async function confirmRefresh() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     setStatus(activeModule === 'official'
-      ? 'Refresh dispatched — GitHub Actions is regenerating all enabled official lists (movies + shows).'
-      : 'Refresh dispatched — GitHub Actions is regenerating all enabled lists.', 'ok');
+      ? 'Refresh dispatched - GitHub Actions is regenerating all enabled official lists (movies + shows).'
+      : 'Refresh dispatched - GitHub Actions is regenerating all enabled lists.', 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
   } finally {
@@ -820,7 +820,7 @@ async function confirmRefreshOne() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    setStatus('"' + list.name + '" refresh dispatched — regenerating just that ' + (official ? 'official list (movies + shows).' : 'list.'), 'ok');
+    setStatus('"' + list.name + '" refresh dispatched - regenerating just that ' + (official ? 'official list (movies + shows).' : 'list.'), 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
   } finally {

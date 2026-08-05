@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * my-list scraper — runs on GitHub Actions, scrapes mdblist.com listing
+ * my-list scraper - runs on GitHub Actions, scrapes mdblist.com listing
  * URLs with headless Chromium (puppeteer-extra + stealth), writes each
  * enabled list's rows as a pretty-printed JSON file into data/<id>.json
  * (served via GitHub Pages), and POSTs run records to the worker's
@@ -11,7 +11,7 @@
  *
  * Required env (GitHub repo secrets / workflow env):
  *   WORKER_ORIGIN   - worker base URL, e.g. https://my-list.workers.dev
- *   MDBLIST_API_KEY - mdblist.com API key (only used for nothing today —
+ *   MDBLIST_API_KEY - mdblist.com API key (only used for nothing today -
  *                     scraping is DOM-based; kept for parity/tests)
  *
  * Usage:
@@ -217,7 +217,7 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
     try {
       await page.waitForSelector(linkSelector, { timeout: 20000 });
     } catch (e) {
-      throw new Error(`${type} links not found within 20s — page may be blocked or slow`);
+      throw new Error(`${type} links not found within 20s - page may be blocked or slow`);
     }
 
     const label = `page-${type}-p${pageIdx}`;
@@ -321,7 +321,7 @@ async function scrapeList(sourceUrl, browser, maxPages, type = "movie") {
 }
 
 // ====================================================================
-// OUTPUT — pretty-printed JSON into data/<id>.json
+// OUTPUT - pretty-printed JSON into data/<id>.json
 // ====================================================================
 function writeCatalog(list, movies) {
   mkdirSync(DATA_DIR, { recursive: true });
@@ -351,7 +351,7 @@ function deleteCatalog(id) {
 // MAIN
 // ====================================================================
 async function main() {
-  // Deletes are independent of scraping — do them first.
+  // Deletes are independent of scraping - do them first.
   for (const id of deleteIds) deleteCatalog(id);
 
   const config = await fetchConfig();
@@ -360,10 +360,10 @@ async function main() {
   const enabledTargets = targets.filter((l) => l.enabled);
 
   // Pure delete (action=scrape_delete with no --lists) must not also
-  // re-scrape every enabled list — the empty list arg races the workflow
+  // re-scrape every enabled list - the empty list arg races the workflow
   // into "all lists".
   if (action === "scrape_delete" && !requestedIds) {
-    console.log("Delete-only run — no lists to scrape.");
+    console.log("Delete-only run - no lists to scrape.");
     process.exit(0);
   }
 
@@ -390,7 +390,7 @@ async function main() {
   try {
     for (const list of enabledTargets) {
       const startedAt = Date.now();
-      const run = { catalog_id: list.id, started_at: startedAt, status: "failed" };
+      const run = { catalog_id: list.id, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
       try {
         // Sanity check: must be an mdblist.com listing URL matching the type.
         const expectedPath = list.type === "series" ? "/shows/" : "/movies/";
@@ -398,11 +398,11 @@ async function main() {
         try {
           parsed = new URL(list.url);
         } catch {
-          throw new Error(`List "${list.name}" has an invalid URL — check the configure page.`);
+          throw new Error(`List "${list.name}" has an invalid URL - check the configure page.`);
         }
         if (parsed.hostname !== "mdblist.com" || !parsed.pathname.startsWith(expectedPath)) {
           throw new Error(
-            `List "${list.name}" has type="${list.type}" but url isn't mdblist.com${expectedPath} (got ${parsed.hostname}${parsed.pathname}) — check the configure page.`
+            `List "${list.name}" has type="${list.type}" but url isn't mdblist.com${expectedPath} (got ${parsed.hostname}${parsed.pathname}) - check the configure page.`
           );
         }
 
@@ -425,7 +425,7 @@ async function main() {
         run.error_message = errors.length ? errors.join(" | ") : null;
         results.push({ catalog: list.id, pagesScraped, moviesFound: deduped.length, errors });
         console.log(
-          `[${list.id}] ${run.status} — ${deduped.length} ${list.type === "series" ? "shows" : "movies"} across ${pagesScraped} page(s)` +
+          `[${list.id}] ${run.status} - ${deduped.length} ${list.type === "series" ? "shows" : "movies"} across ${pagesScraped} page(s)` +
             (errors.length ? ` (errors: ${errors.join("; ")})` : "")
         );
       } catch (err) {

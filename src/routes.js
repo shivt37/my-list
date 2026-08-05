@@ -11,7 +11,7 @@ export const ADDON_NAME = "my-list";
 export const ADDON_VERSION = "0.1.0";
 export const ADDON_DESCRIPTION = "Community-built catalogs: MDBList scraper lists + MDBList official lists.";
 
-// Official module's workflow file — separate cron from the scraper's.
+// Official module's workflow file - separate cron from the scraper's.
 export const OFFICIAL_WORKFLOW = "official.yml";
 
 const corsHeaders = {
@@ -38,7 +38,7 @@ function html(body, extraHeaders = {}) {
   });
 }
 
-// Stremio pagination arrives as /catalog/<type>/<id>/skip=N.json — the
+// Stremio pagination arrives as /catalog/<type>/<id>/skip=N.json - the
 // trailing segment is part of the id token, so handle it like the old
 // worker did.
 export const CATALOG_RE = /^\/catalog\/([^/]+)\/([^/]+?)(?:\/(.*))?\.json$/;
@@ -154,6 +154,7 @@ export async function handleStatus(env, request) {
     catalog_name: nameFor(r),
     catalog_id: r.catalog_id,
     ...(official ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
+    triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
     movies_found: r.movies_found,
     status: r.status,
     error_message: r.error_message ?? null,
@@ -168,9 +169,9 @@ export async function handleSaveConfig(env, request) {
   try {
     const body = await request.json();
     if (!body || !body.scraper || !Array.isArray(body.scraper.lists)) {
-      return json({ error: "Invalid config body — expected { scraper: { lists: [] } }" }, 400);
+      return json({ error: "Invalid config body - expected { scraper: { lists: [] } }" }, 400);
     }
-    // Note: read-modify-write has no lock — concurrent saves can clobber
+    // Note: read-modify-write has no lock - concurrent saves can clobber
     // each other. Accepted for a single-operator admin page.
     const current = await loadConfig(env.STORE);
     const incoming = migrateConfig(body);
@@ -195,7 +196,7 @@ export async function handleSaveConfig(env, request) {
     }
 
     // Scraper module regenerates via the scraper workflow. Official module
-    // has no data files to delete (fixeds slugs) — a toggle just changes
+    // has no data files to delete (fixeds slugs) - a toggle just changes
     // the manifest; nothing to dispatch.
     const dispatch = [];
     for (const l of [...changed, ...added]) {
@@ -212,14 +213,14 @@ export async function handleSaveConfig(env, request) {
       });
     }
     if ((dispatch.length > 0 || deleteIds.length > 0) && !dispatchResult.dispatched) {
-      // Don't persist a config whose workflow dispatch failed — the on-disk
+      // Don't persist a config whose workflow dispatch failed - the on-disk
       // data files would go stale with no way to regenerate them.
-      return json({ ok: false, error: "Save rejected — GitHub dispatch failed: " + dispatchResult.reason }, 502);
+      return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
     }
 
     await saveConfig(env.STORE, incoming);
 
-    // Official toggles surface to the UI but trigger no dispatch — a
+    // Official toggles surface to the UI but trigger no dispatch - a
     // toggle only changes the manifest, no data file to regenerate.
     const prevOffById = new Map(current.official.lists.map((l) => [l.slug, l]));
     const officialChanged = incoming.official.lists
@@ -277,7 +278,7 @@ export async function handleTriggerRefresh(env, request) {
     const slugs = singleId ? [singleId] : enabledQ.map((l) => l.slug);
     const result = await dispatchScraperWorkflow(env, {
       workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
-      // official.yml declares a `slugs` input, not lists/action — GitHub
+      // official.yml declares a `slugs` input, not lists/action - GitHub
       // rejects inputs that the target workflow doesn't define (422).
       inputs: { slugs: slugs.join(",") },
     });
@@ -292,7 +293,7 @@ export async function handleTriggerRefresh(env, request) {
   if (singleId) {
     const list = cfg.scraper.lists.find((l) => l.id === singleId);
     if (!list) return json({ error: "Unknown list id." }, 404);
-    if (!list.enabled) return json({ error: "That list is disabled — enable it first." }, 400);
+    if (!list.enabled) return json({ error: "That list is disabled - enable it first." }, 400);
     targets = [list];
   } else {
     targets = cfg.scraper.lists.filter((l) => l.enabled);
@@ -308,7 +309,7 @@ export async function handleTriggerRefresh(env, request) {
   return json({ ok: true, lists: targets.map((l) => l.id) });
 }
 
-// POST /runs — called by scripts/scrape.mjs (and scripts/official.mjs)
+// POST /runs - called by scripts/scrape.mjs (and scripts/official.mjs)
 // after each list scrape to record the run in worker KV (status page
 // reads from here). Runs are keyed by catalog-id prefix: mdboff_* →
 // runs:official, everything else → runs:scraper.
@@ -332,6 +333,7 @@ export async function handleRunsPost(env, request) {
         movies_found: Number.isInteger(r.movies_found) && r.movies_found >= 0 ? r.movies_found : 0,
         status: r.status === "success" ? "success" : "failed",
         error_message: typeof r.error_message === "string" ? r.error_message.slice(0, 500) : null,
+        triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
       };
       await addRun(env.STORE, run, runsKeyFor(run.catalog_id));
     }

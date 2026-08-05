@@ -1,6 +1,6 @@
-// my-list worker — phase 1: MDBList scraper module only.
+// my-list worker - phase 1: MDBList scraper module only.
 // Thin router: config lives in KV, catalog data in repo data/ (GitHub
-// Pages), scraping happens in GitHub Actions. No scheduled handler —
+// Pages), scraping happens in GitHub Actions. No scheduled handler -
 // schedules are the workflows' own cron lines, edited on github.com.
 
 import { loadConfig } from "./config.js";
@@ -29,7 +29,7 @@ export default {
 
     if (pathname === "/" || pathname === "") {
       return new Response(
-        "my-list — Stremio addon\nConfigure: /configure\nManifest: /manifest.json\nStatus: /status",
+        "my-list - Stremio addon\nConfigure: /configure\nManifest: /manifest.json\nStatus: /status",
         { headers: { "Content-Type": "text/plain" } }
       );
     }

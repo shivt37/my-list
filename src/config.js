@@ -20,7 +20,7 @@ export function runsKeyFor(catalogId) {
 export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
 
 // Seeded IDs are derived from the listing URL (first 8 hex of sha256),
-// so the ID the config shows is the ID the scraper writes under — even
+// so the ID the config shows is the ID the scraper writes under - even
 // on a fresh KV that has never seen the seed list before.
 export function randomScraperId(seedUrl) {
   const seed = seedUrl || Math.random().toString(36).slice(2);
@@ -36,7 +36,7 @@ export function emptyConfig() {
   return { scraper: { lists: [] }, official: { lists: [] } };
 }
 
-// The three MDBList official lists. Slugs are fixed forever — they produce
+// The three MDBList official lists. Slugs are fixed forever - they produce
 // the catalog / data file ids mdboff_<slug>_<movie|show>. Users can only
 // enable/disable; there is no delete, edit, or add.
 export const OFFICIAL_LISTS = [
@@ -46,16 +46,16 @@ export const OFFICIAL_LISTS = [
 ];
 
 export const OFFICIAL_CATALOGS = OFFICIAL_LISTS.flatMap((o) => [
-  { id: `mdboff_${o.slug}_movie`, slug: o.slug, name: `${o.name} — Movies`, type: "movie" },
-  { id: `mdboff_${o.slug}_show`, slug: o.slug, name: `${o.name} — Shows`, type: "series" },
+  { id: `mdboff_${o.slug}_movie`, slug: o.slug, name: `${o.name} - Movies`, type: "movie" },
+  { id: `mdboff_${o.slug}_show`, slug: o.slug, name: `${o.name} - Shows`, type: "series" },
 ]);
 
-// Source URLs for the three pre-seeded scraper lists — lifted verbatim
+// Source URLs for the three pre-seeded scraper lists - lifted verbatim
 // from the old repo's scraper/catalogs.json (filters stay byte-identical;
 // only pagination params get overridden at scrape time).
 const SEED_LISTS = [
   {
-    // Pinned to the ID the data file was first committed under — once a
+    // Pinned to the ID the data file was first committed under - once a
     // scraper write lands in data/<id>.json that id is forever.
     id: "mdb_scrape_1djyii3b",
     name: "Latest Movie(digital releases)",
@@ -109,7 +109,7 @@ export function migrateConfig(raw) {
   const src = (raw && raw.scraper) || {};
   const lists = Array.isArray(src.lists) ? src.lists : [];
   const migrated = lists.map((l) => ({
-    // No path separators or traversal — a crafted id like
+    // No path separators or traversal - a crafted id like
     // "mdb_scrape_a/../../../x" would otherwise reach scrape.mjs and
     // writeCatalog/deleteCatalog's join() and escape data/. Looseness
     // on the tail keeps legacy ids (healing) intact while blocking / \ ..
@@ -125,7 +125,7 @@ export function migrateConfig(raw) {
 
 // Fields that affect the scraped data file: url, maxPages, enabled.
 // Name/type only affect the manifest (built live from config), so they
-// deliberately don't appear here — renaming a list must not re-scrape.
+// deliberately don't appear here - renaming a list must not re-scrape.
 export function listContentHash(list) {
   return createHash("sha256")
     .update([list.url, list.maxPages, list.enabled ? 1 : 0].join(" "))
@@ -141,7 +141,7 @@ export async function loadConfig(kv) {
     raw = null; // corrupt KV value → fall back to seeds rather than 500
   }
   const migrated = migrateConfig(raw);
-  // Seed only when the KV key was genuinely absent — an operator who
+  // Seed only when the KV key was genuinely absent - an operator who
   // saved an empty list (deleted every list) must keep it empty, not
   // have the seeds re-appear on the next read.
   const wasSeeded = raw === null;
@@ -159,7 +159,7 @@ export async function loadConfig(kv) {
     const kept = cfg.official.lists
       .filter((l) => l && typeof l.slug === "string" && known.has(l.slug))
       .map((l) => ({ slug: known.get(l.slug).slug, name: known.get(l.slug).name, enabled: l.enabled !== false }));
-    // Always exactly 3 — a truncated/extra list here must not silently
+    // Always exactly 3 - a truncated/extra list here must not silently
     // drop or duplicate a fixed catalog.
     cfg.official.lists = known.size === kept.length ? kept : officialDefaults();
   }
@@ -183,7 +183,7 @@ export async function loadConfig(kv) {
   }
 
   // Persist the seeded defaults on first load so the list IDs are
-  // permanent — without this, every read re-seeds new IDs and the
+  // permanent - without this, every read re-seeds new IDs and the
   // catalog data files (committed under the original IDs) never match
   // the config.
   if ((wasSeeded && cfg.scraper.lists.length > 0) || healed) {

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * my-list MDBList official lists — runs on GitHub Actions, fetches the 3
+ * my-list MDBList official lists - runs on GitHub Actions, fetches the 3
  * official lists (popular, justwatch-streaming-charts, moviemeter) for
  * both movie and show via the MDBList API, writes each as a pretty-printed
  * JSON file into data/mdboff_<slug>_<movie|show>.json (served via GitHub
  * Pages), and POSTs run records to the worker's /runs endpoint (status
  * page). Unlike the scraper, official lists are only ever enabled/disabled
- * — no add/edit/delete, so there's no config fetch and no delete path.
+ * - no add/edit/delete, so there's no config fetch and no delete path.
  *
  * Required env (GitHub repo secrets / workflow env):
  *   MDBLIST_API_KEY - mdblist.com API key
@@ -126,7 +126,7 @@ async function main() {
   for (const slug of slugs) {
     for (const mediatype of MEDIATYPES) {
       const startedAt = Date.now();
-      const run = { catalog_id: `mdboff_${slug}_${mediatype}`, started_at: startedAt, status: "failed" };
+      const run = { catalog_id: `mdboff_${slug}_${mediatype}`, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
       try {
         const { items, pages } = await fetchAllItems(slug, mediatype);
         writeCatalog(slug, mediatype, items);
@@ -135,7 +135,7 @@ async function main() {
         run.pages_scraped = pages;
         run.movies_found = items.length;
         results.push({ catalog: run.catalog_id, moviesFound: items.length });
-        console.log(`[${run.catalog_id}] ${run.status} — ${items.length} items`);
+        console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items`);
       } catch (e) {
         run.finished_at = Date.now();
         run.pages_scraped = pages;

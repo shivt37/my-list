@@ -1,4 +1,4 @@
-// GitHub Actions workflow dispatch — /save-config, /trigger-refresh and
+// GitHub Actions workflow dispatch - /save-config, /trigger-refresh and
 // /runs all reach the repo through this one function. The workflow file
 // is overridable (official lists dispatch to official.yml, not scrape.yml)
 // so each page keeps its own cron. Each workflow declares different
