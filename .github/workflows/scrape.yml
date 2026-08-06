@@ -51,14 +51,16 @@ jobs:
 
       - name: Sanitize workflow inputs
         id: sanitize
-        # Strict whitelist per arg; any char outside [a-zA-Z0-9,_-]/[01] drops
-        # the arg entirely. Done before the script sees it - a `$(...)`
+        # Strict whitelist per arg; any char outside [a-zA-Z0-9,_-]/[a-zA-Z]
+        # drops the arg entirely. Done before the script sees it - a `$(...)`
         # payload can't reach bash with the inner expansion evaluated.
+        # debug arrives as "true"/"false" (boolean input), not "1"/"0" -
+        # a [01] whitelist would strip it to empty and kill --debug.
         run: |
           SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-zA-Z0-9_-')
           SANITIZED_LISTS=$(printf '%s' "${{ github.event.inputs.lists }}" | tr -cd 'a-zA-Z0-9,_-')
           SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-zA-Z0-9,_-')
-          SANITIZED_DEBUG=$(printf '%s' "${{ github.event.inputs.debug }}" | tr -cd '01')
+          SANITIZED_DEBUG=$(printf '%s' "${{ github.event.inputs.debug }}" | tr -cd 'a-zA-Z')
           [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="scrape"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
           echo "lists=$SANITIZED_LISTS" >> "$GITHUB_OUTPUT"
@@ -82,7 +84,7 @@ jobs:
           ARGS=("--action=${INPUT_ACTION}")
           [ -n "${INPUT_LISTS}" ] && ARGS+=("--lists=${INPUT_LISTS}")
           [ -n "${INPUT_DEL}" ] && ARGS+=("--delete-ids=${INPUT_DEL}")
-          [ "${INPUT_DEBUG}" = "1" ] && ARGS+=("--debug")
+          [ "${INPUT_DEBUG}" = "true" ] && ARGS+=("--debug")
           node scrape.mjs "${ARGS[@]}"
 
       - name: Commit data changes

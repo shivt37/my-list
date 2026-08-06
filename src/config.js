@@ -240,12 +240,12 @@ export function migrateConfig(raw) {
   return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw) } };
 }
 
-// Fields that affect the scraped data file: url, maxPages, enabled.
-// Name/type only affect the manifest (built live from config), so they
-// deliberately don't appear here - renaming a list must not re-scrape.
+// Fields that affect the scraped data file: url, maxPages, enabled, type.
+// Name only affects the manifest (built live from config), so it
+// deliberately doesn't appear here - renaming a list must not re-scrape.
 export function listContentHash(list) {
   return createHash("sha256")
-    .update([list.url, list.maxPages, list.enabled ? 1 : 0].join(" "))
+    .update([list.url, list.maxPages, list.enabled ? 1 : 0, list.type].join(" "))
     .digest("hex")
     .slice(0, 16);
 }

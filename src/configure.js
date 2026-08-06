@@ -898,13 +898,9 @@ function toggleRatingEnabled(i, checked) {
 
 // ─── Save (hash-compare → dispatch changed lists only) ───
 async function saveAll() {
-  // Global save: one config blob, both pages. The scraper page still
-  // guards its own input before persisting; the official page has no
-  // free-form input to validate.
-  if (state.scraper.lists.length === 0) {
-    setStatus('Add at least one scraper list first.', 'error');
-    return;
-  }
+  // Global save: one config blob, all three modules. Zero scraper lists
+  // is legal (official/simkl-only addon) - the server persists an empty
+  // scraper section as-is and skips scraper dispatch.
   if (state.scraper.lists.some(l => !l.url.trim())) {
     setStatus('Every list needs an mdblist URL.', 'error');
     return;

@@ -95,7 +95,6 @@ export async function enabledKindsAndFilters() {
     if (!res.ok) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
     const cfg = await res.json();
     const enabled = new Set((cfg.simkl?.lists || []).filter((l) => l.enabled).map((l) => l.slug));
-    if (enabled.size === 0) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
     return KINDS.filter((k) => enabled.has(k)).map((k) => {
       const l = (cfg.simkl?.lists || []).find((x) => x.slug === k);
       return { kind: k, filter: l?.filter || DEFAULT_FILTERS[k] };
@@ -372,7 +371,12 @@ export async function main({
   if (rawKinds) {
     const wanted = new Set(rawKinds.split(",").filter(Boolean).filter((k) => SANE_KIND.test(k)));
     targets = config.filter((t) => wanted.has(t.kind));
-    if (targets.length === 0) targets = config;
+    // A typo'd --kinds (e.g. "serie") matching nothing must fail loudly -
+    // falling back to `config` would silently refresh every list and
+    // overwrite data/ with the default filters.
+    if (targets.length === 0) {
+      throw new Error(`No simkl kinds matched --kinds="${rawKinds}" (known: series, anime)`);
+    }
   } else {
     targets = config;
   }

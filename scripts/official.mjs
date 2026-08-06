@@ -44,8 +44,10 @@ function arg(name) {
 const slugsArg = arg("slugs");
 
 // Worker is the source of truth for enabled slugs - a disabled list is not
-// refreshed. Falls back to all slugs when the worker is unreachable so a
-// worker outage can't silently stop the refresh.
+// refreshed. A reachable worker that reports zero enabled slugs means the
+// operator disabled every list: refresh nothing. Falls back to all slugs
+// ONLY when the worker is unreachable so a worker outage can't silently
+// stop the refresh.
 export async function enabledSlugs() {
   if (!WORKER_ORIGIN) return SLUGS;
   try {
@@ -56,7 +58,6 @@ export async function enabledSlugs() {
     if (!res.ok) return SLUGS;
     const cfg = await res.json();
     const enabled = new Set((cfg.official?.lists || []).filter((l) => l.enabled).map((l) => l.slug));
-    if (enabled.size === 0) return SLUGS;
     return SLUGS.filter((s) => enabled.has(s));
   } catch {
     return SLUGS;

@@ -12,6 +12,11 @@ export async function dispatchScraperWorkflow(env, { lists = [], action = "scrap
   if (!env.GH_TOKEN || !env.GH_REPO || !wf) {
     return { dispatched: false, reason: "GH_TOKEN/GH_REPO/GH_WORKFLOW not configured" };
   }
+  // Workflow filename lands in the API URL path - allowlist it so a bad
+  // env value or input can't smuggle path segments into the request.
+  if (!/^[a-zA-Z0-9_.-]+\.yml$/.test(wf)) {
+    return { dispatched: false, reason: "Invalid workflow filename: " + wf };
+  }
   const payloadInputs = inputs || {
     lists: lists.join(","),
     action,

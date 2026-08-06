@@ -5,6 +5,7 @@
 import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
+import { createHash, timingSafeEqual } from "node:crypto";
 
 export const ADDON_ID = "com.mylist";
 export const ADDON_NAME = "my-list";
@@ -17,7 +18,7 @@ export const SIMKL_WORKFLOW = "simkl.yml";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "content-type, x-admin-secret",
+  "Access-Control-Allow-Headers": "content-type",
 };
 
 function json(body, status = 200, extraHeaders = {}) {
@@ -33,9 +34,16 @@ function json(body, status = 200, extraHeaders = {}) {
 // env. Not a strong security boundary, raises the bar for drive-by abuse.
 export function requireAdmin(request, env) {
   const secret = env.ADMIN_SECRET;
-  if (!secret) return null;
-  if (request && request.headers.get("x-admin-secret") === secret) return null;
-  return json({ error: "Unauthorized" }, 401);
+  if (!secret) return json({ error: "Auth not configured" }, 503);
+  const provided = request && request.headers.get("x-admin-secret");
+  if (typeof provided !== "string") return json({ error: "Unauthorized" }, 401);
+  // Hash both sides to a fixed length, then constant-time compare - the
+  // raw strings can differ in length and timingSafeEqual requires equal
+  // buffers, so the naive direct compare leaks length and content timing.
+  const a = createHash("sha256").update(provided).digest();
+  const b = createHash("sha256").update(secret).digest();
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return json({ error: "Unauthorized" }, 401);
+  return null;
 }
 
 function html(body, extraHeaders = {}) {
@@ -190,8 +198,14 @@ export async function handleStatus(env, request) {
       ? await getRuns(env.STORE, SIMKL_RUNS_KEY)
       : await getRuns(env.STORE, "runs:scraper");
   const listById = new Map(cfg.scraper.lists.map((l) => [l.id, l.name]));
-  const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, c.name]));
-  const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, c.name]));
+  // Official/simkl runs are keyed by catalog id (mdboff_<slug>_<movie|show>),
+  // but the operator-renamed name lives on the config list - resolve the
+  // run's catalog id back through the slug so a rename in /configure shows
+  // here too, instead of the stale constant.
+  const cfgoffNames = new Map(cfg.official.lists.map((l) => [l.slug, l.name]));
+  const cfgSimNames = new Map(cfg.simkl.lists.map((l) => [l.slug, l.name]));
+  const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, cfgoffNames.get(c.slug) || c.name]));
+  const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, cfgSimNames.get(c.slug) || c.name]));
   const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? r.catalog_id;
   const out = runs.slice(0, 30).map((r) => ({
     catalog_name: nameFor(r),
@@ -213,8 +227,10 @@ export async function handleSaveConfig(env, request) {
   if (guard) return guard;
   try {
     const body = await request.json();
-    if (!body || !body.scraper || !Array.isArray(body.scraper.lists)) {
-      return json({ error: "Invalid config body - expected { scraper: { lists: [] } }" }, 400);
+    if (!body || !body.scraper || !Array.isArray(body.scraper.lists) ||
+        !body.official || !Array.isArray(body.official.lists) ||
+        !body.simkl || !Array.isArray(body.simkl.lists)) {
+      return json({ error: "Invalid config body - expected { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] } }" }, 400);
     }
     // Note: read-modify-write has no lock - concurrent saves can clobber
     // each other. Accepted for a single-operator admin page.
@@ -257,15 +273,28 @@ export async function handleSaveConfig(env, request) {
     for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
     const deleteIds = removed.map((l) => l.id);
 
-    // Dispatch BOTH workflows first, then persist on success of all.
-    // This avoids the stale-window bug where scraper dispatch fires +
-    // simkl dispatch fails → operator-thinks-rolled-back config but the
-    // scraper workflow has already run deleteCatalog() against IDs the
-    // roll back wants to keep. With both fires, save is the last step -
-    // if any dispatch failed, no config write happens, and no workflow
+    // Both dispatches fire before the persist: save is the last step, so
+    // no config write happens on any dispatch failure and no workflow
     // has read a config it shouldn't trust yet.
-    const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
+    // Dispatch simkl FIRST, scraper LAST, then persist on success of all.
+    // The scraper workflow can be destructive (scrape_delete removes data
+    // files); simkl only regenerates arrival listings. If the scraper
+    // fired first and the simkl dispatch then failed, the scraper
+    // workflow would run deleteCatalog() against a config the roll-back
+    // wants to keep. Firing simkl first, scraper last keeps the
+    // destructive action adjacent to the persist: any failure before it
+    // means no config write and no destructive run.
     let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
+    if (simklDispatchKinds.length > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
+        inputs: { kinds: simklDispatchKinds.join(",") },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+    const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
     if (scraperDispatchNeeded) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         lists: dispatch.map((l) => l.id),
@@ -274,15 +303,6 @@ export async function handleSaveConfig(env, request) {
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
-      }
-    }
-    if (simklDispatchKinds.length > 0) {
-      dispatchResult = await dispatchScraperWorkflow(env, {
-        workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
-        inputs: { kinds: simklDispatchKinds.join(",") },
-      });
-      if (!dispatchResult.dispatched) {
-        return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
 
