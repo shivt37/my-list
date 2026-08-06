@@ -361,14 +361,20 @@ export async function main({
 } = {}) {
   // CLI kinds arrive from workflow_dispatch - allow only the two known
   // slugs (series, anime) before they reach writeCatalog's join().
+  // Operator-saved filter must come from fetchConfig() in BOTH paths,
+  // not DEFAULT_FILTERS - otherwise a manual refresh reverts any
+  // configure-page edit (save / single-refresh / refresh-all all pass
+  // kinds, and a bare-kinds build with constant filters overwrites
+  // data/ with the defaults, silently losing the operator's tuning).
   const SANE_KIND = /^[a-z][a-z0-9_-]{0,31}$/;
+  const config = await fetchConfig();
   let targets;
   if (rawKinds) {
-    targets = rawKinds.split(",").filter(Boolean).filter((k) => SANE_KIND.test(k)).map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
-    targets = targets.filter((t) => t.filter);
-    if (targets.length === 0) targets = await fetchConfig();
+    const wanted = new Set(rawKinds.split(",").filter(Boolean).filter((k) => SANE_KIND.test(k)));
+    targets = config.filter((t) => wanted.has(t.kind));
+    if (targets.length === 0) targets = config;
   } else {
-    targets = await fetchConfig();
+    targets = config;
   }
   // Pull cfg separately so writeCatalog can stamp the operator-renamed
   // name onto the data file. Same endpoint as fetchConfig; both are
