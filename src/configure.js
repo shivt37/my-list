@@ -194,10 +194,12 @@ export function buildConfigurePage(origin, config, adminSecret) {
 
   .right-col { flex: 1; min-width: 0; }
   .info { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
+  /* Pencil hugs the name text; the wrap fills remaining space so long
+     names still ellipsize instead of shoving the pencil to the card edge. */
+  .name-wrap { display: flex; align-items: center; gap: 6px; flex: 1 1 auto; min-width: 0; }
   .name-static {
     font-size: 13px; font-weight: 600; color: var(--text);
-    flex: 1 1 auto; min-width: 0;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .name-edit { flex: 1 1 auto; min-width: 0; font-size: 13px; padding: 3px 8px; }
   .icon-btn {
@@ -224,9 +226,6 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .card-controls button { flex-shrink: 0; }
   .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
   .official-actions { margin-left: 60px; }
-  /* Simkl + official put the refresh button on the card's right edge,
-     away from the toggle/name row above. */
-  .card-actions-right { margin-left: auto; }
   .official-hint { font-size: 11px; color: var(--muted); flex: 0 1 auto; min-width: 0; }
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
@@ -561,17 +560,11 @@ function renderScraper() {
   const host = document.getElementById('tabHost');
   const lists = state.scraper.lists;
   const cards = lists.map((l, i) => {
-    const editing = listNameEditIndex === i;
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="card-' + i + '">' +
       '<div class="card-top">' +
         '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleList(' + i + ')"><span class="toggle-slider"></span></label></div>' +
         '<div class="info">' +
-          (editing
-            ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
-            : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-          '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
-          '</span>' +
+          nameEditBlock(i, l) +
           '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
         '</div>' +
       '</div>' +
@@ -643,17 +636,48 @@ function toggleList(i) {
 
 // Inline rename: name only touches the manifest (built live from
 // config), never the data file - so renaming must NOT trigger a regen.
-// Works on both scraper and simkl cards.
-function startNameEdit(i) { listNameEditIndex = i; rerenderActive(); }
+// Shared by scraper, official + simkl cards. The pencil sits in a name-wrap
+// so it hugs the name text instead of stretching to the card's right edge.
+function moduleLists() {
+  return activeModule === 'simkl' ? state.simkl.lists
+    : activeModule === 'official' ? state.official.lists
+    : state.scraper.lists;
+}
+function nameEditBlock(i, l) {
+  const editing = listNameEditIndex === i;
+  return '<div class="name-wrap">' +
+    (editing
+      ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
+      : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
+    '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
+    '</span>' +
+  '</div>';
+}
+
+function startNameEdit(i) {
+  if (listNameEditIndex === i) { cancelName(i); return; }
+  listNameEditIndex = i; rerenderActive();
+}
 function saveName(i) {
-  const lists = activeModule === 'simkl' ? state.simkl.lists : state.scraper.lists;
+  if (listNameEditIndex !== i) return;
+  const lists = moduleLists();
   const el = document.getElementById('nameInput-' + i);
   if (el && el.value.trim()) lists[i].name = el.value.trim();
   listNameEditIndex = -1;
   rerenderActive();
 }
 function cancelName(i) { listNameEditIndex = -1; rerenderActive(); }
-function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else renderScraper(); }
+function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else if (activeModule === 'official') renderOfficial(); else renderScraper(); }
+
+// Clicking anywhere outside the open rename input commits it. Native blur
+// only fires when focus moves to another focusable element, so a click on
+// empty card padding leaves the input focused - this listener covers that.
+document.addEventListener('pointerdown', (e) => {
+  if (listNameEditIndex < 0) return;
+  const el = document.getElementById('nameInput-' + listNameEditIndex);
+  if (el && !el.contains(e.target)) saveName(listNameEditIndex);
+}, true);
 
 function showCreateRow() {
   document.getElementById('createListBtn').style.display = 'none';
@@ -730,7 +754,7 @@ function renderOfficial() {
       '<div class="card-top">' +
         '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleOfficial(' + i + ')"><span class="toggle-slider"></span></label></div>' +
         '<div class="info">' +
-          '<span class="name-static">' + escapeAttr(l.name) + '</span>' +
+          nameEditBlock(i, l) +
           '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
         '</div>' +
       '</div>' +
@@ -749,7 +773,7 @@ function renderOfficial() {
   document.getElementById('headerTitle').textContent = 'MDBList Official List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
-  host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added, renamed or deleted - only enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
+  host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added or deleted - only renamed, enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
 }
 
 function toggleOfficial(i) {
@@ -797,18 +821,13 @@ function renderSimkl() {
       '<div class="card-top">' +
         '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleSimkl(' + i + ')"><span class="toggle-slider"></span></label></div>' +
         '<div class="info">' +
-          (listNameEditIndex === i
-            ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
-            : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-          '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
-          '</span>' +
+          nameEditBlock(i, l) +
+          '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
         '</div>' +
-        '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
       '</div>' +
       '<div class="card-controls">' +
         '<span class="official-hint">' + (l.slug === 'anime' ? 'Anime' : 'Series') + ', refreshed every 12 hours</span>' +
-        '<span class="card-actions card-actions-right">' +
+        '<span class="card-actions official-actions">' +
           '<button class="btn-icon card-refresh" onclick="askSimklRefresh(' + i + ')" title="Refresh this simkl list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
