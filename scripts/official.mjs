@@ -63,6 +63,19 @@ export async function enabledSlugs() {
   }
 }
 
+// Returns the full cfg so writeCatalog can read operator-renamed names.
+// Same endpoint + secret as enabledSlugs; kept separate so callers who
+// only need the slug list don't pay the parse cost.
+export async function getFullConfig() {
+  if (!WORKER_ORIGIN) return null;
+  const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
+    headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Walk cursor pages until has_more is false or the cap (50) is hit.
@@ -105,12 +118,19 @@ export async function fetchAllItems(slug, mediatype) {
   return { items, pages };
 }
 
-export function writeCatalog(slug, mediatype, items) {
+// Name comes from the operator's worker config so a rename in /configure
+// reaches the data file on the next refresh. Constant fallback if the
+// operator wiped the slug entry or the worker read failed.
+const OFFICIAL_DEFAULT_NAMES = Object.fromEntries(SLUGS.map((s) => [s, { movie: `${s} movie`, show: `${s} show` }]));
+
+export function writeCatalog(slug, mediatype, items, cfg) {
   mkdirSync(DATA_DIR, { recursive: true });
   const file = join(DATA_DIR, `mdboff_${slug}_${mediatype}.json`);
+  const renamed = cfg?.official?.lists?.find((l) => l.slug === slug)?.name;
+  const fallback = OFFICIAL_DEFAULT_NAMES[slug]?.[mediatype] || `${slug} ${mediatype}`;
   const out = {
     catalog_id: `mdboff_${slug}_${mediatype}`,
-    name: `${slug} ${mediatype}`,
+    name: renamed || fallback,
     type: mediatype === "movie" ? "movie" : "series",
     scraped_at: Date.now(),
     items,
@@ -152,10 +172,15 @@ async function postRuns(runs) {
 export async function main({
   slugsArg: rawSlugs = slugsArg,
   fetchConfig = enabledSlugs,
+  fetchCfg = getFullConfig,
   fetchApi = fetchAllItems,
+  write = writeCatalog,
   recordRuns = postRuns,
 } = {}) {
   const slugs = rawSlugs ? rawSlugs.split(",").filter(Boolean) : await fetchConfig();
+  // Pull cfg separately - writeCatalog needs operator-renamed names. Cheap
+  // re-read; same worker endpoint, uses the same secret.
+  const cfg = await fetchCfg().catch(() => null);
   const runs = [];
   const results = [];
   for (const slug of slugs) {
@@ -166,7 +191,7 @@ export async function main({
         const { items, pages } = await fetchApi(slug, mediatype);
         // Empty result may mean a legitimate empty list or a scrape gone
         // silent - don't overwrite the last good file with an empty one.
-        if (items.length > 0) writeCatalog(slug, mediatype, items);
+        if (items.length > 0) write(slug, mediatype, items, cfg);
         run.status = items.length > 0 ? "success" : "failed";
         run.finished_at = Date.now();
         run.pages_scraped = pages;

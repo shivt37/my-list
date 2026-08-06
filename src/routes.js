@@ -81,14 +81,19 @@ export async function buildManifest(env) {
   // Scraper lists first, then official lists (only their enabled slugs),
   // then simkl lists. Simkl catalogs declare no skip extra - they're
   // single-shot arrival listings, not paginated.
+  // Official/simkl catalog NAMES are the operator's saved name (renamed in
+  // /configure), falling back to the constant default. The constants stay
+  // the source of id/type/slug and the data-file name on the next regen.
+  const officialBySlug = new Map(cfg.official.lists.map((l) => [l.slug, l.name]));
   const enabledOfficial = new Set(cfg.official.lists.filter((l) => l.enabled).map((l) => l.slug));
   const officialCatalogs = OFFICIAL_CATALOGS
     .filter((c) => enabledOfficial.has(c.slug))
-    .map((c) => ({ name: c.name, id: c.id, type: c.type, extra: [{ name: "skip", isRequired: false }] }));
+    .map((c) => ({ name: officialBySlug.get(c.slug) || c.name, id: c.id, type: c.type, extra: [{ name: "skip", isRequired: false }] }));
+  const simklBySlug = new Map(cfg.simkl.lists.map((l) => [l.slug, l.name]));
   const enabledSimkl = new Set(cfg.simkl.lists.filter((l) => l.enabled).map((l) => l.slug));
   const simklCatalogs = SIMKL_CATALOGS
     .filter((c) => enabledSimkl.has(c.slug))
-    .map((c) => ({ name: c.name, id: c.id, type: c.type, extra: [] }));
+    .map((c) => ({ name: simklBySlug.get(c.slug) || c.name, id: c.id, type: c.type, extra: [] }));
   const catalogs = [
     ...enabled.map((l) => ({
       name: l.name,

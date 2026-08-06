@@ -105,6 +105,22 @@ export async function enabledKindsAndFilters() {
   }
 }
 
+// Same /export-config call, returning the full cfg (not just kinds + filters).
+// Used so writeCatalog can stamp the operator-renamed name on the data file.
+export async function getFullConfig() {
+  if (!WORKER_ORIGIN) return null;
+  try {
+    const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
+      headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ── filter helpers (logic lifted from the legacy mdblist-simkl worker) ──
@@ -281,12 +297,22 @@ export async function fetchTodaysCalendar(kind) {
   return { todaysEntries, metadata };
 }
 
-export function writeCatalog(kind, items) {
+// hardcoded fallback if worker cfg is unavailable (rename couldn't
+// propagate, but the catalog must still write something to stay live).
+const SIMKL_DEFAULT_NAMES = Object.fromEntries(
+  KINDS.map((k) => [k, k === "anime" ? "Anime Arriving Today - Episodes & Premieres" : "Arriving Today - Episodes & Premieres"])
+);
+
+export function writeCatalog(kind, items, cfg) {
   mkdirSync(DATA_DIR, { recursive: true });
   const file = join(DATA_DIR, `simkl_arriving_today_${kind}.json`);
+  // Operator rename in /configure is the source of truth for what this
+  // list is called. Constant fallback if cfg is missing or the kind
+  // disappeared from the saved simkl section.
+  const renamed = cfg?.simkl?.lists?.find((l) => l.slug === kind)?.name;
   const out = {
     catalog_id: `simkl_arriving_today_${kind}`,
-    name: kind === "anime" ? "Anime Arriving Today - Episodes & Premieres" : "Arriving Today - Episodes & Premieres",
+    name: renamed || SIMKL_DEFAULT_NAMES[kind],
     type: "series",
     scraped_at: Date.now(),
     items,
@@ -327,6 +353,7 @@ async function postRuns(runs) {
 export async function main({
   kindsArg: rawKinds = kindsArg,
   fetchConfig = enabledKindsAndFilters,
+  fetchCfg = getFullConfig,
   fetchApi = fetchTodaysCalendar,
   compute = precompute,
   write = writeCatalog,
@@ -338,6 +365,10 @@ export async function main({
   } else {
     targets = await fetchConfig();
   }
+  // Pull cfg separately so writeCatalog can stamp the operator-renamed
+  // name onto the data file. Same endpoint as fetchConfig; both are
+  // budgeted into the same 30s timeout per-kind elsewhere.
+  const cfg = await fetchCfg().catch(() => null);
   const runs = [];
   const results = [];
   for (const t of targets) {
@@ -346,7 +377,7 @@ export async function main({
     try {
       const { todaysEntries, metadata } = await fetchApi(t.kind);
       const items = await compute(t.kind, todaysEntries, metadata, t.filter);
-      write(t.kind, items); // empty IS a valid result here (empty day)
+      write(t.kind, items, cfg); // empty IS a valid result here (empty day)
       run.status = "success";
       run.finished_at = Date.now();
       run.pages_scraped = 1;
