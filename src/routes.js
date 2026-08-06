@@ -167,7 +167,7 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
 
   let data;
   try {
-    const res = await fetch(githubPagesCatalogUrl(env, catalogId), { cf: { cacheTtl: 300 } });
+    const res = await fetch(githubPagesCatalogUrl(env, catalogId));
     if (!res.ok) return json({ metas: [] });
     data = await res.json();
   } catch {
@@ -176,7 +176,7 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
 
   const rows = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
   const slice = rows.slice(skip, skip + 100);
-  return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType })) }, 200, { "cache-control": "public, max-age=300" });
+  return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType })) }, 200);
 }
 
 export async function handleStatus(env, request) {

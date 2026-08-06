@@ -260,6 +260,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
   }
   .tier-head { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 0 2px; }
   .tier-head span { text-align: center; }
+  .tier-head .th-src { display: block; font-size: 9px; font-weight: 400; opacity: 0.75; margin-top: 1px; }
   .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: 7px; text-align: center; }
   .tier-row .danger { justify-self: start; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
@@ -849,7 +850,7 @@ function renderSimkl() {
         '<div class="filter-line"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
         '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><div class="filter-value"><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div></div>' +
-        '<div class="tier-table"><div class="tier-head"><span>Min rating</span><span>Max rating</span><span>Min votes</span><span>Min sec.</span><span></span></div>' + tiers + '</div>' +
+        '<div class="tier-table"><div class="tier-head"><span>Min rating<span class="th-src">(' + escapeAttr(f.rating_source || 'imdb') + ')</span></span><span>Max rating<span class="th-src">(' + escapeAttr(f.rating_source || 'imdb') + ')</span></span><span>Min votes</span><span>Min sec.<span class="th-src">(simkl)</span></span><span></span></div>' + tiers + '</div>' +
       '</div>' +
       '<div class="card-error" id="socardError-' + i + '"></div>' +
     '</div>';
@@ -937,7 +938,11 @@ async function saveAll() {
     setStatus(moduleChanges +
       (data.dispatch && data.dispatch.length
         ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
-        : 'Saved (no content change - nothing regenerated).'), 'ok');
+        : (data.simklChanged && data.simklChanged.length)
+          ? 'Saved. Regenerating simkl: ' + data.simklChanged.join(', ')
+          : (data.officialChanged && data.officialChanged.length)
+            ? 'Saved. Regenerating official: ' + data.officialChanged.join(', ')
+            : 'Saved (no content change - nothing regenerated).'), 'ok');
   } catch (e) {
     setStatus('Save failed: ' + e.message, 'error');
   } finally {
