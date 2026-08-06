@@ -36,7 +36,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
     --border2: #262635;
     --text: #e8edf4;
     --dim: #a5aebc;
-    --muted: #7c8498;
+    --muted: #6b7385;
     --accent: #06b6d4;
     --accent-dim: rgba(6,182,212,0.10);
     --accent-glow: rgba(6,182,212,0.18);
@@ -95,7 +95,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
   button.secondary:hover { background: var(--surface3); filter: none; }
   button.danger {
     background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);
-    padding: 11px 14px; font-size: 12px; font-weight: 500; box-shadow: none;
+    padding: 6px 10px; font-size: 11px; font-weight: 500; box-shadow: none;
   }
   button.danger:hover { background: rgba(255,95,102,0.18); border-color: var(--danger); filter: none; }
   button.btn-save { padding: 8px 18px; }
@@ -108,10 +108,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .btn-icon:hover { color: var(--text); border-color: var(--accent); }
   #refreshBtn.spinning svg, .card-refresh.spinning svg { animation: refresh-spin 0.9s linear infinite; }
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) {
-    #refreshBtn.spinning svg, .card-refresh.spinning svg { animation: none; }
-  }
-  .card-refresh { padding: 10px 12px; }
+  .card-refresh { padding: 5px 6px; }
   .card-refresh svg { display: block; }
 
   /* ── MAIN ── */
@@ -263,15 +260,15 @@ export function buildConfigurePage(origin, config, adminSecret) {
   }
   .tier-head { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 0 2px; }
   .tier-head span { text-align: center; }
-  .tier-head .th-src { display: block; font-size: 9px; font-weight: 400; color: var(--muted); margin-top: 1px; }
+  .tier-head .th-src { display: block; font-size: 9px; font-weight: 400; opacity: 0.75; margin-top: 1px; }
   .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: 7px; text-align: center; }
-  .tier-row .danger { justify-self: start; padding: 9px 10px; font-size: 12px; }
+  .tier-row .danger { justify-self: start; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
     .simkl-filter { grid-template-columns: 1fr; }
     .filter-value { flex-wrap: wrap; }
     .tier-head, .tier-row { grid-template-columns: repeat(4, minmax(48px, 1fr)) 26px; gap: 4px; }
     .tier-num { font-size: 11px; padding: 6px 5px; }
-    .tier-row .danger { padding: 9px 10px; font-size: 11px; }
+    .tier-row .danger { padding: 6px 8px; }
   }
 
   /* ── ACCENT POPUP ── */
@@ -287,7 +284,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
   .swatch {
     width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
-    border: 2px solid transparent; padding: 0; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
+    border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
   }
   .swatch:hover { transform: scale(1.15); }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
@@ -304,7 +301,6 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .menu-item {
     display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
     font-size: 12.5px; color: var(--dim); cursor: pointer; transition: background 0.1s, color 0.1s;
-    width: 100%; text-align: left; background: none; border: 0;
   }
   .menu-item svg { flex-shrink: 0; }
   .menu-item:hover { background: var(--surface2); color: var(--text); }
@@ -368,7 +364,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
     select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
     .pages-label { font-size: 10px; }
     .card-controls .max-pages { font-size: 11px; padding: 5px 6px; }
-    button.danger { padding: 9px 12px; font-size: 10px; }
+    button.danger { padding: 5px 8px; font-size: 10px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
     .swatch { width: 24px; height: 24px; }
     .menu-popup { right: -14px; width: 180px; padding: 5px; }
@@ -403,30 +399,29 @@ export function buildConfigurePage(origin, config, adminSecret) {
       <button class="btn-icon" id="menuBtn" title="Menu">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <div class="menu-popup" id="menuPopup" role="menu">
-        <button class="menu-item active" data-module="scraper" role="menuitem" onclick="activateModule('scraper')">
+      <div class="menu-popup" id="menuPopup">
+        <div class="menu-item active" data-module="scraper" onclick="activateModule('scraper')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           MDBList Scraper
-        </button>
-        <button class="menu-item" data-module="official" role="menuitem" onclick="activateModule('official')">
+        </div>
+        <div class="menu-item" data-module="official" onclick="activateModule('official')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
           MDBList Official List
-        </button>
-        <button class="menu-item" data-module="simkl" role="menuitem" onclick="activateModule('simkl')">
+        </div>
+        <div class="menu-item" data-module="simkl" onclick="activateModule('simkl')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>
           Simkl List
-        </button>
-        <button class="menu-item disabled" onclick="soon()">
+        </div>
+        <div class="menu-item disabled" onclick="soon()">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
           TMDB List<span class="menu-soon">soon</span>
-        </button>
+        </div>
       </div>
     </div>
   </div>
 </header>
 
 <main>
-  <h1 id="pageTitle">MDBList Scraper</h1>
   <div id="status"></div>
   <div id="tabHost"></div>
 </main>
@@ -511,11 +506,7 @@ function applyAccent(hex) {
 }
 
 function selectAccent(hex) {
-  document.querySelectorAll('.swatch').forEach(s => {
-    const active = s.dataset.accent === hex;
-    s.classList.toggle('selected', active);
-    s.setAttribute('aria-pressed', active ? 'true' : 'false');
-  });
+  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('selected', s.dataset.accent === hex));
   applyAccent(hex);
   try { localStorage.setItem(ACCENT_STORAGE_KEY, hex); } catch (e) {}
 }
@@ -525,18 +516,12 @@ function initSwatches() {
   let saved = '#06b6d4';
   try { saved = localStorage.getItem(ACCENT_STORAGE_KEY) || '#06b6d4'; } catch (e) {}
   row.innerHTML = Object.keys(ACCENT_COLORS).map(hex =>
-    '<button type="button" class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" aria-label="Set accent to ' + hex + '" aria-pressed="' + (hex === saved ? 'true' : 'false') + '" onclick="selectAccent(\\\'' + hex + '\\\')"></button>'
+    '<div class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" onclick="selectAccent(\\\'' + hex + '\\\')"></div>'
   ).join('');
   applyAccent(saved);
 }
 
-function toggleAccentPopup() {
-  const popup = document.getElementById('accentPopup');
-  const opening = !popup.classList.contains('visible');
-  popup.classList.toggle('visible');
-  if (opening) document.getElementById('accentBtn').setAttribute('aria-expanded', 'true');
-  else document.getElementById('accentBtn').removeAttribute('aria-expanded');
-}
+function toggleAccentPopup() { document.getElementById('accentPopup').classList.toggle('visible'); }
 function setStatus(msg, kind) {
   const el = document.getElementById('status');
   el.textContent = msg;
@@ -546,18 +531,11 @@ function setStatus(msg, kind) {
 function soon() { setStatus('That module is coming soon - only the MDBList Scraper tab is live right now.', 'error'); }
 
 // ─── Menu ───
-function toggleMenu() {
-  const popup = document.getElementById('menuPopup');
-  const opening = !popup.classList.contains('visible');
-  popup.classList.toggle('visible');
-  if (opening) document.getElementById('menuBtn').setAttribute('aria-expanded', 'true');
-  else document.getElementById('menuBtn').removeAttribute('aria-expanded');
-}
+function toggleMenu() { document.getElementById('menuPopup').classList.toggle('visible'); }
 let activeModule = 'scraper';
 const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
-  document.getElementById('menuBtn').removeAttribute('aria-expanded');
   if (m !== 'scraper' && m !== 'official' && m !== 'simkl') { soon(); return; }
   activeModule = m;
   try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
@@ -570,22 +548,11 @@ document.addEventListener('click', (e) => {
   const popup = document.getElementById('menuPopup');
   if (popup.classList.contains('visible') && !document.getElementById('menuBtn').contains(e.target) && !popup.contains(e.target)) {
     popup.classList.remove('visible');
-    document.getElementById('menuBtn').removeAttribute('aria-expanded');
   }
   const accentPopup = document.getElementById('accentPopup');
   const accentWrap = e.target.closest('.accent-popup-wrap');
   if (accentPopup.classList.contains('visible') && !accentWrap) {
     accentPopup.classList.remove('visible');
-    document.getElementById('accentBtn').removeAttribute('aria-expanded');
-  }
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.getElementById('menuPopup').classList.remove('visible');
-    document.getElementById('accentPopup').classList.remove('visible');
-    document.getElementById('menuBtn').removeAttribute('aria-expanded');
-    document.getElementById('accentBtn').removeAttribute('aria-expanded');
   }
 });
 
@@ -603,13 +570,13 @@ function renderScraper() {
         '</div>' +
       '</div>' +
       '<div class="card-controls">' +
-        '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL" aria-label="mdblist listing URL">' +
-        '<select aria-label="List type" onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
+        '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
+        '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
           '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
           '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
         '</select>' +
-        '<label class="pages-label" for="mp-' + i + '">pages:</label>' +
-        '<input class="max-pages" id="mp-' + i + '" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape" aria-label="Max pages">' +
+        '<span class="pages-label">pages:</span>' +
+        '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
         '<span class="card-actions">' +
           '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
@@ -628,12 +595,12 @@ function renderScraper() {
         'Add List' +
       '</button>' +
       '<div class="create-list-row" id="createListRow" style="display:none">' +
-        '<input class="name-input" id="createNameInput" placeholder="Name - e.g. Latest Movie" aria-label="List name" spellcheck="false">' +
-        '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" aria-label="mdblist listing URL" spellcheck="false">' +
+        '<input class="name-input" id="createNameInput" placeholder="Name - e.g. Latest Movie" spellcheck="false">' +
+        '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
         '<span class="type-pages">' +
-          '<select id="createTypeSelect" aria-label="List type"><option value="movie">Movie</option><option value="series">Series</option></select>' +
-          '<label class="pages-label" for="createPagesInput">pages:</label>' +
-          '<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3" aria-label="Max pages">' +
+          '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+          '<span class="pages-label">pages:</span>' +
+          '<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3">' +
         '</span>' +
         '<button onclick="confirmCreateList()">Add</button>' +
         '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +
@@ -641,7 +608,6 @@ function renderScraper() {
     '</div>';
 
   document.getElementById('headerTitle').textContent = 'MDBList Scraper';
-  document.getElementById('pageTitle').textContent = 'MDBList Scraper';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet - add one above.</div>');
@@ -684,9 +650,9 @@ function nameEditBlock(i, l) {
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
       : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-    '<button class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename" aria-label="Rename ' + escapeAttr(l.name) + '" type="button">' +
+    '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
-    '</button>' +
+    '</span>' +
   '</div>';
 }
 
@@ -815,7 +781,6 @@ function renderOfficial() {
   }).join('');
 
   document.getElementById('headerTitle').textContent = 'MDBList Official List';
-  document.getElementById('pageTitle').textContent = 'MDBList Official List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added or deleted - only renamed, enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
@@ -854,10 +819,10 @@ function renderSimkl() {
     const f = l.filter || {};
     const tiers = (f.rating_tiers || []).map((t, ti) =>
       '<div class="tier-row">' +
-        '<input class="tier-num" type="number" step="0.1" placeholder="min" aria-label="Min rating" value="' + (t.min_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_rating\\\',this.value)">' +
-        '<input class="tier-num" type="number" step="0.1" placeholder="max" aria-label="Max rating" value="' + (t.max_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'max_rating\\\',this.value)">' +
-        '<input class="tier-num" type="number" step="1" placeholder="votes" aria-label="Min votes" value="' + (t.min_votes ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_votes\\\',this.value)">' +
-        '<input class="tier-num" type="number" step="0.1" placeholder="sec." aria-label="Min secondary rating" value="' + (t.min_secondary_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_secondary_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="min" value="' + (t.min_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="max" value="' + (t.max_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'max_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="1" placeholder="votes" value="' + (t.min_votes ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_votes\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="sec." value="' + (t.min_secondary_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_secondary_rating\\\',this.value)">' +
         '<button class="danger" onclick="removeTier(' + i + ',' + ti + ')">−</button>' +
       '</div>'
     ).join('') || '<div class="empty">No rating tiers.</div>';
@@ -882,8 +847,8 @@ function renderSimkl() {
         '<div class="filter-line"><span class="filter-label">Rating source</span><div class="filter-value"><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfRating-' + i + '">Rating filter</label><div class="filter-value"><input type="checkbox" class="filter-check" id="sfRating-' + i + '" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"><span class="toggle-text">' + (f.rating_filter_enabled ? 'Filtering enabled' : 'Filtering disabled') + '</span></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfGenres-' + i + '">Exclude genres</label><div class="filter-value"><input class="url-input" id="sfGenres-' + i + '" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News"></div></div>' +
-        '<div class="filter-line"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb" aria-label="Include countries"></div></div>' +
-        '<div class="filter-line"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp" aria-label="Exclude countries"></div></div>' +
+        '<div class="filter-line"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
+        '<div class="filter-line"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
         '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><div class="filter-value"><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div></div>' +
         '<div class="tier-table"><div class="tier-head"><span>Min rating<span class="th-src">(' + escapeAttr(f.rating_source || 'imdb') + ')</span></span><span>Max rating<span class="th-src">(' + escapeAttr(f.rating_source || 'imdb') + ')</span></span><span>Min votes</span><span>Min sec.<span class="th-src">(simkl)</span></span><span></span></div>' + tiers + '</div>' +
       '</div>' +
@@ -892,7 +857,6 @@ function renderSimkl() {
   }).join('');
 
   document.getElementById('headerTitle').textContent = 'Simkl List';
-  document.getElementById('pageTitle').textContent = 'Simkl List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + '<div class="official-note">The 2 fixed SIMKL Arriving Today lists. Filters are typed below and applied on the next refresh.</div>' + (cards || '<div class="empty">No simkl lists.</div>');
