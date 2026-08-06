@@ -202,7 +202,9 @@ export function normalizeSimklList(raw) {
   const toArr = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim()) : []);
   return {
     slug: def.slug,
-    name: def.name,
+    // Name is operator-editable (configure page) and stays in the manifest
+    // only - it must pass through, falling back to the default when blank.
+    name: typeof raw?.name === "string" && raw.name.trim() ? raw.name.trim() : def.name,
     enabled: raw?.enabled !== false,
     filter: {
       rating_source: def.filter.rating_source,
@@ -273,7 +275,7 @@ export async function loadConfig(kv) {
   } else {
     const kept = cfg.official.lists
       .filter((l) => l && typeof l.slug === "string" && known.has(l.slug))
-      .map((l) => ({ slug: known.get(l.slug).slug, name: known.get(l.slug).name, enabled: l.enabled !== false }));
+      .map((l) => ({ slug: known.get(l.slug).slug, name: typeof l.name === "string" && l.name.trim() ? l.name.trim() : known.get(l.slug).name, enabled: l.enabled !== false }));
     // Always exactly 3 - a truncated/extra list here must not silently
     // drop or duplicate a fixed catalog.
     cfg.official.lists = known.size === kept.length ? kept : officialDefaults();
