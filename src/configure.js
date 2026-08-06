@@ -224,6 +224,9 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .card-controls button { flex-shrink: 0; }
   .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
   .official-actions { margin-left: 60px; }
+  /* Simkl + official put the refresh button on the card's right edge,
+     away from the toggle/name row above. */
+  .card-actions-right { margin-left: auto; }
   .official-hint { font-size: 11px; color: var(--muted); flex: 0 1 auto; min-width: 0; }
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
@@ -244,18 +247,28 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .filter-check { accent-color: var(--accent); }
   .filter-top { display: contents; }
   .filter-top .secondary { justify-self: start; flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
-  .tier-table { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
-  .tier-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  .tier-num {
-    flex: 1 1 90px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
-    padding: 6px 9px; border-radius: 7px;
+  /* Rating filter is a labelled switch, not a bare checkbox. */
+  .filter-toggle { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+  .toggle-text { font-size: 12px; color: var(--dim); }
+
+  /* Tiers read as a real table: side-by-side columns, spanning BOTH grid
+     columns. Before, .tier-table had no grid-column so it fell into the
+     132px label column and every input stacked vertically. */
+  .tier-table { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .tier-head, .tier-row {
+    display: grid; grid-template-columns: repeat(4, minmax(64px, 1fr)) 26px;
+    gap: 6px; align-items: center;
   }
-  .tier-row .danger { flex-shrink: 0; padding: 6px 10px; font-size: 12px; }
+  .tier-head { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 0 2px; }
+  .tier-head span { text-align: center; }
+  .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: 7px; text-align: center; }
+  .tier-row .danger { justify-self: start; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
     .simkl-filter { grid-template-columns: 1fr; }
     .filter-value { flex-wrap: wrap; }
-    .tier-row { flex-wrap: wrap; }
-    .tier-num { flex: 1 1 44%; }
+    .tier-head, .tier-row { grid-template-columns: repeat(4, minmax(48px, 1fr)) 26px; gap: 4px; }
+    .tier-num { font-size: 11px; padding: 6px 5px; }
+    .tier-row .danger { padding: 6px 8px; }
   }
 
   /* ── ACCENT POPUP ── */
@@ -790,9 +803,12 @@ function renderSimkl() {
           '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
           '</span>' +
-          '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
         '</div>' +
-        '<span class="card-actions official-actions">' +
+        '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
+      '</div>' +
+      '<div class="card-controls">' +
+        '<span class="official-hint">' + (l.slug === 'anime' ? 'Anime' : 'Series') + ', refreshed every 12 hours</span>' +
+        '<span class="card-actions card-actions-right">' +
           '<button class="btn-icon card-refresh" onclick="askSimklRefresh(' + i + ')" title="Refresh this simkl list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
@@ -800,12 +816,12 @@ function renderSimkl() {
       '</div>' +
       '<div class="simkl-filter" id="simfilter-' + i + '">' +
         '<div class="filter-line"><span class="filter-label">Rating source</span><div class="filter-value"><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div></div>' +
-        '<div class="filter-line"><span class="filter-label">Rating filter</span><div class="filter-value"><input type="checkbox" class="filter-check" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"></div></div>' +
+        '<div class="filter-line"><label class="filter-label" for="sfRating-' + i + '">Rating filter</label><div class="filter-value"><input type="checkbox" class="filter-check" id="sfRating-' + i + '" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"><span class="toggle-text">' + (f.rating_filter_enabled ? 'Filtering enabled' : 'Filtering disabled') + '</span></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfGenres-' + i + '">Exclude genres</label><div class="filter-value"><input class="url-input" id="sfGenres-' + i + '" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News"></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
         '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><div class="filter-value"><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div></div>' +
-        '<div class="tier-table">' + tiers + '</div>' +
+        '<div class="tier-table"><div class="tier-head"><span>Min rating</span><span>Max rating</span><span>Min votes</span><span>Min sec.</span><span></span></div>' + tiers + '</div>' +
       '</div>' +
       '<div class="card-error" id="socardError-' + i + '"></div>' +
     '</div>';
