@@ -31,22 +31,28 @@ jobs:
         with:
           node-version: 22
 
+      - name: Sanitize workflow inputs
+        id: sanitize
+        run: |
+          # kinds is one of: series, anime, series,anime. Whitelist to
+          # [a-z,] only.
+          SANITIZED_KINDS=$(printf '%s' "${{ github.event.inputs.kinds }}" | tr -cd 'a-z,')
+          echo "kinds=$SANITIZED_KINDS" >> "$GITHUB_OUTPUT"
+
       - name: Run SIMKL arriving-today fetcher
         working-directory: scripts
         env:
           SIMKL_CLIENT_ID: ${{ secrets.SIMKL_CLIENT_ID }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
+          INPUT_KINDS: ${{ steps.sanitize.outputs.kinds }}
         run: |
-          # Inputs flow via env, not inline shell - the bash array quoting
-          # keeps a crafted kinds value from injecting into the shell.
           ARGS=()
-          if [ -n "${{ github.event.inputs.kinds }}" ]; then
-            ARGS+=("--kinds=${{ github.event.inputs.kinds }}")
-          fi
+          [ -n "${INPUT_KINDS}" ] && ARGS+=("--kinds=${INPUT_KINDS}")
           node simkl.mjs "${ARGS[@]}"
 
       - name: Commit data changes
+        if: always()
         run: |
           git config user.name "my-list-bot"
           git config user.email "my-list-bot@users.noreply.github.com"

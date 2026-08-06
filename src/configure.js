@@ -673,8 +673,17 @@ function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else if
 // Clicking anywhere outside the open rename input commits it. Native blur
 // only fires when focus moves to another focusable element, so a click on
 // empty card padding leaves the input focused - this listener covers that.
+//
+// IMPORTANT: bail out if the click landed on the same card's rename UI
+// (input or its pencil button). Without this guard, capture-phase
+// pointerdown commits the rename AND tears down the DOM (rerender swaps
+// innerHTML) before the click handler runs - the target element is gone,
+// the click never reaches it. Every sibling control (toggle, URL, refresh,
+// delete) on the open-rename card required two clicks to use.
 document.addEventListener('pointerdown', (e) => {
   if (listNameEditIndex < 0) return;
+  const wrap = document.querySelector('#card-' + listNameEditIndex + ' .name-wrap, #ocard-' + listNameEditIndex + ' .name-wrap, #socard-' + listNameEditIndex + ' .name-wrap');
+  if (wrap && wrap.contains(e.target)) return;
   const el = document.getElementById('nameInput-' + listNameEditIndex);
   if (el && !el.contains(e.target)) saveName(listNameEditIndex);
 }, true);

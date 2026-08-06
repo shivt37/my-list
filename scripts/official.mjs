@@ -177,7 +177,13 @@ export async function main({
   write = writeCatalog,
   recordRuns = postRuns,
 } = {}) {
-  const slugs = rawSlugs ? rawSlugs.split(",").filter(Boolean) : await fetchConfig();
+  // CLI slugs arrive from workflow_dispatch inputs; only the 3 known
+  // official slugs are ever legal. Strip anything else before they reach
+  // writeCatalog's join() - prevents path traversal via crafted --slugs.
+  const SANE_SLUG = /^[a-z0-9][a-z0-9-]{0,63}$/;
+  const slugs = rawSlugs
+    ? rawSlugs.split(",").filter(Boolean).filter((s) => SANE_SLUG.test(s))
+    : await fetchConfig();
   // Pull cfg separately - writeCatalog needs operator-renamed names. Cheap
   // re-read; same worker endpoint, uses the same secret.
   const cfg = await fetchCfg().catch(() => null);

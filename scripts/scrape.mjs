@@ -372,8 +372,20 @@ export function deleteCatalog(id) {
 // MAIN
 // ====================================================================
 export async function main({ getConfig = fetchConfig, write = writeCatalog, recordRuns = postRuns } = {}) {
-  // Deletes are independent of scraping - do them first.
-  for (const id of deleteIds) deleteCatalog(id);
+  // Delete ids arrive from workflow_dispatch inputs - reject anything
+  // outside the id alphabet before join() can be exploited for path
+  // traversal. Server config ids go through the same regex in
+  // config.js:migrateConfig, so this only matters for CLI-direct calls.
+  for (const id of deleteIds) {
+    if (!/^mdb_scrape_[A-Za-z0-9_-]{1,32}$/.test(id)) {
+      throw new Error(`Refusing to delete: "${id}" is not a valid list id.`);
+    }
+    deleteCatalog(id);
+  }
+  // Same guard for --lists ids; the worker only ever sees them after this.
+  if (requestedIds && requestedIds.some((id) => !/^mdb_scrape_[A-Za-z0-9_-]{1,32}$/.test(id))) {
+    throw new Error(`Refusing to scrape: --lists contained an invalid id.`);
+  }
 
   const config = await fetchConfig();
   const lists = config.scraper && config.scraper.lists ? config.scraper.lists : [];

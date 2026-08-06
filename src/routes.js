@@ -240,44 +240,12 @@ export async function handleSaveConfig(env, request) {
       if (!nextById.has(l.id)) removed.push(l);
     }
 
-    // Scraper module regenerates via the scraper workflow. Official module
-    // has no data files to delete (fixeds slugs) - a toggle just changes
-    // the manifest; nothing to dispatch.
-    const dispatch = [];
-    for (const l of [...changed, ...added]) {
-      if (l.enabled) dispatch.push(l);
-    }
-    const deleteIds = removed.map((l) => l.id);
-
-    let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
-    // Persist before dispatching so the workflow's /export-config read
-    // sees the new config, then roll back on dispatch failure to preserve
-    // the old reject-on-failure semantics.
-    await saveConfig(env.STORE, incoming);
-    if (dispatch.length > 0 || deleteIds.length > 0) {
-      dispatchResult = await dispatchScraperWorkflow(env, {
-        lists: dispatch.map((l) => l.id),
-        action: deleteIds.length > 0 ? "scrape_delete" : "scrape",
-        ...(deleteIds.length > 0 && { deleteIds }),
-      });
-    }
-    if ((dispatch.length > 0 || deleteIds.length > 0) && !dispatchResult.dispatched) {
-      // Don't keep a config whose workflow dispatch failed - the on-disk
-      // data files would go stale with no way to regenerate them.
-      await saveConfig(env.STORE, current);
-      return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
-    }
-
-    // Official toggles surface to the UI but never dispatch - a toggle
-    // only changes the manifest, no data file to regenerate.
+    // Detect official + simkl changes BEFORE any persist or dispatch -
+    // both gate on the original current, not on `incoming`.
     const prevOffById = new Map(current.official.lists.map((l) => [l.slug, l]));
     const officialChanged = incoming.official.lists
       .filter((l) => prevOffById.has(l.slug) && prevOffById.get(l.slug).enabled !== l.enabled)
       .map((l) => l.name);
-
-    // Simkl: an enabled toggle OR a filter edit changes what the next
-    // refresh writes, so both dispatch the simkl workflow. Only the
-    // enabled kinds dispatch - a disabled list's filter is inert.
     const prevSimById = new Map(current.simkl.lists.map((l) => [l.slug, l]));
     const simklChanged = incoming.simkl.lists.filter((l) => {
       const prev = prevSimById.get(l.slug);
@@ -285,23 +253,44 @@ export async function handleSaveConfig(env, request) {
       return prev.enabled !== l.enabled || JSON.stringify(prev.filter) !== JSON.stringify(l.filter);
     });
     const simklDispatchKinds = simklChanged.filter((l) => l.enabled).map((l) => l.slug);
+    const dispatch = [];
+    for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
+    const deleteIds = removed.map((l) => l.id);
 
-    // Update the shared dispatchResult for the response's `github` field:
-    // if only simkl changed, its dispatch is the interesting one.
-    if (simklDispatchKinds.length > 0 && dispatch.length === 0 && deleteIds.length === 0) {
-      dispatchResult = { dispatched: false, reason: "no dispatch needed" };
+    // Dispatch BOTH workflows first, then persist on success of all.
+    // This avoids the stale-window bug where scraper dispatch fires +
+    // simkl dispatch fails → operator-thinks-rolled-back config but the
+    // scraper workflow has already run deleteCatalog() against IDs the
+    // roll back wants to keep. With both fires, save is the last step -
+    // if any dispatch failed, no config write happens, and no workflow
+    // has read a config it shouldn't trust yet.
+    const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
+    let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
+    if (scraperDispatchNeeded) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        lists: dispatch.map((l) => l.id),
+        action: deleteIds.length > 0 ? "scrape_delete" : "scrape",
+        ...(deleteIds.length > 0 && { deleteIds }),
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
+      }
     }
-
     if (simklDispatchKinds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
         inputs: { kinds: simklDispatchKinds.join(",") },
       });
       if (!dispatchResult.dispatched) {
-        await saveConfig(env.STORE, current);
         return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
+
+    // Both dispatches accepted - now persist. (Worker fires 204 on GH's
+    // accept; the workflow may still fail 5min later, but by then the
+    // operator's intent is on disk; this avoids the config/data drift
+    // above.)
+    await saveConfig(env.STORE, incoming);
 
     return json({
       ok: true,

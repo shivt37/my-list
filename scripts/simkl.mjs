@@ -359,9 +359,14 @@ export async function main({
   write = writeCatalog,
   recordRuns = postRuns,
 } = {}) {
+  // CLI kinds arrive from workflow_dispatch - allow only the two known
+  // slugs (series, anime) before they reach writeCatalog's join().
+  const SANE_KIND = /^[a-z][a-z0-9_-]{0,31}$/;
   let targets;
   if (rawKinds) {
-    targets = rawKinds.split(",").filter(Boolean).map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
+    targets = rawKinds.split(",").filter(Boolean).filter((k) => SANE_KIND.test(k)).map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
+    targets = targets.filter((t) => t.filter);
+    if (targets.length === 0) targets = await fetchConfig();
   } else {
     targets = await fetchConfig();
   }

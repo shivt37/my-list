@@ -49,29 +49,47 @@ jobs:
         working-directory: scripts
         run: npm ci
 
+      - name: Sanitize workflow inputs
+        id: sanitize
+        # Strict whitelist per arg; any char outside [a-zA-Z0-9,_-]/[01] drops
+        # the arg entirely. Done before the script sees it - a `$(...)`
+        # payload can't reach bash with the inner expansion evaluated.
+        run: |
+          SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-zA-Z0-9_-')
+          SANITIZED_LISTS=$(printf '%s' "${{ github.event.inputs.lists }}" | tr -cd 'a-zA-Z0-9,_-')
+          SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-zA-Z0-9,_-')
+          SANITIZED_DEBUG=$(printf '%s' "${{ github.event.inputs.debug }}" | tr -cd '01')
+          [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="scrape"
+          echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
+          echo "lists=$SANITIZED_LISTS" >> "$GITHUB_OUTPUT"
+          echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
+          echo "debug=$SANITIZED_DEBUG" >> "$GITHUB_OUTPUT"
+
       - name: Run scraper
         working-directory: scripts
         env:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
           MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
+          INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
+          INPUT_LISTS: ${{ steps.sanitize.outputs.lists }}
+          INPUT_DEL: ${{ steps.sanitize.outputs.delete_ids }}
+          INPUT_DEBUG: ${{ steps.sanitize.outputs.debug }}
         run: |
-          # Inputs flow via env, not inline shell - the bash array quoting
-          # keeps a crafted lists/delete_ids value from injecting into the
-          # shell.
-          ARGS=("--action=${{ github.event.inputs.action || 'scrape' }}")
-          if [ -n "${{ github.event.inputs.lists }}" ]; then
-            ARGS+=("--lists=${{ github.event.inputs.lists }}")
-          fi
-          if [ -n "${{ github.event.inputs.delete_ids }}" ]; then
-            ARGS+=("--delete-ids=${{ github.event.inputs.delete_ids }}")
-          fi
-          if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            ARGS+=("--debug")
-          fi
+          # Inputs reached bash only after char-class sanitization - no
+          # quoting escape can turn a sanitized string back into a
+          # shell expression.
+          ARGS=("--action=${INPUT_ACTION}")
+          [ -n "${INPUT_LISTS}" ] && ARGS+=("--lists=${INPUT_LISTS}")
+          [ -n "${INPUT_DEL}" ] && ARGS+=("--delete-ids=${INPUT_DEL}")
+          [ "${INPUT_DEBUG}" = "1" ] && ARGS+=("--debug")
           node scrape.mjs "${ARGS[@]}"
 
       - name: Commit data changes
+        # Always commit, even if the scraper step exited 1 - that's exactly
+        # when a successful scrape's output must be saved. Without this,
+        # one failed page or a /runs POST error throws away every good file.
+        if: always()
         run: |
           git config user.name "my-list-bot"
           git config user.email "my-list-bot@users.noreply.github.com"
