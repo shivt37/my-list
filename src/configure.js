@@ -194,12 +194,6 @@ export function buildConfigurePage(origin, config, adminSecret) {
   }
   .toggle input:checked + .toggle-slider { background: var(--accent-dim); border-color: var(--accent); }
   .toggle input:checked + .toggle-slider::before { transform: translateX(12px); background: var(--accent); }
-  .toggle {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 44px; height: 44px; gap: 8px;
-  }
-  .toggle input { position: absolute; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: pointer; }
-  .toggle-slider { width: 28px; height: 16px; position: relative; inset: auto; flex-shrink: 0; }
 
   .right-col { flex: 1; min-width: 0; }
   .info { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
@@ -212,7 +206,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
   }
   .name-edit { flex: 1 1 auto; min-width: 0; font-size: 13px; padding: 3px 8px; }
   .icon-btn {
-    display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px;
+    display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;
     border: 1px solid var(--border2); border-radius: 6px; color: var(--muted); cursor: pointer; flex-shrink: 0;
     background: transparent; transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
@@ -293,7 +287,7 @@ export function buildConfigurePage(origin, config, adminSecret) {
   .swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
   .swatch {
     width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
-    border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
+    border: 2px solid transparent; padding: 0; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
   }
   .swatch:hover { transform: scale(1.15); }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
@@ -360,11 +354,12 @@ export function buildConfigurePage(origin, config, adminSecret) {
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
     .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
     .card-top { gap: 9px; }
+    .toggle { width: 26px; height: 15px; }
     .toggle-slider::before { width: 9px; height: 9px; }
     .toggle input:checked + .toggle-slider::before { transform: translateX(11px); }
     .name-static { font-size: 12px; }
     .id-chip { display: none; }
-    .icon-btn { min-width: 44px; min-height: 44px; }
+    .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
     .card-controls { flex-wrap: wrap; }
     .official-hint { flex: 1 1 0; }
