@@ -1,8 +1,8 @@
 {
   "catalog_id": "mdb_scrape_1djyii3b",
-  "name": "Latest Movie(digital releases)",
+  "name": "Latest Movie(digital releases) new",
   "type": "movie",
-  "scraped_at": 1785950054832,
+  "scraped_at": 1786011373153,
   "items": [
     {
       "slug": "38vwp-evil-dead-burn?cache=1",
@@ -40,7 +40,7 @@
       "title": "Maddie's Secret",
       "year": 2026,
       "score": 6,
-      "poster_path": "gtssK2SacGjpj2psN0Ee2TcTgso.jpg",
+      "poster_path": "vADal7sH7E9xFr4w2k4V3EPSzF6.jpg",
       "description": "Maddie is a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. While her life seems picturesque — complete with an adoring husband, ride-or-die best friend and a cupboard full of woman-owned ethically-sourced chili crisp to boot — mounting professional pressures threaten to reawaken a hidden secret from her troubled past.",
       "digital_release_date": null
     },
@@ -149,7 +149,7 @@
       "imdb_id": "tt36304003",
       "title": "72 HOURS",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "9Bu1PW2R1XayqRqnl0aDOgMcrdS.jpg",
       "description": "To save his career, a 40-year-old ad exec joins a crew of twentysomethings for a wild Miami bachelor party after they mistakenly add him to a group chat.",
       "digital_release_date": null
@@ -332,6 +332,16 @@
       "score": 4,
       "poster_path": "jspztckSybRKigzz5IFueP8qptV.jpg",
       "description": "After making a groundbreaking extraterrestrial discovery, astrophysicists Daniel and Michelle are forced to flee from home with their family — pursued through the countryside by a relentless and anonymous assailant. As their flight unfolds, the line between cosmic revelation and human paranoia blurs, leading to a tense and emotional confrontation that challenges the boundaries of understanding, science, and survival.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "33zfj-gangland?cache=1",
+      "imdb_id": "tt28263483",
+      "title": "Gangland",
+      "year": 2025,
+      "score": 3,
+      "poster_path": "zLwuYxDnZ6U64poRnDKFFdwjLcj.jpg",
+      "description": "A weathered tribal cop and his new trainee must find a ruthless fugitive, whose return to their rural Indigenous reservation has exposed its darkest secrets and could ignite a violent gang war.",
       "digital_release_date": null
     },
     {
@@ -550,7 +560,7 @@
       "title": "Savage House",
       "year": 2026,
       "score": 5,
-      "poster_path": "vPBy6cDPYMcj35lpl3W5kPEc2OB.jpg",
+      "poster_path": "uF2qGFP5uL7UWk9h1xDZpWV2P8t.jpg",
       "description": "Against the backdrop of 18th century England, a massive pox outbreak, and Jacobite uprising – Sir Chauncey Savage and Lady Savage blindly pursue a better life. It's not without a tinge of irony that their family name is the Savages, for this is a Savage House indeed, filled with duels, decadence, and bloodshed.",
       "digital_release_date": null
     },
@@ -1419,7 +1429,7 @@
       "imdb_id": "tt37671737",
       "title": "Buffet Infinity",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "c9h2p2qBSb5ThgBtNPWZNQDqvEX.jpg",
       "description": "In a series of cheap, locally produced TV commercials, small business owners rival the looming threat of Buffet Infinity. As Buffet Infinity endlessly expands and grows, engulfing everything in its path, a sinister conspiracy unfolds at the margins, and unfathomable powers begin to seep into the vulnerable community of Westridge County, Alberta.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "nsROal9WTDvbB7ITBZZGrVOlz5z.jpg",
       "description": "A brilliant and intelligent love comedy that celebrates second chances and new horizons, starring a strong and determined woman who settles the score.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3hla7-class-reunion?cache=1",
-      "imdb_id": "tt21068440",
-      "title": "Class Reunion",
-      "year": 2025,
-      "score": 4,
-      "poster_path": "9bj75Pb7sUFE6IeDM33V1GwbagY.jpg",
-      "description": "Feeling nostalgic about their high school days, Hervé, Maxime, and Jordy decide to host a grand reunion party to reconnect and celebrate their 30-year graduation anniversary. However, their idealised memories clash with reality: no one wants to come, especially their former classmates Anne and Marion, who are determined to sabotage the event. For the first time, the trio face a harsh realisation – could it be that all this time they’ve been nothing but a bunch of pretentious jerks? Determined to make amends, they embark on a hilarious quest to prove to the world and themselves that they can be better men.",
       "digital_release_date": null
     }
   ]
