@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1786011442243,
+  "scraped_at": 1786082048910,
   "items": [
     {
       "imdb_id": "tt10986410",
@@ -37,19 +37,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt9892936",
-      "type": "series",
-      "title": "One Hundred Years of Solitude",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/fvEhTiNg2ICs0wXTGKuKoIGhLGe.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt35618070",
       "type": "series",
       "title": "Sterling Point",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt9892936",
+      "type": "series",
+      "title": "One Hundred Years of Solitude",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/9zrvktj9JYQwQxZD4lAySfcYlmI.jpg",
       "imdb_rating": null
     },
     {
@@ -69,14 +69,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt30494226",
-      "type": "series",
-      "title": "Ride or Die",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt33332385",
       "type": "series",
       "title": "Widow's Bay",
@@ -85,27 +77,43 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt16026746",
+      "imdb_id": "tt4600360",
       "type": "series",
-      "title": "X-Men '97",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg",
+      "title": "The Beautiful Lie",
+      "year": 2015,
+      "poster": "https://image.tmdb.org/t/p/w200/p1L2PhMT5MOWFO6IumICmiNAebx.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt34771210",
+      "imdb_id": "tt30494226",
       "type": "series",
-      "title": "I Will Find You",
+      "title": "Ride or Die",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2861424",
+      "imdb_id": "tt8323628",
       "type": "series",
-      "title": "Rick and Morty",
-      "year": 2013,
-      "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg",
+      "title": "My Life with the Walter Boys",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/4o9ICW8TxzqiQXfEzyFytBumA2i.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt8550800",
+      "type": "series",
+      "title": "The Outsider",
+      "year": 2020,
+      "poster": "https://image.tmdb.org/t/p/w200/aMiPwPQjQI1EZN3xP2V0sSU37dc.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt17371078",
+      "type": "series",
+      "title": "The Ark",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/rec774m02XNLSjU9qm5z6UUfMRl.jpg",
       "imdb_rating": null
     },
     {
@@ -117,6 +125,38 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt16026746",
+      "type": "series",
+      "title": "X-Men '97",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2861424",
+      "type": "series",
+      "title": "Rick and Morty",
+      "year": 2013,
+      "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt34771210",
+      "type": "series",
+      "title": "I Will Find You",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt34675596",
       "type": "series",
       "title": "Cape Fear",
@@ -125,11 +165,35 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt27497393",
+      "type": "series",
+      "title": "Stuart Fails to Save the Universe",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/vM6B0dqOB2YdXEaA7bjq5LuXEo.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0118414",
+      "type": "series",
+      "title": "The Odyssey",
+      "year": 1997,
+      "poster": "https://image.tmdb.org/t/p/w200/wCiQ7XySqnz9X1REtDNZRGLfhpe.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt27550719",
       "type": "series",
       "title": "The Hawk",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/6XCbqv7t0rYE2U1jzjh52fBxczj.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt43680755",
+      "type": "series",
+      "title": "The Idaho Murders: College Nightmare",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/2Fjgxlv2ishFAaYYZLa6jccswbq.jpg",
       "imdb_rating": null
     },
     {
@@ -149,46 +213,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt17371078",
-      "type": "series",
-      "title": "The Ark",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/rec774m02XNLSjU9qm5z6UUfMRl.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tr285162",
-      "type": "series",
-      "title": "Abejas, el arte del engaño",
-      "year": 2021,
-      "poster": "https://image.tmdb.org/t/p/w200/nBOviK1ulxg07FqSeL2kuh9xuUV.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt27497393",
-      "type": "series",
-      "title": "Stuart Fails to Save the Universe",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0118414",
-      "type": "series",
-      "title": "The Odyssey",
-      "year": 1997,
-      "poster": "https://image.tmdb.org/t/p/w200/wCiQ7XySqnz9X1REtDNZRGLfhpe.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt43680755",
-      "type": "series",
-      "title": "The Idaho Murders: College Nightmare",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/2Fjgxlv2ishFAaYYZLa6jccswbq.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt16418808",
       "type": "series",
       "title": "Sugar",
@@ -205,6 +229,14 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt27799594",
+      "type": "series",
+      "title": "The Librarians: The Next Chapter",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/gYz2wfhwX8gmpX3T7Jg8WB7v4gr.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt35587659",
       "type": "series",
       "title": "The Five Star Weekend",
@@ -213,27 +245,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt12327578",
-      "type": "series",
-      "title": "Star Trek: Strange New Worlds",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt9813792",
       "type": "series",
       "title": "FROM",
       "year": 2022,
       "poster": "https://image.tmdb.org/t/p/w200/pRtJagIxpfODzzb0T0NAvZSzErC.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt27799594",
-      "type": "series",
-      "title": "The Librarians: The Next Chapter",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/gYz2wfhwX8gmpX3T7Jg8WB7v4gr.jpg",
       "imdb_rating": null
     },
     {
@@ -253,19 +269,19 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt13592494",
+      "type": "series",
+      "title": "The Bombing of Pan Am 103",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/9RR6jkc35HOJcZG3modHZwh3J3J.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt37022512",
       "type": "series",
       "title": "The Other Bennet Sister",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/esU4D2XSA7hNHC8G2bmMkvX5g5H.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt3960394",
-      "type": "series",
-      "title": "Interview with the Vampire",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/mQ0fbfc5ELwb2zjFZM4uwAnN3ee.jpg",
       "imdb_rating": null
     },
     {
@@ -277,35 +293,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0436992",
+      "imdb_id": "tt5675620",
       "type": "series",
-      "title": "Doctor Who",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/m6G92osOtSeXwjSfL21jZCUOvxe.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt27444205",
-      "type": "series",
-      "title": "Paradise",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/l8RqfhqEk04W5sSOjQ9zeWU1DyM.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt31938062",
-      "type": "series",
-      "title": "The Pitt",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt35946742",
-      "type": "series",
-      "title": "Maximum Pleasure Guaranteed",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/oeD9rnfk7AohNiJTRoCx4SOKhXj.jpg",
+      "title": "Marvel's The Punisher",
+      "year": 2017,
+      "poster": "https://image.tmdb.org/t/p/w200/tM6xqRKXoloH9UchaJEyyRE9O1w.jpg",
       "imdb_rating": null
     },
     {
@@ -317,27 +309,43 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt5675620",
+      "imdb_id": "tt31938062",
       "type": "series",
-      "title": "Marvel's The Punisher",
-      "year": 2017,
-      "poster": "https://image.tmdb.org/t/p/w200/tM6xqRKXoloH9UchaJEyyRE9O1w.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt13592494",
-      "type": "series",
-      "title": "The Bombing of Pan Am 103",
+      "title": "The Pitt",
       "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/9RR6jkc35HOJcZG3modHZwh3J3J.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt40385200",
+      "imdb_id": "tt27444205",
       "type": "series",
-      "title": "World War II with Tom Hanks",
+      "title": "Paradise",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/l8RqfhqEk04W5sSOjQ9zeWU1DyM.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0436992",
+      "type": "series",
+      "title": "Doctor Who",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/m6G92osOtSeXwjSfL21jZCUOvxe.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt3960394",
+      "type": "series",
+      "title": "Interview with the Vampire",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/mQ0fbfc5ELwb2zjFZM4uwAnN3ee.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt35946742",
+      "type": "series",
+      "title": "Maximum Pleasure Guaranteed",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/kfedegQJ7cvPGOmqvkvVwrshpZy.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/oeD9rnfk7AohNiJTRoCx4SOKhXj.jpg",
       "imdb_rating": null
     },
     {
@@ -349,27 +357,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt4236770",
-      "type": "series",
-      "title": "Yellowstone",
-      "year": 2018,
-      "poster": "https://image.tmdb.org/t/p/w200/vOYfRZ0NpUK5hG2CB2dJFnYJlGe.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt7472896",
-      "type": "series",
-      "title": "Mr Inbetween",
-      "year": 2018,
-      "poster": "https://image.tmdb.org/t/p/w200/1FkONly4j7hxi6Pz5CmuhRN1Ops.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt29666911",
       "type": "series",
       "title": "Seeking Persephone",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/tJsS5oFvcKsJ3NdlTbuG7nyCDIK.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt40385200",
+      "type": "series",
+      "title": "World War II with Tom Hanks",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/kfedegQJ7cvPGOmqvkvVwrshpZy.jpg",
       "imdb_rating": null
     },
     {
@@ -389,27 +389,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0804503",
+      "imdb_id": "tt7472896",
       "type": "series",
-      "title": "Mad Men",
-      "year": 2007,
-      "poster": "https://image.tmdb.org/t/p/w200/7v8iCNzKFpdlrCMcqCoJyn74Nsa.jpg",
+      "title": "Mr Inbetween",
+      "year": 2018,
+      "poster": "https://image.tmdb.org/t/p/w200/1FkONly4j7hxi6Pz5CmuhRN1Ops.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt8550800",
+      "imdb_id": "tt4236770",
       "type": "series",
-      "title": "The Outsider",
-      "year": 2020,
-      "poster": "https://image.tmdb.org/t/p/w200/aMiPwPQjQI1EZN3xP2V0sSU37dc.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0417299",
-      "type": "series",
-      "title": "Avatar: The Last Airbender",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/yaGt4GIutpbXHsv48tWceWg6s56.jpg",
+      "title": "Yellowstone",
+      "year": 2018,
+      "poster": "https://image.tmdb.org/t/p/w200/vOYfRZ0NpUK5hG2CB2dJFnYJlGe.jpg",
       "imdb_rating": null
     },
     {
@@ -421,59 +413,35 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt33049767",
+      "type": "series",
+      "title": "Adults",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/oJUoRlVXGl3MJb62Ugi1G08GPbx.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0804503",
+      "type": "series",
+      "title": "Mad Men",
+      "year": 2007,
+      "poster": "https://image.tmdb.org/t/p/w200/7v8iCNzKFpdlrCMcqCoJyn74Nsa.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0417299",
+      "type": "series",
+      "title": "Avatar: The Last Airbender",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/yaGt4GIutpbXHsv48tWceWg6s56.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt30459041",
       "type": "series",
       "title": "Your Friends & Neighbors",
       "year": 2025,
       "poster": "https://image.tmdb.org/t/p/w200/lcp63INKEsVHUly9eayx7gEEOcG.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt10982034",
-      "type": "series",
-      "title": "Trying",
-      "year": 2020,
-      "poster": "https://image.tmdb.org/t/p/w200/3zsnWBpxBWpcvmFP7ueHM5sGC80.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt28088031",
-      "type": "series",
-      "title": "Ransom Canyon",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/1efzyMfIe3WauOCWk7Gn56gj7sL.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt22202452",
-      "type": "series",
-      "title": "Pluribus",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/z7Nga7Q9IGFWs5OEduY2gGFxnX3.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt27497448",
-      "type": "series",
-      "title": "A Knight of the Seven Kingdoms",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/k8yARbD9iYn2nRX2HvsopfKDN2r.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt1266020",
-      "type": "series",
-      "title": "Parks and Recreation",
-      "year": 2009,
-      "poster": "https://image.tmdb.org/t/p/w200/5IOj62y2Eb2ngyYmEn1IJ7bFhzH.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt5830254",
-      "type": "series",
-      "title": "Das Boot",
-      "year": 2018,
-      "poster": "https://image.tmdb.org/t/p/w200/pIWOJV7NAfJJ7B9ocV66zT2X5pu.jpg",
       "imdb_rating": null
     },
     {
@@ -485,43 +453,91 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt33049767",
+      "imdb_id": "tt10982034",
       "type": "series",
-      "title": "Adults",
+      "title": "Trying",
+      "year": 2020,
+      "poster": "https://image.tmdb.org/t/p/w200/3zsnWBpxBWpcvmFP7ueHM5sGC80.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt27497448",
+      "type": "series",
+      "title": "A Knight of the Seven Kingdoms",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/k8yARbD9iYn2nRX2HvsopfKDN2r.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt5830254",
+      "type": "series",
+      "title": "Das Boot",
+      "year": 2018,
+      "poster": "https://image.tmdb.org/t/p/w200/pIWOJV7NAfJJ7B9ocV66zT2X5pu.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt22202452",
+      "type": "series",
+      "title": "Pluribus",
       "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/oJUoRlVXGl3MJb62Ugi1G08GPbx.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/z7Nga7Q9IGFWs5OEduY2gGFxnX3.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt37543147",
+      "imdb_id": "tt28088031",
       "type": "series",
-      "title": "Life, Larry and the Pursuit of Unhappiness: An Almost History of America",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/eA8lwlHAuFQrZzek25xgGZCgImu.jpg",
+      "title": "Ransom Canyon",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/1efzyMfIe3WauOCWk7Gn56gj7sL.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt34688214",
+      "imdb_id": "tt0386676",
       "type": "series",
-      "title": "Pompeii: Out of Time with Tom Hiddleston",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/qnOYQ6uqxj5HEuXtVf1vSZicok.jpg",
+      "title": "The Office",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt14403178",
+      "imdb_id": "tt0944947",
       "type": "series",
-      "title": "BEEF",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/25ih0Xq2zWbxhhKxwhvswKYQyEr.jpg",
+      "title": "Game of Thrones",
+      "year": 2011,
+      "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0437741",
+      "imdb_id": "tt0141842",
       "type": "series",
-      "title": "Project Runway",
-      "year": 2004,
-      "poster": "https://image.tmdb.org/t/p/w200/586pDee4pRZpGP6sL1l0hDA9Srw.jpg",
+      "title": "The Sopranos",
+      "year": 1999,
+      "poster": "https://image.tmdb.org/t/p/w200/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0460681",
+      "type": "series",
+      "title": "Supernatural",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/8iixmfGx5EIFPdpNvB2JvI3VIqX.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt1266020",
+      "type": "series",
+      "title": "Parks and Recreation",
+      "year": 2009,
+      "poster": "https://image.tmdb.org/t/p/w200/5IOj62y2Eb2ngyYmEn1IJ7bFhzH.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2149175",
+      "type": "series",
+      "title": "The Americans",
+      "year": 2013,
+      "poster": "https://image.tmdb.org/t/p/w200/w1UBlxEXhbKe8sp0fxFZh7MqTce.jpg",
       "imdb_rating": null
     },
     {
@@ -530,6 +546,46 @@
       "title": "The Mentalist",
       "year": 2008,
       "poster": "https://image.tmdb.org/t/p/w200/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt30826447",
+      "type": "series",
+      "title": "The Four Seasons",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/w09XeYl096pwES8riRMZwEA9rnh.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0903747",
+      "type": "series",
+      "title": "Breaking Bad",
+      "year": 2008,
+      "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0149460",
+      "type": "series",
+      "title": "Futurama",
+      "year": 1999,
+      "poster": "https://image.tmdb.org/t/p/w200/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0472954",
+      "type": "series",
+      "title": "It's Always Sunny in Philadelphia",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0437741",
+      "type": "series",
+      "title": "Project Runway",
+      "year": 2004,
+      "poster": "https://image.tmdb.org/t/p/w200/586pDee4pRZpGP6sL1l0hDA9Srw.jpg",
       "imdb_rating": null
     },
     {
@@ -549,107 +605,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2149175",
+      "imdb_id": "tt3530232",
       "type": "series",
-      "title": "The Americans",
-      "year": 2013,
-      "poster": "https://image.tmdb.org/t/p/w200/w1UBlxEXhbKe8sp0fxFZh7MqTce.jpg",
+      "title": "Last Week Tonight with John Oliver",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0141842",
+      "imdb_id": "tt37543147",
       "type": "series",
-      "title": "The Sopranos",
-      "year": 1999,
-      "poster": "https://image.tmdb.org/t/p/w200/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0472954",
-      "type": "series",
-      "title": "It's Always Sunny in Philadelphia",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0460681",
-      "type": "series",
-      "title": "Supernatural",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/8iixmfGx5EIFPdpNvB2JvI3VIqX.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0386676",
-      "type": "series",
-      "title": "The Office",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0903747",
-      "type": "series",
-      "title": "Breaking Bad",
-      "year": 2008,
-      "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt30826447",
-      "type": "series",
-      "title": "The Four Seasons",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/w09XeYl096pwES8riRMZwEA9rnh.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0108778",
-      "type": "series",
-      "title": "Friends",
-      "year": 1994,
-      "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0944947",
-      "type": "series",
-      "title": "Game of Thrones",
-      "year": 2011,
-      "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt1190634",
-      "type": "series",
-      "title": "The Boys",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt7587890",
-      "type": "series",
-      "title": "The Rookie",
-      "year": 2018,
-      "poster": "https://image.tmdb.org/t/p/w200/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0452046",
-      "type": "series",
-      "title": "Criminal Minds",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt2431250",
-      "type": "series",
-      "title": "Little House on the Prairie",
+      "title": "Life, Larry and the Pursuit of Unhappiness: An Almost History of America",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/oWUGSadxC9vQPOCeHDDVfDezmQC.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/eA8lwlHAuFQrZzek25xgGZCgImu.jpg",
       "imdb_rating": null
     },
     {
@@ -661,19 +629,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt9159144",
+      "imdb_id": "tt14403178",
       "type": "series",
-      "title": "Dark Side of the Ring",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/gHBKjBzCSHdraabjSnAFOMEf4Uf.jpg",
+      "title": "BEEF",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/25ih0Xq2zWbxhhKxwhvswKYQyEr.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt27557289",
+      "imdb_id": "tt0108778",
       "type": "series",
-      "title": "The Boroughs",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/oKxBWbXmnWFO2Wh1QRTtshdfIRa.jpg",
+      "title": "Friends",
+      "year": 1994,
+      "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg",
       "imdb_rating": null
     },
     {
@@ -685,35 +653,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt3530232",
+      "imdb_id": "tt1190634",
       "type": "series",
-      "title": "Last Week Tonight with John Oliver",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg",
+      "title": "The Boys",
+      "year": 2019,
+      "poster": "https://image.tmdb.org/t/p/w200/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt5875444",
+      "imdb_id": "tt2431250",
       "type": "series",
-      "title": "Slow Horses",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/5RuZZIouptatjV96BdPmKmRsnGg.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0160904",
-      "type": "series",
-      "title": "Spooks",
-      "year": 2002,
-      "poster": "https://image.tmdb.org/t/p/w200/5kODxCYihuM49oQWke6GfHdsRT6.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt1399664",
-      "type": "series",
-      "title": "The Night Manager",
-      "year": 2016,
-      "poster": "https://image.tmdb.org/t/p/w200/1MccRnw41qQjREuZkovqP2UX1i3.jpg",
+      "title": "Little House on the Prairie",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/oWUGSadxC9vQPOCeHDDVfDezmQC.jpg",
       "imdb_rating": null
     },
     {
@@ -725,51 +677,27 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2402207",
+      "imdb_id": "tt34688214",
       "type": "series",
-      "title": "The Last Ship",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/xH529hDtPxhslAEeCrN7gD64ZMX.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0149460",
-      "type": "series",
-      "title": "Futurama",
-      "year": 1999,
-      "poster": "https://image.tmdb.org/t/p/w200/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt26450613",
-      "type": "series",
-      "title": "A Shop for Killers",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/7yUY1HUyQuybbvkAAhLzQ7x1l9g.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt15677150",
-      "type": "series",
-      "title": "Shrinking",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/zEFKMNPBKq6JG7uuDkzTQ9WwErn.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt39019156",
-      "type": "series",
-      "title": "Gone",
+      "title": "Pompeii: Out of Time with Tom Hiddleston",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/qnxKB5HlkAZZcyIiITIV7dAUX7u.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/qnOYQ6uqxj5HEuXtVf1vSZicok.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0096708",
+      "imdb_id": "tt5875444",
       "type": "series",
-      "title": "Tales from the Crypt",
-      "year": 1989,
-      "poster": "https://image.tmdb.org/t/p/w200/owrglhGpuB5eJVT3nED6U40NzmM.jpg",
+      "title": "Slow Horses",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/5RuZZIouptatjV96BdPmKmRsnGg.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0452046",
+      "type": "series",
+      "title": "Criminal Minds",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg",
       "imdb_rating": null
     },
     {
@@ -781,19 +709,75 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0773262",
+      "imdb_id": "tt37094589",
       "type": "series",
-      "title": "Dexter",
-      "year": 2006,
-      "poster": "https://image.tmdb.org/t/p/w200/q8dWfc4JwQuv3HayIZeO84jAXED.jpg",
+      "title": "Ms. X",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/rrAWtZvOPNyNqaUqXCjLUC9syKL.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0898266",
+      "imdb_id": "tt15677150",
       "type": "series",
-      "title": "The Big Bang Theory",
-      "year": 2007,
-      "poster": "https://image.tmdb.org/t/p/w200/euKFiO5M125rpngFRBbSW83beeI.jpg",
+      "title": "Shrinking",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/zEFKMNPBKq6JG7uuDkzTQ9WwErn.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt7587890",
+      "type": "series",
+      "title": "The Rookie",
+      "year": 2018,
+      "poster": "https://image.tmdb.org/t/p/w200/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2402207",
+      "type": "series",
+      "title": "The Last Ship",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/xH529hDtPxhslAEeCrN7gD64ZMX.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt1399664",
+      "type": "series",
+      "title": "The Night Manager",
+      "year": 2016,
+      "poster": "https://image.tmdb.org/t/p/w200/1MccRnw41qQjREuZkovqP2UX1i3.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt27557289",
+      "type": "series",
+      "title": "The Boroughs",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/oKxBWbXmnWFO2Wh1QRTtshdfIRa.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt9159144",
+      "type": "series",
+      "title": "Dark Side of the Ring",
+      "year": 2019,
+      "poster": "https://image.tmdb.org/t/p/w200/gHBKjBzCSHdraabjSnAFOMEf4Uf.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt3868860",
+      "type": "series",
+      "title": "Married at First Sight",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/tXfwttpCqqrNGu6di9BCG9wbyg0.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt26450613",
+      "type": "series",
+      "title": "A Shop for Killers",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/7yUY1HUyQuybbvkAAhLzQ7x1l9g.jpg",
       "imdb_rating": null
     },
     {
@@ -805,6 +789,54 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt0238784",
+      "type": "series",
+      "title": "Gilmore Girls",
+      "year": 2000,
+      "poster": "https://image.tmdb.org/t/p/w200/gwtzCwU2wdLLf8oejQu2TINiWfQ.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0898266",
+      "type": "series",
+      "title": "The Big Bang Theory",
+      "year": 2007,
+      "poster": "https://image.tmdb.org/t/p/w200/euKFiO5M125rpngFRBbSW83beeI.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt3230854",
+      "type": "series",
+      "title": "The Expanse",
+      "year": 2015,
+      "poster": "https://image.tmdb.org/t/p/w200/5vQlVWkIMPhZ88OWchJsgwGEK9.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0773262",
+      "type": "series",
+      "title": "Dexter",
+      "year": 2006,
+      "poster": "https://image.tmdb.org/t/p/w200/q8dWfc4JwQuv3HayIZeO84jAXED.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt21969948",
+      "type": "series",
+      "title": "2DEZIT",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/mjP3HQyYvaqpzorWi1NVJ1iRulS.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt3526078",
+      "type": "series",
+      "title": "Schitt's Creek",
+      "year": 2015,
+      "poster": "https://image.tmdb.org/t/p/w200/iRfSzrPS5VYWQv7KVSEg2BZZL6C.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt37692332",
       "type": "series",
       "title": "President Curtis",
@@ -813,11 +845,59 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt0412142",
+      "type": "series",
+      "title": "House",
+      "year": 2004,
+      "poster": "https://image.tmdb.org/t/p/w200/3Cz7ySOQJmqiuTdrc6CY0r65yDI.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt31495377",
+      "type": "series",
+      "title": "Patience",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/kJAKX5QVCbQYxrdlq0jFUA45zuj.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt3747572",
+      "type": "series",
+      "title": "Grantchester",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/5Itrb1x7OiA5A0XUreRuevR1hA6.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt32140872",
       "type": "series",
       "title": "Star City",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/b8VtW6IEIyEWYdnJHx8bG8RdAak.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt36885662",
+      "type": "series",
+      "title": "Best Medicine",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/q7SCSZfDaNDRPL3Xt4TiGSZQQht.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt39019156",
+      "type": "series",
+      "title": "Gone",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/qnxKB5HlkAZZcyIiITIV7dAUX7u.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt3663490",
+      "type": "series",
+      "title": "The Librarians",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/jnEzRcKFqaSXLAP87gVKTXawwGg.jpg",
       "imdb_rating": null
     },
     {
@@ -837,27 +917,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0238784",
+      "imdb_id": "tt0096708",
       "type": "series",
-      "title": "Gilmore Girls",
-      "year": 2000,
-      "poster": "https://image.tmdb.org/t/p/w200/gwtzCwU2wdLLf8oejQu2TINiWfQ.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0118375",
-      "type": "series",
-      "title": "King of the Hill",
-      "year": 1997,
-      "poster": "https://image.tmdb.org/t/p/w200/e2xyMapmYgv4AuSoSDv9Y4pQlD6.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt36517689",
-      "type": "series",
-      "title": "THE GHOST IN THE SHELL",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/uEfNGaxbKI1xWmUy3DIndlaxUkz.jpg",
+      "title": "Tales from the Crypt",
+      "year": 1989,
+      "poster": "https://image.tmdb.org/t/p/w200/owrglhGpuB5eJVT3nED6U40NzmM.jpg",
       "imdb_rating": null
     },
     {
@@ -869,107 +933,19 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt36517689",
+      "type": "series",
+      "title": "THE GHOST IN THE SHELL",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/uEfNGaxbKI1xWmUy3DIndlaxUkz.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt18923754",
       "type": "series",
       "title": "Daredevil: Born Again",
       "year": 2025,
       "poster": "https://image.tmdb.org/t/p/w200/xDUoAsU8lQHOOoRkFiBuarmACDN.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt37094589",
-      "type": "series",
-      "title": "Ms. X",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/rrAWtZvOPNyNqaUqXCjLUC9syKL.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt3868860",
-      "type": "series",
-      "title": "Married at First Sight",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/tXfwttpCqqrNGu6di9BCG9wbyg0.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0412142",
-      "type": "series",
-      "title": "House",
-      "year": 2004,
-      "poster": "https://image.tmdb.org/t/p/w200/3Cz7ySOQJmqiuTdrc6CY0r65yDI.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt3663490",
-      "type": "series",
-      "title": "The Librarians",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/jnEzRcKFqaSXLAP87gVKTXawwGg.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0251497",
-      "type": "series",
-      "title": "Big Brother",
-      "year": 2000,
-      "poster": "https://image.tmdb.org/t/p/w200/q2TMOpJITXP2sHd6CrBmO7FvYk1.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt3526078",
-      "type": "series",
-      "title": "Schitt's Creek",
-      "year": 2015,
-      "poster": "https://image.tmdb.org/t/p/w200/iRfSzrPS5VYWQv7KVSEg2BZZL6C.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt3747572",
-      "type": "series",
-      "title": "Grantchester",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/5Itrb1x7OiA5A0XUreRuevR1hA6.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt31495377",
-      "type": "series",
-      "title": "Patience",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/kJAKX5QVCbQYxrdlq0jFUA45zuj.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt14681924",
-      "type": "series",
-      "title": "My Adventures with Superman",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/eqCGgjQJRImIZp8dUOx1YUpx1dj.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt3230854",
-      "type": "series",
-      "title": "The Expanse",
-      "year": 2015,
-      "poster": "https://image.tmdb.org/t/p/w200/5vQlVWkIMPhZ88OWchJsgwGEK9.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt5978570",
-      "type": "series",
-      "title": "Nirvanna the Band the Show",
-      "year": 2017,
-      "poster": "https://image.tmdb.org/t/p/w200/3tzvFcAagdN3EqHZqEgku4ei9be.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt9018736",
-      "type": "series",
-      "title": "Avatar: The Last Airbender",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/lzZpWEaqzP0qVA5nkCc5ASbNcSy.jpg",
       "imdb_rating": null
     },
     {
@@ -989,75 +965,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2708480",
+      "imdb_id": "tt0118375",
       "type": "series",
-      "title": "The Terror",
-      "year": 2018,
-      "poster": "https://image.tmdb.org/t/p/w200/fUVn5mScv83FfwrRUUR694yA7bd.jpg",
+      "title": "King of the Hill",
+      "year": 1997,
+      "poster": "https://image.tmdb.org/t/p/w200/e2xyMapmYgv4AuSoSDv9Y4pQlD6.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt1839578",
+      "imdb_id": "tt31116964",
       "type": "series",
-      "title": "Person of Interest",
-      "year": 2011,
-      "poster": "https://image.tmdb.org/t/p/w200/f8aIvYk5h7Z8EP3dinCmVgQFYow.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0306414",
-      "type": "series",
-      "title": "The Wire",
-      "year": 2002,
-      "poster": "https://image.tmdb.org/t/p/w200/4lbclFySvugI51fwsyxBTOm4DqK.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt8819906",
-      "type": "series",
-      "title": "Love Island USA",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/kU2y21cls8WargMaX7KI47URMjD.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt4574334",
-      "type": "series",
-      "title": "Stranger Things",
-      "year": 2016,
-      "poster": "https://image.tmdb.org/t/p/w200/uKYUR8GPkKRCksczYDJb3pwZauo.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt33204276",
-      "type": "series",
-      "title": "The Madison",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/nZVRyqVbDqfLSOrLcsGGTUHccZ8.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt8201186",
-      "type": "series",
-      "title": "The Capture",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/bCuTIRmnd6eBNZ9oBBQ2KAtErid.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt1489428",
-      "type": "series",
-      "title": "Justified",
-      "year": 2010,
-      "poster": "https://image.tmdb.org/t/p/w200/ie1quhMk09lDtvtAyQAHTu09R9Z.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt2375692",
-      "type": "series",
-      "title": "Black Sails",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/mZcSwrDdw6cdOVgXm496DgwrQcQ.jpg",
+      "title": "Shine",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/wRVei6yluFs8JrA1yP8FrEG5djy.jpg",
       "imdb_rating": null
     },
     {
@@ -1069,51 +989,35 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt21969948",
+      "imdb_id": "tt2708480",
       "type": "series",
-      "title": "2DEZIT",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/mjP3HQyYvaqpzorWi1NVJ1iRulS.jpg",
+      "title": "The Terror",
+      "year": 2018,
+      "poster": "https://image.tmdb.org/t/p/w200/fUVn5mScv83FfwrRUUR694yA7bd.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0071007",
+      "imdb_id": "tt33204276",
       "type": "series",
-      "title": "Little House on the Prairie",
-      "year": 1974,
-      "poster": "https://image.tmdb.org/t/p/w200/eVpvlqKZfEVsBOttNFTUyfPoA6K.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0052520",
-      "type": "series",
-      "title": "The Twilight Zone",
-      "year": 1959,
-      "poster": "https://image.tmdb.org/t/p/w200/7uY4pCOxbEdv4M8jTE4uMPVoSIW.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt35051401",
-      "type": "series",
-      "title": "The East Palace",
+      "title": "The Madison",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/yfYohBszGqoAW8oM0qydOtJ4kPh.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/nZVRyqVbDqfLSOrLcsGGTUHccZ8.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt11041332",
+      "imdb_id": "tt9018736",
       "type": "series",
-      "title": "Yellowjackets",
-      "year": 2021,
-      "poster": "https://image.tmdb.org/t/p/w200/xRnGrn7Z7SC0KIBodocoU1QgDZF.jpg",
+      "title": "Avatar: The Last Airbender",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/lzZpWEaqzP0qVA5nkCc5ASbNcSy.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt1695360",
+      "imdb_id": "tt5978570",
       "type": "series",
-      "title": "The Legend of Korra",
-      "year": 2012,
-      "poster": "https://image.tmdb.org/t/p/w200/dZgYvSfuh1YHDrJuILlVQ5oA2hF.jpg",
+      "title": "Nirvanna the Band the Show",
+      "year": 2017,
+      "poster": "https://image.tmdb.org/t/p/w200/3tzvFcAagdN3EqHZqEgku4ei9be.jpg",
       "imdb_rating": null
     },
     {
@@ -1125,51 +1029,35 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt42006748",
+      "imdb_id": "tt1489428",
       "type": "series",
-      "title": "House of Stassi",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/ozKN9Y26mRMKtkR4ZC42XxiAcm8.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt12637874",
-      "type": "series",
-      "title": "Fallout",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/c15BtJxCXMrISLVmysdsnZUPQft.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt2802850",
-      "type": "series",
-      "title": "Fargo",
-      "year": 2014,
-      "poster": "https://image.tmdb.org/t/p/w200/a3VW6khsyUVKrG0GBCWFG3NzWPX.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0121955",
-      "type": "series",
-      "title": "South Park",
-      "year": 1997,
-      "poster": "https://image.tmdb.org/t/p/w200/1CGwZCFX2qerXaXQJJUB3qUvxq7.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt34385331",
-      "type": "series",
-      "title": "DTF St. Louis",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xHfafw9UmomDc7jO25s9MpiL4Zs.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt1520211",
-      "type": "series",
-      "title": "The Walking Dead",
+      "title": "Justified",
       "year": 2010,
-      "poster": "https://image.tmdb.org/t/p/w200/aN29llVoCFtBTwDZFtqdD9d8dHb.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/ie1quhMk09lDtvtAyQAHTu09R9Z.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt1839578",
+      "type": "series",
+      "title": "Person of Interest",
+      "year": 2011,
+      "poster": "https://image.tmdb.org/t/p/w200/f8aIvYk5h7Z8EP3dinCmVgQFYow.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt8201186",
+      "type": "series",
+      "title": "The Capture",
+      "year": 2019,
+      "poster": "https://image.tmdb.org/t/p/w200/bCuTIRmnd6eBNZ9oBBQ2KAtErid.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt14681924",
+      "type": "series",
+      "title": "My Adventures with Superman",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/eqCGgjQJRImIZp8dUOx1YUpx1dj.jpg",
       "imdb_rating": null
     },
     {
@@ -1181,11 +1069,131 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2566646",
+      "imdb_id": "tt2802850",
       "type": "series",
-      "title": "Pretty Bad Girls",
+      "title": "Fargo",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/a3VW6khsyUVKrG0GBCWFG3NzWPX.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0160904",
+      "type": "series",
+      "title": "Spooks",
+      "year": 2002,
+      "poster": "https://image.tmdb.org/t/p/w200/5kODxCYihuM49oQWke6GfHdsRT6.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0071007",
+      "type": "series",
+      "title": "Little House on the Prairie",
+      "year": 1974,
+      "poster": "https://image.tmdb.org/t/p/w200/eVpvlqKZfEVsBOttNFTUyfPoA6K.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt11041332",
+      "type": "series",
+      "title": "Yellowjackets",
+      "year": 2021,
+      "poster": "https://image.tmdb.org/t/p/w200/xRnGrn7Z7SC0KIBodocoU1QgDZF.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0758745",
+      "type": "series",
+      "title": "Friday Night Lights",
+      "year": 2006,
+      "poster": "https://image.tmdb.org/t/p/w200/Eu7MzZY1DldJ683z7vLkILHNRD.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt22074164",
+      "type": "series",
+      "title": "Jury Duty",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/ipiqT5uHeJudWy9ICSvuCby7NeI.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt1520211",
+      "type": "series",
+      "title": "The Walking Dead",
+      "year": 2010,
+      "poster": "https://image.tmdb.org/t/p/w200/aN29llVoCFtBTwDZFtqdD9d8dHb.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0306414",
+      "type": "series",
+      "title": "The Wire",
+      "year": 2002,
+      "poster": "https://image.tmdb.org/t/p/w200/4lbclFySvugI51fwsyxBTOm4DqK.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2303687",
+      "type": "series",
+      "title": "Line of Duty",
       "year": 2012,
-      "poster": "https://image.tmdb.org/t/p/w200/7E4CLCB20lgetu5CBVGFna2b9Mw.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/pBAp7VfKVQKQIiLRJHZSMGtyXAB.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt34385331",
+      "type": "series",
+      "title": "DTF St. Louis",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/xHfafw9UmomDc7jO25s9MpiL4Zs.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2375692",
+      "type": "series",
+      "title": "Black Sails",
+      "year": 2014,
+      "poster": "https://image.tmdb.org/t/p/w200/mZcSwrDdw6cdOVgXm496DgwrQcQ.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt42006748",
+      "type": "series",
+      "title": "House of Stassi",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/ozKN9Y26mRMKtkR4ZC42XxiAcm8.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt11379026",
+      "type": "series",
+      "title": "Ghosts",
+      "year": 2021,
+      "poster": "https://image.tmdb.org/t/p/w200/8yBQYa6AdvMY5H9CiAv0HkvF3UE.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0251497",
+      "type": "series",
+      "title": "Big Brother",
+      "year": 2000,
+      "poster": "https://image.tmdb.org/t/p/w200/q2TMOpJITXP2sHd6CrBmO7FvYk1.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt11280740",
+      "type": "series",
+      "title": "Severance",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt12637874",
+      "type": "series",
+      "title": "Fallout",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/c15BtJxCXMrISLVmysdsnZUPQft.jpg",
       "imdb_rating": null
     }
   ]
