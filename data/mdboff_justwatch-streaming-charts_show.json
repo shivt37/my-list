@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1786082048910,
+  "scraped_at": 1786115550040,
   "items": [
     {
       "imdb_id": "tt10986410",
@@ -21,11 +21,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt34866681",
+      "imdb_id": "tt27543562",
       "type": "series",
-      "title": "Lucky",
+      "title": "The Shards",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/aMGHNXWcExdR7rA8uTM3hbzGn1Z.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt35618070",
+      "type": "series",
+      "title": "Sterling Point",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
       "imdb_rating": null
     },
     {
@@ -37,11 +45,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt35618070",
+      "imdb_id": "tt34866681",
       "type": "series",
-      "title": "Sterling Point",
+      "title": "Lucky",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt14688458",
+      "type": "series",
+      "title": "Silo",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg",
       "imdb_rating": null
     },
     {
@@ -61,14 +77,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt14688458",
-      "type": "series",
-      "title": "Silo",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt33332385",
       "type": "series",
       "title": "Widow's Bay",
@@ -85,6 +93,14 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt8323628",
+      "type": "series",
+      "title": "My Life with the Walter Boys",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/4o9ICW8TxzqiQXfEzyFytBumA2i.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt30494226",
       "type": "series",
       "title": "Ride or Die",
@@ -93,11 +109,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt8323628",
+      "imdb_id": "tt12327578",
       "type": "series",
-      "title": "My Life with the Walter Boys",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/4o9ICW8TxzqiQXfEzyFytBumA2i.jpg",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt27497393",
+      "type": "series",
+      "title": "Stuart Fails to Save the Universe",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/vM6B0dqOB2YdXEaA7bjq5LuXEo.jpg",
       "imdb_rating": null
     },
     {
@@ -125,35 +149,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt12327578",
+      "imdb_id": "tt26656917",
       "type": "series",
-      "title": "Star Trek: Strange New Worlds",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt16026746",
-      "type": "series",
-      "title": "X-Men '97",
+      "title": "The Agency",
       "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/zoLZbm5gtTQurjMxp5VOdHIpMmz.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2861424",
+      "imdb_id": "tt34991493",
       "type": "series",
-      "title": "Rick and Morty",
-      "year": 2013,
-      "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt34771210",
-      "type": "series",
-      "title": "I Will Find You",
+      "title": "Dutton Ranch",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
       "imdb_rating": null
     },
     {
@@ -165,11 +173,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt27497393",
+      "imdb_id": "tt2861424",
       "type": "series",
-      "title": "Stuart Fails to Save the Universe",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/vM6B0dqOB2YdXEaA7bjq5LuXEo.jpg",
+      "title": "Rick and Morty",
+      "year": 2013,
+      "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg",
       "imdb_rating": null
     },
     {
@@ -197,19 +205,19 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt34771210",
+      "type": "series",
+      "title": "I Will Find You",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt14452776",
       "type": "series",
       "title": "The Bear",
       "year": 2022,
       "poster": "https://image.tmdb.org/t/p/w200/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt26656917",
-      "type": "series",
-      "title": "The Agency",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/zoLZbm5gtTQurjMxp5VOdHIpMmz.jpg",
       "imdb_rating": null
     },
     {
@@ -250,6 +258,14 @@
       "title": "FROM",
       "year": 2022,
       "poster": "https://image.tmdb.org/t/p/w200/pRtJagIxpfODzzb0T0NAvZSzErC.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt16026746",
+      "type": "series",
+      "title": "X-Men '97",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/2HKBc5UiFw8JrruHq8S1Y7TnlW0.jpg",
       "imdb_rating": null
     },
     {
@@ -442,14 +458,6 @@
       "title": "Your Friends & Neighbors",
       "year": 2025,
       "poster": "https://image.tmdb.org/t/p/w200/lcp63INKEsVHUly9eayx7gEEOcG.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt34991493",
-      "type": "series",
-      "title": "Dutton Ranch",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
       "imdb_rating": null
     },
     {
@@ -789,6 +797,14 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt0160904",
+      "type": "series",
+      "title": "Spooks",
+      "year": 2002,
+      "poster": "https://image.tmdb.org/t/p/w200/5kODxCYihuM49oQWke6GfHdsRT6.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt0238784",
       "type": "series",
       "title": "Gilmore Girls",
@@ -1077,14 +1093,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0160904",
-      "type": "series",
-      "title": "Spooks",
-      "year": 2002,
-      "poster": "https://image.tmdb.org/t/p/w200/5kODxCYihuM49oQWke6GfHdsRT6.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt0071007",
       "type": "series",
       "title": "Little House on the Prairie",
@@ -1178,22 +1186,6 @@
       "title": "Big Brother",
       "year": 2000,
       "poster": "https://image.tmdb.org/t/p/w200/q2TMOpJITXP2sHd6CrBmO7FvYk1.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt11280740",
-      "type": "series",
-      "title": "Severance",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt12637874",
-      "type": "series",
-      "title": "Fallout",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/c15BtJxCXMrISLVmysdsnZUPQft.jpg",
       "imdb_rating": null
     }
   ]
