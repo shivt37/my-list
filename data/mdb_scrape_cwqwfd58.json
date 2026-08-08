@@ -2,15 +2,35 @@
   "catalog_id": "mdb_scrape_cwqwfd58",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1786115616917,
+  "scraped_at": 1786162764339,
   "items": [
+    {
+      "slug": "3qq7x-space-cadet?cache=1",
+      "imdb_id": "tt26446095",
+      "title": "Space Cadet",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "eTxfcOXIZs8mSaL7dqdmpnVmB5l.jpg",
+      "description": "A young astronaut and her guardian robot explore grief, loss and love across generations.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3ifac-big-baby?cache=1",
+      "imdb_id": "tt32229316",
+      "title": "Big Baby",
+      "year": 2025,
+      "score": null,
+      "poster_path": "7psYxnfWGwNCJvGLFOYQ197lXW5.jpg",
+      "description": "A nightmare involving a maniac killer in a baby mask serves as inspiration for horror screenwriter Adam Lewis's new script. As more nightmares, visions, and real life terror being to challenge Adam's sanity, he finds himself in a desperate struggle to control his writing, his reality, and who will be Big Baby's next victim.",
+      "digital_release_date": null
+    },
     {
       "slug": "3ftz6-the-last-house?cache=1",
       "imdb_id": "tt32268156",
       "title": "The Last House",
       "year": 2026,
-      "score": null,
-      "poster_path": "tz3Afb8yxSrYmbfHGGRsJ6HvwRO.jpg",
+      "score": 4,
+      "poster_path": "6JU7E8Vv2M11egkctWVOScxWR75.jpg",
       "description": "A family suddenly sealed inside their home must work together to survive against dwindling resources and the ominous threat keeping them trapped.",
       "digital_release_date": null
     },
@@ -60,7 +80,7 @@
       "title": "Evil Dead Burn",
       "year": 2026,
       "score": 6,
-      "poster_path": "7JFVcU1uzv9zCfyMzLrsU04t8BU.jpg",
+      "poster_path": "uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
       "description": "After her husband's abrupt death, Alice seeks solace with his remaining family — descendants of a leading researcher on demonic possession. As her in-laws transform one by one into creatures that feed on fear, she comes to discover that the vows she took in life survive even in death.",
       "digital_release_date": null
     },
@@ -441,7 +461,7 @@
       "year": 2025,
       "score": null,
       "poster_path": "qtom3MULMUp4vFA3rEkTwEIfWVe.jpg",
-      "description": "In communist Czechoslovakia in 1980, Mara dreams of leaving her village to study in the city and become a pilot. But her father, a widowed Ruthenian farmer, insists she stay and work the land. When her village faces destruction due to a new dam, their generational conflict intensifies, revealing the struggle between tradition, identity, and the desire for freedom in a context of historical change.",
+      "description": "In communist Czechoslovakia in 1980, 15-year-old Mara dreams of leaving her village to study in the city and become a pilot. But her father, a widowed Ruthenian farmer, insists she stay and work the land. When her village faces destruction due to a new dam, their generational conflict intensifies, revealing the struggle between tradition, identity, and the desire for freedom in a context of historical change.",
       "digital_release_date": null
     },
     {
@@ -1422,26 +1442,6 @@
       "score": 8,
       "poster_path": "5u8r3iMUVeVejv8G2PrRvlTbogC.jpg",
       "description": "Martin Short looks back on a life fueled by joy in this documentary with classic clips, fresh interviews and star-studded, never-before-seen home movies.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3q6di-the-christophers?cache=1",
-      "imdb_id": "tt34966562",
-      "title": "The Christophers",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "s6oUrGMNl8hVh7fn0O8oF2rHwrM.jpg",
-      "description": "The estranged children of a once-famous artist hire a forger to complete his unfinished works so they can be \"discovered\" and sold after his death.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "2sp07-faces-of-death?cache=1",
-      "imdb_id": "tt14619456",
-      "title": "Faces of Death",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "vPVY3S57lEooBLJCg6KGdMHkUxm.jpg",
-      "description": "A woman, employed as a website content moderator, comes across a series of violent videos reproducing death scenes from a film.",
       "digital_release_date": null
     }
   ]
