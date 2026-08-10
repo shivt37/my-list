@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases) new",
   "type": "movie",
-  "scraped_at": 1786250909397,
+  "scraped_at": 1786338715297,
   "items": [
+    {
+      "slug": "3ysja-governor?cache=1",
+      "imdb_id": "tt36822418",
+      "title": "Governor",
+      "year": 2026,
+      "score": null,
+      "poster_path": "Anukm4NH6MM025vUQ9ykpWQXnFn.jpg",
+      "description": "Set against Indias 1990 economic crisis, Governor follows Raman, a reluctant bureaucrat unexpectedly appointed as the Governor of the RBI when the nation stands on the brink of bankruptcy. As inflation rises, fuel runs low, and panic spreads, Raman must navigate political pressure and a collapsing system to prevent the country from falling apart.",
+      "digital_release_date": null
+    },
     {
       "slug": "3ukwn-main-vaapas-aaunga?cache=1",
       "imdb_id": "tt37333137",
@@ -22,6 +32,16 @@
       "score": 7,
       "poster_path": "lI3wYg9pcGmrX1IPjcz4PO9TI09.jpg",
       "description": "Fatima, 17, the youngest daughter of a French-Algerian family in a Paris suburb, leaves school for a prestigious prep class. She plays football, has a secret boyfriend, but hides that she loves women. In Paris, new freedoms clash with family tradition and faith, forcing her to find her own path.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3ftz6-the-last-house?cache=1",
+      "imdb_id": "tt32268156",
+      "title": "The Last House",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "6JU7E8Vv2M11egkctWVOScxWR75.jpg",
+      "description": "A family suddenly sealed inside their home must work together to survive against dwindling resources and the ominous threat keeping them trapped.",
       "digital_release_date": null
     },
     {
@@ -492,6 +512,16 @@
       "score": null,
       "poster_path": "8R7tsptUZQtpx1Km7s56mESM5JQ.jpg",
       "description": "A young heir in Amritsar must choose between running his father's business empire and pursuing his passion for music, as tradition and dreams collide in Punjab's vibrant streets.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "40qak-lockbox?cache=1",
+      "imdb_id": "tt37369064",
+      "title": "Lockbox",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "sNJ9u1uL12wOzOvvjjdXX8MqrBT.jpg",
+      "description": "A woman puts her life on the line to protect her troubled, enigmatic cousin, Winthrop, who has been targeted and hunted by a powerful supernatural force.",
       "digital_release_date": null
     },
     {
@@ -1380,7 +1410,7 @@
       "title": "Kartavya",
       "year": 2026,
       "score": 5,
-      "poster_path": "2I689w0K02r5oXawo08W8yNYIzx.jpg",
+      "poster_path": "doTwMyAphlDL5Z8WqE3elWWvj8M.jpg",
       "description": "With his family's safety at stake and menacing threats closing in, a police officer must decide how far he'll go to uphold his duty.",
       "digital_release_date": null
     },
@@ -1412,36 +1442,6 @@
       "score": 6,
       "poster_path": "7NrvUI3vnW8H3rD7ExKcTL7KRcQ.jpg",
       "description": "MMA legend Patton James, now a commercial fisherman, is pulled back into the cage when his brother is in danger. Reuniting with his old coach Sammy, he commits to one final fight in one championship against the brutal champion Xavier Grau.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "33b0h-the-magic-faraway-tree?cache=1",
-      "imdb_id": "tt7734244",
-      "title": "The Magic Faraway Tree",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "udXvLxC5gAqN8SinemyFBEcHpTf.jpg",
-      "description": "A modern family relocates to the countryside where the children discover a magical tree with eccentric residents. They're transported to fantastical lands, rekindling their family bond through adventures.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "2rjs9-hamlet?cache=1",
-      "imdb_id": "tt7798632",
-      "title": "Hamlet",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "7cBh6fWchOJY961A8F1rT98HDdA.jpg",
-      "description": "When Hamlet returns for his father’s funeral, he is stunned to discover his uncle Claudius is marrying his newly widowed mother. Visited by his father’s ghost, Hamlet learns his brutal murder was at the hands of Claudius - and spirals into a quest for vengeance that exposes the rot at the heart of the family’s empire and threatens his own sanity.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3woff-i-can-only-imagine-2?cache=1",
-      "imdb_id": "tt34888646",
-      "title": "I Can Only Imagine 2",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "qYBCs9nBmdNCLduw5BTlendq89z.jpg",
-      "description": "Following the breakout success of the song 'I Can Only Imagine', MercyMe's Bart Millard is living the dream—sold-out arenas, a devoted fanbase, and a thriving career. But behind the spotlight, Bart's past threatens the family he's built, especially the fragile bond with his son Sam. When hopeful newcomer Tim Timmons joins the band for their biggest tour yet, he unknowingly brings a renewed gratitude to Bart's life through their unlikely friendship. Bart soon discovers that Tim carries hardships—and secrets—of his own, forcing him to face his past and repair his relationships with Sam and his wife Shannon before fame costs him what matters most.",
       "digital_release_date": null
     }
   ]
