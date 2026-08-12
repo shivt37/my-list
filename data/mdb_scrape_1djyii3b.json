@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases) new",
   "type": "movie",
-  "scraped_at": 1786462272907,
+  "scraped_at": 1786513632302,
   "items": [
+    {
+      "slug": "44k7z-lucky-strike?cache=1",
+      "imdb_id": "tt19035928",
+      "title": "Lucky Strike",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "kzRAd7mj39ZY3FGNrDdZjqx56tn.jpg",
+      "description": "A wounded American soldier fights to survive behind enemy lines during WWII's Battle of the Bulge against the Germans, relying on his instinct, spy craft and a hand-radio to evade capture and find his way back to his unit.",
+      "digital_release_date": null
+    },
     {
       "slug": "3jda6-minions-monsters?cache=1",
       "imdb_id": "tt32890033",
@@ -422,16 +432,6 @@
       "score": 3,
       "poster_path": "zLwuYxDnZ6U64poRnDKFFdwjLcj.jpg",
       "description": "A weathered tribal cop and his new trainee must find a ruthless fugitive, whose return to their rural Indigenous reservation has exposed its darkest secrets and could ignite a violent gang war.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "30z4m-bitter-christmas?cache=1",
-      "imdb_id": "tt28088049",
-      "title": "Bitter Christmas",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "q030Fi4tubXBJKg3D9otPDgGP2o.jpg",
-      "description": "In 2025 Spain, a celebrated film director struggles to write the screenplay for an autofictional film set in 2004 Spain about an unsuccessful movie director turned director of commercials who suffers a panic attack that forces her to take a break by visiting the Canary Islands, where she begins work on a new film.",
       "digital_release_date": null
     },
     {
