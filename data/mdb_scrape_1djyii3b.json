@@ -1,8 +1,8 @@
 {
   "catalog_id": "mdb_scrape_1djyii3b",
-  "name": "Latest Movie(digital releases) new",
+  "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1786513632302,
+  "scraped_at": 1786600260915,
   "items": [
     {
       "slug": "44k7z-lucky-strike?cache=1",
@@ -12,6 +12,16 @@
       "score": 5,
       "poster_path": "kzRAd7mj39ZY3FGNrDdZjqx56tn.jpg",
       "description": "A wounded American soldier fights to survive behind enemy lines during WWII's Battle of the Bulge against the Germans, relying on his instinct, spy craft and a hand-radio to evade capture and find his way back to his unit.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3ytoy-gail-daughtry-and-the-celebrity-sex-pass?cache=1",
+      "imdb_id": "tt36834010",
+      "title": "Gail Daughtry and the Celebrity Sex Pass",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "98T4bnMjJs71WOVZoeY8edZhfgZ.jpg",
+      "description": "Small-town Kansas hairdresser Gail Daughtry's fiancé uses his 'celebrity sex pass' on Jennifer Aniston, prompting Gail to travel to LA with her friend Otto to find her own pass, Jon Hamm, to even the score.",
       "digital_release_date": null
     },
     {
@@ -39,7 +49,7 @@
       "imdb_id": "tt36822418",
       "title": "Governor",
       "year": 2026,
-      "score": null,
+      "score": 3,
       "poster_path": "Anukm4NH6MM025vUQ9ykpWQXnFn.jpg",
       "description": "Set against Indias 1990 economic crisis, Governor follows Raman, a reluctant bureaucrat unexpectedly appointed as the Governor of the RBI when the nation stands on the brink of bankruptcy. As inflation rises, fuel runs low, and panic spreads, Raman must navigate political pressure and a collapsing system to prevent the country from falling apart.",
       "digital_release_date": null
@@ -432,6 +442,16 @@
       "score": 3,
       "poster_path": "zLwuYxDnZ6U64poRnDKFFdwjLcj.jpg",
       "description": "A weathered tribal cop and his new trainee must find a ruthless fugitive, whose return to their rural Indigenous reservation has exposed its darkest secrets and could ignite a violent gang war.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "30z4m-bitter-christmas?cache=1",
+      "imdb_id": "tt28088049",
+      "title": "Bitter Christmas",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "q030Fi4tubXBJKg3D9otPDgGP2o.jpg",
+      "description": "In 2025 Spain, a celebrated film director struggles to write the screenplay for an autofictional film set in 2004 Spain about an unsuccessful movie director turned director of commercials who suffers a panic attack that forces her to take a break by visiting the Canary Islands, where she begins work on a new film.",
       "digital_release_date": null
     },
     {
@@ -1299,7 +1319,7 @@
       "imdb_id": "tt35148005",
       "title": "Achilles Returns",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "1K6o5Tdno278HYHmsxDQtjgxw5m.jpg",
       "description": "After many years, with help of Thetis and negotiations between Zeus and Hades, the Greek hero Achilles is released from the Underworld into the modern world.",
       "digital_release_date": null
@@ -1419,29 +1439,9 @@
       "imdb_id": "tt28650488",
       "title": "The Super Mario Galaxy Movie",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "eJGWx219ZcEMVQJhAgMiqo8tYY.jpg",
       "description": "Having thwarted Bowser's previous plot to marry Princess Peach, Mario and Luigi now face a fresh threat in Bowser Jr., who is determined to liberate his father from captivity and restore the family legacy. Alongside companions new and old, the brothers travel across the stars to stop the young heir's crusade.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44hgt-love-letters?cache=1",
-      "imdb_id": "tt34762801",
-      "title": "Love Letters",
-      "year": 2025,
-      "score": 8,
-      "poster_path": "nedWOSKUvZf2J0oLjYCk44rob2l.jpg",
-      "description": "Céline, 32, is expecting her first child. But Céline is not pregnant. In three months, it is Nadia, her wife, who will give birth to their daughter.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "449ze-kartavya?cache=1",
-      "imdb_id": "tt39664733",
-      "title": "Kartavya",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "doTwMyAphlDL5Z8WqE3elWWvj8M.jpg",
-      "description": "With his family's safety at stake and menacing threats closing in, a police officer must decide how far he'll go to uphold his duty.",
       "digital_release_date": null
     }
   ]
