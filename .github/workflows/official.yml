@@ -46,7 +46,6 @@ jobs:
         env:
           MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
-          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
           INPUT_SLUGS: ${{ steps.sanitize.outputs.slugs }}
         run: |
           ARGS=()

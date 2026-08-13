@@ -12,7 +12,6 @@
  * Required env (GitHub repo secrets / workflow env):
  *   MDBLIST_API_KEY - mdblist.com API key
  *   WORKER_ORIGIN   - worker base URL (run records + config; required)
- *   WORKER_SECRET   - worker shared secret for /runs + /export-config
  *
  * Usage:
  *   node official.mjs                 # refresh all enabled (default 3) slugs × 2 media types
@@ -29,7 +28,6 @@ export const DATA_DIR = join(ROOT, "data");
 
 const MDBLIST_API_KEY = process.env.MDBLIST_API_KEY;
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
-const WORKER_SECRET = process.env.WORKER_SECRET;
 const API = "https://api.mdblist.com";
 
 export const SLUGS = ["popular", "justwatch-streaming-charts", "moviemeter"];
@@ -52,7 +50,6 @@ export async function enabledSlugs() {
   if (!WORKER_ORIGIN) return SLUGS;
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
-      headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return SLUGS;
@@ -70,7 +67,6 @@ export async function enabledSlugs() {
 export async function getFullConfig() {
   if (!WORKER_ORIGIN) return null;
   const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
-    headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
     signal: AbortSignal.timeout(15000),
   });
   if (!res.ok) return null;
@@ -155,7 +151,6 @@ async function postRuns(runs) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {}),
         },
         body: JSON.stringify({ runs: chunk }),
       });

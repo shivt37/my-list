@@ -12,7 +12,6 @@
  * Required env (GitHub repo secrets / workflow env):
  *   SIMKL_CLIENT_ID - SIMKL API client id (data.simkl.in v2 calendar)
  *   WORKER_ORIGIN   - worker base URL (run records + config)
- *   WORKER_SECRET   - worker shared secret for /runs + /export-config
  *
  * Usage:
  *   node simkl.mjs                  # refresh all enabled kinds (series + anime)
@@ -29,7 +28,6 @@ export const DATA_DIR = join(ROOT, "data");
 
 const SIMKL_CLIENT_ID = process.env.SIMKL_CLIENT_ID;
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
-const WORKER_SECRET = process.env.WORKER_SECRET;
 const SIMKL_APP_NAME = "simkl-arriving-today";
 const SIMKL_APP_VERSION = "3.9.0";
 const CALENDAR = { series: "tv", anime: "anime" };
@@ -89,7 +87,6 @@ export async function enabledKindsAndFilters() {
   if (!WORKER_ORIGIN) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
-      headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
@@ -110,7 +107,6 @@ export async function getFullConfig() {
   if (!WORKER_ORIGIN) return null;
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
-      headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return null;
@@ -334,7 +330,6 @@ async function postRuns(runs) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {}),
         },
         body: JSON.stringify({ runs: chunk }),
       });

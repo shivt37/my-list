@@ -11,7 +11,6 @@
  *
  * Required env (GitHub repo secrets / workflow env):
  *   WORKER_ORIGIN   - worker base URL, e.g. https://my-list.workers.dev
- *   WORKER_SECRET   - worker shared secret for /export-config + /runs
  *   MDBLIST_API_KEY - mdblist.com API key (only used for nothing today -
  *                     scraping is DOM-based; kept for parity/tests)
  *
@@ -41,7 +40,6 @@ export const DATA_DIR = join(ROOT, "data");
 
 export const DEBUG = process.argv.includes("--debug");
 export const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
-export const WORKER_SECRET = process.env.WORKER_SECRET;
 
 export function arg(name) {
   const prefix = `--${name}=`;
@@ -62,7 +60,7 @@ if (!WORKER_ORIGIN && isMain) {
 }
 
 export function authHeaders() {
-  return { "Content-Type": "application/json", ...(WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {}) };
+  return { "Content-Type": "application/json" };
 }
 
 export function chunkArray(arr, size = 50) {
@@ -76,7 +74,6 @@ export function chunkArray(arr, size = 50) {
 // ====================================================================
 export async function fetchConfig() {
   const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
-    headers: WORKER_SECRET ? { "X-Admin-Secret": WORKER_SECRET } : {},
     signal: AbortSignal.timeout(15000),
   });
   if (!res.ok) throw new Error(`Failed to fetch config: HTTP ${res.status}`);

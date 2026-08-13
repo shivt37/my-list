@@ -44,7 +44,6 @@ jobs:
         env:
           SIMKL_CLIENT_ID: ${{ secrets.SIMKL_CLIENT_ID }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
-          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
           INPUT_KINDS: ${{ steps.sanitize.outputs.kinds }}
         run: |
           ARGS=()

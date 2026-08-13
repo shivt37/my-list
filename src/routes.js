@@ -5,7 +5,6 @@
 import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
-import { createHash, timingSafeEqual } from "node:crypto";
 
 export const ADDON_ID = "com.mylist";
 export const ADDON_NAME = "my-list";
@@ -26,24 +25,6 @@ function json(body, status = 200, extraHeaders = {}) {
     status,
     headers: { "content-type": "application/json", "x-content-type-options": "nosniff", ...corsHeaders, ...extraHeaders },
   });
-}
-
-// Shared secret gates every mutating route. The configure page embeds it
-// (it only blocks scripts on other origins, not determined callers - the
-// honest ceiling without Turnstile); the GitHub Actions scripts pass it via
-// env. Not a strong security boundary, raises the bar for drive-by abuse.
-export function requireAdmin(request, env) {
-  const secret = env.ADMIN_SECRET;
-  if (!secret) return json({ error: "Auth not configured" }, 503);
-  const provided = request && request.headers.get("x-admin-secret");
-  if (typeof provided !== "string") return json({ error: "Unauthorized" }, 401);
-  // Hash both sides to a fixed length, then constant-time compare - the
-  // raw strings can differ in length and timingSafeEqual requires equal
-  // buffers, so the naive direct compare leaks length and content timing.
-  const a = createHash("sha256").update(provided).digest();
-  const b = createHash("sha256").update(secret).digest();
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return json({ error: "Unauthorized" }, 401);
-  return null;
 }
 
 function html(body, extraHeaders = {}) {
@@ -69,7 +50,7 @@ export function githubPagesCatalogUrl(env, catalogId) {
 
 // Configure page returns a full Response (html helper lives here too).
 export function configureResponse(env, origin, config) {
-  return html(buildConfigurePage(origin, config, env.ADMIN_SECRET));
+  return html(buildConfigurePage(origin, config));
 }
 
 export function toIST(ms) {
@@ -223,8 +204,6 @@ export async function handleStatus(env, request) {
 }
 
 export async function handleSaveConfig(env, request) {
-  const guard = requireAdmin(request, env);
-  if (guard) return guard;
   try {
     const body = await request.json();
     if (!body || !body.scraper || !Array.isArray(body.scraper.lists) ||
@@ -328,15 +307,11 @@ export async function handleSaveConfig(env, request) {
 }
 
 export async function handleExportConfig(env, request) {
-  const guard = requireAdmin(request, env);
-  if (guard) return guard;
   const cfg = await loadConfig(env.STORE);
   return json(cfg);
 }
 
 export async function handleTriggerRefresh(env, request) {
-  const guard = requireAdmin(request, env);
-  if (guard) return guard;
   const cfg = await loadConfig(env.STORE);
 
   // Optional { id } body → refresh a single list instead of all enabled.
@@ -424,8 +399,6 @@ export async function handleTriggerRefresh(env, request) {
 // reads from here). Runs are keyed by catalog-id prefix: mdboff_* →
 // runs:official, everything else → runs:scraper.
 export async function handleRunsPost(env, request) {
-  const guard = requireAdmin(request, env);
-  if (guard) return guard;
   try {
     const body = await request.json();
     if (!body || !Array.isArray(body.runs)) {

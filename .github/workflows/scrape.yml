@@ -71,7 +71,6 @@ jobs:
         working-directory: scripts
         env:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
-          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
           MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
           INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
           INPUT_LISTS: ${{ steps.sanitize.outputs.lists }}
