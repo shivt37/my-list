@@ -2,14 +2,14 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787061997961,
+  "scraped_at": 1787109305752,
   "items": [
     {
       "slug": "2z2cy-toy-story-5?cache=1",
       "imdb_id": "tt29355505",
       "title": "Toy Story 5",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
       "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
       "digital_release_date": null
@@ -25,6 +25,16 @@
       "digital_release_date": null
     },
     {
+      "slug": "3lgk2-the-birthday-party?cache=1",
+      "imdb_id": "tt33269988",
+      "title": "The Birthday Party",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "sXN4IvB4hM2AYYx9BhdzhokrjvH.jpg",
+      "description": "The late 1970s, somewhere in the Mediterranean: Marcos Timoleon, a tycoon, is throwing a lavish, extravagant birthday party for Sofia on his exclusive private island. The party is a perfect excuse for various people in his life to approach him with their own agendas.",
+      "digital_release_date": null
+    },
+    {
       "slug": "3pc8k-cocktail-2?cache=1",
       "imdb_id": "tt35064672",
       "title": "Cocktail 2",
@@ -32,6 +42,16 @@
       "score": 5,
       "poster_path": "oIQmtByV1LtEQSwM4EpdLTyoSlM.jpg",
       "description": "A vacation in Sicily forces longtime partners Diya and Kunal to question their love and commitment after they reunite with Diya's old friend Ally.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "43so4-to-the-max?cache=1",
+      "imdb_id": "tt36454145",
+      "title": "To the Max",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "7KtjwHzp2EB5N63bZtxVb2gImjf.jpg",
+      "description": "A group of friends bonded by their love for extreme sports discovers BASE jumping in wingsuits — but feeling like flying carries the highest risks.",
       "digital_release_date": null
     },
     {
@@ -1422,26 +1442,6 @@
       "score": 4,
       "poster_path": "1K6o5Tdno278HYHmsxDQtjgxw5m.jpg",
       "description": "After many years, with help of Thetis and negotiations between Zeus and Hades, the Greek hero Achilles is released from the Underworld into the modern world.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3nn7u-chand-mera-dil?cache=1",
-      "imdb_id": "tt34498111",
-      "title": "Chand Mera Dil",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "9LPkXJustudEBgPZEm9tgDx5KtC.jpg",
-      "description": "Aarav and Chandni's passionate college romance is struck by adulthood far too soon, forcing the two young lovers to balance their ambitions with responsibility and realize the evolved meaning of love.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3ua6n-one-last-deal?cache=1",
-      "imdb_id": "tt35566934",
-      "title": "One Last Deal",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "oCWWd5ux3QTGmnHIjJUdzckAxPp.jpg",
-      "description": "Jimmy Banks is an old school agent who desperately needs to get his star player one last big payday before Jimmy’s life, and his client’s reputation, comes tumbling down.",
       "digital_release_date": null
     }
   ]
