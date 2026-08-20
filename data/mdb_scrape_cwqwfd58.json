@@ -2,15 +2,25 @@
   "catalog_id": "mdb_scrape_cwqwfd58",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1787195625826,
+  "scraped_at": 1787235054357,
   "items": [
+    {
+      "slug": "44srk-landship?cache=1",
+      "imdb_id": "tt20564678",
+      "title": "Landship",
+      "year": 2026,
+      "score": null,
+      "poster_path": "iYMX7oUGxHn6Z9pSqcAgl5r0E4N.jpg",
+      "description": "The Battle of Passchendaele, 1917. For three years the great war has been waging, and the two armies find themselves entrenched along the four-hundred-mile Western Front. At the start of a pivotal allied offensive to break the stalemate, the nine-man crew of a British MKIV Tank set out to destroy a series of heavily defended German bunkers.",
+      "digital_release_date": null
+    },
     {
       "slug": "3g6un-mutiny?cache=1",
       "imdb_id": "tt32338669",
       "title": "Mutiny",
       "year": 2026,
-      "score": null,
-      "poster_path": "lsYSWqj6i2iyUDJoLA2cazFJYlC.jpg",
+      "score": 4,
+      "poster_path": "4zWwbVV31Qss578iJdVECyhMslB.jpg",
       "description": "After witnessing his billionaire boss' murder and being framed for the crime, Cole Reed boards a cargo ship on a one-man crusade to avenge his boss' death only to discover an international conspiracy.",
       "digital_release_date": null
     },
@@ -139,7 +149,7 @@
       "imdb_id": "tt42009731",
       "title": "Travis Barker: Louder Than Fear",
       "year": 2026,
-      "score": null,
+      "score": 3,
       "poster_path": "hD8nxSEstIGpxcaWl7Pd6SbwNXh.jpg",
       "description": "After surviving a devastating plane crash that nearly took his life, legendary and electrifying drummer Travis Barker embarks on a raw and redemptive journey in this intimate portrait of the man behind the tattoos who transformed pain into power.",
       "digital_release_date": null
@@ -1300,7 +1310,7 @@
       "title": "Deep Water",
       "year": 2026,
       "score": 5,
-      "poster_path": "kjcuS7xaRyqRjVaVcH4t0qHshuX.jpg",
+      "poster_path": "cyI2Ugpq98WZN1GEYeWkn4ztXOc.jpg",
       "description": "A group of international passengers on a flight from Los Angeles to Shanghai is forced to make an emergency landing in shark-infested waters. The terrified group is forced to work together and overcome their differences if they hope to escape their sinking plane and the frenzy of sharks drawn to the wreckage.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "ybO8oLgpXRhaPmHI6C2FUpxSRrK.jpg",
       "description": "After serving his country in the Army, Unique is falsely accused of assault and sent to prison. Once released, Unique sets up shop in Ohio to restart his life, linking up with his only surviving relative, Ramsey. There’s something insidious happening in this town, though, as its racist sheriff and his crew of similarly bigoted acolytes all have a knack for violence and share a gruesome secret pertaining to a recent string of missing young Black men. When they set their sights on Unique and turn his life upside down, the former soldier has no choice but to bring the ruckus down on the sheriff and his goons.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44l6o-chum?cache=1",
-      "imdb_id": "tt41604789",
-      "title": "Chum",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "eKUYfLzpb6nIxz2OnzoAmxIMFFX.jpg",
-      "description": "A newlywed couple joins friends on a Mediterranean yacht excursion, only to find themselves caught between a predatory shark and a psychopathic killer in their midst-transforming a sun-drenched escape into a fight for survival.",
       "digital_release_date": null
     }
   ]
