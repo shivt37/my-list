@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1787148474618,
+  "scraped_at": 1787195667411,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -37,11 +37,27 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt34866681",
+      "type": "series",
+      "title": "Lucky",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/qdobPy3No4Fi3dCzcIDP9n8AjcO.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt13111078",
       "type": "series",
       "title": "Lioness",
       "year": 2023,
       "poster": "https://image.tmdb.org/t/p/w200/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt34991493",
+      "type": "series",
+      "title": "Dutton Ranch",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
       "imdb_rating": null
     },
     {
@@ -58,22 +74,6 @@
       "title": "Heroes",
       "year": 2006,
       "poster": "https://image.tmdb.org/t/p/w200/lf0TcOkheYUZKpeh7c8lqJHNk5O.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt34866681",
-      "type": "series",
-      "title": "Lucky",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt34991493",
-      "type": "series",
-      "title": "Dutton Ranch",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
       "imdb_rating": null
     },
     {
@@ -101,14 +101,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt11198330",
-      "type": "series",
-      "title": "House of the Dragon",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt31491435",
       "type": "series",
       "title": "Tires",
@@ -117,11 +109,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2281375",
+      "imdb_id": "tt11198330",
       "type": "series",
-      "title": "Nashville",
-      "year": 2012,
-      "poster": "https://image.tmdb.org/t/p/w200/oZ2K2cPeWURnQjCxrvSEnaEcIST.jpg",
+      "title": "House of the Dragon",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg",
       "imdb_rating": null
     },
     {
@@ -130,6 +122,14 @@
       "title": "Sterling Point",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2281375",
+      "type": "series",
+      "title": "Nashville",
+      "year": 2012,
+      "poster": "https://image.tmdb.org/t/p/w200/oZ2K2cPeWURnQjCxrvSEnaEcIST.jpg",
       "imdb_rating": null
     },
     {
@@ -154,6 +154,14 @@
       "title": "The X-Files",
       "year": 1993,
       "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2741602",
+      "type": "series",
+      "title": "The Blacklist",
+      "year": 2013,
+      "poster": "https://image.tmdb.org/t/p/w200/4HTfd1PhgFUenJxVuBDNdLmdr0c.jpg",
       "imdb_rating": null
     },
     {
@@ -617,7 +625,7 @@
       "type": "series",
       "title": "Slow Horses",
       "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/5RuZZIouptatjV96BdPmKmRsnGg.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/w2jauz2PeSjFQifDObI3qDen4f7.jpg",
       "imdb_rating": null
     },
     {
@@ -762,6 +770,14 @@
       "title": "President Curtis",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/lc9riW73Oee2pBxi1UrDPgyQjEr.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0452046",
+      "type": "series",
+      "title": "Criminal Minds",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg",
       "imdb_rating": null
     },
     {
