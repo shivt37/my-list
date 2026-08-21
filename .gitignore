@@ -5,6 +5,12 @@ debug/
 scratch/
 .DS_Store
 
+# Catalog data files are written by the scrape/official/simkl workflows
+# and force-added (`git add -f`) regardless of gitignore. Local clones
+# only need .gitkeep so the directory exists; the live data is rebuilt
+# on every cron and served via GitHub Pages from the bot's commits.
+data/*.json
+
 # local test scripts (not part of deploy or scrape)
 scripts/dry-test.mjs
 scripts/verify-ui.mjs

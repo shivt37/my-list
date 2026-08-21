@@ -230,12 +230,24 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
     if (f.exclude_genres.length > 0 && genres.some((g) => f.exclude_genres.map((x) => x.toLowerCase()).includes(String(g).toLowerCase()))) continue;
     if (!matchesCountry(f.include_countries, f.exclude_countries, country)) continue;
 
+    // Bulk-air detection: SIMKL emits one calendar[] entry per episode,
+    // so a 12-episode binge drop today shows up as 12 entries with the same
+    // simkl_id (already grouped above). The headline picks the max S/E for
+    // the badge, but the type label must inspect the whole batch - a new
+    // show dumped E01-E12 today has headline=E12, which the old
+    // headline-only check would mislabel as "standard".
+    const isBulk = item.episodes.length > 1;
+    const hasS1E1 = isAnime
+      ? item.episodes.some((e) => (e.episode ?? 0) === 1)
+      : item.episodes.some((e) => (e.season ?? 0) === 1 && (e.episode ?? 0) === 1);
+    const hasAnyE1 = item.episodes.some((e) => (e.episode ?? 0) === 1);
+
     let type = "standard";
     if (finaleType != null) {
       type = "finale";
-    } else if (isAnime ? episode === 1 : season === 1 && episode === 1) {
+    } else if (hasS1E1) {
       type = "new_show";
-    } else if (!isAnime && episode === 1 && season > 1) {
+    } else if (!isAnime && hasAnyE1) {
       type = "new_season";
     }
 
@@ -248,6 +260,27 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
 
     const s = !isAnime && season != null ? `S${String(season).padStart(2, "0")}` : "";
     const e = episode != null ? `E${String(episode).padStart(2, "0")}` : "";
+    // Bulk-air range tail: only append when today's batch spans >1 ep.
+    // Skipped for anime season-less numbering only if all entries share season,
+    // which is the common case; otherwise emits SxxExx-SxxExx across seasons.
+    let rangeTail = "";
+    if (isBulk) {
+      const epNums = item.episodes.map((ep) => ep.episode ?? 0);
+      const minEp = Math.min(...epNums);
+      const maxEp = Math.max(...epNums);
+      if (isAnime) {
+        rangeTail = ` · E${String(minEp).padStart(2, "0")}–E${String(maxEp).padStart(2, "0")} (${item.episodes.length} eps today)`;
+      } else {
+        const seasons = [...new Set(item.episodes.map((ep) => ep.season ?? 0))];
+        if (seasons.length === 1) {
+          rangeTail = ` · E${String(minEp).padStart(2, "0")}–E${String(maxEp).padStart(2, "0")} (${item.episodes.length} eps today)`;
+        } else {
+          const minS = Math.min(...seasons);
+          const maxS = Math.max(...seasons);
+          rangeTail = ` · S${String(minS).padStart(2, "0")}E${String(minEp).padStart(2, "0")}–S${String(maxS).padStart(2, "0")}E${String(maxEp).padStart(2, "0")} (${item.episodes.length} eps today)`;
+        }
+      }
+    }
     const airsUtc = headline?.airDate ? new Date(headline.airDate).toISOString().slice(0, 16).replace("T", " ") + " UTC" : "";
     const ratingsStr = formatRatings(item.show.ratings, isAnime ? "mal" : "imdb", isAnime ? "MAL" : "IMDb");
 
@@ -256,7 +289,7 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
       type: "series",
       name: item.title,
       poster: simklPoster(item.show.poster),
-      description: `${label} | ${s}${e} | ${airsUtc} | ${country ? country.toUpperCase() : "??"} | genres: ${genres.join(", ") || "none"} | ${ratingsStr}`,
+      description: `${label} | ${s}${e}${rangeTail} | ${airsUtc} | ${country ? country.toUpperCase() : "??"} | genres: ${genres.join(", ") || "none"} | ${ratingsStr}`,
       _pri: priority,
       _rating: (item.show.ratings?.[f.rating_source]?.rating) ?? -1,
     });

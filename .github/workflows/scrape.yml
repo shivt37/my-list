@@ -2,9 +2,12 @@ name: Scrape MDBList lists
 
 on:
   schedule:
-    # Every 12 hours (UTC). Edit this line on github.com to change the
-    # schedule - no worker-side timing involved.
-    - cron: "0 */12 * * *"
+    # Daily at 07:00 and 19:00 IST (= 01:30 and 13:30 UTC). Edit these
+    # lines on github.com to change the schedule - no worker-side timing
+    # involved. GitHub Actions cron runs on UTC, so IST inputs need a
+    # -5:30 offset.
+    - cron: "30 1 * * *"
+    - cron: "30 13 * * *"
   workflow_dispatch:
     inputs:
       lists:
@@ -38,10 +41,17 @@ jobs:
       # the data-commit step could race and lose runs.
       group: my-list-scrape
       cancel-in-progress: false
+      # queue: max added 2026-05 GitHub feature. Without it, when 3 crons
+      # fire at the same minute only the first acquires the lock and the
+      # other 2 queue as pending - but the default queue depth is 1, so
+      # the 2nd pending run gets CANCELED when the 3rd arrives. queue: max
+      # lifts that to 100 pending slots, so all 3 fire sequentially with
+      # none dropping. Requires cancel-in-progress: false (already set).
+      queue: max
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -94,7 +104,7 @@ jobs:
         run: |
           git config user.name "my-list-bot"
           git config user.email "my-list-bot@users.noreply.github.com"
-          git add data
+          git add -f 'data/*.json'
           if git diff --cached --quiet; then
             echo "No data changes - skipping commit."
           else
@@ -107,7 +117,7 @@ jobs:
 
       - name: Upload debug artifacts
         if: ${{ github.event.inputs.debug == 'true' || failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: scraper-debug-${{ github.run_id }}
           path: scripts/debug/*
