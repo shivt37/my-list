@@ -277,47 +277,88 @@ export function buildConfigurePage(origin, config) {
   .tmdb-dim:first-child { border-top: none; margin-top: 0; padding-top: 0; }
   .tmdb-dim-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .dim-mode-tag {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer;
-    border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px;
-    color: var(--accent); background: var(--accent-soft); user-select: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
+    line-height: 1.5; cursor: pointer; flex-shrink: 0; user-select: none;
+    color: var(--dim); background: var(--surface2); border: 1px solid var(--border2);
+    transition: color 0.12s, border-color 0.12s;
   }
+  .dim-mode-tag:hover { color: var(--text); border-color: var(--accent); }
   .exclude-label-toggle { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
   .exclude-chevron { transition: transform 0.15s; color: var(--muted); }
   .exclude-chevron.open { transform: rotate(180deg); }
+  /* 3-position sliding pill: AND / Mix (read-only) / OR. Thumb position via
+     "left" (not translateX) - translateX % resolves against the thumb's own
+     width, not the track's. */
   .mode-toggle {
-    position: relative; display: inline-flex; align-items: center;
-    border: 1px solid var(--border); border-radius: 999px; padding: 2px; gap: 0;
+    position: relative; display: flex; align-items: center; width: 108px; height: 23px; flex-shrink: 0;
+    box-sizing: border-box; background: var(--surface2); border: 1px solid var(--border2); border-radius: 16px; padding: 2px;
   }
+  .mode-toggle-thumb {
+    position: absolute; top: 2px; left: 2px;
+    width: calc((100% - 4px) / 3); height: 17px;
+    background: var(--accent); border-radius: 12px;
+    box-shadow: 0 0 0 1px var(--accent), 0 0 6px var(--accent-glow);
+    transition: left 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .mode-toggle[data-mode="mixed"] .mode-toggle-thumb {
+    left: calc((100% - 4px) / 3 + 2px);
+    background: var(--muted); box-shadow: none;
+  }
+  .mode-toggle[data-mode="or"] .mode-toggle-thumb { left: calc((100% - 4px) / 3 * 2 + 2px); }
   .mode-toggle-btn {
-    position: relative; z-index: 1; border: none; background: transparent; cursor: pointer;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 3px 12px;
-    border-radius: 999px; color: var(--muted);
+    position: relative; z-index: 1; flex: 1 1 0; align-self: stretch; margin: 0;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    background: transparent; border: 0; padding: 0; box-sizing: border-box;
+    appearance: none; color: var(--dim); font-family: inherit; font-size: 10px; line-height: 1;
+    transition: color 0.12s;
   }
-  .mode-toggle-btn.active { background: var(--accent); color: #fff; }
-  .mode-toggle-btn.mode-toggle-mixed { cursor: default; opacity: 0.75; }
+  .mode-toggle-btn:not(:disabled) { cursor: pointer; }
+  .mode-toggle-btn:disabled { cursor: default; }
+  .mode-toggle-btn:hover:not(.active):not(:disabled) { color: var(--text); }
+  .mode-toggle-btn.active { color: #000; }
+  .mode-toggle[data-mode="mixed"] .mode-toggle-mixed { color: #000; }
   .include-mode-hint { font-size: 10.5px; color: var(--muted); line-height: 1.45; }
   .include-mode-row { display: flex; align-items: baseline; gap: 10px; margin: 10px 0 2px; flex-wrap: wrap; }
   .members-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
   .members-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; align-items: center; }
   .members-empty { font-size: 11px; color: var(--muted); font-style: italic; }
   .member-chip {
-    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px;
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--dim);
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px;
+    padding: 4px 6px 4px 10px; max-width: 220px;
+    transition: border-color 0.12s;
   }
-  .exclude-chip {
-    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px;
-    background: transparent; border: 1px dashed var(--danger); border-radius: 6px; padding: 3px 8px; color: var(--fg);
+  .member-chip:hover { border-color: #32324a; }
+  .chip-remove {
+    display: flex; align-items: center; justify-content: center; width: 16px; height: 16px;
+    border-radius: 50%; color: var(--muted); cursor: pointer; font-size: 13px; line-height: 1; flex-shrink: 0;
+    transition: background 0.12s, color 0.12s;
   }
+  .chip-remove:hover { background: rgba(255,95,102,0.14); color: var(--danger); }
   .member-chip-add {
-    cursor: pointer; color: var(--accent); border-style: dashed; border-color: var(--accent); font-weight: 600;
+    cursor: pointer; color: var(--accent); border-color: rgba(6,182,212,0.5);
+    background: var(--accent-soft); padding: 4px 12px;
+    transition: border-color 0.12s, background 0.12s;
   }
+  .member-chip-add:hover { opacity: 1; border-color: var(--accent); }
+  .exclude-chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--danger);
+    background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: 20px;
+    padding: 4px 6px 4px 10px; max-width: 220px;
+  }
+  .exclude-chip .chip-remove:hover { background: rgba(255,95,102,0.24); }
   .exclude-chip-add {
-    cursor: pointer; color: var(--danger); border-style: dashed; font-weight: 600;
-    background: transparent; border: 1px dashed var(--danger); border-radius: 6px; padding: 3px 8px; font-size: 11.5px;
+    cursor: pointer; color: var(--dim); border-color: var(--border2); background: var(--surface2);
+    padding: 4px 12px; display: inline-flex; align-items: center; font-size: 11.5px;
+    border-radius: 20px; border-width: 1px; border-style: solid;
+    transition: color 0.12s, border-color 0.12s, background 0.12s;
   }
+  .exclude-chip-add:hover { color: var(--text); border-color: var(--dim); }
   .exclude-genre-select-inline {
-    font-size: 11.5px; background: var(--surface); color: var(--fg);
-    border: 1px dashed var(--accent); border-radius: 6px; padding: 3px 6px; cursor: pointer;
+    flex: 0 0 auto; width: fit-content; min-width: 0;
+    color: var(--dim); border-color: var(--border2); background: var(--surface2);
+    padding: 4px 8px; font-size: 11.5px; border-radius: 20px; cursor: pointer;
   }
   .inline-add-search { margin-top: 8px; }
   .inline-add-search .search-row { display: flex; gap: 6px; }
@@ -383,7 +424,8 @@ export function buildConfigurePage(origin, config) {
   .preview-item-link:hover { color: var(--accent); border-color: var(--accent); }
   .preview-item:hover .preview-item-link,
   .preview-item-link:focus-visible { opacity: 1; }
-  .preview-list-link { width: 18px; height: 18px; flex-shrink: 0; align-self: center; margin-left: 4px; }
+  .preview-list-link { width: 18px; height: 18px; flex-shrink: 0; align-self: center; margin-left: 4px; opacity: 0.55; transition: opacity 0.12s, color 0.12s, border-color 0.12s; }
+  .preview-list-link:hover { opacity: 1; color: var(--accent); border-color: var(--accent); }
   .preview-list { display: flex; flex-direction: column; max-height: 260px; overflow-y: auto; }
   .preview-list-item {
     display: flex; align-items: baseline; gap: 8px;
@@ -393,8 +435,6 @@ export function buildConfigurePage(origin, config) {
   .preview-list-num { font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 1.6em; text-align: right; }
   .preview-list-name { font-size: 12.5px; color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; min-width: 0; }
   .count-line { font-size: 11px; color: var(--muted); margin-top: 3px; }
-  .chip-x { cursor: pointer; color: var(--danger); font-weight: 700; text-decoration: none; padding: 0 2px; }
-
   /* ── ACCENT POPUP ── */
   .accent-popup-wrap { position: relative; }
   .accent-popup {
@@ -493,6 +533,26 @@ export function buildConfigurePage(origin, config) {
     .swatch { width: 24px; height: 24px; }
     .menu-popup { right: -14px; width: 180px; padding: 5px; }
     .menu-item { padding: 8px 9px; font-size: 12px; }
+
+    /* ── TMDB tab (ported from old worker) ── */
+    .preview-item:hover { transform: none; }
+    .members-label { font-size: 10px; }
+    .member-chip, .exclude-chip { font-size: 10.5px; padding: 3px 5px 3px 9px; max-width: 150px; }
+    .member-chip-add, .exclude-chip-add { padding: 3px 10px; }
+    .exclude-genre-select-inline { font-size: 10.5px; padding: 3px 6px; }
+    .include-mode-row { gap: 7px; }
+    .mode-toggle { width: 96px; height: 21px; }
+    .mode-toggle-thumb { height: 15px; }
+    .mode-toggle-btn { font-size: 9px; }
+    .dim-mode-tag { font-size: 8.5px; padding: 1px 5px; }
+    .preview-row { margin-top: 9px; padding-top: 9px; }
+    .preview-item { flex: 0 0 60px; width: 60px; }
+    .preview-item img, .preview-poster-placeholder { width: 60px; height: 90px; }
+    .preview-item-title { font-size: 9.5px; }
+    /* No hover on touch - keep TMDB links always visible */
+    .preview-item-link { opacity: 1; width: 17px; height: 17px; top: 4px; right: 4px; }
+    .preview-list-link { opacity: 1; width: 17px; height: 17px; }
+    .inline-add-search button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
   }
   @media (max-width: 380px) {
     .right-col { gap: 6px; }
@@ -1142,7 +1202,7 @@ function renderTmdb() {
         '<div class="info">' +
           nameEditBlock(i, l) +
           '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
-          '<div class="count-line">' + (countLine || 'Tap the eye icon to preview') + '</div>' +
+          '<div class="count-line">' + countLine + '</div>' +
         '</div>' +
         '<span class="card-actions">' +
           '<button class="btn-icon' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
@@ -1168,7 +1228,8 @@ function renderTmdb() {
         : '') +
       '<div class="include-mode-row">' +
         '<span class="members-label">Combine includes</span>' +
-        '<div class="mode-toggle" role="group" aria-label="Combine include filters">' +
+        '<div class="mode-toggle" data-mode="' + summary + '" role="group" aria-label="Combine include filters">' +
+          '<div class="mode-toggle-thumb" aria-hidden="true"></div>' +
           '<button type="button" class="mode-toggle-btn' + (summary === 'and' ? ' active' : '') + '" onclick="setTmdbAllModes(' + i + ', \\\'and\\\')" title="Set every dimension to AND - a movie must match ALL of them at once">AND</button>' +
           '<button type="button" class="mode-toggle-btn mode-toggle-mixed" disabled title="Mix - dimensions are not all set the same way; see each dimension tag">Mix</button>' +
           '<button type="button" class="mode-toggle-btn' + (summary === 'or' ? ' active' : '') + '" onclick="setTmdbAllModes(' + i + ', \\\'or\\\')" title="Set every dimension to OR - a movie matching ANY of them appears in the catalog">OR</button>' +
@@ -1397,7 +1458,7 @@ function tmdbDimSection(i, l, dim) {
     const chips = ids.map((id, idx) => {
       const shown = dim.isStatic ? tmdbStaticName(dim.kind, id, l.mediaType) : (names[idx] != null ? names[idx] : String(id));
       return '<span class="' + cls + '">' + escapeAttr(shown) +
-        '<a class="chip-x" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')">×</a></span>';
+        '<span class="chip-remove" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')" title="Remove">×</span></span>';
     }).join('');
     const addingHere = tmdbAdding && tmdbAdding.i === i && tmdbAdding.kind === dim.kind && tmdbAdding.side === field;
     let adder;
