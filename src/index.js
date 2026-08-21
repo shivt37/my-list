@@ -4,7 +4,7 @@
 // schedules are the workflows' own cron lines, edited on github.com.
 
 import { loadConfig } from "./config.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, configureResponse, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, configureResponse, CATALOG_RE } from "./routes.js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -69,6 +69,17 @@ export default {
 
     if (pathname === "/runs" && request.method === "POST") {
       return handleRunsPost(env, request);
+    }
+
+    // TMDB live helpers (Discover form search boxes + preview).
+    const tmdbSearchMatch = pathname.match(/^\/tmdb\/search-(keyword|company|collection)$/);
+    if (tmdbSearchMatch) {
+      const query = url.searchParams.get("query") || "";
+      return handleTmdbSearch(env, tmdbSearchMatch[1], query);
+    }
+
+    if (pathname === "/tmdb/preview-discover" && request.method === "POST") {
+      return handleTmdbPreviewDiscover(env, request);
     }
 
     return json({ error: "Not found" }, 404);

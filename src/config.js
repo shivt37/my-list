@@ -10,6 +10,7 @@ const CONFIG_KEY = "config";
 const RUNS_SCRAPER_KEY = "runs:scraper";
 const RUNS_OFFICIAL_KEY = "runs:official";
 const RUNS_SIMKL_KEY = "runs:simkl";
+const RUNS_TMDB_KEY = "runs:tmdb";
 const RUNS_MAX = 30;
 const HEALED_KEY = "healed";
 const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -17,11 +18,24 @@ const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
 export function runsKeyFor(catalogId) {
   if (catalogId.startsWith("mdboff_")) return RUNS_OFFICIAL_KEY;
   if (catalogId.startsWith("simkl_")) return RUNS_SIMKL_KEY;
+  if (catalogId.startsWith("tmdb_")) return RUNS_TMDB_KEY;
   return RUNS_SCRAPER_KEY;
 }
 
 export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
 export const SIMKL_RUNS_KEY = RUNS_SIMKL_KEY;
+export const TMDB_RUNS_KEY = RUNS_TMDB_KEY;
+
+// TMDB Discover list ids: tmdb_discover_<movie|series>_<8 base36 chars>.
+// One list = one catalog (no 'all' expansion - the operator picks the
+// media type at creation).
+export function randomTmdbListId(mediaType) {
+  let out = "";
+  for (let i = 0; i < 8; i++) {
+    out += RANDOM_ID_CHARS[Math.floor(Math.random() * RANDOM_ID_CHARS.length)];
+  }
+  return `tmdb_discover_${mediaType === "series" ? "series" : "movie"}_${out}`;
+}
 
 // Seeded IDs are derived from the listing URL (first 8 hex of sha256),
 // so the ID the config shows is the ID the scraper writes under - even
@@ -37,7 +51,7 @@ export function randomScraperId(seedUrl) {
 }
 
 export function emptyConfig() {
-  return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] } };
+  return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
 }
 
 // The two fixed SIMKL Arriving Today lists. Slugs are permanent - they
@@ -237,7 +251,48 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw) } };
+  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw) }, tmdb: { lists: migrateTmdb(raw) } };
+}
+
+// TMDB Discover list entry. Ids are pinned at creation (client + server
+// both generate tmdb_discover_<type>_<8 base36>); unknown-shaped entries
+// are dropped rather than healed - a bad id can't reach data/ paths.
+const TMDB_SORTS = ["release_asc", "release_desc", "popularity_desc", "vote_desc", "title_asc"];
+const numArr = (v) => (Array.isArray(v) ? v.filter((n) => Number.isFinite(n)) : []);
+
+export function normalizeTmdbList(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const mediaType = raw.mediaType === "series" ? "series" : "movie";
+  if (typeof raw.discoverListId !== "string" || !/^[a-z0-9]{8}$/.test(raw.discoverListId)) return null;
+  const modesRaw = raw.includeModes && typeof raw.includeModes === "object" ? raw.includeModes : {};
+  const mode = (v) => (v === "or" ? "or" : "and");
+  return {
+    discoverListId: raw.discoverListId,
+    name: String(raw.name || "").trim().slice(0, 200) || "Untitled",
+    mediaType,
+    sort: TMDB_SORTS.includes(raw.sort) ? raw.sort : "release_asc",
+    enabled: raw.enabled !== false,
+    includeModes: {
+      genre: mode(modesRaw.genre),
+      keyword: mode(modesRaw.keyword),
+      company: mode(modesRaw.company),
+      collection: mode(modesRaw.collection),
+    },
+    includeGenres: numArr(raw.includeGenres),
+    excludeGenres: numArr(raw.excludeGenres),
+    includeKeywords: numArr(raw.includeKeywords),
+    excludeKeywords: numArr(raw.excludeKeywords),
+    includeCompanies: numArr(raw.includeCompanies),
+    excludeCompanies: numArr(raw.excludeCompanies),
+    includeReleaseTypes: numArr(raw.includeReleaseTypes),
+    includeCollections: numArr(raw.includeCollections),
+    excludeCollections: numArr(raw.excludeCollections),
+  };
+}
+
+export function migrateTmdb(raw) {
+  const rawLists = Array.isArray(raw?.tmdb?.lists) ? raw.tmdb.lists : [];
+  return rawLists.map(normalizeTmdbList).filter(Boolean);
 }
 
 // Fields that affect the scraped data file: url, maxPages, enabled, type.
@@ -246,6 +301,35 @@ export function migrateConfig(raw) {
 export function listContentHash(list) {
   return createHash("sha256")
     .update([list.url, list.maxPages, list.enabled ? 1 : 0, list.type].join(" "))
+    .digest("hex")
+    .slice(0, 16);
+}
+
+// Fields that change what the TMDB generator fetches: everything except
+// name. Name only affects the manifest - renaming must not regenerate.
+// Mirrors computeSourceHash in scripts/tmdb.mjs (same field set).
+export function tmdbContentHash(list) {
+  const m = list.includeModes || {};
+  return createHash("sha256")
+    .update(
+      JSON.stringify([
+        list.mediaType,
+        list.sort,
+        m.genre === "or" ? "or" : "and",
+        m.keyword === "or" ? "or" : "and",
+        m.company === "or" ? "or" : "and",
+        m.collection === "or" ? "or" : "and",
+        [...(list.includeGenres || [])].sort(),
+        [...(list.excludeGenres || [])].sort(),
+        [...(list.includeKeywords || [])].sort(),
+        [...(list.excludeKeywords || [])].sort(),
+        [...(list.includeCompanies || [])].sort(),
+        [...(list.excludeCompanies || [])].sort(),
+        [...(list.includeReleaseTypes || [])].sort(),
+        [...(list.includeCollections || [])].sort(),
+        [...(list.excludeCollections || [])].sort(),
+      ])
+    )
     .digest("hex")
     .slice(0, 16);
 }
@@ -299,6 +383,14 @@ export async function loadConfig(kv) {
     } else {
       cfg.simkl.lists = simklDefaults();
     }
+  }
+
+  // Normalize the tmdb section: unknown-shaped entries dropped, known
+  // fields coerced. Empty is legal (tmdb module unused).
+  if (Array.isArray(cfg.tmdb?.lists)) {
+    cfg.tmdb.lists = cfg.tmdb.lists.map(normalizeTmdbList).filter(Boolean);
+  } else {
+    cfg.tmdb = { lists: [] };
   }
 
   // One-shot healing: if any persisted list matches a seed entry by URL

@@ -1,0 +1,90 @@
+name: Generate TMDB Discover lists
+
+on:
+  schedule:
+    # Every 12 hours (UTC), matching the other modules. Full regenerate -
+    # fill-mode skip logic lives in tmdb.mjs via sourceHash comparison.
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+    inputs:
+      ids:
+        description: "Catalog ids to generate (comma-separated, blank = all enabled)"
+        required: false
+        default: ""
+      action:
+        description: "generate | delete"
+        required: false
+        default: "generate"
+        type: choice
+        options:
+          - generate
+          - delete
+      delete_ids:
+        description: "Catalog ids to delete when action=delete (comma-separated)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  tmdb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      # Shared with scrape.yml/official.yml/simkl.yml - all write data/ and
+      # POST run records, so they serialize.
+      group: my-list-scrape
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sanitize workflow inputs
+        id: sanitize
+        run: |
+          # Whitelist to [a-z0-9,_-]; --ids only ever carries
+          # tmdb_discover_<movie|series>_<8 alnum> plus commas.
+          SANITIZED_IDS=$(printf '%s' "${{ github.event.inputs.ids }}" | tr -cd 'a-z0-9,_-')
+          SANITIZED_DELETE=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-z0-9,_-')
+          SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-z_')
+          echo "ids=$SANITIZED_IDS" >> "$GITHUB_OUTPUT"
+          echo "delete_ids=$SANITIZED_DELETE" >> "$GITHUB_OUTPUT"
+          echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
+
+      - name: Generate TMDB discover lists
+        working-directory: scripts
+        env:
+          TMDB_READ_ACCESS_TOKEN: ${{ secrets.TMDB_READ_ACCESS_TOKEN }}
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
+          INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
+          INPUT_DELETE_IDS: ${{ steps.sanitize.outputs.delete_ids }}
+        run: |
+          ARGS=()
+          [ -n "${INPUT_ACTION}" ] && ARGS+=("--action=${INPUT_ACTION}")
+          if [ "${INPUT_ACTION}" = "delete" ]; then
+            [ -n "${INPUT_DELETE_IDS}" ] && ARGS+=("--delete_ids=${INPUT_DELETE_IDS}")
+          else
+            [ -n "${INPUT_IDS}" ] && ARGS+=("--ids=${INPUT_IDS}")
+          fi
+          node tmdb.mjs "${ARGS[@]}"
+
+      - name: Commit data changes
+        if: always()
+        run: |
+          git config user.name "my-list-bot"
+          git config user.email "my-list-bot@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes - skipping commit."
+          else
+            git commit -m "chore(data): refresh TMDB discover lists [skip ci]"
+            # Rebase onto whatever landed (worker deploy commits, manual
+            # pushes) - a bare push races and loses this run's data.
+            git pull --rebase
+            git push
+          fi

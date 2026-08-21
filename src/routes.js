@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, listContentHash, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY } from "./config.js";
+import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, randomTmdbListId, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
 
@@ -14,6 +14,7 @@ export const ADDON_DESCRIPTION = "Community-built catalogs: MDBList scraper list
 // Official module's workflow file - separate cron from the scraper's.
 export const OFFICIAL_WORKFLOW = "official.yml";
 export const SIMKL_WORKFLOW = "simkl.yml";
+export const TMDB_WORKFLOW = "tmdb.yml";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -83,6 +84,15 @@ export async function buildManifest(env) {
   const simklCatalogs = SIMKL_CATALOGS
     .filter((c) => enabledSimkl.has(c.slug))
     .map((c) => ({ name: simklBySlug.get(c.slug) || c.name, id: c.id, type: c.type, extra: [] }));
+  // TMDB discover lists: one list = one catalog (mediaType baked into the id).
+  const tmdbCatalogs = cfg.tmdb.lists
+    .filter((l) => l.enabled)
+    .map((l) => ({
+      name: l.name,
+      id: `tmdb_discover_${l.mediaType}_${l.discoverListId}`,
+      type: l.mediaType,
+      extra: [{ name: "skip", isRequired: false }],
+    }));
   const catalogs = [
     ...enabled.map((l) => ({
       name: l.name,
@@ -92,6 +102,7 @@ export async function buildManifest(env) {
     })),
     ...officialCatalogs,
     ...simklCatalogs,
+    ...tmdbCatalogs,
   ];
   return {
     id: ADDON_ID,
@@ -142,17 +153,31 @@ function rowToMetaSimkl(row) {
   };
 }
 
+// TMDB discover data files store raw TMDB result objects (parts shape from
+// the old tmdb worker, plus series title/release_date aliases). Stremio
+// metas use tmdb:<id> ids.
+function rowToMetaTmdb(row, type) {
+  return {
+    id: `tmdb:${row.id}`,
+    type: type === "series" ? "series" : "movie",
+    name: row.title || row.name,
+    poster: row.poster_path ? `https://image.tmdb.org/t/p/w500${row.poster_path}` : undefined,
+    releaseInfo: row.release_date ? String(row.release_date).slice(0, 4) : undefined,
+  };
+}
+
 export async function handleCatalog(env, catalogType, catalogId, skip) {
   const cfg = await loadConfig(env.STORE);
   const official = OFFICIAL_CATALOGS.find((c) => c.id === catalogId);
   const simkl = SIMKL_CATALOGS.find((c) => c.id === catalogId);
   const list = cfg.scraper.lists.find((l) => l.id === catalogId);
-  const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : rowToMeta;
+  const tmdbList = cfg.tmdb.lists.find((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}` === catalogId);
+  const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : tmdbList ? rowToMetaTmdb : rowToMeta;
 
   // Unknown id / an id whose module is disabled → empty, but still 200.
   // (The manifest controls what Stremio can reach; a stale request after a
   // disable must not 404 the whole chain.)
-  if (!official && !simkl && !list) return json({ metas: [] });
+  if (!official && !simkl && !list && !tmdbList) return json({ metas: [] });
 
   let data;
   try {
@@ -172,12 +197,15 @@ export async function handleStatus(env, request) {
   const page = request && new URL(request.url).searchParams.get("page");
   const official = page === "official";
   const simkl = page === "simkl";
+  const tmdb = page === "tmdb";
   const cfg = await loadConfig(env.STORE);
   const runs = official
     ? await getRuns(env.STORE, "runs:official")
     : simkl
       ? await getRuns(env.STORE, SIMKL_RUNS_KEY)
-      : await getRuns(env.STORE, "runs:scraper");
+      : tmdb
+        ? await getRuns(env.STORE, TMDB_RUNS_KEY)
+        : await getRuns(env.STORE, "runs:scraper");
   const listById = new Map(cfg.scraper.lists.map((l) => [l.id, l.name]));
   // Official/simkl runs are keyed by catalog id (mdboff_<slug>_<movie|show>),
   // but the operator-renamed name lives on the config list - resolve the
@@ -187,11 +215,12 @@ export async function handleStatus(env, request) {
   const cfgSimNames = new Map(cfg.simkl.lists.map((l) => [l.slug, l.name]));
   const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, cfgoffNames.get(c.slug) || c.name]));
   const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, cfgSimNames.get(c.slug) || c.name]));
-  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? r.catalog_id;
+  const tmdbByName = new Map(cfg.tmdb.lists.map((l) => [`tmdb_discover_${l.mediaType}_${l.discoverListId}`, l.name]));
+  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? tmdbByName.get(r.catalog_id) ?? r.catalog_id;
   const out = runs.slice(0, 30).map((r) => ({
     catalog_name: nameFor(r),
     catalog_id: r.catalog_id,
-    ...(official || simkl ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
+    ...(official || simkl || tmdb ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
     triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
     movies_found: r.movies_found,
     status: r.status,
@@ -208,8 +237,9 @@ export async function handleSaveConfig(env, request) {
     const body = await request.json();
     if (!body || !body.scraper || !Array.isArray(body.scraper.lists) ||
         !body.official || !Array.isArray(body.official.lists) ||
-        !body.simkl || !Array.isArray(body.simkl.lists)) {
-      return json({ error: "Invalid config body - expected { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] } }" }, 400);
+        !body.simkl || !Array.isArray(body.simkl.lists) ||
+        !body.tmdb || !Array.isArray(body.tmdb.lists)) {
+      return json({ error: "Invalid config body - expected { scraper, official, simkl, tmdb: { lists: [] } }" }, 400);
     }
     // Note: read-modify-write has no lock - concurrent saves can clobber
     // each other. Accepted for a single-operator admin page.
@@ -248,6 +278,20 @@ export async function handleSaveConfig(env, request) {
       return prev.enabled !== l.enabled || JSON.stringify(prev.filter) !== JSON.stringify(l.filter);
     });
     const simklDispatchKinds = simklChanged.filter((l) => l.enabled).map((l) => l.slug);
+    // TMDB diff: content-hash compare (name-only edits don't regenerate).
+    // Added/changed enabled lists dispatch generate with their catalog ids;
+    // removed lists dispatch delete.
+    const prevTmdbById = new Map(current.tmdb.lists.map((l) => [l.discoverListId, l]));
+    const tmdbAddedOrChanged = incoming.tmdb.lists.filter((l) => {
+      const prev = prevTmdbById.get(l.discoverListId);
+      if (!prev) return true;
+      return tmdbContentHash(l) !== tmdbContentHash(prev);
+    });
+    const nextTmdbIds = new Set(incoming.tmdb.lists.map((l) => l.discoverListId));
+    const tmdbRemoved = current.tmdb.lists.filter((l) => !nextTmdbIds.has(l.discoverListId));
+    const tmdbGenerateIds = tmdbAddedOrChanged.filter((l) => l.enabled)
+      .map((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}`);
+    const tmdbDeleteIds = tmdbRemoved.map((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}`);
     const dispatch = [];
     for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
     const deleteIds = removed.map((l) => l.id);
@@ -284,6 +328,20 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
+    if (tmdbGenerateIds.length > 0 || tmdbDeleteIds.length > 0) {
+      // One dispatch carries both: a save that deletes one list and edits
+      // another must regenerate AND delete in the same run.
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
+        inputs: {
+          ...(tmdbGenerateIds.length > 0 && { ids: tmdbGenerateIds.join(",") }),
+          ...(tmdbDeleteIds.length > 0 && { delete_ids: tmdbDeleteIds.join(",") }),
+        },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub tmdb dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
 
     // Both dispatches accepted - now persist. (Worker fires 204 on GH's
     // accept; the workflow may still fail 5min later, but by then the
@@ -299,6 +357,8 @@ export async function handleSaveConfig(env, request) {
       dispatch: dispatch.map((l) => ({ id: l.id, name: l.name })),
       officialChanged,
       simklChanged: simklChanged.map((l) => l.name),
+      tmdbChanged: tmdbAddedOrChanged.filter((l) => l.enabled).map((l) => l.name),
+      tmdbRemoved: tmdbRemoved.map((l) => l.name),
       github: dispatchResult,
     });
   } catch (e) {
@@ -324,7 +384,7 @@ export async function handleTriggerRefresh(env, request) {
       if (text) {
         const parsed = JSON.parse(text);
         singleId = parsed.id ?? null;
-        page = parsed.page === "official" || parsed.page === "simkl" ? parsed.page : null;
+        page = parsed.page === "official" || parsed.page === "simkl" || parsed.page === "tmdb" ? parsed.page : null;
       }
     } catch {
       singleId = null;
@@ -371,6 +431,28 @@ export async function handleTriggerRefresh(env, request) {
       return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
     }
     return json({ ok: true, lists: kinds, workflow: SIMKL_WORKFLOW });
+  }
+
+  // TMDB page-scoped refresh: one id refresh → one discover list; no id →
+  // all enabled tmdb lists.
+  if (page === "tmdb") {
+    const enabledQ = cfg.tmdb.lists.filter((l) => l.enabled);
+    let ids;
+    if (singleId) {
+      const list = enabledQ.find((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}` === singleId);
+      if (!list) return json({ error: "Unknown or disabled TMDB list." }, 404);
+      ids = [singleId];
+    } else {
+      ids = enabledQ.map((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}`);
+    }
+    const result = await dispatchScraperWorkflow(env, {
+      workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
+      inputs: { ids: ids.join(",") },
+    });
+    if (!result.dispatched) {
+      return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
+    }
+    return json({ ok: true, lists: ids, workflow: TMDB_WORKFLOW });
   }
 
   // Scraper page default (no body / no page): all enabled scraper lists.
@@ -425,5 +507,159 @@ export async function handleRunsPost(env, request) {
     return json({ ok: true });
   } catch (e) {
     return json({ error: "Failed to record runs." }, 500);
+  }
+}
+
+// ── TMDB live helpers (Discover form) ────────────────────────────────────
+// Thin proxies to api.themoviedb.org for the configure page's search
+// boxes + preview. Always hit TMDB directly regardless of any list's
+// saved state. Fail fast with a clear message when the token isn't set.
+
+function tmdbTokenOrError(env) {
+  if (!env.TMDB_READ_ACCESS_TOKEN) {
+    return json({ error: "TMDB_READ_ACCESS_TOKEN not configured - set it as a Cloudflare worker secret." }, 500);
+  }
+  return null;
+}
+
+async function tmdbApi(env, pathAndQuery) {
+  const res = await fetch(`https://api.themoviedb.org/3${pathAndQuery}`, {
+    headers: { Authorization: `Bearer ${env.TMDB_READ_ACCESS_TOKEN}`, Accept: "application/json" },
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    return json({ error: `TMDB ${res.status}: ${body.slice(0, 200)}` }, 502);
+  }
+  return res.json();
+}
+
+const TMDB_SEARCH_MAX = 12;
+
+export async function handleTmdbSearch(env, kind, query) {
+  const guard = tmdbTokenOrError(env);
+  if (guard) return guard;
+  const q = String(query || "").trim();
+  if (!q) return json({ results: [] });
+  const paths = {
+    keyword: `/search/keyword?query=${encodeURIComponent(q)}`,
+    company: `/search/company?query=${encodeURIComponent(q)}`,
+    collection: `/search/collection?query=${encodeURIComponent(q)}`,
+  };
+  const path = paths[kind];
+  if (!path) return json({ error: "Unknown search kind." }, 400);
+  const data = await tmdbApi(env, path);
+  if (data.error) return json(data, 502);
+  const results = (data.results || []).slice(0, TMDB_SEARCH_MAX).map((r) => ({
+    id: r.id,
+    name: r.name || r.title,
+  }));
+  return json({ results });
+}
+
+// Port of the old tmdb worker's buildDiscoverSources/fetch logic, live
+// variant: same AND/OR fragment plan, collection post-filter, capped at
+// 5 pages × 20 for preview purposes. Body is a discover list entry
+// (normalizeTmdbList shape) + optional previewMediaType override.
+const PREVIEW_PAGES = 5;
+
+export async function handleTmdbPreviewDiscover(env, request) {
+  const guard = tmdbTokenOrError(env);
+  if (guard) return guard;
+  try {
+    const body = await request.json();
+    const entry = normalizeTmdbList(body || {});
+    if (!entry) return json({ error: "Invalid discover list body" }, 400);
+    const mediaType = body.previewMediaType === "series" && entry.mediaType !== "series"
+      ? "series"
+      : entry.mediaType;
+    const endpoint = mediaType === "series" ? "/discover/tv" : "/discover/movie";
+    const sortMap = mediaType === "series"
+      ? { release_desc: "first_air_date.desc", release_asc: "first_air_date.asc", popularity_desc: "popularity.desc", vote_desc: "vote_average.desc", title_asc: "popularity.desc" }
+      : { release_desc: "primary_release_date.desc", release_asc: "primary_release_date.asc", popularity_desc: "popularity.desc", vote_desc: "vote_average.desc", title_asc: "original_title.asc" };
+    const sortBy = sortMap[entry.sort] || sortMap.release_asc;
+
+    let excludeQs = "";
+    if (entry.excludeGenres.length > 0) excludeQs += `&without_genres=${encodeURIComponent(entry.excludeGenres.join("|"))}`;
+    if (entry.excludeKeywords.length > 0) excludeQs += `&without_keywords=${encodeURIComponent(entry.excludeKeywords.join("|"))}`;
+    if (entry.excludeCompanies.length > 0) excludeQs += `&without_companies=${encodeURIComponent(entry.excludeCompanies.join("|"))}`;
+
+    // Same source plan as scripts/tmdb.mjs buildDiscoverSources.
+    const m = entry.includeModes;
+    const isAnd = (d) => m[d] !== "or";
+    const releaseTypeQs =
+      mediaType !== "series" && entry.includeReleaseTypes.length > 0
+        ? `&with_release_type=${encodeURIComponent([...new Set(entry.includeReleaseTypes)].join("|"))}&region=US`
+        : "";
+    let andQs = "";
+    if (isAnd("genre") && entry.includeGenres.length > 0) andQs += `&with_genres=${encodeURIComponent(entry.includeGenres.join("|"))}`;
+    if (isAnd("keyword") && entry.includeKeywords.length > 0) andQs += `&with_keywords=${encodeURIComponent(entry.includeKeywords.join("|"))}`;
+    if (isAnd("company") && entry.includeCompanies.length > 0) andQs += `&with_companies=${encodeURIComponent(entry.includeCompanies.join("|"))}`;
+    andQs += releaseTypeQs;
+
+    const sources = [];
+    if (!isAnd("genre") && entry.includeGenres.length > 0) sources.push(`&with_genres=${encodeURIComponent(entry.includeGenres.join("|"))}${andQs}`);
+    if (!isAnd("keyword") && entry.includeKeywords.length > 0) sources.push(`&with_keywords=${encodeURIComponent(entry.includeKeywords.join("|"))}${andQs}`);
+    if (!isAnd("company") && entry.includeCompanies.length > 0) sources.push(`&with_companies=${encodeURIComponent(entry.includeCompanies.join("|"))}${andQs}`);
+    const collectionSource = mediaType !== "series" && !isAnd("collection") && entry.includeCollections.length > 0;
+    const hasDiscover = sources.length > 0;
+    if (andQs && collectionSource && !hasDiscover) sources.push(andQs);
+
+    const dedup = new Map();
+    const collectionIdSet = new Set();
+    if (collectionSource) {
+      const results = await Promise.allSettled(
+        [...new Set(entry.includeCollections)].map((id) => tmdbApi(env, `/collection/${id}`))
+      );
+      for (const r of results) {
+        if (r.status !== "fulfilled" || r.value.error) continue;
+        for (const p of r.value.parts || []) collectionIdSet.add(p.id);
+      }
+      for (const id of collectionIdSet) dedup.set(id, { id });
+    }
+    let page = 1;
+    let totalPages = 1;
+    do {
+      const queries = sources.length > 0 ? sources : [andQs];
+      const round = await Promise.all(
+        queries.map((qs) =>
+          tmdbApi(env, `${endpoint}?${qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`)
+        )
+      );
+      let maxTotal = page;
+      for (const data of round) {
+        if (data.error) return json(data, 502);
+        maxTotal = Math.max(maxTotal, Number.isFinite(data.total_pages) ? data.total_pages : page);
+        for (const item of data.results || []) if (!dedup.has(item.id)) dedup.set(item.id, item);
+      }
+      totalPages = maxTotal;
+      page++;
+    } while (page <= totalPages && page <= PREVIEW_PAGES);
+
+    let items = [...dedup.values()];
+    if (entry.excludeCollections.length > 0) {
+      const exResults = await Promise.allSettled(
+        [...new Set(entry.excludeCollections)].map((id) => tmdbApi(env, `/collection/${id}`))
+      );
+      const exSet = new Set();
+      for (const r of exResults) {
+        if (r.status !== "fulfilled" || r.value.error) continue;
+        for (const p of r.value.parts || []) exSet.add(p.id);
+      }
+      if (exSet.size > 0) items = items.filter((p) => !exSet.has(p.id));
+    }
+    if (mediaType !== "series" && isAnd("collection") && entry.includeCollections.length > 0 && collectionIdSet.size > 0) {
+      items = items.filter((p) => collectionIdSet.has(p.id));
+    }
+
+    const truncated = totalPages > PREVIEW_PAGES;
+    const metas = items.slice(0, 100).map((item) => ({
+      id: item.id,
+      name: item.title || item.name,
+      year: (item.release_date || item.first_air_date || "").slice(0, 4),
+      poster: item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : undefined,
+    }));
+    return json({ items: metas, truncated });
+  } catch (e) {
+    return json({ error: "Invalid request body: " + e.message }, 400);
   }
 }

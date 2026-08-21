@@ -271,6 +271,41 @@ export function buildConfigurePage(origin, config) {
     .tier-row .danger { padding: 6px 8px; }
   }
 
+  /* ── TMDB DISCOVER TAB ── */
+  .tmdb-dim { border-top: 1px solid var(--border); padding: 10px 0 2px; margin-top: 6px; }
+  .tmdb-dim:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+  .tmdb-dim-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dim-mode-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer;
+    border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px;
+    color: var(--accent); background: var(--accent-soft); user-select: none;
+  }
+  .tmdb-static-opts { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .tmdb-opt { font-size: 11.5px; color: var(--fg); display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+  .tmdb-opt input { accent-color: var(--accent); }
+  .tmdb-add-btn { padding: 4px 10px; font-size: 11px; }
+  .tmdb-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+  .tmdb-chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px;
+    font-family: ui-monospace, monospace; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px;
+  }
+  .chip-x { cursor: pointer; color: var(--danger); font-weight: 700; text-decoration: none; padding: 0 2px; }
+  .tmdb-preview { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+  .tmdb-preview-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--dim); margin-bottom: 8px; }
+  .tmdb-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+  .tmdb-preview-item { display: flex; flex-direction: column; gap: 3px; font-size: 10.5px; color: var(--dim); }
+  .tmdb-preview-item img, .tmdb-noimg { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px; background: var(--surface); }
+  .tmdb-pv-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fg); }
+  .tmdb-search-modal { width: min(480px, 92vw); }
+  .tmdb-search-results { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+  .tmdb-search-result {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    font-size: 12.5px; padding: 7px 10px; border-radius: 7px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .tmdb-search-result:hover { border-color: var(--accent); }
+
   /* ── ACCENT POPUP ── */
   .accent-popup-wrap { position: relative; }
   .accent-popup {
@@ -412,9 +447,9 @@ export function buildConfigurePage(origin, config) {
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>
           Simkl List
         </div>
-        <div class="menu-item disabled" onclick="soon()">
+        <div class="menu-item" data-module="tmdb" onclick="activateModule('tmdb')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
-          TMDB List<span class="menu-soon">soon</span>
+          TMDB List
         </div>
       </div>
     </div>
@@ -455,6 +490,17 @@ export function buildConfigurePage(origin, config) {
     <div class="confirm-actions">
       <button class="secondary" onclick="closeRefreshOneConfirm()">Cancel</button>
       <button id="confirmRefreshOneBtn">Refresh list</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-backdrop" id="tmdbSearchBackdrop">
+  <div class="confirm-modal tmdb-search-modal">
+    <div class="confirm-title">Search TMDB</div>
+    <input class="url-input" id="tmdbSearchInput" placeholder="Type to search…" spellcheck="false" oninput="runTmdbSearch()">
+    <div id="tmdbSearchResults" class="tmdb-search-results"></div>
+    <div class="confirm-actions">
+      <button class="secondary" onclick="closeTmdbSearch()">Close</button>
     </div>
   </div>
 </div>
@@ -535,12 +581,13 @@ let activeModule = 'scraper';
 const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
-  if (m !== 'scraper' && m !== 'official' && m !== 'simkl') { soon(); return; }
+  if (m !== 'scraper' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { soon(); return; }
   activeModule = m;
   try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));
   if (m === 'scraper') renderScraper();
   else if (m === 'official') renderOfficial();
+  else if (m === 'tmdb') renderTmdb();
   else renderSimkl();
 }
 document.addEventListener('click', (e) => {
@@ -641,6 +688,7 @@ function toggleList(i) {
 function moduleLists() {
   return activeModule === 'simkl' ? state.simkl.lists
     : activeModule === 'official' ? state.official.lists
+    : activeModule === 'tmdb' ? state.tmdb.lists
     : state.scraper.lists;
 }
 function nameEditBlock(i, l) {
@@ -668,7 +716,7 @@ function saveName(i) {
   rerenderActive();
 }
 function cancelName(i) { listNameEditIndex = -1; rerenderActive(); }
-function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else if (activeModule === 'official') renderOfficial(); else renderScraper(); }
+function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else if (activeModule === 'official') renderOfficial(); else if (activeModule === 'tmdb') renderTmdb(); else renderScraper(); }
 
 // Clicking anywhere outside the open rename input commits it. Native blur
 // only fires when focus moves to another focusable element, so a click on
@@ -723,20 +771,22 @@ async function confirmCreateList() {
 }
 
 function askDelete(i) {
-  const l = state.scraper.lists[i];
+  const l = activeModule === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
   if (!l) return;
   pendingDeleteIndex = i;
-  document.getElementById('deleteConfirmBody').textContent =
-    '"' + l.name + '" will be removed from the config and its data file deleted from GitHub. Existing files on disk for disabled lists stay until deleted here.';
+  document.getElementById('deleteConfirmBody').textContent = activeModule === 'tmdb'
+    ? '"' + l.name + '" will be removed from the config and its data file deleted from GitHub.'
+    : '"' + l.name + '" will be removed from the config and its data file deleted from GitHub. Existing files on disk for disabled lists stay until deleted here.';
   document.getElementById('deleteConfirmBackdrop').classList.add('visible');
 }
 function closeDeleteConfirm() { document.getElementById('deleteConfirmBackdrop').classList.remove('visible'); pendingDeleteIndex = -1; }
 function confirmDelete() {
   if (pendingDeleteIndex < 0) return;
-  state.scraper.lists.splice(pendingDeleteIndex, 1);
+  if (activeModule === 'tmdb') state.tmdb.lists.splice(pendingDeleteIndex, 1);
+  else state.scraper.lists.splice(pendingDeleteIndex, 1);
   pendingDeleteIndex = -1;
   closeDeleteConfirm();
-  renderScraper();
+  rerenderActive();
 }
 
 // IDs are derived from the URL - must match the server's
@@ -895,6 +945,304 @@ function toggleRatingEnabled(i, checked) {
   state.simkl.lists[i].filter.rating_filter_enabled = checked;
 }
 
+// ─── TMDB Discover module tab ───
+// Ported from the old tmdb worker's Discover page: 5 filter dimensions
+// (genre static, keyword/company/collection via live TMDB search, release
+// type static movie-only), per-dimension AND/OR for genre/keyword/company/
+// collection, per-list sort, live preview. One list = one catalog
+// (tmdb_discover_<movie|series>_<8 chars>).
+const TMDB_GENRES = [
+  { id: 28, name: 'Action' }, { id: 12, name: 'Adventure' }, { id: 16, name: 'Animation' }, { id: 35, name: 'Comedy' },
+  { id: 80, name: 'Crime' }, { id: 99, name: 'Documentary' }, { id: 18, name: 'Drama' }, { id: 10751, name: 'Family' },
+  { id: 14, name: 'Fantasy' }, { id: 36, name: 'History' }, { id: 27, name: 'Horror' }, { id: 10402, name: 'Music' },
+  { id: 9648, name: 'Mystery' }, { id: 10749, name: 'Romance' }, { id: 878, name: 'Science Fiction' }, { id: 53, name: 'Thriller' },
+  { id: 10752, name: 'War' }, { id: 37, name: 'Western' },
+];
+const TMDB_RELEASE_TYPES = [
+  { id: 1, name: 'Premiere' }, { id: 2, name: 'Theatrical (limited)' }, { id: 3, name: 'Theatrical' },
+  { id: 4, name: 'Digital' }, { id: 5, name: 'Physical' }, { id: 6, name: 'TV' },
+];
+const TMDB_SORTS = [
+  { value: 'release_asc', label: 'Release date ↑' }, { value: 'release_desc', label: 'Release date ↓' },
+  { value: 'popularity_desc', label: 'Popularity ↓' }, { value: 'vote_desc', label: 'Rating ↓' },
+  { value: 'title_asc', label: 'Title A-Z' },
+];
+// kind -> config field names. Explicit table (no pluralization guessing) -
+// same lesson as the old worker's DISCOVER_FIELD_KEYS.
+const TMDB_FIELD_KEYS = {
+  genre:       { include: 'includeGenres', exclude: 'excludeGenres' },
+  keyword:     { include: 'includeKeywords', exclude: 'excludeKeywords' },
+  company:     { include: 'includeCompanies', exclude: 'excludeCompanies' },
+  releaseType: { include: 'includeReleaseTypes', exclude: null },
+  collection:  { include: 'includeCollections', exclude: 'excludeCollections' },
+};
+const TMDB_DIMS = [
+  { kind: 'genre', label: 'Genres', hasExclude: true, staticOpts: TMDB_GENRES, searchKind: null, movieOnly: false },
+  { kind: 'keyword', label: 'Keywords', hasExclude: true, staticOpts: null, searchKind: 'keyword', movieOnly: false },
+  { kind: 'company', label: 'Companies', hasExclude: true, staticOpts: null, searchKind: 'company', movieOnly: false },
+  { kind: 'releaseType', label: 'Release Type', hasExclude: false, staticOpts: TMDB_RELEASE_TYPES, searchKind: null, movieOnly: true },
+  { kind: 'collection', label: 'Part of Collection', hasExclude: true, staticOpts: null, searchKind: 'collection', movieOnly: true },
+];
+
+let tmdbCreateOpen = false;
+let tmdbSearchTimer = null;
+let tmdbPreviewIndex = -1;
+
+function tmdbEmptyList(mediaType) {
+  return {
+    discoverListId: '', name: '', mediaType: mediaType || 'movie', sort: 'release_asc', enabled: true,
+    includeModes: { genre: 'and', keyword: 'and', company: 'and', collection: 'and' },
+    includeGenres: [], excludeGenres: [], includeKeywords: [], excludeKeywords: [],
+    includeCompanies: [], excludeCompanies: [], includeReleaseTypes: [],
+    includeCollections: [], excludeCollections: [],
+  };
+}
+
+function renderTmdb() {
+  const host = document.getElementById('tabHost');
+  const lists = state.tmdb.lists;
+  const cards = lists.map((l, i) => {
+    const dims = TMDB_DIMS.map((dim) => tmdbDimSection(i, l, dim)).join('');
+    return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="tcard-' + i + '">' +
+      '<div class="card-top">' +
+        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleTmdb(' + i + ')"><span class="toggle-slider"></span></label></div>' +
+        '<div class="info">' +
+          nameEditBlock(i, l) +
+          '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card-controls">' +
+        '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
+          '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
+          '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
+        '</select>' +
+        '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)" title="Sort order">' +
+          TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
+        '</select>' +
+        '<span class="card-actions">' +
+          '<button class="secondary" onclick="askTmdbPreview(' + i + ')">Preview</button>' +
+          '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+          '</button>' +
+          '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
+        '</span>' +
+      '</div>' +
+      '<div class="simkl-filter">' + dims + '</div>' +
+      '<div class="tmdb-preview" id="tmdbPreview-' + i + '" style="display:none"></div>' +
+      '<div class="card-error" id="tcardError-' + i + '"></div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('headerTitle').textContent = 'TMDB List';
+  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+  const createRow =
+    '<div class="create-list-section">' +
+      '<button class="btn-create-list" id="tmdbCreateBtn" onclick="showTmdbCreate()">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+        'Add Discover List' +
+      '</button>' +
+      '<div class="create-list-row" id="tmdbCreateRow" style="display:none">' +
+        '<input class="name-input" id="tmdbCreateNameInput" placeholder="Name - e.g. 80s Horror" spellcheck="false">' +
+        '<select id="tmdbCreateTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+        '<button onclick="confirmCreateTmdb()">Add</button>' +
+        '<button class="secondary" onclick="hideTmdbCreate()">Cancel</button>' +
+      '</div>' +
+    '</div>';
+
+  host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No TMDB discover lists yet - add one above.</div>');
+}
+
+function showTmdbCreate() {
+  document.getElementById('tmdbCreateBtn').style.display = 'none';
+  document.getElementById('tmdbCreateRow').style.display = 'flex';
+  document.getElementById('tmdbCreateNameInput').focus();
+}
+function hideTmdbCreate() {
+  document.getElementById('tmdbCreateBtn').style.display = 'flex';
+  document.getElementById('tmdbCreateRow').style.display = 'none';
+}
+async function confirmCreateTmdb() {
+  const name = document.getElementById('tmdbCreateNameInput').value.trim();
+  if (!name) { setStatus('List needs a name.', 'error'); return; }
+  if (state.tmdb.lists.some((l) => l.name.toLowerCase() === name.toLowerCase())) {
+    setStatus('A list with that name already exists.', 'error');
+    return;
+  }
+  const mediaType = document.getElementById('tmdbCreateTypeSelect').value;
+  // Server generates the same shape on save if blank; generate here so the
+  // card shows a stable id immediately and re-saves keep it.
+  let id;
+  try {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(name + ':' + Date.now()));
+    const hex = Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    id = '';
+    for (let i = 0; i < 8; i++) id += chars[parseInt(hex[i], 16) % chars.length];
+  } catch (e) {
+    id = Math.random().toString(36).slice(2, 10).padEnd(8, '0');
+  }
+  const fresh = tmdbEmptyList(mediaType);
+  fresh.discoverListId = id;
+  fresh.name = name;
+  state.tmdb.lists.push(fresh);
+  hideTmdbCreate();
+  renderTmdb();
+  setStatus('List added. Configure filters below, then press Save to generate it.', 'ok');
+}
+
+function toggleTmdb(i) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  l.enabled = !l.enabled;
+  renderTmdb();
+}
+
+function updateTmdb(i, key, value) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  l[key] = value;
+  renderTmdb();
+}
+
+function setTmdbMode(i, kind, mode) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  l.includeModes[kind] = mode;
+  renderTmdb();
+}
+
+function toggleTmdbItem(i, kind, field, id, checked) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  const key = TMDB_FIELD_KEYS[kind][field];
+  const arr = l[key];
+  const idx = arr.indexOf(id);
+  if (checked && idx === -1) arr.push(id);
+  if (!checked && idx !== -1) arr.splice(idx, 1);
+}
+
+function addTmdbNamed(i, kind, field, id, name) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  const key = TMDB_FIELD_KEYS[kind][field];
+  if (!l[key].includes(id)) l[key].push(id);
+  closeTmdbSearch();
+  renderTmdb();
+}
+
+function removeTmdbId(i, kind, field, id) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  const key = TMDB_FIELD_KEYS[kind][field];
+  const idx = l[key].indexOf(id);
+  if (idx !== -1) l[key].splice(idx, 1);
+  renderTmdb();
+}
+
+let tmdbSearchTarget = null; // { i, kind, field }
+function openTmdbSearch(i, kind, field) {
+  tmdbSearchTarget = { i, kind, field };
+  const backdrop = document.getElementById('tmdbSearchBackdrop');
+  document.getElementById('tmdbSearchInput').value = '';
+  document.getElementById('tmdbSearchResults').innerHTML = '<div class="empty">Type to search…</div>';
+  backdrop.classList.add('visible');
+  document.getElementById('tmdbSearchInput').focus();
+}
+function closeTmdbSearch() {
+  document.getElementById('tmdbSearchBackdrop').classList.remove('visible');
+  tmdbSearchTarget = null;
+}
+async function runTmdbSearch() {
+  if (!tmdbSearchTarget) return;
+  const q = document.getElementById('tmdbSearchInput').value.trim();
+  const box = document.getElementById('tmdbSearchResults');
+  if (tmdbSearchTimer) clearTimeout(tmdbSearchTimer);
+  if (!q) { box.innerHTML = '<div class="empty">Type to search…</div>'; return; }
+  tmdbSearchTimer = setTimeout(async () => {
+    try {
+      const res = await fetch(ORIGIN + '/tmdb/search-' + tmdbSearchTarget.kind + '?query=' + encodeURIComponent(q));
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      box.innerHTML = data.results.length === 0
+        ? '<div class="empty">No results.</div>'
+        : data.results.map((r) =>
+            '<div class="tmdb-search-result" onclick="addTmdbNamed(' + tmdbSearchTarget.i + ',\\\'' + tmdbSearchTarget.kind + '\\\',\\\'' + tmdbSearchTarget.field + '\\\',' + r.id + ',\\\'' + escapeAttr(r.name) + '\\\')">' +
+              '<span>' + escapeAttr(r.name) + '</span><span class="id-chip">' + r.id + '</span></div>').join('');
+    } catch (e) {
+      box.innerHTML = '<div class="empty">Search failed: ' + escapeAttr(e.message) + '</div>';
+    }
+  }, 350);
+}
+
+function tmdbDimSection(i, l, dim) {
+  if (dim.movieOnly && l.mediaType === 'series') return '';
+  const keys = TMDB_FIELD_KEYS[dim.kind];
+  const hasMode = dim.kind !== 'releaseType';
+  const mode = l.includeModes[dim.kind] || 'and';
+  const chip = (id, field) =>
+    '<span class="tmdb-chip">' + id +
+      '<a class="chip-x" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')">×</a></span>';
+  const section = (field, label) => {
+    const ids = l[keys[field]] || [];
+    let picker;
+    if (dim.staticOpts) {
+      picker = '<div class="tmdb-static-opts">' + dim.staticOpts.map((o) => {
+        const on = ids.includes(o.id);
+        return '<label class="tmdb-opt"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="toggleTmdbItem(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + o.id + ',this.checked)"> ' + o.name + '</label>';
+      }).join('') + '</div>';
+    } else {
+      picker = '<button class="secondary tmdb-add-btn" onclick="openTmdbSearch(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\')">+ Search</button>';
+    }
+    return '<div class="filter-line filter-top"><span class="filter-label">' + label + '</span>' +
+      '<div class="filter-value">' + picker + '</div></div>' +
+      (ids.length > 0 ? '<div class="tmdb-chips">' + ids.map((id) => chip(id, field)).join('') + '</div>' : '');
+  };
+  return '<div class="tmdb-dim">' +
+    '<div class="tmdb-dim-head"><span class="filter-label">' + dim.label + '</span>' +
+      (hasMode ? '<span class="dim-mode-tag" onclick="setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" title="' + (mode === 'or'
+        ? 'OR - this selection becomes its own source, unioned with everything else (click to switch to AND)'
+        : 'AND - this selection narrows every other source instead of being one of its own (click to switch to OR)') + '">' + (mode === 'or' ? 'OR' : 'AND') + '</span>' : '') +
+    '</div>' +
+    section('include', 'Include') +
+    (dim.hasExclude ? section('exclude', 'Exclude') : '') +
+  '</div>';
+}
+
+function askTmdbPreview(i) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  tmdbPreviewIndex = i;
+  const box = document.getElementById('tmdbPreview-' + i);
+  box.style.display = 'block';
+  box.innerHTML = '<div class="empty">Loading preview…</div>';
+  fetch(ORIGIN + '/tmdb/preview-discover', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...l }),
+  }).then((r) => r.json()).then((data) => {
+    if (data.error) throw new Error(data.error);
+    box.innerHTML =
+      '<div class="tmdb-preview-head">' +
+        '<span>Preview' + (data.truncated ? ' (first pages only)' : '') + ' - ' + data.items.length + ' items</span>' +
+        '<a class="chip-x" onclick="closeTmdbPreview()">×</a></div>' +
+      '<div class="tmdb-preview-grid">' +
+        data.items.map((m) =>
+          '<div class="tmdb-preview-item">' +
+            (m.poster ? '<img src="' + escapeAttr(m.poster) + '" alt="" loading="lazy">' : '<div class="tmdb-noimg"></div>') +
+            '<span class="tmdb-pv-name">' + escapeAttr(m.name) + '</span>' +
+            '<span class="tmdb-pv-year">' + escapeAttr(m.year || '') + '</span></div>').join('') +
+      '</div>';
+  }).catch((e) => {
+    box.innerHTML = '<div class="empty">Preview failed: ' + escapeAttr(e.message) + '</div>';
+  });
+}
+function closeTmdbPreview() {
+  if (tmdbPreviewIndex < 0) return;
+  const box = document.getElementById('tmdbPreview-' + tmdbPreviewIndex);
+  if (box) { box.style.display = 'none'; box.innerHTML = ''; }
+  tmdbPreviewIndex = -1;
+}
+
 // ─── Save (hash-compare → dispatch changed lists only) ───
 async function saveAll() {
   // Global save: one config blob, all three modules. Zero scraper lists
@@ -902,6 +1250,10 @@ async function saveAll() {
   // scraper section as-is and skips scraper dispatch.
   if (state.scraper.lists.some(l => !l.url.trim())) {
     setStatus('Every list needs an mdblist URL.', 'error');
+    return;
+  }
+  if (state.tmdb.lists.some(l => !l.discoverListId)) {
+    setStatus('TMDB list is missing an id - delete and re-add it.', 'error');
     return;
   }
   const btn = document.getElementById('saveBtn');
@@ -988,11 +1340,12 @@ async function confirmRefresh() {
 }
 
 function askRefresh(i) {
-  const l = state.scraper.lists[i];
+  const l = activeModule === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
   if (!l) return;
   pendingRefreshIndex = i;
-  document.getElementById('refreshOneConfirmBody').textContent =
-    '"' + l.name + '" will be re-scraped now (headless Chromium on GitHub Actions). This can take a few minutes. Are you sure?';
+  document.getElementById('refreshOneConfirmBody').textContent = activeModule === 'tmdb'
+    ? '"' + l.name + '" will be regenerated from the TMDB API now on GitHub Actions. This takes a few seconds. Are you sure?'
+    : '"' + l.name + '" will be re-scraped now (headless Chromium on GitHub Actions). This can take a few minutes. Are you sure?';
   document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
 }
 function closeRefreshOneConfirm() { document.getElementById('refreshOneConfirmBackdrop').classList.remove('visible'); pendingRefreshIndex = -1; }
@@ -1002,16 +1355,19 @@ async function confirmRefreshOne() {
   closeRefreshOneConfirm();
   if (i < 0) return;
   const m = activeModule;
-  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : state.scraper.lists[i];
+  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
   if (!list) return;
-  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : '#card-' + i) + ' .card-refresh';
+  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : m === 'tmdb' ? '#tcard-' + i : '#card-' + i) + ' .card-refresh';
   const btn = document.querySelector(cardSel);
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
   try {
     // Page-scoped: official tab sends page=official + the slug, simkl tab
-    // sends page=simkl + the kind, scraper tab sends the list id
-    // (defaults to the scraper page).
-    const body = m === 'official' ? { page: 'official', id: list.slug } : m === 'simkl' ? { page: 'simkl', id: list.slug } : { id: list.id };
+    // sends page=simkl + the kind, tmdb tab sends page=tmdb + catalog id,
+    // scraper tab sends the list id (defaults to the scraper page).
+    const body = m === 'official' ? { page: 'official', id: list.slug }
+      : m === 'simkl' ? { page: 'simkl', id: list.slug }
+      : m === 'tmdb' ? { page: 'tmdb', id: 'tmdb_discover_' + list.mediaType + '_' + list.discoverListId }
+      : { id: list.id };
     const res = await fetch(ORIGIN + '/trigger-refresh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1019,7 +1375,7 @@ async function confirmRefreshOne() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : 'list.';
+    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : m === 'tmdb' ? 'TMDB list.' : 'list.';
     setStatus('"' + list.name + '" refresh dispatched - regenerating just that ' + tail, 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + e.message, 'error');
@@ -1029,7 +1385,7 @@ async function confirmRefreshOne() {
 }
 
 function openStatus() {
-  const p = activeModule === 'official' ? 'official' : activeModule === 'simkl' ? 'simkl' : 'scraper';
+  const p = activeModule === 'official' ? 'official' : activeModule === 'simkl' ? 'simkl' : activeModule === 'tmdb' ? 'tmdb' : 'scraper';
   window.open(ORIGIN + '/status?page=' + p, '_blank');
 }
 
