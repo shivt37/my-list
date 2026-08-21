@@ -111,6 +111,7 @@ export function buildConfigurePage(origin, config) {
   .card-refresh { padding: 5px 6px; }
   .card-refresh svg { display: block; }
   .tmdb-eye-active { color: var(--accent); border-color: var(--accent); }
+  .tmdb-controls select { font-size: 11px; padding: 4px 24px 4px 8px; width: auto; flex: 0 0 auto; }
 
   /* ── MAIN ── */
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
@@ -829,12 +830,15 @@ function moduleLists() {
     : activeModule === 'tmdb' ? state.tmdb.lists
     : state.scraper.lists;
 }
-function nameEditBlock(i, l) {
+function nameEditBlock(i, l, extraHtml) {
   const editing = listNameEditIndex === i;
   return '<div class="name-wrap">' +
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
       : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
+    '<span class="icon-btn' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
+    '</span>' +
     '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
     '</span>' +
@@ -1205,16 +1209,13 @@ function renderTmdb() {
           '<div class="count-line">' + countLine + '</div>' +
         '</div>' +
         '<span class="card-actions">' +
-          '<button class="btn-icon' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
-            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
-          '</button>' +
           '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
         '</span>' +
       '</div>' +
-      '<div class="card-controls">' +
+      '<div class="card-controls tmdb-controls">' +
         '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
           '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
           '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
@@ -1644,14 +1645,18 @@ async function saveAll() {
       : activeModule === 'simkl' && data.simklChanged && data.simklChanged.length
         ? 'Simkl filters saved: ' + data.simklChanged.join(', ') + '. '
         : '';
+    const tmdbNames = []
+      .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map(n => n + ' (deleted)'));
     setStatus(moduleChanges +
       (data.dispatch && data.dispatch.length
         ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
-        : (data.simklChanged && data.simklChanged.length)
-          ? 'Saved. Regenerating simkl: ' + data.simklChanged.join(', ')
-          : (data.officialChanged && data.officialChanged.length)
-            ? 'Saved. Regenerating official: ' + data.officialChanged.join(', ')
-            : 'Saved (no content change - nothing regenerated).'), 'ok');
+        : tmdbNames.length
+          ? 'Saved. Regenerating TMDB: ' + tmdbNames.join(', ')
+          : (data.simklChanged && data.simklChanged.length)
+            ? 'Saved. Regenerating simkl: ' + data.simklChanged.join(', ')
+            : (data.officialChanged && data.officialChanged.length)
+              ? 'Saved. Regenerating official: ' + data.officialChanged.join(', ')
+              : 'Saved (no content change - nothing regenerated).'), 'ok');
   } catch (e) {
     setStatus('Save failed: ' + e.message, 'error');
   } finally {
