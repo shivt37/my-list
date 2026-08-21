@@ -93,8 +93,12 @@ jobs:
             echo "No data changes - skipping commit."
           else
             git commit -m "chore(data): refresh TMDB discover lists [skip ci]"
-            # Rebase onto whatever landed (worker deploy commits, manual
-            # pushes) - a bare push races and loses this run's data.
-            git pull --rebase
+            # Rebase onto whatever landed (other bots' data commits,
+            # deploys, manual pushes) - a bare push races and loses this
+            # run's data. -X theirs: on a content conflict (two runs
+            # refreshed the same catalog file, e.g. a UI re-run checking
+            # out its original older SHA) the just-regenerated data wins -
+            # these files are throwaway artifacts, never hand-edited.
+            git pull --rebase -X theirs
             git push
           fi
