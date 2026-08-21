@@ -386,10 +386,6 @@ export function buildConfigurePage(origin, config) {
     font-size: 11px; color: var(--muted); background: var(--surface2);
     border-left: 3px solid var(--accent); border-radius: 4px; padding: 6px 10px; margin-top: 8px;
   }
-  .media-kind-tag {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.05em; color: var(--accent);
-    border: 1px solid var(--accent); border-radius: 4px; padding: 0 4px; margin-left: 4px;
-  }
   /* ── PREVIEW ROW (horizontal scroll strip, ported from old worker) ── */
   .preview-row {
     margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
@@ -853,7 +849,16 @@ function saveName(i) {
   if (listNameEditIndex !== i) return;
   const lists = moduleLists();
   const el = document.getElementById('nameInput-' + i);
-  if (el && el.value.trim()) lists[i].name = el.value.trim();
+  if (el && el.value.trim()) {
+    const newName = el.value.trim().toLowerCase();
+    // Duplicate guard mirrors create. TMDB allows the same name across
+    // media types (catalog id embeds type); other modules are name-only.
+    const clash = lists.some((l, j) =>
+      j !== i && l.name.toLowerCase() === newName &&
+      (activeModule !== 'tmdb' || l.mediaType === lists[i].mediaType));
+    if (clash) { setStatus('A list with that name already exists.', 'error'); return; }
+    lists[i].name = el.value.trim();
+  }
   listNameEditIndex = -1;
   rerenderActive();
 }
@@ -1279,11 +1284,13 @@ function hideTmdbCreate() {
 async function confirmCreateTmdb() {
   const name = document.getElementById('tmdbCreateNameInput').value.trim();
   if (!name) { setStatus('List needs a name.', 'error'); return; }
-  if (state.tmdb.lists.some((l) => l.name.toLowerCase() === name.toLowerCase())) {
-    setStatus('A list with that name already exists.', 'error');
+  const mediaType = document.getElementById('tmdbCreateTypeSelect').value;
+  // Same name is fine across media types - the catalog id embeds the type
+  // (tmdb_discover_<mediaType>_<id>), so Stremio sees them as distinct.
+  if (state.tmdb.lists.some((l) => l.name.toLowerCase() === name.toLowerCase() && l.mediaType === mediaType)) {
+    setStatus('A ' + mediaType + ' list with that name already exists.', 'error');
     return;
   }
-  const mediaType = document.getElementById('tmdbCreateTypeSelect').value;
   // Server generates the same shape on save if blank; generate here so the
   // card shows a stable id immediately and re-saves keep it.
   let id;
@@ -1576,8 +1583,7 @@ function tmdbPreviewHtml(i, l) {
     body = '<div class="preview-list">' + l.previewItems.map((p, idx) =>
       '<div class="preview-list-item">' +
         '<span class="preview-list-num">' + (idx + 1) + '.</span>' +
-        '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + p.year + ')' : '') +
-          (p.type === 'series' ? ' <span class="media-kind-tag">Series</span>' : '') + '</span>' +
+        '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + p.year + ')' : '') + '</span>' +
         '<a class="icon-btn preview-list-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
       '</div>').join('') + '</div>';
@@ -1587,7 +1593,7 @@ function tmdbPreviewHtml(i, l) {
         (p.poster ? '<img src="' + escapeAttr(p.poster) + '" alt="" loading="lazy">' : '<div class="preview-poster-placeholder"></div>') +
         '<a class="icon-btn preview-item-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
-        '<div class="preview-item-title">' + escapeAttr(p.name) + (p.type === 'series' ? ' <span class="media-kind-tag">Series</span>' : '') + '</div>' +
+        '<div class="preview-item-title">' + escapeAttr(p.name) + '</div>' +
         '<div class="preview-item-year">' + escapeAttr(p.year || '') + '</div>' +
       '</div>').join('') + '</div>';
   }
