@@ -1,113 +1,78 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-08-05
+**Analysis Date:** 2026-08-21
 
 ## Test Framework
 
-**Runner:** Node.js built-in test runner NOT used. Tests are plain scripts executed directly with `node`.
-
-**Assertion Library:** `node:assert` (strict mode):
-```javascript
-import { strict as assert } from "node:assert";
-```
-
-**No test framework:** No Jest, Vitest, Mocha, or any npm test runner. Tests are standalone `.mjs` files run via `node scripts/<test>.mjs`.
+**Runner:**
+- None - plain Node scripts with `node:assert` (strict mode) and a hand-rolled `check()` helper. No jest/vitest/mocha.
+- UI tests use `jsdom` (`runScripts: "dangerously"`) - **note: jsdom is imported by `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`, and `scripts/dry-test.mjs` but is NOT declared in `scripts/package.json`; it resolves from ambient installs.**
 
 **Run Commands:**
 ```bash
-node scripts/dry-test.mjs       # Integration tests for worker routes + config
-node scripts/verify-ui.mjs      # Headless DOM check of /configure page
+node scripts/dry-test.mjs      # main suite: worker routes + config + script mains (~68 checks)
+node scripts/verify-tmdb.mjs   # TMDB module self-checks (~34 checks incl. jsdom UI checks)
+node scripts/verify-ui.mjs     # configure-page UI structure/behavior checks (~39 checks)
 ```
+All three are gitignore-aware locals or committed files run manually; none wired into CI. `scripts/dry-test.mjs` and `scripts/verify-ui.mjs` are listed in `.gitignore` (local-only).
+
+**Assertion Library:** `import { strict as assert } from "node:assert"` plus a boolean `check(name, ok)` reporter:
+
+```javascript
+// scripts/verify-tmdb.mjs:9
+let fail = 0;
+const check = (name, ok) => { console.log((ok ? "PASS" : "FAIL") + " " + name); if (!ok) fail++; };
+// ...
+console.log(fail === 0 ? "\nALL PASS" : `\n${fail} FAILURES`);
+process.exit(fail === 0 ? 0 : 1);
+```
+
+Variant in `scripts/dry-test.mjs:71-74` wraps a throwing fn and sets `process.exitCode = 1` instead of exiting immediately.
 
 ## Test File Organization
 
-**Location:** `scripts/` directory, co-located with production scripts
+**Location:** All in `scripts/`, sibling to the code they test (imports like `../src/config.js`). No `__tests__/` dirs, no `.test.`/`.spec.` suffixes.
 
-**Naming:** Descriptive, action-oriented names: `dry-test.mjs`, `verify-ui.mjs`
+**Naming:**
+- `dry-test.mjs` - integration-style suite over worker + script modules
+- `verify-<area>.mjs` - focused self-check suites
 
-**Gitignored:** Both test files are in `.gitignore` — they are local-only, not part of CI or deploy:
+**Structure:**
 ```
-scripts/dry-test.mjs
-scripts/verify-ui.mjs
+scripts/
+├── dry-test.mjs        # routes.js, config.js, dispatch, official/simkl/tmdb mains
+├── verify-tmdb.mjs     # tmdb migration/hash/source-plan + configure UI
+├── verify-ui.mjs       # configure page DOM structure + interactions
 ```
-
-**Structure:** Single-file tests, no separate test directories, no test runner config.
 
 ## Test Structure
 
-### dry-test.mjs — Integration Tests
-
-**Pattern:** Flat sequential blocks, each wrapped in a bare `{ ... }` block scope:
+**Suite organization:** Top-level `await`-friendly blocks grouped per module with section comments; no nested describe/it.
 
 ```javascript
-// ── config.js ──
+// scripts/dry-test.mjs pattern
 {
-  const kv = makeKV();
-  const cfg = await loadConfig(kv);
-  assert.equal(cfg.scraper.lists.length, 3);
-  check("loadConfig seeds 3 pinned lists on empty KV, persists", () => {});
-}
-
-// ── routes.js ──
-{
-  const { env } = await freshEnv();
+  const { kv, env } = await freshEnv();
   const man = await buildManifest(env);
-  assert.equal(man.catalogs.length, 3 + 6);
-  check("buildManifest lists 3 scraper + 6 official catalogs", () => {});
+  assert.equal(man.catalogs.length, 3 + 6 + 2);
+  check("buildManifest lists 3 scraper + 6 official + 2 simkl catalogs", () => {});
 }
 ```
 
-**Check function:** Simple pass/fail printer, sets `process.exitCode = 1` on failure:
-```javascript
-let n = 0;
-function check(name, fn) {
-  try { fn(); n++; console.log("PASS " + name); }
-  catch (e) { console.log("FAIL " + name + " - " + e.message); process.exitCode = 1; }
-}
-```
-
-**Test flow:**
-1. Run assertions immediately (not inside `check` callback)
-2. Call `check("description", () => {})` after assertions pass
-3. If assertions throw, `check` is never reached — failure logged automatically
-
-**Suite organization by module:**
-- `config.js` tests: loadConfig seeding, content hashing, migration, run history cap
-- `routes.js` tests: manifest building, save-config dispatch logic, trigger-refresh, catalog serving, status page, XSS escaping
-- Official module tests: seeding, toggle persistence, slug validation, catalog IDs, run routing
-
-### verify-ui.mjs — DOM Structure Tests
-
-**Pattern:** Builds the configure page with JSDOM, runs checks against the rendered DOM:
-
-```javascript
-const dom = new JSDOM(html, { runScripts: "dangerously", resources: "usable" });
-dom.window.addEventListener("error", (e) => errors.push(e.message));
-await new Promise((r) => setTimeout(r, 1200));
-
-check("no JS errors", errors.length === 0);
-check("toolbar Status button exists", !!doc.querySelector(".scraper-toolbar .secondary"));
-```
-
-**Check function:** Same pattern as dry-test.mjs but `fail` counter instead of `process.exitCode`:
-```javascript
-let fail = 0;
-const check = (name, ok) => {
-  console.log((ok ? "PASS" : "FAIL") + " " + name);
-  if (!ok) fail++;
-};
-process.exit(fail ? 1 : 0);
-```
-
-**Coverage:** Verifies scraper tab DOM structure, official tab rendering, handler function existence, menu/accent bindings.
+**Patterns:**
+- Arrange-Act-Assert inside each block; assertion messages used as documentation (`"config NOT persisted on dispatch failure"`)
+- Each save scenario gets a FRESH KV/env (`freshEnv()`) because saves persist
+- Regression tests named with their bug id/comment ("C2 fix", "#5", "H3") - e.g. `dry-test.mjs:560+` "API error path records failed run (C2 fix, no ReferenceError)"
+- Exit-code hygiene around script calls that set `process.exitCode`: save/restore `const savedExit = process.exitCode; ... process.exitCode = savedExit;` (`dry-test.mjs:574-577`)
+- Cache-busting dynamic import for scripts capturing env at module load: `await import("../scripts/official.mjs?t=1")` after setting `process.env.WORKER_ORIGIN` first (`dry-test.mjs:552-556`)
 
 ## Mocking
 
-**No mocking library.** All mocks are hand-rolled.
+**Framework:** None - hand-built fakes injected via `main()` parameter defaults (see CONVENTIONS.md) or swapped globals.
 
-### Fake KV Store
-
+**Fake KV (in-memory Workers KV):**
 ```javascript
+// scripts/dry-test.mjs:21-28
 function makeKV() {
   const m = new Map();
   return {
@@ -118,171 +83,94 @@ function makeKV() {
 }
 ```
 
-### Fake Environment
-
+**Stub GitHub dispatch via env-carried fake + global fetch swap:**
 ```javascript
-function makeEnv(kv) {
-  const ghCalls = [];
-  const env = {
-    STORE: kv,
-    GITHUB_PAGES_BASE: "https://stub.pages/base",
-    GH_TOKEN: "tok", GH_REPO: "u/r", GH_WORKFLOW: "scrape.yml", GH_REF: "main",
-    _ghCalls: ghCalls,
-  };
-  env.GH_FETCH = async (url, opts) => {
-    ghCalls.push({ url, body: opts?.body ? JSON.parse(opts.body) : null });
-    return { status: 204, text: async () => "" };
-  };
-  return env;
-}
-```
+// scripts/dry-test.mjs:38-41, 64-68
+env.GH_FETCH = async (url, opts) => { ghCalls.push({ url, body: JSON.parse(opts.body) }); return { status: 204, text: async () => "" }; };
 
-### Failing GH Dispatch Mock
-
-```javascript
-function makeEnvGHFail(kv) {
-  // ... same as makeEnv but GH_FETCH returns { status: 401 }
-}
-```
-
-### Global fetch Stub
-
-```javascript
 async function withFetch(fake, fn) {
   const og = global.fetch;
   global.fetch = fake;
   try { return await fn(); } finally { global.fetch = og; }
 }
 ```
+Every `withFetch` call restores the real fetch in `finally` - **always pair them**.
 
-Used to stub `dispatchScraperWorkflow` which calls global `fetch`:
+**Dependency injection over monkey-patching:** script tests pass fakes straight to `main()`:
 ```javascript
-const res = await withFetch(env.GH_FETCH, () => handleSaveConfig(env, ...));
+await off.main({ slugsArg: "popular", fetchConfig: async () => ["popular"], fetchApi: boom, recordRuns: async (runs) => { recorded.push(...runs); } });
 ```
 
-Catalog data stubbed via direct `global.fetch` override:
+**What to mock:** network boundaries only - GitHub API, GitHub Pages catalog fetch, worker `/export-config`, TMDB/SIMKL APIs, KV storage. Filesystem writes stay REAL where cheap (writeCatalog round-trips read back with `readFile` then `rm(f, { force: true })` cleanup, `dry-test.mjs:640-650`).
+
+**What NOT to mock:** pure logic under test (`passesRatingTiers`, `precompute`, `computeSourceHash`, regexes) is called directly; no spies needed beyond simple push-capturing arrays.
+
+**UI testing via jsdom:** build the real HTML string from `buildConfigurePage()`, load into JSDOM with scripts enabled, wait for timers, then drive exported globals:
 ```javascript
-global.fetch = async (u) => ({
-  ok: true,
-  json: async () => ({ items: [{ imdb_id: "tt1", title: "A", ... }] })
-});
+// scripts/verify-tmdb.mjs:78-88
+const dom = new JSDOM(html, { runScripts: "dangerously", resources: "usable" });
+dom.window.addEventListener("error", (e) => errors.push(e.message));
+await new Promise((r) => setTimeout(r, 1200));   // let inline JS settle
+dom.window.activateModule("tmdb");
 ```
-
-**What to mock:**
-- KV store (always — no real Cloudflare KV in tests)
-- `global.fetch` when testing dispatch or catalog serving
-- Environment bindings (`env.STORE`, `env.GH_TOKEN`, etc.)
-
-**What NOT to mock:**
-- Config migration logic (tested against real migration functions)
-- Hash functions (`listContentHash`, `randomScraperId`)
-- Response construction (`json()`, `html()`)
+XSS is tested through the render path: hostile names injected into config, assert `\\u003c/script>` escaping and `escapeAttr` usage survive (`dry-test.mjs:497-508`).
 
 ## Fixtures and Factories
 
-**Test data:**
-- Seed URL copied verbatim from `src/config.js` for healing tests:
-  ```javascript
-  const SEED_URL = "https://mdblist.com/movies/?q_title=&q_sort=releasedigital...";
-  ```
-- Fresh environment created per test block via `freshEnv()`:
-  ```javascript
-  async function freshEnv() {
-    const k = makeKV();
-    const e = makeEnv(k);
-    await loadConfig(k);  // seed the 3 pinned lists
-    return { kv: k, env: e };
-  }
-  ```
-- No fixture files — all test data inline
+**Test data:** inline object literals + tiny factory arrows:
+```javascript
+// scripts/dry-test.mjs:929-934
+const meta = (id, over = {}) => ({ ids: { imdb: `tt${id}`, tmdb: id }, title: `Show ${id}`, poster: null,
+  genres: [], country: "us",
+  ratings: { imdb: { rating: 7.5, votes: 9000 }, simkl: { rating: 7.4, votes: 900 } }, ...over });
+const e = (sid, season, episode, date, finaleType = null) => ({ simkl_id: sid, date, episode: { season, episode }, finale_type: finaleType });
+```
 
-**Location:** Fixtures defined at top of test file, before test blocks.
+**Location:** defined at point of use, no fixtures directory. The seed-list URL is duplicated verbatim into `dry-test.mjs:19` because healing matches URLs byte-for-byte - keep in sync with `SEED_LISTS` in `src/config.js`.
 
 ## Coverage
 
-**Requirements:** None enforced. No coverage tool configured.
+**Requirements:** None enforced (no tooling). De facto: every route handler, migrate function, hash function, filter helper, and each script's success/error/delete/empty paths has at least one check.
 
-**Manual coverage assessment:** `dry-test.mjs` covers:
-- `config.js`: loadConfig, saveConfig, migrateConfig, emptyConfig, randomScraperId, listContentHash, addRun, getRuns, runsKeyFor, seedScraperDefaults, officialDefaults, migrateOfficial
-- `routes.js`: buildManifest, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleCatalog, CATALOG_RE, rowToMeta, rowToMetaOfficial
-- `configure.js`: buildConfigurePage (XSS escaping)
-
-**Not tested:**
-- `src/index.js` fetch handler (thin router — tested indirectly via route handlers)
-- `dispatch.js` (mocked in integration tests, not unit tested independently)
-- `scripts/scrape.mjs` (requires headless Chromium, runs in CI only)
-- `scripts/official.mjs` (requires MDBList API key, runs in CI only)
+**View Coverage:** Not available - would require instrumenting with c8/nyc manually.
 
 ## Test Types
 
-**Unit Tests:**
-- Individual functions tested in isolation within `dry-test.mjs` blocks
-- Config migration, hashing, seeding tested directly
+**Unit Tests:** pure helpers asserted directly (`matchesCountry`, `passesRatingTiers`, `simklPoster`, `CATALOG_RE`, content hashes, id normalizers).
 
-**Integration Tests:**
-- Full route handler flows: save-config → dispatch → persist
-- Request/response cycle via `new Request(...)` construction
-- Multiple routes composed in single test blocks (e.g., save → status → verify)
+**Integration Tests:** route handlers exercised with fake env/KV/Request objects end-to-end (`new Request("http://x/save-config", { method: "POST", ... })` then `JSON.parse(await res.text())`) - covers dispatch ordering, rollback-on-failure, runs key routing, status field shapes.
 
-**E2E Tests:**
-- `verify-ui.mjs` serves as a lightweight E2E for the configure page DOM
-- Real CI tests run via GitHub Actions workflows (`scrape.yml`, `official.yml`)
-
-**No browser E2E tests** (Playwright, Cypress, etc.)
+**E2E Tests:** Not used. Closest is verify-ui/jsdom driving the real configure page DOM including pointer-event rename flows.
 
 ## Common Patterns
 
-### Request Construction
-
+**Async Testing:**
 ```javascript
-const res = await handleSaveConfig(env, new Request("http://x/save-config", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(body),
-}));
+// top-level await throughout .mjs files - no async wrapper needed
+const s1 = await sim.precompute("series", [e(1, 1, 5, "2026-08-05T20:00:00Z"), ...], { 1: meta(1) }, tvFilter);
+assert.match(s1[0].description, /🏁 Finale \(season\) \| S01E06/, "finale headline uses its own S/E");
 ```
 
-### Response Parsing
-
+**Error Testing:**
 ```javascript
-const jsonOf = async (r) => JSON.parse(await r.text());
-const d = await jsonOf(res);
-assert.equal(d.ok, true);
+// loud failure expected (dry-test.mjs:952-964)
+let typoThrew = false;
+try { await sim.main({ kindsArg: "serie", /* fakes... */ }); } catch { typoThrew = true; }
+check("simkl: unknown --kinds throws instead of refreshing all", () => assert.equal(typoThrew, true));
+
+// HTTP error shape asserted on Response objects
+const res = await handleSaveConfig(envFail, new Request(...));
+assert.equal(res.status, 502, "dispatch failure rejected");
+const after = await loadConfig(kv);
+assert.equal(after.scraper.lists[0].maxPages, 3, "config NOT persisted on dispatch failure");
 ```
 
-### Assertion Patterns
-
-```javascript
-// Exact equality
-assert.equal(cfg.scraper.lists.length, 3);
-
-// Deep equality
-assert.deepEqual(man.types, ["movie", "series"]);
-
-// Truthy
-assert.ok(kv._m.has("config"), "seed persisted");
-
-// Regex match
-assert.match(out[0].started_at_ist, /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2} (AM|PM)$/);
-
-// Negative assertion
-assert.notEqual(listContentHash(l0), listContentHash({ ...l0, maxPages: 5 }));
-
-// Does not contain
-assert.ok(!("id" in out[0]), "no internal run id");
-```
-
-### Test Naming Convention
-
-Descriptive strings stating the expected behavior:
-```javascript
-check("save no-op: no dispatch", () => {});
-check("save add: dispatches scrape for the added list only", () => {});
-check("configure page escapes hostile name/url", () => {});
-```
-
-Format: `<scenario>: <expected behavior>`
+**Writing a new test - follow this recipe:**
+1. Add a block in the matching section of `scripts/dry-test.mjs` (worker/routes/config) or the right `verify-*.mjs`
+2. Fresh `makeKV()`/`freshEnv()` per scenario; wrap any global.fetch swap in `withFetch`
+3. Assert with messages, then register one `check("behavior description", fn)`
+4. Clean up written files with `rm(f, { force: true })`; restore `process.exitCode` and env vars
 
 ---
 
-*Testing analysis: 2026-08-05*
+*Testing analysis: 2026-08-21*

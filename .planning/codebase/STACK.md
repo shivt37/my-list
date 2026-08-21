@@ -1,95 +1,94 @@
 # Technology Stack
 
-**Analysis Date:** 2026-08-05
+**Analysis Date:** 2026-08-21
 
 ## Languages
 
 **Primary:**
-- JavaScript (ES Modules) - Worker source (`src/*.js`), scraper scripts (`scripts/*.mjs`), tests (`scripts/dry-test.mjs`, `scripts/verify-ui.mjs`)
+- JavaScript (ES modules, `"type": "module"`, no TypeScript) - everywhere: `src/*.js` (worker), `scripts/*.mjs` (CI scrapers/generators)
 
 **Secondary:**
-- HTML/CSS - Inline in `src/configure.js` (configure page, ~850 lines)
-- YAML - GitHub Actions workflows (`.github/workflows/*.yml`)
-
-**Notable absence:** No TypeScript. Entire codebase is plain JavaScript.
+- Inline HTML/CSS/JS - the entire `/configure` admin UI is one template-literal string in `src/configure.js` (1773 lines)
+- YAML - GitHub Actions workflows in `.github/workflows/` (scrape.yml, official.yml, simkl.yml, tmdb.yml)
+- Bash - sanitize/commit steps inside the workflow YAML
 
 ## Runtime
 
-**Worker Runtime:**
-- Cloudflare Workers (V8 isolate, edge network)
-- Compatibility date: `2026-01-01`
-- Compatibility flags: `nodejs_compat`
-- Entry point: `src/index.js`
+**Environment:**
+- Cloudflare Workers (`wrangler.toml`, `main = "src/index.js"`, `compatibility_date = "2026-01-01"`, `compatibility_flags = ["nodejs_compat"]`)
+- Node.js 22 on GitHub Actions runners (`actions/setup-node@v5`, `node-version: 22` in all four workflows)
+- Local dev machine observed on Node v26.5.0
 
-**Scraper Runtime:**
-- Node.js 22 (GitHub Actions runner)
-- Runs headless Chromium via Puppeteer
-- `scripts/` directory contains all scraper logic
-
-**Platform:** `wrangler.toml` at `D:\New folder (5)\my-list\wrangler.toml`
-
-## Package Manager
-
-**npm**
-- Lockfile: `scripts/package-lock.json` (present)
-- Note: No root `package.json` — dependencies are scoped to `scripts/` only
-- Worker (`src/`) has zero npm dependencies; relies on Cloudflare Workers runtime globals
+**Package Manager:**
+- npm (lockfile present at `scripts/package-lock.json`; `npm ci` in `scrape.yml`)
+- Repo root has NO package.json, but a root-level `node_modules/` with `jsdom` + parse5/css-tree etc. exists for the local verify scripts (`scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`). These deps are undeclared anywhere - install manually if missing.
 
 ## Frameworks
 
 **Core:**
-- Cloudflare Workers (module syntax) - `D:\New folder (5)\my-list\src\index.js`
-- No web framework (Express, Hono, etc.) — manual routing via URL pathname matching
+- None. The worker is a raw `fetch(request, env)` handler (`src/index.js`) with hand-rolled routing, JSON helpers, and CORS headers. No Hono/itty-router/Express.
+- Vanilla DOM JS in the configure page (no framework, no bundler).
 
 **Testing:**
-- Node.js built-in `assert` (strict mode) - `D:\New folder (5)\my-list\scripts\dry-test.mjs`
-- JSDOM - DOM verification for configure page - `D:\New folder (5)\my-list\scripts\verify-ui.mjs`
-- No test runner framework (no Jest, Vitest, Mocha)
+- None (no test framework). Hand-rolled assert-based scripts:
+  - `scripts/dry-test.mjs` - full route integration tests against fake in-memory KV + stubbed GH API
+  - `scripts/verify-tmdb.mjs` - TMDB module self-checks (config migration, hashes, source plan) using jsdom
+  - `scripts/verify-ui.mjs` - headless check of the built configure page HTML using jsdom
+- All run directly with `node scripts/<file>.mjs`
 
-**Scraping:**
-- Puppeteer ^25.3.0 - Headless Chromium
-- puppeteer-extra ^3.3.6 - Plugin system
-- puppeteer-extra-plugin-stealth ^2.11.2 - Anti-detection evasion
+**Build/Dev:**
+- Wrangler (Cloudflare CLI) - deploy/dev via `wrangler.toml`. No build step; source ships as-is.
+- GitHub Actions - both CI and the actual compute platform for scraping/generation.
 
 ## Key Dependencies
 
 **Critical:**
-- `puppeteer` ^25.3.0 - Headless browser for scraping mdblist.com (`D:\New folder (5)\my-list\scripts\scrape.mjs`)
-- `puppeteer-extra` ^3.3.6 - Plugin host for stealth (`D:\New folder (5)\my-list\scripts\scrape.mjs`)
-- `puppeteer-extra-plugin-stealth` ^2.11.2 - Evades bot detection (`D:\New folder (5)\my-list\scripts\scrape.mjs`)
-- `jsdom` - DOM parser for UI verification tests (`D:\New folder (5)\my-list\scripts\verify-ui.mjs`)
+- `puppeteer` ^25.3.0 - headless Chromium for DOM-scraping mdblist.com (`scripts/scrape.mjs`)
+- `puppeteer-extra` ^3.3.6 + `puppeteer-extra-plugin-stealth` ^2.11.2 - anti-bot-evasion wrapper around puppeteer (`scripts/scrape.mjs` lines 29-35)
 
-**Infrastructure:**
-- Cloudflare KV namespace (binding `STORE`) - Config + run history storage
-- GitHub Actions workflows - Scheduled scraping (every 12h) and manual dispatch
+**Infrastructure (zero-install, platform-provided):**
+- Cloudflare Workers KV - config + run-history storage, bound as `STORE` (`wrangler.toml` [[kv_namespaces]], id `36b7763e6e31445696e1a773c44de7a3`)
+- Native `fetch` - all HTTP (worker + all scripts); `AbortSignal.timeout(15000-30000)` used throughout
+- `node:crypto` (createHash sha256) - content-hash change detection (`src/config.js` `listContentHash`/`tmdbContentHash`, `scripts/tmdb.mjs` `computeSourceHash`)
+- `node:fs`, `node:path`, `node:url` - file writes in scraper scripts
+- `jsdom` (root node_modules only) - local verification of configure page
 
 ## Configuration
 
-**Environment (Cloudflare Worker):**
-- `wrangler.toml` - Worker config, KV binding, vars
-- KV keys: `config` (JSON blob), `runs:scraper`, `runs:official`, `healed`
-- Secrets (not in wrangler.toml): `GH_TOKEN`
+**Environment:**
 
-**Environment (GitHub Actions):**
-- Secrets: `WORKER_ORIGIN`, `MDBLIST_API_KEY`, `GH_TOKEN` (Cloudflare)
-- Workflow vars in `wrangler.toml`: `GITHUB_PAGES_BASE`, `GH_REPO`, `GH_WORKFLOW`, `GH_OFFICIAL_WORKFLOW`
+Worker vars (plain text, `wrangler.toml` `[vars]`):
+- `GITHUB_PAGES_BASE` = `https://shivt37.github.io/my-list` - where catalog JSON lives
+- `GH_REPO` = `shivt37/my-list` - dispatch target repo
+- `GH_WORKFLOW` = `scrape.yml`, `GH_OFFICIAL_WORKFLOW` = `official.yml`, `GH_TMDB_WORKFLOW` = `tmdb.yml`
+- Note: `routes.js` reads optional `env.GH_SIMKL_WORKFLOW` (falls back to `"simkl.yml"` constant) and `env.GH_REF` (falls back to `"main"` in `dispatch.js`) - neither is declared in `wrangler.toml`
+
+Worker secrets (Cloudflare):
+- `GH_TOKEN` - GitHub PAT for workflow dispatch (`wrangler secret put GH_TOKEN`)
+- `TMDB_READ_ACCESS_TOKEN` - TMDB v4 read token, checked in `routes.js` `tmdbTokenOrError()`
+
+GitHub Actions repo secrets:
+- `WORKER_ORIGIN` - worker base URL (all four workflows)
+- `MDBLIST_API_KEY` - official lists API key (`official.yml`)
+- `TMDB_READ_ACCESS_TOKEN` - discover generation (`tmdb.yml`)
+- `SIMKL_CLIENT_ID` - Simkl calendar client id (`simkl.yml`)
+
+KV layout (`src/config.js`): key `config` (full addon config), `runs:scraper|runs:official|runs:simkl|runs:tmdb` (last 30 run records each), `healed` (one-shot id-healing flag).
 
 **Build:**
-- No build step for worker (ES modules, direct deployment via Wrangler)
-- `npm ci` in `scripts/` before scraper runs
+- `wrangler.toml` - sole build/deploy config; no tsconfig, no bundler config, no eslint/prettier configs detected.
 
 ## Platform Requirements
 
 **Development:**
-- Node.js 22 (for scraper scripts and tests)
-- Wrangler CLI (for worker deployment)
-- Chromium (bundled with Puppeteer)
+- Node 18+ (native fetch, AbortSignal.timeout), npm
+- Wrangler authenticated to the Cloudflare account owning the KV namespace (`.wrangler/wrangler-account.json` cache present)
 
 **Production:**
-- Cloudflare Workers (edge compute)
-- GitHub Pages (static catalog data hosting)
-- GitHub Actions (scheduled scraping, cron-based)
+- Cloudflare Worker named `my-list` (workers.dev URL referenced as `https://my-list.st87.workers.dev` in tests)
+- GitHub repo `shivt37/my-list` serving `data/*.json` via GitHub Pages from `main`; workflows force-add ignored `data/*.json` (`git add -f`) and push with `git pull --rebase -X theirs`
+- Stremio consumes `/manifest.json` + `/catalog/...` endpoints from the worker
 
 ---
 
-*Stack analysis: 2026-08-05*
+*Stack analysis: 2026-08-21*
