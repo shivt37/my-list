@@ -110,6 +110,7 @@ export function buildConfigurePage(origin, config) {
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   .card-refresh { padding: 5px 6px; }
   .card-refresh svg { display: block; }
+  .tmdb-eye-active { color: var(--accent); border-color: var(--accent); }
 
   /* ── MAIN ── */
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
@@ -347,24 +348,50 @@ export function buildConfigurePage(origin, config) {
     font-size: 9px; font-weight: 700; letter-spacing: 0.05em; color: var(--accent);
     border: 1px solid var(--accent); border-radius: 4px; padding: 0 4px; margin-left: 4px;
   }
-  .preview-row { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
-  .preview-toolbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
-  .preview-msg { font-size: 12px; color: var(--dim); padding: 4px 0; }
-  .preview-msg.error { color: var(--danger); }
-  .preview-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
-  .preview-item { position: relative; display: flex; flex-direction: column; gap: 3px; font-size: 10.5px; color: var(--dim); }
-  .preview-item img, .preview-poster-placeholder { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px; background: var(--surface); }
-  .preview-item-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fg); }
-  .preview-item-link, .preview-list-link {
-    position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
-    background: rgba(0,0,0,0.55); border: none; color: #fff; z-index: 1;
+  /* ── PREVIEW ROW (horizontal scroll strip, ported from old worker) ── */
+  .preview-row {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+    width: 100%; max-width: 100%; min-width: 0; overflow: hidden;
+    animation: tmdb-preview-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .preview-list-link { position: static; flex-shrink: 0; }
-  .preview-list { display: flex; flex-direction: column; gap: 3px; }
-  .preview-list-item { display: flex; align-items: center; gap: 7px; font-size: 12px; padding: 3px 4px; border-radius: 5px; }
-  .preview-list-item:hover { background: var(--surface2); }
+  @keyframes tmdb-preview-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .preview-toolbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .preview-msg { font-size: 12px; color: var(--dim); padding: 6px 2px; }
+  .preview-msg.error { color: var(--danger); }
+  .preview-scroll {
+    display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; padding: 2px 2px 6px;
+    scrollbar-width: thin;
+  }
+  .preview-scroll::-webkit-scrollbar { height: 6px; }
+  .preview-item { flex: 0 0 74px; width: 74px; position: relative; transition: transform 0.12s ease; }
+  .preview-item:hover { transform: translateY(-2px); }
+  .preview-item img, .preview-poster-placeholder {
+    width: 74px; height: 111px; object-fit: cover; border-radius: 6px;
+    background: var(--surface2); display: block;
+  }
+  .preview-item-title {
+    font-size: 10.5px; color: var(--fg); margin-top: 5px; line-height: 1.3;
+    overflow: hidden; text-overflow: ellipsis; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  }
+  .preview-item-year { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .preview-item-link {
+    position: absolute; top: 5px; right: 5px; width: 20px; height: 20px;
+    border-radius: 5px; opacity: 0; transition: opacity 0.12s, color 0.12s, border-color 0.12s;
+    background: rgba(10,10,13,0.72);
+  }
+  .preview-item-link:hover { color: var(--accent); border-color: var(--accent); }
+  .preview-item:hover .preview-item-link,
+  .preview-item-link:focus-visible { opacity: 1; }
+  .preview-list-link { width: 18px; height: 18px; flex-shrink: 0; align-self: center; margin-left: 4px; }
+  .preview-list { display: flex; flex-direction: column; max-height: 260px; overflow-y: auto; }
+  .preview-list-item {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 7px 4px; border-bottom: 1px solid var(--border);
+  }
+  .preview-list-item:last-child { border-bottom: none; }
   .preview-list-num { font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 1.6em; text-align: right; }
-  .preview-list-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .preview-list-name { font-size: 12.5px; color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; min-width: 0; }
   .count-line { font-size: 11px; color: var(--muted); margin-top: 3px; }
   .chip-x { cursor: pointer; color: var(--danger); font-weight: 700; text-decoration: none; padding: 0 2px; }
 
@@ -1117,16 +1144,14 @@ function renderTmdb() {
           '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
           '<div class="count-line">' + (countLine || 'Tap the eye icon to preview') + '</div>' +
         '</div>' +
-        '<span class="icon-group">' +
-          '<span class="icon-btn' + (l.previewOpen ? ' active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
-          '</span>' +
-          '<span class="icon-btn card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+        '<span class="card-actions">' +
+          '<button class="btn-icon' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
+          '</button>' +
+          '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
-          '</span>' +
-          '<span class="icon-btn" onclick="askDelete(' + i + ')" title="Delete this list">' +
-            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
-          '</span>' +
+          '</button>' +
+          '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
         '</span>' +
       '</div>' +
       '<div class="card-controls">' +
@@ -1492,16 +1517,16 @@ function tmdbPreviewHtml(i, l) {
         '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + p.year + ')' : '') +
           (p.type === 'series' ? ' <span class="media-kind-tag">Series</span>' : '') + '</span>' +
         '<a class="icon-btn preview-list-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
-          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
       '</div>').join('') + '</div>';
   } else {
     body = '<div class="preview-scroll">' + l.previewItems.map((p) =>
       '<div class="preview-item">' +
         (p.poster ? '<img src="' + escapeAttr(p.poster) + '" alt="" loading="lazy">' : '<div class="preview-poster-placeholder"></div>') +
         '<a class="icon-btn preview-item-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
-          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
         '<div class="preview-item-title">' + escapeAttr(p.name) + (p.type === 'series' ? ' <span class="media-kind-tag">Series</span>' : '') + '</div>' +
-        '<div>' + escapeAttr(p.year || '') + '</div>' +
+        '<div class="preview-item-year">' + escapeAttr(p.year || '') + '</div>' +
       '</div>').join('') + '</div>';
   }
   return '<div class="preview-row">' +

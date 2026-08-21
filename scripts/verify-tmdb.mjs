@@ -89,7 +89,8 @@ check("UI: card shows id chip", doc.getElementById("tcard-0").textContent.includ
 check("UI: dimension sections rendered", doc.querySelectorAll("#tcard-0 .tmdb-dim").length === 5);
 check("UI: AND tag present", !!doc.querySelector("#tcard-0 .dim-mode-tag"));
 check("UI: global mode pill present", !!doc.querySelector("#tcard-0 .mode-toggle"));
-check("UI: eye-icon preview toggle present", !!doc.querySelector('#tcard-0 .icon-btn[title="Preview results"]'));
+check("UI: eye-icon preview toggle present", !!doc.querySelector('#tcard-0 .btn-icon[title="Preview results"]'));
+check("UI: delete is text button", [...doc.querySelectorAll("#tcard-0 button.danger")].some((b) => b.textContent === "Delete"));
 check("UI: collapsed section shows count", [...doc.querySelectorAll("#tcard-0 .filter-label")].some((el) => /Keywords \(2\)/.test(el.textContent)));
 check("UI: header title set", doc.getElementById("headerTitle").textContent === "TMDB List");
 dom.window.toggleTmdbSection(0, "genre");

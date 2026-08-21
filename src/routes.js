@@ -570,14 +570,18 @@ const PREVIEW_PAGE_SIZE = 20;
 // has no name sort).
 function sortPreviewItems(items, sortKey, mediaType) {
   const dateField = mediaType === "series" ? "first_air_date" : "release_date";
+  const hasDate = (i) => Boolean(i[dateField]);
   const cmp = {
-    release_asc: (a, b) => String(a[dateField] || "").localeCompare(String(b[dateField] || "")),
-    release_desc: (a, b) => String(b[dateField] || "").localeCompare(String(a[dateField] || "")),
+    release_asc: (a, b) => String(a[dateField] || "9999").localeCompare(String(b[dateField] || "9999")),
+    release_desc: (a, b) => String(b[dateField] || "0000").localeCompare(String(a[dateField] || "0000")),
     popularity_desc: (a, b) => (b.popularity || 0) - (a.popularity || 0),
     vote_desc: (a, b) => (b.vote_average || 0) - (a.vote_average || 0),
     title_asc: (a, b) => String(a.title || a.name || "").localeCompare(String(b.title || b.name || "")),
   }[sortKey] || ((a, b) => (b.popularity || 0) - (a.popularity || 0));
-  return items.sort(cmp);
+  return items.sort((a, b) => {
+    if (hasDate(a) !== hasDate(b)) return hasDate(a) ? -1 : 1;
+    return cmp(a, b);
+  });
 }
 
 export async function handleTmdbPreviewDiscover(env, request) {

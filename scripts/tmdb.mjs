@@ -209,6 +209,24 @@ async function collectionParts(collectionIds) {
   return parts;
 }
 
+// Client-side sort matching the preview's sortPreviewItems. Empty dates
+// (unreleased titles) sort to the end regardless of direction.
+export function sortItems(items, sortKey, mediaType) {
+  const dateField = mediaType === "series" ? "first_air_date" : "release_date";
+  const hasDate = (i) => Boolean(i[dateField] || i.release_date || i.first_air_date);
+  const cmp = {
+    release_asc: (a, b) => String(a[dateField] || "9999").localeCompare(String(b[dateField] || "9999")),
+    release_desc: (a, b) => String(b[dateField] || "0000").localeCompare(String(a[dateField] || "0000")),
+    popularity_desc: (a, b) => (b.popularity || 0) - (a.popularity || 0),
+    vote_desc: (a, b) => (b.vote_average || 0) - (a.vote_average || 0),
+    title_asc: (a, b) => String(a.title || a.name || "").localeCompare(String(b.title || b.name || "")),
+  }[sortKey] || ((a, b) => (b.popularity || 0) - (a.popularity || 0));
+  return items.sort((a, b) => {
+    if (hasDate(a) !== hasDate(b)) return hasDate(a) ? -1 : 1;
+    return cmp(a, b);
+  });
+}
+
 export async function buildDiscoverItems(list, mediaType) {
   const endpoint = mediaType === "series" ? "/discover/tv" : "/discover/movie";
   const sortMap = mediaType === "series" ? SORT_BY_TV : SORT_BY_MOVIE;
@@ -264,6 +282,11 @@ export async function buildDiscoverItems(list, mediaType) {
     const includeSet = await collectionIdSet(list.includeCollections);
     if (includeSet.size > 0) items = items.filter((p) => includeSet.has(p.id));
   }
+
+  // Multi-source unions lose TMDB's server-side order, and unreleased titles
+  // (empty release_date, e.g. 2028 entries) would sort first on asc. Re-sort
+  // client-side; no-date items always go last.
+  items = sortItems(items, list.sort, mediaType);
 
   items = items.slice(0, MAX_ITEMS);
 
