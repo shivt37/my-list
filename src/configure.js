@@ -836,11 +836,11 @@ function nameEditBlock(i, l, extraHtml) {
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
       : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-    '<span class="icon-btn' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
-      '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
-    '</span>' +
     '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
+    '</span>' +
+    '<span class="icon-btn' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
     '</span>' +
   '</div>';
 }
