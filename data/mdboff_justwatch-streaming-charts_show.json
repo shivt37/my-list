@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1787283165375,
+  "scraped_at": 1787311629041,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -29,6 +29,14 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt10293938",
+      "type": "series",
+      "title": "Outer Banks",
+      "year": 2020,
+      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt34866681",
       "type": "series",
       "title": "Lucky",
@@ -45,27 +53,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt10293938",
-      "type": "series",
-      "title": "Outer Banks",
-      "year": 2020,
-      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt13111078",
       "type": "series",
       "title": "Lioness",
       "year": 2023,
       "poster": "https://image.tmdb.org/t/p/w200/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0472954",
-      "type": "series",
-      "title": "It's Always Sunny in Philadelphia",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
       "imdb_rating": null
     },
     {
@@ -77,35 +69,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt33332385",
+      "imdb_id": "tt0472954",
       "type": "series",
-      "title": "Widow's Bay",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt30494226",
-      "type": "series",
-      "title": "Ride or Die",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt35618070",
-      "type": "series",
-      "title": "Sterling Point",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0813715",
-      "type": "series",
-      "title": "Heroes",
-      "year": 2006,
-      "poster": "https://image.tmdb.org/t/p/w200/lf0TcOkheYUZKpeh7c8lqJHNk5O.jpg",
+      "title": "It's Always Sunny in Philadelphia",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
       "imdb_rating": null
     },
     {
@@ -117,14 +85,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt31491435",
-      "type": "series",
-      "title": "Tires",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt12327578",
       "type": "series",
       "title": "Star Trek: Strange New Worlds",
@@ -133,11 +93,43 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt11198330",
+      "imdb_id": "tt35618070",
       "type": "series",
-      "title": "House of the Dragon",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg",
+      "title": "Sterling Point",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt33332385",
+      "type": "series",
+      "title": "Widow's Bay",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt31491435",
+      "type": "series",
+      "title": "Tires",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt30494226",
+      "type": "series",
+      "title": "Ride or Die",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0813715",
+      "type": "series",
+      "title": "Heroes",
+      "year": 2006,
+      "poster": "https://image.tmdb.org/t/p/w200/lf0TcOkheYUZKpeh7c8lqJHNk5O.jpg",
       "imdb_rating": null
     },
     {
@@ -149,6 +141,14 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt27497393",
+      "type": "series",
+      "title": "Stuart Fails to Save the Universe",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt27846061",
       "type": "series",
       "title": "Ludwig",
@@ -157,11 +157,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt14452776",
+      "imdb_id": "tt11198330",
       "type": "series",
-      "title": "The Bear",
+      "title": "House of the Dragon",
       "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg",
       "imdb_rating": null
     },
     {
@@ -170,14 +170,6 @@
       "title": "Dutton Ranch",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt27497393",
-      "type": "series",
-      "title": "Stuart Fails to Save the Universe",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
       "imdb_rating": null
     },
     {
@@ -202,6 +194,14 @@
       "title": "The X-Files",
       "year": 1993,
       "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt14452776",
+      "type": "series",
+      "title": "The Bear",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg",
       "imdb_rating": null
     },
     {
