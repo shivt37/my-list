@@ -14,9 +14,10 @@ const raw = {
   tmdb: { lists: [{
     discoverListId: "abc12345", name: "Test", mediaType: "movie", sort: "popularity_desc", enabled: true,
     includeModes: { genre: "or", keyword: "and", company: "and", collection: "and" },
-    includeGenres: [28, 27], excludeGenres: [99], includeKeywords: [1], excludeKeywords: [],
+    includeGenres: [28, 27], excludeGenres: [99], includeKeywords: [1], excludeKeywords: [2],
+    includeKeywordNames: ["Zombie Film"], excludeKeywordNames: ["Slow Burn"],
     includeCompanies: [], excludeCompanies: [], includeReleaseTypes: [4],
-    includeCollections: [10], excludeCollections: [],
+    includeCollections: [10], includeCollectionNames: ["Alien Collection"], excludeCollections: [],
   }] },
 };
 const cfg = migrateConfig(raw);
@@ -25,6 +26,14 @@ check("migrated entry fields survive", cfg.tmdb.lists[0].discoverListId === "abc
 check("bad id dropped", normalizeTmdbList({ discoverListId: "BAD ID!" }) === null);
 check("unknown mediaType coerced to movie", normalizeTmdbList({ discoverListId: "abc12345", mediaType: "all" }).mediaType === "movie");
 check("runsKeyFor tmdb branch", runsKeyFor("tmdb_discover_movie_abc12345") === "runs:tmdb");
+
+const named = normalizeTmdbList({
+  discoverListId: "abc12345",
+  includeKeywords: [1, 2], includeKeywordNames: ["Zombie Film"],
+  includeCollections: [10, 11], includeCollectionNames: ["A", "B"],
+});
+check("name arrays truncated to id length", named.includeKeywordNames.length === 1 && named.includeCollectionNames.length === 2);
+check("rename does not change hash (names not hashed)", tmdbContentHash(named) === tmdbContentHash({ ...named, includeKeywordNames: ["x", "y"] }));
 
 const l = cfg.tmdb.lists[0];
 const h1 = tmdbContentHash(l);
@@ -79,8 +88,17 @@ check("UI: renderTmdb renders card", !!doc.getElementById("tcard-0"));
 check("UI: card shows id chip", doc.getElementById("tcard-0").textContent.includes("tmdb_discover_movie_abc12345"));
 check("UI: dimension sections rendered", doc.querySelectorAll("#tcard-0 .tmdb-dim").length === 5);
 check("UI: AND tag present", !!doc.querySelector("#tcard-0 .dim-mode-tag"));
-check("UI: preview button present", !!doc.querySelector('#tcard-0 .card-actions .secondary'));
+check("UI: global mode pill present", !!doc.querySelector("#tcard-0 .mode-toggle"));
+check("UI: eye-icon preview toggle present", !!doc.querySelector('#tcard-0 .icon-btn[title="Preview results"]'));
+check("UI: collapsed section shows count", [...doc.querySelectorAll("#tcard-0 .filter-label")].some((el) => /Keywords \(2\)/.test(el.textContent)));
 check("UI: header title set", doc.getElementById("headerTitle").textContent === "TMDB List");
+dom.window.toggleTmdbSection(0, "genre");
+await new Promise((r) => setTimeout(r, 50));
+check("UI: section expands on click", !!doc.querySelector("#tcard-0 .exclude-genre-select-inline"));
+dom.window.toggleTmdbSection(0, "keyword");
+await new Promise((r) => setTimeout(r, 50));
+check("UI: named chips visible when open", [...doc.querySelectorAll("#tcard-0 .member-chip")].some((c) => c.textContent.includes("Zombie Film")));
+check("UI: + Add inline search chip present", !!doc.querySelector("#tcard-0 .member-chip-add"));
 dom.window.activateModule("scraper");
 await new Promise((r) => setTimeout(r, 50));
 check("UI: switching back to scraper works", !!doc.querySelector(".list-card, .create-list-section"));

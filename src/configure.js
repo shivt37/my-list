@@ -272,7 +272,7 @@ export function buildConfigurePage(origin, config) {
   }
 
   /* ── TMDB DISCOVER TAB ── */
-  .tmdb-dim { border-top: 1px solid var(--border); padding: 10px 0 2px; margin-top: 6px; }
+  .tmdb-dim { border-top: 1px solid var(--border); padding: 8px 0 2px; margin-top: 6px; }
   .tmdb-dim:first-child { border-top: none; margin-top: 0; padding-top: 0; }
   .tmdb-dim-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .dim-mode-tag {
@@ -280,31 +280,93 @@ export function buildConfigurePage(origin, config) {
     border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px;
     color: var(--accent); background: var(--accent-soft); user-select: none;
   }
-  .tmdb-static-opts { display: flex; flex-wrap: wrap; gap: 4px 12px; }
-  .tmdb-opt { font-size: 11.5px; color: var(--fg); display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
-  .tmdb-opt input { accent-color: var(--accent); }
-  .tmdb-add-btn { padding: 4px 10px; font-size: 11px; }
-  .tmdb-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-  .tmdb-chip {
-    display: inline-flex; align-items: center; gap: 5px; font-size: 11px;
-    font-family: ui-monospace, monospace; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px;
+  .exclude-label-toggle { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+  .exclude-chevron { transition: transform 0.15s; color: var(--muted); }
+  .exclude-chevron.open { transform: rotate(180deg); }
+  .mode-toggle {
+    position: relative; display: inline-flex; align-items: center;
+    border: 1px solid var(--border); border-radius: 999px; padding: 2px; gap: 0;
   }
+  .mode-toggle-btn {
+    position: relative; z-index: 1; border: none; background: transparent; cursor: pointer;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 3px 12px;
+    border-radius: 999px; color: var(--muted);
+  }
+  .mode-toggle-btn.active { background: var(--accent); color: #fff; }
+  .mode-toggle-btn.mode-toggle-mixed { cursor: default; opacity: 0.75; }
+  .include-mode-hint { font-size: 10.5px; color: var(--muted); line-height: 1.45; }
+  .include-mode-row { display: flex; align-items: baseline; gap: 10px; margin: 10px 0 2px; flex-wrap: wrap; }
+  .members-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+  .members-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; align-items: center; }
+  .members-empty { font-size: 11px; color: var(--muted); font-style: italic; }
+  .member-chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px;
+  }
+  .exclude-chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px;
+    background: transparent; border: 1px dashed var(--danger); border-radius: 6px; padding: 3px 8px; color: var(--fg);
+  }
+  .member-chip-add {
+    cursor: pointer; color: var(--accent); border-style: dashed; border-color: var(--accent); font-weight: 600;
+  }
+  .exclude-chip-add {
+    cursor: pointer; color: var(--danger); border-style: dashed; font-weight: 600;
+    background: transparent; border: 1px dashed var(--danger); border-radius: 6px; padding: 3px 8px; font-size: 11.5px;
+  }
+  .exclude-genre-select-inline {
+    font-size: 11.5px; background: var(--surface); color: var(--fg);
+    border: 1px dashed var(--accent); border-radius: 6px; padding: 3px 6px; cursor: pointer;
+  }
+  .inline-add-search { margin-top: 8px; }
+  .inline-add-search .search-row { display: flex; gap: 6px; }
+  .inline-add-search .search-input-wrap { position: relative; flex: 1; }
+  .inline-add-search .search-input { width: 100%; font-size: 12.5px; padding: 7px 30px 7px 10px; }
+  .inline-add-search .search-icon { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  .inline-add-search .search-results {
+    max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 8px;
+  }
+  .result-item {
+    display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 6px 9px;
+    border-radius: 7px; cursor: pointer; background: var(--surface); border: 1px solid var(--border);
+  }
+  .result-item:hover { border-color: var(--accent); }
+  .result-item.disabled { opacity: 0.45; cursor: default; }
+  .result-thumb, .result-thumb-placeholder {
+    width: 28px; height: 42px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--surface2);
+  }
+  .result-thumb-placeholder { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; }
+  .result-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .result-meta { font-size: 10.5px; color: var(--muted); }
+  .empty-msg { font-size: 11.5px; color: var(--muted); padding: 6px 2px; }
+  .sort-fallback-note {
+    font-size: 11px; color: var(--muted); background: var(--surface2);
+    border-left: 3px solid var(--accent); border-radius: 4px; padding: 6px 10px; margin-top: 8px;
+  }
+  .media-kind-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.05em; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 4px; padding: 0 4px; margin-left: 4px;
+  }
+  .preview-row { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+  .preview-toolbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .preview-msg { font-size: 12px; color: var(--dim); padding: 4px 0; }
+  .preview-msg.error { color: var(--danger); }
+  .preview-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+  .preview-item { position: relative; display: flex; flex-direction: column; gap: 3px; font-size: 10.5px; color: var(--dim); }
+  .preview-item img, .preview-poster-placeholder { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px; background: var(--surface); }
+  .preview-item-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fg); }
+  .preview-item-link, .preview-list-link {
+    position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+    background: rgba(0,0,0,0.55); border: none; color: #fff; z-index: 1;
+  }
+  .preview-list-link { position: static; flex-shrink: 0; }
+  .preview-list { display: flex; flex-direction: column; gap: 3px; }
+  .preview-list-item { display: flex; align-items: center; gap: 7px; font-size: 12px; padding: 3px 4px; border-radius: 5px; }
+  .preview-list-item:hover { background: var(--surface2); }
+  .preview-list-num { font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 1.6em; text-align: right; }
+  .preview-list-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .count-line { font-size: 11px; color: var(--muted); margin-top: 3px; }
   .chip-x { cursor: pointer; color: var(--danger); font-weight: 700; text-decoration: none; padding: 0 2px; }
-  .tmdb-preview { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
-  .tmdb-preview-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--dim); margin-bottom: 8px; }
-  .tmdb-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
-  .tmdb-preview-item { display: flex; flex-direction: column; gap: 3px; font-size: 10.5px; color: var(--dim); }
-  .tmdb-preview-item img, .tmdb-noimg { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px; background: var(--surface); }
-  .tmdb-pv-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fg); }
-  .tmdb-search-modal { width: min(480px, 92vw); }
-  .tmdb-search-results { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
-  .tmdb-search-result {
-    display: flex; justify-content: space-between; align-items: center; gap: 8px;
-    font-size: 12.5px; padding: 7px 10px; border-radius: 7px; cursor: pointer;
-    background: var(--surface); border: 1px solid var(--border);
-  }
-  .tmdb-search-result:hover { border-color: var(--accent); }
 
   /* ── ACCENT POPUP ── */
   .accent-popup-wrap { position: relative; }
@@ -490,17 +552,6 @@ export function buildConfigurePage(origin, config) {
     <div class="confirm-actions">
       <button class="secondary" onclick="closeRefreshOneConfirm()">Cancel</button>
       <button id="confirmRefreshOneBtn">Refresh list</button>
-    </div>
-  </div>
-</div>
-
-<div class="confirm-backdrop" id="tmdbSearchBackdrop">
-  <div class="confirm-modal tmdb-search-modal">
-    <div class="confirm-title">Search TMDB</div>
-    <input class="url-input" id="tmdbSearchInput" placeholder="Type to search…" spellcheck="false" oninput="runTmdbSearch()">
-    <div id="tmdbSearchResults" class="tmdb-search-results"></div>
-    <div class="confirm-actions">
-      <button class="secondary" onclick="closeTmdbSearch()">Close</button>
     </div>
   </div>
 </div>
@@ -955,9 +1006,19 @@ const TMDB_GENRES = [
   { id: 28, name: 'Action' }, { id: 12, name: 'Adventure' }, { id: 16, name: 'Animation' }, { id: 35, name: 'Comedy' },
   { id: 80, name: 'Crime' }, { id: 99, name: 'Documentary' }, { id: 18, name: 'Drama' }, { id: 10751, name: 'Family' },
   { id: 14, name: 'Fantasy' }, { id: 36, name: 'History' }, { id: 27, name: 'Horror' }, { id: 10402, name: 'Music' },
-  { id: 9648, name: 'Mystery' }, { id: 10749, name: 'Romance' }, { id: 878, name: 'Science Fiction' }, { id: 53, name: 'Thriller' },
-  { id: 10752, name: 'War' }, { id: 37, name: 'Western' },
+  { id: 9648, name: 'Mystery' }, { id: 10749, name: 'Romance' }, { id: 878, name: 'Science Fiction' }, { id: 10770, name: 'TV Movie' },
+  { id: 53, name: 'Thriller' }, { id: 10752, name: 'War' }, { id: 37, name: 'Western' },
 ];
+// TMDB's TV genre ids differ from movie ids in several entries - a shared
+// list would send wrong ids to /discover/tv.
+const TMDB_TV_GENRES = [
+  { id: 10759, name: 'Action & Adventure' }, { id: 16, name: 'Animation' }, { id: 35, name: 'Comedy' },
+  { id: 80, name: 'Crime' }, { id: 99, name: 'Documentary' }, { id: 18, name: 'Drama' }, { id: 10751, name: 'Family' },
+  { id: 10762, name: 'Kids' }, { id: 9648, name: 'Mystery' }, { id: 10763, name: 'News' }, { id: 10764, name: 'Reality' },
+  { id: 10765, name: 'Sci-Fi & Fantasy' }, { id: 10766, name: 'Soap' }, { id: 10767, name: 'Talk' },
+  { id: 10768, name: 'War & Politics' }, { id: 37, name: 'Western' },
+];
+const tmdbGenresFor = (mediaType) => (mediaType === 'series' ? TMDB_TV_GENRES : TMDB_GENRES);
 const TMDB_RELEASE_TYPES = [
   { id: 1, name: 'Premiere' }, { id: 2, name: 'Theatrical (limited)' }, { id: 3, name: 'Theatrical' },
   { id: 4, name: 'Digital' }, { id: 5, name: 'Physical' }, { id: 6, name: 'TV' },
@@ -977,12 +1038,24 @@ const TMDB_FIELD_KEYS = {
   collection:  { include: 'includeCollections', exclude: 'excludeCollections' },
 };
 const TMDB_DIMS = [
-  { kind: 'genre', label: 'Genres', hasExclude: true, staticOpts: TMDB_GENRES, searchKind: null, movieOnly: false },
-  { kind: 'keyword', label: 'Keywords', hasExclude: true, staticOpts: null, searchKind: 'keyword', movieOnly: false },
-  { kind: 'company', label: 'Companies', hasExclude: true, staticOpts: null, searchKind: 'company', movieOnly: false },
-  { kind: 'releaseType', label: 'Release Type', hasExclude: false, staticOpts: TMDB_RELEASE_TYPES, searchKind: null, movieOnly: true },
-  { kind: 'collection', label: 'Part of Collection', hasExclude: true, staticOpts: null, searchKind: 'collection', movieOnly: true },
+  { kind: 'genre', label: 'Genres', hasExclude: true, isStatic: true, searchKind: null, movieOnly: false },
+  { kind: 'keyword', label: 'Keywords', hasExclude: true, isStatic: false, searchKind: 'keyword', movieOnly: false },
+  { kind: 'company', label: 'Companies', hasExclude: true, isStatic: false, searchKind: 'company', movieOnly: false },
+  { kind: 'releaseType', label: 'Release Type', hasExclude: false, isStatic: true, searchKind: null, movieOnly: true },
+  { kind: 'collection', label: 'Part of Collection', hasExclude: true, isStatic: false, searchKind: 'collection', movieOnly: true },
 ];
+// Names for the dims that carry them (keyword/company/collection). Genre and
+// releaseType names resolve from their static option lists instead.
+const TMDB_NAME_KEYS = {
+  keyword:   { include: 'includeKeywordNames', exclude: 'excludeKeywordNames' },
+  company:   { include: 'includeCompanyNames', exclude: 'excludeCompanyNames' },
+  collection:{ include: 'includeCollectionNames', exclude: 'excludeCollectionNames' },
+};
+function tmdbStaticName(kind, id, mediaType) {
+  const opts = kind === 'releaseType' ? TMDB_RELEASE_TYPES : tmdbGenresFor(mediaType);
+  const opt = opts.find((o) => o.id === id);
+  return opt ? opt.name : String(id);
+}
 
 let tmdbCreateOpen = false;
 let tmdbSearchTimer = null;
@@ -992,24 +1065,69 @@ function tmdbEmptyList(mediaType) {
   return {
     discoverListId: '', name: '', mediaType: mediaType || 'movie', sort: 'release_asc', enabled: true,
     includeModes: { genre: 'and', keyword: 'and', company: 'and', collection: 'and' },
-    includeGenres: [], excludeGenres: [], includeKeywords: [], excludeKeywords: [],
-    includeCompanies: [], excludeCompanies: [], includeReleaseTypes: [],
-    includeCollections: [], excludeCollections: [],
+    includeGenres: [], excludeGenres: [],
+    includeKeywords: [], includeKeywordNames: [], excludeKeywords: [], excludeKeywordNames: [],
+    includeCompanies: [], includeCompanyNames: [], excludeCompanies: [], excludeCompanyNames: [],
+    includeReleaseTypes: [],
+    includeCollections: [], includeCollectionNames: [], excludeCollections: [], excludeCollectionNames: [],
   };
+}
+
+// ─── TMDB Discover tab ──────────────────────────────────────────────────────
+// UI ported from the old worker's renderDiscoverLists/filterSectionHtml:
+// named chips, collapsible filter sections with counts, global AND/Mix/OR
+// pill, inline search rows, dropdown-add for static dims, eye-icon preview
+// with grid/list toggle + TMDB links + caching.
+
+const TMDB_MODE_KINDS = ['genre', 'keyword', 'company', 'collection'];
+const tmdbOpenSections = new Set();
+let tmdbAdding = null; // { i, kind, side }
+let tmdbSearchResultsHtml = null;
+
+function tmdbModeSummary(l) {
+  const values = TMDB_MODE_KINDS.map((k) => (l.includeModes[k] === 'or' ? 'or' : 'and'));
+  if (values.every((v) => v === 'and')) return 'and';
+  if (values.every((v) => v === 'or')) return 'or';
+  return 'mixed';
+}
+
+function tmdbUrlFor(p) {
+  const kind = p.type === 'series' ? 'tv' : 'movie';
+  return 'https://www.themoviedb.org/' + kind + '/' + String(p.id).replace(/^tmdb:/, '');
 }
 
 function renderTmdb() {
   const host = document.getElementById('tabHost');
   const lists = state.tmdb.lists;
   const cards = lists.map((l, i) => {
-    const dims = TMDB_DIMS.map((dim) => tmdbDimSection(i, l, dim)).join('');
+    const dims = TMDB_DIMS.filter((d) => !(d.movieOnly && l.mediaType === 'series'))
+      .map((dim) => tmdbDimSection(i, l, dim)).join('');
+    const summary = tmdbModeSummary(l);
+    const countLine = typeof l.count === 'number' ? l.count + (l.previewTruncated ? '+' : '') + ' results' : '';
+    const pillHint = summary === 'mixed'
+      ? "Genres, Keywords, Companies, and Part of Collection are not all set the same way - use each dimension's own AND/OR tag to adjust individually, or click AND/OR here to set all four at once."
+      : summary === 'or'
+        ? 'Each genre, keyword, company, release type, and collection is an independent source; results are unioned.'
+        : "All include dimensions are AND'd into one TMDB query (often returns few or no results).";
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="tcard-' + i + '">' +
       '<div class="card-top">' +
         '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleTmdb(' + i + ')"><span class="toggle-slider"></span></label></div>' +
         '<div class="info">' +
           nameEditBlock(i, l) +
           '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
+          '<div class="count-line">' + (countLine || 'Tap the eye icon to preview') + '</div>' +
         '</div>' +
+        '<span class="icon-group">' +
+          '<span class="icon-btn' + (l.previewOpen ? ' active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
+          '</span>' +
+          '<span class="icon-btn card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+          '</span>' +
+          '<span class="icon-btn" onclick="askDelete(' + i + ')" title="Delete this list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
+          '</span>' +
+        '</span>' +
       '</div>' +
       '<div class="card-controls">' +
         '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
@@ -1019,16 +1137,21 @@ function renderTmdb() {
         '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)" title="Sort order">' +
           TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
         '</select>' +
-        '<span class="card-actions">' +
-          '<button class="secondary" onclick="askTmdbPreview(' + i + ')">Preview</button>' +
-          '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
-            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
-          '</button>' +
-          '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
-        '</span>' +
       '</div>' +
-      '<div class="simkl-filter">' + dims + '</div>' +
-      '<div class="tmdb-preview" id="tmdbPreview-' + i + '" style="display:none"></div>' +
+      (l.sort === 'title_asc' && l.mediaType === 'series'
+        ? '<div class="sort-fallback-note">Title (A-Z) is not supported by TMDB for series - showing Popularity instead.</div>'
+        : '') +
+      '<div class="include-mode-row">' +
+        '<span class="members-label">Combine includes</span>' +
+        '<div class="mode-toggle" role="group" aria-label="Combine include filters">' +
+          '<button type="button" class="mode-toggle-btn' + (summary === 'and' ? ' active' : '') + '" onclick="setTmdbAllModes(' + i + ', \\\'and\\\')" title="Set every dimension to AND - a movie must match ALL of them at once">AND</button>' +
+          '<button type="button" class="mode-toggle-btn mode-toggle-mixed" disabled title="Mix - dimensions are not all set the same way; see each dimension tag">Mix</button>' +
+          '<button type="button" class="mode-toggle-btn' + (summary === 'or' ? ' active' : '') + '" onclick="setTmdbAllModes(' + i + ', \\\'or\\\')" title="Set every dimension to OR - a movie matching ANY of them appears in the catalog">OR</button>' +
+        '</div>' +
+        '<span class="include-mode-hint">' + pillHint + '</span>' +
+      '</div>' +
+      dims +
+      (l.previewOpen ? tmdbPreviewHtml(i, l) : '') +
       '<div class="card-error" id="tcardError-' + i + '"></div>' +
     '</div>';
   }).join('');
@@ -1050,6 +1173,11 @@ function renderTmdb() {
     '</div>';
 
   host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No TMDB discover lists yet - add one above.</div>');
+
+  if (tmdbAdding) {
+    const inp = document.getElementById('tmdbInlineInput');
+    if (inp) { inp.focus(); }
+  }
 }
 
 function showTmdbCreate() {
@@ -1087,7 +1215,7 @@ async function confirmCreateTmdb() {
   state.tmdb.lists.push(fresh);
   hideTmdbCreate();
   renderTmdb();
-  setStatus('List added. Configure filters below, then press Save to generate it.', 'ok');
+  setStatus('List added. Expand a filter section below to start narrowing it down, then press Save to generate it.', 'ok');
 }
 
 function toggleTmdb(i) {
@@ -1101,6 +1229,18 @@ function updateTmdb(i, key, value) {
   const l = state.tmdb.lists[i];
   if (!l) return;
   l[key] = value;
+  if (key === 'mediaType' || key === 'sort') {
+    delete l.count;
+    if (l.previewOpen) { loadTmdbPreview(i); return; }
+  }
+  renderTmdb();
+}
+
+function setTmdbAllModes(i, mode) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  l.includeModes = { genre: mode, keyword: mode, company: mode, collection: mode };
+  invalidateTmdbPreview(l);
   renderTmdb();
 }
 
@@ -1108,25 +1248,25 @@ function setTmdbMode(i, kind, mode) {
   const l = state.tmdb.lists[i];
   if (!l) return;
   l.includeModes[kind] = mode;
+  invalidateTmdbPreview(l);
   renderTmdb();
 }
 
-function toggleTmdbItem(i, kind, field, id, checked) {
-  const l = state.tmdb.lists[i];
-  if (!l) return;
-  const key = TMDB_FIELD_KEYS[kind][field];
-  const arr = l[key];
-  const idx = arr.indexOf(id);
-  if (checked && idx === -1) arr.push(id);
-  if (!checked && idx !== -1) arr.splice(idx, 1);
+function toggleTmdbSection(i, kind) {
+  const key = i + ':' + kind;
+  if (tmdbOpenSections.has(key)) tmdbOpenSections.delete(key);
+  else tmdbOpenSections.add(key);
+  if (tmdbAdding && tmdbAdding.i === i && tmdbAdding.kind === kind) closeTmdbInlineSearch();
+  else renderTmdb();
 }
 
-function addTmdbNamed(i, kind, field, id, name) {
+function addTmdbStatic(i, kind, field, valueStr) {
+  if (!valueStr) return;
+  const id = parseInt(valueStr, 10);
   const l = state.tmdb.lists[i];
-  if (!l) return;
-  const key = TMDB_FIELD_KEYS[kind][field];
-  if (!l[key].includes(id)) l[key].push(id);
-  closeTmdbSearch();
+  if (!l || l[TMDB_FIELD_KEYS[kind][field]].includes(id)) return;
+  l[TMDB_FIELD_KEYS[kind][field]].push(id);
+  invalidateTmdbPreview(l);
   renderTmdb();
 }
 
@@ -1136,111 +1276,247 @@ function removeTmdbId(i, kind, field, id) {
   const key = TMDB_FIELD_KEYS[kind][field];
   const idx = l[key].indexOf(id);
   if (idx !== -1) l[key].splice(idx, 1);
+  const namesKey = TMDB_NAME_KEYS[kind] && TMDB_NAME_KEYS[kind][field];
+  if (namesKey && l[namesKey]) l[namesKey].splice(idx, 1);
+  invalidateTmdbPreview(l);
   renderTmdb();
 }
 
-let tmdbSearchTarget = null; // { i, kind, field }
-function openTmdbSearch(i, kind, field) {
-  tmdbSearchTarget = { i, kind, field };
-  const backdrop = document.getElementById('tmdbSearchBackdrop');
-  document.getElementById('tmdbSearchInput').value = '';
-  document.getElementById('tmdbSearchResults').innerHTML = '<div class="empty">Type to search…</div>';
-  backdrop.classList.add('visible');
-  document.getElementById('tmdbSearchInput').focus();
+function openTmdbInlineSearch(i, kind, side) {
+  tmdbAdding = { i, kind, side };
+  tmdbSearchResultsHtml = null;
+  renderTmdb();
+  const input = document.getElementById('tmdbInlineInput');
+  if (input) input.focus();
 }
-function closeTmdbSearch() {
-  document.getElementById('tmdbSearchBackdrop').classList.remove('visible');
-  tmdbSearchTarget = null;
+function closeTmdbInlineSearch() {
+  tmdbAdding = null;
+  tmdbSearchResultsHtml = null;
+  renderTmdb();
 }
-async function runTmdbSearch() {
-  if (!tmdbSearchTarget) return;
-  const q = document.getElementById('tmdbSearchInput').value.trim();
-  const box = document.getElementById('tmdbSearchResults');
+
+async function runTmdbInlineSearch() {
+  if (!tmdbAdding) return;
+  const input = document.getElementById('tmdbInlineInput');
+  if (!input) return;
+  const q = input.value.trim();
   if (tmdbSearchTimer) clearTimeout(tmdbSearchTimer);
-  if (!q) { box.innerHTML = '<div class="empty">Type to search…</div>'; return; }
+  if (q.length < 2) {
+    tmdbSearchResultsHtml = null;
+    rerenderKeepInput(q);
+    return;
+  }
   tmdbSearchTimer = setTimeout(async () => {
     try {
-      const res = await fetch(ORIGIN + '/tmdb/search-' + tmdbSearchTarget.kind + '?query=' + encodeURIComponent(q));
+      const res = await fetch(ORIGIN + '/tmdb/search-' + tmdbAdding.kind + '?query=' + encodeURIComponent(q));
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      box.innerHTML = data.results.length === 0
-        ? '<div class="empty">No results.</div>'
-        : data.results.map((r) =>
-            '<div class="tmdb-search-result" onclick="addTmdbNamed(' + tmdbSearchTarget.i + ',\\\'' + tmdbSearchTarget.kind + '\\\',\\\'' + tmdbSearchTarget.field + '\\\',' + r.id + ',\\\'' + escapeAttr(r.name) + '\\\')">' +
-              '<span>' + escapeAttr(r.name) + '</span><span class="id-chip">' + r.id + '</span></div>').join('');
+      const l = state.tmdb.lists[tmdbAdding.i];
+      const idsKey = TMDB_FIELD_KEYS[tmdbAdding.kind][tmdbAdding.side];
+      tmdbSearchResultsHtml = data.results.length === 0
+        ? '<div class="empty-msg">No results found.</div>'
+        : data.results.map((r) => {
+            const already = l && l[idsKey].includes(r.id);
+            return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
+              (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + tmdbAdding.kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name) + '\\\')"') + '>' +
+              (r.poster ? '<img class="result-thumb" src="' + escapeAttr(r.poster) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
+              '<div><div class="result-title">' + escapeAttr(r.name) + '</div>' +
+              '<div class="result-meta">' + (already ? 'Already added' : 'Click to add') + '</div></div></div>';
+          }).join('');
     } catch (e) {
-      box.innerHTML = '<div class="empty">Search failed: ' + escapeAttr(e.message) + '</div>';
+      tmdbSearchResultsHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
     }
-  }, 350);
+    rerenderKeepInput(q);
+  }, 400);
+}
+
+// Re-render then restore the inline input's text + caret - innerHTML swap
+// would otherwise wipe what the user typed mid-search.
+function rerenderKeepInput(text) {
+  renderTmdb();
+  const fresh = document.getElementById('tmdbInlineInput');
+  if (fresh) { fresh.value = text; fresh.focus(); fresh.setSelectionRange(text.length, text.length); }
+}
+
+function pickTmdbResult(i, kind, side, id, name) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  const idsKey = TMDB_FIELD_KEYS[kind][side];
+  const namesKey = TMDB_NAME_KEYS[kind][side];
+  if (l[idsKey].includes(id)) { setStatus('That is already added.', 'error'); return; }
+  l[idsKey].push(id);
+  l[namesKey].push(name);
+  invalidateTmdbPreview(l);
+  closeTmdbInlineSearch();
+}
+
+// Old worker's escapeForOnclick - escapeAttr alone mangles apostrophes when
+// the string lands inside a JS string literal in an attribute.
+function escapeForOnclick(str) {
+  return escapeAttr(str).replace(/'/g, "\\'");
 }
 
 function tmdbDimSection(i, l, dim) {
   if (dim.movieOnly && l.mediaType === 'series') return '';
   const keys = TMDB_FIELD_KEYS[dim.kind];
+  const nameKeys = TMDB_NAME_KEYS[dim.kind];
   const hasMode = dim.kind !== 'releaseType';
   const mode = l.includeModes[dim.kind] || 'and';
-  const chip = (id, field) =>
-    '<span class="tmdb-chip">' + id +
-      '<a class="chip-x" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')">×</a></span>';
-  const section = (field, label) => {
+  const isOpen = tmdbOpenSections.has(i + ':' + dim.kind);
+  const totalCount = [keys.include, keys.exclude].filter(Boolean)
+    .reduce((n, f) => n + (l[f] || []).length, 0);
+
+  const chipRow = (field, label, cls) => {
     const ids = l[keys[field]] || [];
-    let picker;
-    if (dim.staticOpts) {
-      picker = '<div class="tmdb-static-opts">' + dim.staticOpts.map((o) => {
-        const on = ids.includes(o.id);
-        return '<label class="tmdb-opt"><input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="toggleTmdbItem(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + o.id + ',this.checked)"> ' + o.name + '</label>';
-      }).join('') + '</div>';
+    const names = nameKeys ? (l[nameKeys[field]] || []) : null;
+    const chips = ids.map((id, idx) => {
+      const shown = dim.isStatic ? tmdbStaticName(dim.kind, id, l.mediaType) : (names[idx] != null ? names[idx] : String(id));
+      return '<span class="' + cls + '">' + escapeAttr(shown) +
+        '<a class="chip-x" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')">×</a></span>';
+    }).join('');
+    const addingHere = tmdbAdding && tmdbAdding.i === i && tmdbAdding.kind === dim.kind && tmdbAdding.side === field;
+    let adder;
+    if (dim.isStatic) {
+      const opts = (dim.kind === 'releaseType' ? TMDB_RELEASE_TYPES : tmdbGenresFor(l.mediaType))
+        .filter((o) => !ids.includes(o.id));
+      adder = '<select class="exclude-genre-select-inline" onchange="addTmdbStatic(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',this.value);this.value=\\'\\'">' +
+        '<option value="">+ ' + (field === 'include' ? 'Add' : 'Exclude') + '</option>' +
+        opts.map((o) => '<option value="' + o.id + '">' + escapeAttr(o.name) + '</option>').join('') +
+        '</select>';
+    } else if (!addingHere) {
+      adder = cls === 'member-chip'
+        ? '<span class="member-chip member-chip-add" onclick="openTmdbInlineSearch(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\')">+ Add</span>'
+        : '<span class="exclude-chip-add" onclick="openTmdbInlineSearch(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\')">+ Exclude</span>';
     } else {
-      picker = '<button class="secondary tmdb-add-btn" onclick="openTmdbSearch(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\')">+ Search</button>';
+      adder = '';
     }
-    return '<div class="filter-line filter-top"><span class="filter-label">' + label + '</span>' +
-      '<div class="filter-value">' + picker + '</div></div>' +
-      (ids.length > 0 ? '<div class="tmdb-chips">' + ids.map((id) => chip(id, field)).join('') + '</div>' : '');
+    return '<div class="members-label" style="margin-top:8px;">' + label + (dim.hasExclude ? ' (any of these)' : '') + '</div>' +
+      '<div class="members-chips">' + chips +
+        (ids.length === 0 ? '<span class="members-empty">' + (cls === 'member-chip' ? 'None yet' : 'Nothing excluded') + '</span>' : '') +
+        adder + '</div>' +
+      (!dim.isStatic && addingHere ? tmdbInlineSearchHtml(i, dim, field) : '');
   };
+
   return '<div class="tmdb-dim">' +
-    '<div class="tmdb-dim-head"><span class="filter-label">' + dim.label + '</span>' +
-      (hasMode ? '<span class="dim-mode-tag" onclick="setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" title="' + (mode === 'or'
+    '<div class="exclude-label"><span class="exclude-label-toggle" onclick="toggleTmdbSection(' + i + ',\\\'' + dim.kind + '\\\')">' +
+      '<span class="filter-label">' + dim.label + (totalCount > 0 ? ' (' + totalCount + ')' : '') + '</span>' +
+      '<svg class="exclude-chevron' + (isOpen ? ' open' : '') + '" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+      (hasMode ? '<span class="dim-mode-tag" onclick="event.stopPropagation();setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" title="' + (mode === 'or'
         ? 'OR - this selection becomes its own source, unioned with everything else (click to switch to AND)'
         : 'AND - this selection narrows every other source instead of being one of its own (click to switch to OR)') + '">' + (mode === 'or' ? 'OR' : 'AND') + '</span>' : '') +
-    '</div>' +
-    section('include', 'Include') +
-    (dim.hasExclude ? section('exclude', 'Exclude') : '') +
+    '</span></div>' +
+    (isOpen
+      ? chipRow('include', 'Include', 'member-chip') + (dim.hasExclude ? chipRow('exclude', 'Exclude', 'exclude-chip') : '')
+      : '') +
   '</div>';
 }
 
-function askTmdbPreview(i) {
+function tmdbInlineSearchHtml(i, dim, side) {
+  const placeholder = { keyword: 'Search for a keyword…', company: 'Search for a company…', collection: 'Search for a collection…' }[dim.searchKind] || 'Search…';
+  return '<div class="inline-add-search">' +
+    '<div class="search-row">' +
+      '<div class="search-input-wrap">' +
+        '<input class="search-input" id="tmdbInlineInput" type="text" placeholder="' + placeholder + '" autocomplete="off" spellcheck="false"' +
+          ' oninput="runTmdbInlineSearch()"' +
+          ' onkeydown="if(event.key===&quot;Escape&quot;)closeTmdbInlineSearch();">' +
+        '<span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>' +
+      '</div>' +
+      '<button onclick="runTmdbInlineSearchNow()">Add</button>' +
+      '<button class="secondary" onclick="closeTmdbInlineSearch()">Cancel</button>' +
+    '</div>' +
+    '<div class="search-results">' + (tmdbSearchResultsHtml || '') + '</div>' +
+  '</div>';
+}
+
+function runTmdbInlineSearchNow() {
+  if (tmdbSearchTimer) clearTimeout(tmdbSearchTimer);
+  runTmdbInlineSearch();
+}
+
+function invalidateTmdbPreview(l) {
+  delete l.previewItems;
+  delete l.count;
+  if (l.previewOpen) loadTmdbPreview(state.tmdb.lists.indexOf(l));
+}
+
+function toggleTmdbPreview(i) {
   const l = state.tmdb.lists[i];
   if (!l) return;
-  tmdbPreviewIndex = i;
-  const box = document.getElementById('tmdbPreview-' + i);
-  box.style.display = 'block';
-  box.innerHTML = '<div class="empty">Loading preview…</div>';
-  fetch(ORIGIN + '/tmdb/preview-discover', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...l }),
-  }).then((r) => r.json()).then((data) => {
-    if (data.error) throw new Error(data.error);
-    box.innerHTML =
-      '<div class="tmdb-preview-head">' +
-        '<span>Preview' + (data.truncated ? ' (first pages only)' : '') + ' - ' + data.items.length + ' items</span>' +
-        '<a class="chip-x" onclick="closeTmdbPreview()">×</a></div>' +
-      '<div class="tmdb-preview-grid">' +
-        data.items.map((m) =>
-          '<div class="tmdb-preview-item">' +
-            (m.poster ? '<img src="' + escapeAttr(m.poster) + '" alt="" loading="lazy">' : '<div class="tmdb-noimg"></div>') +
-            '<span class="tmdb-pv-name">' + escapeAttr(m.name) + '</span>' +
-            '<span class="tmdb-pv-year">' + escapeAttr(m.year || '') + '</span></div>').join('') +
-      '</div>';
-  }).catch((e) => {
-    box.innerHTML = '<div class="empty">Preview failed: ' + escapeAttr(e.message) + '</div>';
-  });
+  l.previewOpen = !l.previewOpen;
+  if (l.previewOpen && !l.previewItems) loadTmdbPreview(i);
+  else renderTmdb();
 }
-function closeTmdbPreview() {
-  if (tmdbPreviewIndex < 0) return;
-  const box = document.getElementById('tmdbPreview-' + tmdbPreviewIndex);
-  if (box) { box.style.display = 'none'; box.innerHTML = ''; }
-  tmdbPreviewIndex = -1;
+
+function toggleTmdbPreviewView(i) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  l.previewViewMode = (l.previewViewMode || 'grid') === 'grid' ? 'list' : 'grid';
+  renderTmdb();
+}
+
+async function loadTmdbPreview(i) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  l.previewLoading = true;
+  l.previewError = null;
+  renderTmdb();
+  try {
+    const res = await fetch(ORIGIN + '/tmdb/preview-discover', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...l }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    l.previewItems = data.items;
+    l.previewTruncated = !!data.truncated;
+    l.count = data.items.length;
+  } catch (e) {
+    l.previewError = 'Could not load results: ' + e.message;
+  } finally {
+    l.previewLoading = false;
+    renderTmdb();
+  }
+}
+
+function tmdbPreviewHtml(i, l) {
+  const isGrid = (l.previewViewMode || 'grid') === 'grid';
+  let body;
+  if (l.previewLoading) body = '<div class="preview-msg">Loading…</div>';
+  else if (l.previewError) body = '<div class="preview-msg error">' + escapeAttr(l.previewError) + '</div>';
+  else if (!(l.previewItems || []).length) body = '<div class="preview-msg">No results found.</div>';
+  else if (!isGrid) {
+    body = '<div class="preview-list">' + l.previewItems.map((p, idx) =>
+      '<div class="preview-list-item">' +
+        '<span class="preview-list-num">' + (idx + 1) + '.</span>' +
+        '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + p.year + ')' : '') +
+          (p.type === 'series' ? ' <span class="media-kind-tag">Series</span>' : '') + '</span>' +
+        '<a class="icon-btn preview-list-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
+      '</div>').join('') + '</div>';
+  } else {
+    body = '<div class="preview-scroll">' + l.previewItems.map((p) =>
+      '<div class="preview-item">' +
+        (p.poster ? '<img src="' + escapeAttr(p.poster) + '" alt="" loading="lazy">' : '<div class="preview-poster-placeholder"></div>') +
+        '<a class="icon-btn preview-item-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
+        '<div class="preview-item-title">' + escapeAttr(p.name) + (p.type === 'series' ? ' <span class="media-kind-tag">Series</span>' : '') + '</div>' +
+        '<div>' + escapeAttr(p.year || '') + '</div>' +
+      '</div>').join('') + '</div>';
+  }
+  return '<div class="preview-row">' +
+    '<div class="preview-toolbar">' +
+      '<span class="icon-btn" onclick="toggleTmdbPreviewView(' + i + ')" title="' + (isGrid ? 'Switch to list view' : 'Switch to grid view') + '">' +
+        (isGrid
+          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>') +
+      '</span>' +
+    '</div>' +
+    (l.previewTruncated
+      ? '<div class="sort-fallback-note">This filter combination matches a very large number of titles - showing the first ' + (l.previewItems || []).length + ' for preview. Your actual Stremio catalog will still show everything as you scroll.</div>'
+      : '') +
+    body +
+  '</div>';
 }
 
 // ─── Save (hash-compare → dispatch changed lists only) ───

@@ -259,6 +259,12 @@ export function migrateConfig(raw) {
 // are dropped rather than healed - a bad id can't reach data/ paths.
 const TMDB_SORTS = ["release_asc", "release_desc", "popularity_desc", "vote_desc", "title_asc"];
 const numArr = (v) => (Array.isArray(v) ? v.filter((n) => Number.isFinite(n)) : []);
+// Display names for keyword/company/collection ids, kept index-aligned with
+// the id arrays. UI-only - never hashed, never sent to the generator.
+const nameArr = (v, len) => {
+  const arr = Array.isArray(v) ? v.map((s) => String(s).slice(0, 200)) : [];
+  return arr.slice(0, len);
+};
 
 export function normalizeTmdbList(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -266,6 +272,12 @@ export function normalizeTmdbList(raw) {
   if (typeof raw.discoverListId !== "string" || !/^[a-z0-9]{8}$/.test(raw.discoverListId)) return null;
   const modesRaw = raw.includeModes && typeof raw.includeModes === "object" ? raw.includeModes : {};
   const mode = (v) => (v === "or" ? "or" : "and");
+  const incKw = numArr(raw.includeKeywords);
+  const excKw = numArr(raw.excludeKeywords);
+  const incCo = numArr(raw.includeCompanies);
+  const excCo = numArr(raw.excludeCompanies);
+  const incCl = numArr(raw.includeCollections);
+  const excCl = numArr(raw.excludeCollections);
   return {
     discoverListId: raw.discoverListId,
     name: String(raw.name || "").trim().slice(0, 200) || "Untitled",
@@ -280,13 +292,19 @@ export function normalizeTmdbList(raw) {
     },
     includeGenres: numArr(raw.includeGenres),
     excludeGenres: numArr(raw.excludeGenres),
-    includeKeywords: numArr(raw.includeKeywords),
-    excludeKeywords: numArr(raw.excludeKeywords),
-    includeCompanies: numArr(raw.includeCompanies),
-    excludeCompanies: numArr(raw.excludeCompanies),
+    includeKeywords: incKw,
+    includeKeywordNames: nameArr(raw.includeKeywordNames, incKw.length),
+    excludeKeywords: excKw,
+    excludeKeywordNames: nameArr(raw.excludeKeywordNames, excKw.length),
+    includeCompanies: incCo,
+    includeCompanyNames: nameArr(raw.includeCompanyNames, incCo.length),
+    excludeCompanies: excCo,
+    excludeCompanyNames: nameArr(raw.excludeCompanyNames, excCo.length),
     includeReleaseTypes: numArr(raw.includeReleaseTypes),
-    includeCollections: numArr(raw.includeCollections),
-    excludeCollections: numArr(raw.excludeCollections),
+    includeCollections: incCl,
+    includeCollectionNames: nameArr(raw.includeCollectionNames, incCl.length),
+    excludeCollections: excCl,
+    excludeCollectionNames: nameArr(raw.excludeCollectionNames, excCl.length),
   };
 }
 

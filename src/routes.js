@@ -552,15 +552,33 @@ export async function handleTmdbSearch(env, kind, query) {
   const results = (data.results || []).slice(0, TMDB_SEARCH_MAX).map((r) => ({
     id: r.id,
     name: r.name || r.title,
+    poster: r.poster_path ? `https://image.tmdb.org/t/p/w92${r.poster_path}` : null,
   }));
   return json({ results });
 }
 
 // Port of the old tmdb worker's buildDiscoverSources/fetch logic, live
 // variant: same AND/OR fragment plan, collection post-filter, capped at
-// 5 pages × 20 for preview purposes. Body is a discover list entry
-// (normalizeTmdbList shape) + optional previewMediaType override.
-const PREVIEW_PAGES = 5;
+// 25 pages × 20 = up to 500 items (old worker's MAX_PREVIEW_PAGES). Body is
+// a discover list entry (normalizeTmdbList shape) + optional previewMediaType.
+const PREVIEW_PAGES = 25;
+const PREVIEW_PAGE_SIZE = 20;
+
+// Client-side sort of the unioned multi-source result set - mirrors the old
+// worker's sortParts so preview order matches what the generated catalog
+// serves. title_asc on series falls back to popularity (TMDB /discover/tv
+// has no name sort).
+function sortPreviewItems(items, sortKey, mediaType) {
+  const dateField = mediaType === "series" ? "first_air_date" : "release_date";
+  const cmp = {
+    release_asc: (a, b) => String(a[dateField] || "").localeCompare(String(b[dateField] || "")),
+    release_desc: (a, b) => String(b[dateField] || "").localeCompare(String(a[dateField] || "")),
+    popularity_desc: (a, b) => (b.popularity || 0) - (a.popularity || 0),
+    vote_desc: (a, b) => (b.vote_average || 0) - (a.vote_average || 0),
+    title_asc: (a, b) => String(a.title || a.name || "").localeCompare(String(b.title || b.name || "")),
+  }[sortKey] || ((a, b) => (b.popularity || 0) - (a.popularity || 0));
+  return items.sort(cmp);
+}
 
 export async function handleTmdbPreviewDiscover(env, request) {
   const guard = tmdbTokenOrError(env);
@@ -651,12 +669,14 @@ export async function handleTmdbPreviewDiscover(env, request) {
       items = items.filter((p) => collectionIdSet.has(p.id));
     }
 
+    sortPreviewItems(items, entry.sort, mediaType);
     const truncated = totalPages > PREVIEW_PAGES;
-    const metas = items.slice(0, 100).map((item) => ({
+    const metas = items.slice(0, PREVIEW_PAGES * PREVIEW_PAGE_SIZE).map((item) => ({
       id: item.id,
+      type: mediaType === "series" ? "series" : "movie",
       name: item.title || item.name,
       year: (item.release_date || item.first_air_date || "").slice(0, 4),
-      poster: item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : undefined,
+      poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : undefined,
     }));
     return json({ items: metas, truncated });
   } catch (e) {
