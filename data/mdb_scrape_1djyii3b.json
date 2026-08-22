@@ -2,18 +2,8 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787371120168,
+  "scraped_at": 1787407328470,
   "items": [
-    {
-      "slug": "32ndh-rosebush-pruning?cache=1",
-      "imdb_id": "tt27844906",
-      "title": "Rosebush Pruning",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "tXsTtSgguTsk5J115jokwK55awF.jpg",
-      "description": "In a Spanish villa, American siblings Jack, Ed, Anna and Robert wallow in isolation and their inherited fortune. When Jack wants to move in with his girlfriend and Ed uncovers the truth about their mother’s death, the fabric of the family begins to unravel.",
-      "digital_release_date": null
-    },
     {
       "slug": "35q62-welcome-to-the-jungle?cache=1",
       "imdb_id": "tt28540171",
@@ -85,6 +75,16 @@
       "digital_release_date": null
     },
     {
+      "slug": "3lvx1-bharat-bhhagya-viddhaata?cache=1",
+      "imdb_id": "tt33334267",
+      "title": "Bharat Bhhagya Viddhaata",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "tf5lLrrikOswHKHpzW0UiHycJEx.jpg",
+      "description": "Inside Cama Hospital, one of the sites targeted during the 2008 Mumbai terror attacks, nurses, ward boys, cleaners, lift operators, security personnel, and administrative workers keep 400 people alive while armed assailants struck the city around them.",
+      "digital_release_date": null
+    },
+    {
       "slug": "3pc8k-cocktail-2?cache=1",
       "imdb_id": "tt35064672",
       "title": "Cocktail 2",
@@ -99,7 +99,7 @@
       "imdb_id": "tt36454145",
       "title": "To the Max",
       "year": 2026,
-      "score": 3,
+      "score": 5,
       "poster_path": "7KtjwHzp2EB5N63bZtxVb2gImjf.jpg",
       "description": "A group of friends bonded by their love for extreme sports discovers BASE jumping in wingsuits — but feeling like flying carries the highest risks.",
       "digital_release_date": null
