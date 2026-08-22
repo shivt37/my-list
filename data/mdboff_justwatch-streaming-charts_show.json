@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1787371049321,
+  "scraped_at": 1787407262521,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -37,14 +37,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt34866681",
-      "type": "series",
-      "title": "Lucky",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt36303968",
       "type": "series",
       "title": "Furious",
@@ -53,11 +45,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt10293938",
+      "imdb_id": "tt34866681",
       "type": "series",
-      "title": "Outer Banks",
-      "year": 2020,
-      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg",
+      "title": "Lucky",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
       "imdb_rating": null
     },
     {
@@ -66,6 +58,22 @@
       "title": "Lioness",
       "year": 2023,
       "poster": "https://image.tmdb.org/t/p/w200/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2017109",
+      "type": "series",
+      "title": "Banshee",
+      "year": 2013,
+      "poster": "https://image.tmdb.org/t/p/w200/5nXFiz8Rn8eezVjSTZBd7HmnF1G.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt10293938",
+      "type": "series",
+      "title": "Outer Banks",
+      "year": 2020,
+      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg",
       "imdb_rating": null
     },
     {
@@ -85,14 +93,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt31491435",
-      "type": "series",
-      "title": "Tires",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt30923123",
       "type": "series",
       "title": "The Audacity",
@@ -101,11 +101,11 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt12327578",
+      "imdb_id": "tt31491435",
       "type": "series",
-      "title": "Star Trek: Strange New Worlds",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
+      "title": "Tires",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg",
       "imdb_rating": null
     },
     {
@@ -125,11 +125,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2017109",
+      "imdb_id": "tt0472954",
       "type": "series",
-      "title": "Banshee",
-      "year": 2013,
-      "poster": "https://image.tmdb.org/t/p/w200/5nXFiz8Rn8eezVjSTZBd7HmnF1G.jpg",
+      "title": "It's Always Sunny in Philadelphia",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
       "imdb_rating": null
     },
     {
@@ -141,19 +149,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt0472954",
-      "type": "series",
-      "title": "It's Always Sunny in Philadelphia",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt0813715",
       "type": "series",
       "title": "Heroes",
       "year": 2006,
       "poster": "https://image.tmdb.org/t/p/w200/lf0TcOkheYUZKpeh7c8lqJHNk5O.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt8593252",
+      "type": "series",
+      "title": "Coroner",
+      "year": 2019,
+      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg",
       "imdb_rating": null
     },
     {
@@ -645,14 +653,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt8593252",
-      "type": "series",
-      "title": "Coroner",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt39368539",
       "type": "series",
       "title": "Monsters of God",
@@ -1029,14 +1029,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt7459986",
-      "type": "series",
-      "title": "The Widow",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/lSeCcQ2yMMmetbKZWePRLFqwDT.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt33265765",
       "type": "series",
       "title": "Legends",
@@ -1138,6 +1130,14 @@
       "title": "Outlander",
       "year": 2014,
       "poster": "https://image.tmdb.org/t/p/w200/oftZNfyTVNU7IfOqoGLoT8MGvNs.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt7459986",
+      "type": "series",
+      "title": "The Widow",
+      "year": 2019,
+      "poster": "https://image.tmdb.org/t/p/w200/lSeCcQ2yMMmetbKZWePRLFqwDT.jpg",
       "imdb_rating": null
     },
     {
