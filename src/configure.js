@@ -1638,10 +1638,17 @@ async function saveAll() {
         return out;
       });
     }
+    // Strip UI-only preview state (cached results, flags, counters) from
+    // TMDB lists before posting - the server drops unknown fields anyway,
+    // so this only saves uploading hundreds of dead objects per Save.
+    const slimTmdb = {
+      ...state.tmdb,
+      lists: state.tmdb.lists.map(({ previewOpen, previewItems, previewTruncated, previewError, previewLoading, previewViewMode, count, ...rest }) => rest),
+    };
     const res = await fetch(ORIGIN + '/save-config', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...state, simkl: simklClone }),
+      body: JSON.stringify({ ...state, tmdb: slimTmdb, simkl: simklClone }),
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
