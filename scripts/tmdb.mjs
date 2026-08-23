@@ -22,7 +22,7 @@
  *   node tmdb.mjs --ids=tmdb_discover_movie_abc12345,...
  */
 
-import { writeFileSync, mkdirSync, readFileSync, existsSync, unlinkSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync, unlinkSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -58,11 +58,12 @@ function arg(name) {
 }
 
 // Order-independent fingerprint of everything that changes what gets
-// fetched. Name/enabled/sort deliberately excluded - a rename or sort-only
-// edit must not trigger a regenerate (sort is baked in at generation time,
-// but a sort change only reorders stored items, which fill-mode skips are
-// fine to defer to the next full regen... no: sort IS baked into the query,
-// so it must be hashed. Kept in.)
+// fetched (sort IS baked into the TMDB query, so it must be hashed; name
+// and enabled only affect the manifest, so they stay out). The hash is
+// stamped onto each generated data file for future diffing/audit - the
+// worker's tmdbContentHash mirrors this field set for save-time change
+// detection. There is deliberately NO fill-mode skip here: every run
+// regenerates, and only a 0-item result skips the write.
 export function computeSourceHash(list) {
   const modes = list.includeModes || {};
   const inputs = {
@@ -86,16 +87,6 @@ export function computeSourceHash(list) {
     Array.isArray(value) ? [...value].sort() : value
   );
   return createHash("sha256").update(normalized).digest("hex").slice(0, 16);
-}
-
-function readExistingHash(catalogId) {
-  const file = join(DATA_DIR, `${catalogId}.json`);
-  if (!existsSync(file)) return null;
-  try {
-    return JSON.parse(readFileSync(file, "utf8")).sourceHash || null;
-  } catch {
-    return null;
-  }
 }
 
 async function tmdbFetch(pathAndQuery) {
@@ -436,6 +427,17 @@ export async function main({
 
   await recordRuns(runs);
   console.log("\nSummary:", JSON.stringify(results, null, 2));
+  // Mirror scrape/official/simkl: a failed generation must fail the
+  // Actions step (non-zero exit) so the run shows red on GitHub instead
+  // of silently going green while /status carries the failures. Catch-path
+  // entries carry { error }, empty-result entries carry status:"failed".
+  // Uses process.exitCode (not process.exit) because this main() returns
+  // normally - letting Node drain naturally avoids abrupt-exit edge cases.
+  const failed = results.filter((r) => r.error || r.status === "failed");
+  if (failed.length > 0 && isMain) {
+    console.error(`${failed.length} list(s) failed generation - failing run.`);
+    process.exitCode = 1;
+  }
   return { generated: results };
 }
 
