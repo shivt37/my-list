@@ -2,8 +2,15 @@
   "catalog_id": "simkl_arriving_today_series",
   "name": "Arriving Today (Series) - Episodes & Premieres",
   "type": "series",
-  "scraped_at": 1787457969044,
+  "scraped_at": 1787496262270,
   "items": [
+    {
+      "id": "tt31849235",
+      "type": "series",
+      "name": "The Westies",
+      "poster": "https://simkl.in/posters/20/2007733770e602aee3_m.webp",
+      "description": "🏁 Finale (season) | S01E08 | 2026-08-23 04:00 UTC | US | genres: Crime, Drama | Simkl 7.4 (45) | IMDb 7.1 (1806)"
+    },
     {
       "id": "tt14321914",
       "type": "series",
@@ -23,14 +30,7 @@
       "type": "series",
       "name": "Lioness",
       "poster": "https://simkl.in/posters/14/141711093d5c64f3b4_m.webp",
-      "description": "📺 New Episode | S03E04 | 2026-08-23 07:00 UTC | US | genres: Action, Drama, Thriller | Simkl 7.8 (981) | IMDb 7.8 (93179)"
-    },
-    {
-      "id": "tt31849235",
-      "type": "series",
-      "name": "The Westies",
-      "poster": "https://simkl.in/posters/20/2007733770e602aee3_m.webp",
-      "description": "📺 New Episode | S01E08 | 2026-08-23 04:00 UTC | US | genres: Crime, Drama | Simkl 7.4 (44) | IMDb 7.1 (1806)"
+      "description": "📺 New Episode | S03E04 | 2026-08-23 07:00 UTC | US | genres: Action, Drama, Thriller | Simkl 7.8 (986) | IMDb 7.8 (93179)"
     }
   ]
 }
