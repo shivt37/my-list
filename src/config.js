@@ -453,6 +453,13 @@ export async function saveConfig(kv, cfg) {
 
 // ---- scrape-run history (last 30 per module, most recent first) ----
 // Scraper runs live under runs:scraper, official runs under runs:official.
+//
+// Known limitation (accepted 2026-08-23 - see .planning/codebase/FUNCTIONAL-AUDIT.md M5):
+// two truly simultaneous addRun calls could interleave their get+put and lose
+// a record. Accepted because every workflow shares the single Actions
+// concurrency group (my-list-scrape), so legitimate writers are serialized by
+// design; worst case is a missing row in a diagnostics list. Revisit only if
+// that group ever loosens - thorough fix = per-post KV keys + merge-on-read.
 
 export async function addRun(kv, run, key = RUNS_SCRAPER_KEY) {
   let runs = [];

@@ -124,6 +124,7 @@
 - Problem: `addRun` does get+put per record with no lock (acknowledged in `src/routes.js` line 245 comment for saves; same pattern in `src/config.js` `addRun`). Concurrent writers lose records.
 - Files: `src/config.js` (lines 450-454)
 - Improvement path: Concurrency group mostly serializes legitimate writers today; move runs to Durable Objects only if the group ever loosens.
+- **Decision (2026-08-23, functional audit M5): accepted as-is.** The race was reproduced deterministically in the audit; the shared Actions concurrency group (`queue: max`) prevents it in practice, and the thorough fix (per-post keys + merge-on-read) costs more than a missing diagnostics row justifies for a single-operator system. Revisit only if the concurrency group changes. Full reasoning: `FUNCTIONAL-AUDIT.md` §6.2 M5.
 
 ## Fragile Areas
 
