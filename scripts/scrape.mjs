@@ -11,8 +11,8 @@
  *
  * Required env (GitHub repo secrets / workflow env):
  *   WORKER_ORIGIN   - worker base URL, e.g. https://my-list.workers.dev
- *   MDBLIST_API_KEY - mdblist.com API key (only used for nothing today -
- *                     scraping is DOM-based; kept for parity/tests)
+ *   (Scraping is DOM-based; MDBLIST_API_KEY is not needed here - only
+ *    official.mjs talks to the MDBList API.)
  *
  * Usage:
  *   node scrape.mjs                       # scrape ALL enabled lists

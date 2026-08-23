@@ -81,7 +81,8 @@ jobs:
         working-directory: scripts
         env:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
-          MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
+          # MDBLIST_API_KEY deliberately NOT mounted here: the DOM scraper
+          # never calls the MDBList API - only official.yml uses the key.
           INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
           INPUT_LISTS: ${{ steps.sanitize.outputs.lists }}
           INPUT_DEL: ${{ steps.sanitize.outputs.delete_ids }}
