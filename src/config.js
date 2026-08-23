@@ -448,11 +448,25 @@ export async function saveConfig(kv, cfg) {
 // Scraper runs live under runs:scraper, official runs under runs:official.
 
 export async function addRun(kv, run, key = RUNS_SCRAPER_KEY) {
-  const runs = (await kv.get(key, "json")) || [];
+  let runs = [];
+  try {
+    const stored = await kv.get(key, "json");
+    // A corrupted or non-array value must not crash the writer (or take
+    // down POST /runs wholesale) - start a fresh list instead, mirroring
+    // loadConfig's corrupt-config fallback.
+    if (Array.isArray(stored)) runs = stored;
+  } catch {
+    runs = [];
+  }
   runs.unshift(run);
   await kv.put(key, JSON.stringify(runs.slice(0, RUNS_MAX)));
 }
 
 export async function getRuns(kv, key = RUNS_SCRAPER_KEY) {
-  return (await kv.get(key, "json")) || [];
+  try {
+    const runs = await kv.get(key, "json");
+    return Array.isArray(runs) ? runs : [];
+  } catch {
+    return []; // corrupt KV value → empty history rather than a thrown 500
+  }
 }

@@ -491,18 +491,24 @@ export async function handleRunsPost(env, request) {
     }
     const now = Date.now();
     for (const r of body.runs) {
-      const run = {
-        id: now + Math.floor(Math.random() * 1000),
-        catalog_id: String(r.catalog_id ?? "").slice(0, 64),
-        started_at: Number.isFinite(r.started_at) ? r.started_at : now,
-        finished_at: Number.isFinite(r.finished_at) ? r.finished_at : now,
-        pages_scraped: Number.isInteger(r.pages_scraped) && r.pages_scraped >= 0 ? r.pages_scraped : 0,
-        movies_found: Number.isInteger(r.movies_found) && r.movies_found >= 0 ? r.movies_found : 0,
-        status: r.status === "success" ? "success" : "failed",
-        error_message: typeof r.error_message === "string" ? r.error_message.slice(0, 500) : null,
-        triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
-      };
-      await addRun(env.STORE, run, runsKeyFor(run.catalog_id));
+      // Per-record isolation: one malformed record must not drop its valid
+      // siblings (previously any throw here 500'd the whole batch).
+      try {
+        const run = {
+          id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : now + Math.floor(Math.random() * 1000),
+          catalog_id: String(r.catalog_id ?? "").slice(0, 64),
+          started_at: Number.isFinite(r.started_at) ? r.started_at : now,
+          finished_at: Number.isFinite(r.finished_at) ? r.finished_at : now,
+          pages_scraped: Number.isInteger(r.pages_scraped) && r.pages_scraped >= 0 ? r.pages_scraped : 0,
+          movies_found: Number.isInteger(r.movies_found) && r.movies_found >= 0 ? r.movies_found : 0,
+          status: r.status === "success" ? "success" : "failed",
+          error_message: typeof r.error_message === "string" ? r.error_message.slice(0, 500) : null,
+          triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
+        };
+        await addRun(env.STORE, run, runsKeyFor(run.catalog_id));
+      } catch {
+        // Skip the bad record; keep ingesting the rest of the batch.
+      }
     }
     return json({ ok: true });
   } catch (e) {
