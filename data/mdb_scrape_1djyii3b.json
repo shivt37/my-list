@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787458044645,
+  "scraped_at": 1787496313050,
   "items": [
     {
       "slug": "35q62-welcome-to-the-jungle?cache=1",
@@ -152,6 +152,16 @@
       "score": 7,
       "poster_path": "4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg",
       "description": "This is the rambunctious, ridiculous and totally true story of how the Minions conquered Hollywood, became movie stars, lost everything, unleashed monsters onto the world and then banded together to try and save the planet from the mayhem they had just created.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3yf9x-the-boy-from-below?cache=1",
+      "imdb_id": "tt27337790",
+      "title": "The Boy from Below",
+      "year": 2025,
+      "score": null,
+      "poster_path": "6boCGBq6PYULSraA6PRUt9nuA93.jpg",
+      "description": "On Halloween night, 1997, a masked killer brings slasher films to life in Carpenter Falls. A video store clerk and her friends must survive his deadly game before they’re picked off one by one.",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "yU6ybmt1CSdkVBTJJsRYz5xnB4q.jpg",
       "description": "1050 AD: Robert Cole returns to England to bring the medical light of the Orient to his countrymen. But he fails because of the intrigues of the established London doctors, who feel threatened by the new knowledge. And it is not only the human body that is full of seemingly impenetrable secrets, the soul also holds its own mysteries.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3aotx-miss-you-love-you?cache=1",
-      "imdb_id": "tt30343126",
-      "title": "Miss You, Love You",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "aVt8ubqnuBU8R5MVNbuf9OTy8sa.jpg",
-      "description": "A blunt, grieving widow is forced to plan her husband’s funeral with a total stranger: her estranged gay son’s gay assistant. As they fumble through grief and their strange, darkly funny circumstances, buried secrets and long-held resentments surface, but their partnership becomes an unlikely conduit for connection, laughter, and healing for this mother and her unexpected surrogate son.",
       "digital_release_date": null
     }
   ]
