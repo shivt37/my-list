@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1787457987519,
+  "scraped_at": 1787493780670,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -10,14 +10,6 @@
       "title": "Lanterns",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/gpC7h43xPMEV3goYMQShfJbTtLq.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt14688458",
-      "type": "series",
-      "title": "Silo",
-      "year": 2023,
-      "poster": "https://image.tmdb.org/t/p/w200/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg",
       "imdb_rating": null
     },
     {
@@ -45,14 +37,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt34866681",
-      "type": "series",
-      "title": "Lucky",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt13111078",
       "type": "series",
       "title": "Lioness",
@@ -61,107 +45,19 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt2017109",
+      "imdb_id": "tt34866681",
       "type": "series",
-      "title": "Banshee",
-      "year": 2013,
-      "poster": "https://image.tmdb.org/t/p/w200/5nXFiz8Rn8eezVjSTZBd7HmnF1G.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt10293938",
-      "type": "series",
-      "title": "Outer Banks",
-      "year": 2020,
-      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt33332385",
-      "type": "series",
-      "title": "Widow's Bay",
+      "title": "Lucky",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt35618070",
+      "imdb_id": "tt14688458",
       "type": "series",
-      "title": "Sterling Point",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt30923123",
-      "type": "series",
-      "title": "The Audacity",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/ea6hHjW8yWjROSYwynpWsYc4mYZ.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt27497393",
-      "type": "series",
-      "title": "Stuart Fails to Save the Universe",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt31491435",
-      "type": "series",
-      "title": "Tires",
-      "year": 2024,
-      "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0472954",
-      "type": "series",
-      "title": "It's Always Sunny in Philadelphia",
-      "year": 2005,
-      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt30494226",
-      "type": "series",
-      "title": "Ride or Die",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt8593252",
-      "type": "series",
-      "title": "Coroner",
-      "year": 2019,
-      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt12327578",
-      "type": "series",
-      "title": "Star Trek: Strange New Worlds",
-      "year": 2022,
-      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt36937503",
-      "type": "series",
-      "title": "Anna Pigeon",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/iLhi3wqsLOdHB61vySJRm7y09XS.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt0106179",
-      "type": "series",
-      "title": "The X-Files",
-      "year": 1993,
-      "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg",
+      "title": "Silo",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg",
       "imdb_rating": null
     },
     {
@@ -173,6 +69,46 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt30494226",
+      "type": "series",
+      "title": "Ride or Die",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt33332385",
+      "type": "series",
+      "title": "Widow's Bay",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt31491435",
+      "type": "series",
+      "title": "Tires",
+      "year": 2024,
+      "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt35618070",
+      "type": "series",
+      "title": "Sterling Point",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0472954",
+      "type": "series",
+      "title": "It's Always Sunny in Philadelphia",
+      "year": 2005,
+      "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt11198330",
       "type": "series",
       "title": "House of the Dragon",
@@ -181,11 +117,43 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt10293938",
+      "type": "series",
+      "title": "Outer Banks",
+      "year": 2020,
+      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt34991493",
       "type": "series",
       "title": "Dutton Ranch",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt27497393",
+      "type": "series",
+      "title": "Stuart Fails to Save the Universe",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt0106179",
+      "type": "series",
+      "title": "The X-Files",
+      "year": 1993,
+      "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
       "imdb_rating": null
     },
     {
@@ -213,6 +181,14 @@
       "imdb_rating": null
     },
     {
+      "imdb_id": "tt36937503",
+      "type": "series",
+      "title": "Anna Pigeon",
+      "year": 2026,
+      "poster": "https://image.tmdb.org/t/p/w200/iLhi3wqsLOdHB61vySJRm7y09XS.jpg",
+      "imdb_rating": null
+    },
+    {
       "imdb_id": "tt2281375",
       "type": "series",
       "title": "Nashville",
@@ -226,6 +202,14 @@
       "title": "My Brilliant Career",
       "year": 2026,
       "poster": "https://image.tmdb.org/t/p/w200/fhpa8B6USatHybK04XBbPAB6Mlz.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt2017109",
+      "type": "series",
+      "title": "Banshee",
+      "year": 2013,
+      "poster": "https://image.tmdb.org/t/p/w200/5nXFiz8Rn8eezVjSTZBd7HmnF1G.jpg",
       "imdb_rating": null
     },
     {
@@ -322,6 +306,14 @@
       "title": "Sugar",
       "year": 2024,
       "poster": "https://image.tmdb.org/t/p/w200/tLmwLYiI7EpPbhgmdeivNGY0xw7.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt8593252",
+      "type": "series",
+      "title": "Coroner",
+      "year": 2019,
+      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg",
       "imdb_rating": null
     },
     {
