@@ -1,12 +1,7 @@
 // Configure page: shared shell (header + hamburger menu + confirm modal +
-// CSS) hosting per-module tabs. Phase 1 ships the scraper tab; the other
-// three menu items render "coming soon". Tab markup lives in
-// scraperTabHtml() below, injected into #tabHost at load; each module
-// owns its state in `window.moduleState` and renders via its own render().
-
-function escapeAttr(s) {
-  return String(s ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+// CSS) hosting per-module tabs. Tab markup lives in scraperTabHtml-style
+// render functions below, injected into #tabHost at load; all modules share
+// the single `state` object and re-render via rerenderActive().
 
 export function buildConfigurePage(origin, config) {
   // </script> can escape the inline state blob (V8 JSON.stringify does not
@@ -1159,9 +1154,7 @@ function tmdbStaticName(kind, id, mediaType) {
   return opt ? opt.name : String(id);
 }
 
-let tmdbCreateOpen = false;
 let tmdbSearchTimer = null;
-let tmdbPreviewIndex = -1;
 
 function tmdbEmptyList(mediaType) {
   return {
