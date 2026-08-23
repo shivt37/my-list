@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_ogu4jkeo",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1787407364441,
+  "scraped_at": 1787458080657,
   "items": [
+    {
+      "slug": "436w8-blood-sacrifice?cache=1",
+      "imdb_id": "tt38553367",
+      "title": "Blood Sacrifice",
+      "year": 2026,
+      "score": null,
+      "poster_path": "8iFUWLKBAWDrJ9rOunscgIDrGQ1.jpg",
+      "description": "Following the brutal murder of two police officers, a tenacious detective reluctantly joins forces with his estranged ex-cop father to catch the killer.",
+      "first_air_date": null
+    },
     {
       "slug": "kvl0-lanterns?cache=1",
       "imdb_id": "tt26545992",
@@ -19,7 +29,7 @@
       "imdb_id": "tt41559147",
       "title": "Moria",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "5T0cYK9C5UDVlqYGIYB8hcxq65T.jpg",
       "description": "Moria Casán transforms her life story into a symbolic spectacle of fame, controversy and ceaseless reinvention.",
       "first_air_date": null
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "xyVpiSZNA2fYJUuuagkqiSHJqjr.jpg",
       "description": "Winter. Hawkins. 1985. Welcome back to a town crawling with secrets, where beloved heroes are facing fresh mysteries... and an all-new breed of strange.",
-      "first_air_date": null
-    },
-    {
-      "slug": "3xf4i-flunked?cache=1",
-      "imdb_id": "tt37031059",
-      "title": "Flunked",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "ieFwnQWpI1XYIiYMTFMYNH3ny09.jpg",
-      "description": "Eddy, a math genius and small-time crook, avoids jail-time by going undercover as a teacher. His mission: to identify the kid of a major criminal.",
       "first_air_date": null
     }
   ]

@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787407328470,
+  "scraped_at": 1787458044645,
   "items": [
     {
       "slug": "35q62-welcome-to-the-jungle?cache=1",
@@ -219,7 +219,7 @@
       "imdb_id": "tt36822418",
       "title": "Governor",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "Anukm4NH6MM025vUQ9ykpWQXnFn.jpg",
       "description": "Set against Indias 1990 economic crisis, Governor follows Raman, a reluctant bureaucrat unexpectedly appointed as the Governor of the RBI when the nation stands on the brink of bankruptcy. As inflation rises, fuel runs low, and panic spreads, Raman must navigate political pressure and a collapsing system to prevent the country from falling apart.",
       "digital_release_date": null
@@ -519,7 +519,7 @@
       "imdb_id": "tt41983440",
       "title": "23 000 Lives",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "cNYTQKXvlSI62WacK35SfL22xs2.jpg",
       "description": "A group of young people sets sail for the Mediterranean to save the lives of refugees — a mission that puts their ideas of law and justice to the test.",
       "digital_release_date": null
@@ -582,6 +582,16 @@
       "score": 2,
       "poster_path": "uXgnaogJMjzNs2pnZkcGM1EulOa.jpg",
       "description": "A village's unity is tested by a new highway project that sparks greed and conflict.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3prnj-golden-kamuy-the-abashiri-prison-raid?cache=1",
+      "imdb_id": "tt38109660",
+      "title": "Golden Kamuy -The Abashiri Prison Raid-",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "a9W2203QLRqBT3a6EVDECc8g9Y2.jpg",
+      "description": "As each group pursues their mission, a fierce battle unfolds over the tattooed prisoners. Who is friend, and who is foe? The fight leads them all to Abashiri Prison, where Noppera-bo, the man who holds all the answers, is locked away...",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "aVt8ubqnuBU8R5MVNbuf9OTy8sa.jpg",
       "description": "A blunt, grieving widow is forced to plan her husband’s funeral with a total stranger: her estranged gay son’s gay assistant. As they fumble through grief and their strange, darkly funny circumstances, buried secrets and long-held resentments surface, but their partnership becomes an unlikely conduit for connection, laughter, and healing for this mother and her unexpected surrogate son.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3mgyw-idolos?cache=1",
-      "imdb_id": "tt27590933",
-      "title": "Ídolos",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "j2gYxk9EQXh2hz1jNZQOe9WOUXU.jpg",
-      "description": "A fiery young motorcycle racer throws away his shot at the junior championship in a reckless crash, only to receive a surprise offer from a top Moto2 team that gives him a chance at redemption. But to claim it, he must train under his estranged father, a disgraced former world champion haunted by a tragic past. As the father and son battle personal demons, media scrutiny, and a ruthless racing circuit, their fractured bond is pushed to the limit by ambition, love, and the unforgiving speed of the sport. With a wildcard entry into MotoGP on the line, they must confront the wreckage of their relationship to seize a future—on and off the track.",
       "digital_release_date": null
     }
   ]
