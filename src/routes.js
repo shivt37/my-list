@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, randomTmdbListId, addRun, getRuns, saveConfig, runsKeyFor, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
+import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY, OFFICIAL_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
 
@@ -89,7 +89,7 @@ export async function buildManifest(env) {
     .filter((l) => l.enabled)
     .map((l) => ({
       name: l.name,
-      id: `tmdb_discover_${l.mediaType}_${l.discoverListId}`,
+      id: tmdbCatalogId(l),
       type: l.mediaType,
       extra: [{ name: "skip", isRequired: false }],
     }));
@@ -171,7 +171,7 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
   const official = OFFICIAL_CATALOGS.find((c) => c.id === catalogId);
   const simkl = SIMKL_CATALOGS.find((c) => c.id === catalogId);
   const list = cfg.scraper.lists.find((l) => l.id === catalogId);
-  const tmdbList = cfg.tmdb.lists.find((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}` === catalogId);
+  const tmdbList = cfg.tmdb.lists.find((l) => tmdbCatalogId(l) === catalogId);
   const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : tmdbList ? rowToMetaTmdb : rowToMeta;
 
   // Unknown id / an id whose module is disabled → empty, but still 200.
@@ -215,7 +215,7 @@ export async function handleStatus(env, request) {
   const cfgSimNames = new Map(cfg.simkl.lists.map((l) => [l.slug, l.name]));
   const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, cfgoffNames.get(c.slug) || c.name]));
   const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, cfgSimNames.get(c.slug) || c.name]));
-  const tmdbByName = new Map(cfg.tmdb.lists.map((l) => [`tmdb_discover_${l.mediaType}_${l.discoverListId}`, l.name]));
+  const tmdbByName = new Map(cfg.tmdb.lists.map((l) => [tmdbCatalogId(l), l.name]));
   const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? tmdbByName.get(r.catalog_id) ?? r.catalog_id;
   const out = runs.slice(0, 30).map((r) => ({
     catalog_name: nameFor(r),
@@ -290,8 +290,8 @@ export async function handleSaveConfig(env, request) {
     const nextTmdbIds = new Set(incoming.tmdb.lists.map((l) => l.discoverListId));
     const tmdbRemoved = current.tmdb.lists.filter((l) => !nextTmdbIds.has(l.discoverListId));
     const tmdbGenerateIds = tmdbAddedOrChanged.filter((l) => l.enabled)
-      .map((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}`);
-    const tmdbDeleteIds = tmdbRemoved.map((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}`);
+      .map((l) => tmdbCatalogId(l));
+    const tmdbDeleteIds = tmdbRemoved.map((l) => tmdbCatalogId(l));
     const dispatch = [];
     for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
     const deleteIds = removed.map((l) => l.id);
@@ -439,11 +439,11 @@ export async function handleTriggerRefresh(env, request) {
     const enabledQ = cfg.tmdb.lists.filter((l) => l.enabled);
     let ids;
     if (singleId) {
-      const list = enabledQ.find((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}` === singleId);
+      const list = enabledQ.find((l) => tmdbCatalogId(l) === singleId);
       if (!list) return json({ error: "Unknown or disabled TMDB list." }, 404);
       ids = [singleId];
     } else {
-      ids = enabledQ.map((l) => `tmdb_discover_${l.mediaType}_${l.discoverListId}`);
+      ids = enabledQ.map((l) => tmdbCatalogId(l));
     }
     const result = await dispatchScraperWorkflow(env, {
       workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,

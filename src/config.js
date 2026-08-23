@@ -26,6 +26,13 @@ export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
 export const SIMKL_RUNS_KEY = RUNS_SIMKL_KEY;
 export const TMDB_RUNS_KEY = RUNS_TMDB_KEY;
 
+// Single source of truth for the TMDB catalog-id string. The manifest,
+// catalog lookup, refresh routing, and status naming all build this same
+// shape - keeping it in one place stops them drifting apart.
+export function tmdbCatalogId(list) {
+  return `tmdb_discover_${list.mediaType}_${list.discoverListId}`;
+}
+
 // TMDB Discover list ids: tmdb_discover_<movie|series>_<8 base36 chars>.
 // One list = one catalog (no 'all' expansion - the operator picks the
 // media type at creation).
