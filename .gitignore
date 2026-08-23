@@ -4,6 +4,7 @@ dev-dist/
 debug/
 scratch/
 .DS_Store
+.audit/
 
 # Catalog data files are written by the scrape/official/simkl workflows
 # and force-added (`git add -f`) regardless of gitignore. Local clones
