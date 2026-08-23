@@ -24,6 +24,9 @@ export async function dispatchScraperWorkflow(env, { lists = [], action = "scrap
       Accept: "application/vnd.github+json",
       "User-Agent": "my-list-worker",
     },
+    // Bound a hung GitHub API connection so a save/refresh fails fast
+    // with a clear reason instead of stalling the request.
+    signal: AbortSignal.timeout(15000),
     body: JSON.stringify({
       ref: env.GH_REF || "main",
       inputs: payloadInputs,

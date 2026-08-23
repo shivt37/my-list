@@ -531,6 +531,10 @@ function tmdbTokenOrError(env) {
 async function tmdbApi(env, pathAndQuery) {
   const res = await fetch(`https://api.themoviedb.org/3${pathAndQuery}`, {
     headers: { Authorization: `Bearer ${env.TMDB_READ_ACCESS_TOKEN}`, Accept: "application/json" },
+    // Bound a hung TMDB connection - the preview endpoint can issue dozens
+    // of sequential rounds, and an unbounded stall would hold the request
+    // open until the platform kills it.
+    signal: AbortSignal.timeout(30000),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
