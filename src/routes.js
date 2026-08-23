@@ -394,12 +394,15 @@ export async function handleTriggerRefresh(env, request) {
 
   // Official page-scoped refresh: one slug refresh → one official list
   // (movies + shows); no id → all enabled official lists.
-  if (page === "official") {
-    const enabledQ = cfg.official.lists.filter((l) => l.enabled);
-    if (singleId) {
-      const list = enabledQ.find((l) => l.slug === singleId);
-      if (!list) return json({ error: "Unknown or disabled official list." }, 404);
-    }
+    // Consistent contract across all four modules: unknown id → 404,
+    // known-but-disabled id → 400 with an actionable message.
+    if (page === "official") {
+      const enabledQ = cfg.official.lists.filter((l) => l.enabled);
+      if (singleId) {
+        const list = cfg.official.lists.find((l) => l.slug === singleId);
+        if (!list) return json({ error: "Unknown official list." }, 404);
+        if (!list.enabled) return json({ error: `"${list.name}" is disabled - enable it first.` }, 400);
+      }
     const slugs = singleId ? [singleId] : enabledQ.map((l) => l.slug);
     const result = await dispatchScraperWorkflow(env, {
       workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
@@ -418,8 +421,9 @@ export async function handleTriggerRefresh(env, request) {
   if (page === "simkl") {
     const enabledQ = cfg.simkl.lists.filter((l) => l.enabled);
     if (singleId) {
-      const list = enabledQ.find((l) => l.slug === singleId);
-      if (!list) return json({ error: "Unknown or disabled simkl list." }, 404);
+      const list = cfg.simkl.lists.find((l) => l.slug === singleId);
+      if (!list) return json({ error: "Unknown simkl list." }, 404);
+      if (!list.enabled) return json({ error: `"${list.name}" is disabled - enable it first.` }, 400);
     }
     const kinds = singleId ? [singleId] : enabledQ.map((l) => l.slug);
     const result = await dispatchScraperWorkflow(env, {
@@ -439,8 +443,9 @@ export async function handleTriggerRefresh(env, request) {
     const enabledQ = cfg.tmdb.lists.filter((l) => l.enabled);
     let ids;
     if (singleId) {
-      const list = enabledQ.find((l) => tmdbCatalogId(l) === singleId);
-      if (!list) return json({ error: "Unknown or disabled TMDB list." }, 404);
+      const list = cfg.tmdb.lists.find((l) => tmdbCatalogId(l) === singleId);
+      if (!list) return json({ error: "Unknown TMDB list." }, 404);
+      if (!list.enabled) return json({ error: `"${list.name}" is disabled - enable it first.` }, 400);
       ids = [singleId];
     } else {
       ids = enabledQ.map((l) => tmdbCatalogId(l));
@@ -459,8 +464,8 @@ export async function handleTriggerRefresh(env, request) {
   let targets;
   if (singleId) {
     const list = cfg.scraper.lists.find((l) => l.id === singleId);
-    if (!list) return json({ error: "Unknown list id." }, 404);
-    if (!list.enabled) return json({ error: "That list is disabled - enable it first." }, 400);
+    if (!list) return json({ error: "Unknown scraper list." }, 404);
+    if (!list.enabled) return json({ error: `"${list.name}" is disabled - enable it first.` }, 400);
     targets = [list];
   } else {
     targets = cfg.scraper.lists.filter((l) => l.enabled);
