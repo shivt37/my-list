@@ -18,7 +18,7 @@
 
 **Duplicated logic that must stay in sync (drift risk):**
 - Issue: Three parallel implementations exist by design and are only kept aligned by comments.
-  - Hash: `tmdbContentHash` (`src/config.js` lines 329-353) vs `computeSourceHash` (`scripts/tmdb.mjs` lines 66-89). A field added to one and not the other makes fill-mode skip logic disagree with the save-time diff.
+  - Hash: `tmdbContentHash` (`src/config.js`) vs `computeSourceHash` (`scripts/tmdb.mjs`). The two are NOT byte-comparable (different serializations) and never cross-compare: the worker hash gates save-time dispatch, the script hash is stamped onto data files for audit. There is no fill-mode skip (corrected 2026-08-23); a field added to one and not the other still risks silent divergence between save-time diffing and file stamping.
   - Discover query plan: `buildDiscoverSources` (`scripts/tmdb.mjs` lines 118-173) vs inline copy in `handleTmdbPreviewDiscover` (`src/routes.js` lines 604-658). Comment says "Same source plan" but nothing enforces it.
   - Simkl defaults: `SIMKL_LISTS` (`src/config.js` lines 64-98) vs `DEFAULT_FILTERS` (`scripts/simkl.mjs` lines 60-84). Editing one silently diverges fallback behavior.
 - Files: as listed
@@ -36,6 +36,7 @@
 - Files: `.github/workflows/scrape.yml` (line 84), `scripts/scrape.mjs` (lines 14-15)
 - Impact: Confusing threat model; secret mounted where unnecessary.
 - Fix approach: Remove from `scrape.yml` env block; keep only in `official.yml` where `official.mjs` actually uses it.
+- **RESOLVED 2026-08-23 (audit m13):** key removed from scrape.yml env with an explanatory comment; scrape.mjs header updated. Still mounted in official.yml where it's genuinely used.
 
 **MDBList API key in query string:**
 - Issue: `fetchAllItems` passes `apikey` as a URL search param (`scripts/official.mjs` line 87).
@@ -62,14 +63,16 @@
 - Files: `.github/workflows/tmdb.yml`
 - Trigger: N/A - current state.
 - Workaround: Manual refresh from configure page. Confirm intent or uncomment.
+- **Decision (2026-08-23): kept once-daily intentionally** - owner confirmed the current schedule; manual refresh covers mid-day changes.
 
 **`triggered_by` collapse:**
-- Symptoms: `/status` maps any non-"scheduled" trigger value to "manual" (`src/routes.js` line 224), so a forged `/runs` POST or future trigger types misreport as manual.
+- Symptoms: `/status` maps any non-"scheduled" trigger value to "manual" (`src/routes.js`), so a forged `/runs` POST or future trigger types misreport as manual.
 - Files: `src/routes.js`
 - Workaround: None; cosmetic.
 
 **Run-id collisions:**
-- Symptoms: `addRun` ids are `Date.now() + random(1000)` (`src/routes.js` line 495); two runs in the same millisecond can collide. Ids are display-only today (list is ordered by insertion, not id), so impact is latent.
+- Symptoms: `addRun` ids were `Date.now() + random(1000)`; two runs in the same millisecond could collide. Ids are display-only today, so impact was latent.
+- **RESOLVED 2026-08-23 (audit M3):** run ids now use `crypto.randomUUID()`.
 - Files: `src/routes.js`, `src/config.js` (`addRun`)
 - Workaround: None needed currently.
 
@@ -181,6 +184,7 @@
 - Risk: Imported by `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`, `scripts/dry-test.mjs` but present in NO `package.json` (repo root has none; `scripts/package.json` lists only puppeteer family). Resolves from an ambient root-level `node_modules/` install.
 - Impact: Fresh clone cannot run any verification script; CI-less project gives no signal.
 - Migration plan: Add root `package.json` with jsdom as devDependency (or move verify scripts under `scripts/` and declare it there).
+- **Decision (2026-08-23): left undeclared intentionally (audit m8/m9 skipped)** - single-operator project; on a fresh machine run `npm install --no-save --no-package-lock jsdom` at the repo root.
 
 **`queue: max` (GitHub Actions feature):**
 - Risk: New platform capability; subject to change/removal.

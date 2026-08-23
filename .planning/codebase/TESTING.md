@@ -83,10 +83,12 @@ function makeKV() {
 }
 ```
 
-**Stub GitHub dispatch via env-carried fake + global fetch swap:**
+**Stub GitHub dispatch via a plain env object + global fetch swap:**
 ```javascript
-// scripts/dry-test.mjs:38-41, 64-68
-env.GH_FETCH = async (url, opts) => { ghCalls.push({ url, body: JSON.parse(opts.body) }); return { status: 204, text: async () => "" }; };
+// scripts/dry-test.mjs - the fake GH call recorder rides on the fake env;
+// there is NO env.GH_FETCH seam in production code - dispatch.js always
+// uses global fetch, so tests swap it:
+env._ghCalls = [];
 
 async function withFetch(fake, fn) {
   const og = global.fetch;

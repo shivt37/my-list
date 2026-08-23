@@ -20,7 +20,7 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 │  Thin fetch-handler router, no scheduled handler                   │
 ├──────────────┬───────────────┬──────────────┬──────────────────────┤
 │ routes.js    │ config.js     │ dispatch.js  │ configure.js         │
-│ manifest/    │ KV load/      │ GH Actions   │ 1773-line single-    │
+│ manifest/    │ KV load/      │ GH Actions   │ single-file admin    │
 │ catalog/     │ migrate/      │ workflow     │ file admin UI        │
 │ status/runs  │ hashes/runs   │ dispatch     │ (HTML+CSS+JS string) │
 └──────────────┴───────┬───────┴──────┬───────┴──────────────────────┘
@@ -61,12 +61,12 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 | Worker entry/router | Match pathname/method to handler, CORS preflight, root info text | `src/index.js` |
 | Route handlers | Manifest build, catalog serving, status, save/export-config, trigger-refresh, /runs ingest, TMDB search + preview proxies | `src/routes.js` |
 | Config store | KV read/migrate/normalize per module, seed defaults, id generation, content hashes, run history (last 30/module) | `src/config.js` |
-| Workflow dispatcher | Single function that POSTs `workflow_dispatch` to api.github.com; workflow filename allowlist | `src/dispatch.js` |
-| Admin UI | Full configure SPA as one template-literal HTML page: scraper/official/simkl/tmdb tabs, save diffing client-side, refresh buttons, TMDB preview | `src/configure.js` |
-| MDBList DOM scraper | Headless Chromium (puppeteer-extra + stealth) scraping mdblist.com listing URLs into `data/mdb_scrape_*.json` | `scripts/scrape.mjs` |
+| Workflow dispatcher | Single function that POSTs `workflow_dispatch` to api.github.com (filename from trusted config; no runtime allowlist) | `src/dispatch.js` |
+| Admin UI | Full configure SPA as one template-literal HTML page: scraper/official/simkl/tmdb tabs, save diffing client-side, refresh buttons, TMDB preview (preview-eye rendered on TMDB tab only) | `src/configure.js` |
+| MDBList DOM scraper | Headless Chromium (puppeteer-extra + stealth) scraping mdblist.com listing URLs into `data/mdb_scrape_*.json`; no MDBLIST_API_KEY needed (removed from scrape.yml 2026-08-23) | `scripts/scrape.mjs` |
 | Official lists fetcher | MDBList API cursor pagination into `data/mdboff_<slug>_<movie\|show>.json` | `scripts/official.mjs` |
 | SIMKL arriving-today | SIMKL v2 calendar filter/sort into `data/simkl_arriving_today_<kind>.json` | `scripts/simkl.mjs` |
-| TMDB discover generator | Multi-source AND/OR discover queries into `data/tmdb_discover_*.json`, sourceHash skip support | `scripts/tmdb.mjs` |
+| TMDB discover generator | Multi-source AND/OR discover queries into `data/tmdb_discover_*.json`; sourceHash stamped onto output for audit only (no fill-mode skip); failures exit non-zero so the Actions run shows red | `scripts/tmdb.mjs` |
 | Workflows | Cron schedules (01:30/13:30 UTC), input sanitization, bot commit step | `.github/workflows/{scrape,official,simkl,tmdb}.yml` |
 | Dry-run integration tests | Every worker route vs fake KV + stubbed GH fetch/Pages fetch | `scripts/dry-test.mjs` |
 | Module self-checks | TMDB additions, UI smoke via JSDOM | `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs` |
@@ -108,7 +108,7 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 **Dispatch layer:**
 - Purpose: fire-and-forget GitHub Actions triggers; returns `{ dispatched, reason }`, never throws
 - Location: `src/dispatch.js`
-- Depends on: env `GH_TOKEN`, `GH_REPO`, `GH_REF`; optional `env.GH_FETCH` injection point used by tests
+- Depends on: env `GH_TOKEN`, `GH_REPO`, `GH_REF`; outbound fetch bounded by `AbortSignal.timeout(15000)` (M4, 2026-08-23)
 - Used by: `routes.js` (save-config, trigger-refresh)
 
 **Presentation layer (worker-rendered):**
@@ -147,7 +147,7 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 ### Refresh/regeneration flow (control plane)
 
 1. Cron line in workflow YAML or operator button → `POST /trigger-refresh` (page-scoped variants for official/simkl/tmdb) or direct `workflow_dispatch`
-2. `dispatchScraperWorkflow` (`src/dispatch.js`) POSTs to `repos/{GH_REPO}/actions/workflows/<file>/dispatches`, expects 204; workflow filename validated against `/^[a-zA-Z0-9_.-]+\.yml$/`
+2. `dispatchScraperWorkflow` (`src/dispatch.js`) POSTs to `repos/{GH_REPO}/actions/workflows/<file>/dispatches`, expects 204; the filename comes from trusted env vars/constants (no regex allowlist exists in code - corrected 2026-08-23)
 3. Workflow sanitizes inputs in bash (`tr -cd` char-class whitelists) before passing to the Node script
 4. Script pulls its own config live from `${WORKER_ORIGIN}/export-config` (worker is source of truth for enabled lists, filters, renamed names)
 5. Scrapes/fetches upstream → writes `data/<catalog_id>.json` (empty-result guard: do NOT overwrite last good file with empty — except `simkl.mjs` where an empty airing-day is legitimate)
@@ -167,7 +167,7 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 **State Management:**
 - Config: single KV key `config` (JSON), normalized through `migrateConfig` on every read; seeds written back on first-ever load; one-shot id healing gated by `healed` key
 - Run history: four append-front KV lists capped at 30 (`RUNS_MAX`)
-- Client UI: plain module-level variables + `window.moduleState`, re-rendered per tab; accent color and active module persisted in localStorage (`mylist_accent`, `mylist_active_module`)
+- Client UI: one plain module-level `let state` object shared by all tabs, re-rendered per tab via `rerenderActive()`; accent color and active module persisted in localStorage (`mylist_accent`, `mylist_active_module`)
 
 ## Key Abstractions
 
@@ -207,7 +207,7 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 ## Architectural Constraints
 
 - **Threading:** Worker is single-threaded per-request (standard Workers model). Scripts are sequential per target list with `sleep` jitter between pages/lists; only TMDB collection fetches use `Promise.allSettled`.
-- **Global state:** None in the worker beyond KV. Scripts keep module-level constants only. Test seam: `env.GH_FETCH` is consulted nowhere in production code — `scripts/dry-test.mjs` temporarily swaps global `fetch` around dispatch calls instead (see its `withFetch` helper).
+- **Global state:** None in the worker beyond KV. Scripts keep module-level constants only. Test seam: none built in — no `env.GH_FETCH` exists anywhere; `scripts/dry-test.mjs` temporarily swaps global `fetch` around dispatch calls instead (see its `withFetch` helper).
 - **Workflow serialization:** All four workflows share concurrency group `my-list-scrape`, `cancel-in-progress: false`, `queue: max` — required because they race on (a) the KV read-modify-write in `addRun` and (b) the same `data/` directory in git.
 - **Commit conflict policy:** `git pull --rebase -X theirs` everywhere — data files are treated as disposable regenerated artifacts, never hand-edited; newest regeneration wins.
 - **KV consistency:** `handleSaveConfig` read-modify-write has no lock — concurrent saves can clobber; explicitly accepted for a single-operator admin page (comment at `src/routes.js:244`).
@@ -219,8 +219,8 @@ Stremio addon split across two runtimes connected by GitHub Actions dispatch + G
 
 ### Monolithic generated-UI file
 
-**What happens:** `src/configure.js` is a single 1773-line file mixing CSS tokens, layout CSS, HTML shell, and ~1100 lines of vanilla-JS tab logic inside nested template literals.
-**Why it's a problem here:** any edit risks breaking string interpolation/escaping (note the `<` hard-escaping at line 14 and duplicated `escapeAttr` definitions at lines 7 and 656 — outer server copy and inner client copy).
+**What happens:** `src/configure.js` is a single ~1680-line file mixing CSS tokens, layout CSS, HTML shell, and vanilla-JS tab logic inside nested template literals.
+**Why it's a problem here:** any edit risks breaking string interpolation/escaping (note the `<` hard-escaping near the top of `buildConfigurePage`; the duplicated server-side `escapeAttr` copy was removed 2026-08-23 — only the client copy remains).
 **Do this instead:** follow existing convention when extending — add a new `renderXxx()` tab function and register it in `rerenderActive()` (`src/configure.js:861`); do not extract files (no bundler exists to recombine them).
 
 ### Duplicated logic across worker and scripts

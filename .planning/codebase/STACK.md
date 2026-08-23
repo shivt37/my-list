@@ -21,7 +21,7 @@
 
 **Package Manager:**
 - npm (lockfile present at `scripts/package-lock.json`; `npm ci` in `scrape.yml`)
-- Repo root has NO package.json, but a root-level `node_modules/` with `jsdom` + parse5/css-tree etc. exists for the local verify scripts (`scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`). These deps are undeclared anywhere - install manually if missing.
+- Repo root has NO package.json. The verify scripts need `jsdom`, which is declared in NO manifest (decision 2026-08-23: intentionally left undeclared) - on a fresh machine run `npm install --no-save --no-package-lock jsdom` at the repo root to make them runnable.
 
 ## Frameworks
 

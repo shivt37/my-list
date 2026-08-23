@@ -36,7 +36,7 @@ my-list/
 │   ├── routes.js             # all route handlers (manifest/catalog/status/save/runs/tmdb proxies)
 │   ├── config.js             # KV config store, migration, hashes, run history
 │   ├── dispatch.js           # GitHub Actions workflow dispatch (single function)
-│   └── configure.js          # admin SPA as one HTML string (1773 lines)
+│   └── configure.js          # admin SPA as one HTML string (~1680 lines)
 ├── .gitignore                # ignores data/*.json (force-added by bots) and local tests
 └── wrangler.toml             # worker name/main/KV binding STORE/vars
 ```

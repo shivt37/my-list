@@ -10,7 +10,7 @@
   - Auth: `MDBLIST_API_KEY` env var (GitHub secret), passed as `apikey` query param
 - Listing-page DOM scrape - `https://mdblist.com/movies|shows/?...` URLs saved in config; headless Chromium via puppeteer-extra + stealth (`scripts/scrape.mjs`)
   - Auth: none (stealth plugin evades bot detection)
-- Note: `MDBLIST_API_KEY` is documented in `scrape.mjs` header as "used for nothing today - kept for parity/tests"
+- Note: `MDBLIST_API_KEY` is no longer mounted in scrape.yml nor read by scrape.mjs (cleaned up 2026-08-23) - only official.mjs talks to the MDBList API
 
 **TMDB:**
 - v3 API with v4 bearer token - `https://api.themoviedb.org/3/discover/{movie,tv}`, `/search/{keyword,company,collection}`, `/collection/<id>` (`src/routes.js` `tmdbApi()`, `scripts/tmdb.mjs` `tmdbFetch()` at line 101)
@@ -29,7 +29,7 @@
 - `POST https://api.github.com/repos/<GH_REPO>/actions/workflows/<wf>/dispatches` (`src/dispatch.js`)
   - Client: raw `fetch`
   - Auth: `GH_TOKEN` (Cloudflare secret, Bearer PAT)
-  - Expects exactly HTTP 204 on success; workflow filename allowlisted against `/^[a-zA-Z0-9_.-]+\.yml$/` to block path injection
+  - Expects exactly HTTP 204 on success; workflow filename comes from trusted env vars/constants (no runtime allowlist - corrected 2026-08-23); outbound fetch bounded by `AbortSignal.timeout(15000)` to block path injection
   - Dispatches four workflows: `scrape.yml` (lists/action/delete_ids inputs), `official.yml` (slugs input), `simkl.yml` (kinds input), `tmdb.yml` (ids/action/delete_ids inputs)
 
 **GitHub Pages (catalog data plane):**
