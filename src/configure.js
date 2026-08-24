@@ -42,6 +42,7 @@ export function buildConfigurePage(origin, config) {
     --danger-border: rgba(255,95,102,0.30);
     --ok: #34d399;
     --r: 9px;
+    --r-sm: 8px;
     --r2: 14px;
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
@@ -121,7 +122,7 @@ export function buildConfigurePage(origin, config) {
   /* ── INPUTS + SELECTS - explicit dark, can never render white ── */
   input {
     background: #0c0c13; color: #e8edf4;
-    border: 1px solid var(--border2); border-radius: 8px;
+    border: 1px solid var(--border2); border-radius: var(--r-sm);
     padding: 8px 10px; font-size: 13px; outline: none;
     transition: border-color 0.12s, box-shadow 0.12s;
   }
@@ -136,7 +137,7 @@ export function buildConfigurePage(origin, config) {
   select {
     appearance: none; -webkit-appearance: none;
     background-color: #0c0c13; color: #e8edf4;
-    border: 1px solid var(--border2); border-radius: 8px;
+    border: 1px solid var(--border2); border-radius: var(--r-sm);
     padding: 8px 28px 8px 10px; font-size: 13px; cursor: pointer; outline: none;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7385' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -202,7 +203,7 @@ export function buildConfigurePage(origin, config) {
   .name-edit { flex: 1 1 auto; min-width: 0; font-size: 13px; padding: 3px 8px; }
   .icon-btn {
     display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;
-    border: 1px solid var(--border2); border-radius: 6px; color: var(--muted); cursor: pointer; flex-shrink: 0;
+    border: 1px solid var(--border2); border-radius: var(--r-sm); color: var(--muted); cursor: pointer; flex-shrink: 0;
     background: transparent; padding: 0; transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
   .icon-btn:hover { color: var(--text); border-color: #3a3a52; background: var(--surface2); filter: none; }
@@ -216,11 +217,11 @@ export function buildConfigurePage(origin, config) {
   .card-controls .url-input { margin-right: 60px; }
   .card-controls .url-input {
     flex: 0 1 40%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
-    padding: 7px 9px; border-radius: 7px;
+    padding: 7px 9px; border-radius: var(--r-sm);
   }
   .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
   .pages-label { font-size: 11px; color: var(--muted); flex-shrink: 0; }
-  .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: 7px; }
+  .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: var(--r-sm); }
   .card-controls button { flex-shrink: 0; }
   .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
   .official-actions { margin-left: 60px; }
@@ -240,7 +241,7 @@ export function buildConfigurePage(origin, config) {
   .filter-line { display: contents; }
   .filter-label { font-size: 11px; font-weight: 500; color: var(--dim); }
   .filter-value { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .filter-value .url-input { flex: 1 1 100%; min-width: 0; font-size: 12px; padding: 6px 9px; border-radius: 7px; }
+  .filter-value .url-input { flex: 1 1 100%; min-width: 0; font-size: 12px; padding: 6px 9px; border-radius: var(--r-sm); }
   .filter-check { accent-color: var(--accent); }
   .filter-top { display: contents; }
   .filter-top .secondary { justify-self: start; flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
@@ -259,7 +260,7 @@ export function buildConfigurePage(origin, config) {
   .tier-head { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 0 2px; }
   .tier-head span { text-align: center; }
   .tier-head .th-src { display: block; font-size: 9px; font-weight: 400; opacity: 0.75; margin-top: 1px; }
-  .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: 7px; text-align: center; }
+  .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: var(--r-sm); text-align: center; }
   .tier-row .danger { justify-self: start; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
     .simkl-filter { grid-template-columns: 1fr; }
@@ -275,7 +276,7 @@ export function buildConfigurePage(origin, config) {
   .tmdb-dim-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .dim-mode-tag {
     display: inline-flex; align-items: center; justify-content: center;
-    padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
+    padding: 1px 6px; border-radius: var(--r-sm); font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
     line-height: 1.5; cursor: pointer; flex-shrink: 0; user-select: none;
     color: var(--dim); background: var(--surface2); border: 1px solid var(--border2);
     transition: color 0.12s, border-color 0.12s;
@@ -291,12 +292,12 @@ export function buildConfigurePage(origin, config) {
      width, not the track's. */
   .mode-toggle {
     position: relative; display: flex; align-items: center; width: 108px; height: 23px; flex-shrink: 0;
-    box-sizing: border-box; background: var(--surface2); border: 1px solid var(--border2); border-radius: 16px; padding: 2px;
+    box-sizing: border-box; background: var(--surface2); border: 1px solid var(--border2); border-radius: 999px; padding: 2px;
   }
   .mode-toggle-thumb {
     position: absolute; top: 2px; left: 2px;
     width: calc((100% - 4px) / 3); height: 17px;
-    background: var(--accent); border-radius: 12px;
+    background: var(--accent); border-radius: 999px;
     box-shadow: 0 0 0 1px var(--accent), 0 0 6px var(--accent-glow);
     transition: left 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   }
@@ -324,7 +325,7 @@ export function buildConfigurePage(origin, config) {
   .members-empty { font-size: 11px; color: var(--muted); font-style: italic; }
   .member-chip {
     display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--dim);
-    background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px;
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: 999px;
     padding: 4px 6px 4px 10px; max-width: 220px;
     transition: border-color 0.12s;
   }
@@ -344,21 +345,21 @@ export function buildConfigurePage(origin, config) {
   .member-chip-add:hover { opacity: 1; border-color: var(--accent); }
   .exclude-chip {
     display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--danger);
-    background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: 20px;
+    background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: 999px;
     padding: 4px 6px 4px 10px; max-width: 220px;
   }
   .exclude-chip .chip-remove:hover { background: rgba(255,95,102,0.24); }
   .exclude-chip-add {
     cursor: pointer; color: var(--dim); border-color: var(--border2); background: var(--surface2);
     padding: 4px 12px; display: inline-flex; align-items: center; font-size: 11.5px;
-    border-radius: 20px; border-width: 1px; border-style: solid;
+    border-radius: 999px; border-width: 1px; border-style: solid;
     transition: color 0.12s, border-color 0.12s, background 0.12s;
   }
   .exclude-chip-add:hover { color: var(--text); border-color: var(--dim); }
   .exclude-genre-select-inline {
     flex: 0 0 auto; width: fit-content; min-width: 0;
     color: var(--dim); border-color: var(--border2); background: var(--surface2);
-    padding: 4px 8px; font-size: 11.5px; border-radius: 20px; cursor: pointer;
+    padding: 4px 8px; font-size: 11.5px; border-radius: 999px; cursor: pointer;
   }
   .inline-add-search { margin-top: 8px; }
   .inline-add-search .search-row { display: flex; gap: 6px; }
@@ -370,12 +371,12 @@ export function buildConfigurePage(origin, config) {
   }
   .result-item {
     display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 6px 9px;
-    border-radius: 7px; cursor: pointer; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r-sm); cursor: pointer; background: var(--surface); border: 1px solid var(--border);
   }
   .result-item:hover { border-color: var(--accent); }
   .result-item.disabled { opacity: 0.45; cursor: default; }
   .result-thumb, .result-thumb-placeholder {
-    width: 28px; height: 42px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--surface2);
+    width: 28px; height: 42px; border-radius: var(--r-sm); object-fit: cover; flex-shrink: 0; background: var(--surface2);
   }
   .result-thumb-placeholder { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; }
   .result-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -383,7 +384,7 @@ export function buildConfigurePage(origin, config) {
   .empty-msg { font-size: 11.5px; color: var(--muted); padding: 6px 2px; }
   .sort-fallback-note {
     font-size: 11px; color: var(--muted); background: var(--surface2);
-    border-radius: 4px; padding: 6px 10px; margin-top: 8px;
+    border-radius: var(--r-sm); padding: 6px 10px; margin-top: 8px;
   }
   /* ── PREVIEW ROW (horizontal scroll strip, ported from old worker) ── */
   .preview-row {
@@ -403,7 +404,7 @@ export function buildConfigurePage(origin, config) {
   .preview-item { flex: 0 0 74px; width: 74px; position: relative; transition: transform 0.12s ease; }
   .preview-item:hover { transform: translateY(-2px); }
   .preview-item img, .preview-poster-placeholder {
-    width: 74px; height: 111px; object-fit: cover; border-radius: 6px;
+    width: 74px; height: 111px; object-fit: cover; border-radius: var(--r-sm);
     background: var(--surface2); display: block;
   }
   .preview-item-title {
@@ -414,7 +415,7 @@ export function buildConfigurePage(origin, config) {
   .preview-item-year { font-size: 10px; color: var(--muted); margin-top: 1px; }
   .preview-item-link {
     position: absolute; top: 5px; right: 5px; width: 20px; height: 20px;
-    border-radius: 5px; opacity: 0; transition: opacity 0.12s, color 0.12s, border-color 0.12s;
+    border-radius: var(--r-sm); opacity: 0; transition: opacity 0.12s, color 0.12s, border-color 0.12s;
     background: rgba(10,10,13,0.72);
   }
   .preview-item-link:hover { color: var(--accent); border-color: var(--accent); }
@@ -435,7 +436,7 @@ export function buildConfigurePage(origin, config) {
   .accent-popup-wrap { position: relative; }
   .accent-popup {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
-    background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r);
     padding: 14px; z-index: 200; width: 220px; max-width: calc(100vw - 32px);
     box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
@@ -454,13 +455,13 @@ export function buildConfigurePage(origin, config) {
   .menu-popup-wrap { position: relative; }
   .menu-popup {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
-    background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r);
     padding: 6px; z-index: 200; width: 200px; max-width: calc(100vw - 32px);
     box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .menu-popup.visible { display: block; }
   .menu-item {
-    display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--r-sm);
     background: transparent; border-color: transparent; font-weight: 400; text-align: left; width: 100%;
     font-size: 12.5px; color: var(--dim); cursor: pointer; transition: background 0.1s, color 0.1s;
   }
@@ -510,7 +511,7 @@ export function buildConfigurePage(origin, config) {
     .create-list-row .max-pages { flex: 1 1 auto; }
     .create-list-row button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
     .btn-create-list { font-size: 12px; padding: 10px 14px; }
-    .list-card { padding: 9px; margin-bottom: 8px; border-radius: 12px; }
+    .list-card { padding: 9px; margin-bottom: 8px; }
     .card-top { gap: 9px; }
     .toggle { width: 26px; height: 15px; }
     .toggle-slider::before { width: 9px; height: 9px; }
