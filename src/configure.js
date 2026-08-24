@@ -717,6 +717,20 @@ function setStatus(msg, kind) {
 
 function soon() { setStatus('That module is coming soon - only the MDBList Scraper tab is live right now.', 'error'); }
 
+// QW9: translate known raw infra errors into plain sentences. Unknown
+// errors pass through untouched - never hide an unexpected failure.
+// new RegExp (not a /.../ literal): this code lives inside a template
+// literal, and backslash-escaped slashes would be eaten before reaching
+// the browser.
+const ERROR_MAP = [
+  [new RegExp('GH_TOKEN/GH_REPO/GH_WORKFLOW not configured', 'i'),
+    'GitHub is not connected - set the GH_TOKEN secret on the worker first.'],
+];
+function humanizeError(msg) {
+  for (const [re, friendly] of ERROR_MAP) if (re.test(msg)) return msg.replace(re, friendly);
+  return msg;
+}
+
 // ─── Menu ───
 function toggleMenu() { document.getElementById('menuPopup').classList.toggle('visible'); }
 let activeModule = 'scraper';
@@ -1686,7 +1700,7 @@ async function saveAll() {
               ? 'Saved. Regenerating official: ' + data.officialChanged.join(', ')
               : 'Saved (no content change - nothing regenerated).'), 'ok');
   } catch (e) {
-    setStatus('Save failed: ' + e.message, 'error');
+    setStatus('Save failed: ' + humanizeError(e.message), 'error');
   } finally {
     btn.disabled = false; btn.textContent = 'Save';
   }
@@ -1743,7 +1757,7 @@ async function confirmRefresh() {
         : 'Refresh dispatched - GitHub Actions is regenerating all enabled lists.';
     setStatus(msg, 'ok');
   } catch (e) {
-    setStatus('Refresh failed: ' + e.message, 'error');
+    setStatus('Refresh failed: ' + humanizeError(e.message), 'error');
   } finally {
     btn.classList.remove('spinning'); btn.disabled = false;
   }
@@ -1789,7 +1803,7 @@ async function confirmRefreshOne() {
     const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : m === 'tmdb' ? 'TMDB list.' : 'list.';
     setStatus('"' + list.name + '" refresh dispatched - regenerating just that ' + tail, 'ok');
   } catch (e) {
-    setStatus('Refresh failed: ' + e.message, 'error');
+    setStatus('Refresh failed: ' + humanizeError(e.message), 'error');
   } finally {
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
   }
