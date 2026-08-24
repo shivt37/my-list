@@ -108,7 +108,6 @@ export function buildConfigurePage(origin, config) {
   .card-refresh { padding: 5px 6px; }
   .card-refresh svg { display: block; }
   .tmdb-eye-active { color: var(--accent); border-color: var(--accent); }
-  .tmdb-controls select { font-size: 11px; padding: 4px 24px 4px 8px; width: auto; flex: 0 0 auto; }
 
   /* ── MAIN ── */
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
@@ -152,20 +151,21 @@ export function buildConfigurePage(origin, config) {
   .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
   .scraper-toolbar button.secondary { padding: 6px 12px; font-size: 11px; font-weight: 500; }
 
-  .create-list-section { margin-bottom: 18px; }
+  /* A45: quiet "+ Add List" ghost trigger BELOW the cards, expanding into a
+     labeled 2-column mini-form. Empty sections render the form open. */
+  .create-slot { margin-top: 16px; }
   .btn-create-list {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; padding: 11px 16px; border-radius: var(--r);
-    border: 1px dashed var(--border2); background: transparent;
+    display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
+    border-radius: var(--r); border: 1px dashed var(--border2); background: transparent;
     color: var(--dim); font-size: 13px; font-weight: 500; cursor: pointer;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
   .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-  .create-list-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .create-list-row .name-input { flex: 1 1 150px; min-width: 0; font-size: 12px; padding: 7px 9px; }
-  .create-list-row .url-input { flex: 3 1 280px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
-  .create-list-row select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; }
-  .create-list-row button { flex-shrink: 0; padding: 7px 14px; font-size: 12px; }
+  .create-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; align-items: end; }
+  .create-form :is(input, select) { width: 100%; font-size: 12px; padding: 7px 9px; }
+  .create-form .url-input { font-family: ui-monospace, monospace; }
+  .create-form input[type="number"] { text-align: center; }
+  .create-form .body-actions { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; }
 
   .list-card {
     background: var(--surface-card);
@@ -174,10 +174,26 @@ export function buildConfigurePage(origin, config) {
     transition: border-color 0.15s, opacity 0.15s;
   }
   .list-card:hover { border-color: #242436; }
-  .list-card.disabled { opacity: 0.6; }
+  /* A45: disabled cards stop fading wholesale (opacity .6 dragged text below
+     contrast). Quiet border + muted name/chip instead; controls are actually
+     disabled via JS (everything except the enable toggle). */
+  .list-card.disabled { border-color: var(--border); }
+  .list-card.disabled .name-static, .list-card.disabled .id-chip { color: var(--muted); }
+  .list-card.disabled :is(input, select, button)[disabled] { opacity: 0.45; }
 
-  .card-top { display: flex; gap: 12px; align-items: flex-start; }
-  .toggle-col { flex-shrink: 0; padding-top: 3px; }
+  /* A45 two-zone card: head = identity row, body = labeled fields.
+     Everything gap-aligned - the old margin-right/margin-left hacks are gone. */
+  .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .card-head > .id-chip { margin-left: auto; }
+  .card-head > .count-line { flex-basis: 100%; }
+  .card-body { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; margin-top: 12px; }
+  .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .field-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
+  .field-url { flex: 1 1 260px; }
+  .field-url .url-input { width: 100%; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
+  .field .max-pages { width: 64px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
+  .body-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
+  .official-hint { font-size: 11px; color: var(--muted); flex: 0 1 auto; min-width: 0; align-self: center; }
   .toggle { position: relative; display: inline-block; width: 28px; height: 16px; cursor: pointer; }
   .toggle input { opacity: 0; width: 0; height: 0; }
   .toggle-slider {
@@ -192,7 +208,6 @@ export function buildConfigurePage(origin, config) {
   .toggle input:checked + .toggle-slider::before { transform: translateX(12px); background: var(--accent); }
 
   .right-col { flex: 1; min-width: 0; }
-  .info { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
   /* Pencil hugs the name text; the wrap fills remaining space so long
      names still ellipsize instead of shoving the pencil to the card edge. */
   .name-wrap { display: flex; align-items: center; gap: 6px; flex: 1 1 auto; min-width: 0; }
@@ -213,19 +228,6 @@ export function buildConfigurePage(origin, config) {
     font-family: ui-monospace, monospace; flex-shrink: 0;
   }
 
-  .card-controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .card-controls .url-input { margin-right: 60px; }
-  .card-controls .url-input {
-    flex: 0 1 40%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px;
-    padding: 7px 9px; border-radius: var(--r-sm);
-  }
-  .card-controls select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
-  .pages-label { font-size: 11px; color: var(--muted); flex-shrink: 0; }
-  .max-pages { width: 56px; flex-shrink: 0; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; border-radius: var(--r-sm); }
-  .card-controls button { flex-shrink: 0; }
-  .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 40px; }
-  .official-actions { margin-left: 60px; }
-  .official-hint { font-size: 11px; color: var(--muted); flex: 0 1 auto; min-width: 0; }
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
@@ -520,8 +522,8 @@ export function buildConfigurePage(origin, config) {
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) { main { padding: 20px; } }
-  @media (min-width: 560px) {
-    .card-top { align-items: center; }
+  @media (min-width: 561px) {
+    .card-head { align-items: center; }
   }
   @media (max-width: 640px) {
     header { padding: 10px 14px; }
@@ -530,17 +532,12 @@ export function buildConfigurePage(origin, config) {
     button.btn-save { padding: 6px 11px; font-size: 11px; }
     .btn-icon { padding: 6px 8px; }
     main { padding: 14px 12px 56px; }
-    .create-list-row { gap: 6px; }
-    .create-list-row .name-input,
-    .create-list-row .url-input { flex: 1 1 100%; }
-    .create-list-row .type-pages { flex: 1 1 100%; display: flex; gap: 6px; align-items: center; }
-    .create-list-row select { flex: 1 1 60%; min-width: 0; }
-    .create-list-row .pages-label { flex-shrink: 0; }
-    .create-list-row .max-pages { flex: 1 1 auto; }
-    .create-list-row button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
-    .btn-create-list { font-size: 12px; padding: 10px 14px; }
+    .create-form { grid-template-columns: 1fr; }
+    .card-body .field { flex: 1 1 calc(50% - 6px); }
+    .card-body .field-url { flex: 1 1 100%; }
+    .body-actions { flex: 1 1 100%; margin-left: 0; justify-content: flex-end; }
     .list-card { padding: 9px; margin-bottom: 8px; }
-    .card-top { gap: 9px; }
+    .card-head { gap: 9px; }
     .toggle { width: 26px; height: 15px; }
     .toggle-slider::before { width: 9px; height: 9px; }
     .toggle input:checked + .toggle-slider::before { transform: translateX(11px); }
@@ -548,13 +545,7 @@ export function buildConfigurePage(origin, config) {
     .id-chip { display: none; }
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
-    .card-controls { flex-wrap: wrap; }
-    .official-hint { flex: 1 1 0; }
-    .card-actions { margin-left: auto; }
-    .card-controls .url-input { flex: 1 1 100%; margin-right: 0; }
     select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
-    .pages-label { font-size: 10px; }
-    .card-controls .max-pages { font-size: 11px; padding: 5px 6px; }
     button.danger { padding: 5px 8px; font-size: 10px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
     .swatch { width: 24px; height: 24px; }
@@ -583,8 +574,7 @@ export function buildConfigurePage(origin, config) {
   }
   @media (max-width: 380px) {
     .right-col { gap: 6px; }
-    .card-controls { flex-wrap: wrap; }
-    .card-controls select { flex: 1 1 100%; }
+    .field-url { flex-basis: 100%; }
   }
 </style>
 </head>
@@ -792,23 +782,26 @@ function renderScraper() {
   const lists = state.scraper.lists;
   const cards = lists.map((l, i) => {
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="card-' + i + '">' +
-      '<div class="card-top">' +
-        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleList(' + i + ')"><span class="toggle-slider"></span></label></div>' +
-        '<div class="info">' +
-          nameEditBlock(i, l) +
-          '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
-        '</div>' +
+      '<div class="card-head">' +
+        '<label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleList(' + i + ')"><span class="toggle-slider"></span></label>' +
+        nameEditBlock(i, l) +
+        '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
       '</div>' +
-      '<div class="card-controls">' +
-        '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false" title="mdblist listing URL">' +
-        '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
-          '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
-          '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
-        '</select>' +
-        '<span class="pages-label">pages:</span>' +
-        '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
-        '<span class="card-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list">' +
+      '<div class="card-body">' +
+        '<label class="field field-url"><span class="field-label">URL</span>' +
+          '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
+        '</label>' +
+        '<label class="field"><span class="field-label">Type</span>' +
+          '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
+            '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
+            '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
+          '</select>' +
+        '</label>' +
+        '<label class="field"><span class="field-label">Pages</span>' +
+          '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)">' +
+        '</label>' +
+        '<span class="body-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list" aria-label="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
@@ -818,29 +811,29 @@ function renderScraper() {
     '</div>';
   }).join('');
 
-  const createRow =
-    '<div class="create-list-section">' +
-      '<button class="btn-create-list" id="createListBtn" onclick="showCreateRow()">' +
-        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
-        'Add List' +
-      '</button>' +
-      '<div class="create-list-row" id="createListRow" style="display:none">' +
-        '<input class="name-input" id="createNameInput" placeholder="Name - e.g. Latest Movie" spellcheck="false">' +
-        '<input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
-        '<span class="type-pages">' +
-          '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
-          '<span class="pages-label">pages:</span>' +
-          '<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3">' +
-        '</span>' +
-        '<button onclick="confirmCreateList()">Add</button>' +
-        '<button class="secondary" onclick="hideCreateRow()">Cancel</button>' +
+  const emptyHint = lists.length ? '' : '<div class="empty">No scraper lists yet - add your first below.</div>';
+  const trigger = lists.length
+    ? '<button class="btn-create-list" id="createListBtn" onclick="showCreateRow()">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+      'Add List</button>'
+    : '';
+  const createOpen = lists.length ? ' style="display:none"' : ' style="display:grid"';
+  const createSlot =
+    '<div class="create-slot">' + trigger +
+      '<div class="create-form" id="createListRow"' + createOpen + '>' +
+        '<label class="field"><span class="field-label">Name</span><input class="name-input" id="createNameInput" placeholder="Name - e.g. Latest Movie" spellcheck="false"></label>' +
+        '<label class="field"><span class="field-label">URL</span><input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false"></label>' +
+        '<label class="field"><span class="field-label">Type</span><select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select></label>' +
+        '<label class="field"><span class="field-label">Pages</span><input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3"></label>' +
+        '<span class="body-actions"><button onclick="confirmCreateList()">Add</button><button type="button" class="secondary" onclick="hideCreateRow()">Cancel</button></span>' +
       '</div>' +
     '</div>';
 
   document.getElementById('headerTitle').textContent = 'MDBList Scraper';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
-  host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No scraper lists yet - add one above.</div>');
+  host.innerHTML = toolbar + cards + emptyHint + createSlot;
+  applyDisabledState();
   if (listNameEditIndex >= 0 && listNameEditIndex < lists.length) {
     const el = document.getElementById('nameInput-' + listNameEditIndex);
     if (el) { el.focus(); el.select(); }
@@ -875,6 +868,14 @@ function moduleLists() {
     : activeModule === 'tmdb' ? state.tmdb.lists
     : state.scraper.lists;
 }
+// A45: a disabled list no longer fades via opacity (that failed contrast).
+// Instead every control except its enable toggle is genuinely disabled -
+// inputs can't be edited, buttons can't be clicked, text stays readable.
+function applyDisabledState() {
+  document.querySelectorAll('.list-card.disabled').forEach(card => {
+    card.querySelectorAll('input:not(.toggle input), select, button').forEach(el => { el.disabled = true; });
+  });
+}
 function nameEditBlock(i, l, extraHtml) {
   const editing = listNameEditIndex === i;
   return '<div class="name-wrap">' +
@@ -904,7 +905,9 @@ function saveName(i) {
   if (listNameEditIndex !== i) return;
   const lists = moduleLists();
   const el = document.getElementById('nameInput-' + i);
-  if (el && el.value.trim()) {
+  // lists[i] guard: switching modules with a rename still open fires blur
+  // after the swap - the index may not exist (or exist) in the NEW module.
+  if (el && el.value.trim() && lists[i]) {
     const newName = el.value.trim().toLowerCase();
     // Duplicate guard mirrors create. TMDB allows the same name across
     // media types (catalog id embeds type); other modules are name-only.
@@ -939,13 +942,19 @@ document.addEventListener('pointerdown', (e) => {
 }, true);
 
 function showCreateRow() {
-  document.getElementById('createListBtn').style.display = 'none';
-  document.getElementById('createListRow').style.display = 'flex';
+  const btn = document.getElementById('createListBtn');
+  const row = document.getElementById('createListRow');
+  if (!btn || !row) return;
+  btn.style.display = 'none';
+  row.style.display = 'grid';
   document.getElementById('createNameInput').focus();
 }
 function hideCreateRow() {
-  document.getElementById('createListBtn').style.display = 'flex';
-  document.getElementById('createListRow').style.display = 'none';
+  const btn = document.getElementById('createListBtn');
+  const row = document.getElementById('createListRow');
+  if (!btn || !row) return;
+  btn.style.display = '';
+  row.style.display = 'none';
 }
 async function confirmCreateList() {
   const name = document.getElementById('createNameInput').value.trim();
@@ -1037,17 +1046,15 @@ function renderOfficial() {
   const lists = state.official.lists;
   const cards = lists.map((l, i) => {
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="ocard-' + i + '">' +
-      '<div class="card-top">' +
-        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleOfficial(' + i + ')"><span class="toggle-slider"></span></label></div>' +
-        '<div class="info">' +
-          nameEditBlock(i, l) +
-          '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
-        '</div>' +
+      '<div class="card-head">' +
+        '<label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleOfficial(' + i + ')"><span class="toggle-slider"></span></label>' +
+        nameEditBlock(i, l) +
+        '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
       '</div>' +
-      '<div class="card-controls">' +
+      '<div class="card-body">' +
         '<span class="official-hint">Movies + shows, refreshed every 12 hours via the MDBList API</span>' +
-        '<span class="card-actions official-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this official list">' +
+        '<span class="body-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this official list" aria-label="Refresh this official list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
         '</span>' +
@@ -1060,6 +1067,7 @@ function renderOfficial() {
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added or deleted - only renamed, enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
+  applyDisabledState();
 }
 
 function toggleOfficial(i) {
@@ -1131,17 +1139,15 @@ function renderSimkl() {
     ).join('') || '<div class="empty">No rating tiers.</div>';
 
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="socard-' + i + '">' +
-      '<div class="card-top">' +
-        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleSimkl(' + i + ')"><span class="toggle-slider"></span></label></div>' +
-        '<div class="info">' +
-          nameEditBlock(i, l) +
-          '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
-        '</div>' +
+      '<div class="card-head">' +
+        '<label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleSimkl(' + i + ')"><span class="toggle-slider"></span></label>' +
+        nameEditBlock(i, l) +
+        '<span class="id-chip">' + escapeAttr(l.slug) + '</span>' +
       '</div>' +
-      '<div class="card-controls">' +
+      '<div class="card-body">' +
         '<span class="official-hint">' + (l.slug === 'anime' ? 'Anime' : 'Series') + ', refreshed every 12 hours</span>' +
-        '<span class="card-actions official-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this simkl list">' +
+        '<span class="body-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this simkl list" aria-label="Refresh this simkl list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
         '</span>' +
@@ -1163,6 +1169,7 @@ function renderSimkl() {
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
   host.innerHTML = toolbar + '<div class="official-note">The 2 fixed SIMKL Arriving Today lists. Filters are typed below and applied on the next refresh.</div>' + (cards || '<div class="empty">No simkl lists.</div>');
+  applyDisabledState();
 }
 
 function toggleSimkl(i) {
@@ -1311,28 +1318,30 @@ function renderTmdb() {
         ? 'Each genre, keyword, company, release type, and collection is an independent source; results are unioned.'
         : "All include dimensions are AND'd into one TMDB query (often returns few or no results).";
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="tcard-' + i + '">' +
-      '<div class="card-top">' +
-        '<div class="toggle-col"><label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleTmdb(' + i + ')"><span class="toggle-slider"></span></label></div>' +
-        '<div class="info">' +
-          nameEditBlock(i, l) +
-          '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
-          '<div class="count-line">' + countLine + '</div>' +
-        '</div>' +
-        '<span class="card-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list">' +
+      '<div class="card-head">' +
+        '<label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleTmdb(' + i + ')"><span class="toggle-slider"></span></label>' +
+        nameEditBlock(i, l) +
+        '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
+        '<div class="count-line">' + countLine + '</div>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<label class="field"><span class="field-label">Media type</span>' +
+          '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)">' +
+            '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
+            '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
+          '</select>' +
+        '</label>' +
+        '<label class="field"><span class="field-label">Sort order</span>' +
+          '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)">' +
+            TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
+          '</select>' +
+        '</label>' +
+        '<span class="body-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list" aria-label="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
         '</span>' +
-      '</div>' +
-      '<div class="card-controls tmdb-controls">' +
-        '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
-          '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
-          '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
-        '</select>' +
-        '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)" title="Sort order">' +
-          TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
-        '</select>' +
       '</div>' +
       (l.sort === 'title_asc' && l.mediaType === 'series'
         ? '<div class="sort-fallback-note">Title (A-Z) is not supported by TMDB for series - showing Popularity instead.</div>'
@@ -1355,21 +1364,24 @@ function renderTmdb() {
 
   document.getElementById('headerTitle').textContent = 'TMDB List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+  const emptyHint = lists.length ? '' : '<div class="empty">No TMDB discover lists yet - add your first below.</div>';
+  const trigger = lists.length
+    ? '<button class="btn-create-list" id="tmdbCreateBtn" onclick="showTmdbCreate()">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+      'Add Discover List</button>'
+    : '';
+  const createOpen = lists.length ? ' style="display:none"' : ' style="display:grid"';
   const createRow =
-    '<div class="create-list-section">' +
-      '<button class="btn-create-list" id="tmdbCreateBtn" onclick="showTmdbCreate()">' +
-        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
-        'Add Discover List' +
-      '</button>' +
-      '<div class="create-list-row" id="tmdbCreateRow" style="display:none">' +
-        '<input class="name-input" id="tmdbCreateNameInput" placeholder="Name - e.g. 80s Horror" spellcheck="false">' +
-        '<select id="tmdbCreateTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
-        '<button onclick="confirmCreateTmdb()">Add</button>' +
-        '<button class="secondary" onclick="hideTmdbCreate()">Cancel</button>' +
+    '<div class="create-slot">' + trigger +
+      '<div class="create-form" id="tmdbCreateRow"' + createOpen + '>' +
+        '<label class="field"><span class="field-label">Name</span><input class="name-input" id="tmdbCreateNameInput" placeholder="Name - e.g. 80s Horror" spellcheck="false"></label>' +
+        '<label class="field"><span class="field-label">Media type</span><select id="tmdbCreateTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select></label>' +
+        '<span class="body-actions"><button onclick="confirmCreateTmdb()">Add</button><button type="button" class="secondary" onclick="hideTmdbCreate()">Cancel</button></span>' +
       '</div>' +
     '</div>';
 
-  host.innerHTML = toolbar + createRow + (cards || '<div class="empty">No TMDB discover lists yet - add one above.</div>');
+  host.innerHTML = toolbar + cards + emptyHint + createRow;
+  applyDisabledState();
 
   if (tmdbAdding) {
     const inp = document.getElementById('tmdbInlineInput');
@@ -1378,13 +1390,19 @@ function renderTmdb() {
 }
 
 function showTmdbCreate() {
-  document.getElementById('tmdbCreateBtn').style.display = 'none';
-  document.getElementById('tmdbCreateRow').style.display = 'flex';
+  const btn = document.getElementById('tmdbCreateBtn');
+  const row = document.getElementById('tmdbCreateRow');
+  if (!btn || !row) return;
+  btn.style.display = 'none';
+  row.style.display = 'grid';
   document.getElementById('tmdbCreateNameInput').focus();
 }
 function hideTmdbCreate() {
-  document.getElementById('tmdbCreateBtn').style.display = 'flex';
-  document.getElementById('tmdbCreateRow').style.display = 'none';
+  const btn = document.getElementById('tmdbCreateBtn');
+  const row = document.getElementById('tmdbCreateRow');
+  if (!btn || !row) return;
+  btn.style.display = '';
+  row.style.display = 'none';
 }
 async function confirmCreateTmdb() {
   const name = document.getElementById('tmdbCreateNameInput').value.trim();
