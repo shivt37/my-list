@@ -1864,7 +1864,7 @@ async function saveAll() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     const moduleChanges = activeModule === 'official' && data.officialChanged && data.officialChanged.length
-      ? 'Official toggles saved: ' + data.officialChanged.join(', ') + '. '
+      ? 'Official lists saved' + ((data.officialDispatchedSlugs || []).length ? ' - regenerating: ' : ': ') + data.officialChanged.join(', ') + '. '
       : activeModule === 'simkl' && data.simklChanged && data.simklChanged.length
         ? 'Simkl filters saved: ' + data.simklChanged.join(', ') + '. '
         : '';

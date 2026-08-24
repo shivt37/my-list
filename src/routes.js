@@ -271,6 +271,12 @@ export async function handleSaveConfig(env, request) {
     const officialChanged = incoming.official.lists
       .filter((l) => prevOffById.has(l.slug) && prevOffById.get(l.slug).enabled !== l.enabled)
       .map((l) => l.name);
+    // Owner request 2026-08-24: enabling an official list regenerates its
+    // data immediately instead of waiting for cron/manual refresh. Strict
+    // OFF->ON compare - disables and net-unchanged stays dispatch-free.
+    const officialEnabledSlugs = incoming.official.lists
+      .filter((l) => { const prev = prevOffById.get(l.slug); return prev && !prev.enabled && l.enabled; })
+      .map((l) => l.slug);
     const prevSimById = new Map(current.simkl.lists.map((l) => [l.slug, l]));
     const simklChanged = incoming.simkl.lists.filter((l) => {
       const prev = prevSimById.get(l.slug);
@@ -291,6 +297,15 @@ export async function handleSaveConfig(env, request) {
     const tmdbRemoved = current.tmdb.lists.filter((l) => !nextTmdbIds.has(l.discoverListId));
     const tmdbGenerateIds = tmdbAddedOrChanged.filter((l) => l.enabled)
       .map((l) => tmdbCatalogId(l));
+    // Owner request 2026-08-24: toggling a TMDB list ON must regenerate even
+    // when content is unchanged (tmdbContentHash deliberately excludes
+    // `enabled`, and must keep excluding it - scripts/tmdb.mjs mirrors this
+    // hash onto data files). Toggle-on also rescues lists that were added
+    // while disabled and never generated. Set-dedupe against hash-path ids.
+    const tmdbToggledOnIds = incoming.tmdb.lists
+      .filter((l) => { const prev = prevTmdbById.get(l.discoverListId); return prev && !prev.enabled && l.enabled; })
+      .map((l) => tmdbCatalogId(l));
+    const tmdbGenerateSet = new Set([...tmdbGenerateIds, ...tmdbToggledOnIds]);
     const tmdbDeleteIds = tmdbRemoved.map((l) => tmdbCatalogId(l));
     const dispatch = [];
     for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
@@ -299,14 +314,14 @@ export async function handleSaveConfig(env, request) {
     // Both dispatches fire before the persist: save is the last step, so
     // no config write happens on any dispatch failure and no workflow
     // has read a config it shouldn't trust yet.
-    // Dispatch simkl FIRST, scraper LAST, then persist on success of all.
-    // The scraper workflow can be destructive (scrape_delete removes data
-    // files); simkl only regenerates arrival listings. If the scraper
-    // fired first and the simkl dispatch then failed, the scraper
-    // workflow would run deleteCatalog() against a config the roll-back
-    // wants to keep. Firing simkl first, scraper last keeps the
-    // destructive action adjacent to the persist: any failure before it
-    // means no config write and no destructive run.
+    // Dispatch order: simkl + official first (non-destructive refreshes),
+    // then tmdb, scraper LAST - the scraper workflow can be destructive
+    // (scrape_delete removes data files); simkl/official only regenerate
+    // listings. If the scraper fired first and a later dispatch failed,
+    // the scraper workflow would run deleteCatalog() against a config the
+    // roll-back wants to keep. Keeping the destructive action adjacent to
+    // the persist means any failure before it = no config write and no
+    // destructive run.
     let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
     if (simklDispatchKinds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
@@ -315,6 +330,15 @@ export async function handleSaveConfig(env, request) {
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+    if (officialEnabledSlugs.length > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
+        inputs: { slugs: officialEnabledSlugs.join(",") },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub official dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
     const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
@@ -328,13 +352,13 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
-    if (tmdbGenerateIds.length > 0 || tmdbDeleteIds.length > 0) {
+    if (tmdbGenerateSet.size > 0 || tmdbDeleteIds.length > 0) {
       // One dispatch carries both: a save that deletes one list and edits
       // another must regenerate AND delete in the same run.
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
         inputs: {
-          ...(tmdbGenerateIds.length > 0 && { ids: tmdbGenerateIds.join(",") }),
+          ...(tmdbGenerateSet.size > 0 && { ids: [...tmdbGenerateSet].join(",") }),
           ...(tmdbDeleteIds.length > 0 && { delete_ids: tmdbDeleteIds.join(",") }),
         },
       });
@@ -356,8 +380,13 @@ export async function handleSaveConfig(env, request) {
       removed: removed.map((l) => l.name),
       dispatch: dispatch.map((l) => ({ id: l.id, name: l.name })),
       officialChanged,
+      officialDispatchedSlugs: officialEnabledSlugs,
       simklChanged: simklChanged.map((l) => l.name),
-      tmdbChanged: tmdbAddedOrChanged.filter((l) => l.enabled).map((l) => l.name),
+      // Display names for everything this save will regenerate - hash-path
+      // changes AND enable-toggles, deduped via the same set.
+      tmdbChanged: incoming.tmdb.lists
+        .filter((l) => l.enabled && tmdbGenerateSet.has(tmdbCatalogId(l)))
+        .map((l) => l.name),
       tmdbRemoved: tmdbRemoved.map((l) => l.name),
       github: dispatchResult,
     });
