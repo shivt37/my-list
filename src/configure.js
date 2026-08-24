@@ -655,6 +655,15 @@ export function buildConfigurePage(origin, config) {
   </div>
 </dialog>
 
+<dialog class="confirm-modal" id="refreshOneDlg" aria-labelledby="refreshOneTitle" aria-describedby="refreshOneBody">
+  <div class="confirm-title" id="refreshOneTitle">Refresh this list?</div>
+  <div class="confirm-body" id="refreshOneBody"></div>
+  <div class="confirm-actions">
+    <button class="secondary" autofocus onclick="closeRefreshOneConfirm()">Cancel</button>
+    <button id="confirmRefreshOneBtn">Refresh</button>
+  </div>
+</dialog>
+
 <div class="toast-wrap" id="toastWrap" role="status">
   <span id="toastMsg"></span>
   <button type="button" class="toast-undo" id="toastUndo">Undo</button>
@@ -667,6 +676,7 @@ let state = ${initial};
 // ─── Scraper module state ───
 let listNameEditIndex = -1;
 let pendingDeleteIndex = -1;
+let pendingRefreshIndex = -1;
 
 function escapeAttr(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -798,7 +808,7 @@ function renderScraper() {
         '<span class="pages-label">pages:</span>' +
         '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
         '<span class="card-actions">' +
-          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this list">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
@@ -1037,7 +1047,7 @@ function renderOfficial() {
       '<div class="card-controls">' +
         '<span class="official-hint">Movies + shows, refreshed every 12 hours via the MDBList API</span>' +
         '<span class="card-actions official-actions">' +
-          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this official list">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this official list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
         '</span>' +
@@ -1059,9 +1069,20 @@ function toggleOfficial(i) {
   renderOfficial();
 }
 
-// R1 (M14): single-list refresh no longer confirms - a trivial, non-destructive
-// dispatch doesn't earn an interruption (NN/g overuse rule). Icon click fires
-// immediately; the existing spinner is the busy state.
+// R1 (amended per owner): single-list refresh keeps its confirmation, as a
+// native dialog that names the list and states the timing.
+function askSingleRefresh(i) {
+  const m = activeModule;
+  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
+  if (!list) return;
+  pendingRefreshIndex = i;
+  document.getElementById('refreshOneTitle').textContent = "Refresh '" + list.name + "'?";
+  const timing = m === 'simkl' || m === 'tmdb' ? 'a few seconds' : m === 'official' ? 'about a minute' : '1-3 minutes';
+  document.getElementById('refreshOneBody').textContent = 'Queues a GitHub Actions rebuild of just this list now. Typically takes ' + timing + '; progress shows on the Status page.';
+  document.getElementById('refreshOneDlg').showModal();
+}
+function closeRefreshOneConfirm() { document.getElementById('refreshOneDlg').close(); pendingRefreshIndex = -1; }
+
 async function performSingleRefresh(i) {
   const m = activeModule;
   const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
@@ -1120,7 +1141,7 @@ function renderSimkl() {
       '<div class="card-controls">' +
         '<span class="official-hint">' + (l.slug === 'anime' ? 'Anime' : 'Series') + ', refreshed every 12 hours</span>' +
         '<span class="card-actions official-actions">' +
-          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this simkl list">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this simkl list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
         '</span>' +
@@ -1298,7 +1319,7 @@ function renderTmdb() {
           '<div class="count-line">' + countLine + '</div>' +
         '</div>' +
         '<span class="card-actions">' +
-          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this list">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
@@ -1813,16 +1834,23 @@ document.getElementById('menuBtn').onclick = toggleMenu;
 document.getElementById('accentBtn').onclick = toggleAccentPopup;
 document.getElementById('confirmRefreshBtn').onclick = confirmRefresh;
 document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
+document.getElementById('confirmRefreshOneBtn').onclick = () => {
+  const i = pendingRefreshIndex;
+  closeRefreshOneConfirm();
+  performSingleRefresh(i);
+};
 
-// R1: backdrop click cancels refresh-all; delete keeps backdrop inert
-// (stray clicks during a grave moment must not dismiss it - Esc/Cancel only).
-const refreshDlg = document.getElementById('refreshConfirmDlg');
-refreshDlg.addEventListener('click', (e) => {
-  const r = refreshDlg.getBoundingClientRect();
-  if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
-    closeRefreshConfirm();
-  }
-});
+// R1: clicking the dim backdrop outside any confirm dialog closes it
+// (per your call - including Delete; Escape and Cancel do the same).
+function backdropCancels(dlg, closeFn) {
+  dlg.addEventListener('click', (e) => {
+    const r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeFn();
+  });
+}
+backdropCancels(document.getElementById('refreshConfirmDlg'), closeRefreshConfirm);
+backdropCancels(document.getElementById('refreshOneDlg'), closeRefreshOneConfirm);
+backdropCancels(document.getElementById('deleteConfirmDlg'), closeDeleteConfirm);
 
 initSwatches();
 let savedModule = 'scraper';
