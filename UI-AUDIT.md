@@ -8,6 +8,26 @@
 
 ---
 
+## Progress status — updated 2026-08-24 (end of implementation session)
+
+All work below is committed locally and **pushed to `main`** at `github.com/shivt37/my-list`. Playwright verification harnesses live in `.audit/` (`r3-verify.cjs`, `r5-keys-verify.cjs`, `r6-verify.cjs`; gitignored) and run against `wrangler dev` on :8787.
+
+| Item | State | Notes |
+|---|---|---|
+| Quick wins 1–13 | ✅ done | incl. QW4/QW5 stopgaps later superseded by R1 |
+| R1 native `<dialog>` modals + tiering | ✅ done | owner-amended: single-list refresh keeps a confirm dialog naming the list + timing; backdrop click closes all three |
+| R2 tablist nav | ⏭️ **skipped by owner** | hamburger popup remains as-is |
+| R3 card rebuild | ✅ done | + two rounds of owner tweaks (density kept: no stacked field labels except inline "Pages"; compact controls; one control row; official/simkl hint+refresh share a line; simkl IMDb/MAL chip visible on mobile; TMDB add-form single line w/ compact media-type select; scraper add-form mirrors card controls) + follow-up fix pinning TMDB card refresh/delete right on desktop. Also fixed latent crash: renaming while switching modules. |
+| R4 token spine | 🔻 **reduced by owner** | shipped: spacing tokens `--s1..--s6` on exact-match padding/margin/gap values, color role aliases for remaining raw hexes, tabular numerals (counts/tiers/chips). Owner kept current font sizes — T15 type ladder NOT adopted; rem/browser-zoom conversion skipped (available later on request). |
+| R5 accent picker | 🔻 **scoped by owner** | shipped: arrow-key grid only (←→↑↓ via live-geometry rows, Home/End, Space/Enter commit, roving tabindex). Skipped: 32/44px named swatches, hover/focus live-preview-before-commit, Reset-to-default row, check-mark selection cue, bottom sheet <768px, aria-live announce, trigger aria-expanded. |
+| R6 save pipeline | 🔻 **trimmed by owner** | shipped: dirty-gated Save only (disabled until change, amber dot, tooltip). Declined & removed: tab-switch guard dialog, beforeunload warning, Ctrl+S, crash-recovery drafts/banner, success toast + error chip w/ Retry+Details — save feedback stays in the top `#status` line. `buildConfig()` kept as dirty baseline (preview caches never count as changes). Trade-off accepted: closing/reloading with unsaved edits discards silently. |
+| R7 state contract | ⏳ deferred ("later") | agreed scope when resumed: pillars = skeletons, regional Retry+Details, field-level validation, empty-state anatomy — **global-toast pillar dropped** per R6 decision. |
+| R8 motion pass | ⏳ deferred | enter-only overlays, exits instant, View Transitions crossfade, FLIP cards, reduced-motion kill-switch. Save-checkmark sub-item moot unless save feedback changes. |
+| R9 header + layout | ⏳ deferred | open decision recorded: keep existing hamburger beside new `•••` overflow (owner to confirm fold-in vs side-by-side). 2-col grid ≥1024 is the most visible change left. |
+| R10 dimension editor + preview D4 | ⏳ deferred | reuses R7's skeleton/retry/empty machinery in preview + search when both run. |
+
+---
+
 ## Phase 1 — Ground Truth (measured, not guessed)
 
 ### Detector findings (`detect.mjs --json src/configure.js`)
@@ -121,34 +141,34 @@ Full output includes an 11-region × 6-breakpoint behavior matrix, complete touc
 
 ## Punch List
 
-### Quick wins (low effort — do first)
-1. Replace `.list-card` background `#161616` → `--surface-card` token (`#0f1119`). *(1 line)*
-2. Kill `side-tab`: restyle `.sort-fallback-note` as plain tinted text, drop `border-left: 3px solid var(--accent)`. *(1 line + detector re-run goes clean)*
-3. Bump `--muted` usages that fail AA → `--muted` value `#8a93a8`. *(token change, ~4.9:1 everywhere)*
-4. Add Escape-to-close + backdrop-click-close + `role="dialog"`/`aria-modal="true"` to the three backdrops (pre-`<dialog>` stopgap). *(~15 lines JS + 2 attrs each)*
-5. Move focus into modal on open; return it on close. *(~6 lines)*
-6. Convert menu-items, swatches, pencil/eye/mode-tag/chip-remove spans → real `<button>`s (or `role=radiogroup` for swatches) with aria-labels. *(mechanical)*
-7. Add `<h1>` (visually styled as current title). *(1 line + CSS)*
-8. Raise touch targets: mode-pill height 23→32px min, chip-remove ×→24px hit area via padding, icon-btn 22→28px visual/44 hit via pseudo-element. *(CSS only)*
-9. Humanize save-error copy via ERROR_MAP (never print `GH_TOKEN/GH_REPO/GH_WORKFLOW` raw). *(map + one branch)*
-10. Radius consolidation: map 6/7px→`--r-sm 8px`… collapse 12 values to 3 tokens. *(CSS find-replace)*
-11. Font-size consolidation first pass: 8.5/9/9.5/10/10.5 → 10 or 11 floor. *(CSS)*
-12. Eye-preview button: render only when `activeModule==='tmdb'` (removes state-corruption bug). *(one conditional)*
-13. Add `aria-live="polite"` region wired to existing `setStatus()`. *(2 lines)*
+### Quick wins (low effort — do first) — ✅ ALL 13 DONE
+1. ✅ Replace `.list-card` background `#161616` → `--surface-card` token (`#0f1119`). *(1 line)*
+2. ✅ Kill `side-tab`: restyle `.sort-fallback-note` as plain tinted text, drop `border-left: 3px solid var(--accent)`. *(1 line + detector re-run goes clean)*
+3. ✅ Bump `--muted` usages that fail AA → `--muted` value `#8a93a8`. *(token change, ~4.9:1 everywhere)*
+4. ✅ ~~Add Escape-to-close + backdrop-click-close + `role="dialog"`/`aria-modal="true"` to the three backdrops~~ — stopgap superseded by R1 native `<dialog>`.
+5. ✅ ~~Move focus into modal on open; return it on close~~ — superseded by R1 (native focus management).
+6. ✅ Convert menu-items, swatches, pencil/eye/mode-tag/chip-remove spans → real `<button>`s with aria-labels.
+7. ✅ Add `<h1>` (visually styled as current title).
+8. ✅ Raise touch targets: mode-pill height 23→32px min, chip-remove ×→24px hit area via padding, icon-btn hit via pseudo-element.
+9. ✅ Humanize save-error copy via ERROR_MAP (never print `GH_TOKEN/GH_REPO/GH_WORKFLOW` raw).
+10. ✅ Radius consolidation: collapse to `--r / --r-sm / --r2` tokens.
+11. ✅ Font-size consolidation first pass: sub-10px floor raised. *(long tail of half-pixel sizes remains — R4's ladder was declined by owner)*
+12. ✅ Eye-preview button: render only when `activeModule==='tmdb'`.
+13. ✅ Add `aria-live="polite"` region wired to existing `setStatus()`.
 
-### Larger reworks (plan separately)
-R1. **Native `<dialog>` conversion** of all three confirms + M15 tiering (delete Undo toast, refresh-single immediate dispatch). *Effort: M*
-R2. **A32 tablist nav** replacing hamburger popup (arrow-key roving tabindex, ≤380 segmented variant). *M*
-R3. **A45 card rebuild** as labeled-form two-zone grid (deletes both alignment hacks) + embedded create slot. *M*
-R4. **Token spine adoption** (semantic `--{role}-{state}` names, T15 type ladder, S15 spacing grid) across the whole stylesheet. *M-L*
-R5. **P15 accent picker** rebuild (named radiogroup, bottom sheet <768, Reset, aria-live). *M*
-R6. **S15 save pipeline**: dirty tracking, amber dot, beforeunload/tab guards, toast success/error chip, drafts. *M-L*
-R7. **S13 state contract**: skeleton/spinner regions, empty-state anatomy, ERROR_MAP layer. *L*
-R8. **X15 motion pass**: overlay enter transitions, FLIP add/remove, View Transitions crossfade, reduced-motion kill-switch. *M*
-R9. **Header A11** (brand/h1-center/actions regroup) + layout A23 clamp + 2-col grid ≥1024. *M*
-R10. **Dimension editor + preview D4** overhaul (disclosure rows, dual-coded chips, ranked filmstrip). *L*
+### Larger reworks
+R1. ✅ **DONE** — Native `<dialog>` conversion + M15 tiering. Owner amendment kept: refresh-single retains a confirm dialog naming the list + expected timing; backdrop click closes all three dialogs. Delete gained the 8s Undo toast.
+R2. ⏭️ **SKIPPED BY OWNER** — A32 tablist nav not wanted; hamburger popup stays.
+R3. ✅ **DONE** — Two-zone cards (identity head + one compact control row per owner: only inline "Pages" label, previous density/sizes preserved), margin hacks deleted, disabled lists dim instead of fading (controls truly disabled), add-list as quiet slot below cards, TMDB empty state as slim note, TMDB actions pinned right on desktop. Owner-tweaked twice for density parity with old layout; also fixed latent crash (module switch during inline rename).
+R4. 🔻 **REDUCED** — shipped spacing tokens (exact-match values only), color role aliases, tabular numerals. Font sizes intentionally untouched by owner; rem conversion skipped.
+R5. 🔻 **SCOPED** — arrow-key grid navigation on existing picker only (roving tabindex, Home/End, Space/Enter). All other P15 features skipped by owner.
+R6. 🔻 **TRIMMED** — dirty-gated Save + amber dot only. Guards, Ctrl+S, drafts, toasts/error-chip removed at owner request; feedback returns to `#status` line.
+R7. ⏳ **DEFERRED** — S13 state contract. On resume: skeletons (preview tiles, search rows), regional Retry+Details errors, field-level create-form validation, empty-state anatomy (icon+headline+body+action). Global-toast pillar dropped per R6 decision.
+R8. ⏳ **DEFERRED** — X15 motion pass (enter-only overlays, tab crossfade, FLIP, reduced-motion kill-switch).
+R9. ⏳ **DEFERRED** — Header A11 + layout A23. Pending owner call: hamburger sits beside new `•••` (proposed) or folds into it.
+R10. ⏳ **DEFERRED** — Dimension editor disclosures + ranked filmstrip preview; shares R7 machinery.
 
-*Suggested sequencing: all Quick wins → R1/R2/R3 (biggest UX-per-effort) → R4/R6 → R5/R8/R9 → R7/R10.*
+*Suggested sequencing when resuming: R7 → R10 (shared machinery) → R8 → R9 last (most visible structural change).*
 
 ---
 
