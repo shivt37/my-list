@@ -27,6 +27,7 @@ export function buildConfigurePage(origin, config) {
     --surface: #0c0c13;
     --surface2: #13131d;
     --surface3: #1a1a26;
+    --surface-card: #0f1119;
     --border: #1b1b26;
     --border2: #262635;
     --text: #e8edf4;
@@ -166,7 +167,7 @@ export function buildConfigurePage(origin, config) {
   .create-list-row button { flex-shrink: 0; padding: 7px 14px; font-size: 12px; }
 
   .list-card {
-    background: #161616;
+    background: var(--surface-card);
     border: 1px solid var(--border); border-radius: var(--r2); padding: 12px;
     margin-bottom: 10px; display: flex; flex-direction: column;
     transition: border-color 0.15s, opacity 0.15s;
