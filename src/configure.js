@@ -203,9 +203,9 @@ export function buildConfigurePage(origin, config) {
   .icon-btn {
     display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;
     border: 1px solid var(--border2); border-radius: 6px; color: var(--muted); cursor: pointer; flex-shrink: 0;
-    background: transparent; transition: color 0.15s, border-color 0.15s, background 0.15s;
+    background: transparent; padding: 0; transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
-  .icon-btn:hover { color: var(--text); border-color: #3a3a52; background: var(--surface2); }
+  .icon-btn:hover { color: var(--text); border-color: #3a3a52; background: var(--surface2); filter: none; }
   .id-chip {
     font-size: 10px; color: var(--muted); background: var(--surface2);
     border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px;
@@ -280,8 +280,10 @@ export function buildConfigurePage(origin, config) {
     color: var(--dim); background: var(--surface2); border: 1px solid var(--border2);
     transition: color 0.12s, border-color 0.12s;
   }
-  .dim-mode-tag:hover { color: var(--text); border-color: var(--accent); }
-  .exclude-label-toggle { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+  .dim-mode-tag:hover { color: var(--text); border-color: var(--accent); filter: none; }
+  .exclude-label-toggle { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; background: none; border: 0; padding: 0; font: inherit; color: inherit; }
+  .exclude-label-toggle:hover { filter: none; }
+  .exclude-label { display: flex; align-items: center; gap: 7px; }
   .exclude-chevron { transition: transform 0.15s; color: var(--muted); }
   .exclude-chevron.open { transform: rotate(180deg); }
   /* 3-position sliding pill: AND / Mix (read-only) / OR. Thumb position via
@@ -330,9 +332,10 @@ export function buildConfigurePage(origin, config) {
   .chip-remove {
     display: flex; align-items: center; justify-content: center; width: 16px; height: 16px;
     border-radius: 50%; color: var(--muted); cursor: pointer; font-size: 13px; line-height: 1; flex-shrink: 0;
+    background: transparent; border: 0; padding: 0;
     transition: background 0.12s, color 0.12s;
   }
-  .chip-remove:hover { background: rgba(255,95,102,0.14); color: var(--danger); }
+  .chip-remove:hover { background: rgba(255,95,102,0.14); color: var(--danger); filter: none; }
   .member-chip-add {
     cursor: pointer; color: var(--accent); border-color: rgba(6,182,212,0.5);
     background: var(--accent-soft); padding: 4px 12px;
@@ -443,7 +446,7 @@ export function buildConfigurePage(origin, config) {
     width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
     border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
   }
-  .swatch:hover { transform: scale(1.15); }
+  .swatch:hover { transform: scale(1.15); filter: none; }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
 
   /* ── MENU ── */
@@ -457,10 +460,11 @@ export function buildConfigurePage(origin, config) {
   .menu-popup.visible { display: block; }
   .menu-item {
     display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
+    background: transparent; border-color: transparent; font-weight: 400; text-align: left;
     font-size: 12.5px; color: var(--dim); cursor: pointer; transition: background 0.1s, color 0.1s;
   }
   .menu-item svg { flex-shrink: 0; }
-  .menu-item:hover { background: var(--surface2); color: var(--text); }
+  .menu-item:hover { background: var(--surface2); color: var(--text); filter: none; }
   .menu-item.active { background: var(--accent-dim); color: var(--accent); }
   .menu-item.disabled { opacity: 0.4; cursor: default; }
   .menu-item.disabled:hover { background: none; color: var(--dim); }
@@ -577,22 +581,22 @@ export function buildConfigurePage(origin, config) {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div class="menu-popup" id="menuPopup">
-        <div class="menu-item active" data-module="scraper" onclick="activateModule('scraper')">
+        <button type="button" class="menu-item active" data-module="scraper" onclick="activateModule('scraper')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           MDBList Scraper
-        </div>
-        <div class="menu-item" data-module="official" onclick="activateModule('official')">
+        </button>
+        <button type="button" class="menu-item" data-module="official" onclick="activateModule('official')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
           MDBList Official List
-        </div>
-        <div class="menu-item" data-module="simkl" onclick="activateModule('simkl')">
+        </button>
+        <button type="button" class="menu-item" data-module="simkl" onclick="activateModule('simkl')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>
           Simkl List
-        </div>
-        <div class="menu-item" data-module="tmdb" onclick="activateModule('tmdb')">
+        </button>
+        <button type="button" class="menu-item" data-module="tmdb" onclick="activateModule('tmdb')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
           TMDB List
-        </div>
+        </button>
       </div>
     </div>
   </div>
@@ -651,18 +655,18 @@ function escapeAttr(s) {
 
 // ─── Accent colour (localStorage-persisted) ───
 const ACCENT_COLORS = {
-  '#fb923c': { dim: 0.10, glow: 0.18 }, // Amber
-  '#f59e0b': { dim: 0.10, glow: 0.18 }, // Gold
-  '#f43f5e': { dim: 0.10, glow: 0.18 }, // Rose
-  '#e63d64': { dim: 0.10, glow: 0.18 }, // Magenta
-  '#60a5fa': { dim: 0.10, glow: 0.18 }, // Sky Blue
-  '#38bdf8': { dim: 0.10, glow: 0.18 }, // Ice Blue
-  '#818cf8': { dim: 0.10, glow: 0.18 }, // Indigo
-  '#5550f7': { dim: 0.10, glow: 0.18 }, // Violet
-  '#06b6d4': { dim: 0.10, glow: 0.18 }, // Cyan (default)
-  '#19be81': { dim: 0.10, glow: 0.18 }, // Emerald
-  '#e2e8f0': { dim: 0.08, glow: 0.14 }, // Pure White
-  '#94a3b8': { dim: 0.08, glow: 0.14 }, // Slate
+  '#fb923c': { name: 'Amber', dim: 0.10, glow: 0.18 },
+  '#f59e0b': { name: 'Gold', dim: 0.10, glow: 0.18 },
+  '#f43f5e': { name: 'Rose', dim: 0.10, glow: 0.18 },
+  '#e63d64': { name: 'Magenta', dim: 0.10, glow: 0.18 },
+  '#60a5fa': { name: 'Sky Blue', dim: 0.10, glow: 0.18 },
+  '#38bdf8': { name: 'Ice Blue', dim: 0.10, glow: 0.18 },
+  '#818cf8': { name: 'Indigo', dim: 0.10, glow: 0.18 },
+  '#5550f7': { name: 'Violet', dim: 0.10, glow: 0.18 },
+  '#06b6d4': { name: 'Cyan (default)', dim: 0.10, glow: 0.18 },
+  '#19be81': { name: 'Emerald', dim: 0.10, glow: 0.18 },
+  '#e2e8f0': { name: 'Pure White', dim: 0.08, glow: 0.14 },
+  '#94a3b8': { name: 'Slate', dim: 0.08, glow: 0.14 },
 };
 const ACCENT_STORAGE_KEY = 'mylist_accent';
 
@@ -682,17 +686,23 @@ function applyAccent(hex) {
 }
 
 function selectAccent(hex) {
-  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('selected', s.dataset.accent === hex));
+  document.querySelectorAll('.swatch').forEach(s => {
+    const on = s.dataset.accent === hex;
+    s.classList.toggle('selected', on);
+    s.setAttribute('aria-checked', on ? 'true' : 'false');
+  });
   applyAccent(hex);
   try { localStorage.setItem(ACCENT_STORAGE_KEY, hex); } catch (e) {}
 }
 
 function initSwatches() {
   const row = document.getElementById('swatchRow');
+  row.setAttribute('role', 'radiogroup');
+  row.setAttribute('aria-label', 'Accent colour');
   let saved = '#06b6d4';
   try { saved = localStorage.getItem(ACCENT_STORAGE_KEY) || '#06b6d4'; } catch (e) {}
   row.innerHTML = Object.keys(ACCENT_COLORS).map(hex =>
-    '<div class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" onclick="selectAccent(\\\'' + hex + '\\\')"></div>'
+    '<button type="button" role="radio" aria-checked="' + (hex === saved ? 'true' : 'false') + '" class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" aria-label="Accent colour: ' + ACCENT_COLORS[hex].name + '" onclick="selectAccent(\\\'' + hex + '\\\')"></button>'
   ).join('');
   applyAccent(saved);
 }
@@ -828,17 +838,17 @@ function nameEditBlock(i, l, extraHtml) {
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
       : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-    '<span class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename">' +
+    '<button type="button" class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename" aria-label="Rename list">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
-    '</span>' +
+    '</button>' +
     // The preview-eye only makes sense on TMDB cards: toggleTmdbPreview
     // indexes state.tmdb.lists, so rendering it on scraper/official/simkl
     // cards made the button either a silent no-op or (worse) hijack the
     // page to the TMDB tab by toggling an unrelated same-index list.
     (activeModule === 'tmdb'
-      ? '<span class="icon-btn' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results">' +
+      ? '<button type="button" class="icon-btn' + (l.previewOpen ? ' tmdb-eye-active' : '') + '" onclick="toggleTmdbPreview(' + i + ')" title="Preview results" aria-label="Preview results"' + (l.previewOpen ? ' aria-pressed="true"' : '') + '>' +
         '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
-      '</span>'
+      '</button>'
       : '') +
   '</div>';
 }
@@ -1469,7 +1479,7 @@ function tmdbDimSection(i, l, dim) {
     const chips = ids.map((id, idx) => {
       const shown = dim.isStatic ? tmdbStaticName(dim.kind, id, l.mediaType) : (names[idx] != null ? names[idx] : String(id));
       return '<span class="' + cls + '">' + escapeAttr(shown) +
-        '<span class="chip-remove" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')" title="Remove">×</span></span>';
+        '<button type="button" class="chip-remove" onclick="removeTmdbId(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + field + '\\\',' + id + ')" title="Remove" aria-label="Remove ' + escapeAttr(shown) + '">×</button></span>';
     }).join('');
     const addingHere = tmdbAdding && tmdbAdding.i === i && tmdbAdding.kind === dim.kind && tmdbAdding.side === field;
     let adder;
@@ -1495,13 +1505,14 @@ function tmdbDimSection(i, l, dim) {
   };
 
   return '<div class="tmdb-dim">' +
-    '<div class="exclude-label"><span class="exclude-label-toggle" onclick="toggleTmdbSection(' + i + ',\\\'' + dim.kind + '\\\')">' +
+    '<div class="exclude-label"><button type="button" class="exclude-label-toggle" onclick="toggleTmdbSection(' + i + ',\\\'' + dim.kind + '\\\')" aria-expanded="' + (isOpen ? 'true' : 'false') + '">' +
       '<span class="filter-label">' + dim.label + (totalCount > 0 ? ' (' + totalCount + ')' : '') + '</span>' +
       '<svg class="exclude-chevron' + (isOpen ? ' open' : '') + '" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
-      (hasMode ? '<span class="dim-mode-tag" onclick="event.stopPropagation();setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" title="' + (mode === 'or'
+    '</button>' +
+      (hasMode ? '<span class="dim-mode-tag" role="button" tabindex="0" onclick="setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" onkeydown="if(event.key===\\\'Enter\\\'||event.key===\\\' \\\'){event.preventDefault();setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')}" aria-label="Set ' + dim.label + ' combination to ' + (mode === 'or' ? 'AND' : 'OR') + '" title="' + (mode === 'or'
         ? 'OR - this selection becomes its own source, unioned with everything else (click to switch to AND)'
         : 'AND - this selection narrows every other source instead of being one of its own (click to switch to OR)') + '">' + (mode === 'or' ? 'OR' : 'AND') + '</span>' : '') +
-    '</span></div>' +
+    '</div>' +
     (isOpen
       ? chipRow('include', 'Include', 'member-chip') + (dim.hasExclude ? chipRow('exclude', 'Exclude', 'exclude-chip') : '')
       : '') +
