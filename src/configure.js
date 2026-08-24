@@ -72,7 +72,7 @@ export function buildConfigurePage(origin, config) {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
   }
-  .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; }
+  .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; margin: 0; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
 
   /* ── BUTTONS (solid accent, no color-mix) ── */
@@ -562,7 +562,7 @@ export function buildConfigurePage(origin, config) {
 <body>
 
 <header>
-  <div class="header-title" id="headerTitle">MDBList Scraper</div>
+  <h1 class="header-title" id="headerTitle">MDBList Scraper</h1>
   <div class="header-actions">
     <button class="btn-save" id="saveBtn">Save</button>
     <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh - regenerate all enabled lists">
