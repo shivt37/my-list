@@ -380,7 +380,7 @@ export function buildConfigurePage(origin, config) {
   .empty-msg { font-size: 11.5px; color: var(--muted); padding: 6px 2px; }
   .sort-fallback-note {
     font-size: 11px; color: var(--muted); background: var(--surface2);
-    border-left: 3px solid var(--accent); border-radius: 4px; padding: 6px 10px; margin-top: 8px;
+    border-radius: 4px; padding: 6px 10px; margin-top: 8px;
   }
   /* ── PREVIEW ROW (horizontal scroll strip, ported from old worker) ── */
   .preview-row {
