@@ -445,6 +445,7 @@ export function buildConfigurePage(origin, config) {
   .swatch {
     width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
     border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
+    padding: 0; appearance: none; -webkit-appearance: none;
   }
   .swatch:hover { transform: scale(1.15); filter: none; }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
@@ -460,7 +461,7 @@ export function buildConfigurePage(origin, config) {
   .menu-popup.visible { display: block; }
   .menu-item {
     display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
-    background: transparent; border-color: transparent; font-weight: 400; text-align: left;
+    background: transparent; border-color: transparent; font-weight: 400; text-align: left; width: 100%;
     font-size: 12.5px; color: var(--dim); cursor: pointer; transition: background 0.1s, color 0.1s;
   }
   .menu-item svg { flex-shrink: 0; }
