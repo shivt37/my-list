@@ -2,7 +2,7 @@
 // hash stability, generator source-plan logic, and the configure page UI.
 // Run: node scripts/verify-tmdb.mjs
 import { migrateConfig, tmdbContentHash, normalizeTmdbList, runsKeyFor } from "../src/config.js";
-import { buildDiscoverSources, computeSourceHash } from "./tmdb.mjs";
+import { buildDiscoverSources, computeSourceHash } from "../scripts/tmdb.mjs";
 import { JSDOM } from "jsdom";
 
 let fail = 0;
@@ -102,7 +102,7 @@ check("UI: named chips visible when open", [...doc.querySelectorAll("#tcard-0 .m
 check("UI: + Add inline search chip present", !!doc.querySelector("#tcard-0 .member-chip-add"));
 dom.window.activateModule("scraper");
 await new Promise((r) => setTimeout(r, 50));
-check("UI: switching back to scraper works", !!doc.querySelector(".list-card, .create-list-section"));
+check("UI: switching back to scraper works", !!doc.querySelector(".list-card, .create-slot"));
 
 console.log(fail === 0 ? "\nALL PASS" : `\n${fail} FAILURES`);
 process.exit(fail === 0 ? 0 : 1);

@@ -13,7 +13,6 @@ scratch/
 data/*.json
 
 # local test scripts (not part of deploy or scrape)
-scripts/dry-test.mjs
-scripts/verify-ui.mjs
+testing/
 
 implementation/
