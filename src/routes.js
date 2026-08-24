@@ -380,8 +380,14 @@ export async function handleSaveConfig(env, request) {
       removed: removed.map((l) => l.name),
       dispatch: dispatch.map((l) => ({ id: l.id, name: l.name })),
       officialChanged,
-      officialDispatchedSlugs: officialEnabledSlugs,
+      // Names whose workflows actually fired this save - the UI reports
+      // from these, never from the changed arrays (a disable is a change
+      // but must not claim a regeneration).
+      officialDispatched: incoming.official.lists
+        .filter((l) => officialEnabledSlugs.includes(l.slug))
+        .map((l) => l.name),
       simklChanged: simklChanged.map((l) => l.name),
+      simklDispatched: simklChanged.filter((l) => l.enabled).map((l) => l.name),
       // Display names for everything this save will regenerate - hash-path
       // changes AND enable-toggles, deduped via the same set.
       tmdbChanged: incoming.tmdb.lists

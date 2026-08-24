@@ -1863,24 +1863,29 @@ async function saveAll() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    const moduleChanges = activeModule === 'official' && data.officialChanged && data.officialChanged.length
-      ? 'Official lists saved' + ((data.officialDispatchedSlugs || []).length ? ' - regenerating: ' : ': ') + data.officialChanged.join(', ') + '. '
-      : activeModule === 'simkl' && data.simklChanged && data.simklChanged.length
-        ? 'Simkl filters saved: ' + data.simklChanged.join(', ') + '. '
-        : '';
-    const tmdbNames = []
-      .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map(n => n + ' (deleted)'));
+    // Success copy reports what ACTUALLY dispatched - never raw change
+    // lists (disabling a list is a change but regenerates nothing).
+    const regen = [];
+    const scraperNames = (data.dispatch || []).map((d) => d.name);
+    if (scraperNames.length) regen.push('Regenerating: ' + scraperNames.join(', '));
+    if (data.removed && data.removed.length) regen.push('Removing: ' + data.removed.join(', '));
+    if (data.officialDispatched && data.officialDispatched.length) regen.push('Regenerating official: ' + data.officialDispatched.join(', '));
+    if (data.simklDispatched && data.simklDispatched.length) regen.push('Regenerating simkl: ' + data.simklDispatched.join(', '));
+    const tmdbLine = []
+      .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map((n) => n + ' (removed)'));
+    if (tmdbLine.length) regen.push('Regenerating TMDB: ' + tmdbLine.join(', '));
+
+    const turnedOff = []
+      .concat((data.officialChanged || []).filter((n) => !(data.officialDispatched || []).includes(n)))
+      .concat((data.simklChanged || []).filter((n) => !(data.simklDispatched || []).includes(n)));
+
+    let msg;
+    const offNote = turnedOff.length ? ' ' + turnedOff.join(', ') + ' turned off - no rebuild needed.' : '';
+    if (regen.length) msg = 'Saved. ' + regen.join('. ') + '.' + offNote;
+    else if (turnedOff.length) msg = 'Saved. ' + turnedOff.join(', ') + ' turned off - no rebuild needed.';
+    else msg = 'Saved - no regeneration needed.';
+    setStatus(msg, 'ok');
     lastSavedJson = JSON.stringify(payload);
-    setStatus(moduleChanges +
-      (data.dispatch && data.dispatch.length
-        ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
-        : tmdbNames.length
-          ? 'Saved. Regenerating TMDB: ' + tmdbNames.join(', ')
-          : (data.simklChanged && data.simklChanged.length)
-            ? 'Saved. Regenerating simkl: ' + data.simklChanged.join(', ')
-            : (data.officialChanged && data.officialChanged.length)
-              ? 'Saved. Regenerating official: ' + data.officialChanged.join(', ')
-              : 'Saved (no content change - nothing regenerated).'), 'ok');
   } catch (e) {
     setStatus('Save failed: ' + humanizeError(e.message), 'error');
   } finally {
