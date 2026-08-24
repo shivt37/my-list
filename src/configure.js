@@ -472,23 +472,51 @@ export function buildConfigurePage(origin, config) {
   .menu-item.disabled:hover { background: none; color: var(--dim); }
   .menu-soon { margin-left: auto; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 
-  /* ── CONFIRM MODAL ── */
-  .confirm-backdrop {
-    position: fixed; inset: 0; background: rgba(3,3,6,0.72); display: none;
-    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
-    align-items: center; justify-content: center; z-index: 300; padding: 20px;
-  }
-  .confirm-backdrop.visible { display: flex; }
-  .confirm-modal {
+  /* ── CONFIRM DIALOGS (R1: native <dialog>; QW4/QW5 stopgaps removed) ── */
+  dialog.confirm-modal {
     background: var(--surface);
     border: 1px solid var(--border2); border-radius: var(--r2);
-    padding: 20px; width: 100%; max-width: 360px;
+    padding: 20px; width: min(400px, calc(100vw - 40px));
+    margin: auto;
     box-shadow: 0 28px 60px -16px rgba(0,0,0,0.9);
+  }
+  dialog.confirm-modal::backdrop {
+    background: rgba(3,3,6,0.72);
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  }
+  @media (max-width: 767px) {
+    /* Bottom sheet: docked, full-width, grab handle, safe-area aware */
+    dialog.confirm-modal {
+      position: fixed; inset: auto 0 0 0; margin: 0;
+      width: 100%; max-width: none;
+      border-radius: var(--r2) var(--r2) 0 0; border-bottom: none;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+    dialog.confirm-modal::before {
+      content: ''; display: block; width: 36px; height: 4px;
+      border-radius: 999px; background: var(--border2); margin: 0 auto 14px;
+    }
   }
   .confirm-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
   .confirm-body { font-size: 12.5px; color: var(--dim); line-height: 1.5; margin-bottom: 18px; }
   .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
   .confirm-actions button { padding: 8px 14px; font-size: 12.5px; }
+
+  /* ── UNDO TOAST (R1 minimal inline widget; R7's S13 toast system absorbs it) ── */
+  .toast-wrap {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 24px;
+    display: none; align-items: center; gap: 14px;
+    background: var(--surface3); border: 1px solid var(--border2); border-radius: var(--r);
+    padding: 10px 16px; z-index: 500;
+    font-size: 12.5px; color: var(--text);
+    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.7);
+  }
+  .toast-wrap.visible { display: flex; }
+  .toast-undo {
+    background: transparent; border: 0; padding: 2px 4px;
+    color: var(--accent); font-weight: 600; cursor: pointer;
+  }
+  .toast-undo:hover { filter: brightness(1.15); }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) { main { padding: 20px; } }
@@ -609,37 +637,27 @@ export function buildConfigurePage(origin, config) {
   <div id="tabHost"></div>
 </main>
 
-<div class="confirm-backdrop" id="refreshConfirmBackdrop">
-  <div class="confirm-modal" role="dialog" aria-modal="true">
-    <div class="confirm-title" id="refreshAllTitle">Refresh all scraper lists?</div>
-    <div class="confirm-body" id="refreshAllBody">This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?</div>
-    <div class="confirm-actions">
-      <button class="secondary" onclick="closeRefreshConfirm()">Cancel</button>
-      <button id="confirmRefreshBtn">Refresh all</button>
-    </div>
+<dialog class="confirm-modal" id="refreshConfirmDlg" aria-labelledby="refreshAllTitle" aria-describedby="refreshAllBody">
+  <div class="confirm-title" id="refreshAllTitle">Refresh all lists?</div>
+  <div class="confirm-body" id="refreshAllBody"></div>
+  <div class="confirm-actions">
+    <button class="secondary" autofocus onclick="closeRefreshConfirm()">Cancel</button>
+    <button id="confirmRefreshBtn">Refresh all</button>
   </div>
-</div>
+</dialog>
 
-<div class="confirm-backdrop" id="deleteConfirmBackdrop">
-  <div class="confirm-modal" role="dialog" aria-modal="true">
-    <div class="confirm-title">Delete this list?</div>
-    <div class="confirm-body" id="deleteConfirmBody"></div>
-    <div class="confirm-actions">
-      <button class="secondary" onclick="closeDeleteConfirm()">Cancel</button>
-      <button class="danger" id="confirmDeleteBtn">Delete</button>
-    </div>
+<dialog class="confirm-modal" id="deleteConfirmDlg" aria-labelledby="deleteConfirmTitle" aria-describedby="deleteConfirmBody">
+  <div class="confirm-title" id="deleteConfirmTitle">Delete this list?</div>
+  <div class="confirm-body" id="deleteConfirmBody"></div>
+  <div class="confirm-actions">
+    <button class="secondary" autofocus onclick="closeDeleteConfirm()">Cancel</button>
+    <button class="danger" id="confirmDeleteBtn">Delete list</button>
   </div>
-</div>
+</dialog>
 
-<div class="confirm-backdrop" id="refreshOneConfirmBackdrop">
-  <div class="confirm-modal" role="dialog" aria-modal="true">
-    <div class="confirm-title">Refresh this list?</div>
-    <div class="confirm-body" id="refreshOneConfirmBody"></div>
-    <div class="confirm-actions">
-      <button class="secondary" onclick="closeRefreshOneConfirm()">Cancel</button>
-      <button id="confirmRefreshOneBtn">Refresh list</button>
-    </div>
-  </div>
+<div class="toast-wrap" id="toastWrap" role="status">
+  <span id="toastMsg"></span>
+  <button type="button" class="toast-undo" id="toastUndo">Undo</button>
 </div>
 
 <script>
@@ -649,7 +667,6 @@ let state = ${initial};
 // ─── Scraper module state ───
 let listNameEditIndex = -1;
 let pendingDeleteIndex = -1;
-let pendingRefreshIndex = -1;
 
 function escapeAttr(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -781,7 +798,7 @@ function renderScraper() {
         '<span class="pages-label">pages:</span>' +
         '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)" title="Max pages to scrape">' +
         '<span class="card-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
@@ -949,20 +966,44 @@ function askDelete(i) {
   const l = activeModule === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
   if (!l) return;
   pendingDeleteIndex = i;
-  document.getElementById('deleteConfirmBody').textContent = activeModule === 'tmdb'
-    ? '"' + l.name + '" will be removed from the config and its data file deleted from GitHub.'
-    : '"' + l.name + '" will be removed from the config and its data file deleted from GitHub. Existing files on disk for disabled lists stay until deleted here.';
-  document.getElementById('deleteConfirmBackdrop').classList.add('visible');
-  showModalFocus('deleteConfirmBackdrop');
+  document.getElementById('deleteConfirmTitle').textContent = "Delete '" + l.name + "'?";
+  document.getElementById('deleteConfirmBody').textContent = 'Removes this list and its saved filters, tiers, and pages settings. You can re-add the URL later but tuning is lost.';
+  document.getElementById('deleteConfirmDlg').showModal();
 }
-function closeDeleteConfirm() { document.getElementById('deleteConfirmBackdrop').classList.remove('visible'); pendingDeleteIndex = -1; hideModalFocus(); }
+function closeDeleteConfirm() { document.getElementById('deleteConfirmDlg').close(); pendingDeleteIndex = -1; }
+
+// R1 undo window: deletion is in-memory until Save, so Undo simply splices
+// the snapshot back. ponytail: minimal inline toast; R7's S13 toast system
+// replaces this widget.
+let undoTimer = null;
+function showUndoToast(name, restore) {
+  const wrap = document.getElementById('toastWrap');
+  document.getElementById('toastMsg').textContent = "Deleted '" + name + "'";
+  document.getElementById('toastUndo').onclick = () => {
+    clearTimeout(undoTimer);
+    wrap.classList.remove('visible');
+    restore();
+    setStatus("Restored '" + name + "'. Press Save to keep it.", 'ok');
+  };
+  wrap.classList.add('visible');
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => wrap.classList.remove('visible'), 8000);
+}
+
 function confirmDelete() {
   if (pendingDeleteIndex < 0) return;
-  if (activeModule === 'tmdb') state.tmdb.lists.splice(pendingDeleteIndex, 1);
-  else state.scraper.lists.splice(pendingDeleteIndex, 1);
+  const i = pendingDeleteIndex;
+  const lists = activeModule === 'tmdb' ? state.tmdb.lists : state.scraper.lists;
+  const snapshot = lists[i];
+  const name = snapshot.name;
+  lists.splice(i, 1);
   pendingDeleteIndex = -1;
   closeDeleteConfirm();
   rerenderActive();
+  showUndoToast(name, () => {
+    lists.splice(Math.min(i, lists.length), 0, snapshot);
+    rerenderActive();
+  });
 }
 
 // IDs are derived from the URL - must match the server's
@@ -996,7 +1037,7 @@ function renderOfficial() {
       '<div class="card-controls">' +
         '<span class="official-hint">Movies + shows, refreshed every 12 hours via the MDBList API</span>' +
         '<span class="card-actions official-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askOfficialRefresh(' + i + ')" title="Refresh this official list">' +
+          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this official list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
         '</span>' +
@@ -1018,24 +1059,38 @@ function toggleOfficial(i) {
   renderOfficial();
 }
 
-function askOfficialRefresh(i) {
-  const l = state.official.lists[i];
-  if (!l) return;
-  pendingRefreshIndex = i;
-  document.getElementById('refreshOneConfirmBody').textContent =
-    '"' + l.name + '" (movies + shows) will be re-fetched from the MDBList API now on GitHub Actions. This can take a minute. Are you sure?';
-  document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
-  showModalFocus('refreshOneConfirmBackdrop');
-}
-
-function askSimklRefresh(i) {
-  const l = state.simkl.lists[i];
-  if (!l) return;
-  pendingRefreshIndex = i;
-  document.getElementById('refreshOneConfirmBody').textContent =
-    '"' + l.name + '" will be re-fetched from the SIMKL calendar API now on GitHub Actions. This takes a few seconds. Are you sure?';
-  document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
-  showModalFocus('refreshOneConfirmBackdrop');
+// R1 (M14): single-list refresh no longer confirms - a trivial, non-destructive
+// dispatch doesn't earn an interruption (NN/g overuse rule). Icon click fires
+// immediately; the existing spinner is the busy state.
+async function performSingleRefresh(i) {
+  const m = activeModule;
+  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
+  if (!list) return;
+  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : m === 'tmdb' ? '#tcard-' + i : '#card-' + i) + ' .card-refresh';
+  const btn = document.querySelector(cardSel);
+  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
+  try {
+    // Page-scoped: official tab sends page=official + the slug, simkl tab
+    // sends page=simkl + the kind, tmdb tab sends page=tmdb + catalog id,
+    // scraper tab sends the list id (defaults to the scraper page).
+    const body = m === 'official' ? { page: 'official', id: list.slug }
+      : m === 'simkl' ? { page: 'simkl', id: list.slug }
+      : m === 'tmdb' ? { page: 'tmdb', id: 'tmdb_discover_' + list.mediaType + '_' + list.discoverListId }
+      : { id: list.id };
+    const res = await fetch(ORIGIN + '/trigger-refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : m === 'tmdb' ? 'TMDB list.' : 'list.';
+    setStatus("'" + list.name + "' is rebuilding - regenerating just that " + tail, 'ok');
+  } catch (e) {
+    setStatus('Refresh failed: ' + humanizeError(e.message), 'error');
+  } finally {
+    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+  }
 }
 
 // ─── Simkl module tab ───
@@ -1065,7 +1120,7 @@ function renderSimkl() {
       '<div class="card-controls">' +
         '<span class="official-hint">' + (l.slug === 'anime' ? 'Anime' : 'Series') + ', refreshed every 12 hours</span>' +
         '<span class="card-actions official-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askSimklRefresh(' + i + ')" title="Refresh this simkl list">' +
+          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this simkl list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
         '</span>' +
@@ -1243,7 +1298,7 @@ function renderTmdb() {
           '<div class="count-line">' + countLine + '</div>' +
         '</div>' +
         '<span class="card-actions">' +
-          '<button class="btn-icon card-refresh" onclick="askRefresh(' + i + ')" title="Refresh this list">' +
+          '<button class="btn-icon card-refresh" onclick="performSingleRefresh(' + i + ')" title="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
           '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
@@ -1707,36 +1762,20 @@ async function saveAll() {
   }
 }
 
-// QW5: focus management for confirm modals (superseded by R1 native <dialog>).
-// Opening parks focus on the modal's first button (Cancel - never the
-// destructive action); closing returns it to the invoking control.
-let modalTrigger = null;
-function showModalFocus(backdropId) {
-  modalTrigger = document.activeElement;
-  const firstBtn = document.querySelector('#' + backdropId + ' .confirm-modal button');
-  if (firstBtn) firstBtn.focus();
-}
-function hideModalFocus() {
-  if (modalTrigger && document.contains(modalTrigger)) modalTrigger.focus();
-  modalTrigger = null;
-}
-
+// R1: native <dialog>. showModal() supplies Escape-close, focus trap and
+// focus-return to the invoker natively - the QW4/QW5 stopgaps are deleted.
 function openRefreshConfirm() {
   const m = activeModule;
-  if (m === 'official') {
-    document.getElementById('refreshAllTitle').textContent = 'Refresh all official lists?';
-    document.getElementById('refreshAllBody').textContent = 'This re-fetches every enabled official list (movies + shows) right now from the MDBList API on GitHub Actions. It takes about a minute. Are you sure?';
-  } else if (m === 'simkl') {
-    document.getElementById('refreshAllTitle').textContent = 'Refresh all simkl lists?';
-    document.getElementById('refreshAllBody').textContent = 'This re-fetches every enabled SIMKL Arriving Today list right now from the SIMKL calendar API on GitHub Actions. It takes a few seconds. Are you sure?';
-  } else {
-    document.getElementById('refreshAllTitle').textContent = 'Refresh all scraper lists?';
-    document.getElementById('refreshAllBody').textContent = 'This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?';
-  }
-  document.getElementById('refreshConfirmBackdrop').classList.add('visible');
-  showModalFocus('refreshConfirmBackdrop');
+  const enabledCount = (m === 'official' ? state.official.lists : m === 'simkl' ? state.simkl.lists : m === 'tmdb' ? state.tmdb.lists : state.scraper.lists)
+    .filter((l) => l.enabled).length;
+  document.getElementById('refreshAllTitle').textContent = 'Refresh all lists?';
+  const timing = m === 'simkl' ? 'a few seconds each'
+    : m === 'official' ? 'about a minute each'
+    : '1-3 minutes each';
+  document.getElementById('refreshAllBody').textContent = 'Queues GitHub Actions rebuilds for ' + enabledCount + ' enabled ' + (m === 'scraper' ? '' : m + ' ') + 'lists. Typically takes ' + timing + '; progress shows on the Status page.';
+  document.getElementById('refreshConfirmDlg').showModal();
 }
-function closeRefreshConfirm() { document.getElementById('refreshConfirmBackdrop').classList.remove('visible'); hideModalFocus(); }
+function closeRefreshConfirm() { document.getElementById('refreshConfirmDlg').close(); }
 async function confirmRefresh() {
   closeRefreshConfirm();
   const btn = document.getElementById('refreshBtn');
@@ -1764,52 +1803,6 @@ async function confirmRefresh() {
   }
 }
 
-function askRefresh(i) {
-  const l = activeModule === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
-  if (!l) return;
-  pendingRefreshIndex = i;
-  document.getElementById('refreshOneConfirmBody').textContent = activeModule === 'tmdb'
-    ? '"' + l.name + '" will be regenerated from the TMDB API now on GitHub Actions. This takes a few seconds. Are you sure?'
-    : '"' + l.name + '" will be re-scraped now (headless Chromium on GitHub Actions). This can take a few minutes. Are you sure?';
-  document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
-  showModalFocus('refreshOneConfirmBackdrop');
-}
-function closeRefreshOneConfirm() { document.getElementById('refreshOneConfirmBackdrop').classList.remove('visible'); pendingRefreshIndex = -1; hideModalFocus(); }
-async function confirmRefreshOne() {
-  const i = pendingRefreshIndex;
-  pendingRefreshIndex = -1;
-  closeRefreshOneConfirm();
-  if (i < 0) return;
-  const m = activeModule;
-  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
-  if (!list) return;
-  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : m === 'tmdb' ? '#tcard-' + i : '#card-' + i) + ' .card-refresh';
-  const btn = document.querySelector(cardSel);
-  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
-  try {
-    // Page-scoped: official tab sends page=official + the slug, simkl tab
-    // sends page=simkl + the kind, tmdb tab sends page=tmdb + catalog id,
-    // scraper tab sends the list id (defaults to the scraper page).
-    const body = m === 'official' ? { page: 'official', id: list.slug }
-      : m === 'simkl' ? { page: 'simkl', id: list.slug }
-      : m === 'tmdb' ? { page: 'tmdb', id: 'tmdb_discover_' + list.mediaType + '_' + list.discoverListId }
-      : { id: list.id };
-    const res = await fetch(ORIGIN + '/trigger-refresh', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : m === 'tmdb' ? 'TMDB list.' : 'list.';
-    setStatus('"' + list.name + '" refresh dispatched - regenerating just that ' + tail, 'ok');
-  } catch (e) {
-    setStatus('Refresh failed: ' + humanizeError(e.message), 'error');
-  } finally {
-    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-  }
-}
-
 function openStatus() {
   const p = activeModule === 'official' ? 'official' : activeModule === 'simkl' ? 'simkl' : activeModule === 'tmdb' ? 'tmdb' : 'scraper';
   window.open(ORIGIN + '/status?page=' + p, '_blank');
@@ -1820,26 +1813,16 @@ document.getElementById('menuBtn').onclick = toggleMenu;
 document.getElementById('accentBtn').onclick = toggleAccentPopup;
 document.getElementById('confirmRefreshBtn').onclick = confirmRefresh;
 document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
-document.getElementById('confirmRefreshOneBtn').onclick = confirmRefreshOne;
 
-// QW4 stopgap (superseded by R1 native <dialog>): Escape + backdrop-click close.
-const CONFIRM_BACKDROPS = [
-  { id: 'refreshConfirmBackdrop', close: closeRefreshConfirm },
-  { id: 'deleteConfirmBackdrop', close: closeDeleteConfirm },
-  { id: 'refreshOneConfirmBackdrop', close: closeRefreshOneConfirm },
-];
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  for (const b of CONFIRM_BACKDROPS) {
-    const el = document.getElementById(b.id);
-    if (el && el.classList.contains('visible')) { b.close(); return; }
+// R1: backdrop click cancels refresh-all; delete keeps backdrop inert
+// (stray clicks during a grave moment must not dismiss it - Esc/Cancel only).
+const refreshDlg = document.getElementById('refreshConfirmDlg');
+refreshDlg.addEventListener('click', (e) => {
+  const r = refreshDlg.getBoundingClientRect();
+  if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
+    closeRefreshConfirm();
   }
 });
-for (const b of CONFIRM_BACKDROPS) {
-  document.getElementById(b.id).addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) b.close();
-  });
-}
 
 initSwatches();
 let savedModule = 'scraper';
