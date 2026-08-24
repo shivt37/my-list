@@ -107,38 +107,14 @@ export function buildConfigurePage(origin, config) {
   }
   button.danger:hover { background: rgba(255,95,102,0.18); border-color: var(--danger); filter: none; }
   button.btn-save { padding: 8px 18px; position: relative; }
-  /* R6: Save is truthful - disabled until something changed; amber dot marks dirty */
+  /* R6 (trimmed per owner): Save is disabled until something changed;
+     amber dot marks unsaved state. Guards/drafts/toasts declined. */
   button.btn-save[disabled] { opacity: 0.45; cursor: not-allowed; }
   .btn-save.dirty::after {
     content: ''; position: absolute; top: -4px; right: -4px;
     width: 8px; height: 8px; border-radius: 50%;
     background: #f5a524; box-shadow: 0 0 0 2px var(--bg);
   }
-  .save-error-chip {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    background: var(--danger-bg); border: 1px solid var(--danger-border);
-    color: var(--danger); padding: 6px 10px; border-radius: var(--r-sm);
-    font-size: 12px; max-width: min(460px, 55vw);
-  }
-  .save-error-chip summary { cursor: pointer; font-size: 11px; color: var(--dim); }
-  .save-error-chip pre {
-    white-space: pre-wrap; word-break: break-word; max-width: 380px; max-height: 120px;
-    overflow: auto; margin: 4px 0 0; font-size: 10.5px; color: var(--dim);
-  }
-  .save-error-chip .secondary, .save-error-chip button { font-size: 11px; padding: 3px 8px; flex-shrink: 0; }
-  #toastHost { position: fixed; right: 20px; bottom: 20px; z-index: 600; display: flex; flex-direction: column; gap: 8px; }
-  .toast-ok {
-    background: var(--surface-card); border: 1px solid rgba(52,211,153,0.35); color: var(--text);
-    padding: 12px 16px; border-radius: var(--r); box-shadow: 0 12px 32px -8px rgba(0,0,0,0.7);
-    font-size: 12.5px; max-width: 380px;
-  }
-  .draft-banner {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-    background: rgba(6,182,212,0.06); border: 1px dashed var(--border-hover);
-    padding: 8px 12px; border-radius: var(--r-sm); margin-bottom: 14px;
-    font-size: 12px; color: var(--dim);
-  }
-  .draft-banner button { font-size: 11px; padding: 4px 10px; }
   .btn-icon {
     background: var(--surface); border: 1px solid var(--border2); color: var(--dim);
     font-size: 16px; cursor: pointer; padding: 7px 9px; border-radius: var(--r);
@@ -600,8 +576,6 @@ export function buildConfigurePage(origin, config) {
     .header-actions { gap: 6px; }
     button.btn-save { padding: 6px 11px; font-size: 11px; }
     .btn-icon { padding: 6px 8px; }
-    #toastHost { left: 12px; right: 12px; bottom: auto; top: 64px; }
-    .save-error-chip { max-width: none; }
     main { padding: 14px 12px 56px; }
     .create-form .field { flex-basis: 100%; }
     .create-form.inline .field-name { flex-basis: 100%; }
@@ -655,12 +629,6 @@ export function buildConfigurePage(origin, config) {
 <header>
   <h1 class="header-title" id="headerTitle">MDBList Scraper</h1>
   <div class="header-actions">
-    <div class="save-error-chip" id="saveErrorChip" hidden>
-      <span id="chipMsg"></span>
-      <details><summary>Details</summary><pre id="chipRaw"></pre></details>
-      <button type="button" class="secondary" id="chipRetry">Retry</button>
-      <button type="button" class="icon-btn" id="chipClose" aria-label="Dismiss save error">×</button>
-    </div>
     <button class="btn-save" id="saveBtn">Save</button>
     <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh - regenerate all enabled lists">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
@@ -702,13 +670,6 @@ export function buildConfigurePage(origin, config) {
 
 <main>
   <div id="status" aria-live="polite"></div>
-  <div class="draft-banner" id="draftBanner" hidden>
-    <span>You have an unsaved draft from an earlier visit.</span>
-    <span style="display:flex;gap:8px">
-      <button type="button" id="draftApply">Apply draft</button>
-      <button type="button" class="secondary" id="draftDiscard">Discard</button>
-    </span>
-  </div>
   <div id="tabHost"></div>
 </main>
 
@@ -743,17 +704,6 @@ export function buildConfigurePage(origin, config) {
   <span id="toastMsg"></span>
   <button type="button" class="toast-undo" id="toastUndo">Undo</button>
 </div>
-
-<div id="toastHost" aria-live="polite"></div>
-
-<dialog class="confirm-modal" id="dirtyDlg" aria-labelledby="dirtyTitle">
-  <div class="confirm-title" id="dirtyTitle">Discard unsaved changes?</div>
-  <div class="confirm-body">Your edits haven't been saved yet.</div>
-  <div class="confirm-actions">
-    <button type="button" class="secondary" autofocus onclick="closeDirtyDialog()">Keep editing</button>
-    <button type="button" class="danger" id="discardSwitchBtn">Discard changes</button>
-  </div>
-</dialog>
 
 <script>
 const ORIGIN = ${JSON.stringify(origin).replace(/</g, "\\u003c")};
@@ -872,10 +822,6 @@ function toggleMenu() { document.getElementById('menuPopup').classList.toggle('v
 let activeModule = 'scraper';
 const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
-  // R6 guard: switching sections with unsaved edits asks first (nothing is
-  // lost by switching, so "Keep editing" is the calm default; Discard
-  // genuinely reverts to the last-saved config).
-  if (m !== activeModule && isDirty()) { pendingSwitch = m; document.getElementById('dirtyDlg').showModal(); return; }
   document.getElementById('menuPopup').classList.remove('visible');
   if (m !== 'scraper' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { soon(); return; }
   activeModule = m;
@@ -1852,10 +1798,10 @@ function tmdbPreviewHtml(i, l) {
   '</div>';
 }
 
-// ─── Save (R6 pipeline: dirty-gated, toasts, guards, drafts) ───
+// ─── Save (R6 trimmed per owner: dirty-gated button + amber dot only) ───
 
-// Exact payload shape that gets POSTed - reused for dirty comparison and
-// drafts so preview caches / cosmetic state never count as "changes".
+// Exact payload shape that gets POSTed - reused for dirty comparison so
+// preview caches / cosmetic state never count as "changes".
 function buildConfig() {
   // Drop blank tier fields so empty inputs persist as absent keys, not nulls.
   const simklClone = JSON.parse(JSON.stringify(state.simkl));
@@ -1880,7 +1826,6 @@ function buildConfig() {
 
 let lastSavedJson = null;
 try { lastSavedJson = JSON.stringify(buildConfig()); } catch (e) {}
-const DRAFT_KEY = 'mylist_draft';
 function isDirty() {
   try { return JSON.stringify(buildConfig()) !== lastSavedJson; } catch (e) { return false; }
 }
@@ -1888,45 +1833,12 @@ function refreshDirtyUI() {
   const btn = document.getElementById('saveBtn');
   if (!btn.classList.contains('saving')) {
     btn.disabled = !isDirty();
-    btn.title = isDirty() ? 'Save changes (Ctrl+S)' : 'No changes to save';
+    btn.title = isDirty() ? 'Save changes' : 'No changes to save';
   }
   btn.classList.toggle('dirty', isDirty());
 }
-function revertToSaved() {
-  try {
-    const obj = JSON.parse(lastSavedJson);
-    for (const k of Object.keys(obj)) state[k] = obj[k];
-  } catch (e) {}
-  clearDraft();
-}
-
-// Draft mirror: debounce-mirrored while dirty; offered back after a crash.
-let draftTimer = null;
-function scheduleDraft() {
-  clearTimeout(draftTimer);
-  draftTimer = setTimeout(() => {
-    if (!isDirty()) return;
-    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(buildConfig())); } catch (e) {}
-  }, 800);
-}
-function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
-document.addEventListener('input', () => { refreshDirtyUI(); scheduleDraft(); });
-document.addEventListener('change', () => { refreshDirtyUI(); scheduleDraft(); });
-
-// Save feedback channels: green toast (success) / red chip beside Save (failure)
-let toastTimer = null;
-function showSaveToast(msg) {
-  document.getElementById('toastHost').innerHTML = '<div class="toast-ok" role="status"></div>';
-  document.querySelector('#toastHost .toast-ok').textContent = msg;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { document.getElementById('toastHost').innerHTML = ''; }, 6000);
-}
-function showSaveError(msg, raw) {
-  document.getElementById('saveErrorChip').hidden = false;
-  document.getElementById('chipMsg').textContent = msg;
-  document.getElementById('chipRaw').textContent = raw || msg;
-}
-function hideSaveError() { document.getElementById('saveErrorChip').hidden = true; }
+document.addEventListener('input', refreshDirtyUI);
+document.addEventListener('change', refreshDirtyUI);
 
 async function saveAll() {
   // Global save: one config blob, all three modules. Zero scraper lists
@@ -1958,7 +1870,8 @@ async function saveAll() {
         : '';
     const tmdbNames = []
       .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map(n => n + ' (deleted)'));
-    showSaveToast(moduleChanges +
+    lastSavedJson = JSON.stringify(payload);
+    setStatus(moduleChanges +
       (data.dispatch && data.dispatch.length
         ? 'Saved. Regenerating: ' + data.dispatch.map(d => d.name).join(', ')
         : tmdbNames.length
@@ -1967,12 +1880,9 @@ async function saveAll() {
             ? 'Saved. Regenerating simkl: ' + data.simklChanged.join(', ')
             : (data.officialChanged && data.officialChanged.length)
               ? 'Saved. Regenerating official: ' + data.officialChanged.join(', ')
-              : 'Saved (no content change - nothing regenerated).'));
-    lastSavedJson = JSON.stringify(payload);
-    hideSaveError();
-    clearDraft();
+              : 'Saved (no content change - nothing regenerated).'), 'ok');
   } catch (e) {
-    showSaveError('Save failed: ' + humanizeError(e.message), e.message);
+    setStatus('Save failed: ' + humanizeError(e.message), 'error');
   } finally {
     btn.classList.remove('saving');
     btn.textContent = 'Save';
@@ -2028,27 +1938,6 @@ function openStatus() {
 
 document.getElementById('saveBtn').onclick = saveAll;
 document.getElementById('menuBtn').onclick = toggleMenu;
-
-// ─── R6 bindings ───
-let pendingSwitch = null;
-function closeDirtyDialog() { document.getElementById('dirtyDlg').close(); }
-document.getElementById('chipRetry').onclick = saveAll;
-document.getElementById('chipClose').onclick = hideSaveError;
-document.getElementById('discardSwitchBtn').onclick = () => {
-  closeDirtyDialog();
-  revertToSaved();
-  const target = pendingSwitch; pendingSwitch = null;
-  if (target) activateModule(target);
-};
-document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-    e.preventDefault();
-    if (isDirty()) saveAll();
-  }
-});
-window.addEventListener('beforeunload', (e) => {
-  if (isDirty()) { e.preventDefault(); e.returnValue = ''; }
-});
 document.getElementById('accentBtn').onclick = toggleAccentPopup;
 document.getElementById('confirmRefreshBtn').onclick = confirmRefresh;
 document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
@@ -2074,35 +1963,7 @@ initSwatches();
 let savedModule = 'scraper';
 try { savedModule = localStorage.getItem(MODULE_KEY) || 'scraper'; } catch (e) {}
 if (savedModule !== 'scraper') activateModule(savedModule); else renderScraper();
-
-// R6 boot: offer a leftover draft back before the owner starts editing.
 refreshDirtyUI();
-(function checkDraft() {
-  let raw = null;
-  try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) {}
-  if (!raw) return;
-  try {
-    const obj = JSON.parse(raw);
-    if (JSON.stringify(obj) !== lastSavedJson) {
-      window.__r6draft = obj;
-      document.getElementById('draftBanner').hidden = false;
-    } else clearDraft();
-  } catch (e) { clearDraft(); }
-})();
-document.getElementById('draftApply').onclick = () => {
-  const obj = window.__r6draft;
-  if (!obj) return;
-  for (const k of Object.keys(obj)) state[k] = obj[k];
-  window.__r6draft = null;
-  clearDraft();
-  document.getElementById('draftBanner').hidden = true;
-  rerenderActive();
-};
-document.getElementById('draftDiscard').onclick = () => {
-  window.__r6draft = null;
-  clearDraft();
-  document.getElementById('draftBanner').hidden = true;
-};
 </script>
 </body>
 </html>`;
