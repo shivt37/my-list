@@ -32,7 +32,7 @@ export function buildConfigurePage(origin, config) {
     --border2: #262635;
     --text: #e8edf4;
     --dim: #a5aebc;
-    --muted: #6b7385;
+    --muted: #8a93a8;
     --accent: #06b6d4;
     --accent-dim: rgba(6,182,212,0.10);
     --accent-glow: rgba(6,182,212,0.18);
