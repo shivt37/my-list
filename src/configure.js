@@ -927,8 +927,9 @@ function askDelete(i) {
     ? '"' + l.name + '" will be removed from the config and its data file deleted from GitHub.'
     : '"' + l.name + '" will be removed from the config and its data file deleted from GitHub. Existing files on disk for disabled lists stay until deleted here.';
   document.getElementById('deleteConfirmBackdrop').classList.add('visible');
+  showModalFocus('deleteConfirmBackdrop');
 }
-function closeDeleteConfirm() { document.getElementById('deleteConfirmBackdrop').classList.remove('visible'); pendingDeleteIndex = -1; }
+function closeDeleteConfirm() { document.getElementById('deleteConfirmBackdrop').classList.remove('visible'); pendingDeleteIndex = -1; hideModalFocus(); }
 function confirmDelete() {
   if (pendingDeleteIndex < 0) return;
   if (activeModule === 'tmdb') state.tmdb.lists.splice(pendingDeleteIndex, 1);
@@ -998,6 +999,7 @@ function askOfficialRefresh(i) {
   document.getElementById('refreshOneConfirmBody').textContent =
     '"' + l.name + '" (movies + shows) will be re-fetched from the MDBList API now on GitHub Actions. This can take a minute. Are you sure?';
   document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
+  showModalFocus('refreshOneConfirmBackdrop');
 }
 
 function askSimklRefresh(i) {
@@ -1007,6 +1009,7 @@ function askSimklRefresh(i) {
   document.getElementById('refreshOneConfirmBody').textContent =
     '"' + l.name + '" will be re-fetched from the SIMKL calendar API now on GitHub Actions. This takes a few seconds. Are you sure?';
   document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
+  showModalFocus('refreshOneConfirmBackdrop');
 }
 
 // ─── Simkl module tab ───
@@ -1677,6 +1680,20 @@ async function saveAll() {
   }
 }
 
+// QW5: focus management for confirm modals (superseded by R1 native <dialog>).
+// Opening parks focus on the modal's first button (Cancel - never the
+// destructive action); closing returns it to the invoking control.
+let modalTrigger = null;
+function showModalFocus(backdropId) {
+  modalTrigger = document.activeElement;
+  const firstBtn = document.querySelector('#' + backdropId + ' .confirm-modal button');
+  if (firstBtn) firstBtn.focus();
+}
+function hideModalFocus() {
+  if (modalTrigger && document.contains(modalTrigger)) modalTrigger.focus();
+  modalTrigger = null;
+}
+
 function openRefreshConfirm() {
   const m = activeModule;
   if (m === 'official') {
@@ -1690,8 +1707,9 @@ function openRefreshConfirm() {
     document.getElementById('refreshAllBody').textContent = 'This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?';
   }
   document.getElementById('refreshConfirmBackdrop').classList.add('visible');
+  showModalFocus('refreshConfirmBackdrop');
 }
-function closeRefreshConfirm() { document.getElementById('refreshConfirmBackdrop').classList.remove('visible'); }
+function closeRefreshConfirm() { document.getElementById('refreshConfirmBackdrop').classList.remove('visible'); hideModalFocus(); }
 async function confirmRefresh() {
   closeRefreshConfirm();
   const btn = document.getElementById('refreshBtn');
@@ -1727,8 +1745,9 @@ function askRefresh(i) {
     ? '"' + l.name + '" will be regenerated from the TMDB API now on GitHub Actions. This takes a few seconds. Are you sure?'
     : '"' + l.name + '" will be re-scraped now (headless Chromium on GitHub Actions). This can take a few minutes. Are you sure?';
   document.getElementById('refreshOneConfirmBackdrop').classList.add('visible');
+  showModalFocus('refreshOneConfirmBackdrop');
 }
-function closeRefreshOneConfirm() { document.getElementById('refreshOneConfirmBackdrop').classList.remove('visible'); pendingRefreshIndex = -1; }
+function closeRefreshOneConfirm() { document.getElementById('refreshOneConfirmBackdrop').classList.remove('visible'); pendingRefreshIndex = -1; hideModalFocus(); }
 async function confirmRefreshOne() {
   const i = pendingRefreshIndex;
   pendingRefreshIndex = -1;
