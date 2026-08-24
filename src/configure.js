@@ -216,6 +216,9 @@ export function buildConfigurePage(origin, config) {
   .pages-field { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: 11px; color: var(--muted); cursor: pointer; }
   .card-body .max-pages { width: 56px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
   .body-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  /* TMDB cards: two compact selects stretch nothing, so pin actions right
+     explicitly (scraper/official/simkl fill the row via url/hint growth). */
+  .tmdb-actions { margin-left: auto; }
   .official-hint { font-size: 11px; color: var(--muted); flex: 1 1 0; min-width: 0; }
   /* Field/label vocabulary reserved for the create forms */
   .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
@@ -1385,7 +1388,7 @@ function renderTmdb() {
         '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)" title="Sort order">' +
           TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
         '</select>' +
-        '<span class="body-actions">' +
+        '<span class="body-actions tmdb-actions">' +
           '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list" aria-label="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
