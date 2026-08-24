@@ -44,6 +44,17 @@ export function buildConfigurePage(origin, config) {
     --r: 9px;
     --r-sm: 8px;
     --r2: 14px;
+    /* S15 spacing grid - exact-match values only; off-grid kept per owner */
+    --s1: 4px;  /* chip internals     */
+    --s2: 8px;  /* control gaps       */
+    --s3: 12px; /* intra-card rows    */
+    --s4: 16px; /* card padding       */
+    --s5: 24px; /* section separation */
+    --s6: 32px; /* page-level rhythm  */
+    /* semantic aliases for remaining raw hexes (values unchanged) */
+    --border-hover: #2f2f42;
+    --border-icon-hover: #3a3a52;
+    --border-card-hover: #242436;
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
@@ -58,7 +69,7 @@ export function buildConfigurePage(origin, config) {
   body > * { position: relative; z-index: 1; }
 
   /* Selection stays neutral - no accent tint on highlight. */
-  ::selection { background: #262635; color: #e8edf4; }
+  ::selection { background: var(--border2); color: var(--text); }
   /* One focus line only: inputs shift border color, no stacked outline ring. */
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   input:focus, select:focus { outline: none; border-color: var(--accent); }
@@ -66,7 +77,7 @@ export function buildConfigurePage(origin, config) {
   /* ── HEADER ── */
   header {
     border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
+    padding: var(--s3) var(--s5);
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 100;
     background: rgba(5,5,8,0.85);
@@ -78,7 +89,7 @@ export function buildConfigurePage(origin, config) {
 
   /* ── BUTTONS (solid accent, no color-mix) ── */
   button {
-    padding: 9px 16px; border-radius: var(--r); border: 1px solid var(--accent);
+    padding: 9px var(--s4); border-radius: var(--r); border: 1px solid var(--accent);
     background: var(--accent); color: #040507;
     font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
     transition: filter 0.15s, transform 0.1s;
@@ -120,13 +131,13 @@ export function buildConfigurePage(origin, config) {
 
   /* ── INPUTS + SELECTS - explicit dark, can never render white ── */
   input {
-    background: #0c0c13; color: #e8edf4;
+    background: var(--surface); color: var(--text);
     border: 1px solid var(--border2); border-radius: var(--r-sm);
     padding: 8px 10px; font-size: 13px; outline: none;
     transition: border-color 0.12s, box-shadow 0.12s;
   }
   input::placeholder { color: var(--muted); }
-  input:hover { border-color: #2f2f42; }
+  input:hover { border-color: var(--border-hover); }
   input:focus { border-color: var(--accent); }
   /* No native spin arrows on number inputs */
   input[type="number"]::-webkit-outer-spin-button,
@@ -135,7 +146,7 @@ export function buildConfigurePage(origin, config) {
 
   select {
     appearance: none; -webkit-appearance: none;
-    background-color: #0c0c13; color: #e8edf4;
+    background-color: var(--surface); color: var(--text);
     border: 1px solid var(--border2); border-radius: var(--r-sm);
     padding: 8px 28px 8px 10px; font-size: 13px; cursor: pointer; outline: none;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7385' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -143,9 +154,9 @@ export function buildConfigurePage(origin, config) {
     background-position: right 9px center;
     transition: border-color 0.12s, box-shadow 0.12s;
   }
-  select:hover { border-color: #2f2f42; }
+  select:hover { border-color: var(--border-hover); }
   select:focus { border-color: var(--accent); }
-  select option { background: #0c0c13; color: #e8edf4; }
+  select option { background: var(--surface); color: var(--text); }
 
   /* ── SCRAPER TAB ── */
   .scraper-toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
@@ -185,7 +196,7 @@ export function buildConfigurePage(origin, config) {
     margin-bottom: 10px; display: flex; flex-direction: column;
     transition: border-color 0.15s, opacity 0.15s;
   }
-  .list-card:hover { border-color: #242436; }
+  .list-card:hover { border-color: var(--border-card-hover); }
   /* A45: disabled cards stop fading wholesale (opacity .6 dragged text below
      contrast). Quiet border + muted name/chip instead; controls are actually
      disabled via JS (everything except the enable toggle). */
@@ -236,7 +247,7 @@ export function buildConfigurePage(origin, config) {
     border: 1px solid var(--border2); border-radius: var(--r-sm); color: var(--muted); cursor: pointer; flex-shrink: 0;
     background: transparent; padding: 0; transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
-  .icon-btn:hover { color: var(--text); border-color: #3a3a52; background: var(--surface2); filter: none; }
+  .icon-btn:hover { color: var(--text); border-color: var(--border-icon-hover); background: var(--surface2); filter: none; }
   .id-chip {
     font-size: 10px; color: var(--muted); background: var(--surface2);
     border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px;
@@ -249,7 +260,7 @@ export function buildConfigurePage(origin, config) {
 
   /* ── SIMKL FILTER EDITOR ── */
   .simkl-filter {
-    margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;
+    margin-top: var(--s3); border-top: 1px solid var(--border); padding-top: var(--s3);
     display: grid; grid-template-columns: 132px 1fr; gap: 10px;
   }
   /* The rating-source chip (imdb/mal) reuses .id-chip, which phones hide -
@@ -349,7 +360,7 @@ export function buildConfigurePage(origin, config) {
   .member-chip {
     display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--dim);
     background: var(--surface2); border: 1px solid var(--border2); border-radius: 999px;
-    padding: 4px 6px 4px 10px; max-width: 220px;
+    padding: var(--s1) 6px var(--s1) 10px; max-width: 220px;
     transition: border-color 0.12s;
   }
   .member-chip:hover { border-color: #32324a; }
@@ -369,7 +380,7 @@ export function buildConfigurePage(origin, config) {
   .exclude-chip {
     display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--danger);
     background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: 999px;
-    padding: 4px 6px 4px 10px; max-width: 220px;
+    padding: var(--s1) 6px var(--s1) 10px; max-width: 220px;
   }
   .exclude-chip .chip-remove:hover { background: rgba(255,95,102,0.24); }
   .exclude-chip-add {
@@ -411,7 +422,7 @@ export function buildConfigurePage(origin, config) {
   }
   /* ── PREVIEW ROW (horizontal scroll strip, ported from old worker) ── */
   .preview-row {
-    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+    margin-top: var(--s3); padding-top: var(--s3); border-top: 1px solid var(--border);
     width: 100%; max-width: 100%; min-width: 0; overflow: hidden;
     animation: tmdb-preview-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -449,18 +460,20 @@ export function buildConfigurePage(origin, config) {
   .preview-list { display: flex; flex-direction: column; max-height: 260px; overflow-y: auto; }
   .preview-list-item {
     display: flex; align-items: baseline; gap: 8px;
-    padding: 7px 4px; border-bottom: 1px solid var(--border);
+    padding: 7px var(--s1); border-bottom: 1px solid var(--border);
   }
   .preview-list-item:last-child { border-bottom: none; }
   .preview-list-num { font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 1.6em; text-align: right; }
   .preview-list-name { font-size: 12.5px; color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; min-width: 0; }
+  /* fixed-width digits so counts stop jittering */
+  .count-line, .tier-num, .max-pages, .id-chip { font-variant-numeric: tabular-nums; }
   .count-line { font-size: 11px; color: var(--muted); margin-top: 3px; }
   /* ── ACCENT POPUP ── */
   .accent-popup-wrap { position: relative; }
   .accent-popup {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
     background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r);
-    padding: 14px; z-index: 200; width: 220px; max-width: calc(100vw - 32px);
+    padding: 14px; z-index: 200; width: 220px; max-width: calc(100vw - var(--s6));
     box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .accent-popup.visible { display: block; }
@@ -479,7 +492,7 @@ export function buildConfigurePage(origin, config) {
   .menu-popup {
     display: none; position: absolute; top: calc(100% + 8px); right: 0;
     background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r);
-    padding: 6px; z-index: 200; width: 200px; max-width: calc(100vw - 32px);
+    padding: 6px; z-index: 200; width: 200px; max-width: calc(100vw - var(--s6));
     box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
   }
   .menu-popup.visible { display: block; }
@@ -530,7 +543,7 @@ export function buildConfigurePage(origin, config) {
     position: fixed; left: 50%; transform: translateX(-50%); bottom: 24px;
     display: none; align-items: center; gap: 14px;
     background: var(--surface3); border: 1px solid var(--border2); border-radius: var(--r);
-    padding: 10px 16px; z-index: 500;
+    padding: 10px var(--s4); z-index: 500;
     font-size: 12.5px; color: var(--text);
     box-shadow: 0 12px 32px -8px rgba(0,0,0,0.7);
   }
