@@ -744,6 +744,8 @@ function selectAccent(hex) {
     const on = s.dataset.accent === hex;
     s.classList.toggle('selected', on);
     s.setAttribute('aria-checked', on ? 'true' : 'false');
+    // roving tabindex: Tab lands on the selected dot; arrows take over inside
+    s.tabIndex = on ? 0 : -1;
   });
   applyAccent(hex);
   try { localStorage.setItem(ACCENT_STORAGE_KEY, hex); } catch (e) {}
@@ -756,9 +758,29 @@ function initSwatches() {
   let saved = '#06b6d4';
   try { saved = localStorage.getItem(ACCENT_STORAGE_KEY) || '#06b6d4'; } catch (e) {}
   row.innerHTML = Object.keys(ACCENT_COLORS).map(hex =>
-    '<button type="button" role="radio" aria-checked="' + (hex === saved ? 'true' : 'false') + '" class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" aria-label="Accent colour: ' + ACCENT_COLORS[hex].name + '" onclick="selectAccent(\\\'' + hex + '\\\')"></button>'
+    '<button type="button" role="radio" tabindex="' + (hex === saved ? '0' : '-1') + '" aria-checked="' + (hex === saved ? 'true' : 'false') + '" class="swatch' + (hex === saved ? ' selected' : '') + '" data-accent="' + hex + '" style="background:' + hex + '" aria-label="Accent colour: ' + ACCENT_COLORS[hex].name + '" onclick="selectAccent(\\\'' + hex + '\\\')"></button>'
   ).join('');
   applyAccent(saved);
+
+  // Arrow-key grid navigation: focus moves, Space/Enter (native button
+  // activation) commits. Column count derives from real layout so the
+  // up/down step stays correct at every popup width.
+  row.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) return;
+    const swatches = Array.from(row.querySelectorAll('.swatch'));
+    const cur = swatches.indexOf(document.activeElement);
+    if (cur < 0) return;
+    const cols = swatches.filter(s => s.offsetTop === swatches[0].offsetTop).length;
+    let next = cur;
+    if (e.key === 'ArrowRight') next = Math.min(swatches.length - 1, cur + 1);
+    else if (e.key === 'ArrowLeft') next = Math.max(0, cur - 1);
+    else if (e.key === 'ArrowDown') next = Math.min(swatches.length - 1, cur + cols);
+    else if (e.key === 'ArrowUp') next = Math.max(0, cur - cols);
+    else if (e.key === 'Home') next = 0;
+    else next = swatches.length - 1;
+    e.preventDefault();
+    swatches[next].focus();
+  });
 }
 
 function toggleAccentPopup() { document.getElementById('accentPopup').classList.toggle('visible'); }
