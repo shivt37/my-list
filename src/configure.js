@@ -604,7 +604,7 @@ export function buildConfigurePage(origin, config) {
 </main>
 
 <div class="confirm-backdrop" id="refreshConfirmBackdrop">
-  <div class="confirm-modal">
+  <div class="confirm-modal" role="dialog" aria-modal="true">
     <div class="confirm-title" id="refreshAllTitle">Refresh all scraper lists?</div>
     <div class="confirm-body" id="refreshAllBody">This force-regenerates every enabled list right now (headless Chromium on GitHub Actions). It can take a few minutes per list. Are you sure?</div>
     <div class="confirm-actions">
@@ -615,7 +615,7 @@ export function buildConfigurePage(origin, config) {
 </div>
 
 <div class="confirm-backdrop" id="deleteConfirmBackdrop">
-  <div class="confirm-modal">
+  <div class="confirm-modal" role="dialog" aria-modal="true">
     <div class="confirm-title">Delete this list?</div>
     <div class="confirm-body" id="deleteConfirmBody"></div>
     <div class="confirm-actions">
@@ -626,7 +626,7 @@ export function buildConfigurePage(origin, config) {
 </div>
 
 <div class="confirm-backdrop" id="refreshOneConfirmBackdrop">
-  <div class="confirm-modal">
+  <div class="confirm-modal" role="dialog" aria-modal="true">
     <div class="confirm-title">Refresh this list?</div>
     <div class="confirm-body" id="refreshOneConfirmBody"></div>
     <div class="confirm-actions">
@@ -1775,6 +1775,25 @@ document.getElementById('accentBtn').onclick = toggleAccentPopup;
 document.getElementById('confirmRefreshBtn').onclick = confirmRefresh;
 document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
 document.getElementById('confirmRefreshOneBtn').onclick = confirmRefreshOne;
+
+// QW4 stopgap (superseded by R1 native <dialog>): Escape + backdrop-click close.
+const CONFIRM_BACKDROPS = [
+  { id: 'refreshConfirmBackdrop', close: closeRefreshConfirm },
+  { id: 'deleteConfirmBackdrop', close: closeDeleteConfirm },
+  { id: 'refreshOneConfirmBackdrop', close: closeRefreshOneConfirm },
+];
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  for (const b of CONFIRM_BACKDROPS) {
+    const el = document.getElementById(b.id);
+    if (el && el.classList.contains('visible')) { b.close(); return; }
+  }
+});
+for (const b of CONFIRM_BACKDROPS) {
+  document.getElementById(b.id).addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) b.close();
+  });
+}
 
 initSwatches();
 let savedModule = 'scraper';
