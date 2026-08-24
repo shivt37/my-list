@@ -605,7 +605,7 @@ export function buildConfigurePage(origin, config) {
 </header>
 
 <main>
-  <div id="status"></div>
+  <div id="status" aria-live="polite"></div>
   <div id="tabHost"></div>
 </main>
 
