@@ -166,6 +166,12 @@ export function buildConfigurePage(origin, config) {
   .create-form .url-input { font-family: ui-monospace, monospace; }
   .create-form input[type="number"] { text-align: center; }
   .create-form .body-actions { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; }
+  /* TMDB add-form is a single line per owner review */
+  .create-form.inline { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
+  .create-form.inline :is(input, select) { width: auto; }
+  .create-form.inline .name-input { flex: 1 1 160px; min-width: 0; }
+  .create-form.inline button { padding: 7px 14px; font-size: 12px; flex-shrink: 0; }
+  .create-form.inline .body-actions { margin-left: auto; }
 
   .list-card {
     background: var(--surface-card);
@@ -181,19 +187,22 @@ export function buildConfigurePage(origin, config) {
   .list-card.disabled .name-static, .list-card.disabled .id-chip { color: var(--muted); }
   .list-card.disabled :is(input, select, button)[disabled] { opacity: 0.45; }
 
-  /* A45 two-zone card: head = identity row, body = labeled fields.
-     Everything gap-aligned - the old margin-right/margin-left hacks are gone. */
+  /* A45 two-zone card: head = identity row, body = one compact control row
+     (per owner review: previous density kept - only "Pages" carries a small
+     inline label; full stacked labels live solely in the create form). */
   .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
   .card-head > .id-chip { margin-left: auto; }
   .card-head > .count-line { flex-basis: 100%; }
-  .card-body { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; margin-top: 12px; }
+  .card-body { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px; }
+  .card-body .url-input { flex: 1 1 220px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
+  .card-body select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
+  .pages-field { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: 11px; color: var(--muted); cursor: pointer; }
+  .card-body .max-pages { width: 56px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
+  .body-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .official-hint { font-size: 11px; color: var(--muted); flex: 1 1 0; min-width: 0; }
+  /* Field/label vocabulary reserved for the create forms */
   .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
   .field-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
-  .field-url { flex: 1 1 260px; }
-  .field-url .url-input { width: 100%; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
-  .field .max-pages { width: 64px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
-  .body-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
-  .official-hint { font-size: 11px; color: var(--muted); flex: 0 1 auto; min-width: 0; align-self: center; }
   .toggle { position: relative; display: inline-block; width: 28px; height: 16px; cursor: pointer; }
   .toggle input { opacity: 0; width: 0; height: 0; }
   .toggle-slider {
@@ -237,6 +246,9 @@ export function buildConfigurePage(origin, config) {
     margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;
     display: grid; grid-template-columns: 132px 1fr; gap: 10px;
   }
+  /* The rating-source chip (imdb/mal) reuses .id-chip, which phones hide -
+     this row must stay visible at every width. */
+  .simkl-filter .id-chip { display: inline-block; }
   /* Filter fields sit in a 2-col grid (text column + value column) - the
      CSV inputs never stretch full width, so a long genre list stays a
      contained field instead of a full-bleed strip. Mobile stacks 1-col. */
@@ -265,7 +277,8 @@ export function buildConfigurePage(origin, config) {
   .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: var(--r-sm); text-align: center; }
   .tier-row .danger { justify-self: start; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
-    .simkl-filter { grid-template-columns: 1fr; }
+    /* Owner call: label and its value share one line on phones too. */
+    .simkl-filter { grid-template-columns: auto 1fr; }
     .filter-value { flex-wrap: wrap; }
     .tier-head, .tier-row { grid-template-columns: repeat(4, minmax(48px, 1fr)) 26px; gap: 4px; }
     .tier-num { font-size: 11px; padding: 6px 5px; }
@@ -533,9 +546,9 @@ export function buildConfigurePage(origin, config) {
     .btn-icon { padding: 6px 8px; }
     main { padding: 14px 12px 56px; }
     .create-form { grid-template-columns: 1fr; }
-    .card-body .field { flex: 1 1 calc(50% - 6px); }
-    .card-body .field-url { flex: 1 1 100%; }
-    .body-actions { flex: 1 1 100%; margin-left: 0; justify-content: flex-end; }
+    .create-form.inline .name-input { flex-basis: 100%; }
+    .card-body .url-input { flex: 1 1 100%; }
+    .body-actions { margin-left: auto; }
     .list-card { padding: 9px; margin-bottom: 8px; }
     .card-head { gap: 9px; }
     .toggle { width: 26px; height: 15px; }
@@ -546,6 +559,7 @@ export function buildConfigurePage(origin, config) {
     .icon-btn { width: 20px; height: 20px; }
     .icon-btn svg { width: 12px; height: 12px; }
     select { font-size: 10px; padding: 5px 24px 5px 6px; background-position: right 6px center; }
+    .card-body .max-pages { font-size: 11px; padding: 5px 6px; }
     button.danger { padding: 5px 8px; font-size: 10px; }
     .accent-popup { right: -14px; width: 190px; padding: 12px; }
     .swatch { width: 24px; height: 24px; }
@@ -574,7 +588,7 @@ export function buildConfigurePage(origin, config) {
   }
   @media (max-width: 380px) {
     .right-col { gap: 6px; }
-    .field-url { flex-basis: 100%; }
+    .card-body .url-input { flex-basis: 100%; }
   }
 </style>
 </head>
@@ -788,16 +802,12 @@ function renderScraper() {
         '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
       '</div>' +
       '<div class="card-body">' +
-        '<label class="field field-url"><span class="field-label">URL</span>' +
-          '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
-        '</label>' +
-        '<label class="field"><span class="field-label">Type</span>' +
-          '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
-            '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
-            '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
-          '</select>' +
-        '</label>' +
-        '<label class="field"><span class="field-label">Pages</span>' +
+        '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateList(' + i + ', \\\'url\\\', this.value)" placeholder="https://mdblist.com/movies/…" spellcheck="false">' +
+        '<select onchange="updateList(' + i + ', \\\'type\\\', this.value)">' +
+          '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
+          '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
+        '</select>' +
+        '<label class="pages-field">Pages' +
           '<input class="max-pages" type="number" min="1" max="50" value="' + l.maxPages + '" onchange="updateList(' + i + ', \\\'maxPages\\\', this.value)">' +
         '</label>' +
         '<span class="body-actions">' +
@@ -1325,17 +1335,13 @@ function renderTmdb() {
         '<div class="count-line">' + countLine + '</div>' +
       '</div>' +
       '<div class="card-body">' +
-        '<label class="field"><span class="field-label">Media type</span>' +
-          '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)">' +
-            '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
-            '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
-          '</select>' +
-        '</label>' +
-        '<label class="field"><span class="field-label">Sort order</span>' +
-          '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)">' +
-            TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
-          '</select>' +
-        '</label>' +
+        '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
+          '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
+          '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
+        '</select>' +
+        '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)" title="Sort order">' +
+          TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
+        '</select>' +
         '<span class="body-actions">' +
           '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list" aria-label="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
@@ -1370,10 +1376,10 @@ function renderTmdb() {
       '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
       'Add Discover List</button>'
     : '';
-  const createOpen = lists.length ? ' style="display:none"' : ' style="display:grid"';
+  const createOpen = lists.length ? ' style="display:none"' : ' style="display:flex"';
   const createRow =
     '<div class="create-slot">' + trigger +
-      '<div class="create-form" id="tmdbCreateRow"' + createOpen + '>' +
+      '<div class="create-form inline" id="tmdbCreateRow"' + createOpen + '>' +
         '<label class="field"><span class="field-label">Name</span><input class="name-input" id="tmdbCreateNameInput" placeholder="Name - e.g. 80s Horror" spellcheck="false"></label>' +
         '<label class="field"><span class="field-label">Media type</span><select id="tmdbCreateTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select></label>' +
         '<span class="body-actions"><button onclick="confirmCreateTmdb()">Add</button><button type="button" class="secondary" onclick="hideTmdbCreate()">Cancel</button></span>' +
@@ -1394,7 +1400,7 @@ function showTmdbCreate() {
   const row = document.getElementById('tmdbCreateRow');
   if (!btn || !row) return;
   btn.style.display = 'none';
-  row.style.display = 'grid';
+  row.style.display = 'flex';
   document.getElementById('tmdbCreateNameInput').focus();
 }
 function hideTmdbCreate() {
