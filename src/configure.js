@@ -152,7 +152,8 @@ export function buildConfigurePage(origin, config) {
   .scraper-toolbar button.secondary { padding: 6px 12px; font-size: 11px; font-weight: 500; }
 
   /* A45: quiet "+ Add List" ghost trigger BELOW the cards, expanding into a
-     labeled 2-column mini-form. Empty sections render the form open. */
+     mini-form. Owner call: Name/URL carry labels; Type + Pages mirror the
+     list card's compact controls and share a line on mobile too. */
   .create-slot { margin-top: 16px; }
   .btn-create-list {
     display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
@@ -161,17 +162,22 @@ export function buildConfigurePage(origin, config) {
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
   .btn-create-list:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-  .create-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; align-items: end; }
-  .create-form :is(input, select) { width: 100%; font-size: 12px; padding: 7px 9px; }
+  .create-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; }
+  .create-form .field { flex: 1 1 200px; }
+  .create-form .field :is(input, select) { width: 100%; font-size: 12px; padding: 7px 9px; }
   .create-form .url-input { font-family: ui-monospace, monospace; }
-  .create-form input[type="number"] { text-align: center; }
-  .create-form .body-actions { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; }
-  /* TMDB add-form is a single line per owner review */
-  .create-form.inline { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
-  .create-form.inline :is(input, select) { width: auto; }
-  .create-form.inline .name-input { flex: 1 1 160px; min-width: 0; }
-  .create-form.inline button { padding: 7px 14px; font-size: 12px; flex-shrink: 0; }
-  .create-form.inline .body-actions { margin-left: auto; }
+  .create-form > select { font-size: 12px; padding: 7px 26px 7px 9px; flex-shrink: 0; }
+  .create-form .pages-field { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: 11px; color: var(--muted); cursor: pointer; }
+  .create-form .max-pages { width: 56px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
+  .create-form .body-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .create-form button { padding: 7px 14px; font-size: 12px; flex-shrink: 0; }
+  /* TMDB variant: everything one line, media-type select sized like the
+     scraper card's type select, Add/Cancel pinned right. */
+  .create-form.inline { gap: 8px; }
+  .create-form.inline .field-name { flex: 1 1 200px; }
+  .create-form.inline .field-name .name-input { width: 100%; }
+  .create-form.inline .field-mtype { flex: 0 0 auto; }
+  .create-form.inline .field-mtype select { width: auto; min-width: 76px; font-size: 12px; padding: 7px 26px 7px 9px; }
 
   .list-card {
     background: var(--surface-card);
@@ -277,8 +283,10 @@ export function buildConfigurePage(origin, config) {
   .tier-num { width: 100%; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 6px 9px; border-radius: var(--r-sm); text-align: center; }
   .tier-row .danger { justify-self: start; padding: 6px 10px; font-size: 12px; }
   @media (max-width: 600px) {
-    /* Owner call: label and its value share one line on phones too. */
+    /* Owner call: label and its value share one line on phones - except the
+       three CSV rows, whose input drops to its own full-width line below. */
     .simkl-filter { grid-template-columns: auto 1fr; }
+    .filter-csv .filter-label, .filter-csv .filter-value { grid-column: 1 / -1; }
     .filter-value { flex-wrap: wrap; }
     .tier-head, .tier-row { grid-template-columns: repeat(4, minmax(48px, 1fr)) 26px; gap: 4px; }
     .tier-num { font-size: 11px; padding: 6px 5px; }
@@ -545,8 +553,8 @@ export function buildConfigurePage(origin, config) {
     button.btn-save { padding: 6px 11px; font-size: 11px; }
     .btn-icon { padding: 6px 8px; }
     main { padding: 14px 12px 56px; }
-    .create-form { grid-template-columns: 1fr; }
-    .create-form.inline .name-input { flex-basis: 100%; }
+    .create-form .field { flex-basis: 100%; }
+    .create-form.inline .field-name { flex-basis: 100%; }
     .card-body .url-input { flex: 1 1 100%; }
     .body-actions { margin-left: auto; }
     .list-card { padding: 9px; margin-bottom: 8px; }
@@ -827,14 +835,14 @@ function renderScraper() {
       '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
       'Add List</button>'
     : '';
-  const createOpen = lists.length ? ' style="display:none"' : ' style="display:grid"';
+  const createOpen = lists.length ? ' style="display:none"' : ' style="display:flex"';
   const createSlot =
     '<div class="create-slot">' + trigger +
       '<div class="create-form" id="createListRow"' + createOpen + '>' +
         '<label class="field"><span class="field-label">Name</span><input class="name-input" id="createNameInput" placeholder="Name - e.g. Latest Movie" spellcheck="false"></label>' +
         '<label class="field"><span class="field-label">URL</span><input class="url-input" id="createUrlInput" placeholder="https://mdblist.com/movies/…" spellcheck="false"></label>' +
-        '<label class="field"><span class="field-label">Type</span><select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select></label>' +
-        '<label class="field"><span class="field-label">Pages</span><input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3"></label>' +
+        '<select id="createTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+        '<label class="pages-field">Pages<input class="max-pages" id="createPagesInput" type="number" min="1" max="50" value="3"></label>' +
         '<span class="body-actions"><button onclick="confirmCreateList()">Add</button><button type="button" class="secondary" onclick="hideCreateRow()">Cancel</button></span>' +
       '</div>' +
     '</div>';
@@ -956,7 +964,7 @@ function showCreateRow() {
   const row = document.getElementById('createListRow');
   if (!btn || !row) return;
   btn.style.display = 'none';
-  row.style.display = 'grid';
+  row.style.display = 'flex';
   document.getElementById('createNameInput').focus();
 }
 function hideCreateRow() {
@@ -1165,9 +1173,9 @@ function renderSimkl() {
       '<div class="simkl-filter" id="simfilter-' + i + '">' +
         '<div class="filter-line"><span class="filter-label">Rating source</span><div class="filter-value"><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div></div>' +
         '<div class="filter-line"><label class="filter-label" for="sfRating-' + i + '">Rating filter</label><div class="filter-value"><input type="checkbox" class="filter-check" id="sfRating-' + i + '" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"><span class="toggle-text">' + (f.rating_filter_enabled ? 'Filtering enabled' : 'Filtering disabled') + '</span></div></div>' +
-        '<div class="filter-line"><label class="filter-label" for="sfGenres-' + i + '">Exclude genres</label><div class="filter-value"><input class="url-input" id="sfGenres-' + i + '" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News"></div></div>' +
-        '<div class="filter-line"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
-        '<div class="filter-line"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
+        '<div class="filter-line filter-csv"><label class="filter-label" for="sfGenres-' + i + '">Exclude genres</label><div class="filter-value"><input class="url-input" id="sfGenres-' + i + '" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News"></div></div>' +
+        '<div class="filter-line filter-csv"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
+        '<div class="filter-line filter-csv"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
         '<div class="filter-line filter-top"><span class="filter-label">Rating tiers</span><div class="filter-value"><button class="secondary" onclick="addTier(' + i + ')">+ Add tier</button></div></div>' +
         '<div class="tier-table"><div class="tier-head"><span>Min rating<span class="th-src">(' + escapeAttr(f.rating_source || 'imdb') + ')</span></span><span>Max rating<span class="th-src">(' + escapeAttr(f.rating_source || 'imdb') + ')</span></span><span>Min votes</span><span>Min sec.<span class="th-src">(simkl)</span></span><span></span></div>' + tiers + '</div>' +
       '</div>' +
@@ -1370,7 +1378,7 @@ function renderTmdb() {
 
   document.getElementById('headerTitle').textContent = 'TMDB List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
-  const emptyHint = lists.length ? '' : '<div class="empty">No TMDB discover lists yet - add your first below.</div>';
+  const emptyHint = lists.length ? '' : '<div class="official-note">No TMDB discover lists yet - add your first below.</div>';
   const trigger = lists.length
     ? '<button class="btn-create-list" id="tmdbCreateBtn" onclick="showTmdbCreate()">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
@@ -1380,8 +1388,8 @@ function renderTmdb() {
   const createRow =
     '<div class="create-slot">' + trigger +
       '<div class="create-form inline" id="tmdbCreateRow"' + createOpen + '>' +
-        '<label class="field"><span class="field-label">Name</span><input class="name-input" id="tmdbCreateNameInput" placeholder="Name - e.g. 80s Horror" spellcheck="false"></label>' +
-        '<label class="field"><span class="field-label">Media type</span><select id="tmdbCreateTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select></label>' +
+        '<label class="field field-name"><span class="field-label">Name</span><input class="name-input" id="tmdbCreateNameInput" placeholder="Name - e.g. 80s Horror" spellcheck="false"></label>' +
+        '<label class="field field-mtype"><span class="field-label">Media type</span><select id="tmdbCreateTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select></label>' +
         '<span class="body-actions"><button onclick="confirmCreateTmdb()">Add</button><button type="button" class="secondary" onclick="hideTmdbCreate()">Cancel</button></span>' +
       '</div>' +
     '</div>';
