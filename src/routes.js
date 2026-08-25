@@ -646,10 +646,12 @@ const PREVIEW_PAGE_SIZE = 20;
 // Client-side sort of the unioned multi-source result set - mirrors the old
 // worker's sortParts so preview order matches what the generated catalog
 // serves. title_asc on series falls back to popularity (TMDB /discover/tv
-// has no name sort).
+// has no name sort). Owner request 2026-08-25: movies without a release
+// date are dropped (matching scripts/tmdb.mjs); series keep sinking last.
 function sortPreviewItems(items, sortKey, mediaType) {
   const dateField = mediaType === "series" ? "first_air_date" : "release_date";
   const hasDate = (i) => Boolean(i[dateField]);
+  if (mediaType !== "series") items = items.filter(hasDate);
   const cmp = {
     release_asc: (a, b) => String(a[dateField] || "9999").localeCompare(String(b[dateField] || "9999")),
     release_desc: (a, b) => String(b[dateField] || "0000").localeCompare(String(a[dateField] || "0000")),
@@ -752,7 +754,9 @@ export async function handleTmdbPreviewDiscover(env, request) {
       items = items.filter((p) => collectionIdSet.has(p.id));
     }
 
-    sortPreviewItems(items, entry.sort, mediaType);
+    // sortPreviewItems filters undated movies (returns a new array) -
+    // capture the result, don't rely on in-place sorting.
+    items = sortPreviewItems(items, entry.sort, mediaType);
     const truncated = totalPages > PREVIEW_PAGES;
     const metas = items.slice(0, PREVIEW_PAGES * PREVIEW_PAGE_SIZE).map((item) => ({
       id: item.id,

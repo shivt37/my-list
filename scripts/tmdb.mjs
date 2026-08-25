@@ -200,11 +200,15 @@ async function collectionParts(collectionIds) {
   return parts;
 }
 
-// Client-side sort matching the preview's sortPreviewItems. Empty dates
-// (unreleased titles) sort to the end regardless of direction.
+// Client-side sort matching the preview's sortPreviewItems.
+// Owner request 2026-08-25: MOVIES without any release date are dropped
+// entirely instead of sinking to the end (all sort modes). SERIES keep the
+// old sink behavior - undated entries are unreleased future titles the
+// owner still wants listed last.
 export function sortItems(items, sortKey, mediaType) {
   const dateField = mediaType === "series" ? "first_air_date" : "release_date";
   const hasDate = (i) => Boolean(i[dateField] || i.release_date || i.first_air_date);
+  if (mediaType !== "series") items = items.filter(hasDate);
   const cmp = {
     release_asc: (a, b) => String(a[dateField] || "9999").localeCompare(String(b[dateField] || "9999")),
     release_desc: (a, b) => String(b[dateField] || "0000").localeCompare(String(a[dateField] || "0000")),
@@ -276,7 +280,7 @@ export async function buildDiscoverItems(list, mediaType) {
 
   // Multi-source unions lose TMDB's server-side order, and unreleased titles
   // (empty release_date, e.g. 2028 entries) would sort first on asc. Re-sort
-  // client-side; no-date items always go last.
+  // client-side; movies drop no-date items, series sink them last.
   items = sortItems(items, list.sort, mediaType);
 
   items = items.slice(0, MAX_ITEMS);
