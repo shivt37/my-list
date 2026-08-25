@@ -295,7 +295,8 @@ export function buildConfigurePage(origin, config) {
   /* Filter fields sit in a 2-col grid (text column + value column) - the
      CSV inputs never stretch full width, so a long genre list stays a
      contained field instead of a full-bleed strip. Mobile stacks 1-col. */
-  /* ── SCROLLBAR: ghost — invisible until you hover within a scrollable area ── */
+  /* ── SCROLLBAR: ghost â€” desktop only — invisible until you hover within a scrollable area ── */
+  @media (hover: hover) {
   html,
   .preview-list,
   .preview-scroll,
@@ -339,6 +340,7 @@ export function buildConfigurePage(origin, config) {
   /* Thumb direct hover brightens further */
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--border-icon-hover);
+  }
   }
 
   .filter-line { display: contents; }
