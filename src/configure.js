@@ -267,7 +267,7 @@ export function buildConfigurePage(origin, config) {
 
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
   /* Official picker rows (add-from-catalog dialog) */
-  .pick-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow: auto; margin-top: 4px; }
+  .pick-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow: auto; margin-top: 4px; margin-bottom: 14px; }
   .pick-row {
     display: flex; align-items: center; gap: 10px; padding: 8px 10px;
     border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface2);
