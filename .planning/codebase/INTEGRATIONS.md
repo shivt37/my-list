@@ -1,116 +1,113 @@
 # External Integrations
 
-**Analysis Date:** 2026-08-21
+**Analysis Date:** 2026-08-25
 
 ## APIs & External Services
 
-**MDBList (two distinct access modes):**
-- Official lists API - `https://api.mdblist.com/lists/official/<slug>/items?apikey=...` (`scripts/official.mjs` line 31, 86-93)
-  - Client: raw `fetch`, no SDK
-  - Auth: `MDBLIST_API_KEY` env var (GitHub secret), passed as `apikey` query param
-- Listing-page DOM scrape - `https://mdblist.com/movies|shows/?...` URLs saved in config; headless Chromium via puppeteer-extra + stealth (`scripts/scrape.mjs`)
-  - Auth: none (stealth plugin evades bot detection)
-- Note: `MDBLIST_API_KEY` is no longer mounted in scrape.yml nor read by scrape.mjs (cleaned up 2026-08-23) - only official.mjs talks to the MDBList API
+**Stremio (consumer, not called):**
+- The Worker IS a Stremio addon. Stremio clients GET `/manifest.json` and `/catalog/<type>/<id>/skip=<n>.json` (`src/routes.js` - `buildManifest`, `handleCatalog`, `CATALOG_RE`). No auth.
 
-**TMDB:**
-- v3 API with v4 bearer token - `https://api.themoviedb.org/3/discover/{movie,tv}`, `/search/{keyword,company,collection}`, `/collection/<id>` (`src/routes.js` `tmdbApi()`, `scripts/tmdb.mjs` `tmdbFetch()` at line 101)
-  - Client: raw `fetch`, Bearer Authorization header
-  - Auth: `TMDB_READ_ACCESS_TOKEN` (Cloudflare secret + GitHub secret)
-  - Used two ways: live search/preview proxies from the configure page (`routes.js` lines 513-688) and batch catalog generation in CI (`scripts/tmdb.mjs`)
-  - Poster images pulled from `https://image.tmdb.org/t/p/w500<poster_path>` when building Stremio metas (`routes.js` `rowToMetaTmdb`)
+**MDBList API:**
+- Official lists refresh + configure-page picker.
+  - Caller: `src/routes.js` `handleMdblistOfficialCatalog` (GET `https://api.mdblist.com/lists/official?apikey=...`) and `scripts/official.mjs` (`apikey` query param via `url.searchParams.set`).
+  - Auth: `MDBLIST_API_KEY` - Cloudflare worker secret for the picker proxy; GitHub repo secret for official.yml.
+  - Note: key travels as a URL query param on both paths (API's convention), visible in access logs upstream.
+- mdblist.com website scraping (DOM, not API): `scripts/scrape.mjs` drives headless Chromium with puppeteer-extra stealth against listing URLs stored in config; pagination params appended per the page-0/1+ rule documented in the script header.
 
-**SIMKL:**
-- v2 calendar API - `https://data.simkl.in/calendar/v2/{tv,anime}.json?client_id=...&app-name=simkl-arriving-today&app-version=3.9.0` (`scripts/simkl.mjs` `simklUrl()`)
-  - Client: raw `fetch`
-  - Auth: `SIMKL_CLIENT_ID` (GitHub secret); no user token - anonymous client-id app identity
-  - Metadata (genres/country/ratings incl. IMDb + MAL) embedded in calendar response - no per-title calls
+**TMDB API:**
+- Two consumers of `https://api.themoviedb.org/3`:
+  1. Live helpers for the configure UI: keyword/company/collection search (`handleTmdbSearch`) and full Discover preview (`handleTmdbPreviewDiscover`) in `src/routes.js`; 30s fetch timeout via `AbortSignal.timeout`.
+  2. Catalog generation: `scripts/tmdb.mjs` builds discover source plans (AND/OR modes, collection post-filter, 500-item cap).
+- Auth: `TMDB_READ_ACCESS_TOKEN` as Bearer token (TMDB v4 read token) - Cloudflare secret + GitHub secret.
+- Posters served from `https://image.tmdb.org/t/p/w500/...` (built into metas in `src/routes.js`).
 
-**GitHub Actions API (workflow dispatch):**
-- `POST https://api.github.com/repos/<GH_REPO>/actions/workflows/<wf>/dispatches` (`src/dispatch.js`)
-  - Client: raw `fetch`
-  - Auth: `GH_TOKEN` (Cloudflare secret, Bearer PAT)
-  - Expects exactly HTTP 204 on success; workflow filename comes from trusted env vars/constants (no runtime allowlist - corrected 2026-08-23); outbound fetch bounded by `AbortSignal.timeout(15000)` to block path injection
-  - Dispatches four workflows: `scrape.yml` (lists/action/delete_ids inputs), `official.yml` (slugs input), `simkl.yml` (kinds input), `tmdb.yml` (ids/action/delete_ids inputs)
+**SIMKL API:**
+- Arriving-today calendars: `https://data.simkl.in/calendar/v2/{tv,anime}.json?client_id=...&app-name=simkl-arriving-today&app-version=3.9.0` (`scripts/simkl.mjs`). Metadata comes embedded in the calendar payload - no per-title calls.
+- Auth: public `SIMKL_CLIENT_ID` (GitHub repo secret) - app-level identification, not user auth.
 
-**GitHub Pages (catalog data plane):**
-- `GET {GITHUB_PAGES_BASE}/data/<catalogId>.json` on every `/catalog/*` request (`src/routes.js` `githubPagesCatalogUrl()`)
-  - No auth; worker is a thin fetcher that never touches mdblist itself
-  - Missing/failed fetch returns `{ metas: [] }` with status 200, never an error
+**GitHub API (Actions dispatch):**
+- `POST https://api.github.com/repos/{GH_REPO}/actions/workflows/{workflow}/dispatches` - single choke point is `dispatchScraperWorkflow()` in `src/dispatch.js`. 15s timeout; expects HTTP 204.
+- Auth: `GH_TOKEN` Bearer (Cloudflare secret). Vars `GH_REPO`, plus workflow-file names from wrangler.toml vars / constants in `src/routes.js`.
+- Workflows dispatched: `scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml` (all in `.github/workflows/`).
+
+**Google Fonts:**
+- Inter font loaded by the configure page from `fonts.googleapis.com` / `fonts.gstatic.com` (`src/configure.js`; CSP in `src/routes.js` html helper allows these origins).
 
 ## Data Storage
 
 **Databases:**
-- Cloudflare Workers KV
-  - Binding: `STORE` (`wrangler.toml`, namespace id `36b7763e6e31445696e1a773c44de7a3`)
-  - Keys: `config` (full addon config JSON), `runs:scraper` / `runs:official` / `runs:simkl` / `runs:tmdb` (last-30 run history each, capped by `RUNS_MAX = 30` in `src/config.js`), `healed` (one-shot flag)
-  - Access via `kv.get(key, "json")` / `kv.put`; corrupt config value falls back to seeds instead of erroring (`loadConfig`)
+- None (no D1, no SQL).
+
+**KV Store:**
+- Cloudflare Workers KV, binding `STORE` (`wrangler.toml`), accessed via `env.STORE` throughout `src/config.js` and `src/routes.js`.
+  - `config` - the whole multi-module list config (scraper/official/simkl/tmdb sections); read-migrated-written by `loadConfig()`.
+  - `runs:scraper`, `runs:official`, `runs:simkl`, `runs:tmdb` - last 30 scrape-run records each (`addRun`/`getRuns` in `src/config.js`), written via POST `/runs` from the scripts.
+  - `healed` - one-shot seed-id healing flag.
+  - `cache:mdblist-official` - 10-minute TTL cache (manual timestamp check) of the MDBList official catalog for the picker proxy.
 
 **File Storage:**
-- Git repo `data/*.json` files committed by CI bots and served via GitHub Pages. Ignored locally (`.gitignore` `data/*.json`) but force-added in workflows (`git add -f 'data/*.json'`). Push strategy: `git pull --rebase -X theirs`.
-- File naming convention encodes module: `mdb_scrape_<8 chars>.json`, `mdboff_<slug>_<movie|show>.json`, `simkl_arriving_today_<series|anime>.json`, `tmdb_discover_<movie|series>_<8 base36>.json`
+- Catalog data files are JSON committed to the repo's `data/` directory (e.g. `data/mdb_scrape_*.json`, `data/mdboff_*_*.json`, `data/simkl_arriving_today_*.json`, `data/tmdb_discover_*.json`) and served publicly via GitHub Pages at `{GITHUB_PAGES_BASE}/data/<id>.json`. The Worker only fetches them (`githubPagesCatalogUrl` in `src/routes.js`); scripts write them locally and workflows commit+push (`git pull --rebase -X theirs` then push, in every workflow).
 
 **Caching:**
-- None. Every catalog request re-fetches from GitHub Pages.
+- KV-based cache for the MDBList official catalog only (see above). No CDN/cache headers beyond default Worker behavior; no other caching layer.
 
 ## Authentication & Identity
 
 **Auth Provider:**
-- None for the addon itself. Stremio consumes the manifest/catalog anonymously.
-- The `/configure` admin page, `/save-config`, `/trigger-refresh`, and `/export-config` have NO authentication - anyone with the worker URL can read full config and trigger GitHub Actions runs. Single-operator assumption noted in code comment ("Accepted for a single-operator admin page" at `src/routes.js` line 245).
+- None. No user auth anywhere - this is deliberate:
+  - Stremio catalog endpoints are public by protocol.
+  - `/configure`, `/save-config`, `/export-config`, `/trigger-refresh` are unauthenticated admin surfaces (single-operator model; noted read-modify-write race accepted in `src/routes.js` comments).
+- Machine-to-machine secrets only: `GH_TOKEN`, `TMDB_READ_ACCESS_TOKEN`, `MDBLIST_API_KEY` (Cloudflare secrets); `SIMKL_CLIENT_ID`, `WORKER_ORIGIN` (GitHub secrets).
 
 ## Monitoring & Observability
 
 **Error Tracking:**
-- None (no Sentry/GlitchTip).
+- None.
 
 **Logs:**
-- `console.log`/`console.error` in scripts (visible only in GitHub Actions run logs)
-- Structured run-history instead of logs: scrapers POST `{ runs: [...] }` to the worker's `/runs` endpoint (`routes.js` `handleRunsPost`), stored in KV, rendered by `/status?page=<module>` with IST timestamps (`toIST()` hardcodes UTC+5:30)
+- `console.log`/`console.error` in worker + scripts (visible in Cloudflare dash / Actions logs). Dispatch stub logs `[dispatch-stub] ...` (`src/dispatch.js`).
+- Self-reported run history: scripts POST run records to the Worker's `/runs` endpoint after each list scrape; `/status` page renders the last 30 per module with IST timestamps (`toIST` in `src/routes.js`).
 
 ## CI/CD & Deployment
 
 **Hosting:**
-- Worker: Cloudflare Workers (deployed via Wrangler)
-- Data/catalogs: GitHub Pages from `shivt37/my-list` repo root
-- Compute for scraping: GitHub Actions ubuntu-latest runners
+- Worker: Cloudflare Workers via wrangler.
+- Static data: GitHub Pages from `main`.
 
 **CI Pipeline:**
-- Four scheduled+manual-dispatch workflows, all sharing concurrency group `my-list-scrape` with `queue: max` (serialize all data writes):
-  - `.github/workflows/scrape.yml` - cron `30 1,13 * * *` UTC, puppeteer scrape, 30 min timeout
-  - `.github/workflows/official.yml` - same crons, MDBList official API, 15 min
-  - `.github/workflows/simkl.yml` - same crons, Simkl calendar fetch, 15 min
-  - `.github/workflows/tmdb.yml` - cron `30 1 * * *` UTC only (the `30 13` line is commented out), TMDB discover generation, 15 min
-- All four: checkout@v5, setup-node@v5 (Node 22), input sanitization via `tr -cd` whitelists, then commit-and-push data changes as `my-list-bot`
-- No PR checks, no lint/test CI
+- Four GitHub Actions workflows (all cron `30 1,13 * * *` UTC = 07:00/19:00 IST except tmdb.yml which has the second cron commented out):
+  - `.github/workflows/scrape.yml` - puppeteer DOM scrape; inputs `lists/action/delete_ids/debug`; input sanitization step before bash; commits data with `[skip ci]`.
+  - `.github/workflows/official.yml` - MDBList API refresh/delete; inputs `slugs/action/delete_ids`.
+  - `.github/workflows/simkl.yml` - SIMKL calendar refresh; input `kinds`.
+  - `.github/workflows/tmdb.yml` - TMDB generate/delete; inputs `ids/action/delete_ids`.
+- All four share concurrency group `my-list-scrape` (`cancel-in-progress: false`, `queue: max`) to serialize data-dir writes and KV run-record posts.
+- Deploy pipeline for the Worker itself: none detected (manual wrangler deploy; no CI workflow deploys it).
 
 ## Environment Configuration
 
-**Required env vars:**
+**Required env vars (Worker):**
+- Secrets: `GH_TOKEN`, `TMDB_READ_ACCESS_TOKEN`, `MDBLIST_API_KEY` (each guarded with a clear "not configured" error in `src/dispatch.js` / `src/routes.js`).
+- Vars (wrangler.toml): `GITHUB_PAGES_BASE`, `GH_REPO`, `GH_WORKFLOW`, `GH_OFFICIAL_WORKFLOW`, `GH_TMDB_WORKFLOW`.
+- Optional: `GH_DISPATCH_STUB` (local dev only), `GH_REF` (defaults `main`), `GH_SIMKL_WORKFLOW` (defaults constant).
 
-Cloudflare secrets:
-- `GH_TOKEN` - required for any save/refresh dispatch
-- `TMDB_READ_ACCESS_TOKEN` - required for `/tmdb/search-*` and `/tmdb/preview-discover` (fails fast with 500 if unset)
-
-Cloudflare vars (`wrangler.toml`): `GITHUB_PAGES_BASE`, `GH_REPO`, `GH_WORKFLOW`, `GH_OFFICIAL_WORKFLOW`, `GH_TMDB_WORKFLOW`; optional undeclared-but-read: `GH_SIMKL_WORKFLOW`, `GH_REF`
-
-GitHub Actions secrets: `WORKER_ORIGIN`, `MDBLIST_API_KEY`, `TMDB_READ_ACCESS_TOKEN`, `SIMKL_CLIENT_ID`
+**Required env vars (scripts, set by workflows from repo secrets):**
+- `WORKER_ORIGIN` (all four scripts - required, hard-exit when missing in scrape.mjs main path).
+- `MDBLIST_API_KEY` (official.mjs), `SIMKL_CLIENT_ID` (simkl.mjs), `TMDB_READ_ACCESS_TOKEN` (tmdb.mjs).
+- `.dev.vars` file exists locally for wrangler dev (gitignored; contents not inspected).
 
 **Secrets location:**
-- Cloudflare dashboard / `wrangler secret put` (worker side)
-- GitHub repo Settings > Secrets and variables > Actions (CI side)
-- `.env` files not detected; `node_modules/.cache/wrangler/wrangler-account.json` present (local account cache)
+- Worker side: Cloudflare dashboard / `wrangler secret put` (documented in wrangler.toml comments).
+- Scripts side: GitHub repo secrets referenced in workflow files under `${{ secrets.* }}`.
 
 ## Webhooks & Callbacks
 
 **Incoming:**
-- `POST /runs` - called by `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs` after each list run to record run history in KV (chunked ≤50 records per request). Unauthenticated.
-- `POST /save-config` - configure page persists config and triggers workflow dispatches (simkl first, scraper last, tmdb combined generate+delete; dispatches must succeed before KV persist)
-- `POST /trigger-refresh` - manual refresh, optional `{ id, page }` body scopes to one list/module
-- `POST /tmdb/preview-discover` - configure page preview, up to 25 TMDB pages per call
+- `POST /runs` - callback from all four scraper scripts recording run history into KV (`src/routes.js` `handleRunsPost`; batches capped at 50 records). Unauthenticated.
+- No other inbound webhooks.
 
 **Outgoing:**
-- Workflow dispatches (see GitHub Actions API above) - the worker's only write-path into the data pipeline
+- GitHub Actions dispatches (see GitHub API above) are effectively the outbound trigger mechanism; no HTTP webhooks fired by this codebase.
 
 ---
 
-*Integration audit: 2026-08-21*
+*Integration audit: 2026-08-25*

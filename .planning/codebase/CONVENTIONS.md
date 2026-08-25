@@ -1,168 +1,131 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-08-21
+**Analysis Date:** 2026-08-25
 
-## Language & Module System
+## Languages & Style Baseline
 
-**Plain JavaScript ESM - no TypeScript, no transpile step:**
-- Worker source: `.js` files in `src/`, ESM (`import`/`export`)
-- Node scripts: `.mjs` files in `scripts/`; `scripts/package.json` sets `"type": "module"`
-- Worker runs on Cloudflare Workers with `"compatibility_flags = ["nodejs_compat"]"` and imports `node:crypto` (`src/config.js:7`)
-- No JSDoc types on signatures - types are enforced by runtime normalize/migrate functions instead (see Input Validation)
+- Plain JavaScript ESM (`"type": "module"` implied by `.mjs`/import syntax in `src/*.js`; explicit in `scripts/package.json`). No TypeScript anywhere.
+- No transpiler, no bundler for source — code runs as-is on Cloudflare Workers (`nodejs_compat` flag in `wrangler.toml`) and Node 22 in Actions.
+- **No linter or formatter configured.** No `.eslintrc*`, `eslint.config.*`, `.prettierrc*`, `biome.json`, or `.editorconfig`. Style is enforced by convention and review only — match surrounding code exactly when editing.
+- Double quotes in `src/*.js` and `scripts/*.mjs`; single quotes inside the browser-JS template literal in `src/configure.js` (it lives inside backticks, so it avoids nested backticks).
 
 ## Naming Patterns
 
 **Files:**
-- kebab-case not used; single-word lowercase names: `config.js`, `routes.js`, `dispatch.js`, `scrape.mjs`, `tmdb.mjs`, `simkl.mjs`, `official.mjs`
-- Self-check suites prefixed `verify-`: `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`; the main suite is `scripts/dry-test.mjs`
+- Worker modules: short lowercase nouns — `src/index.js`, `src/config.js`, `src/routes.js`, `src/dispatch.js`, `src/configure.js`
+- Action scripts: lowercase `.mjs` matching their module — `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`
+- Tests: `<area>-test.mjs`, `dry-test.mjs`, `verify-<area>.mjs` under `testing/`
 
-**Functions:**
-- camelCase verbs: `loadConfig`, `saveConfig`, `buildManifest`, `handleCatalog`, `normalizeTmdbList`, `migrateConfig`
-- Route handlers prefixed `handle`: `handleSaveConfig`, `handleTriggerRefresh`, `handleRunsPost` (`src/routes.js`)
-- Row-to-meta mappers suffixed by module: `rowToMeta`, `rowToMetaOfficial`, `rowToMetaSimkl`, `rowToMetaTmdb` (`src/routes.js:118-167`)
-- Predicate helpers prefixed `passes`/`matches`: `passesRatingTiers`, `matchesCountry` (`scripts/simkl.mjs:123-152`)
+**Functions:** camelCase verbs — `loadConfig`, `buildManifest`, `handleSaveConfig`, `dispatchScraperWorkflow`, `writeCatalog`, `normalizeTiers`. Route handlers uniformly prefixed `handle<Thing>` (`src/routes.js`).
 
-**Variables/constants:**
-- Module-level constants UPPER_SNAKE_CASE: `RUNS_MAX`, `CONFIG_KEY`, `MAX_ITEMS`, `TMDB_SORTS`, `SEED_LISTS` (`src/config.js`, `scripts/tmdb.mjs`)
-- Regex constants also UPPER_SNAKE: `CATALOG_RE`, `ID_RE`, `SANE_SLUG`, `SANE_KIND` (`src/routes.js:46`, `scripts/tmdb.mjs:37`, `scripts/simkl.mjs:396`)
-- Local helpers camelCase: `arg()`, `sleep()`, `chunkArray()`, `jsonOf()`
+**Constants:** UPPER_SNAKE_CASE at module top — `CONFIG_KEY`, `RUNS_MAX`, `MAX_OFFICIAL_LISTS`, `SANE_OFFICIAL_SLUG`, `TMDB_SORTS`, `PREVIEW_PAGES` (`src/config.js`, `src/routes.js`).
 
-**IDs (string formats, load-bearing):**
-- Scraper lists: `mdb_scrape_<8 alnum>`; official catalogs: `mdboff_<slug>_<movie|show>`; simkl: `simkl_arriving_today_<slug>`; tmdb: `tmdb_discover_<movie|series>_<8 base36>`
-- KV keys colon-namespaced: `runs:scraper`, `runs:official`, `runs:simkl`, `runs:tmdb`, `healed`, `config` (`src/config.js:9-16`)
+**Variables:** camelCase; booleans read as predicates (`wasSeeded`, `alreadyHealed`, `scraperDispatchNeeded`).
+
+**Types:** None. Shapes are documented via header comments and normalization functions, not interfaces. A list's canonical shape is whatever its `normalize*/migrate*` function returns (`src/config.js:227-339`).
+
+**Catalog id prefixes encode the module** and are relied on throughout: `mdb_scrape_*`, `mdboff_<slug>_<movie|show>`, `simkl_arriving_today_<kind>`, `tmdb_discover_<movie|series>_<8base36>`. New catalog families must follow this scheme (`src/config.js:18-45`, `runsKeyFor` keys off it).
 
 ## Code Style
 
-**Formatting:**
-- No formatter or linter configured (no eslint/prettier/biome config anywhere)
-- De facto style: double quotes for strings, semicolons, 2-space indent, template literals for HTML/URLs
-- Long lines accepted (URL seed constants are single lines hundreds of chars long, `src/config.js:146`)
+**Formatting:** Not enforced by tooling. Observed: 2-space indent, ~120-char practical line limit, semicolons in `src/` and `scripts/`, arrow functions for small helpers, `const` by default.
 
-**Linting:** None. Correctness is guarded by tests + regex validation, not static analysis.
+**Linting:** None. Do not add config files unprompted.
 
 ## Import Organization
 
 **Order:**
-1. Node builtins with `node:` prefix: `node:crypto`, `node:fs`, `node:path`, `node:url`
-2. npm packages (puppeteer family, jsdom in tests)
-3. Relative modules `./x.js` / `../src/x.js`
+1. `node:` builtins (`node:crypto`, `node:fs`, `node:path`, `node:url`)
+2. Sibling project modules (`./config.js`, `../src/routes.js`)
+3. Third-party packages (`puppeteer-extra`, `puppeteer-extra-plugin-stealth`, `jsdom`)
 
-**Path Aliases:** None - relative paths only.
-
-## Function Design
-
-**Dependency-injected `main()` - THE core pattern for all scripts:**
-
-Every GitHub Actions script exports a `main()` whose collaborators are overridable via one destructured object parameter:
-
-```javascript
-// scripts/tmdb.mjs:353
-export async function main({
-  idsArg = arg("ids"),
-  actionArg = arg("action") || "generate",
-  fetchCfg = getLists,
-  build = buildDiscoverItems,
-  write = writeCatalog,
-  remove = deleteCatalog,
-  recordRuns = postRuns,
-} = {}) { ... }
-```
-
-Same shape in `scripts/scrape.mjs:371`, `scripts/simkl.mjs:380`, `scripts/official.mjs:168`. Tests import the module and pass fakes without mocking frameworks. **Follow this for any new script.**
-
-**`isMain` guard - fresh each run, exported for testing:**
-
-```javascript
-// scripts/simkl.mjs:449
-export const isMain = typeof process !== "undefined" && !!process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (isMain) {
-  if (!SIMKL_CLIENT_ID) { console.error("Missing SIMKL_CLIENT_ID env var."); process.exit(1); }
-  main().catch((err) => { console.error("Fatal error:", err); process.exit(1); });
-}
-```
-
-Env-var presence checks live inside the `isMain` block so importing for tests never exits. `scripts/tmdb.mjs:449` uses an async `pathToFileURL` variant - both forms exist.
-
-**Small pure helpers exported alongside main flow:** `buildPageUrl`, `chunkArray`, `writeCatalog`, `deleteCatalog`, `computeSourceHash`, `precompute` - all exported so tests hit them directly.
+All imports are named imports; one flat block per group. No path aliases — relative paths only.
 
 ## Module Design
 
-**Exports:** Named exports only, except the worker entry (`export default { fetch }` in `src/index.js:21`). `src/configure.js` exports exactly one function (`buildConfigurePage`) - the entire admin UI is one template-literal string.
+**Exports:** Named exports exclusively. The single `export default` is the worker's fetch handler in `src/index.js:21` (Workers platform requirement).
 
-**No barrel files.** Consumers import from the specific module.
+**No barrel files.** Each module imported directly where needed.
 
-**Pure-function normalization layer:** All untrusted config passes through `migrate*`/`normalize*` functions that return brand-new objects with known fields only:
-- `migrateConfig`, `migrateOfficial`, `migrateSimkl`, `migrateTmdb` (`src/config.js:184-314`)
-- Unknown fields dropped, types coerced (`Number(t[k])`), lengths clamped (`Math.min(50, Math.max(1, ...))`), name sliced to 200 chars
-- Malformed entries dropped (`filter(Boolean)`), never thrown
+**Dependency injection for testability (scripts):** every Action script's `main()` accepts injectable collaborators with production defaults:
+```js
+// scripts/official.mjs:177
+export async function main({
+  slugsArg = slugsArg,
+  actionArg = rawAction,
+  fetchConfig = enabledSlugs,
+  fetchApi = fetchAllItems,
+  write = writeCatalog,
+  recordRuns = postRuns,
+} = {}) {
+```
+New script logic must follow this pattern — pure-ish functions exported, `main()` parameterized, so `testing/dry-test.mjs` can import and drive them with fakes.
 
-## Input Validation (trust boundaries)
+**isMain guard:** scripts guard side effects so tests can import safely:
+```js
+// scripts/official.mjs:260
+export const isMain = typeof process !== "undefined" && !!process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) { ... }
+```
 
-Hand-rolled regex allowlists - no zod. Every boundary has one:
+**Entry-point routing:** `src/index.js` is a flat if-chain over `pathname` returning `Response`s; handlers live in `src/routes.js`. Add new endpoints as a `handleX(env, request)` export in `routes.js` plus one if-line in `index.js`.
 
-| Boundary | Guard | File |
-|----------|-------|------|
-| Workflow filename into GH API URL | `/^[a-zA-Z0-9_.-]+\.yml$/` | `src/dispatch.js:17` |
-| Config list ids | `/^mdb_scrape_[A-Za-z0-9_-]{1,32}$/` | `src/config.js:247` |
-| TMDB discover ids | `/^[a-z0-9]{8}$/`, `/^tmdb_discover_(movie\|series)_[a-z0-9]{8}$/` | `src/config.js:272`, `scripts/tmdb.mjs:37` |
-| CLI `--lists`/`--delete-ids` before file `join()` | same scraper id regex | `scripts/scrape.mjs:377-385` |
-| CLI `--slugs` / `--kinds` | `SANE_SLUG`, `SANE_KIND` | `scripts/official.mjs:179`, `scripts/simkl.mjs:396` |
-| Workflow inputs before bash | `tr -cd 'a-zA-Z0-9,_-'` sanitize step | `.github/workflows/scrape.yml` |
-| Inline `<script>` state blob | `JSON.stringify(config).replace(/</g, "\\u003c")` + `escapeAttr()` | `src/configure.js:10-14` |
+## Input Validation (Trust Boundaries)
 
-**Rule: validate/allowlist at every boundary where a string reaches a filesystem `join()` or URL path. Never trust workflow_dispatch inputs, KV contents, or request bodies.**
+This is the strongest enforced convention — validate/coerce everything crossing a boundary, never throw past it:
+
+- **Persisted config:** every field re-derived through `migrateConfig`/`migrateOfficial`/`normalizeTmdbList`/`normalizeTiers` on every load and every save (`src/config.js:204-344`). Regex-guard ids before they touch file paths: `/^mdb_scrape_[A-Za-z0-9_-]{1,32}$/`, `/^[a-z0-9][a-z0-9-]{0,63}$/`, `/^tmdb_discover_(movie|series)_[a-z0-9]{8}$/`.
+- **Numeric clamps:** `maxPages` clamped `Math.min(50, Math.max(1, Math.floor(...)))` (`src/config.js:281`).
+- **POST bodies:** shape-checked up front with a 400 carrying an actionable message (`src/routes.js:238-243`); per-record isolation in batch ingestion — one malformed record must not drop valid siblings (`src/routes.js:562-581`).
+- **CLI/workflow args:** sanitized twice — char-class whitelist in the workflow bash step *and* regex rejection inside `main()` (`scripts/scrape.mjs:376-385`, `.github/workflows/scrape.yml` sanitize step).
+- **XSS:** the embedded config blob is hard-escaped before injection into HTML: `JSON.stringify(config).replace(/</g, "\\u003c")` (`src/configure.js:9`); attribute values go through `escapeAttr`.
 
 ## Error Handling
 
-**Worker routes (`src/`):** try/catch returning JSON envelopes; never throw to the client.
+**Patterns:**
 
-```javascript
-// src/routes.js:364
-} catch (e) {
-  return json({ error: "Save failed." }, 500);
-}
-```
-
-- Client-error responses carry specific messages (`400` invalid body, `404` unknown/disabled list, `502` upstream GH/TMDB failure, `501` unconfigured secrets)
-- Deliberate silent catches carry a comment explaining why: corrupt KV falls back to seeds (`src/config.js:359-361`), failed catalog fetch returns `{ metas: [] }` with HTTP 200 so Stremio chains don't break (`src/routes.js:187-189`)
-- Dispatch-before-persist ordering: all GitHub dispatches must succeed before `saveConfig` writes KV, else the save is rejected and nothing persisted (`src/routes.js:300-350`)
-
-**Scripts (`scripts/`):** per-item try/catch recording failures into run records instead of crashing the loop:
-
-```javascript
-// scripts/tmdb.mjs:420-435 - failure becomes a structured run record
-} catch (e) {
-  runs.push({ catalog_id, status: "failed", error_message: e.message.slice(0, 500), ... });
-}
-```
-
-- Empty results never overwrite the last good data file (`if (items.length > 0) write(...)` in `scripts/tmdb.mjs:403`, `scripts/official.mjs:196`, `scripts/scrape.mjs:344`) - exception: simkl empty day IS written (`scripts/simkl.mjs:423`)
-- Failures set `process.exitCode = 1` rather than exiting mid-loop; non-fatal POST failures use `console.warn` + exitCode
-- Fetches always carry `signal: AbortSignal.timeout(...)` (15s config, 30s API)
+1. **Degradation over 500s in the worker.** Corrupt KV values fall back to seeds/empty instead of throwing (`src/config.js:388-391`, `479-501`); unknown/disabled catalog ids return `{ metas: [] }` with 200 so Stremio chains don't break (`src/routes.js:180-189`).
+2. **Explicit status-code contract:** 400 invalid body, 404 unknown id, 400 known-but-disabled with actionable message, 501/502 failed upstream dispatch, 500 catch-all `"Save failed."` (`src/routes.js:235-431`). Never leak stack traces to responses.
+3. **Transactional save ordering:** all dispatches fire before `saveConfig` persist, non-destructive workflows before destructive ones, so any failure leaves config and data consistent (`src/routes.js:327-397`). Preserve this ordering when adding new dispatch paths.
+4. **Fail-fast with context in scripts:** thrown errors carry slug/id/status text sliced to 200 chars (`scripts/official.mjs:100-104`); per-list try/catch records a `failed` run row and continues the batch (`scripts/scrape.mjs:461-468`).
+5. **Never overwrite good data with empty:** a 0-item scrape skips the file write (`scripts/scrape.mjs:341-344`, `scripts/official.mjs:229-232`); simkl is the documented exception because an empty day is legitimate (`scripts/simkl.mjs:9-11`).
+6. **Silent best-effort for non-critical writes:** cache writes wrapped in `try {} catch {}` with a comment saying why failure is acceptable (`src/routes.js:805`).
+7. **UI errors humanized:** known infra messages mapped to plain sentences via `ERROR_MAP`/`humanizeError`; unknown messages pass through untouched (`src/configure.js:825-837`).
 
 ## Logging
 
-**Framework:** bare `console` - no library.
+**Framework:** None. `console.log` / `console.warn` / `console.error` directly.
 
-**Patterns:**
-- `src/` (worker): zero console calls; responses ARE the output
-- Scripts: `[<catalog_id>] <status> - N items` per item (`console.log`), `console.warn` for recoverable failures, `console.error` for per-item fatal errors, final `Summary:` JSON dump
-- Debug artifacts gated behind `--debug` flag writing HTML/screenshots to `debug/` (`scripts/scrape.mjs:127-139`)
+- `scripts/*.mjs`: free use of all three; `warn` for recoverable, `error` for failures, and set `process.exitCode = 1` on partial failure so Actions marks the step red while still committing good data.
+- `src/` (worker): essentially silent in production; the only `console.log` is the local-dev `GH_DISPATCH_STUB` branch in `src/dispatch.js:14-16` (never enabled in prod). Do not add console noise to worker code.
 
 ## Comments
 
-**When to comment:** Extensive *why*-comments on every non-obvious decision - race conditions, security rationale, rollback ordering, bot-detection workarounds. Examples: dispatch-order rationale (`src/routes.js:299-309`), concurrency `queue: max` explanation (`.github/workflows/scrape.yml`), warm-up session purpose (`scripts/scrape.mjs:167-172`). If a line looks weird, there is a comment above it explaining the bug it prevents.
+**When to comment:** This codebase comments *why*, heavily and well. Follow it:
+- Invariants and their rationale (`src/config.js:222-226` — blank tier would vacuously pass every title)
+- Dated decisions and owner requests (`Owner request 2026-08-24: ...` in `src/routes.js:275`)
+- Accepted limitations with revisit conditions (`src/config.js:473-477` — addRun race, references FUNCTIONAL-AUDIT M5)
+- Cross-file mirrors that must stay in sync (`Mirrors computeSourceHash in scripts/tmdb.mjs` — `src/config.js:358`)
+- Security reasoning (`src/config.js:274-277` — traversal guard)
 
-**Section dividers:** `// ── Section Name ──...` (box-drawing) in tests and mid-file regions; `// ===== NAME =====` banner blocks in `scripts/scrape.mjs`.
+**JSDoc/TSDoc:** Not used. Script files open with a block comment covering purpose, required env vars, and CLI usage (`scripts/scrape.mjs:2-27`) — replicate that header for new scripts.
 
-**JSDoc:** Only on script file headers (`scripts/*.mjs` open with `/** ... */` blocks documenting env vars, usage flags, and behavioral rules). No per-function JSDoc.
+## Function Design
 
-## State Management
+- Handlers do orchestration; leaf helpers stay pure (`rowToMeta*` mappers, `sortPreviewItems`, `buildPageUrl`).
+- Long linear flows are acceptable inside one handler when they're a single narrative (`handleSaveConfig`, ~200 lines) — split only when a piece is reused or independently testable.
+- Diff-by-content-hash pattern: changes detected by hashing the fields that affect output, deliberately excluding display-only fields like `name` (`listContentHash`, `tmdbContentHash` — `src/config.js:349-383`). Any new list type needs the same hash discipline, mirrored between worker and generator script.
 
-- Config is a single KV JSON blob read through `loadConfig(kv)` on every request (no caching layer); `kv` binding always passed as parameter, never imported globally
-- Content hashes decide re-scrapes: `listContentHash` / `tmdbContentHash` (`src/config.js:319-353`) deliberately exclude `name` so renames don't trigger regeneration - keep any new hash field-set in sync with `computeSourceHash` in `scripts/tmdb.mjs`
-- One-shot migrations stamped with a sentinel KV key (`healed`, `src/config.js:421-430`)
+## UI Code (configure page)
+
+- One giant template-literal document in `src/configure.js` (~2000 lines: CSS tokens + HTML shell + inline JS). Browser-side JS uses string-concatenation rendering into `#tabHost` with full re-render on change (`rerenderActive`), not DOM diffing.
+- Design tokens as CSS custom properties on `:root` with a fixed spacing grid (`--s1..--s6`) — use the grid variables, not raw pixel values (`src/configure.js:48-53`).
+- Global state in a single `state` object; handlers attached via inline `onchange="fn()"` referencing globals exposed on `window`.
+
+## Git Conventions
+
+Commit subjects follow `<type>: <summary>` — types observed: `feat:`, `fix:`, `chore(data):` (bot commits, `[skip ci]` suffix), `chore(dev):`, `ui:`. Data commits are made by bots (`my-list-bot`) in workflows; humans/AI commit code separately.
 
 ---
 
-*Convention analysis: 2026-08-21*
+*Convention analysis: 2026-08-25*

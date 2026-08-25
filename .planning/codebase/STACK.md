@@ -1,94 +1,73 @@
 # Technology Stack
 
-**Analysis Date:** 2026-08-21
+**Analysis Date:** 2026-08-25
 
 ## Languages
 
 **Primary:**
-- JavaScript (ES modules, `"type": "module"`, no TypeScript) - everywhere: `src/*.js` (worker), `scripts/*.mjs` (CI scrapers/generators)
+- JavaScript (ES modules) - entire codebase. Worker code in plain `.js` (`src/index.js`, `src/config.js`, `src/routes.js`, `src/dispatch.js`, `src/configure.js`); Node scripts in `.mjs` (`scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`). No TypeScript anywhere; types documented via comments only.
 
 **Secondary:**
-- Inline HTML/CSS/JS - the entire `/configure` admin UI is one template-literal string in `src/configure.js` (1773 lines)
-- YAML - GitHub Actions workflows in `.github/workflows/` (scrape.yml, official.yml, simkl.yml, tmdb.yml)
-- Bash - sanitize/commit steps inside the workflow YAML
+- None.
 
 ## Runtime
 
 **Environment:**
-- Cloudflare Workers (`wrangler.toml`, `main = "src/index.js"`, `compatibility_date = "2026-01-01"`, `compatibility_flags = ["nodejs_compat"]`)
-- Node.js 22 on GitHub Actions runners (`actions/setup-node@v5`, `node-version: 22` in all four workflows)
-- Local dev machine observed on Node v26.5.0
+- Cloudflare Workers runtime - `src/index.js` default export `{ fetch(request, env) }`. `compatibility_date = "2026-01-01"` with `nodejs_compat` flag (used for `node:crypto` createHash in `src/config.js`).
+- Node.js 22 - GitHub Actions runners (`actions/setup-node@v5`, `node-version: 22` in all four workflows).
 
 **Package Manager:**
-- npm (lockfile present at `scripts/package-lock.json`; `npm ci` in `scrape.yml`)
-- Repo root has NO package.json. The verify scripts need `jsdom`, which is declared in NO manifest (decision 2026-08-23: intentionally left undeclared) - on a fresh machine run `npm install --no-save --no-package-lock jsdom` at the repo root to make them runnable.
+- npm (only dependency-bearing package is `scripts/package.json`; lockfile `scripts/package-lock.json` present).
+- The Worker itself has ZERO npm dependencies - it runs on platform APIs only (`fetch`, `crypto.randomUUID`, `AbortSignal.timeout`, KV bindings).
 
 ## Frameworks
 
 **Core:**
-- None. The worker is a raw `fetch(request, env)` handler (`src/index.js`) with hand-rolled routing, JSON helpers, and CORS headers. No Hono/itty-router/Express.
-- Vanilla DOM JS in the configure page (no framework, no bundler).
+- None. No web framework - hand-rolled router in `src/index.js` (if-chains on pathname), hand-rolled HTML template literal UI in `src/configure.js` (2057 lines, single server-rendered page with inline CSS/vanilla JS, Google Fonts Inter).
+- Stremio Addon protocol (HTTP convention, not a library): `/manifest.json` and `/catalog/<type>/<id>/skip=<n>.json` served from `src/routes.js`.
 
 **Testing:**
-- None (no test framework). Hand-rolled assert-based scripts:
-  - `scripts/dry-test.mjs` - full route integration tests against fake in-memory KV + stubbed GH API
-  - `scripts/verify-tmdb.mjs` - TMDB module self-checks (config migration, hashes, source plan) using jsdom
-  - `scripts/verify-ui.mjs` - headless check of the built configure page HTML using jsdom
-- All run directly with `node scripts/<file>.mjs`
+- `node:assert/strict` standalone scripts - no test framework. Files in `testing/` (gitignored): `save-config.test.mjs`, `dry-test.mjs` (fake KV + stubbed globalThis.fetch), `verify-tmdb.mjs`, `verify-ui.mjs` (both use JSDOM, present in `scripts/node_modules/jsdom` but NOT declared in `scripts/package.json`).
 
 **Build/Dev:**
-- Wrangler (Cloudflare CLI) - deploy/dev via `wrangler.toml`. No build step; source ships as-is.
-- GitHub Actions - both CI and the actual compute platform for scraping/generation.
+- Wrangler - deploy/dev tool for the Worker (`wrangler.toml`, local state in `.wrangler/`). No build step, no bundler config beyond wrangler defaults.
+- Local dev secrets in `.dev.vars` (gitignored; existence confirmed, contents never read).
 
 ## Key Dependencies
 
 **Critical:**
-- `puppeteer` ^25.3.0 - headless Chromium for DOM-scraping mdblist.com (`scripts/scrape.mjs`)
-- `puppeteer-extra` ^3.3.6 + `puppeteer-extra-plugin-stealth` ^2.11.2 - anti-bot-evasion wrapper around puppeteer (`scripts/scrape.mjs` lines 29-35)
+- `puppeteer` ^25.3.0 - headless Chromium DOM scraping of mdblist.com listing pages (`scripts/scrape.mjs`). This is the whole scraper mechanism.
+- `puppeteer-extra` ^3.3.6 + `puppeteer-extra-plugin-stealth` ^2.11.2 - stealth plugin applied before launch to avoid bot detection (`scripts/scrape.mjs`).
 
-**Infrastructure (zero-install, platform-provided):**
-- Cloudflare Workers KV - config + run-history storage, bound as `STORE` (`wrangler.toml` [[kv_namespaces]], id `36b7763e6e31445696e1a773c44de7a3`)
-- Native `fetch` - all HTTP (worker + all scripts); `AbortSignal.timeout(15000-30000)` used throughout
-- `node:crypto` (createHash sha256) - content-hash change detection (`src/config.js` `listContentHash`/`tmdbContentHash`, `scripts/tmdb.mjs` `computeSourceHash`)
-- `node:fs`, `node:path`, `node:url` - file writes in scraper scripts
-- `jsdom` (root node_modules only) - local verification of configure page
+**Infrastructure:**
+- `actions/checkout@v5`, `actions/setup-node@v5`, `actions/upload-artifact@v5` - GitHub Actions plumbing in all workflows.
+- `node:crypto`, `node:fs`, `node:path`, `node:url` - stdlib only in scripts; no other runtime deps.
+- jsdom - undeclared dev-only dep for UI verification tests (`testing/verify-tmdb.mjs`, `testing/verify-ui.mjs`).
 
 ## Configuration
 
 **Environment:**
-
-Worker vars (plain text, `wrangler.toml` `[vars]`):
-- `GITHUB_PAGES_BASE` = `https://shivt37.github.io/my-list` - where catalog JSON lives
-- `GH_REPO` = `shivt37/my-list` - dispatch target repo
-- `GH_WORKFLOW` = `scrape.yml`, `GH_OFFICIAL_WORKFLOW` = `official.yml`, `GH_TMDB_WORKFLOW` = `tmdb.yml`
-- Note: `routes.js` reads optional `env.GH_SIMKL_WORKFLOW` (falls back to `"simkl.yml"` constant) and `env.GH_REF` (falls back to `"main"` in `dispatch.js`) - neither is declared in `wrangler.toml`
-
-Worker secrets (Cloudflare):
-- `GH_TOKEN` - GitHub PAT for workflow dispatch (`wrangler secret put GH_TOKEN`)
-- `TMDB_READ_ACCESS_TOKEN` - TMDB v4 read token, checked in `routes.js` `tmdbTokenOrError()`
-
-GitHub Actions repo secrets:
-- `WORKER_ORIGIN` - worker base URL (all four workflows)
-- `MDBLIST_API_KEY` - official lists API key (`official.yml`)
-- `TMDB_READ_ACCESS_TOKEN` - discover generation (`tmdb.yml`)
-- `SIMKL_CLIENT_ID` - Simkl calendar client id (`simkl.yml`)
-
-KV layout (`src/config.js`): key `config` (full addon config), `runs:scraper|runs:official|runs:simkl|runs:tmdb` (last 30 run records each), `healed` (one-shot id-healing flag).
+- Worker vars declared in `[vars]` of `wrangler.toml`: `GITHUB_PAGES_BASE`, `GH_REPO`, `GH_WORKFLOW`, `GH_OFFICIAL_WORKFLOW`, `GH_TMDB_WORKFLOW`.
+- Worker secrets (Cloudflare dashboard or `wrangler secret put`): `GH_TOKEN`, `TMDB_READ_ACCESS_TOKEN`, `MDBLIST_API_KEY`. Referenced as `env.*` in `src/dispatch.js` and `src/routes.js`.
+- Optional flags: `GH_DISPATCH_STUB` (set in `.dev.vars` for local dev - stubs dispatches; never set on production), `GH_REF`, `GH_SIMKL_WORKFLOW` (env overrides read in `src/routes.js`).
+- Script env (GitHub repo secrets passed by workflows): `WORKER_ORIGIN`, `MDBLIST_API_KEY` (official.yml only), `SIMKL_CLIENT_ID` (simkl.yml only), `TMDB_READ_ACCESS_TOKEN` (tmdb.yml only).
+- App runtime config lives in KV (binding `STORE`) under key `config` - edited via `/configure` page, migrated on every load by `migrateConfig()` in `src/config.js`.
 
 **Build:**
-- `wrangler.toml` - sole build/deploy config; no tsconfig, no bundler config, no eslint/prettier configs detected.
+- `wrangler.toml` - worker name `my-list`, main `src/index.js`, KV binding `STORE` (id `36b7763e6e31445696e1a773c44de7a3`).
+- No tsconfig, no bundler, no lint/format config detected.
 
 ## Platform Requirements
 
 **Development:**
-- Node 18+ (native fetch, AbortSignal.timeout), npm
-- Wrangler authenticated to the Cloudflare account owning the KV namespace (`.wrangler/wrangler-account.json` cache present)
+- Node 22 + wrangler for the worker; Chromium installed via puppeteer for running scrape.mjs locally.
+- `npm ci` inside `scripts/` reproduces script deps.
 
 **Production:**
-- Cloudflare Worker named `my-list` (workers.dev URL referenced as `https://my-list.st87.workers.dev` in tests)
-- GitHub repo `shivt37/my-list` serving `data/*.json` via GitHub Pages from `main`; workflows force-add ignored `data/*.json` (`git add -f`) and push with `git pull --rebase -X theirs`
-- Stremio consumes `/manifest.json` + `/catalog/...` endpoints from the worker
+- Cloudflare Worker (deployed via wrangler) + Cloudflare KV namespace.
+- GitHub Pages serving `data/*.json` from the repo's `main` branch at `GITHUB_PAGES_BASE` (https://shivt37.github.io/my-list).
+- GitHub Actions with `contents: write` permission committing data files back to the repo (bot identity `my-list-bot`).
 
 ---
 
-*Stack analysis: 2026-08-21*
+*Stack analysis: 2026-08-25*

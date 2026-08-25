@@ -1,230 +1,195 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-08-21
+**Analysis Date:** 2026-08-25
+
+Companion context: `.planning/codebase/FUNCTIONAL-AUDIT.md` (2026-08-23 audit). Its Moderate fixes M1–M4 and minors m2/m3/m13/m14 are **verified applied** in current code (eye-button gating at `src/configure.js:977`, `process.exitCode=1` at `scripts/tmdb.mjs:436-440`, per-record isolation at `src/routes.js:562-581`, `AbortSignal.timeout` on TMDB/GH fetches at `src/routes.js:606` and `src/dispatch.js:36`). Findings below reflect the repo as it stands today.
 
 ## Tech Debt
 
-**Unauthenticated admin surface (highest priority):**
-- Issue: Every mutating/config endpoint is open to anonymous internet traffic. No auth check exists anywhere in `src/index.js` or `src/routes.js`.
-- Files: `src/index.js` (lines 37-83 route table), `src/routes.js` (`handleSaveConfig`, `handleTriggerRefresh`, `handleExportConfig`, `handleRunsPost`)
-- Impact: Any stranger can (a) rewrite the entire addon config via POST `/save-config`, (b) trigger unlimited GitHub Actions runs via `/trigger-refresh` (burns Actions minutes, queues the shared concurrency group for hours), (c) read the full config via GET `/export-config` (leaks operator's mdblist URLs/filters), (d) forge run history via POST `/runs`. The destructive `scrape_delete` action is reachable through `/save-config` by deleting lists.
-- Fix approach: Add a shared-secret check (e.g. `ADMIN_TOKEN` worker secret compared against an `Authorization`/query param) on `/save-config`, `/trigger-refresh`, `/export-config`, `/runs`. The configure page JS (`src/configure.js` `saveAll`/`confirmRefresh`) would need to send it. Catalog reads (`/manifest.json`, `/catalog/*`) stay public.
+**Broken regression suite: `testing/dry-test.mjs` cannot run at all**
+- Issue: imports `OFFICIAL_CATALOGS` from `../src/config.js`, but that export was removed when dynamic official lists shipped (commit e60e07f replaced the frozen constant with `officialCatalogsFor()`). Module resolution throws `SyntaxError: does not provide an export named 'OFFICIAL_CATALOGS'` before any test executes. Assertions at `testing/dry-test.mjs:422-426` also assert the removed constant's shape.
+- Files: `testing/dry-test.mjs` (lines 9-11, 422-426), `src/config.js`
+- Impact: the largest integration suite (1191 lines covering save-dispatch ordering, runs routing, status shapes, hash gating) is dead. Regressions in `src/config.js`/`src/routes.js` ship undetected.
+- Fix approach: swap `OFFICIAL_CATALOGS` for `officialCatalogsFor(officialDefaults())` in the import and assertions; re-run.
 
-**Worker-as-free-TMDB-proxy:**
-- Issue: `/tmdb/search-*` and `/tmdb/preview-discover` (`src/routes.js` lines 538-689) forward arbitrary queries to TMDB using the worker's own bearer token, with no auth or rate limit. The preview endpoint fans out to up to 25 pages x N sources plus collection fetches per request.
-- Files: `src/routes.js` (`tmdbApi`, `handleTmdbSearch`, `handleTmdbPreviewDiscover`), `wrangler.toml` (token as secret)
-- Impact: Abuse exhausts the TMDB API quota tied to the operator's account; catalogs stop generating.
-- Fix approach: Same admin-token gate as above, or Cloudflare WAF rate-limiting rule on `/tmdb/*`.
+**Stale regression suite: `testing/verify-ui.mjs` crashes mid-run**
+- Issue: asserts markup/handlers that no longer exist — `.card-controls`, `.create-list-section`, `.info`, `.card-top`, `w.askOfficialRefresh`, `w.askSimklRefresh`. Current markup uses `.card-head`/`.card-body`/`.name-wrap`; refresh handlers were unified into `askSingleRefresh`. Throws `TypeError: Cannot read properties of null` at `testing/verify-ui.mjs:57`.
+- Files: `testing/verify-ui.mjs`, `src/configure.js`
+- Impact: UI smoke coverage (rename flows, tab rendering, card structure) lost even where jsdom is installed.
+- Fix approach: rewrite selectors/handler names against the current DOM contract, or retire it in favor of the Playwright harnesses in `.audit/` (`r*-verify.cjs`).
 
-**Duplicated logic that must stay in sync (drift risk):**
-- Issue: Three parallel implementations exist by design and are only kept aligned by comments.
-  - Hash: `tmdbContentHash` (`src/config.js`) vs `computeSourceHash` (`scripts/tmdb.mjs`). The two are NOT byte-comparable (different serializations) and never cross-compare: the worker hash gates save-time dispatch, the script hash is stamped onto data files for audit. There is no fill-mode skip (corrected 2026-08-23); a field added to one and not the other still risks silent divergence between save-time diffing and file stamping.
-  - Discover query plan: `buildDiscoverSources` (`scripts/tmdb.mjs` lines 118-173) vs inline copy in `handleTmdbPreviewDiscover` (`src/routes.js` lines 604-658). Comment says "Same source plan" but nothing enforces it.
-  - Simkl defaults: `SIMKL_LISTS` (`src/config.js` lines 64-98) vs `DEFAULT_FILTERS` (`scripts/simkl.mjs` lines 60-84). Editing one silently diverges fallback behavior.
-- Files: as listed
-- Impact: Silent behavioral divergence; preview shows different results than the generated catalog; stale-filter overwrites.
-- Fix approach: Extract the hash and source-plan functions into a shared module importable by both worker and scripts (both already ESM; worker has `nodejs_compat`). At minimum, add a verify-script assertion comparing outputs.
+**Entire local test suite is gitignored**
+- Issue: `.gitignore` excludes `testing/` wholesale. A fresh clone ships only `testing/verify-tmdb.mjs` (also gitignored — actually nothing under testing/ is tracked). Header comments still say "Run: node scripts/dry-test.mjs" (stale path).
+- Files: `.gitignore`, `testing/`
+- Impact: no CI, no fresh-machine verification; the suites exist on one machine only. FUNCTIONAL-AUDIT m8/m9 remain open.
+- Fix approach: un-ignore `testing/`, declare `jsdom` (needed by `testing/verify-ui.mjs`, `testing/verify-tmdb.mjs`) in a package.json, optionally run suites in a GitHub workflow.
 
-**Copy-paste helpers across scripts:**
-- Issue: `arg()`, `chunkArray()`, `postRuns()`, `sleep` are duplicated nearly verbatim in `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`.
-- Files: as listed
-- Impact: Bug fixes (e.g. retry/backoff on `/runs` POST failure) must be applied 4 times.
-- Fix approach: Shared `scripts/lib/common.mjs`.
+**Dead exports kept alive only by a broken test**
+- Issue: `emptyConfig()` (`src/config.js:60`) and `randomTmdbListId()` (`src/config.js:39`) have zero production callers. `emptyConfig` is imported (unused) by the currently-unrunnable `testing/dry-test.mjs:9`.
+- Files: `src/config.js`, `testing/dry-test.mjs`
+- Impact: misleading API surface; blocks clean removal until dry-test is fixed.
+- Fix approach: delete both plus the dry-test import once the suite is repaired.
 
-**Dead secret plumbing:**
-- Issue: `MDBLIST_API_KEY` is declared in `scrape.yml` env and documented in `scripts/scrape.mjs` header, but the DOM-based scraper never reads it ("only used for nothing today").
-- Files: `.github/workflows/scrape.yml` (line 84), `scripts/scrape.mjs` (lines 14-15)
-- Impact: Confusing threat model; secret mounted where unnecessary.
-- Fix approach: Remove from `scrape.yml` env block; keep only in `official.yml` where `official.mjs` actually uses it.
-- **RESOLVED 2026-08-23 (audit m13):** key removed from scrape.yml env with an explanatory comment; scrape.mjs header updated. Still mounted in official.yml where it's genuinely used.
+**`src/configure.js` is a 2057-line monolith**
+- Issue: entire admin UI — reset CSS (~600 lines), four tab renderers, ~74 inline browser functions, dialogs — lives in one exported template-literal string. All inter-element communication goes through inline `onclick="..."` attributes with nested escape layers (`escapeAttr`, `escapeForOnclick`, `\\\''` quoting inside a template literal).
+- Files: `src/configure.js`
+- Impact: any edit risks breaking the escaping choreography; no syntax highlighting/linting of the embedded JS; index-based card identity (`#ocard-${i}`, `pendingDeleteIndex`) breaks silently if render order changes.
+- Fix approach: incremental — extract the CSS block and the pure-JS runtime into separate files served alongside, or accept as-is for a single-operator admin page (current implicit choice). Note the deferred R7/R8/R9/R10 UX roadmap in `UI-AUDIT.md` will all land in this file.
 
-**MDBList API key in query string:**
-- Issue: `fetchAllItems` passes `apikey` as a URL search param (`scripts/official.mjs` line 87).
-- Files: `scripts/official.mjs`
-- Impact: Key can leak into any upstream/proxy access logs. Error messages include response bodies but not URLs, so current leak surface is limited to transport logs.
-- Fix approach: Move to `X-MDbList-Key`-style header if the API supports one; otherwise accept (documented limitation).
+**Duplicated logic that must stay mirrored by hand**
+- Issue: three deliberate cross-file mirrors with no mechanical enforcement:
+  1. Simkl default filters: `SIMKL_LISTS` (`src/config.js:71-105`) vs `DEFAULT_FILTERS` (`scripts/simkl.mjs:60-84`) — byte-identical copies.
+  2. TMDB content hash: `tmdbContentHash()` (`src/config.js:359-383`) vs `computeSourceHash()` (`scripts/tmdb.mjs`) — same field set, stamped onto data files.
+  3. TMDB discover source-plan/sort: `handleTmdbPreviewDiscover` + `sortPreviewItems` (`src/routes.js:650-768`) vs `buildDiscoverSources`/`sortItems` (`scripts/tmdb.mjs`) — preview must match generated output.
+  Client-side id derivation `randomId()` (`src/configure.js:1122`) must also match `randomScraperId()` (`src/config.js:50`).
+- Files: `src/config.js`, `src/routes.js`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`, `src/configure.js`
+- Impact: a change to one side silently diverges preview-from-output or breaks change detection (missed or spurious regenerations).
+- Fix approach: shared module imported by both worker and scripts (worker bundles via `nodejs_compat`; scripts run plain Node ESM) — feasible but touches deploy packaging; otherwise keep the existing loud comments as the guard.
+
+**Error swallowing hides root causes on save**
+- Issue: `handleSaveConfig`'s outer catch returns a bare `{ error: "Save failed." }` (`src/routes.js:428-430`) with no detail and no server log, unlike every other handler which surfaces reasons.
+- Files: `src/routes.js`
+- Impact: a malformed body passing shape-validation but throwing in migration is undiagnosable from the UI.
+- Fix approach: include `e.message` (sanitized) like `handleTmdbPreviewDiscover` does at `src/routes.js:766`.
 
 ## Known Bugs
 
-**Stale-catalog-on-silent-scrape-failure (design tradeoff with blind spot):**
-- Symptoms: A blocked/broken scrape writes nothing (empty-result guard), so the served catalog keeps showing old data indefinitely while `/status` shows failures only if the operator checks.
-- Files: `scripts/scrape.mjs` (`writeCatalog` lines 341-356), `scripts/official.mjs` (`writeCatalog` guard line 196), `scripts/tmdb.mjs` (`items.length > 0` guard line 403)
-- Trigger: mdblist changes its DOM selectors, bot detection starts blocking, or TMDB returns 0 rows for a valid filter combo.
-- Workaround: Watch `/status?page=scraper` manually; debug artifacts on failure (`scrape.yml` upload step).
+**Public catalog fetch has no timeout (regression vs stated convention)**
+- Symptoms: `handleCatalog` fetches GitHub Pages JSON with no `AbortSignal.timeout` (`src/routes.js:184`). Every other outbound worker fetch carries one (M4 fixed TMDB + GH dispatch but missed this — the hottest path).
+- Files: `src/routes.js:184`
+- Trigger: a hung/unresponsive Pages or intermediate connection stalls the Stremio-facing request until the platform kills it, instead of returning the graceful `{ metas: [] }` fallback at line 188.
+- Workaround: none at runtime; platform request limit eventually fires.
+- Fix approach: add `signal: AbortSignal.timeout(15000)` matching `scripts/*` conventions.
 
-**`git pull --rebase -X theirs` push can still fail:**
-- Symptoms: Commit step fails after a successful scrape if another writer pushes between the rebase and the push; run exits non-zero though local files were correct.
-- Files: `.github/workflows/scrape.yml` (lines 99-120), same block in `official.yml`/`simkl.yml`/`tmdb.yml`
-- Trigger: Only matters when the shared concurrency group fails to serialize (see Scaling Limits below).
-- Workaround: Re-run the workflow; next cron heals.
-
-**Second TMDB cron disabled:**
-- Symptoms: TMDB discover lists refresh once daily (01:30 UTC) while scraper/official/simkl refresh twice; the 13:30 UTC line is commented out in `tmdb.yml` line 10.
-- Files: `.github/workflows/tmdb.yml`
-- Trigger: N/A - current state.
-- Workaround: Manual refresh from configure page. Confirm intent or uncomment.
-- **Decision (2026-08-23): kept once-daily intentionally** - owner confirmed the current schedule; manual refresh covers mid-day changes.
-
-**`triggered_by` collapse:**
-- Symptoms: `/status` maps any non-"scheduled" trigger value to "manual" (`src/routes.js`), so a forged `/runs` POST or future trigger types misreport as manual.
-- Files: `src/routes.js`
-- Workaround: None; cosmetic.
-
-**Run-id collisions:**
-- Symptoms: `addRun` ids were `Date.now() + random(1000)`; two runs in the same millisecond could collide. Ids are display-only today, so impact was latent.
-- **RESOLVED 2026-08-23 (audit M3):** run ids now use `crypto.randomUUID()`.
-- Files: `src/routes.js`, `src/config.js` (`addRun`)
-- Workaround: None needed currently.
+**Duplicate scraper URLs collide onto one catalog id**
+- Symptoms: `confirmCreateList` (`src/configure.js:1044-1067`) guards duplicate *names* only. Two lists sharing the same mdblist URL derive the same pinned id via `randomScraperId`/`randomId` (sha256 of URL), so both cards write/read the same `data/<id>.json` and appear twice in the manifest.
+- Files: `src/configure.js:1122-1132`, `src/config.js:50-58`
+- Trigger: paste the same listing URL into two differently-named lists.
+- Workaround: operator discipline.
+- Fix approach: one-line URL-duplicate guard next to the name-clash check.
 
 ## Security Considerations
 
-**Inbound auth (see Tech Debt item 1):**
-- Risk: Full config takeover + unlimited Actions dispatch + run-history poisoning by anonymous users.
+**Unauthenticated admin/control surface (owner-closed decision — recorded, not reopened)**
+- Risk: `/save-config`, `/trigger-refresh`, `/export-config`, `/runs`, `/tmdb/search-*`, `/tmdb/preview-discover`, `/mdblist/official-catalog` accept anonymous traffic; every response sends `Access-Control-Allow-Origin: *` (`src/index.js:9-12`, `src/routes.js:19-22`). Anyone learning the workers.dev URL can rewrite config, fire paid GitHub Actions runs, read the full config, forge status-page history (`POST /runs`, `src/routes.js:552`), or burn TMDB API quota through the preview fan-out (up to 25 pages × N sources per call, `src/routes.js:720-737`).
 - Files: `src/index.js`, `src/routes.js`
-- Current mitigation: None on inbound requests. Workflow inputs ARE sanitized (see below); outbound secrets are handled correctly.
-- Recommendations: Admin shared secret on the four sensitive routes; consider Cloudflare Access as an alternative.
+- Current mitigation: none (deliberate). FUNCTIONAL-AUDIT §6.4 records this as accepted for a private single-operator addon.
+- Recommendations: if posture ever changes, a single shared-secret header checked in `src/index.js` before routing covers all mutating endpoints with ~5 lines; leave catalog serving public.
 
-**TMDB bearer token handling (audited - clean):**
-- Risk: Token leakage into logs/responses.
-- Files: `src/routes.js` (`tmdbApi` lines 525-534), `scripts/tmdb.mjs` (`tmdbFetch` lines 101-111), `.github/workflows/tmdb.yml` (line 71)
-- Current mitigation: Token lives only in `env.TMDB_READ_ACCESS_TOKEN` / `secrets.TMDB_READ_ACCESS_TOKEN`; sent solely in the `Authorization: Bearer` header; never interpolated into URLs, error messages, or console output. Error paths echo only the TMDB *response* body sliced to 200 chars (`src/routes.js` line 531), which does not contain the token. Missing-token path returns a generic config error without echoing any value. Verified: no `console.log` of the token anywhere in the repo.
-- Recommendations: Keep as-is; do not add the token to any thrown Error message in `scripts/tmdb.mjs`.
+**API keys travel in URL query strings**
+- Risk: `?apikey=` to MDBList (`src/routes.js:795`, `scripts/official.mjs:94`) and `client_id` to SIMKL (`scripts/simkl.mjs:48-55`) end up in any upstream/proxy access logs. This is how the vendor APIs work; exposure is limited to key-scoped read access.
+- Files: `src/routes.js`, `scripts/official.mjs`, `scripts/simkl.mjs`
+- Current mitigation: keys live only in Cloudflare/GitHub secrets (`.dev.vars` exists locally, contents never committed); error bodies proxied to the client are truncated to 200 chars (`src/routes.js:610`).
+- Recommendations: none practical while vendors require query-param keys.
 
-**Workflow input sanitization (audited - solid):**
-- Current mitigation: Every `${{ github.event.inputs.* }}` interpolation goes through `tr -cd` char-class whitelists in a dedicated sanitize step BEFORE reaching bash args or `$GITHUB_OUTPUT`: `[a-zA-Z0-9,_-]` for lists/delete_ids (`scrape.yml` lines 70-72), `[a-z,]` for kinds (`simkl.mjs` line 49 / `simkl.yml`), `[a-z0-9,_-]` for slugs (`official.yml` line 51), `[a-z0-9,_-]` + `[a-z_]` for tmdb ids/action (`tmdb.yml` lines 61-63). Defense in depth continues in the scripts: id regexes gate `deleteCatalog`/`writeCatalog` joins (`scripts/scrape.mjs` lines 376-384, `scripts/tmdb.mjs` `ID_RE` line 37 + line 369, `scripts/official.mjs` `SANE_SLUG` line 179, `scripts/simkl.mjs` `SANE_KIND` line 396), and `migrateConfig` enforces `^mdb_scrape_[A-Za-z0-9_-]{1,32}$` (`src/config.js` line 247) blocking path traversal into `data/`.
-- Residual risk: Sanitization strips rather than rejects, so garbage input silently becomes empty/default (e.g. a malformed `action` becomes `scrape` - full re-scrape). Acceptable.
-- Recommendations: None required.
+**Inline-script CSP relies on `'unsafe-inline'`**
+- Risk: the configure page's CSP (`src/routes.js:36`) permits inline scripts/styles because the whole app is one inline blob. The `<`-escaping of the injected state blob (`src/configure.js:9`, `:728`) is correct, and user strings pass through `escapeAttr`/`escapeForOnclick`, but the pattern means any future unescaped interpolation is instantly script injection.
+- Files: `src/routes.js:36`, `src/configure.js`
+- Current mitigation: careful escaping helpers; `frame-ancestors 'none'`, `object-src 'none'`.
+- Recommendations: keep all list-name/slug interpolations routed through the two escape helpers; never interpolate raw values into `onclick` payloads.
 
-**Configure page XSS surface:**
-- Risk: List names/URLs are operator-supplied and rendered via string-concatenated HTML with inline `onclick` handlers (`src/configure.js` `nameEditBlock`, `pickTmdbResult`, `escapeForOnclick`). CSP permits `script-src 'unsafe-inline'` (`src/routes.js` line 36).
-- Files: `src/configure.js`, `src/routes.js` (`html()` CSP)
-- Current mitigation: `escapeAttr` escapes `& " < >`; `</script>` breakout of the embedded state blob is hard-escaped (`src/configure.js` line 14); `escapeForOnclick` handles the attribute-JS-string double context. Since the config is single-operator and only the operator can write it, this is self-XSS unless combined with the unauthenticated `/save-config` hole above - an attacker who can write config could plant a name payload that executes in the operator's browser.
-- Recommendations: Fixing the auth hole closes the realistic exploit chain; longer term, replace inline handlers with delegated listeners and drop `'unsafe-inline'`.
-
-**Secrets inventory (existence only):**
-- `.env` files: none present. Secrets referenced: `GH_TOKEN`, `TMDB_READ_ACCESS_TOKEN`, `MDBLIST_API_KEY`, `SIMKL_CLIENT_ID`, `WORKER_ORIGIN` as GitHub/Cloudflare secrets. KV namespace id in `wrangler.toml` is an identifier, not a credential.
+**Dev stub flag is a prod foot-gun**
+- Risk: `GH_DISPATCH_STUB` makes every dispatch report success without firing (`src/dispatch.js:14-17`). Set on production, saves would "succeed" while catalogs silently never regenerate.
+- Files: `src/dispatch.js`, `.dev.vars` (existence noted only)
+- Current mitigation: comment warns "never set on production"; stub responses carry `stubbed: true`.
+- Recommendations: acceptable; optionally have `buildConfigurePage` badge the UI when the stub is active.
 
 ## Performance Bottlenecks
 
-**Global serialization of all four workflows:**
-- Problem: All crons fire at the SAME minute (01:30 and 13:30 UTC) and share concurrency group `my-list-scrape` (`cancel-in-progress: false`, `queue: max`). Worst case: puppeteer scrape (30 min timeout) head-of-line blocks official/simkl/tmdb refreshes behind it.
-- Files: `.github/workflows/scrape.yml` (lines 38-50), `official.yml` (25-37), `simkl.yml` (25-36), `tmdb.yml` (37-48)
-- Cause: Deliberate - they all write `data/*.json` and POST `/runs` (KV read-modify-write in `addRun`).
-- Improvement path: Stagger cron minutes (e.g. 01:30/01:40/01:50/02:00 UTC) to cut contention while keeping the lock as backstop.
+**No caching on the catalog-serving hot path**
+- Problem: every Stremio catalog request re-fetches the full Pages JSON (`src/routes.js:184`) and re-reads+migrates config from KV (`loadConfig` at `src/routes.js:170`). Pretty-printed data files (`JSON.stringify(out, null, 2)` in all four `scripts/*.mjs` writers) inflate transfer size ~2x.
+- Files: `src/routes.js:169-194`, `scripts/scrape.mjs` (`writeCatalog`), `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`
+- Cause: simplicity-first design; Workers KV read is cheap but the Pages round-trip dominates latency on page-turns.
+- Improvement path: `caches.default` with a short TTL on the Pages fetch, and minified JSON output in the generators. Both are behavior tradeoffs (staleness window) the owner declined to pick during the audit (m5) — revisit if Stremio latency matters.
 
-**Unbounded scraper-list fan-out:**
-- Problem: One save can create arbitrarily MANY enabled lists (count uncapped in `migrateConfig`); a full refresh dispatches all of them into one 30-minute-budget workflow run with per-page sleeps (1.5-3.5 s) plus warm-up navigation.
-- Files: `src/config.js` (`migrateConfig`), `scripts/scrape.mjs` (`main` loop)
-- Cause: No ceiling on `cfg.scraper.lists.length`.
-- Improvement path: Cap list count (e.g. 20) in `migrateConfig`.
-
-**Preview fan-out cost:**
-- Problem: `handleTmdbPreviewDiscover` runs up to 25 pages x up to 4 sources + collection lookups synchronously in the worker per click.
-- Files: `src/routes.js` (lines 587-689)
-- Improvement path: Auth/rate-limit (see security); cache previews keyed by content hash.
-
-**KV read-modify-write per run record:**
-- Problem: `addRun` does get+put per record with no lock (acknowledged in `src/routes.js` line 245 comment for saves; same pattern in `src/config.js` `addRun`). Concurrent writers lose records.
-- Files: `src/config.js` (lines 450-454)
-- Improvement path: Concurrency group mostly serializes legitimate writers today; move runs to Durable Objects only if the group ever loosens.
-- **Decision (2026-08-23, functional audit M5): accepted as-is.** The race was reproduced deterministically in the audit; the shared Actions concurrency group (`queue: max`) prevents it in practice, and the thorough fix (per-post keys + merge-on-read) costs more than a missing diagnostics row justifies for a single-operator system. Revisit only if the concurrency group changes. Full reasoning: `FUNCTIONAL-AUDIT.md` §6.2 M5.
+**TMDB preview endpoint fan-out**
+- Problem: one preview click can issue dozens of sequential TMDB rounds (25 pages × up to 3 OR-sources, plus collection lookups), each bounded at 30s (`src/routes.js:720-737`). Unauthenticated (see Security).
+- Files: `src/routes.js:666-768`
+- Cause: faithful port of the old worker's preview semantics.
+- Improvement path: lower `PREVIEW_PAGES`, or cache previews per content-hash in KV like `handleMdblistOfficialCatalog` already does (`src/routes.js:775-809` — good in-repo pattern to copy).
 
 ## Fragile Areas
 
-**Puppeteer DOM scraping of mdblist.com:**
-- Files: `scripts/scrape.mjs` (selectors at lines 231, 253-264; bot-detection warm-up at lines 173-211)
-- Why fragile: Hardcoded CSS selectors (`.card`, `.idscore.search-score-main`, `a[href^="/movie/"]`) and anti-bot choreography (UA spoofing, homepage warm-up, scroll simulation). Any mdblist redesign or stricter Cloudflare challenge silently yields 0 rows.
-- Safe modification: Never widen the empty-result guard to overwrite files; keep `writeCatalog` returning null on empty. Test selector changes against a saved HTML fixture.
-- Test coverage: None for selectors (requires live site).
+**Save-config diff + dispatch orchestration (`handleSaveConfig`)**
+- Files: `src/routes.js:235-431`
+- Why fragile: one 190-line function hand-rolls change detection for four modules (scraper by `listContentHash`, simkl by JSON.stringify compare, TMDB by hash + strict enable-toggle, official by slug set arithmetic), then sequences up to five dispatches whose order encodes destructiveness (scraper last, deliberately — see comment block at `src/routes.js:327-334`). There is also a TOCTOU window: dispatches fire *before* `saveConfig` persists (`src/routes.js:397`), so a workflow runner starting unusually fast could read the pre-save config from `/export-config` and (for officials) drop the just-added slug at the intersect guard (`scripts/official.mjs:214`). In practice the KV write lands in milliseconds while runners take seconds, and the failure mode is a missed regeneration, never corruption.
+- Safe modification: preserve dispatch-before-persist ordering and the destructive-last rule; extend `testing/save-config.test.mjs` (currently the only green suite covering this path) before touching the diff logic.
+- Test coverage: good — `testing/save-config.test.mjs` (387 lines, ALL PASS) covers regen-on-enable, cleanup dispatches, cap enforcement.
 
-**Catalog regex + pagination contract:**
-- Files: `src/routes.js` (`CATALOG_RE` line 46, skip parse lines 49-51), `scripts/scrape.mjs` (`buildPageUrl` lines 109-120)
-- Why fragile: The `q_page_next`/`q_current_page` encoding mirrors mdblist's generated URLs byte-for-byte; the trailing `skip=N.json` segment rides inside the catalog id match. A Stremio request-shape change or mdblist pagination change breaks silently (empty metas).
-- Safe modification: Change only with captured live URLs as fixtures.
-- Test coverage: Partially covered in `scripts/dry-test.mjs` (gitignored).
+**DOM scraping choreography (`scripts/scrape.mjs`)**
+- Files: `scripts/scrape.mjs:144-336`
+- Why fragile: depends on mdblist.com's exact DOM (`.search-results-list > .card`, `.header.movie-title`, `a[href^="/movie/"]`...) and on bot-detection mood (warm-up homepage visit, randomized scrolls, UA spoofing). Any upstream redesign or stricter challenge breaks scrapes overnight with no code change on our side.
+- Safe modification: keep the warm-up dance intact; use `--debug` artifacts (uploaded by `scrape.yml` on failure) to re-derive selectors.
+- Test coverage: none possible offline; run records on `/status?page=` are the tripwire. Empty-result guard (`scripts/scrape.mjs:344`) prevents bad scrapes from clobbering good data.
 
-**Configure page monolith:**
-- Files: `src/configure.js` (~1770 lines: CSS + HTML + all tab JS in one template literal)
-- Why fragile: Four modules' UI state machines share globals (`state`, `activeModule`, index-based card ids `#card-i`/`#ocard-i`/`#socard-i`/`#tcard-i`); innerHTML-string rendering means any quote-escaping slip breaks silently. The pointerdown rename-commit workaround (lines 873-879) depends on exact DOM timing.
-- Safe modification: Touch one tab's render function at a time; re-run `node scripts/verify-ui.mjs` (drives the real DOM via jsdom).
-- Test coverage: `scripts/verify-ui.mjs` + `scripts/dry-test.mjs` cover rename/pointer flows; both gitignored local-only.
+**Index-keyed UI state (`src/configure.js`)**
+- Why fragile: cards address state by array index (`toggleList(i)`, `pendingDeleteIndex`, `#ocard-${i}`); the rename blur/pointerdown commit already needed a guard for module-switch-with-rename-open (`src/configure.js:993-1002`) and an outside-click capture handler (`src/configure.js:1021-1027`). New per-card controls must repeat the module-dispatch ternaries seen throughout.
+- Safe modification: always re-query the DOM after `rerenderActive()` (innerHTML swap replaces every node — see note at `testing/verify-ui.mjs:135`).
 
-**Seed/heal one-shot KV migration:**
-- Files: `src/config.js` (`seedScraperDefaults`, heal block lines 420-439, `HEALED_KEY`)
-- Why fragile: First-load seeding persists config on READ; a cold KV hit by two concurrent readers can double-write. After healing flips, seed-URL re-adds keep user ids forever - re-triggering healing requires manual KV surgery.
-- Safe modification: Don't reorder the wasSeeded/healed conditions without tracing both branches.
-- Test coverage: Covered in `scripts/verify-tmdb.mjs` config-migration checks.
+**GitHub Actions serialization contract**
+- Files: `.github/workflows/*.yml` (all four)
+- Why fragile: correctness of `addRun`'s read-modify-write and of data commits rests on the shared concurrency group `my-list-scrape` + the `queue: max` feature (2026-05). If GitHub drops/renames `queue: max`, simultaneous crons cancel pending runs (missed refreshes, self-healing next cron). Documented in-workflow and in `src/config.js:472-477`.
+- Safe modification: never split the concurrency group without first fixing the M5 race below.
 
 ## Scaling Limits
 
-**GitHub Actions queue depth:**
-- Current capacity: `queue: max` claims up to 100 pending slots per concurrency group (comments cite the 2026-05 feature).
-- Limit: If the feature is unavailable on the plan or renamed, behavior falls back to default depth 1 - simultaneous crons cancel all but one pending run, losing scheduled refreshes entirely.
-- Files: all four `.github/workflows/*.yml` concurrency blocks
-- Scaling path: Verify `queue: max` takes effect after first simultaneous-cron window; otherwise stagger crons.
+**Run history: KV read-modify-write race (M5 — reproduced, acceptance documented)**
+- Current capacity: 30 records per module (`RUNS_MAX`, `src/config.js:14`), 50 per POST batch (`src/routes.js:558`).
+- Limit: two truly concurrent `POST /runs` interleave get+put and lose one writer's records (`addRun`, `src/config.js:479-492`). Reproduced deterministically during the 2026-08-23 audit; accepted because the shared Actions concurrency group serializes all legitimate writers. Worst case: a missing diagnostics row.
+- Scaling path: unique-key-per-post + capped merge-on-read if the concurrency group ever loosens; Workers KV has no CAS primitive, so cheap fixes don't exist.
 
-**KV value/list-count ceilings:**
-- Current capacity: Config is one JSON blob under key `config`; run history capped at 30/module (`RUNS_MAX`), `/runs` capped at 50 records/request.
-- Limit: Workers KV value cap (25 MiB) and list-count-unchecked growth (see Performance). Manifest grows linearly with enabled lists; Stremio clients refetch it often.
-- Scaling path: Cap list count; split config per module if it ever nears limits.
+**Official lists cap**
+- Current capacity: `MAX_OFFICIAL_LISTS = 20` (`src/config.js:142`), enforced server-side in `migrateOfficial` (`src/config.js:204-220`).
+- Limit: entries past the cap are dropped *silently* on save — the picker UI (`addOfficial`, `src/configure.js:1216-1224`) doesn't check the cap, so list #21 vanishes without feedback.
+- Scaling path: surface a count/warning in the picker; raise the cap consciously (each active slug costs 2 API pulls × 2 cron runs/day).
 
-**Single-worker egress:**
-- Current capacity: Every catalog request fetches `GITHUB_PAGES_BASE/data/<id>.json` fresh from Pages (`src/routes.js` `handleCatalog`) - no cache API usage.
-- Limit: Popular catalogs pay Pages latency per Stremio skip-page; Pages soft rate limits apply.
-- Scaling path: Add `caches.default` around the Pages fetch (data changes only per-cron; 5-10 min TTL safe).
+**Workflow queue depth**
+- Limit: `queue: max` holds 100 pending runs per group; beyond that arrivals are canceled. Irrelevant at current volume (4 workflows × ≤2 crons/day + manual saves).
 
 ## Dependencies at Risk
 
-**puppeteer / puppeteer-extra / stealth plugin:**
-- Risk: Chromium download pinned loosely (`^25.3.0`); stealth plugin lags Chrome fingerprint changes; mdblist bot detection arms race.
-- Impact: Whole scraper module stops producing data.
-- Migration plan: None needed until failures appear; debug artifacts (`--debug`) aid diagnosis.
+**puppeteer-extra 3.3.6 (+ stealth plugin 2.11.2)**
+- Risk: predates Puppeteer v25 (`scripts/package.json` pins `puppeteer ^25.3.0`); upstream hasn't declared v25 support. A puppeteer minor bump could silently break the stealth wrapper and thus the entire scraper (bot detection returns).
+- Impact: `scripts/scrape.mjs` produces nothing; other modules unaffected.
+- Migration plan: pin puppeteer exactly; test one minor bump manually via a dispatched debug run before letting `^` float. Watch item from FUNCTIONAL-AUDIT m10.
 
-**jsdom (undeclared):**
-- Risk: Imported by `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`, `scripts/dry-test.mjs` but present in NO `package.json` (repo root has none; `scripts/package.json` lists only puppeteer family). Resolves from an ambient root-level `node_modules/` install.
-- Impact: Fresh clone cannot run any verification script; CI-less project gives no signal.
-- Migration plan: Add root `package.json` with jsdom as devDependency (or move verify scripts under `scripts/` and declare it there).
-- **Decision (2026-08-23): left undeclared intentionally (audit m8/m9 skipped)** - single-operator project; on a fresh machine run `npm install --no-save --no-package-lock jsdom` at the repo root.
+**jsdom (undeclared)**
+- Risk: required by `testing/verify-tmdb.mjs` / `testing/verify-ui.mjs` but declared in no manifest (no root package.json; `scripts/package.json` has only puppeteer deps). Works on this machine only because it was installed ad hoc during the audit.
+- Impact: test suites fail on any fresh checkout.
+- Migration plan: fold into the "un-ignore testing/" fix above.
 
-**`queue: max` (GitHub Actions feature):**
-- Risk: New platform capability; subject to change/removal.
-- Impact: Scheduled-run loss as described under Scaling Limits.
-- Migration plan: Cron staggering removes reliance.
+Otherwise: zero runtime dependencies in the Worker (platform-provided APIs only — `src/` imports nothing external), which is a deliberate strength.
 
 ## Missing Critical Features
 
-**No inbound authentication (covered above):**
-- Problem: Blocks any public exposure beyond hobby use; currently the biggest gap.
-- Blocks: Sharing the configure URL, multi-operator use, hosting without embarrassment.
+**CI never runs the tests**
+- Problem: all four `.github/workflows/*.yml` are data pipelines; no workflow lints or tests `src/`. Combined with the gitignored/broken suites, nothing verifies changes between "works on my machine" and production.
+- Blocks: confident refactoring of `src/config.js`/`src/routes.js` (the highest-churn files).
 
-**No CI:**
-- Problem: No workflow runs lint/tests on push; verification scripts are manual and gitignored.
-- Files: `.github/workflows/` contains only data-pipeline workflows.
-- Blocks: Regression safety for `src/` changes.
-
-**No structured logging/alerting:**
-- Problem: Worker has zero logging; failures surface only via `/status` (which itself depends on unauthenticated `/runs` posts). No alert when a cron fails repeatedly.
-- Blocks: Noticing silent scrape death without manual checks.
+**Deferred UX state contract (R7) and motion pass (R8)** — tracked in `UI-AUDIT.md`; skeletons/regional retry/field validation agreed but not scheduled. Not blocking; listed so planners know the roadmap lives there, not in code TODOs (the codebase contains zero TODO/FIXME/HACK markers).
 
 ## Test Coverage Gaps
 
-**Worker `src/` has no direct tests:**
-- What's not tested: `src/routes.js` end-to-end (save-config diffing/dispatch ordering, catalog serving fallbacks, status name resolution), `src/index.js` routing.
-- Files: `src/routes.js`, `src/index.js`, `src/dispatch.js`
-- Risk: Save-config's dispatch-order rules (simkl-first/scraper-last/persist-last) and hash-gated regeneration are the most intricate logic in the repo and regress invisibly.
-- Priority: High.
+**`testing/dry-test.mjs` + `testing/verify-ui.mjs` non-functional** — see Tech Debt above. Everything they covered is currently unprotected.
 
-**Live-site scraper selectors:**
-- What's not tested: `scripts/scrape.mjs` `page.evaluate` extraction block.
-- Files: `scripts/scrape.mjs` (lines 251-305)
-- Risk: Breaks unnoticed until catalogs go stale.
-- Priority: Medium (fixture-based smoke test feasible).
+**Preview/generator parity untested**
+- What's not tested: that `handleTmdbPreviewDiscover`'s source-plan and sort (`src/routes.js:650-768`) produce the same ordering/filtering as `scripts/tmdb.mjs` `buildDiscoverItems` — the invariant the preview promises the operator.
+- Files: `src/routes.js`, `scripts/tmdb.mjs`
+- Risk: silent divergence — preview shows X, catalog serves Y.
+- Priority: Medium (one fixture-driven assert comparing both paths on a canned TMDB response would pin it).
 
-**Verify scripts not runnable from clean checkout:**
-- What's not tested: Anything, on machines lacking ambient jsdom (see Dependencies at Risk).
-- Files: `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs`, `scripts/dry-test.mjs`
-- Priority: High (one-line package.json fix).
+**`/mdblist/official-catalog` proxy untested**
+- What's not tested: cache hit/miss, TTL expiry, configured-slug exclusion, non-array upstream shape handling (`src/routes.js:778-823`).
+- Files: `src/routes.js`
+- Risk: Low (small, defensive); a fake-KV unit test is ~30 lines.
+- Priority: Low-Medium.
+
+**Configure-page escaping untested after verify-ui broke**
+- What's not tested: that adversarial list names survive `escapeAttr`/`escapeForOnclick`/state-blob embedding round-trips.
+- Files: `src/configure.js`
+- Risk: XSS regression would be invisible until exploited.
+- Priority: Medium — restore with the verify-ui rewrite.
 
 ---
 
-*Concerns audit: 2026-08-21*
+*Concerns audit: 2026-08-25*

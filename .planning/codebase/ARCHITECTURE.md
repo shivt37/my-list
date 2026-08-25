@@ -1,259 +1,248 @@
-<!-- refreshed: 2026-08-21 -->
+<!-- refreshed: 2026-08-25 -->
 # Architecture
 
-**Analysis Date:** 2026-08-21
+**Analysis Date:** 2026-08-25
 
 ## System Overview
 
-Stremio addon split across two runtimes connected by GitHub Actions dispatch + GitHub Pages data files:
-
 ```text
 ┌────────────────────────────────────────────────────────────────────┐
-│                    Consumers / Operators                            │
-│   Stremio clients          Browser (admin)                          │
-│   (manifest + catalogs)    (configure page)                         │
-└────────┬───────────────────────────┬─────────────────────────────────┘
-         │                           │
-         ▼                           ▼
+│                        Consumers                                    │
+│   Stremio/Nuvio clients          Single owner-admin browser         │
+│   (manifest + catalog JSON)      (/configure control panel)         │
+└────────┬───────────────────────────────┬───────────────────────────┘
+         │                               │
+         ▼                               ▼
 ┌────────────────────────────────────────────────────────────────────┐
-│              Cloudflare Worker  (src/index.js)                      │
-│  Thin fetch-handler router, no scheduled handler                   │
-├──────────────┬───────────────┬──────────────┬──────────────────────┤
-│ routes.js    │ config.js     │ dispatch.js  │ configure.js         │
-│ manifest/    │ KV load/      │ GH Actions   │ single-file admin    │
-│ catalog/     │ migrate/      │ workflow     │ file admin UI        │
-│ status/runs  │ hashes/runs   │ dispatch     │ (HTML+CSS+JS string) │
-└──────────────┴───────┬───────┴──────┬───────┴──────────────────────┘
-                       │              │
-            ┌──────────▼───┐   ┌──────▼───────────────────┐
-            │ KV (STORE)   │   │ GitHub Actions dispatch  │
-            │ config,      │   │ (api.github.com)         │
-            │ runs:*       │   └──────┬───────────────────┘
-            └──────────────┘          │
-                                      ▼
-┌────────────────────────────────────────────────────────────────────┐
-│           GitHub Actions scrapers  (scripts/*.mjs, Node 22)        │
-│  4 independent modules, all in concurrency group `my-list-scrape`  │
-├───────────────┬───────────────┬───────────────┬───────────────────┤
-│ scrape.mjs    │ official.mjs  │ simkl.mjs     │ tmdb.mjs          │
-│ puppeteer DOM │ MDBList API   │ SIMKL v2      │ TMDB /discover    │
-│ of mdblist.com│ (official)    │ calendar API  │ (+ live preview   │
-│               │               │               │  proxy in worker) │
-└───────┬───────┴───────┬───────┴───────┬───────┴─────────┬─────────┘
-        │  write data/<catalog_id>.json │                 │
-        │  POST /runs back to worker    │                 │
-        ▼                               ▼                 ▼
-┌────────────────────────────────────────────────────────────────────┐
-│  Git repo data/ dir → bot commit ("[skip ci]",                     │
-│  git pull --rebase -X theirs) → GitHub Pages                       │
-│  (GITHUB_PAGES_BASE = https://shivt37.github.io/my-list)           │
-└──────────────────────────────┬─────────────────────────────────────┘
-                               │
-                               ▼
-              Worker fetches {GITHUB_PAGES_BASE}/data/<id>.json
-              at request time to serve Stremio catalogs
+│              Cloudflare Worker  (src/, plain JS modules)            │
+│                                                                    │
+│  Router: `src/index.js` (fetch handler, path matching)             │
+│  ├─ Stremio API: `src/routes.js`                                   │
+│  │    /manifest.json · /catalog/<type>/<id>[.json] · /status       │
+│  ├─ Admin API: `src/routes.js`                                     │
+│  │    /configure · /save-config · /export-config                   │
+│  │    /trigger-refresh · /runs                                     │
+│  ├─ Live proxies: `src/routes.js`                                  │
+│  │    /tmdb/search-* · /tmdb/preview-discover                      │
+│  │    /mdblist/official-catalog (KV-cached 10 min)                 │
+│  ├─ Persistence: `src/config.js` (KV binding STORE)                │
+│  ├─ Dispatch: `src/dispatch.js` (GitHub workflow_dispatch API)     │
+│  └─ Admin UI: `src/configure.js` (single template literal:         │
+│       inline CSS + JS, tabs per module, ~2057 lines)               │
+└───────┬──────────────────────────────────┬─────────────────────────┘
+        │ KV read/write                    │ workflow_dispatch POST
+        ▼                                  ▼
+┌────────────────────┐   ┌──────────────────────────────────────────┐
+│ Cloudflare KV      │   │ GitHub Actions (.github/workflows/)       │
+│ (binding STORE)    │   │ scrape.yml · official.yml · simkl.yml     │
+│  config            │   │ tmdb.yml  — all share concurrency group   │
+│  runs:<module>     │   │ my-list-scrape (queue: max)               │
+│  cache:mdblist-*   │   └───────┬──────────────────────────────────┘
+│  healed            │           │ run node script
+└────────────────────┘           ▼
+                        ┌──────────────────────────────────────────┐
+                        │ scripts/*.mjs (Node 22, ubuntu runner)   │
+                        │ scrape.mjs  - puppeteer DOM scraping     │
+                        │ official.mjs - MDBList REST API          │
+                        │ simkl.mjs   - SIMKL v2 calendar API      │
+                        │ tmdb.mjs    - TMDB Discover API          │
+                        │ Each: GET /export-config → generate     │
+                        │ → write data/<id>.json → POST /runs     │
+                        └───────┬──────────────────────────────────┘
+                                │ git commit + push (bot)
+                                ▼
+                        ┌──────────────────────────────────────────┐
+                        │ data/<catalog_id>.json (repo, force-add) │
+                        │ served via GitHub Pages                  │
+                        │ (GITHUB_PAGES_BASE var in wrangler.toml) │
+                        └───────┬──────────────────────────────────┘
+                                │ fetch on every /catalog request
+                                └──► back to Worker catalog handler
 ```
 
 ## Component Responsibilities
 
 | Component | Responsibility | File |
 |-----------|----------------|------|
-| Worker entry/router | Match pathname/method to handler, CORS preflight, root info text | `src/index.js` |
-| Route handlers | Manifest build, catalog serving, status, save/export-config, trigger-refresh, /runs ingest, TMDB search + preview proxies | `src/routes.js` |
-| Config store | KV read/migrate/normalize per module, seed defaults, id generation, content hashes, run history (last 30/module) | `src/config.js` |
-| Workflow dispatcher | Single function that POSTs `workflow_dispatch` to api.github.com (filename from trusted config; no runtime allowlist) | `src/dispatch.js` |
-| Admin UI | Full configure SPA as one template-literal HTML page: scraper/official/simkl/tmdb tabs, save diffing client-side, refresh buttons, TMDB preview (preview-eye rendered on TMDB tab only) | `src/configure.js` |
-| MDBList DOM scraper | Headless Chromium (puppeteer-extra + stealth) scraping mdblist.com listing URLs into `data/mdb_scrape_*.json`; no MDBLIST_API_KEY needed (removed from scrape.yml 2026-08-23) | `scripts/scrape.mjs` |
-| Official lists fetcher | MDBList API cursor pagination into `data/mdboff_<slug>_<movie\|show>.json` | `scripts/official.mjs` |
-| SIMKL arriving-today | SIMKL v2 calendar filter/sort into `data/simkl_arriving_today_<kind>.json` | `scripts/simkl.mjs` |
-| TMDB discover generator | Multi-source AND/OR discover queries into `data/tmdb_discover_*.json`; sourceHash stamped onto output for audit only (no fill-mode skip); failures exit non-zero so the Actions run shows red | `scripts/tmdb.mjs` |
-| Workflows | Cron schedules (01:30/13:30 UTC), input sanitization, bot commit step | `.github/workflows/{scrape,official,simkl,tmdb}.yml` |
-| Dry-run integration tests | Every worker route vs fake KV + stubbed GH fetch/Pages fetch | `scripts/dry-test.mjs` |
-| Module self-checks | TMDB additions, UI smoke via JSDOM | `scripts/verify-tmdb.mjs`, `scripts/verify-ui.mjs` |
+| Worker router | CORS, OPTIONS, URL dispatch to handlers | `src/index.js` |
+| Stremio routes | Manifest build, catalog serving (fetch Pages JSON, slice, map to metas), status page data | `src/routes.js` |
+| Admin routes | Save-config diff + dispatch orchestration, trigger-refresh, run-record ingestion, export-config | `src/routes.js` |
+| TMDB/MDBList proxies | Live search boxes, discover preview, official-list picker feed | `src/routes.js` |
+| Config store | Load/migrate/normalize/save config in KV, run history (last 30/module), content hashes, id generation, seeds/healing | `src/config.js` |
+| Workflow dispatcher | Single choke point for all GitHub Actions dispatches; local-dev stub via `GH_DISPATCH_STUB` | `src/dispatch.js` |
+| Configure page | Full admin UI as one exported string builder (`buildConfigurePage`) — shell, tabs, dialogs, toasts, save/refresh logic | `src/configure.js` |
+| Scraper scripts | Regenerate catalog JSON files from four sources; report runs back to `/runs` | `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs` |
+| Workflows | Cron (01:30/13:30 UTC), input sanitization, bot commit/push of `data/*.json` | `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml` |
 
 ## Pattern Overview
 
-**Overall:** Decoupled producer/consumer pipeline. The worker is stateless-per-request (KV-backed config only) and never touches upstream data sources; scrapers are stateless batch jobs whose output is committed as static JSON files and served through GitHub Pages. Control plane (worker → GitHub dispatch API) is fully separated from data plane (scrapers → git → Pages → worker fetch).
+**Overall:** Serverless request-handler + scheduled batch pipeline ("worker as thin router, Actions as the compute layer"). The Worker never scrapes; it serves pre-generated static JSON fetched from GitHub Pages. All heavy lifting happens in GitHub Actions, which writes results back into the repo as committed JSON files.
 
 **Key Characteristics:**
-- No bundler/build step anywhere — plain ESM on both sides (worker uses `nodejs_compat` flag for `node:crypto`)
-- Catalog identity = filename: every module writes `data/<catalog_id>.json`; worker's `CATALOG_RE` in `src/routes.js` maps `/catalog/<type>/<id>/skip=N.json` straight to a Pages fetch of that id
-- Four fixed modules (scraper / official / simkl / tmdb), each with its own config section, KV runs key, workflow file, and manifest naming rules
-- All cross-runtime mutation flows through one chokepoint: `dispatchScraperWorkflow()` in `src/dispatch.js`
-- Defensive normalization at every trust boundary: workflow inputs sanitized in bash (`tr -cd` whitelists), CLI args regex-whitelisted in scripts, KV values re-normalized on every `loadConfig()`
+- Four independent catalog "modules" (scraper, official, simkl, tmdb) share one config shape `{ scraper|official|simkl|tmdb: { lists: [] } }` and one save endpoint.
+- Data plane is fully decoupled from control plane: saving config never writes catalog data directly — it dispatches workflows that regenerate files asynchronously (minutes later).
+- Catalog ids are namespaced by prefix (`mdb_scrape_*`, `mdboff_<slug>_<movie|show>`, `simkl_arriving_today_<kind>`, `tmdb_discover_<movie|series>_<8 base36>`); the prefix routes run-history keys (`runsKeyFor`, `src/config.js:18`) and selects the row-to-meta mapper (`handleCatalog`, `src/routes.js:169`).
+- Everything is plain JavaScript ES modules — no framework, no TypeScript, no bundler for the Worker.
 
 ## Layers
 
-**Router layer:**
-- Purpose: URL/method dispatch only, zero business logic
+**Routing layer:**
+- Purpose: Match pathname/method to a handler; CORS preflight.
 - Location: `src/index.js`
-- Contains: pathname matching incl. `CATALOG_RE`, CORS OPTIONS handling
-- Depends on: `routes.js` handlers
-- Used by: Cloudflare runtime (`wrangler.toml` `main = "src/index.js"`)
+- Depends on: `src/routes.js`
+- Used by: Cloudflare runtime
 
-**Handler layer:**
-- Purpose: Stremio-facing endpoints + admin endpoints + run-record ingestion
+**API/handler layer:**
+- Purpose: Manifest/catalog/status (Stremio contract) + save/export/refresh/runs (admin) + live proxies.
 - Location: `src/routes.js`
-- Contains: `buildManifest`, `handleCatalog`, `handleStatus`, `handleSaveConfig`, `handleExportConfig`, `handleTriggerRefresh`, `handleRunsPost`, `handleTmdbSearch`, `handleTmdbPreviewDiscover`, per-module row→meta mappers
-- Depends on: `config.js`, `dispatch.js`, `configure.js`
-- Used by: `index.js`
+- Depends on: `src/config.js`, `src/dispatch.js`, `src/configure.js`
+- Used by: `src/index.js`; scripts call `/export-config` and POST `/runs`
 
-**Config/state layer:**
-- Purpose: single source of truth in KV key `config`; also stores `runs:scraper|official|simkl|tmdb` (max 30 each) and one-shot `healed` marker
+**Persistence/domain layer:**
+- Purpose: The only code that touches KV. Normalization/migration is the trust boundary for all persisted config (regex-guarded ids block path traversal, capped arrays, coerced fields).
 - Location: `src/config.js`
-- Contains: `loadConfig`/`saveConfig`, `migrateConfig` (+ per-module migrators), seed constants (`SEED_LISTS`, `OFFICIAL_LISTS`, `SIMKL_LISTS`), id generators, `listContentHash`/`tmdbContentHash`, `addRun`/`getRuns`
-- Depends on: `node:crypto` only
-- Used by: `routes.js`, imported directly by `scripts/dry-test.mjs`
+- Contains: `loadConfig`/`saveConfig`, `migrateConfig` + per-module normalizers, seed constants (`SEED_LISTS`, `OFFICIAL_LISTS`, `SIMKL_LISTS`), `listContentHash`/`tmdbContentHash`, `addRun`/`getRuns`, id generators.
+- Used by: `src/routes.js`
 
-**Dispatch layer:**
-- Purpose: fire-and-forget GitHub Actions triggers; returns `{ dispatched, reason }`, never throws
+**Dispatch adapter:**
+- Purpose: Wrap the GitHub `workflow_dispatch` REST call; returns `{ dispatched, reason }` instead of throwing so callers can convert failures into HTTP error responses.
 - Location: `src/dispatch.js`
-- Depends on: env `GH_TOKEN`, `GH_REPO`, `GH_REF`; outbound fetch bounded by `AbortSignal.timeout(15000)` (M4, 2026-08-23)
-- Used by: `routes.js` (save-config, trigger-refresh)
+- Used by: `src/routes.js`
 
-**Presentation layer (worker-rendered):**
-- Purpose: admin SPA served at `/configure`
-- Location: `src/configure.js` — `buildConfigurePage(origin, config)` returns one HTML string with inline CSS + JS; client JS calls back into worker endpoints (`/save-config`, `/trigger-refresh`, `/tmdb/search-*`, `/tmdb/preview-discover`)
-- Used by: `routes.js` via `configureResponse()`
+**Presentation layer (server-rendered):**
+- Purpose: Emit the entire `/configure` SPA as one HTML string with embedded initial-state JSON (`let state = ${initial}`, escaped `<` → `<`, `src/configure.js:9`).
+- Location: `src/configure.js`
+- Used by: `routes.js#configureResponse`
 
-**Batch-job layer:**
-- Purpose: regenerate catalog data files on cron or manual dispatch
-- Location: `scripts/{scrape,official,simkl,tmdb}.mjs`
-- Contains: each module exports injectable `main({ fetchCfg, write, recordRuns, ... })` so `dry-test.mjs` can drive them without network; shared shape = fetch config from `${WORKER_ORIGIN}/export-config` → hit upstream → write `data/<id>.json` → POST runs to `${WORKER_ORIGIN}/runs`
-- Depends on: worker HTTP API; puppeteer (scrape only)
-- Used by: GitHub Actions workflows
-
-**Orchestration layer:**
-- Purpose: schedule, sanitize inputs, commit data
-- Location: `.github/workflows/*.yml`
-- Contains: identical commit recipe in all four: `git add -f 'data/*.json'` under `if: always()`, bot identity `my-list-bot`, `git pull --rebase -X theirs`, `git push`
+**Batch pipeline (out-of-process):**
+- Purpose: Regenerate catalog data files; runs only in CI or locally via `node scripts/*.mjs`.
+- Location: `scripts/*.mjs`, orchestrated by `.github/workflows/*.yml`
+- Depends on: Worker's `/export-config` (config source of truth), Worker's `/runs` (run history sink)
 
 ## Data Flow
 
-### Primary request path (Stremio catalog)
+### Primary Request Path (Stremio catalog read)
 
-1. Stremio requests `/catalog/movie/mdboff_popular_movie/skip=100.json` — matched by `CATALOG_RE` (`src/routes.js:46`) in `src/index.js:46-52`
-2. `handleCatalog` loads config from KV, resolves which module owns the catalog id, picks the matching `rowToMeta{,_Official,_Simkl,_Tmdb}` mapper (`src/routes.js:169-194`)
-3. Fetches `{env.GITHUB_PAGES_BASE}/data/<catalogId>.json`; any failure or unknown id returns `{ metas: [] }` with 200 (a stale request must not break the chain)
-4. Slices `skip..skip+100`, returns Stremio `{ metas }`
+1. Client requests `/catalog/movie/mdboff_popular_movie/skip=100.json` (`src/index.js:46`, regex `CATALOG_RE` in `src/routes.js:46`)
+2. `handleCatalog` loads config from KV, resolves which module owns the id, picks the matching mapper (`rowToMeta` / `rowToMetaOfficial` / `rowToMetaSimkl` / `rowToMetaTmdb`) (`src/routes.js:169-175`)
+3. Fetches `https://shivt37.github.io/my-list/data/<id>.json` (GH Pages); unknown id, disabled module, non-OK response, or fetch throw all return `{ metas: [] }` with 200 — never 404 the chain (`src/routes.js:180-189`)
+4. Slices rows `[skip, skip+100]`, maps to Stremio metas (`src/routes.js:191-193`)
 
-### Save/configure flow
+### Control Plane Path (config save → regeneration)
 
-1. Browser tab in `src/configure.js` collects edits, POSTs full config to `/save-config`
-2. `handleSaveConfig` (`src/routes.js:235`) diffs incoming vs current: scraper lists via `listContentHash`, simkl via enabled+filter compare, tmdb via `tmdbContentHash`; computes adds/removes/dispatches
-3. Dispatch order is deliberate — simkl first, scraper last, tmdb last (`src/routes.js:302-344`): the scraper can be destructive (`scrape_delete`), so it stays adjacent to the persist; any dispatch failure returns 502 **before** `saveConfig()` writes KV (no partial state)
-4. On all dispatches accepted → `saveConfig()` persists; response reports changed/added/removed per module
+1. Operator edits state in `/configure`; `buildConfig()` serializes client state (`src/configure.js:1885`), `saveAll()` POSTs to `/save-config` (`src/configure.js:1923`)
+2. `handleSaveConfig` validates body shape, runs incoming through `migrateConfig` (normalize/trust boundary) (`src/routes.js:235-247`)
+3. Diffs incoming vs current per module: scraper lists by `listContentHash`, simkl by enabled+filter compare, official by slug set + strict OFF→ON toggles, tmdb by `tmdbContentHash` plus toggle-on rescue (`src/routes.js:249-319`)
+4. Dispatches workflows in deliberate order — simkl, then official regen, then official delete-cleanup, then scraper (potentially destructive `scrape_delete`), then tmdb. Any dispatch failure aborts before persist (502), so no config write happens unless every dispatch was accepted (`src/routes.js:335-391`)
+5. Only after all dispatches accepted: `saveConfig` persists to KV (`src/routes.js:397`)
+6. GitHub Actions picks up the dispatch, sanitizes inputs through char-class whitelists, runs the script, commits `data/*.json` as `my-list-bot` with `git pull --rebase -X theirs` (`scrape.yml` commit step)
+7. Next `/catalog` request serves the regenerated file from Pages
 
-### Refresh/regeneration flow (control plane)
+### Telemetry Path (run records)
 
-1. Cron line in workflow YAML or operator button → `POST /trigger-refresh` (page-scoped variants for official/simkl/tmdb) or direct `workflow_dispatch`
-2. `dispatchScraperWorkflow` (`src/dispatch.js`) POSTs to `repos/{GH_REPO}/actions/workflows/<file>/dispatches`, expects 204; the filename comes from trusted env vars/constants (no regex allowlist exists in code - corrected 2026-08-23)
-3. Workflow sanitizes inputs in bash (`tr -cd` char-class whitelists) before passing to the Node script
-4. Script pulls its own config live from `${WORKER_ORIGIN}/export-config` (worker is source of truth for enabled lists, filters, renamed names)
-5. Scrapes/fetches upstream → writes `data/<catalog_id>.json` (empty-result guard: do NOT overwrite last good file with empty — except `simkl.mjs` where an empty airing-day is legitimate)
-6. POSTs run records (chunks of ≤50) to `/runs` → `runsKeyFor()` (`src/config.js:18`) routes by id prefix (`mdboff_`/`simkl_`/`tmdb_`/other) to the right KV runs key
-7. Commit step (`if: always()`): force-add data, `[skip ci]` message, `git pull --rebase -X theirs` (regenerated throwaway data wins conflicts), push → GitHub Pages updates
-
-### Status/readback flow
-
-1. `/status?page=official|simkl|tmdb` reads corresponding `runs:*` KV list, resolves display names through current config so operator renames show up (`src/routes.js:196-233`)
-2. Timestamps rendered IST via `toIST()`
-
-### TMDB preview flow (live, bypasses regeneration)
-
-1. Configure page calls `/tmdb/search-keyword|company|collection` or POSTs `/tmdb/preview-discover`
-2. Worker proxies api.themoviedb.org directly with `TMDB_READ_ACCESS_TOKEN`, replicating the exact source plan of `buildDiscoverSources` in `scripts/tmdb.mjs` (`sortPreviewItems` mirrors `sortItems`), capped at 25 pages × 20 items
+1. Script finishes a list → POSTs batches of ≤50 run records to `/runs` (`postRuns` in `scripts/scrape.mjs:86`)
+2. `handleRunsPost` sanitizes each record independently (one malformed record skipped, valid siblings kept) and calls `addRun` (`src/routes.js:552-581`)
+3. `addRun` does read-modify-write on `runs:<module>` keyed by catalog-id prefix, unshift + cap at 30 (`src/config.js:479-492`)
+4. `/status?page=<module>` reads the matching key, resolves display names back through config, renders IST timestamps (`src/routes.js:196-233`)
 
 **State Management:**
-- Config: single KV key `config` (JSON), normalized through `migrateConfig` on every read; seeds written back on first-ever load; one-shot id healing gated by `healed` key
-- Run history: four append-front KV lists capped at 30 (`RUNS_MAX`)
-- Client UI: one plain module-level `let state` object shared by all tabs, re-rendered per tab via `rerenderActive()`; accent color and active module persisted in localStorage (`mylist_accent`, `mylist_active_module`)
+- Server state lives entirely in Cloudflare KV under four kinds of keys: `config` (whole config as one JSON blob), `runs:scraper|official|simkl|tmdb`, `cache:mdblist-official` (10-min TTL picker cache), `healed` (one-shot migration flag). See `src/config.js:9-15` and `src/routes.js:775`.
+- Client state is a single module-level `state` object in the configure page's inline JS, hydrated from server-rendered JSON; re-render happens through per-module `renderScraper()/renderOfficial()/renderSimkl()/renderTmdb()` functions writing into `#tabHost` (`src/configure.js:683, 729, 867, 1135, 1272, 1453`). Accent color persists in `localStorage`.
 
 ## Key Abstractions
 
-**Catalog id namespaces** (identity = data filename):
-- `mdb_scrape_<8 chars>` — seeded ids pinned forever; derived from first 8 hex of sha256(url) via `randomScraperId` (`src/config.js:43`)
-- `mdboff_<slug>_<movie|show>` — 6 fixed official catalogs (`OFFICIAL_CATALOGS`, `src/config.js:132`)
-- `simkl_arriving_today_<series|anime>` — 2 fixed kinds (`SIMKL_CATALOGS`, `src/config.js:100`)
-- `tmdb_discover_<movie|series>_<8 base36>` — one list = one catalog, media type baked into id (`randomTmdbListId`, `src/config.js:32`)
+**Catalog id namespaces:**
+- Purpose: One string identifies a catalog everywhere — manifest entry, data filename (`data/<id>.json`), run-history routing, refresh targeting.
+- Examples: `src/config.js:32` (`tmdbCatalogId`), `src/config.js:149` (`officialCatalogsFor` builds `mdboff_<slug>_<movie|show>` pairs), `src/config.js:107` (`SIMKL_CATALOGS`)
+- Pattern: Prefix-based polymorphism instead of a class hierarchy.
 
-**Module record shapes** (all under one config object `{ scraper, official, simkl, tmdb: { lists: [] } }`):
-- scraper: `{ id, name, url, type, maxPages, enabled }`
-- official: `{ slug, name, enabled }` (fixed slugs, toggle-only)
-- simkl: `{ slug, name, enabled, filter: { rating_source, rating_filter_enabled, exclude_genres, include_countries, exclude_countries, rating_tiers[] } }`
-- tmdb: `{ discoverListId, name, mediaType, sort, enabled, includeModes{genre,keyword,company,collection}, include*/exclude* id arrays + parallel *Names arrays (UI-only) }`
+**Content hashes (change detection):**
+- Purpose: Decide which lists a save must regenerate. Hash covers only fields that change scraped output; `name` deliberately excluded so renames never re-scrape.
+- Examples: `listContentHash` (`src/config.js:349`), `tmdbContentHash` (`src/config.js:359`) — the latter mirrors `computeSourceHash` in `scripts/tmdb.mjs`; keep both sides in sync when editing fields.
+- Pattern: Shared hash function on both sides of the worker/script boundary, stamped onto data files as `sourceHash` for audit.
 
-**Injectable main():** every script's `main({...})` takes its IO functions as parameters (`fetchCfg`, `write`, `recordRuns`, `fetchApi`, ...) — the seam `scripts/dry-test.mjs` and self-checks use. `isMain` guards differ per file (`resolve(argv[1])` vs `pathToFileURL` comparison in `tmdb.mjs`).
+**Config migration as trust boundary:**
+- Purpose: Every read AND every write of config passes through `migrateConfig`/normalizers — corrupted KV, hostile saves, and legacy shapes all converge on one normalized form.
+- Examples: `migrateConfig` (`src/config.js:269`), `migrateOfficial` (`src/config.js:204`, sane-slug regex + cap 20), `normalizeTmdbList` (`src/config.js:299`, regex-guarded ids), `normalizeSimklList` (`src/config.js:242`)
+- Pattern: Parse-don't-validate; ids regexes double as path-traversal defense for `data/` joins in scripts.
 
-**Content hashes:** `listContentHash` (scraper) and `tmdbContentHash` deliberately exclude `name` — renaming a list changes only the manifest, never triggers a re-scrape/regenerate. `computeSourceHash` in `scripts/tmdb.mjs` mirrors `tmdbContentHash` field-for-field so stored data files carry the fingerprint.
+**Row-to-meta mapper family:**
+- Purpose: Convert each module's distinct item shape into the common Stremio meta object.
+- Examples: `src/routes.js:118-167` (`rowToMeta`, `rowToMetaOfficial`, `rowToMetaSimkl`, `rowToMetaTmdb`)
+- Pattern: Plain functions selected by ownership lookup in `handleCatalog`; new module = new mapper + a branch in the lookup chain.
+
+**Workflow dispatch descriptor:**
+- Purpose: One dispatcher signature covers all four workflows; callers pass either the scraper default (`lists`/`action`/`deleteIds`) or an explicit `{ workflow, inputs }` object matching that workflow's declared inputs.
+- Examples: `dispatchScraperWorkflow(env, {...})` (`src/dispatch.js:10`)
+- Pattern: Single adapter; workflow-file names also exported as constants in `src/routes.js:15-17` and overridable via env vars (`GH_OFFICIAL_WORKFLOW` etc.).
 
 ## Entry Points
 
-**Cloudflare Worker fetch handler:**
-- Location: `src/index.js` (`export default { fetch }`), configured by `wrangler.toml`
-- Triggers: Stremio clients, browser admin page, scraper scripts (config + run posts)
-- Responsibilities: routing, CORS, nothing else
+**Worker fetch handler:**
+- Location: `src/index.js:21` (`export default { async fetch }`)
+- Triggers: Any HTTPS request to the deployed worker
+- Responsibilities: CORS preflight, root info text, route table (exact paths + two regexes), 404 fallback
 
-**GitHub Actions workflows (schedule + workflow_dispatch):**
-- Locations: `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml`
-- Triggers: cron `30 1,13 * * * UTC` (tmdb currently has 13:30 commented out), manual dispatch from worker or GitHub UI
-- Responsibilities: input sanitization, secret injection, running the script, committing data
+**Scraper script mains:**
+- Location: `scripts/scrape.mjs:371` (`main()`), analogous in `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`
+- Triggers: Workflow `schedule` crons (01:30/13:30 UTC; tmdb.yml currently only 01:30) and `workflow_dispatch`
+- Responsibilities: Fetch config from `/export-config`, regenerate requested catalogs, write `data/*.json`, POST run records
 
-**CLI (local/testing):**
-- `node scripts/scrape.mjs --lists=a,b --action=scrape_delete --delete-ids=c --debug`
-- `node scripts/official.mjs --slugs=...`, `node scripts/simkl.mjs --kinds=...`, `node scripts/tmdb.mjs --ids=... --action=generate|delete`
-- Tests: `node scripts/dry-test.mjs`, `node scripts/verify-tmdb.mjs`, `node scripts/verify-ui.mjs`
+**Workflows:**
+- Location: `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml`
+- Triggers: Cron + manual dispatch
+- Responsibilities: Checkout, Node 22 setup, `npm ci` in `scripts/`, char-class input sanitization step, script invocation, always-run commit/push of data files
+
+**Tests/self-checks:**
+- Location: `testing/dry-test.mjs` (full route suite vs fake KV + stubbed fetch), `testing/save-config.test.mjs` (regen-on-enable regressions), `testing/verify-tmdb.mjs` (module self-check incl. generator source-plan), `testing/verify-ui.mjs` (JSDOM render check of the built page)
 
 ## Architectural Constraints
 
-- **Threading:** Worker is single-threaded per-request (standard Workers model). Scripts are sequential per target list with `sleep` jitter between pages/lists; only TMDB collection fetches use `Promise.allSettled`.
-- **Global state:** None in the worker beyond KV. Scripts keep module-level constants only. Test seam: none built in — no `env.GH_FETCH` exists anywhere; `scripts/dry-test.mjs` temporarily swaps global `fetch` around dispatch calls instead (see its `withFetch` helper).
-- **Workflow serialization:** All four workflows share concurrency group `my-list-scrape`, `cancel-in-progress: false`, `queue: max` — required because they race on (a) the KV read-modify-write in `addRun` and (b) the same `data/` directory in git.
-- **Commit conflict policy:** `git pull --rebase -X theirs` everywhere — data files are treated as disposable regenerated artifacts, never hand-edited; newest regeneration wins.
-- **KV consistency:** `handleSaveConfig` read-modify-write has no lock — concurrent saves can clobber; explicitly accepted for a single-operator admin page (comment at `src/routes.js:244`).
-- **No scheduled worker handler:** cron lives solely in workflow YAML lines, edited on github.com.
-- **Path traversal defense in depth:** id regexes in `migrateConfig` (`/^mdb_scrape_[A-Za-z0-9_-]{1,32}$/`, `src/config.js:247`), per-script arg whitelists (`ID_RE`, `SANE_SLUG`, `SANE_KIND`), and bash `tr -cd` sanitization before args ever reach Node.
-- **Runtime compat:** worker needs `compatibility_flags = ["nodejs_compat"]` (`wrangler.toml`) for `node:crypto`.
+- **Threading:** Single-threaded request handling per isolate. The preview endpoint can issue dozens of sequential paged TMDB rounds bounded by `AbortSignal.timeout(30000)`; outbound dispatches bound at 15s (`src/dispatch.js:36`), MDBList proxy at 20s (`src/routes.js:797`).
+- **Global serialization via Actions:** All four workflows share one concurrency group `my-list-scrape` with `queue: max`, `cancel-in-progress: false`. This is load-bearing: it serializes writers to both `data/` commits and the KV `addRun` read-modify-write (documented in each yml and in `src/config.js:472-477`). Do not give a workflow its own group without fixing the KV race first.
+- **Save ordering invariant:** Dispatch-before-persist with destructive-action-last ordering (`src/routes.js:325-334`). A failed dispatch must leave KV untouched; the scraper dispatch must stay adjacent to the persist because it can delete data files.
+- **No auth beyond obscurity:** `/save-config`, `/trigger-refresh`, `/runs` have no authentication — single-operator product decision (see `PRODUCT.md`). Do not expose this worker publicly to untrusted parties.
+- **Read-modify-write races (accepted):** `handleSaveConfig` has no lock (concurrent saves clobber; noted `src/routes.js:244`); `addRun` can lose records under true simultaneous writes (mitigated only by the Actions group). Accepted for single-operator scale.
+- **Data files are artifacts, not source:** `data/*.json` is gitignored locally but force-added (`git add -f`) by bot commits; local clones only carry `.gitkeep`. Never hand-edit them.
+- **Worker never talks to MDBList's site/API for catalogs:** catalog bytes come exclusively from GH Pages; MDBLIST_API_KEY reaches only `official.yml` and the picker proxy.
 
 ## Anti-Patterns
 
-### Monolithic generated-UI file
+### Monolithic template-literal UI
 
-**What happens:** `src/configure.js` is a single ~1680-line file mixing CSS tokens, layout CSS, HTML shell, and vanilla-JS tab logic inside nested template literals.
-**Why it's a problem here:** any edit risks breaking string interpolation/escaping (note the `<` hard-escaping near the top of `buildConfigurePage`; the duplicated server-side `escapeAttr` copy was removed 2026-08-23 — only the client copy remains).
-**Do this instead:** follow existing convention when extending — add a new `renderXxx()` tab function and register it in `rerenderActive()` (`src/configure.js:861`); do not extract files (no bundler exists to recombine them).
+**What happens:** The entire admin SPA (~2050 lines of CSS + HTML + JS) lives inside one exported template literal in `src/configure.js`, with behavior wired via inline `onclick="..."` attributes referencing global functions defined in the same literal.
+**Why it's wrong (by conventional standards):** No modules, no type checking, hard to test in isolation (tests resort to JSDOM parsing of the emitted string), easy to break quoting/escaping between layers.
+**Do this instead:** This is a deliberate design choice for a zero-build single-file deployment (documented in `PRODUCT.md`). When touching it: keep new markup in the existing tab-render-function pattern (`renderScraper` style, injecting into `#tabHost`), escape anything interpolated with `escapeAttr`/`<` escaping, and do not introduce a bundler/framework without an explicit owner decision. If a change grows large, prefer extracting another `renderXxxTabHtml` function within the same file.
 
-### Duplicated logic across worker and scripts
+### Duplicated hash/logic across worker and scripts
 
-**What happens:** TMDB source-plan/sort logic exists twice (`handleTmdbPreviewDiscover` in `src/routes.js:587` vs `buildDiscoverSources`/`sortItems` in `scripts/tmdb.mjs`); hash logic mirrored (`tmdbContentHash` vs `computeSourceHash`); simkl default filters duplicated verbatim in `src/config.js` (`simklDefaults`) and `scripts/simkl.mjs` (`DEFAULT_FILTERS`).
-**Why it's a problem here:** the two sides cannot import each other (different runtimes/deps), so drift risk is real; comments explicitly call out "mirrors" obligations.
-**Do this instead:** when changing any of these, update BOTH copies in the same change and run `node scripts/verify-tmdb.mjs` / `dry-test.mjs`.
-
-### Silent-failure JSON APIs returning 200-empty
-
-**What happens:** `handleCatalog` swallows Pages fetch errors and unknown ids into `{ metas: [] }` 200s.
-**Why intentional:** a stale catalog request after a disable must not break Stremio rendering.
-**Do this instead:** keep this behavior for catalog routes; debug via `/status` run history, not error surfaces.
+**What happens:** `tmdbContentHash` (`src/config.js:359`) must mirror `computeSourceHash` in `scripts/tmdb.mjs`; sane-slug regex exists in both `migrateOfficial` (`src/config.js:144`) and `scripts/official.mjs`.
+**Why it's wrong:** Silent drift — a field added on one side only makes saves stop dispatching (or dispatch forever) without any error.
+**Do this instead:** When changing hashed fields or slug rules, grep both sides (`Grep pattern: computeSourceHash|SANE_SLUG|listContentHash`) and update together; comments at each site name the mirror.
 
 ## Error Handling
 
-**Strategy:** fail soft on reads (empty results, never 500 to Stremio), fail loud and early on writes (save rejected with 502 before any persist if a dispatch fails), per-item try/catch in batch jobs with run-record capture.
+**Strategy:** Fail soft on the read path (never break a Stremio chain), fail loud-and-reject on the write path (no partial config states).
 
 **Patterns:**
-- Dispatch result object pattern: `{ dispatched: bool, reason?: string }` — callers map failures to 501/502 with the reason embedded (`src/routes.js:317,328,342,474`)
-- Batch job run record: every list produces a run entry even on failure (`status`, `error_message` sliced to 500 chars) posted to `/runs`; process exit code 1 if anything failed
-- Empty-output guard: scrapers refuse to overwrite a good data file with an empty scrape (all except simkl, documented exception)
-- KV corrupt value tolerated: `loadConfig` catches parse errors and falls back to seeds (`src/config.js:359`)
-- Worker-wide catch-alls return generic messages (`"Save failed."`, `"Failed to record runs."`) to avoid leaking internals
+- Catalog serving: any failure (unknown id, disabled module, non-OK fetch, JSON parse throw) → `{ metas: [] }` with 200 (`src/routes.js:180-189`)
+- KV reads: corrupt/non-array values fall back to empty/default rather than throwing (`loadConfig` `src/config.js:385-399`, `getRuns` `src/config.js:494-501`, picker cache read `src/routes.js:786-791`); best-effort cache writes swallow errors (`src/routes.js:805`)
+- Save path: invalid body → 400; any dispatch rejection → 502 with reason and NO persist (`src/routes.js:335-391`); unexpected throw → generic 500 `"Save failed."` (`src/routes.js:428-430`)
+- Dispatcher returns result objects (`{ dispatched: false, reason }`) instead of throwing; caller maps to HTTP codes (`src/dispatch.js:42-45`)
+- Run ingestion: per-record try/catch isolation — one bad record never drops its batch siblings (`src/routes.js:565-581`)
+- Secrets: missing token checked up front with actionable message (`tmdbTokenOrError` `src/routes.js:593`, `MDBLIST_API_KEY` guard `src/routes.js:779`, `dispatchScraperWorkflow` guard `src/dispatch.js:19`)
+- Local dev without GitHub secrets: `GH_DISPATCH_STUB` env flag makes saves succeed with logged-not-fired dispatches (`src/dispatch.js:14-17`); never set in production
 
 ## Cross-Cutting Concerns
 
-**Logging:** `console.log/warn/error` in scripts (GitHub Actions log stream); worker has none (responses are the log). Debug dumps (HTML + screenshots) behind `--debug` flag in `scrape.mjs`, uploaded as artifacts.
+**Logging:** `console.log` only where meaningful — dispatch stub logging in `src/dispatch.js:15`; scripts log progress to Actions stdout. No structured logger.
 
-**Validation:** layered — bash char-class sanitize → script arg regex allowlist → `migrateConfig`/`normalizeSimklList`/`normalizeTmdbList` field coercion on KV load → upstream URL sanity checks before scraping (`scrape.mjs:425-437`).
+**Validation:** Centralized in `migrateConfig` + per-module normalizers (`src/config.js`); workflow inputs additionally sanitized by bash `tr -cd` whitelists before reaching scripts (each yml's "Sanitize workflow inputs" step) — defense-in-depth against shell injection.
 
-**Authentication:** none on worker endpoints (single-operator assumption; CORS `*`). GitHub token (`GH_TOKEN` secret) gates dispatches; workflow `permissions: contents: write` gates commits; upstream API keys arrive as repo secrets (`MDBLIST_API_KEY`, `SIMKL_CLIENT_ID`, `TMDB_READ_ACCESS_TOKEN`, `WORKER_ORIGIN`). `MDBLIST_API_KEY` is currently unused by `scrape.mjs` (DOM-based scraping) but still wired through the workflow.
+**Authentication:** None on endpoints (single-operator). Secrets (`GH_TOKEN`, `MDBLIST_API_KEY`, `SIMKL_CLIENT_ID`, `TMDB_READ_ACCESS_TOKEN`, `WORKER_ORIGIN`) are Cloudflare Worker secrets / GitHub repo secrets; `.dev.vars` exists locally (presence only — contents not inspected). Non-secret vars live in `wrangler.toml` `[vars]` (`GITHUB_PAGES_BASE`, `GH_REPO`, workflow filenames).
+
+**CORS/security headers:** Wide-open CORS (`Access-Control-Allow-Origin: *`) on everything; the HTML page carries a strict CSP (`src/routes.js:36`) restricting connect-src to 'self', frame-ancestors none, plus `nosniff` everywhere.
 
 ---
 
-*Architecture analysis: 2026-08-21*
+*Architecture analysis: 2026-08-25*
