@@ -2,7 +2,7 @@
   "catalog_id": "tmdb_discover_movie_hcklknam",
   "name": "Marvel Universe - Movies",
   "type": "movie",
-  "scraped_at": 1787630791669,
+  "scraped_at": 1787644964149,
   "sourceHash": "5fe286dfe3e6a497",
   "items": [
     {
@@ -927,64 +927,6 @@
       "video": false,
       "vote_average": 7.664,
       "vote_count": 28656
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/i0P1P5p2Xpxq5HrpO2zOnA8ifFR.jpg",
-      "genre_ids": [
-        14,
-        12
-      ],
-      "id": 1737233,
-      "title": "Untitled Shang-Chi and the Legend of the Ten Rings Sequel",
-      "original_language": "en",
-      "original_title": "Untitled Shang-Chi and the Legend of the Ten Rings Sequel",
-      "overview": "The sequel to the 2021 film set in the Marvel Cinematic Universe (MCU) based on the Marvel comics. Plot TBA.",
-      "popularity": 1.2196,
-      "poster_path": "/eg37SyXwgF7xlo89C97SWJ3ue9f.jpg",
-      "release_date": "",
-      "softcore": false,
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        878
-      ],
-      "id": 1731190,
-      "title": "Nova",
-      "original_language": "en",
-      "original_title": "Nova",
-      "overview": "A film set in the Marvel Cinematic Universe (MCU) based on the Marvel Comics character. Plot TBA.",
-      "popularity": 0.9708,
-      "poster_path": null,
-      "release_date": "",
-      "softcore": false,
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        878
-      ],
-      "id": 1474568,
-      "title": "Untitled Deadpool/X-Men Teamup Film",
-      "original_language": "en",
-      "original_title": "Untitled Deadpool/X-Men Teamup Film",
-      "overview": "A film set in the Marvel Cinematic Universe (MCU) based on the Marvel Comics characters. Plot TBA.",
-      "popularity": 1.0992,
-      "poster_path": null,
-      "release_date": "",
-      "softcore": false,
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
     }
   ]
 }
