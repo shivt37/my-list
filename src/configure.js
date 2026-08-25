@@ -295,13 +295,14 @@ export function buildConfigurePage(origin, config) {
   /* Filter fields sit in a 2-col grid (text column + value column) - the
      CSV inputs never stretch full width, so a long genre list stays a
      contained field instead of a full-bleed strip. Mobile stacks 1-col. */
-  /* ── SCROLLBAR: ghost — invisible until you hover a scrollable area ── */
-  html {
+  /* ── SCROLLBAR: ghost — invisible until you hover within a scrollable area ── */
+  html,
+  .preview-list,
+  .preview-scroll,
+  .pick-list,
+  .inline-add-search .search-results {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
-  }
-  *:hover {
-    scrollbar-color: var(--border2) transparent;
   }
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -311,13 +312,34 @@ export function buildConfigurePage(origin, config) {
     border: 2px solid transparent;
     background-clip: padding-box;
   }
-  *:hover::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-corner { background: transparent; }
+
+  /* Page-level: reveals when hovering anywhere in the viewport */
+  html:hover {
+    scrollbar-color: var(--border2) transparent;
+  }
+  html:hover::-webkit-scrollbar-thumb {
     background-color: var(--border2);
   }
+
+  /* Inner containers: reveals only when hovering that specific box */
+  .preview-list:hover,
+  .preview-scroll:hover,
+  .pick-list:hover,
+  .inline-add-search .search-results:hover {
+    scrollbar-color: var(--border2) transparent;
+  }
+  .preview-list:hover::-webkit-scrollbar-thumb,
+  .preview-scroll:hover::-webkit-scrollbar-thumb,
+  .pick-list:hover::-webkit-scrollbar-thumb,
+  .inline-add-search .search-results:hover::-webkit-scrollbar-thumb {
+    background-color: var(--border2);
+  }
+
+  /* Thumb direct hover brightens further */
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--border-icon-hover);
   }
-  ::-webkit-scrollbar-corner { background: transparent; }
 
   .filter-line { display: contents; }
   .filter-label { font-size: 11px; font-weight: 500; color: var(--dim); }
