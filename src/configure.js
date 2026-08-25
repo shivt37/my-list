@@ -13,6 +13,7 @@ export function buildConfigurePage(origin, config) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050508">
+<meta name="color-scheme" content="dark">
 <title>my-list - Configure</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +24,10 @@ export function buildConfigurePage(origin, config) {
   input, button, select, textarea { font: inherit; }
 
   :root {
+    /* Dark native UI: checkboxes, select popups, scrollbars all render dark */
+    color-scheme: dark;
+    /* Brand every checkable control with the theme accent */
+    accent-color: var(--accent);
     --bg: #050508;
     --surface: #0c0c13;
     --surface2: #13131d;
