@@ -326,25 +326,41 @@ export function buildConfigurePage(origin, config) {
   /* ── CHECKBOX: neutral dark, checked = light fill + dark check ──
      14px matches the surrounding 11-12px filter text without being oversized. */
   .filter-check {
-    appearance: none;
-    -webkit-appearance: none;
+    appearance: none !important;
+    -webkit-appearance: none !important;
     accent-color: transparent;
+    -webkit-tap-highlight-color: transparent;
     width: 14px; height: 14px;
     padding: 0;
     margin: 0;
     border-radius: 3px;
     border: 1px solid var(--border2);
-    background: var(--surface2);
+    background-color: var(--surface2);
     display: grid; place-content: center;
     cursor: pointer;
-    margin: 0;
     flex-shrink: 0;
     transition: border-color 0.12s ease, background-color 0.12s ease;
   }
-  .filter-check:hover { border-color: var(--border-hover); }
+  /* Explicit color pinning at every state - no browser defaults can bleed through */
+  .filter-check:hover {
+    border-color: var(--border-hover);
+    background-color: var(--surface2);
+  }
+  .filter-check:active {
+    background-color: var(--surface3);
+    border-color: var(--border-icon-hover);
+  }
   .filter-check:checked {
     background-color: var(--text);
     border-color: var(--text);
+  }
+  .filter-check:checked:hover {
+    background-color: var(--dim);
+    border-color: var(--dim);
+  }
+  .filter-check:checked:active {
+    background-color: var(--muted);
+    border-color: var(--muted);
   }
   .filter-check::before {
     content: '';
@@ -1364,7 +1380,7 @@ function renderSimkl() {
       '</div>' +
       '<div class="simkl-filter" id="simfilter-' + i + '">' +
         '<div class="filter-line"><span class="filter-label">Rating source</span><div class="filter-value"><span class="id-chip">' + escapeAttr(f.rating_source || 'imdb') + '</span></div></div>' +
-        '<div class="filter-line"><span class="filter-label">Rating filter</span><div class="filter-value"><input type="checkbox" class="filter-check" id="sfRating-' + i + '" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"><span class="toggle-text">' + (f.rating_filter_enabled ? 'Filtering (Enabled)' : 'Filtering (Disabled)') + '</span></div></div>' +
+        '<div class="filter-line"><span class="filter-label">Rating filter</span><div class="filter-value"><input type="checkbox" class="filter-check" id="sfRating-' + i + '" ' + (f.rating_filter_enabled ? 'checked' : '') + ' onchange="toggleRatingEnabled(' + i + ',this.checked)"><span class="toggle-text">' + (f.rating_filter_enabled ? '(Filtering Enabled)' : '(Filtering Disabled)') + '</span></div></div>' +
         '<div class="filter-line filter-csv"><label class="filter-label" for="sfGenres-' + i + '">Exclude genres</label><div class="filter-value"><input class="url-input" id="sfGenres-' + i + '" value="' + escapeAttr((f.exclude_genres || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_genres\\\',this.value)" placeholder="Talk Show, Reality, News"></div></div>' +
         '<div class="filter-line filter-csv"><label class="filter-label" for="sfIncC-' + i + '">Include countries</label><div class="filter-value"><input class="url-input" id="sfIncC-' + i + '" value="' + escapeAttr((f.include_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'include_countries\\\',this.value)" placeholder="us, gb"></div></div>' +
         '<div class="filter-line filter-csv"><label class="filter-label" for="sfExcC-' + i + '">Exclude countries</label><div class="filter-value"><input class="url-input" id="sfExcC-' + i + '" value="' + escapeAttr((f.exclude_countries || []).join(', ')) + '" onchange="setCsv(' + i + ',\\\'exclude_countries\\\',this.value)" placeholder="cn, kr, jp"></div></div>' +
@@ -1414,6 +1430,7 @@ function removeTier(i, ti) {
 
 function toggleRatingEnabled(i, checked) {
   state.simkl.lists[i].filter.rating_filter_enabled = checked;
+  renderSimkl();
 }
 
 // ─── TMDB Discover module tab ───
