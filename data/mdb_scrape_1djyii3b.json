@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787585118808,
+  "scraped_at": 1787630728061,
   "items": [
+    {
+      "slug": "n80k-motor-city?cache=1",
+      "imdb_id": "tt2012616",
+      "title": "Motor City",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "lGovcOtxugJPhfJjFKud9EbWtOA.jpg",
+      "description": "In 1970s Detroit, John Miller falls for a local gangster's girl and lands in prison for a crime he didn't commit. With his life ruined, Miller plots revenge against the man who took his girl away.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3vnzn-hadestown-the-musical?cache=1",
+      "imdb_id": "tt36307021",
+      "title": "Hadestown: The Musical",
+      "year": 2026,
+      "score": 9,
+      "poster_path": "iJNVygzkuOSCOdCPNI1nLSeF7sz.jpg",
+      "description": "The tragic love of Orpheus and Eurydice is intertwined with the complex relationship of Hades and Persephone. Eurydice, struggling with poverty, is lured to the industrial underworld of Hadestown by Hades, while Orpheus, a struggling musician, ventures down below to bring her back. (Filmed live at the Lyric Theatre, London, featuring the core five original Broadway cast members.)",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3ydw9-her-private-hell?cache=1",
+      "imdb_id": "tt36629665",
+      "title": "Her Private Hell",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "kiFacg75KVjy0AM3S4QmbPas8zL.jpg",
+      "description": "When a mysterious mist engulfs a futuristic metropolis, unleashing a deadly and elusive entity, a troubled young woman searches for her father. Her quest collides with an American GI on a harrowing odyssey to rescue his daughter from Hell.",
+      "digital_release_date": null
+    },
     {
       "slug": "35q62-welcome-to-the-jungle?cache=1",
       "imdb_id": "tt28540171",
@@ -140,7 +170,7 @@
       "title": "The Invite",
       "year": 2026,
       "score": 8,
-      "poster_path": "b7Dr8Chzse8VagexAporUu2RtLx.jpg",
+      "poster_path": "hFLVVF6GSfFkvDlht6iCsCcFjrh.jpg",
       "description": "Joe and Angela's marriage is on thin ice. When they invite their enigmatic upstairs neighbors for a dinner party, the night spirals into unexpected places. Have they reignited the spark or lit the match that burns it all down?",
       "digital_release_date": null
     },
@@ -835,9 +865,9 @@
       "digital_release_date": null
     },
     {
-      "slug": "2tn91-help?cache=1",
+      "slug": "2tn91-strung?cache=1",
       "imdb_id": "tt15532464",
-      "title": "Help",
+      "title": "Strung",
       "year": 2026,
       "score": 5,
       "poster_path": "lWdpUOhnJ8uWWO1G1vbyUsCliov.jpg",
@@ -1412,36 +1442,6 @@
       "score": 6,
       "poster_path": "72KQHN1xUO6gWHLRRPyJcCQXlve.jpg",
       "description": "A washed-up musician travels to Korea to write for K-pop stars, discovering that his long-lost son is set to front one of the country’s hottest new groups. He then jumps at the opportunity to capitalize on his son’s stardom for his own renaissance, but learns that fatherhood is much more fulfilling and meaningful than stardom.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3nla1-aida-the-movie?cache=1",
-      "imdb_id": "tt33797166",
-      "title": "Aida, the Movie",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "h4QnoqmMPS50U7m1XByw29CJ1ws.jpg",
-      "description": "The film deals with the filming of an episode of the series with storylines that take place both within the fiction with the characters of 'Aída' and outside of it with the actors themselves and their relationships, which reflects on topics such as the limits of comedy, the work of a comedian and fame.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "31m3j-iron-lung?cache=1",
-      "imdb_id": "tt27564844",
-      "title": "Iron Lung",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "sIwakdbMGS1krtgendTWpxTY9Hw.jpg",
-      "description": "In a post-apocalyptic future where an event known as \"The Quiet Rapture\" caused all known stars and habitable planets in the universe to disappear, a convict is sent to search an ocean of blood discovered on a desolate moon, using a small submarine nicknamed the \"Iron Lung\".",
-      "digital_release_date": null
-    },
-    {
-      "slug": "39hry-the-physician-ii?cache=1",
-      "imdb_id": "tt32793488",
-      "title": "The Physician II",
-      "year": 2025,
-      "score": 5,
-      "poster_path": "yU6ybmt1CSdkVBTJJsRYz5xnB4q.jpg",
-      "description": "1050 AD: Robert Cole returns to England to bring the medical light of the Orient to his countrymen. But he fails because of the intrigues of the established London doctors, who feel threatened by the new knowledge. And it is not only the human body that is full of seemingly impenetrable secrets, the soul also holds its own mysteries.",
       "digital_release_date": null
     }
   ]
