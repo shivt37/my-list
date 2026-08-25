@@ -266,6 +266,16 @@ export function buildConfigurePage(origin, config) {
   }
 
   .official-note { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
+  /* Official picker rows (add-from-catalog dialog) */
+  .pick-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow: auto; margin-top: 4px; }
+  .pick-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface2);
+  }
+  .pick-row .pick-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .pick-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .pick-meta { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pick-row button { flex-shrink: 0; font-size: 12px; padding: 5px 12px; }
   .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; }
   .empty { color: var(--muted); text-align: center; padding: 24px 0; font-size: 13px; }
 
@@ -705,6 +715,15 @@ export function buildConfigurePage(origin, config) {
   <button type="button" class="toast-undo" id="toastUndo">Undo</button>
 </div>
 
+<dialog class="confirm-modal" id="officialPickDlg" aria-labelledby="officialPickTitle">
+  <div class="confirm-title" id="officialPickTitle">Add Official List</div>
+  <div class="confirm-body" id="officialPickBody">Loading the MDBList official catalog…</div>
+  <div class="pick-list" id="officialPickList"></div>
+  <div class="confirm-actions">
+    <button type="button" class="secondary" autofocus onclick="closeOfficialPicker()">Close</button>
+  </div>
+</dialog>
+
 <script>
 const ORIGIN = ${JSON.stringify(origin).replace(/</g, "\\u003c")};
 let state = ${initial};
@@ -1048,11 +1067,15 @@ async function confirmCreateList() {
 }
 
 function askDelete(i) {
-  const l = activeModule === 'tmdb' ? state.tmdb.lists[i] : state.scraper.lists[i];
+  const l = activeModule === 'tmdb' ? state.tmdb.lists[i]
+    : activeModule === 'official' ? state.official.lists[i]
+    : state.scraper.lists[i];
   if (!l) return;
   pendingDeleteIndex = i;
   document.getElementById('deleteConfirmTitle').textContent = "Delete '" + l.name + "'?";
-  document.getElementById('deleteConfirmBody').textContent = 'Removes this list and its saved filters, tiers, and pages settings. You can re-add the URL later but tuning is lost.';
+  document.getElementById('deleteConfirmBody').textContent = activeModule === 'official'
+    ? 'Removes this list from your addon and deletes its data files. You can re-add it later from the Add Official List picker.'
+    : 'Removes this list and its saved filters, tiers, and pages settings. You can re-add the URL later but tuning is lost.';
   document.getElementById('deleteConfirmDlg').showModal();
 }
 function closeDeleteConfirm() { document.getElementById('deleteConfirmDlg').close(); pendingDeleteIndex = -1; }
@@ -1078,7 +1101,9 @@ function showUndoToast(name, restore) {
 function confirmDelete() {
   if (pendingDeleteIndex < 0) return;
   const i = pendingDeleteIndex;
-  const lists = activeModule === 'tmdb' ? state.tmdb.lists : state.scraper.lists;
+  const lists = activeModule === 'tmdb' ? state.tmdb.lists
+    : activeModule === 'official' ? state.official.lists
+    : state.scraper.lists;
   const snapshot = lists[i];
   const name = snapshot.name;
   lists.splice(i, 1);
@@ -1123,6 +1148,7 @@ function renderOfficial() {
           '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this official list" aria-label="Refresh this official list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
           '</button>' +
+          '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
         '</span>' +
       '</div>' +
       '<div class="card-error" id="ocardError-' + i + '"></div>' +
@@ -1131,8 +1157,15 @@ function renderOfficial() {
 
   document.getElementById('headerTitle').textContent = 'MDBList Official List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+  const addSlot =
+    '<div class="create-slot">' +
+      '<button class="btn-create-list" onclick="openOfficialPicker()">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+        'Add Official List' +
+      '</button>' +
+    '</div>';
 
-  host.innerHTML = toolbar + '<div class="official-note">These are the 3 fixed MDBList official lists. They cannot be added or deleted - only renamed, enabled or disabled.</div>' + (cards || '<div class="empty">No official lists.</div>');
+  host.innerHTML = toolbar + '<div class="official-note">Official MDBList lists - rename, enable or disable freely. Add more from the live MDBList catalog with the picker below; Delete removes a list (and its data files) after Save.</div>' + cards + addSlot;
   applyDisabledState();
 }
 
@@ -1141,6 +1174,53 @@ function toggleOfficial(i) {
   if (!l) return;
   l.enabled = !l.enabled;
   renderOfficial();
+}
+
+// ─── Official picker: add from MDBList's live /lists/official catalog ───
+// Server proxy (/mdblist/official-catalog) already excludes configured
+// slugs; filtered again here against in-page state for race safety.
+let officialCatalogRows = [];
+function openOfficialPicker() {
+  document.getElementById('officialPickDlg').showModal();
+  loadOfficialCatalog();
+}
+function closeOfficialPicker() { document.getElementById('officialPickDlg').close(); }
+async function loadOfficialCatalog() {
+  const body = document.getElementById('officialPickBody');
+  const listEl = document.getElementById('officialPickList');
+  body.textContent = 'Fetching the live MDBList official catalog…';
+  listEl.innerHTML = '';
+  try {
+    const res = await fetch(ORIGIN + '/mdblist/official-catalog');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const have = new Set(state.official.lists.map((l) => l.slug));
+    officialCatalogRows = (data.lists || []).filter((l) => l && l.slug && !have.has(l.slug));
+    if (!officialCatalogRows.length) {
+      body.textContent = 'No additional official lists available yet - the MDBList API currently exposes only the ones you already have. New lists appear here automatically once MDBList publishes them.';
+      return;
+    }
+    body.textContent = 'Pick any to add. It starts enabled and regenerates when you press Save.';
+    listEl.innerHTML = officialCatalogRows.map((l, idx) =>
+      '<div class="pick-row">' +
+        '<span class="pick-info">' +
+          '<span class="pick-name">' + escapeAttr(l.name) + '</span>' +
+          '<span class="pick-meta">' + (l.items != null ? l.items + ' items' : 'catalog') + (l.description ? ' · ' + escapeAttr(l.description) : '') + '</span>' +
+        '</span>' +
+        '<button type="button" onclick="addOfficial(' + idx + ')">Add</button>' +
+      '</div>').join('');
+  } catch (e) {
+    body.textContent = 'Could not load MDBList catalog: ' + humanizeError(e.message);
+  }
+}
+function addOfficial(idx) {
+  const row = officialCatalogRows[idx];
+  if (!row) return;
+  if (state.official.lists.some((l) => l.slug === row.slug)) { closeOfficialPicker(); return; }
+  state.official.lists.push({ slug: row.slug, name: row.name, enabled: true });
+  closeOfficialPicker();
+  rerenderActive();
+  setStatus("'" + row.name + "' added. Press Save to keep it - it will regenerate right away.", 'ok');
 }
 
 // R1 (amended per owner): single-list refresh keeps its confirmation, as a
@@ -1870,6 +1950,7 @@ async function saveAll() {
     if (scraperNames.length) regen.push('Regenerating: ' + scraperNames.join(', '));
     if (data.removed && data.removed.length) regen.push('Removing: ' + data.removed.join(', '));
     if (data.officialDispatched && data.officialDispatched.length) regen.push('Regenerating official: ' + data.officialDispatched.join(', '));
+    if (data.officialRemoved && data.officialRemoved.length) regen.push('Removing official: ' + data.officialRemoved.join(', '));
     if (data.simklDispatched && data.simklDispatched.length) regen.push('Regenerating simkl: ' + data.simklDispatched.join(', '));
     const tmdbLine = []
       .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map((n) => n + ' (removed)'));
@@ -1963,6 +2044,7 @@ function backdropCancels(dlg, closeFn) {
 backdropCancels(document.getElementById('refreshConfirmDlg'), closeRefreshConfirm);
 backdropCancels(document.getElementById('refreshOneDlg'), closeRefreshOneConfirm);
 backdropCancels(document.getElementById('deleteConfirmDlg'), closeDeleteConfirm);
+backdropCancels(document.getElementById('officialPickDlg'), closeOfficialPicker);
 
 initSwatches();
 let savedModule = 'scraper';

@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 /**
- * my-list MDBList official lists - runs on GitHub Actions, fetches the 3
- * official lists (popular, justwatch-streaming-charts, moviemeter) for
- * both movie and show via the MDBList API, writes each as a pretty-printed
- * JSON file into data/mdboff_<slug>_<movie|show>.json (served via GitHub
- * Pages), and POSTs run records to the worker's /runs endpoint (status
- * page). Unlike the scraper, official lists are only ever enabled/disabled
- * - no add/edit/delete, no delete path. Disabled slugs are skipped when
- * the worker serves config.
+ * my-list MDBList official lists - runs on GitHub Actions. The slug
+ * universe comes from the worker's /export-config (operators add/delete
+ * officials in /configure; MDBList's live catalog feeds the picker), so
+ * this script never hardcodes one. For each enabled slug it fetches both
+ * mediatypes via the MDBList API, writes data/mdboff_<slug>_<movie|show>.json
+ * (served via GitHub Pages), and POSTs run records to the worker's /runs
+ * endpoint (status page).
  *
  * Required env (GitHub repo secrets / workflow env):
- *   MDBLIST_API_KEY - mdblist.com API key
- *   WORKER_ORIGIN   - worker base URL (run records + config; required)
+ *   MDBLIST_API_KEY - mdblist.com API key (not needed for action=delete)
+ *   WORKER_ORIGIN   - worker base URL (config source; required)
  *
  * Usage:
- *   node official.mjs                 # refresh all enabled (default 3) slugs × 2 media types
- *   node official.mjs --slugs=popular,justwatch-streaming-charts
+ *   node official.mjs                 # refresh all enabled slugs x 2 media types
+ *   node official.mjs --slugs=popular,trending-x
+ *   node official.mjs --action=delete --delete-ids=mdboff_x_movie,mdboff_x_show
  */
 
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 
@@ -30,7 +30,6 @@ const MDBLIST_API_KEY = process.env.MDBLIST_API_KEY;
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
 const API = "https://api.mdblist.com";
 
-export const SLUGS = ["popular", "justwatch-streaming-charts", "moviemeter"];
 export const MEDIATYPES = ["movie", "show"];
 
 function arg(name) {
@@ -40,24 +39,32 @@ function arg(name) {
 }
 
 const slugsArg = arg("slugs");
+const actionArg = arg("action");
+const deleteIdsArg = arg("delete-ids");
 
-// Worker is the source of truth for enabled slugs - a disabled list is not
-// refreshed. A reachable worker that reports zero enabled slugs means the
-// operator disabled every list: refresh nothing. Falls back to all slugs
-// ONLY when the worker is unreachable so a worker outage can't silently
-// stop the refresh.
+// Slug universe comes from the OPERATOR'S CONFIG (/export-config), never a
+// frozen constant - officials are added/deleted from /configure now. The
+// fail-open-on-outage behavior of the old hardcoded trio is intentionally
+// gone: with an open slug set, guessing during a worker outage would
+// scrape the wrong catalog. No worker = nothing to refresh (logged loudly).
 export async function enabledSlugs() {
-  if (!WORKER_ORIGIN) return SLUGS;
+  if (!WORKER_ORIGIN) {
+    console.error("WORKER_ORIGIN missing - cannot read official slug config. Refresh skipped.");
+    return [];
+  }
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
       signal: AbortSignal.timeout(15000),
     });
-    if (!res.ok) return SLUGS;
+    if (!res.ok) {
+      console.error(`Worker /export-config HTTP ${res.status} - cannot read official slug config. Refresh skipped.`);
+      return [];
+    }
     const cfg = await res.json();
-    const enabled = new Set((cfg.official?.lists || []).filter((l) => l.enabled).map((l) => l.slug));
-    return SLUGS.filter((s) => enabled.has(s));
-  } catch {
-    return SLUGS;
+    return (cfg.official?.lists || []).filter((l) => l.enabled).map((l) => l.slug);
+  } catch (e) {
+    console.error(`Worker unreachable (${e.message}) - official refresh skipped.`);
+    return [];
   }
 }
 
@@ -116,9 +123,11 @@ export async function fetchAllItems(slug, mediatype) {
 }
 
 // Name comes from the operator's worker config so a rename in /configure
-// reaches the data file on the next refresh. Constant fallback if the
-// operator wiped the slug entry or the worker read failed.
-const OFFICIAL_DEFAULT_NAMES = Object.fromEntries(SLUGS.map((s) => [s, { movie: `${s} movie`, show: `${s} show` }]));
+// reaches the data file on the next refresh. Generic fallback for slugs
+// without a config entry (should not happen - config is the source).
+const OFFICIAL_DEFAULT_NAMES = new Proxy({}, {
+  get: (_t, slug) => ({ movie: `${slug} movie`, show: `${slug} show` }),
+});
 
 export function writeCatalog(slug, mediatype, items, cfg) {
   mkdirSync(DATA_DIR, { recursive: true });
@@ -167,19 +176,45 @@ async function postRuns(runs) {
 
 export async function main({
   slugsArg: rawSlugs = slugsArg,
+  actionArg: rawAction = actionArg,
+  deleteIdsArg: rawDeleteIds = deleteIdsArg,
   fetchConfig = enabledSlugs,
   fetchCfg = getFullConfig,
   fetchApi = fetchAllItems,
   write = writeCatalog,
   recordRuns = postRuns,
 } = {}) {
-  // CLI slugs arrive from workflow_dispatch inputs; only the 3 known
-  // official slugs are ever legal. Strip anything else before they reach
-  // writeCatalog's join() - prevents path traversal via crafted --slugs.
+  // CLI inputs arrive from workflow_dispatch; the same char whitelist as
+  // before guards path traversal into writeCatalog's join().
   const SANE_SLUG = /^[a-z0-9][a-z0-9-]{0,63}$/;
-  const slugs = rawSlugs
-    ? rawSlugs.split(",").filter(Boolean).filter((s) => SANE_SLUG.test(s))
-    : await fetchConfig();
+  const SANE_ID = /^mdboff_[a-z0-9-]+_(movie|show)$/;
+
+  // ── Delete mode: remove data files for deleted officials. No API calls,
+  //    no run records - deletions are silent cleanup.
+  if (rawAction === "delete") {
+    if (!rawDeleteIds) {
+      console.log("action=delete but no --delete-ids given - nothing to do.");
+      return;
+    }
+    const ids = rawDeleteIds.split(",").filter(Boolean).filter((id) => SANE_ID.test(id));
+    mkdirSync(DATA_DIR, { recursive: true });
+    for (const id of ids) {
+      const file = join(DATA_DIR, `${id}.json`);
+      try { rmSync(file, { force: true }); console.log(`[delete] ${file}`); }
+      catch (e) { console.error(`[delete] ${file}: ${e.message}`); }
+    }
+    return;
+  }
+
+  const enabledSet = new Set(await fetchConfig());
+  let slugs;
+  if (rawSlugs) {
+    // Workflow/CLI override - intersect with config so a stale or crafted
+    // input can't resurrect a list the operator deleted.
+    slugs = rawSlugs.split(",").filter(Boolean).filter((s) => SANE_SLUG.test(s) && enabledSet.has(s));
+  } else {
+    slugs = [...enabledSet];
+  }
   // Pull cfg separately - writeCatalog needs operator-renamed names. Cheap
   // re-read; same worker endpoint, uses the same secret.
   const cfg = await fetchCfg().catch(() => null);
@@ -224,7 +259,8 @@ export async function main({
 // official.mjs without exiting.
 export const isMain = typeof process !== "undefined" && !!process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
-  if (!MDBLIST_API_KEY) {
+  // action=delete never touches the MDBList API - key not required there.
+  if (actionArg !== "delete" && !MDBLIST_API_KEY) {
     console.error("Missing MDBLIST_API_KEY env var.");
     process.exit(1);
   }

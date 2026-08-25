@@ -3,8 +3,10 @@ node_modules/
 dev-dist/
 debug/
 scratch/
+.DS_Store/
 .DS_Store
 .audit/
+.dev.vars
 
 # Catalog data files are written by the scrape/official/simkl workflows
 # and force-added (`git add -f`) regardless of gitignore. Local clones

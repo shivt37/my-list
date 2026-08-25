@@ -127,19 +127,31 @@ export function simklDefaults() {
   }));
 }
 
-// The three MDBList official lists. Slugs are fixed forever - they produce
-// the catalog / data file ids mdboff_<slug>_<movie|show>. Users can only
-// enable/disable; there is no delete, edit, or add.
+// Seed defaults for fresh installs. The slug set is OPEN - operators add
+// more via the /configure picker (sourced live from MDBList's
+// /lists/official catalog) and delete freely. These three stay as the
+// out-of-the-box trio.
 export const OFFICIAL_LISTS = [
   { slug: "popular", name: "Popular" },
   { slug: "justwatch-streaming-charts", name: "JustWatch Streaming Charts" },
   { slug: "moviemeter", name: "MovieMeter" },
 ];
 
-export const OFFICIAL_CATALOGS = OFFICIAL_LISTS.flatMap((o) => [
-  { id: `mdboff_${o.slug}_movie`, slug: o.slug, name: `${o.name} - Movies`, type: "movie" },
-  { id: `mdboff_${o.slug}_show`, slug: o.slug, name: `${o.name} - Shows`, type: "series" },
-]);
+// Hard ceiling per config save - cheap protection against runaway adds.
+// Each active slug costs 2 API pulls x 2 cron runs/day.
+export const MAX_OFFICIAL_LISTS = 20;
+
+const SANE_OFFICIAL_SLUG = /^[a-z0-9][a-z0-9-]{0,63}$/;
+
+// Catalog pairs derived from the OPERATOR'S config (was a frozen constant
+// when officials were fixed to 3). One list -> movie + show catalog ids:
+// mdboff_<slug>_<movie|show>.
+export function officialCatalogsFor(officialLists) {
+  return (officialLists || []).flatMap((o) => [
+    { id: `mdboff_${o.slug}_movie`, slug: o.slug, name: `${o.name} - Movies`, type: "movie" },
+    { id: `mdboff_${o.slug}_show`, slug: o.slug, name: `${o.name} - Shows`, type: "series" },
+  ]);
+}
 
 // Source URLs for the three pre-seeded scraper lists - lifted verbatim
 // from the old repo's scraper/catalogs.json (filters stay byte-identical;
@@ -185,15 +197,26 @@ export function officialDefaults() {
   return OFFICIAL_LISTS.map((o) => ({ slug: o.slug, name: o.name, enabled: true }));
 }
 
-// Persisted official section: only the 3 fixed slugs, only their enabled
-// flag survives. Slug must be one of the knowns or it's dropped (extras,
-// renames, stale entries all fall away here).
+// Persisted official section: open slug set (picker adds, operator deletes).
+// Sanitize each entry - sane slug regex (mirrors SANE_SLUG in
+// scripts/official.mjs), dedupe by slug, cap at MAX_OFFICIAL_LISTS. Blank
+// names fall back to the slug. Unknown junk entries are dropped silently.
 export function migrateOfficial(raw) {
   const rawLists = Array.isArray(raw?.official?.lists) ? raw.official.lists : [];
-  const map = new Map(OFFICIAL_LISTS.map((o) => [o.slug, true]));
-  return rawLists
-    .filter((l) => l && typeof l.slug === "string" && map.has(l.slug))
-    .map((l) => ({ slug: l.slug, name: l.name, enabled: l.enabled !== false }));
+  const seen = new Set();
+  const out = [];
+  for (const l of rawLists) {
+    if (!l || typeof l.slug !== "string" || !SANE_OFFICIAL_SLUG.test(l.slug)) continue;
+    if (seen.has(l.slug)) continue;
+    seen.add(l.slug);
+    out.push({
+      slug: l.slug,
+      name: String(typeof l.name === "string" ? l.name.trim() : "") || l.slug,
+      enabled: l.enabled !== false,
+    });
+    if (out.length >= MAX_OFFICIAL_LISTS) break;
+  }
+  return out;
 }
 
 // A tier passes only when EVERY field defined on it holds; omitted fields
@@ -375,19 +398,11 @@ export async function loadConfig(kv) {
     ? seedScraperDefaults(migrated)
     : migrated;
 
-  // Normalize the official section to exactly the 3 known slugs. Missing
-  // official key (old saved configs) → defaults; known slugs keep their
-  // persisted enabled flag; unknown/stale slugs get dropped.
-  const known = new Map(officialDefaults().map((o) => [o.slug, o]));
+  // Normalize the official section. Entries were already sanitized/deduped/
+  // capped by migrateOfficial - only seed defaults when the key is missing
+  // entirely (fresh install). Empty list stays legal (operator deleted all).
   if (!Array.isArray(cfg.official?.lists) || cfg.official.lists.length === 0) {
     cfg.official = { lists: officialDefaults() };
-  } else {
-    const kept = cfg.official.lists
-      .filter((l) => l && typeof l.slug === "string" && known.has(l.slug))
-      .map((l) => ({ slug: known.get(l.slug).slug, name: typeof l.name === "string" && l.name.trim() ? l.name.trim() : known.get(l.slug).name, enabled: l.enabled !== false }));
-    // Always exactly 3 - a truncated/extra list here must not silently
-    // drop or duplicate a fixed catalog.
-    cfg.official.lists = known.size === kept.length ? kept : officialDefaults();
   }
 
   // Normalize the simkl section to exactly the 2 known slugs with their

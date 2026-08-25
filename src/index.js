@@ -4,7 +4,7 @@
 // schedules are the workflows' own cron lines, edited on github.com.
 
 import { loadConfig } from "./config.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, configureResponse, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -80,6 +80,11 @@ export default {
 
     if (pathname === "/tmdb/preview-discover" && request.method === "POST") {
       return handleTmdbPreviewDiscover(env, request);
+    }
+
+    // Official picker: live MDBList catalog minus already-configured slugs.
+    if (pathname === "/mdblist/official-catalog") {
+      return handleMdblistOfficialCatalog(env);
     }
 
     return json({ error: "Not found" }, 404);

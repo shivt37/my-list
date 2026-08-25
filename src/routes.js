@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, OFFICIAL_CATALOGS, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY, OFFICIAL_RUNS_KEY } from "./config.js";
+import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { buildConfigurePage } from "./configure.js";
 
@@ -72,11 +72,11 @@ export async function buildManifest(env) {
   // then simkl lists. Simkl catalogs declare no skip extra - they're
   // single-shot arrival listings, not paginated.
   // Official/simkl catalog NAMES are the operator's saved name (renamed in
-  // /configure), falling back to the constant default. The constants stay
-  // the source of id/type/slug and the data-file name on the next regen.
+  // /configure), falling back to the derived default. The config is the
+  // source of id/type/slug and the data-file name on the next regen.
   const officialBySlug = new Map(cfg.official.lists.map((l) => [l.slug, l.name]));
   const enabledOfficial = new Set(cfg.official.lists.filter((l) => l.enabled).map((l) => l.slug));
-  const officialCatalogs = OFFICIAL_CATALOGS
+  const officialCatalogs = officialCatalogsFor(cfg.official.lists)
     .filter((c) => enabledOfficial.has(c.slug))
     .map((c) => ({ name: officialBySlug.get(c.slug) || c.name, id: c.id, type: c.type, extra: [{ name: "skip", isRequired: false }] }));
   const simklBySlug = new Map(cfg.simkl.lists.map((l) => [l.slug, l.name]));
@@ -168,7 +168,7 @@ function rowToMetaTmdb(row, type) {
 
 export async function handleCatalog(env, catalogType, catalogId, skip) {
   const cfg = await loadConfig(env.STORE);
-  const official = OFFICIAL_CATALOGS.find((c) => c.id === catalogId);
+  const official = officialCatalogsFor(cfg.official.lists).find((c) => c.id === catalogId);
   const simkl = SIMKL_CATALOGS.find((c) => c.id === catalogId);
   const list = cfg.scraper.lists.find((l) => l.id === catalogId);
   const tmdbList = cfg.tmdb.lists.find((l) => tmdbCatalogId(l) === catalogId);
@@ -200,7 +200,7 @@ export async function handleStatus(env, request) {
   const tmdb = page === "tmdb";
   const cfg = await loadConfig(env.STORE);
   const runs = official
-    ? await getRuns(env.STORE, "runs:official")
+    ? await getRuns(env.STORE, OFFICIAL_RUNS_KEY)
     : simkl
       ? await getRuns(env.STORE, SIMKL_RUNS_KEY)
       : tmdb
@@ -210,10 +210,10 @@ export async function handleStatus(env, request) {
   // Official/simkl runs are keyed by catalog id (mdboff_<slug>_<movie|show>),
   // but the operator-renamed name lives on the config list - resolve the
   // run's catalog id back through the slug so a rename in /configure shows
-  // here too, instead of the stale constant.
+  // here too, instead of the derived default.
   const cfgoffNames = new Map(cfg.official.lists.map((l) => [l.slug, l.name]));
   const cfgSimNames = new Map(cfg.simkl.lists.map((l) => [l.slug, l.name]));
-  const officialByName = new Map(OFFICIAL_CATALOGS.map((c) => [c.id, cfgoffNames.get(c.slug) || c.name]));
+  const officialByName = new Map(officialCatalogsFor(cfg.official.lists).map((c) => [c.id, cfgoffNames.get(c.slug) || c.name]));
   const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, cfgSimNames.get(c.slug) || c.name]));
   const tmdbByName = new Map(cfg.tmdb.lists.map((l) => [tmdbCatalogId(l), l.name]));
   const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? tmdbByName.get(r.catalog_id) ?? r.catalog_id;
@@ -277,6 +277,16 @@ export async function handleSaveConfig(env, request) {
     const officialEnabledSlugs = incoming.official.lists
       .filter((l) => { const prev = prevOffById.get(l.slug); return prev && !prev.enabled && l.enabled; })
       .map((l) => l.slug);
+    // Dynamic officials: brand-new slugs (picker adds) regenerate right away
+    // when enabled; removals dispatch a data-file cleanup run.
+    const officialAddedSlugs = incoming.official.lists
+      .filter((l) => !prevOffById.has(l.slug) && l.enabled)
+      .map((l) => l.slug);
+    const officialRegenSlugs = [...new Set([...officialEnabledSlugs, ...officialAddedSlugs])];
+    const nextOffSlugs = new Set(incoming.official.lists.map((l) => l.slug));
+    const officialRemovedIds = current.official.lists
+      .filter((l) => !nextOffSlugs.has(l.slug))
+      .flatMap((l) => [`mdboff_${l.slug}_movie`, `mdboff_${l.slug}_show`]);
     const prevSimById = new Map(current.simkl.lists.map((l) => [l.slug, l]));
     const simklChanged = incoming.simkl.lists.filter((l) => {
       const prev = prevSimById.get(l.slug);
@@ -332,13 +342,26 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
-    if (officialEnabledSlugs.length > 0) {
+    const officialRegenNeeded = officialRegenSlugs.length > 0;
+    if (officialRegenNeeded) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
-        inputs: { slugs: officialEnabledSlugs.join(",") },
+        inputs: { slugs: officialRegenSlugs.join(",") },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub official dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+    if (officialRemovedIds.length > 0) {
+      // Data-file cleanup for deleted officials. Runs like every other
+      // dispatch (accepted-204 ≠ done) but is non-critical: a failed
+      // cleanup leaves orphan JSON files that nothing serves.
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
+        inputs: { action: "delete", delete_ids: officialRemovedIds.join(",") },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub official cleanup dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
     const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
@@ -384,7 +407,13 @@ export async function handleSaveConfig(env, request) {
       // from these, never from the changed arrays (a disable is a change
       // but must not claim a regeneration).
       officialDispatched: incoming.official.lists
-        .filter((l) => officialEnabledSlugs.includes(l.slug))
+        .filter((l) => officialRegenSlugs.includes(l.slug))
+        .map((l) => l.name),
+      officialAdded: incoming.official.lists
+        .filter((l) => !prevOffById.has(l.slug))
+        .map((l) => l.name),
+      officialRemoved: current.official.lists
+        .filter((l) => !nextOffSlugs.has(l.slug))
         .map((l) => l.name),
       simklChanged: simklChanged.map((l) => l.name),
       simklDispatched: simklChanged.filter((l) => l.enabled).map((l) => l.name),
@@ -736,4 +765,59 @@ export async function handleTmdbPreviewDiscover(env, request) {
   } catch (e) {
     return json({ error: "Invalid request body: " + e.message }, 400);
   }
+}
+
+// ── MDBList official catalog proxy (configure picker) ───────────────────
+// GET /mdblist/official-catalog → the live /lists/official catalog minus
+// slugs already configured. Cached ~10 min in KV: the catalog changes at
+// MDBList's pace (weeks), not the operator's, and the endpoint is
+// undocumented with unknown rate limits - never hammer it.
+const OFFICIAL_CATALOG_CACHE_KEY = "cache:mdblist-official";
+const OFFICIAL_CATALOG_TTL_MS = 10 * 60 * 1000;
+
+export async function handleMdblistOfficialCatalog(env) {
+  if (!env.MDBLIST_API_KEY) {
+    return json({ error: "MDBLIST_API_KEY not configured - set it as a Cloudflare worker secret." }, 500);
+  }
+  const cfg = await loadConfig(env.STORE);
+  const existing = new Set(cfg.official.lists.map((l) => l.slug));
+
+  let all = null;
+  try {
+    const cached = await env.STORE.get(OFFICIAL_CATALOG_CACHE_KEY, "json");
+    if (cached && Array.isArray(cached.lists) && Date.now() - cached.fetched_at < OFFICIAL_CATALOG_TTL_MS) {
+      all = cached.lists;
+    }
+  } catch { /* cache miss/hit failure falls through to live fetch */ }
+
+  if (!all) {
+    try {
+      const res = await fetch(`https://api.mdblist.com/lists/official?apikey=${encodeURIComponent(env.MDBLIST_API_KEY)}`, {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!res.ok) {
+        return json({ error: `MDBList ${res.status}: ${(await res.text()).slice(0, 200)}` }, 502);
+      }
+      all = await res.json();
+      if (!Array.isArray(all)) return json({ error: "Unexpected MDBList catalog shape." }, 502);
+      // Best-effort cache write - a KV hiccup must not fail the request.
+      try { await env.STORE.put(OFFICIAL_CATALOG_CACHE_KEY, JSON.stringify({ fetched_at: Date.now(), lists: all })); } catch { }
+    } catch (e) {
+      return json({ error: "Failed to reach MDBList: " + e.message }, 502);
+    }
+  }
+
+  const lists = all
+    .filter((l) => l && typeof l.slug === "string" && !existing.has(l.slug))
+    .map((l) => ({
+      slug: l.slug,
+      name: l.name || l.slug,
+      description: l.description || "",
+      items: Number.isInteger(l.items) ? l.items : null,
+      movies: Number.isInteger(l.movies) ? l.movies : null,
+      shows: Number.isInteger(l.shows) ? l.shows : null,
+      updated: l.updated || null,
+    }));
+  return json({ lists });
 }

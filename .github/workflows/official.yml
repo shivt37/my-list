@@ -11,7 +11,19 @@ on:
   workflow_dispatch:
     inputs:
       slugs:
-        description: "Official slugs to refresh (comma-separated, blank = all)"
+        description: "Official slugs to refresh (comma-separated, blank = all enabled)"
+        required: false
+        default: ""
+      action:
+        description: "refresh (default) or delete data files for delete_ids"
+        required: false
+        default: "refresh"
+        type: choice
+        options:
+          - refresh
+          - delete
+      delete_ids:
+        description: "Catalog ids to delete when action=delete (mdboff_<slug>_<movie|show>, comma-separated)"
         required: false
         default: ""
 
@@ -45,21 +57,33 @@ jobs:
       - name: Sanitize workflow inputs
         id: sanitize
         run: |
-          # Whitelist to [a-z0-9,_-]; --slugs only ever carries fixed slugs
-          # (popular, justwatch-streaming-charts, moviemeter) plus comma
-          # separator - drop everything else before bash sees it.
+          # Whitelist to [a-z0-9,_-]; slugs/delete_ids only ever carry
+          # official slug chars plus the comma separator - drop everything
+          # else before bash sees it. action is a GH choice input (safe).
           SANITIZED_SLUGS=$(printf '%s' "${{ github.event.inputs.slugs }}" | tr -cd 'a-z0-9,_-')
+          SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-z')
+          SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-z0-9,_-')
+          [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="refresh"
           echo "slugs=$SANITIZED_SLUGS" >> "$GITHUB_OUTPUT"
+          echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
+          echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
 
-      - name: Run official lists fetcher
+      - name: Run official lists fetcher / deleter
         working-directory: scripts
         env:
           MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           INPUT_SLUGS: ${{ steps.sanitize.outputs.slugs }}
+          INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
+          INPUT_DEL: ${{ steps.sanitize.outputs.delete_ids }}
         run: |
           ARGS=()
-          [ -n "${INPUT_SLUGS}" ] && ARGS+=("--slugs=${INPUT_SLUGS}")
+          if [ "${INPUT_ACTION}" = "delete" ]; then
+            ARGS+=("--action=delete")
+            [ -n "${INPUT_DEL}" ] && ARGS+=("--delete-ids=${INPUT_DEL}")
+          else
+            [ -n "${INPUT_SLUGS}" ] && ARGS+=("--slugs=${INPUT_SLUGS}")
+          fi
           node official.mjs "${ARGS[@]}"
 
       - name: Commit data changes
@@ -71,7 +95,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No data changes - skipping commit."
           else
-            git commit -m "chore(data): refresh official lists [skip ci]"
+            git commit -m "chore(data): sync official lists [skip ci]"
             # Rebase onto whatever landed (other bots' data commits,
             # deploys, manual pushes) - a bare push races and loses this
             # run's data. -X theirs: on a content conflict (two runs
