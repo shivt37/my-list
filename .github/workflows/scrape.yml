@@ -2,12 +2,12 @@ name: Scrape MDBList lists
 
 on:
   schedule:
-    # Daily at 07:00 and 19:00 IST (= 01:30 and 13:30 UTC). Edit these
+    # Daily at 05:30 and 17:30 IST (= 00:00 and 12:00 UTC). Edit these
     # lines on github.com to change the schedule - no worker-side timing
     # involved. GitHub Actions cron runs on UTC, so IST inputs need a
     # -5:30 offset.
-    - cron: "30 1 * * *"
-    - cron: "30 13 * * *"
+    - cron: "0 0 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
     inputs:
       lists:

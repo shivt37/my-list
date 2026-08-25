@@ -2,12 +2,12 @@ name: Generate TMDB Discover lists
 
 on:
   schedule:
-    # Daily at 07:00 and 19:00 IST (= 01:30 and 13:30 UTC), matching the
-    # other modules. GitHub Actions cron runs on UTC, so IST inputs need a
-    # -5:30 offset. Full regenerate - every run regenerates from scratch;
+    # Daily at 05:30 IST (= 00:00 UTC), matching the other modules' first
+    # run. GitHub Actions cron runs on UTC, so IST inputs need a -5:30
+    # offset. Full regenerate - every run regenerates from scratch;
     # sourceHash is stamped onto each data file for diffing/audit only.
-    - cron: "30 1 * * *"
-    #- cron: "30 13 * * *"
+    - cron: "0 0 * * *"
+    #- cron: "0 12 * * *"
   workflow_dispatch:
     inputs:
       ids:
