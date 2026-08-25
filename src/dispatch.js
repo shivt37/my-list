@@ -8,6 +8,13 @@
 const GH_API = "https://api.github.com";
 
 export async function dispatchScraperWorkflow(env, { lists = [], action = "scrape", deleteIds = [], workflow, inputs } = {}) {
+  // Local-dev stub: set GH_DISPATCH_STUB in .dev.vars to make saves fully
+  // functional without real GitHub secrets - dispatches "succeed" and are
+  // logged instead of fired. Never set on production.
+  if (env.GH_DISPATCH_STUB) {
+    console.log(`[dispatch-stub] ${workflow || env.GH_WORKFLOW || "scrape.yml"} <-`, inputs || { lists, action, deleteIds });
+    return { dispatched: true, stubbed: true };
+  }
   const wf = workflow || env.GH_WORKFLOW;
   if (!env.GH_TOKEN || !env.GH_REPO || !wf) {
     return { dispatched: false, reason: "GH_TOKEN/GH_REPO/GH_WORKFLOW not configured" };
