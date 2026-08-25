@@ -343,7 +343,7 @@ export function buildConfigurePage(origin, config) {
   }
   /* Explicit color pinning at every state - no browser defaults can bleed through */
   .filter-check:hover {
-    border-color: var(--border-hover);
+    border-color: var(--muted);
     background-color: var(--surface2);
   }
   .filter-check:active {
