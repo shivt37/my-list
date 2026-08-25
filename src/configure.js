@@ -295,11 +295,71 @@ export function buildConfigurePage(origin, config) {
   /* Filter fields sit in a 2-col grid (text column + value column) - the
      CSV inputs never stretch full width, so a long genre list stays a
      contained field instead of a full-bleed strip. Mobile stacks 1-col. */
+  /* ── SCROLLBAR: ghost — invisible until you hover a scrollable area ── */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  *:hover {
+    scrollbar-color: var(--border2) transparent;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  *:hover::-webkit-scrollbar-thumb {
+    background-color: var(--border2);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--border-icon-hover);
+  }
+  ::-webkit-scrollbar-corner { background: transparent; }
+
   .filter-line { display: contents; }
   .filter-label { font-size: 11px; font-weight: 500; color: var(--dim); }
   .filter-value { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .filter-value .url-input { flex: 1 1 100%; min-width: 0; font-size: 12px; padding: 6px 9px; border-radius: var(--r-sm); }
-  .filter-check { accent-color: var(--accent); }
+  /* ── CHECKBOX: neutral dark, checked = light fill + dark check ──
+     14px matches the surrounding 11-12px filter text without being oversized. */
+  .filter-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    padding: 0;
+    margin: 0;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    display: grid; place-content: center;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    transition: border-color 0.12s ease, background-color 0.12s ease;
+  }
+  .filter-check:hover { border-color: var(--border-hover); }
+  .filter-check:checked {
+    background-color: var(--text);
+    border-color: var(--text);
+  }
+  .filter-check::before {
+    content: '';
+    width: 8px; height: 8px;
+    clip-path: polygon(14% 44%, 0% 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    background-color: var(--bg);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: transform 120ms ease-in-out;
+  }
+  .filter-check:checked::before { transform: scale(1); }
+  .filter-check:focus-visible {
+    outline: 2px solid var(--muted);
+    outline-offset: 2px;
+  }
+  .filter-check:disabled { opacity: 0.45; cursor: not-allowed; }
   .filter-top { display: contents; }
   .filter-top .secondary { justify-self: start; flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
   /* Rating filter is a labelled switch, not a bare checkbox. */
@@ -458,9 +518,7 @@ export function buildConfigurePage(origin, config) {
   .preview-msg.error { color: var(--danger); }
   .preview-scroll {
     display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; padding: 2px 2px 6px;
-    scrollbar-width: thin;
   }
-  .preview-scroll::-webkit-scrollbar { height: 6px; }
   .preview-item { flex: 0 0 74px; width: 74px; position: relative; transition: transform 0.12s ease; }
   .preview-item:hover { transform: translateY(-2px); }
   .preview-item img, .preview-poster-placeholder {
