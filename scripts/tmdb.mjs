@@ -82,6 +82,7 @@ export function computeSourceHash(list) {
     includeReleaseTypes: list.includeReleaseTypes || [],
     includeCollections: list.includeCollections || [],
     excludeCollections: list.excludeCollections || [],
+    minVoteCount: list.minVoteCount || null,
   };
   const normalized = JSON.stringify(inputs, (key, value) =>
     Array.isArray(value) ? [...value].sort() : value
@@ -244,6 +245,9 @@ export async function buildDiscoverItems(list, mediaType) {
   const sortMap = mediaType === "series" ? SORT_BY_TV : SORT_BY_MOVIE;
   const sortBy = sortMap[list.sort] || SORT_BY_MOVIE.release_asc;
   const excludeQs = excludeQsFor(list);
+  // B7: optional vote-count floor - kills the 1-vote 10/10 junk that owns
+  // page one of a rating-sorted discover query.
+  const voteFloorQs = list.minVoteCount > 0 ? `&vote_count.gte=${list.minVoteCount}` : '';
   const maxPages = Math.ceil(MAX_ITEMS / 20);
   const { sources, singleQueryMode, singleQueryQs, collectionIsPostFilter } =
     buildDiscoverSources(list, mediaType);
@@ -302,7 +306,7 @@ export async function buildDiscoverItems(list, mediaType) {
     let page = 1;
     let totalPages = 1;
     do {
-      const path = `${endpoint}?${singleQueryQs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`;
+      const path = `${endpoint}?${singleQueryQs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}${voteFloorQs}`;
       const data = await tmdbFetch(path);
       pagesFetched++;
       for (const item of data.results || []) admit(item);
@@ -322,7 +326,7 @@ export async function buildDiscoverItems(list, mediaType) {
     do {
       const round = await Promise.all(
         discoverSources.map((src) =>
-          tmdbFetch(`${endpoint}?${src.qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`)
+          tmdbFetch(`${endpoint}?${src.qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}${voteFloorQs}`)
         )
       );
       pagesFetched += round.length;

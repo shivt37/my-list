@@ -174,9 +174,10 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
   const tmdbList = cfg.tmdb.lists.find((l) => tmdbCatalogId(l) === catalogId);
   const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : tmdbList ? rowToMetaTmdb : rowToMeta;
 
-  // Unknown id / an id whose module is disabled → empty, but still 200.
-  // (The manifest controls what Stremio can reach; a stale request after a
-  // disable must not 404 the whole chain.)
+  // B11 (actual contract): unknown ids return empty; ids of DISABLED
+  // modules keep serving their data on purpose - the manifest gates what
+  // clients can discover, while direct catalog URLs stay valid across a
+  // disable/enable cycle.
   if (!official && !simkl && !list && !tmdbList) return json({ metas: [] });
 
   let data;
@@ -660,7 +661,7 @@ export async function handleTmdbSearch(env, kind, query) {
 // Port of the old tmdb worker's buildDiscoverSources/fetch logic, live
 // variant: same AND/OR fragment plan, collection post-filter, capped at
 // 25 pages × 20 = up to 500 items (old worker's MAX_PREVIEW_PAGES). Body is
-// a discover list entry (normalizeTmdbList shape) + optional previewMediaType.
+// a discover list entry (normalizeTmdbList shape).
 const PREVIEW_PAGES = 25;
 const PREVIEW_PAGE_SIZE = 20;
 
@@ -693,9 +694,7 @@ export async function handleTmdbPreviewDiscover(env, request) {
     const body = await request.json();
     const entry = normalizeTmdbList(body || {});
     if (!entry) return json({ error: "Invalid discover list body" }, 400);
-    const mediaType = body.previewMediaType === "series" && entry.mediaType !== "series"
-      ? "series"
-      : entry.mediaType;
+    const mediaType = entry.mediaType;
     const endpoint = mediaType === "series" ? "/discover/tv" : "/discover/movie";
     const sortMap = mediaType === "series"
       ? { release_desc: "first_air_date.desc", release_asc: "first_air_date.asc", popularity_desc: "popularity.desc", vote_desc: "vote_average.desc", title_asc: "popularity.desc" }
@@ -706,6 +705,8 @@ export async function handleTmdbPreviewDiscover(env, request) {
     if (entry.excludeGenres.length > 0) excludeQs += `&without_genres=${encodeURIComponent(entry.excludeGenres.join("|"))}`;
     if (entry.excludeKeywords.length > 0) excludeQs += `&without_keywords=${encodeURIComponent(entry.excludeKeywords.join("|"))}`;
     if (entry.excludeCompanies.length > 0) excludeQs += `&without_companies=${encodeURIComponent(entry.excludeCompanies.join("|"))}`;
+    // B7: optional vote-count floor, mirroring scripts/tmdb.mjs.
+    const voteFloorQs = entry.minVoteCount > 0 ? `&vote_count.gte=${entry.minVoteCount}` : "";
 
     // Same source plan as scripts/tmdb.mjs buildDiscoverSources.
     const m = entry.includeModes;
@@ -782,7 +783,7 @@ export async function handleTmdbPreviewDiscover(env, request) {
         const queries = sources.length > 0 ? sources : [andQs];
         const round = await Promise.all(
           queries.map((qs) =>
-            tmdbApi(env, `${endpoint}?${qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`)
+            tmdbApi(env, `${endpoint}?${qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}${voteFloorQs}`)
           )
         );
         let maxTotal = page;

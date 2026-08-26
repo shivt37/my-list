@@ -342,6 +342,9 @@ export function normalizeTmdbList(raw) {
     includeCollectionNames: nameArr(raw.includeCollectionNames, effIncCl.length),
     excludeCollections: effExcCl,
     excludeCollectionNames: nameArr(raw.excludeCollectionNames, effExcCl.length),
+    // B7: optional TMDB vote-count floor - only meaningful with the rating
+    // sort, but stored per-list so it survives sort round-trips.
+    minVoteCount: Number.isInteger(raw.minVoteCount) && raw.minVoteCount > 0 ? raw.minVoteCount : null,
   };
 }
 
@@ -383,6 +386,7 @@ export function tmdbContentHash(list) {
         [...(list.includeReleaseTypes || [])].sort(),
         [...(list.includeCollections || [])].sort(),
         [...(list.excludeCollections || [])].sort(),
+        list.minVoteCount ?? null,
       ])
     )
     .digest("hex")

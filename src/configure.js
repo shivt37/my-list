@@ -232,6 +232,8 @@ export function buildConfigurePage(origin, config) {
   /* TMDB cards: two compact selects stretch nothing, so pin actions right
      explicitly (scraper/official/simkl fill the row via url/hint growth). */
   .tmdb-actions { margin-left: auto; }
+  /* B7 vote floor: sized like the card's selects so the row rhythm holds. */
+  .card-body .vote-floor { width: 84px; font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
   .official-hint { font-size: 11px; color: var(--muted); flex: 1 1 0; min-width: 0; }
   /* Field/label vocabulary reserved for the create forms */
   .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
@@ -1583,6 +1585,13 @@ function renderTmdb() {
         '<select onchange="updateTmdb(' + i + ', \\\'sort\\\', this.value)" title="Sort order">' +
           TMDB_SORTS.map((s) => '<option value="' + s.value + '"' + (l.sort === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
         '</select>' +
+        // B7: vote floor only makes sense for a rating-sorted list.
+        (l.sort === 'vote_desc'
+          ? '<input type="number" class="vote-floor" min="1" step="10" placeholder="Min votes" ' +
+            'title="Minimum TMDB vote count - hides 1-vote 10/10 titles from a rating-sorted list" ' +
+            'value="' + (l.minVoteCount || '') + '" ' +
+            'onchange="updateTmdb(' + i + ', \\\'minVoteCount\\\', this.value ? parseInt(this.value, 10) : null)">'
+          : '') +
         '<span class="body-actions tmdb-actions">' +
           '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list" aria-label="Refresh this list">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
@@ -1763,9 +1772,13 @@ function removeTmdbId(i, kind, field, id) {
   if (!l) return;
   const key = TMDB_FIELD_KEYS[kind][field];
   const idx = l[key].indexOf(id);
-  if (idx !== -1) l[key].splice(idx, 1);
-  const namesKey = TMDB_NAME_KEYS[kind] && TMDB_NAME_KEYS[kind][field];
-  if (namesKey && l[namesKey]) l[namesKey].splice(idx, 1);
+  // B12: both splices share one idx !== -1 guard - an unguarded names splice
+  // would delete the last name whenever indexOf misses.
+  if (idx !== -1) {
+    l[key].splice(idx, 1);
+    const namesKey = TMDB_NAME_KEYS[kind] && TMDB_NAME_KEYS[kind][field];
+    if (namesKey && l[namesKey]) l[namesKey].splice(idx, 1);
+  }
   invalidateTmdbPreview(l);
   renderTmdb();
 }
@@ -1890,9 +1903,11 @@ function tmdbDimSection(i, l, dim) {
       '<span class="filter-label">' + dim.label + (totalCount > 0 ? ' (' + totalCount + ')' : '') + '</span>' +
       '<svg class="exclude-chevron' + (isOpen ? ' open' : '') + '" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
     '</button>' +
-      (hasMode ? '<span class="dim-mode-tag" role="button" tabindex="0" onclick="setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" onkeydown="if(event.key===\\\'Enter\\\'||event.key===\\\' \\\'){event.preventDefault();setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')}" aria-label="Set ' + dim.label + ' combination to ' + (mode === 'or' ? 'AND' : 'OR') + '" title="' + (mode === 'or'
+      (hasMode ? '<span class="dim-mode-tag" role="button" tabindex="0" onclick="setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')" onkeydown="if(event.key===\\\'Enter\\\'||event.key===\\\' \\\'){event.preventDefault();setTmdbMode(' + i + ',\\\'' + dim.kind + '\\\',\\\'' + (mode === 'or' ? 'and' : 'or') + '\\\')}" aria-label="Set ' + dim.label + ' combination to ' + (mode === 'or' ? 'AND' : (dim.kind === 'collection' ? 'ANY OF' : 'OR')) + '" title="' + (mode === 'or'
         ? 'OR - this selection becomes its own source, unioned with everything else (click to switch to AND)'
-        : 'AND - this selection narrows every other source instead of being one of its own (click to switch to OR)') + '">' + (mode === 'or' ? 'OR' : 'AND') + '</span>' : '') +
+        : dim.kind === 'collection'
+          ? 'ANY OF - a title matches if it belongs to ANY selected collection; members are unioned, then narrowed by the other sources (click to switch to OR)'
+          : 'AND - this selection narrows every other source instead of being one of its own (click to switch to OR)') + '">' + (mode === 'or' ? 'OR' : (dim.kind === 'collection' ? 'ANY OF' : 'AND')) + '</span>' : '') +
     '</div>' +
     (isOpen
       ? chipRow('include', 'Include', 'member-chip') + (dim.hasExclude ? chipRow('exclude', 'Exclude', 'exclude-chip') : '')
@@ -1950,10 +1965,13 @@ async function loadTmdbPreview(i) {
   l.previewError = null;
   renderTmdb();
   try {
+    // B13: preview keys are UI-only state - posting them bloats the payload
+    // for nothing (and previewItems can be hundreds of KB after a fetch).
+    const { previewOpen, previewLoading, previewError, previewItems, previewTruncated, count, ...configOnly } = l;
     const res = await fetch(ORIGIN + '/tmdb/preview-discover', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...l }),
+      body: JSON.stringify(configOnly),
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
