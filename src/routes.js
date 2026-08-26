@@ -119,7 +119,12 @@ export async function buildManifest(env) {
 // poster/description + a type-specific date field that extraction has
 // never successfully filled - see scraper report S1). The catalog type
 // comes from the operator's declared list, never inferred from rows.
+// Owner request 2026-08-26: releaseInfo shows the full release date
+// (digital/first-air, populated since the S1 selector repair) with the bare
+// year as fallback for pre-repair data files; mdblist's internal score is
+// NOT an IMDb rating - the misleading imdbRating field is dropped entirely.
 function rowToMeta(row, catalogType = row.type) {
+  const releaseDate = row.digital_release_date || row.first_air_date || null;
   return {
     id: row.imdb_id,
     type: catalogType === "series" ? "series" : "movie",
@@ -129,8 +134,7 @@ function rowToMeta(row, catalogType = row.type) {
         ? row.poster_path
         : `https://image.tmdb.org/t/p/w500/${row.poster_path}`
       : undefined,
-    releaseInfo: row.year ? String(row.year) : undefined,
-    imdbRating: row.score ? (row.score / 10).toFixed(1) : undefined,
+    releaseInfo: releaseDate || (row.year ? String(row.year) : undefined),
   };
 }
 

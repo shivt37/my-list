@@ -269,7 +269,9 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
           if (!itemLink) return;
 
           const href = itemLink.getAttribute("href") || "";
-          const slug = href.split(linkPrefix)[1]?.replace(/\/$/, "") || null;
+          // S7: strip cache-buster queries so slugs stay clean
+          // (/show/436w8-blood-sacrifice?cache=1 -> 436w8-blood-sacrifice).
+          const slug = href.split(linkPrefix)[1]?.split("?")[0].replace(/\/$/, "") || null;
 
           const imdbHref = imdbLink?.getAttribute("href") || "";
           const imdbMatch = imdbHref.match(/tt\d+/);
@@ -324,15 +326,26 @@ export async function scrapeList(sourceUrl, browser, maxPages, type = "movie") {
 
   for (let i = 0; i < maxPages; i++) {
     const url = buildPageUrl(sourceUrl, i);
-    try {
-      const movies = await scrapeOnePage(browser, url, type, i);
-      pagesScraped++;
-      if (movies.length === 0) break;
-      allMovies.push(...movies);
-    } catch (err) {
-      errors.push(`Page ${i}: ${err.message}`);
-      break;
+    // S8: one bounded retry per failing page - a transient block or blip
+    // must not kill the rest of the list until the next cron. Hard
+    // Cloudflare challenges still fail after the single retry.
+    let movies = null;
+    for (let attempt = 0; attempt < 2 && movies === null; attempt++) {
+      try {
+        movies = await scrapeOnePage(browser, url, type, i);
+      } catch (err) {
+        if (attempt === 1) {
+          errors.push(`Page ${i}: ${err.message}`);
+          break;
+        }
+        console.warn(`  [${type} p${i}] attempt 1 failed (${err.message.slice(0, 120)}) - retrying...`);
+        await sleep(5000 + Math.random() * 5000);
+      }
     }
+    if (movies === null) break; // page never succeeded - stop this list
+    pagesScraped++;
+    if (movies.length === 0) break;
+    allMovies.push(...movies);
     if (i < maxPages - 1) await sleep(1500 + Math.random() * 2000);
   }
 
@@ -421,8 +434,17 @@ export async function main({ getConfig = fetchConfig, write = writeCatalog, reco
 
   const runs = [];
   const results = [];
+  let consecutiveFailures = 0;
   try {
-    for (const list of enabledTargets) {
+    for (let li = 0; li < enabledTargets.length; li++) {
+      const list = enabledTargets[li];
+      // S8: breathe between lists - back-to-back listing pages are what
+      // trips mdblist's bot detection in the first place.
+      if (li > 0) await sleep(2500 + Math.random() * 2500);
+      if (consecutiveFailures >= 3) {
+        console.error(`Stopping - ${consecutiveFailures} consecutive failed lists (likely blocked); aborting remaining batch.`);
+        break;
+      }
       const startedAt = Date.now();
       const run = { catalog_id: list.id, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
       try {
@@ -450,13 +472,23 @@ export async function main({ getConfig = fetchConfig, write = writeCatalog, reco
           return true;
         });
 
-        write(list, deduped);
+        // S2: only a clean run publishes - a partial failure must keep the
+        // last good file serving instead of overwriting it with truncated
+        // content. The empty-guard inside writeCatalog stays as belt-and-
+        // braces for direct CLI use.
+        if (errors.length === 0) write(list, deduped);
 
         run.status = deduped.length > 0 && !errors.length ? "success" : "failed";
         run.finished_at = Date.now();
         run.pages_scraped = pagesScraped;
         run.movies_found = deduped.length;
-        run.error_message = errors.length ? errors.join(" | ") : null;
+        // S6: a legitimately-empty scrape must say so - a blank error on a
+        // red row is indistinguishable from a swallowed bug.
+        run.error_message = errors.length
+          ? errors.join(" | ")
+          : deduped.length === 0
+            ? `0 rows returned (${pagesScraped} page(s) scraped)`
+            : null;
         results.push({ catalog: list.id, pagesScraped, moviesFound: deduped.length, errors });
         console.log(
           `[${list.id}] ${run.status} - ${deduped.length} ${list.type === "series" ? "shows" : "movies"} across ${pagesScraped} page(s)` +
@@ -470,6 +502,10 @@ export async function main({ getConfig = fetchConfig, write = writeCatalog, reco
         results.push({ catalog: list.id, error: err.message });
         console.error(`[${list.id}] failed: ${err.message}`);
       }
+      // S8 circuit breaker: three dead lists in a row almost certainly means
+      // we're blocked - burning the remaining targets just adds red rows.
+      if (run.status === "success") consecutiveFailures = 0;
+      else consecutiveFailures++;
       runs.push(run);
     }
   } finally {
