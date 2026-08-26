@@ -111,6 +111,7 @@ export async function fetchAllItems(slug, mediatype) {
         type: mediatype === "movie" ? "movie" : "series",
         title: item.title,
         year: item.release_year ?? null,
+        release_date: item.release_date ?? null,
         poster: item.poster ?? null,
         imdb_rating: item.rating?.imdb?.rating ?? null,
       });

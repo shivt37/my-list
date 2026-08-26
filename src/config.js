@@ -139,7 +139,7 @@ export const OFFICIAL_LISTS = [
 
 // Hard ceiling per config save - cheap protection against runaway adds.
 // Each active slug costs 2 API pulls x 2 cron runs/day.
-export const MAX_OFFICIAL_LISTS = 20;
+export const MAX_OFFICIAL_LISTS = 30;
 
 const SANE_OFFICIAL_SLUG = /^[a-z0-9][a-z0-9-]{0,63}$/;
 

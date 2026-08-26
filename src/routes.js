@@ -139,13 +139,13 @@ function rowToMeta(row, catalogType = row.type) {
 }
 
 function rowToMetaOfficial(row) {
+  const releaseDate = row.release_date || null;
   return {
     id: row.imdb_id,
     type: row.type,
     name: row.title,
-    poster: row.poster || undefined,
-    releaseInfo: row.year ? String(row.year) : undefined,
-    imdbRating: row.imdb_rating ? (row.imdb_rating / 10).toFixed(1) : undefined,
+    poster: row.poster ? row.poster.replace("/w200/", "/w500/") : undefined,
+    releaseInfo: releaseDate || (row.year ? String(row.year) : undefined),
   };
 }
 
