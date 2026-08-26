@@ -731,16 +731,33 @@ export async function handleTmdbPreviewDiscover(env, request) {
     const collectionOnly = hasCollections && sources.length === 0 && !andQs;
     if (hasCollections) {
       const parts = [];
+      const failedLookups = [];
       const results = await Promise.allSettled(
         [...new Set(entry.includeCollections)].map((id) => tmdbApi(env, `/collection/${id}`))
       );
       for (const r of results) {
-        if (r.status !== "fulfilled" || r.value.error) continue;
+        // B6: a failed lookup must be loud, not a silent filter bypass.
+        // tmdbApi returns parsed JSON on success but an (unparsed) error
+        // Response on TMDB failure - detect and unwrap that shape.
+        if (r.status !== "fulfilled") {
+          failedLookups.push(String(r.reason?.message || r.reason).slice(0, 120));
+          continue;
+        }
+        if (r.value && typeof r.value.json === "function") {
+          const body = await r.value.json().catch(() => ({}));
+          failedLookups.push(String(body.error || "unknown TMDB error").slice(0, 120));
+          continue;
+        }
+        if (r.value && r.value.error) {
+          failedLookups.push(String(r.value.error).slice(0, 120));
+          continue;
+        }
         for (const p of r.value.parts || []) {
           collectionIdSet.add(p.id);
           parts.push(p);
         }
       }
+      if (failedLookups.length > 0) return json({ error: `Collection lookup failed: ${failedLookups.join("; ")}` }, 502);
       // OR mode: members enter directly. AND + collection-only: discover is
       // skipped entirely (below), so the members ARE the result and must be
       // seeded too - the post-filter then keeps them by identity.

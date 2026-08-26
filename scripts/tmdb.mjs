@@ -187,17 +187,34 @@ async function collectionIdSet(collectionIds) {
   return ids;
 }
 
-async function collectionParts(collectionIds) {
-  if (!collectionIds || collectionIds.length === 0) return [];
-  const results = await Promise.allSettled(
-    [...new Set(collectionIds)].map((id) => tmdbFetch(`/collection/${id}`))
+// Strict variant for INCLUDE collections (B6): a failed lookup must fail
+// the run instead of silently disabling the filter the user asked for.
+// Excludes stay lenient via collectionIdSet above - missing exclude data
+// narrows nothing, so it doesn't justify failing the list.
+async function collectionPartsStrict(collectionIds) {
+  const unique = [...new Set(collectionIds || [])];
+  const settled = await Promise.all(
+    unique.map((id) =>
+      tmdbFetch(`/collection/${id}`).then(
+        (v) => ({ id, v }),
+        (err) => ({ id, err })
+      )
+    )
   );
+  const set = new Set();
   const parts = [];
-  for (const r of results) {
-    if (r.status !== "fulfilled") continue;
-    if (Array.isArray(r.value.parts)) parts.push(...r.value.parts);
+  const failed = [];
+  for (const r of settled) {
+    if (r.err) {
+      failed.push(`collection ${r.id} lookup failed (${String(r.err.message).slice(0, 120)})`);
+      continue;
+    }
+    for (const p of r.v.parts || []) {
+      set.add(p.id);
+      parts.push(p);
+    }
   }
-  return parts;
+  return { set, parts, failed };
 }
 
 // Client-side sort matching the preview's sortPreviewItems.
@@ -231,8 +248,55 @@ export async function buildDiscoverItems(list, mediaType) {
   const { sources, singleQueryMode, singleQueryQs, collectionIsPostFilter } =
     buildDiscoverSources(list, mediaType);
 
-  const dedup = new Map();
+  // Include-collection members are fetched BEFORE the loops (A2/B6): the
+  // filter gates insertion directly instead of intersecting after a full
+  // 500-item window (which for older collections yields ~0), and knowing
+  // the member count lets pagination stop early once every member is found.
+  let includeSet = null;
+  let includeParts = [];
+  if (mediaType !== "series" && (list.includeCollections || []).length > 0) {
+    const strict = await collectionPartsStrict(list.includeCollections);
+    if (strict.failed.length > 0) throw new Error(strict.failed.join("; "));
+    includeSet = strict.set;
+    includeParts = strict.parts;
+  }
   const excludeSet = await collectionIdSet(list.excludeCollections);
+
+  // Shared admission predicate - one bouncer for every entrance (B5):
+  // discover results and collection-direct parts are screened identically.
+  // Genre excludes re-check genre_ids so parts can't slip through the
+  // without_genres gap; keyword/company excludes remain discover-only
+  // (parts carry no such fields - ponytail: enrich on first real combo).
+  const exGenres = list.excludeGenres || [];
+  const passesFilters = (item) =>
+    (!includeSet || includeSet.has(item.id)) &&
+    !excludeSet.has(item.id) &&
+    !exGenres.some((g) => (item.genre_ids || []).includes(g));
+
+  const dedup = new Map();
+  const admit = (item) => {
+    if (!dedup.has(item.id) && passesFilters(item)) dedup.set(item.id, item);
+  };
+  let pagesFetched = 0;
+
+  // A2 shortcut: AND-collection with no other contributing dimension. The
+  // members ARE the whole result - skip discover entirely. Without this, a
+  // release-sorted page window almost never intersects an older collection.
+  // ponytail ceiling: AND-genre+collection could shortcut via parts'
+  // genre_ids too; add when a real list uses that combo.
+  const noOtherDims =
+    (list.includeGenres || []).length === 0 &&
+    (list.includeKeywords || []).length === 0 &&
+    (list.includeCompanies || []).length === 0 &&
+    (list.includeReleaseTypes || []).length === 0;
+  if (collectionIsPostFilter && noOtherDims) {
+    for (const p of includeParts) admit(p);
+    return finalize(dedup, list, mediaType, pagesFetched, null);
+  }
+
+  // Post-filtered lists shrink per page, so allow a deeper scan before
+  // giving up (quota fuse); unfiltered lists keep the 500-item window.
+  const effectiveCap = collectionIsPostFilter ? Math.max(maxPages, 100) : maxPages;
 
   if (singleQueryMode) {
     let page = 1;
@@ -240,18 +304,18 @@ export async function buildDiscoverItems(list, mediaType) {
     do {
       const path = `${endpoint}?${singleQueryQs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`;
       const data = await tmdbFetch(path);
-      for (const item of data.results || []) if (!dedup.has(item.id)) dedup.set(item.id, item);
+      pagesFetched++;
+      for (const item of data.results || []) admit(item);
       totalPages = Number.isFinite(data.total_pages) ? data.total_pages : page;
       page++;
-    } while (page <= totalPages && page <= maxPages && dedup.size < MAX_ITEMS);
+    } while (
+      page <= totalPages &&
+      page <= effectiveCap &&
+      dedup.size < MAX_ITEMS &&
+      !(includeSet && dedup.size >= includeSet.size)
+    );
   } else {
-    for (const src of sources) {
-      if (src.kind === "collection") {
-        for (const p of await collectionParts(src.ids)) {
-          if (!dedup.has(p.id)) dedup.set(p.id, p);
-        }
-      }
-    }
+    for (const p of includeParts) admit(p);
     const discoverSources = sources.filter((s) => s.kind === "discover");
     let page = 1;
     let totalPages = 1;
@@ -261,26 +325,34 @@ export async function buildDiscoverItems(list, mediaType) {
           tmdbFetch(`${endpoint}?${src.qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`)
         )
       );
+      pagesFetched += round.length;
       let maxTotal = page;
       for (const data of round) {
         maxTotal = Math.max(maxTotal, Number.isFinite(data.total_pages) ? data.total_pages : page);
-        for (const item of data.results || []) if (!dedup.has(item.id)) dedup.set(item.id, item);
+        for (const item of data.results || []) admit(item);
       }
       totalPages = maxTotal;
       page++;
-    } while (page <= totalPages && page <= maxPages && dedup.size < MAX_ITEMS);
+    } while (
+      page <= totalPages &&
+      page <= effectiveCap &&
+      dedup.size < MAX_ITEMS &&
+      !(includeSet && dedup.size >= includeSet.size)
+    );
   }
 
+  let warning = null;
+  if (includeSet && dedup.size < includeSet.size) {
+    warning = `collected ${dedup.size}/${includeSet.size} collection members within ${effectiveCap}-page scan budget`;
+    console.warn(`  [tmdb] ${warning}`);
+  }
+  return finalize(dedup, list, mediaType, pagesFetched, warning);
+}
+
+// Shared tail: sort (drops undated movies per owner rule), cap, series
+// aliasing. Both the shortcut and loop paths return this shape.
+function finalize(dedup, list, mediaType, pagesFetched, warning) {
   let items = [...dedup.values()];
-  if (excludeSet.size > 0) items = items.filter((p) => !excludeSet.has(p.id));
-  if (collectionIsPostFilter) {
-    const includeSet = await collectionIdSet(list.includeCollections);
-    if (includeSet.size > 0) items = items.filter((p) => includeSet.has(p.id));
-  }
-
-  // Multi-source unions lose TMDB's server-side order, and unreleased titles
-  // (empty release_date, e.g. 2028 entries) would sort first on asc. Re-sort
-  // client-side; movies drop no-date items, series sink them last.
   items = sortItems(items, list.sort, mediaType);
 
   items = items.slice(0, MAX_ITEMS);
@@ -294,7 +366,7 @@ export async function buildDiscoverItems(list, mediaType) {
       release_date: item.first_air_date,
     }));
   }
-  return items;
+  return { items, pagesFetched, warning };
 }
 
 export function writeCatalog(list, mediaType, items, sourceHash) {
@@ -392,7 +464,8 @@ export async function main({
     const triggeredBy = process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual";
     try {
       const sourceHash = computeSourceHash(list);
-      const items = await build(list, list.mediaType);
+      const built = await build(list, list.mediaType);
+      const items = built.items;
       // Empty result may mean a legitimate empty filter combo or a fetch
       // gone silent - don't overwrite the last good file with an empty one.
       if (items.length > 0) {
@@ -404,8 +477,11 @@ export async function main({
         catalog_id: catalogId,
         started_at: startedAt,
         finished_at: Date.now(),
-        pages_scraped: Math.ceil(items.length / 20),
+        // B16: real pages fetched (discover requests), not ceil(kept/20) -
+        // a 25-page scan filtered down to 12 items used to report "1".
+        pages_scraped: built.pagesFetched || Math.ceil(items.length / 20),
         movies_found: items.length,
+        ...(built.warning ? { warning: built.warning } : {}),
         status: ok ? "success" : "failed",
         error_message: ok ? null : "0 items returned",
         triggered_by: triggeredBy,
