@@ -1036,6 +1036,11 @@ function updateList(i, key, value) {
     const n = parseInt(value, 10);
     l.maxPages = Number.isFinite(n) ? Math.min(50, Math.max(1, n)) : 3;
   } else {
+    // S4: closing the post-create URL-edit path for duplicate URLs.
+    if (key === 'url' && state.scraper.lists.some((other, j) => j !== i && other.url === value)) {
+      setStatus('That listing URL is already added.', 'error');
+      return; // don't commit the duplicate
+    }
     l[key] = value;
   }
 }
@@ -1162,6 +1167,12 @@ async function confirmCreateList() {
     setStatus('A list with that name already exists.', 'error');
     return;
   }
+  // S4: same URL into two lists = duplicate catalog id + last-writer-wins data
+  // file. Block at the only place users can create lists.
+  if (state.scraper.lists.some(l => l.url === url)) {
+    setStatus('That listing URL is already added.', 'error');
+    return;
+  }
   const id = await randomId(url);
   const pagesInput = document.getElementById('createPagesInput');
   const n = pagesInput ? parseInt(pagesInput.value, 10) : NaN;
@@ -1228,13 +1239,19 @@ function confirmDelete() {
 async function randomId(seedUrl) {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
   if (!seedUrl) return 'mdb_scrape_' + Math.random().toString(36).slice(2, 10);
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(seedUrl));
-  const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-  let out = '';
-  for (let i = 0; i < 8; i++) {
-    out += chars[parseInt(hex[i], 16) % chars.length];
+  try {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(seedUrl));
+    const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    let out = '';
+    for (let i = 0; i < 8; i++) {
+      out += chars[parseInt(hex[i], 16) % chars.length];
+    }
+    return 'mdb_scrape_' + out;
+  } catch {
+    // S10: insecure contexts (http:// LAN) hide crypto.subtle - fall back
+    // to a random id matching the TMDB tab's existing pattern.
+    return 'mdb_scrape_' + Math.random().toString(36).slice(2, 10).padEnd(8, '0');
   }
-  return 'mdb_scrape_' + out;
 }
 
 // ─── Official module tab ───

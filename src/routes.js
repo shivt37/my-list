@@ -382,17 +382,10 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub official cleanup dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
-    const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
-    if (scraperDispatchNeeded) {
-      dispatchResult = await dispatchScraperWorkflow(env, {
-        lists: dispatch.map((l) => l.id),
-        action: deleteIds.length > 0 ? "scrape_delete" : "scrape",
-        ...(deleteIds.length > 0 && { deleteIds }),
-      });
-      if (!dispatchResult.dispatched) {
-        return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
-      }
-    }
+    // S3: tmdb fires before scraper — the scraper workflow can be
+    // destructive (scrape_delete removes data files); if tmdb fails
+    // after the persist, the scraper's delete would run against a
+    // config the rollback wants to keep.
     if (tmdbGenerateSet.size > 0 || tmdbDeleteIds.length > 0) {
       // One dispatch carries both: a save that deletes one list and edits
       // another must regenerate AND delete in the same run.
@@ -405,6 +398,17 @@ export async function handleSaveConfig(env, request) {
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub tmdb dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+    const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
+    if (scraperDispatchNeeded) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        lists: dispatch.map((l) => l.id),
+        action: deleteIds.length > 0 ? "scrape_delete" : "scrape",
+        ...(deleteIds.length > 0 && { deleteIds }),
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
 
@@ -552,6 +556,8 @@ export async function handleTriggerRefresh(env, request) {
   } else {
     targets = cfg.scraper.lists.filter((l) => l.enabled);
   }
+  // S5: don't dispatch a GitHub Actions run just to print "nothing to do".
+  if (targets.length === 0) return json({ ok: true, lists: [] });
 
   const result = await dispatchScraperWorkflow(env, {
     lists: targets.map((l) => l.id),
