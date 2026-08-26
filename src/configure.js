@@ -1604,6 +1604,12 @@ function renderTmdb() {
         '<span class="include-mode-hint">' + pillHint + '</span>' +
       '</div>' +
       dims +
+      // A1: persistent education for the zero-filter footgun.
+      (!(l.includeGenres || []).length && !(l.includeKeywords || []).length &&
+        !(l.includeCompanies || []).length && !(l.includeReleaseTypes || []).length &&
+        !(l.includeCollections || []).length
+        ? '<div class="sort-fallback-note">No filters yet - this would match the entire TMDB database.</div>'
+        : '') +
       (l.previewOpen ? tmdbPreviewHtml(i, l) : '') +
       '<div class="card-error" id="tcardError-' + i + '"></div>' +
     '</div>';
@@ -1693,7 +1699,25 @@ function updateTmdb(i, key, value) {
   const l = state.tmdb.lists[i];
   if (!l) return;
   l[key] = value;
-  if (key === 'mediaType' || key === 'sort') {
+  if (key === 'mediaType') {
+    // B4: movie-only selections must not survive a type switch - TV genre
+    // ids are a different id space, and release types / collections don't
+    // apply to series at all. Keywords and companies are type-neutral.
+    l.includeGenres = [];
+    l.excludeGenres = [];
+    l.includeReleaseTypes = [];
+    l.includeCollections = [];
+    l.includeCollectionNames = [];
+    l.excludeCollections = [];
+    l.excludeCollectionNames = [];
+    delete l.count;
+    invalidateTmdbPreview(l);
+    setStatus('Media type changed - genre, release-type and collection filters were cleared.', 'ok');
+    if (l.previewOpen) { loadTmdbPreview(i); return; }
+    renderTmdb();
+    return;
+  }
+  if (key === 'sort') {
     delete l.count;
     if (l.previewOpen) { loadTmdbPreview(i); return; }
   }
@@ -2035,6 +2059,16 @@ async function saveAll() {
   }
   if (state.tmdb.lists.some(l => !l.discoverListId)) {
     setStatus('TMDB list is missing an id - delete and re-add it.', 'error');
+    return;
+  }
+  // A1: a discover list with zero filters matches TMDB's entire database
+  // (~1.1M titles) - almost certainly not what the operator wants.
+  const emptyTmdb = state.tmdb.lists.find(l =>
+    !(l.includeGenres || []).length && !(l.includeKeywords || []).length &&
+    !(l.includeCompanies || []).length && !(l.includeReleaseTypes || []).length &&
+    !(l.includeCollections || []).length);
+  if (emptyTmdb) {
+    setStatus("List '" + (emptyTmdb.name || 'Untitled') + "' has no filters - it would match all 1.1M TMDB titles. Add at least one filter.", 'error');
     return;
   }
   const btn = document.getElementById('saveBtn');

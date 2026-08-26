@@ -319,6 +319,13 @@ export async function handleSaveConfig(env, request) {
       .map((l) => tmdbCatalogId(l));
     const tmdbGenerateSet = new Set([...tmdbGenerateIds, ...tmdbToggledOnIds]);
     const tmdbDeleteIds = tmdbRemoved.map((l) => tmdbCatalogId(l));
+    // B4: a media-type switch mints a new catalog id (type is baked into the
+    // id), which would orphan the old type's data file forever. Queue the
+    // old id for deletion alongside removals.
+    const tmdbTypeSwitchOldIds = incoming.tmdb.lists
+      .filter((l) => { const p = prevTmdbById.get(l.discoverListId); return p && p.mediaType !== l.mediaType; })
+      .map((l) => tmdbCatalogId(prevTmdbById.get(l.discoverListId)));
+    for (const oldId of tmdbTypeSwitchOldIds) if (!tmdbDeleteIds.includes(oldId)) tmdbDeleteIds.push(oldId);
     const dispatch = [];
     for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
     const deleteIds = removed.map((l) => l.id);

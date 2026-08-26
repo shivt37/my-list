@@ -308,6 +308,13 @@ export function normalizeTmdbList(raw) {
   const excCo = numArr(raw.excludeCompanies);
   const incCl = numArr(raw.includeCollections);
   const excCl = numArr(raw.excludeCollections);
+  // B4: movie-only dimensions cannot survive a series list - /discover/tv
+  // has no release-type or belongs-to-collection filter, and stored values
+  // would silently poison generation. Coerce server-side so imported or
+  // legacy configs are clean too (UI clears them on switch as well).
+  const isSeries = mediaType === "series";
+  const effIncCl = isSeries ? [] : incCl;
+  const effExcCl = isSeries ? [] : excCl;
   return {
     discoverListId: raw.discoverListId,
     name: String(raw.name || "").trim().slice(0, 200) || "Untitled",
@@ -330,11 +337,11 @@ export function normalizeTmdbList(raw) {
     includeCompanyNames: nameArr(raw.includeCompanyNames, incCo.length),
     excludeCompanies: excCo,
     excludeCompanyNames: nameArr(raw.excludeCompanyNames, excCo.length),
-    includeReleaseTypes: numArr(raw.includeReleaseTypes),
-    includeCollections: incCl,
-    includeCollectionNames: nameArr(raw.includeCollectionNames, incCl.length),
-    excludeCollections: excCl,
-    excludeCollectionNames: nameArr(raw.excludeCollectionNames, excCl.length),
+    includeReleaseTypes: isSeries ? [] : numArr(raw.includeReleaseTypes),
+    includeCollections: effIncCl,
+    includeCollectionNames: nameArr(raw.includeCollectionNames, effIncCl.length),
+    excludeCollections: effExcCl,
+    excludeCollectionNames: nameArr(raw.excludeCollectionNames, effExcCl.length),
   };
 }
 
