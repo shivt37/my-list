@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1787715340649,
+  "scraped_at": 1787754338688,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -1109,14 +1109,6 @@
       "imdb_rating": null
     },
     {
-      "imdb_id": "tt41956044",
-      "type": "series",
-      "title": "D&D: Dungeon Masters",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/IgyfRielRU2TEWGkA3U3Zdg9YI.jpg",
-      "imdb_rating": null
-    },
-    {
       "imdb_id": "tt37692332",
       "type": "series",
       "title": "President Curtis",
@@ -1186,6 +1178,22 @@
       "title": "King of the Hill",
       "year": 1997,
       "poster": "https://image.tmdb.org/t/p/w200/e2xyMapmYgv4AuSoSDv9Y4pQlD6.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt14403178",
+      "type": "series",
+      "title": "BEEF",
+      "year": 2023,
+      "poster": "https://image.tmdb.org/t/p/w200/25ih0Xq2zWbxhhKxwhvswKYQyEr.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt31974367",
+      "type": "series",
+      "title": "The Beast in Me",
+      "year": 2025,
+      "poster": "https://image.tmdb.org/t/p/w200/jxf7JCfIMvGONWTNUIJ068sFixK.jpg",
       "imdb_rating": null
     }
   ]
