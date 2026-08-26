@@ -115,10 +115,14 @@ export async function buildManifest(env) {
   };
 }
 
-function rowToMeta(row) {
+// Scraper data files carry raw mdblist rows (imdb_id/title/year/score/
+// poster/description + a type-specific date field that extraction has
+// never successfully filled - see scraper report S1). The catalog type
+// comes from the operator's declared list, never inferred from rows.
+function rowToMeta(row, catalogType = row.type) {
   return {
     id: row.imdb_id,
-    type: row.first_air_date ? "series" : "movie",
+    type: catalogType === "series" ? "series" : "movie",
     name: row.title,
     poster: row.poster_path
       ? row.poster_path.startsWith("http")

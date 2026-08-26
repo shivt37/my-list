@@ -259,7 +259,10 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
           const imdbLink = container.querySelector('.idtext a[href*="imdb.com/title/"]');
           const titleEl = container.querySelector(".header.movie-title, .header.show-title, .movie-title, .show-title");
           const scoreEl = container.querySelector(".idscore.search-score-main");
-          const releaseDateEl = container.querySelector('[data-action="watched"][data-release-date]');
+          // Release date lives in a small overlay on the poster frame -
+          // "Digital: 2026-08-25" / "Theater: ..." / "Release: ..." (DOM
+          // redesign ~Aug 2026; the old [data-release-date] attr is gone).
+          const posterDateLabel = container.querySelector(".poster-frame .label");
           const posterEl = container.querySelector("img.poster-card");
           const descEl = container.querySelector(".description.collapsible-description");
 
@@ -280,7 +283,8 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
           const scoreText = (scoreEl?.textContent || "").trim();
           const score = scoreText && scoreText !== "?" ? parseInt(scoreText, 10) : null;
 
-          const releaseDate = releaseDateEl?.getAttribute("data-release-date") || null;
+          const labelDateMatch = posterDateLabel ? (posterDateLabel.textContent || "").match(/(\d{4}-\d{2}-\d{2})/) : null;
+          const releaseDate = labelDateMatch ? labelDateMatch[1] : null;
 
           const posterSrc = posterEl?.getAttribute("src") || "";
           const posterMatch = posterSrc.match(/\/([A-Za-z0-9]+\.jpg)$/);
