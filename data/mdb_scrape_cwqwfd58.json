@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_cwqwfd58",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1787668175112,
+  "scraped_at": 1787715419313,
   "items": [
+    {
+      "slug": "41kgx-above-below?cache=1",
+      "imdb_id": "tt37603783",
+      "title": "Above & Below",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg",
+      "description": "A group of friends set off for an unforgettable vacation. What begins as an adventure of partying and diving quickly turns into a nightmare when they are attacked by criminals in open waters.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "418bh-blood-shine?cache=1",
+      "imdb_id": "tt35255434",
+      "title": "Blood Shine",
+      "year": 2025,
+      "score": null,
+      "poster_path": "tIFl8WiKgxAU91XjreyCHSl8YmJ.jpg",
+      "description": "In her remote country home, a religious zealot takes a young filmmaker captive, claiming her sadistic rituals will change him into a god.",
+      "digital_release_date": null
+    },
     {
       "slug": "3ydw9-her-private-hell?cache=1",
       "imdb_id": "tt36629665",
@@ -20,7 +40,7 @@
       "title": "Motor City",
       "year": 2026,
       "score": 6,
-      "poster_path": "lGovcOtxugJPhfJjFKud9EbWtOA.jpg",
+      "poster_path": "rKws4iqKhrzWHVLHnwtMnCpEHhF.jpg",
       "description": "In 1970s Detroit, John Miller falls for a local gangster's girl and lands in prison for a crime he didn't commit. With his life ruined, Miller plots revenge against the man who took his girl away.",
       "digital_release_date": null
     },
@@ -1422,26 +1442,6 @@
       "score": 1,
       "poster_path": "nCL9LCKau7c0PBbkRMh7fKHjRRI.jpg",
       "description": "Migrant Nina takes a hotel job in the Maldives, but her island paradise turns nightmarish after an incident. Falsely accused, she must evade traps to escape her unjust life sentence.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3jnz0-pressure?cache=1",
-      "imdb_id": "tt32547691",
-      "title": "Pressure",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "gFjEggtrejCN79r6SXRjM269OtG.jpg",
-      "description": "In the tense 72 hours before D-Day, and the fate of the free world hanging in the balance, General Dwight D. Eisenhower and Captain James Stagg face an impossible choice—launch the largest and most dangerous seaborne invasion in history or risk losing the war altogether.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "4388u-monsters?cache=1",
-      "imdb_id": "tt38573622",
-      "title": "Monsters",
-      "year": 2025,
-      "score": 1,
-      "poster_path": "thebZURuxbS6VdrV7A52OKaLfyO.jpg",
-      "description": "A small town somewhere in the north. The body of a brutally murdered young girl, Anna, is found by the river. The investigation is taken up by the determined criminalist Laura Linhartová (Kristýna Ryška), and her old colleague Adam Beneš (Kryštof Hádek) is assigned to her. The main suspect is a recently convicted perpetrator who is responsible for a similar murder. Just when it seems that the search for Anna's murderer is over, new evidence appears that brings the whole case back to the beginning. The criminalists thus embark on a complicated investigation full of unexpected twists and turns. The circle of suspects in the small town expands dramatically. The tension between Laura and Adam rises, not to mention their different characters and shared past. And the question still hangs in the air: Who killed Anna Pittnerová?",
       "digital_release_date": null
     }
   ]
