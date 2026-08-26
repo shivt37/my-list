@@ -190,7 +190,9 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
 
   const rows = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
   const slice = rows.slice(skip, skip + 100);
-  return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType })) }, 200);
+  // Forward catalogType positionally too: rowToMetaTmdb(row, type) reads its
+  // second argument - row.type alone never reached it (B1 fix).
+  return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType }, catalogType)) }, 200);
 }
 
 export async function handleStatus(env, request) {
@@ -598,18 +600,30 @@ function tmdbTokenOrError(env) {
 }
 
 async function tmdbApi(env, pathAndQuery) {
-  const res = await fetch(`https://api.themoviedb.org/3${pathAndQuery}`, {
-    headers: { Authorization: `Bearer ${env.TMDB_READ_ACCESS_TOKEN}`, Accept: "application/json" },
-    // Bound a hung TMDB connection - the preview endpoint can issue dozens
-    // of sequential rounds, and an unbounded stall would hold the request
-    // open until the platform kills it.
-    signal: AbortSignal.timeout(30000),
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    return json({ error: `TMDB ${res.status}: ${body.slice(0, 200)}` }, 502);
+  // ponytail: single retry on connection-level failures - the operator's
+  // local network drops ~40% of outbound connections (fast-fail, not
+  // timeouts), and preview fires dozens of sequential calls where one loss
+  // would 502 the whole request. Remove when local networking is stable.
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(`https://api.themoviedb.org/3${pathAndQuery}`, {
+        headers: { Authorization: `Bearer ${env.TMDB_READ_ACCESS_TOKEN}`, Accept: "application/json" },
+        // Bound a hung TMDB connection - the preview endpoint can issue dozens
+        // of sequential rounds, and an unbounded stall would hold the request
+        // open until the platform kills it.
+        signal: AbortSignal.timeout(30000),
+      });
+      if (!res.ok) {
+        const body = await res.text().catch(() => "");
+        return json({ error: `TMDB ${res.status}: ${body.slice(0, 200)}` }, 502);
+      }
+      return res.json();
+    } catch (e) {
+      lastErr = e;
+    }
   }
-  return res.json();
+  throw lastErr;
 }
 
 const TMDB_SEARCH_MAX = 12;
@@ -709,34 +723,54 @@ export async function handleTmdbPreviewDiscover(env, request) {
 
     const dedup = new Map();
     const collectionIdSet = new Set();
-    if (collectionSource) {
+    // Collection membership is fetched in BOTH modes: OR mode inserts the
+    // members directly (full part objects, B3), AND mode uses the set to
+    // post-filter discover results below (B2 - previously dead code because
+    // the set was only ever built on the OR path).
+    const hasCollections = mediaType !== "series" && entry.includeCollections.length > 0;
+    const collectionOnly = hasCollections && sources.length === 0 && !andQs;
+    if (hasCollections) {
+      const parts = [];
       const results = await Promise.allSettled(
         [...new Set(entry.includeCollections)].map((id) => tmdbApi(env, `/collection/${id}`))
       );
       for (const r of results) {
         if (r.status !== "fulfilled" || r.value.error) continue;
-        for (const p of r.value.parts || []) collectionIdSet.add(p.id);
+        for (const p of r.value.parts || []) {
+          collectionIdSet.add(p.id);
+          parts.push(p);
+        }
       }
-      for (const id of collectionIdSet) dedup.set(id, { id });
+      // OR mode: members enter directly. AND + collection-only: discover is
+      // skipped entirely (below), so the members ARE the result and must be
+      // seeded too - the post-filter then keeps them by identity.
+      if (!isAnd("collection") || collectionOnly)
+        for (const p of parts) if (!dedup.has(p.id)) dedup.set(p.id, p);
     }
+    // Collection-only list (no genre/keyword/company/release-type dim at all):
+    // skip the discover round-trips. Otherwise a release-sorted 25-page
+    // window almost never intersects an older collection and the preview
+    // reads as empty.
     let page = 1;
     let totalPages = 1;
-    do {
-      const queries = sources.length > 0 ? sources : [andQs];
-      const round = await Promise.all(
-        queries.map((qs) =>
-          tmdbApi(env, `${endpoint}?${qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`)
-        )
-      );
-      let maxTotal = page;
-      for (const data of round) {
-        if (data.error) return json(data, 502);
-        maxTotal = Math.max(maxTotal, Number.isFinite(data.total_pages) ? data.total_pages : page);
-        for (const item of data.results || []) if (!dedup.has(item.id)) dedup.set(item.id, item);
-      }
-      totalPages = maxTotal;
-      page++;
-    } while (page <= totalPages && page <= PREVIEW_PAGES);
+    if (!collectionOnly) {
+      do {
+        const queries = sources.length > 0 ? sources : [andQs];
+        const round = await Promise.all(
+          queries.map((qs) =>
+            tmdbApi(env, `${endpoint}?${qs.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${page}${excludeQs}`)
+          )
+        );
+        let maxTotal = page;
+        for (const data of round) {
+          if (data.error) return json(data, 502);
+          maxTotal = Math.max(maxTotal, Number.isFinite(data.total_pages) ? data.total_pages : page);
+          for (const item of data.results || []) if (!dedup.has(item.id)) dedup.set(item.id, item);
+        }
+        totalPages = maxTotal;
+        page++;
+      } while (page <= totalPages && page <= PREVIEW_PAGES);
+    }
 
     let items = [...dedup.values()];
     if (entry.excludeCollections.length > 0) {
@@ -767,7 +801,10 @@ export async function handleTmdbPreviewDiscover(env, request) {
     }));
     return json({ items: metas, truncated });
   } catch (e) {
-    return json({ error: "Invalid request body: " + e.message }, 400);
+    // Body-parse failures (malformed JSON) stay a 400; anything downstream
+    // (TMDB fetch/timeout/parse) is a gateway problem, not the client's (B15).
+    if (e instanceof SyntaxError) return json({ error: "Invalid request body: " + e.message }, 400);
+    return json({ error: "Preview failed: " + e.message }, 502);
   }
 }
 
