@@ -370,6 +370,9 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub official dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
+    // O3: official cleanup fires after tmdb (destructive-capable) and
+    // before scraper — this puts all destructive actions at the tail,
+    // closest to persist, matching the documented invariant.
     if (officialRemovedIds.length > 0) {
       // Data-file cleanup for deleted officials. Runs like every other
       // dispatch (accepted-204 ≠ done) but is non-critical: a failed

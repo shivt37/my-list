@@ -50,7 +50,7 @@ const deleteIdsArg = arg("delete-ids");
 export async function enabledSlugs() {
   if (!WORKER_ORIGIN) {
     console.error("WORKER_ORIGIN missing - cannot read official slug config. Refresh skipped.");
-    return [];
+    return null; // O5: null signals "couldn't fetch" vs empty array "nothing enabled"
   }
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
@@ -58,13 +58,13 @@ export async function enabledSlugs() {
     });
     if (!res.ok) {
       console.error(`Worker /export-config HTTP ${res.status} - cannot read official slug config. Refresh skipped.`);
-      return [];
+      return null;
     }
     const cfg = await res.json();
     return (cfg.official?.lists || []).filter((l) => l.enabled).map((l) => l.slug);
   } catch (e) {
     console.error(`Worker unreachable (${e.message}) - official refresh skipped.`);
-    return [];
+    return null;
   }
 }
 
@@ -113,7 +113,6 @@ export async function fetchAllItems(slug, mediatype) {
         year: item.release_year ?? null,
         release_date: item.release_date ?? null,
         poster: item.poster ?? null,
-        imdb_rating: item.rating?.imdb?.rating ?? null,
       });
     }
 
@@ -207,7 +206,15 @@ export async function main({
     return;
   }
 
-  const enabledSet = new Set(await fetchConfig());
+  const enabledSlugsList = await fetchConfig();
+  // O5: null = worker unreachable/config unreadable. Don't silently
+  // exit 0 (looks green) — record nothing and fail the run.
+  if (enabledSlugsList === null) {
+    console.error("Aborting: worker config unreachable.");
+    process.exitCode = 1;
+    return { generated: [] };
+  }
+  const enabledSet = new Set(enabledSlugsList);
   let slugs;
   if (rawSlugs) {
     // Workflow/CLI override - intersect with config so a stale or crafted
