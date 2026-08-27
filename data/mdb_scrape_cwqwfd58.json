@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_cwqwfd58",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1787754481349,
+  "scraped_at": 1787807833538,
   "items": [
+    {
+      "slug": "41myx-the-last-sunrise",
+      "imdb_id": "tt37654096",
+      "title": "The Last Sunrise",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "3PWJqDfygN0YNNjWsDUOXclCp3h.jpg",
+      "description": "Ry, a college student with a chronic illness, escapes to Mallorca for the summer with her mother, where she unexpectedly falls for a local and begins to embrace living in the moment. But as her condition worsens and long-hidden family secrets come to light, everything she has found before summer's end is threatened.",
+      "digital_release_date": null
+    },
     {
       "slug": "41kgx-above-below",
       "imdb_id": "tt37603783",
@@ -40,7 +50,7 @@
       "title": "Motor City",
       "year": 2026,
       "score": 6,
-      "poster_path": "rKws4iqKhrzWHVLHnwtMnCpEHhF.jpg",
+      "poster_path": "cWAVzTWm9xdc8skHH7h1vreUtcD.jpg",
       "description": "In 1970s Detroit, John Miller falls for a local gangster's girl and lands in prison for a crime he didn't commit. With his life ruined, Miller plots revenge against the man who took his girl away.",
       "digital_release_date": null
     },
@@ -59,8 +69,8 @@
       "imdb_id": "tt32333324",
       "title": "Batman: Knightfall Part 1: Knightfall",
       "year": 2026,
-      "score": null,
-      "poster_path": "g19IoButQepcHPShmzfPGYOWfTq.jpg",
+      "score": 7,
+      "poster_path": "360qdtu2hLnqMu8SVHMywn420w1.jpg",
       "description": "Arkham Asylum has been destroyed, and all its inmates have been unleashed upon Gotham City. As Batman races to round up some of his greatest enemies, he is pushed to his physical and mental limits and into a final confrontation with a new threat: the man called Bane!",
       "digital_release_date": null
     },
@@ -79,7 +89,7 @@
       "imdb_id": "tt37540328",
       "title": "Back to the 90s",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "2T0j25ofU6aUei6J6ek2hlTL1wc.jpg",
       "description": "When a mysterious glitch sends a rising boyband back to 1995 - just days before the biggest showcase of their lives - the five friends race to reverse the time slip. But as unexpected connections form and the past pulls them in deeper, getting home means confronting what they're willing to leave behind - and who they truly are to each other.",
       "digital_release_date": null
@@ -89,7 +99,7 @@
       "imdb_id": "tt39390497",
       "title": "Facing El Chapo",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
       "description": "Two Mexican officers must survive the final hours of their shift after crossing a ruthless cartel boss.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "cyI2Ugpq98WZN1GEYeWkn4ztXOc.jpg",
       "description": "A group of international passengers on a flight from Los Angeles to Shanghai is forced to make an emergency landing in shark-infested waters. The terrified group is forced to work together and overcome their differences if they hope to escape their sinking plane and the frenzy of sharks drawn to the wreckage.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3ij68-hell-in-paradise",
-      "imdb_id": "tt32296243",
-      "title": "Hell in Paradise",
-      "year": 2025,
-      "score": 1,
-      "poster_path": "nCL9LCKau7c0PBbkRMh7fKHjRRI.jpg",
-      "description": "Migrant Nina takes a hotel job in the Maldives, but her island paradise turns nightmarish after an incident. Falsely accused, she must evade traps to escape her unjust life sentence.",
       "digital_release_date": null
     }
   ]

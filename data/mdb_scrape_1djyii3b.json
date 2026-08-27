@@ -2,15 +2,25 @@
   "catalog_id": "mdb_scrape_1djyii3b",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787754467894,
+  "scraped_at": 1787807818199,
   "items": [
+    {
+      "slug": "3js9s-gohan",
+      "imdb_id": "tt36958999",
+      "title": "Gohan",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "nVq1Dn88NzVIVTDpGZeP7fxpLa1.jpg",
+      "description": "The bonds between humans and animals following a stray dog named Gohan as it moves through life with temporary owners over a decade, through good times and bad times, joy and sorrow, hellos and goodbyes.",
+      "digital_release_date": "2026-08-27"
+    },
     {
       "slug": "n80k-motor-city",
       "imdb_id": "tt2012616",
       "title": "Motor City",
       "year": 2026,
       "score": 6,
-      "poster_path": "rKws4iqKhrzWHVLHnwtMnCpEHhF.jpg",
+      "poster_path": "cWAVzTWm9xdc8skHH7h1vreUtcD.jpg",
       "description": "In 1970s Detroit, John Miller falls for a local gangster's girl and lands in prison for a crime he didn't commit. With his life ruined, Miller plots revenge against the man who took his girl away.",
       "digital_release_date": "2026-08-25"
     },
@@ -42,6 +52,16 @@
       "score": 4,
       "poster_path": "kiFacg75KVjy0AM3S4QmbPas8zL.jpg",
       "description": "When a mysterious mist engulfs a futuristic metropolis, unleashing a deadly and elusive entity, a troubled young woman searches for her father. Her quest collides with an American GI on a harrowing odyssey to rescue his daughter from Hell.",
+      "digital_release_date": "2026-08-25"
+    },
+    {
+      "slug": "432rh-batman-knightfall-part-1-knightfall",
+      "imdb_id": "tt32333324",
+      "title": "Batman: Knightfall Part 1: Knightfall",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "360qdtu2hLnqMu8SVHMywn420w1.jpg",
+      "description": "Arkham Asylum has been destroyed, and all its inmates have been unleashed upon Gotham City. As Batman races to round up some of his greatest enemies, he is pushed to his physical and mental limits and into a final confrontation with a new threat: the man called Bane!",
       "digital_release_date": "2026-08-25"
     },
     {
@@ -149,7 +169,7 @@
       "imdb_id": "tt41110859",
       "title": "Aakhri Sawal",
       "year": 2026,
-      "score": 1,
+      "score": 2,
       "poster_path": "9CXBZH6sRJpFTMSaY3wj1jx98F4.jpg",
       "description": "Vicky, a brilliant but volatile scholar who ignites a national firestorm when he publicly accuses his legendary mentor, Professor Gopal Nadkarni, of institutional bias. What begins as a faculty dispute is quickly hijacked by a sensationalist news anchor and an ambitious political activist, turning a private disagreement into a televised \"intellectual trial\" watched by millions.",
       "digital_release_date": "2026-08-14"
@@ -292,6 +312,16 @@
       "score": 4,
       "poster_path": "6JU7E8Vv2M11egkctWVOScxWR75.jpg",
       "description": "A family suddenly sealed inside their home must work together to survive against dwindling resources and the ominous threat keeping them trapped.",
+      "digital_release_date": "2026-08-06"
+    },
+    {
+      "slug": "3k6c8-rage-of-stars",
+      "imdb_id": "tt29512655",
+      "title": "Rage of Stars",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "oLld47ZT1I3iecM3OWhIphohQUJ.jpg",
+      "description": "A story about a woman from the International Special Forces Unit, who has a premonition about the impending end of humanity.",
       "digital_release_date": "2026-08-06"
     },
     {
@@ -1413,36 +1443,6 @@
       "poster_path": "xdZ8k5s8DTwWyPBMIcflrYLgcAK.jpg",
       "description": "A marine biologist is doing research on a fish farm when she encounters several strange occurrences. Along with the brutal deaths of two teenagers, all signs point to the deep fjord; can there be more to the depths than the eye can see?",
       "digital_release_date": "2026-06-01"
-    },
-    {
-      "slug": "3y68h-our-hero-balthazar",
-      "imdb_id": "tt36589928",
-      "title": "Our Hero, Balthazar",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "mxVTarvl5OLoU9YWIYygby6R0KI.jpg",
-      "description": "Eager to impress his activist crush, a wealthy New York teenager follows an online connection to Texas, where he's convinced he can stop an act of extreme violence.",
-      "digital_release_date": "2026-06-01"
-    },
-    {
-      "slug": "2wg63-k-pops",
-      "imdb_id": "tt19896510",
-      "title": "K-Pops!",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "72KQHN1xUO6gWHLRRPyJcCQXlve.jpg",
-      "description": "A washed-up musician travels to Korea to write for K-pop stars, discovering that his long-lost son is set to front one of the country’s hottest new groups. He then jumps at the opportunity to capitalize on his son’s stardom for his own renaissance, but learns that fatherhood is much more fulfilling and meaningful than stardom.",
-      "digital_release_date": "2026-05-30"
-    },
-    {
-      "slug": "3nla1-aida-the-movie",
-      "imdb_id": "tt33797166",
-      "title": "Aida, the Movie",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "h4QnoqmMPS50U7m1XByw29CJ1ws.jpg",
-      "description": "The film deals with the filming of an episode of the series with storylines that take place both within the fiction with the characters of 'Aída' and outside of it with the actors themselves and their relationships, which reflects on topics such as the limits of comedy, the work of a comedian and fame.",
-      "digital_release_date": "2026-05-30"
     }
   ]
 }
