@@ -2,14 +2,15 @@
   "catalog_id": "mdboff_popular_movie",
   "name": "Popular",
   "type": "movie",
-  "scraped_at": 1787754336315,
+  "scraped_at": 1787803773944,
   "items": [
     {
       "imdb_id": "tt22084616",
       "type": "movie",
       "title": "Spider-Man: Brand New Day",
       "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/ghF1JYv7P5BgWHYfq9dqhqqNfz8.jpg",
+      "release_date": "2026-07-29",
+      "poster": "https://image.tmdb.org/t/p/w200/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg",
       "imdb_rating": null
     },
     {
@@ -17,6 +18,7 @@
       "type": "movie",
       "title": "The Odyssey",
       "year": 2026,
+      "release_date": "2026-07-15",
       "poster": "https://image.tmdb.org/t/p/w200/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
       "imdb_rating": null
     },
@@ -25,6 +27,7 @@
       "type": "movie",
       "title": "Obsession",
       "year": 2026,
+      "release_date": "2026-05-13",
       "poster": "https://image.tmdb.org/t/p/w200/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg",
       "imdb_rating": null
     },
@@ -33,15 +36,8 @@
       "type": "movie",
       "title": "Project Hail Mary",
       "year": 2026,
+      "release_date": "2026-03-15",
       "poster": "https://image.tmdb.org/t/p/w200/yihdXomYb5kTeSivtFndMy5iDmf.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt33071426",
-      "type": "movie",
-      "title": "The Drama",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg",
       "imdb_rating": null
     },
     {
@@ -49,7 +45,17 @@
       "type": "movie",
       "title": "Backrooms",
       "year": 2026,
+      "release_date": "2026-05-27",
       "poster": "https://image.tmdb.org/t/p/w200/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt33071426",
+      "type": "movie",
+      "title": "The Drama",
+      "year": 2026,
+      "release_date": "2026-04-01",
+      "poster": "https://image.tmdb.org/t/p/w200/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg",
       "imdb_rating": null
     },
     {
@@ -57,6 +63,7 @@
       "type": "movie",
       "title": "The Invite",
       "year": 2026,
+      "release_date": "2026-06-25",
       "poster": "https://image.tmdb.org/t/p/w200/hFLVVF6GSfFkvDlht6iCsCcFjrh.jpg",
       "imdb_rating": null
     },
@@ -65,6 +72,7 @@
       "type": "movie",
       "title": "The Devil Wears Prada 2",
       "year": 2026,
+      "release_date": "2026-04-29",
       "poster": "https://image.tmdb.org/t/p/w200/xTI42pmsP5EDnvsNJPEDubwWBQO.jpg",
       "imdb_rating": null
     },
@@ -73,6 +81,7 @@
       "type": "movie",
       "title": "The End of Oak Street",
       "year": 2026,
+      "release_date": "2026-08-12",
       "poster": "https://image.tmdb.org/t/p/w200/fYXqpgPmHMphSF2W30GbTeJVIa5.jpg",
       "imdb_rating": null
     },
@@ -81,6 +90,7 @@
       "type": "movie",
       "title": "The Last House",
       "year": 2026,
+      "release_date": "2026-08-06",
       "poster": "https://image.tmdb.org/t/p/w200/6JU7E8Vv2M11egkctWVOScxWR75.jpg",
       "imdb_rating": null
     },
@@ -89,6 +99,7 @@
       "type": "movie",
       "title": "Masters of the Universe",
       "year": 2026,
+      "release_date": "2026-06-03",
       "poster": "https://image.tmdb.org/t/p/w200/oRuyGUHdoaQxWP3SDfafGkStxTC.jpg",
       "imdb_rating": null
     },
@@ -97,6 +108,7 @@
       "type": "movie",
       "title": "Disclosure Day",
       "year": 2026,
+      "release_date": "2026-06-10",
       "poster": "https://image.tmdb.org/t/p/w200/AnJ8IQJI23hNpYXVNaythu061Ru.jpg",
       "imdb_rating": null
     },
@@ -105,6 +117,7 @@
       "type": "movie",
       "title": "Toy Story 5",
       "year": 2026,
+      "release_date": "2026-06-17",
       "poster": "https://image.tmdb.org/t/p/w200/sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
       "imdb_rating": null
     },
@@ -113,6 +126,7 @@
       "type": "movie",
       "title": "Avatar Aang: The Last Airbender",
       "year": 2026,
+      "release_date": "2026-07-24",
       "poster": "https://image.tmdb.org/t/p/w200/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg",
       "imdb_rating": null
     },
@@ -121,6 +135,7 @@
       "type": "movie",
       "title": "The Sheep Detectives",
       "year": 2026,
+      "release_date": "2026-04-30",
       "poster": "https://image.tmdb.org/t/p/w200/iKy5460GdsoknM8ppmGlJbKxAKa.jpg",
       "imdb_rating": null
     },
@@ -129,6 +144,7 @@
       "type": "movie",
       "title": "Supergirl",
       "year": 2026,
+      "release_date": "2026-06-24",
       "poster": "https://image.tmdb.org/t/p/w200/1QCWdqzTfh2x9UylVpspIU6QTuM.jpg",
       "imdb_rating": null
     },
@@ -137,15 +153,8 @@
       "type": "movie",
       "title": "Evil Dead Burn",
       "year": 2026,
+      "release_date": "2026-07-07",
       "poster": "https://image.tmdb.org/t/p/w200/uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt10375624",
-      "type": "movie",
-      "title": "Voicemails for Isabelle",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/canZTWSxACSnAluir3dCtMxKpA1.jpg",
       "imdb_rating": null
     },
     {
@@ -153,15 +162,8 @@
       "type": "movie",
       "title": "Minions & Monsters",
       "year": 2026,
+      "release_date": "2026-06-24",
       "poster": "https://image.tmdb.org/t/p/w200/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt31193180",
-      "type": "movie",
-      "title": "Sinners",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg",
       "imdb_rating": null
     },
     {
@@ -169,7 +171,26 @@
       "type": "movie",
       "title": "Michael",
       "year": 2026,
+      "release_date": "2026-04-22",
       "poster": "https://image.tmdb.org/t/p/w200/2AvgnCwCakNiJqWZqaQhdGjWNey.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt10375624",
+      "type": "movie",
+      "title": "Voicemails for Isabelle",
+      "year": 2026,
+      "release_date": "2026-06-20",
+      "poster": "https://image.tmdb.org/t/p/w200/canZTWSxACSnAluir3dCtMxKpA1.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt10676052",
+      "type": "movie",
+      "title": "The Fantastic 4: First Steps",
+      "year": 2025,
+      "release_date": "2025-07-23",
+      "poster": "https://image.tmdb.org/t/p/w200/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg",
       "imdb_rating": null
     },
     {
@@ -177,6 +198,7 @@
       "type": "movie",
       "title": "Marty Supreme",
       "year": 2025,
+      "release_date": "2025-12-19",
       "poster": "https://image.tmdb.org/t/p/w200/lYWEXbQgRTR4ZQleSXAgRbxAjvq.jpg",
       "imdb_rating": null
     },
@@ -185,15 +207,8 @@
       "type": "movie",
       "title": "Leviticus",
       "year": 2026,
+      "release_date": "2026-06-17",
       "poster": "https://image.tmdb.org/t/p/w200/gnAsZvBygplNpp8PtjoTEYv3VPB.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt10676052",
-      "type": "movie",
-      "title": "The Fantastic 4: First Steps",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg",
       "imdb_rating": null
     },
     {
@@ -201,6 +216,7 @@
       "type": "movie",
       "title": "Thunderbolts*",
       "year": 2025,
+      "release_date": "2025-04-30",
       "poster": "https://image.tmdb.org/t/p/w200/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg",
       "imdb_rating": null
     },
@@ -209,7 +225,17 @@
       "type": "movie",
       "title": "Teenage Sex and Death at Camp Miasma",
       "year": 2026,
+      "release_date": "2026-08-06",
       "poster": "https://image.tmdb.org/t/p/w200/5Cz1EJOKpZ8hqvBNZYF9C2zTB2T.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt31193180",
+      "type": "movie",
+      "title": "Sinners",
+      "year": 2025,
+      "release_date": "2025-04-16",
+      "poster": "https://image.tmdb.org/t/p/w200/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg",
       "imdb_rating": null
     },
     {
@@ -217,15 +243,8 @@
       "type": "movie",
       "title": "Heartstopper Forever",
       "year": 2026,
+      "release_date": "2026-07-14",
       "poster": "https://image.tmdb.org/t/p/w200/mHt4cVaxU3Ms6OyP1olCJ2tFIY1.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt26581740",
-      "type": "movie",
-      "title": "Weapons",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/cpf7vsRZ0MYRQcnLWteD5jK9ymT.jpg",
       "imdb_rating": null
     },
     {
@@ -233,6 +252,7 @@
       "type": "movie",
       "title": "Scary Movie",
       "year": 2026,
+      "release_date": "2026-06-03",
       "poster": "https://image.tmdb.org/t/p/w200/znHT8peERZRWG1ME3r0Db0EV8k8.jpg",
       "imdb_rating": null
     },
@@ -241,6 +261,7 @@
       "type": "movie",
       "title": "Superman",
       "year": 2025,
+      "release_date": "2025-07-09",
       "poster": "https://image.tmdb.org/t/p/w200/ldyfo0BKmz5rWtJJKCvwaNS4cJT.jpg",
       "imdb_rating": null
     },
@@ -249,6 +270,7 @@
       "type": "movie",
       "title": "The Housemaid",
       "year": 2025,
+      "release_date": "2025-12-18",
       "poster": "https://image.tmdb.org/t/p/w200/cWsBscZzwu5brg9YjNkGewRUvJX.jpg",
       "imdb_rating": null
     },
@@ -257,6 +279,7 @@
       "type": "movie",
       "title": "Tony",
       "year": 2026,
+      "release_date": "2026-08-07",
       "poster": "https://image.tmdb.org/t/p/w200/3WN0JWwRI7oGH7Ni2R6poVWej05.jpg",
       "imdb_rating": null
     },
@@ -265,6 +288,7 @@
       "type": "movie",
       "title": "The Long Walk",
       "year": 2025,
+      "release_date": "2025-09-10",
       "poster": "https://image.tmdb.org/t/p/w200/wobVTa99eW0ht6c1rNNzLkazPtR.jpg",
       "imdb_rating": null
     },
@@ -273,6 +297,7 @@
       "type": "movie",
       "title": "Don't Say Good Luck",
       "year": 2026,
+      "release_date": "2026-08-13",
       "poster": "https://image.tmdb.org/t/p/w200/dgTKahWonzVLeN8Lm22WR2S7D0A.jpg",
       "imdb_rating": null
     },
@@ -281,7 +306,17 @@
       "type": "movie",
       "title": "72 HOURS",
       "year": 2026,
+      "release_date": "2026-07-20",
       "poster": "https://image.tmdb.org/t/p/w200/9Bu1PW2R1XayqRqnl0aDOgMcrdS.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt26581740",
+      "type": "movie",
+      "title": "Weapons",
+      "year": 2025,
+      "release_date": "2025-08-04",
+      "poster": "https://image.tmdb.org/t/p/w200/cpf7vsRZ0MYRQcnLWteD5jK9ymT.jpg",
       "imdb_rating": null
     },
     {
@@ -289,6 +324,7 @@
       "type": "movie",
       "title": "Ready or Not: Here I Come",
       "year": 2026,
+      "release_date": "2026-03-19",
       "poster": "https://image.tmdb.org/t/p/w200/13ZcJzSGEqVgDSqsS9U5EkQwPkV.jpg",
       "imdb_rating": null
     },
@@ -297,6 +333,7 @@
       "type": "movie",
       "title": "Bugonia",
       "year": 2025,
+      "release_date": "2025-10-23",
       "poster": "https://image.tmdb.org/t/p/w200/rSdOua3wKMEaFWDcKAYWRjXQWOt.jpg",
       "imdb_rating": null
     },
@@ -305,7 +342,17 @@
       "type": "movie",
       "title": "Avatar: Fire and Ash",
       "year": 2025,
+      "release_date": "2025-12-17",
       "poster": "https://image.tmdb.org/t/p/w200/bRBeSHfGHwkEpImlhxPmOcUsaeg.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt32393988",
+      "type": "movie",
+      "title": "Insidious: Out of the Further",
+      "year": 2026,
+      "release_date": "2026-08-19",
+      "poster": "https://image.tmdb.org/t/p/w200/4tTrW9dXCByS5wt2pXVWb58zNjz.jpg",
       "imdb_rating": null
     },
     {
@@ -313,6 +360,7 @@
       "type": "movie",
       "title": "The Devil's Mouth",
       "year": 2026,
+      "release_date": "2026-07-29",
       "poster": "https://image.tmdb.org/t/p/w200/lH8k9uCWYn2b2gsYleqYBDPbWa8.jpg",
       "imdb_rating": null
     },
@@ -321,6 +369,7 @@
       "type": "movie",
       "title": "F1",
       "year": 2025,
+      "release_date": "2025-06-25",
       "poster": "https://image.tmdb.org/t/p/w200/9PXZIUsSDh4alB80jheWX4fhZmy.jpg",
       "imdb_rating": null
     },
@@ -329,6 +378,7 @@
       "type": "movie",
       "title": "Enola Holmes 3",
       "year": 2026,
+      "release_date": "2026-06-30",
       "poster": "https://image.tmdb.org/t/p/w200/7kRYHH9H9PjBFwz1FprbHB2AAjI.jpg",
       "imdb_rating": null
     },
@@ -337,31 +387,8 @@
       "type": "movie",
       "title": "One Battle After Another",
       "year": 2025,
+      "release_date": "2025-09-23",
       "poster": "https://image.tmdb.org/t/p/w200/lbBWwxBht4JFP5PsuJ5onpMqugW.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt17490712",
-      "type": "movie",
-      "title": "Mortal Kombat II",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/hwRdDFIhaEmpRgoki805YvyyjZf.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt26443597",
-      "type": "movie",
-      "title": "Zootopia 2",
-      "year": 2025,
-      "poster": "https://image.tmdb.org/t/p/w200/oJ7g2CifqpStmoYQyaLQgEU32qO.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt26443616",
-      "type": "movie",
-      "title": "Hoppers",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/xjtWQ2CL1mpmMNwuU5HeS4Iuwuu.jpg",
       "imdb_rating": null
     },
     {
@@ -369,7 +396,35 @@
       "type": "movie",
       "title": "One Night Only",
       "year": 2026,
+      "release_date": "2026-07-28",
       "poster": "https://image.tmdb.org/t/p/w200/9LGEqZvzI7Tsosf8srwEY48rZsD.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt26443597",
+      "type": "movie",
+      "title": "Zootopia 2",
+      "year": 2025,
+      "release_date": "2025-11-26",
+      "poster": "https://image.tmdb.org/t/p/w200/oJ7g2CifqpStmoYQyaLQgEU32qO.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt17490712",
+      "type": "movie",
+      "title": "Mortal Kombat II",
+      "year": 2026,
+      "release_date": "2026-05-06",
+      "poster": "https://image.tmdb.org/t/p/w200/hwRdDFIhaEmpRgoki805YvyyjZf.jpg",
+      "imdb_rating": null
+    },
+    {
+      "imdb_id": "tt26443616",
+      "type": "movie",
+      "title": "Hoppers",
+      "year": 2026,
+      "release_date": "2026-03-04",
+      "poster": "https://image.tmdb.org/t/p/w200/xjtWQ2CL1mpmMNwuU5HeS4Iuwuu.jpg",
       "imdb_rating": null
     },
     {
@@ -377,6 +432,7 @@
       "type": "movie",
       "title": "Frankenstein",
       "year": 2025,
+      "release_date": "2025-10-17",
       "poster": "https://image.tmdb.org/t/p/w200/g4JtvGlQO7DByTI6frUobqvSL3R.jpg",
       "imdb_rating": null
     },
@@ -385,6 +441,7 @@
       "type": "movie",
       "title": "Hokum",
       "year": 2026,
+      "release_date": "2026-04-29",
       "poster": "https://image.tmdb.org/t/p/w200/x6rHcQFiYcczLQPrmxXPAicm54E.jpg",
       "imdb_rating": null
     },
@@ -393,15 +450,8 @@
       "type": "movie",
       "title": "Hamnet",
       "year": 2025,
+      "release_date": "2025-11-26",
       "poster": "https://image.tmdb.org/t/p/w200/vbeyOZm2bvBXcbgPD3v6o94epPX.jpg",
-      "imdb_rating": null
-    },
-    {
-      "imdb_id": "tt8036976",
-      "type": "movie",
-      "title": "Send Help",
-      "year": 2026,
-      "poster": "https://image.tmdb.org/t/p/w200/zbJWVHOtj3ljBzWgL1P8pxP03Up.jpg",
       "imdb_rating": null
     }
   ]
