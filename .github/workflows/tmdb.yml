@@ -90,7 +90,7 @@ jobs:
             fi
             if [ "$attempt" -eq 1 ]; then
               echo "Requested IDs not in config yet - waiting 10s for KV propagation..."
-              sleep 10
+              sleep 20
             fi
           done
           echo "WARNING: IDs still missing after retry - proceeding anyway"
