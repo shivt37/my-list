@@ -154,7 +154,7 @@ function rowToMetaOfficial(row) {
 function rowToMetaSimkl(row) {
   return {
     id: row.id || row.imdb_id,
-    type: "series",
+    type: row.type === "movie" ? "movie" : "series",
     name: row.name || row.title,
     poster: row.poster || undefined,
     description: row.description || undefined,

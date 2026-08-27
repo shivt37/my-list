@@ -237,13 +237,24 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
     // show dumped E01-E12 today has headline=E12, which the old
     // headline-only check would mislabel as "standard".
     const isBulk = item.episodes.length > 1;
+    // K2: anime films (theatrical premieres) appear in the anime calendar as
+    // episode-less stubs. The metadata is authoritative (anime_type:"movie",
+    // total_episodes:1) - detect via that first, falling back to the
+    // episode-less-batch shape for older/edge payloads.
+    const isFilm = !isAnime
+      ? false
+      : item.show.anime_type === "movie"
+        || (item.show.anime_type === "OVA" && item.episodes.every((e) => e.episode == null))
+        || item.episodes.every((e) => e.season == null && e.episode == null);
     const hasS1E1 = isAnime
       ? item.episodes.some((e) => (e.episode ?? 0) === 1)
       : item.episodes.some((e) => (e.season ?? 0) === 1 && (e.episode ?? 0) === 1);
     const hasAnyE1 = item.episodes.some((e) => (e.episode ?? 0) === 1);
 
     let type = "standard";
-    if (finaleType != null) {
+    if (isFilm) {
+      type = "film";
+    } else if (finaleType != null) {
       type = "finale";
     } else if (hasS1E1) {
       type = "new_show";
@@ -252,11 +263,12 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
     }
 
     // New shows are exempt from the rating filter - no track record yet.
-    // Genre/country filters above still apply.
-    if (type !== "new_show" && f.rating_filter_enabled && !passesRatingTiers(f.rating_tiers, item.show.ratings?.[f.rating_source], item.show.ratings?.simkl)) continue;
+    // Genre/country filters above still apply. Films likewise skip the
+    // episode-based rating gate (single titles, not yet rated).
+    if (type !== "new_show" && type !== "film" && f.rating_filter_enabled && !passesRatingTiers(f.rating_tiers, item.show.ratings?.[f.rating_source], item.show.ratings?.simkl)) continue;
 
-    const label = finaleType != null ? FINALE_LABEL[finaleType] : LABEL[type];
-    const priority = finaleType != null ? FINALE_PRIORITY[finaleType] : PRIORITY[type];
+    const label = isFilm ? "🎬 Movie" : finaleType != null ? FINALE_LABEL[finaleType] : LABEL[type];
+    const priority = isFilm ? PRIORITY.new_season : finaleType != null ? FINALE_PRIORITY[finaleType] : PRIORITY[type];
 
     const s = !isAnime && season != null ? `S${String(season).padStart(2, "0")}` : "";
     const e = episode != null ? `E${String(episode).padStart(2, "0")}` : "";
@@ -286,10 +298,10 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
 
     metas.push({
       id: item.id,
-      type: "series",
+      type: isFilm ? "movie" : "series",
       name: item.title,
       poster: simklPoster(item.show.poster),
-      description: `${label} | ${s}${e}${rangeTail} | ${airsUtc} | ${country ? country.toUpperCase() : "??"} | genres: ${genres.join(", ") || "none"} | ${ratingsStr}`,
+      description: `${label}${isFilm ? "" : " | " + s + e + rangeTail} | ${airsUtc} | ${country ? country.toUpperCase() : "??"} | genres: ${genres.join(", ") || "none"} | ${ratingsStr}`,
       _pri: priority,
       _rating: (item.show.ratings?.[f.rating_source]?.rating) ?? -1,
     });
