@@ -405,6 +405,9 @@ export async function loadConfig(kv) {
   // saved an empty list (deleted every list) must keep it empty, not
   // have the seeds re-appear on the next read.
   const wasSeeded = raw === null;
+  // O1: only seed officials when the key is absent from KV - an explicit
+  // empty array means the operator intentionally deleted every list.
+  const officialKeyAbsent = !(raw && typeof raw === "object" && Array.isArray(raw.official?.lists));
   const cfg = wasSeeded && migrated.scraper.lists.length === 0
     ? seedScraperDefaults(migrated)
     : migrated;
@@ -412,7 +415,7 @@ export async function loadConfig(kv) {
   // Normalize the official section. Entries were already sanitized/deduped/
   // capped by migrateOfficial - only seed defaults when the key is missing
   // entirely (fresh install). Empty list stays legal (operator deleted all).
-  if (!Array.isArray(cfg.official?.lists) || cfg.official.lists.length === 0) {
+  if (officialKeyAbsent) {
     cfg.official = { lists: officialDefaults() };
   }
 
@@ -466,7 +469,7 @@ export async function loadConfig(kv) {
   // permanent - without this, every read re-seeds new IDs and the
   // catalog data files (committed under the original IDs) never match
   // the config.
-  if ((wasSeeded && cfg.scraper.lists.length > 0) || healed) {
+  if ((wasSeeded && cfg.scraper.lists.length > 0) || officialKeyAbsent || healed) {
     await kv.put(CONFIG_KEY, JSON.stringify(cfg));
     if (healed) await kv.put(HEALED_KEY, "1");
   }

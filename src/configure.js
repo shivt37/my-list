@@ -1330,7 +1330,9 @@ async function loadOfficialCatalog() {
           '<span class="pick-name">' + escapeAttr(l.name) + '</span>' +
           '<span class="pick-meta">' + (l.items != null ? l.items + ' items' : 'catalog') + (l.description ? ' · ' + escapeAttr(l.description) : '') + '</span>' +
         '</span>' +
-        '<button type="button" onclick="addOfficial(' + idx + ')">Add</button>' +
+        '<button type="button" onclick="addOfficial(' + idx + ')"' +
+          (state.official.lists.length >= 30 ? ' disabled title="Cap reached (30)"' : '') +
+          '>Add</button>' +
       '</div>').join('');
   } catch (e) {
     body.textContent = 'Could not load MDBList catalog: ' + humanizeError(e.message);
@@ -1340,6 +1342,12 @@ function addOfficial(idx) {
   const row = officialCatalogRows[idx];
   if (!row) return;
   if (state.official.lists.some((l) => l.slug === row.slug)) { closeOfficialPicker(); return; }
+  // O4: mirror MAX_OFFICIAL_LISTS (config.js) - the server silently drops
+  // entries past the cap; block here so the operator knows.
+  if (state.official.lists.length >= 30) {
+    setStatus('Official list cap reached (30). Remove one before adding another.', 'error');
+    closeOfficialPicker(); return;
+  }
   state.official.lists.push({ slug: row.slug, name: row.name, enabled: true });
   closeOfficialPicker();
   rerenderActive();
