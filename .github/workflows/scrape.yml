@@ -77,6 +77,40 @@ jobs:
           echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
           echo "debug=$SANITIZED_DEBUG" >> "$GITHUB_OUTPUT"
 
+      - name: Wait for KV consistency
+        # Cloudflare KV is eventually consistent: when save-config
+        # dispatches this workflow, the KV write may not have propagated
+        # to the replica that /export-config reads from. This manifests
+        # as "No enabled lists to scrape" when specific --lists IDs are
+        # dispatched but the config still shows the pre-save state.
+        # Only fires on dispatch-triggered runs with explicit list IDs
+        # (cron runs scrape all enabled, no ID mismatch possible).
+        if: ${{ steps.sanitize.outputs.lists != '' }}
+        env:
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          INPUT_LISTS: ${{ steps.sanitize.outputs.lists }}
+        run: |
+          for attempt in 1 2; do
+            CONFIG=$(curl -sf "${WORKER_ORIGIN}/export-config" || echo '{}')
+            MISSING=false
+            IFS=',' read -ra IDS <<< "$INPUT_LISTS"
+            for id in "${IDS[@]}"; do
+              if ! echo "$CONFIG" | grep -q "\"$id\""; then
+                MISSING=true
+                break
+              fi
+            done
+            if [ "$MISSING" = false ]; then
+              echo "Config ready (attempt $attempt)"
+              exit 0
+            fi
+            if [ "$attempt" -eq 1 ]; then
+              echo "Requested IDs not in config yet - waiting 10s for KV propagation..."
+              sleep 10
+            fi
+          done
+          echo "WARNING: IDs still missing after retry - proceeding anyway"
+
       - name: Run scraper
         working-directory: scripts
         env:
