@@ -65,6 +65,36 @@ jobs:
           echo "delete_ids=$SANITIZED_DELETE" >> "$GITHUB_OUTPUT"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
 
+      - name: Wait for KV consistency
+        if: ${{ steps.sanitize.outputs.ids != '' }}
+        env:
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
+        run: |
+          for attempt in 1 2; do
+            CONFIG=$(curl -sf "${WORKER_ORIGIN}/export-config" || echo '{}')
+            MISSING=false
+            IFS=',' read -ra IDS <<< "$INPUT_IDS"
+            for id in "${IDS[@]}"; do
+              # Dispatched IDs are tmdb_discover_{type}_{8-char-hash};
+              # config stores discoverListId as the 8-char hash.
+              HASH=$(echo "$id" | sed 's/^tmdb_discover_[a-z]*_//')
+              if ! echo "$CONFIG" | grep -q "\"${HASH}\""; then
+                MISSING=true
+                break
+              fi
+            done
+            if [ "$MISSING" = false ]; then
+              echo "Config ready (attempt $attempt)"
+              exit 0
+            fi
+            if [ "$attempt" -eq 1 ]; then
+              echo "Requested IDs not in config yet - waiting 10s for KV propagation..."
+              sleep 10
+            fi
+          done
+          echo "WARNING: IDs still missing after retry - proceeding anyway"
+
       - name: Generate TMDB discover lists
         working-directory: scripts
         env:
