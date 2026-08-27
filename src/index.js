@@ -5,6 +5,7 @@
 
 import { loadConfig } from "./config.js";
 import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
+import { checkSession, isPublic, isAdminPath, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -25,6 +26,28 @@ export default {
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: { ...corsHeaders, "Access-Control-Allow-Methods": "GET, POST, OPTIONS" } });
+    }
+
+    // ── AUTH ROUTES (always reachable, no session required) ──
+    if (pathname === "/configure/login" && request.method === "POST") {
+      return handleLogin(env, request);
+    }
+    if (pathname === "/configure/logout" && (request.method === "POST" || request.method === "GET")) {
+      return handleLogout();
+    }
+
+    // ── GATE EVERYTHING ELSE (admin page + admin control APIs) ──
+    if (isAdminPath(pathname) && !isPublic(pathname)) {
+      const sess = await checkSession(env, request);
+      if (!sess.ok) {
+        const accept = request.headers.get("Accept") || "";
+        if (accept.includes("text/html") && pathname === "/configure") {
+          return new Response(loginPageHtml({ error: null, blocked: false }), {
+            headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+          });
+        }
+        return json({ error: "Unauthorized - log in at /configure first." }, 401);
+      }
     }
 
     if (pathname === "/" || pathname === "") {
