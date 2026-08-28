@@ -131,7 +131,8 @@ export function buildConfigurePage(origin, config) {
   @keyframes refresh-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   .card-refresh { padding: 5px 6px; }
   .card-refresh svg { display: block; }
-  .tmdb-eye-active { color: var(--accent); border-color: var(--accent); }
+  .icon-btn.tmdb-eye-active { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+  .icon-btn.tmdb-eye-active:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 12px -6px var(--accent-glow); }
 
   /* ── MAIN ── */
   main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px; }
@@ -266,6 +267,8 @@ export function buildConfigurePage(origin, config) {
     background: transparent; padding: 0; transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
   .icon-btn:hover { color: var(--text); border-color: var(--border-icon-hover); background: var(--surface2); filter: none; }
+  /* Rename (pencil) button: literal margin-left on every page (name-rename class applied in nameEditBlock). */
+  .name-rename { margin-left: 6px; }
   .id-chip {
     font-size: 10px; color: var(--muted); background: var(--surface2);
     border: 1px solid var(--border); padding: 1px 7px; border-radius: 999px;
@@ -1078,7 +1081,7 @@ function nameEditBlock(i, l, extraHtml) {
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
       : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
-    '<button type="button" class="icon-btn" onclick="startNameEdit(' + i + ')" title="Rename" aria-label="Rename list">' +
+    '<button type="button" class="icon-btn name-rename" onclick="startNameEdit(' + i + ')" title="Rename" aria-label="Rename list">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
     '</button>' +
     // The preview-eye only makes sense on TMDB cards: toggleTmdbPreview
