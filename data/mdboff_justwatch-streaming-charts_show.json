@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1787897901034,
+  "scraped_at": 1787953807576,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -163,6 +163,14 @@
       "year": 2013,
       "release_date": "2013-01-11",
       "poster": "https://image.tmdb.org/t/p/w200/5nXFiz8Rn8eezVjSTZBd7HmnF1G.jpg"
+    },
+    {
+      "imdb_id": "tt0106179",
+      "type": "series",
+      "title": "The X-Files",
+      "year": 1993,
+      "release_date": "1993-09-10",
+      "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg"
     },
     {
       "imdb_id": "tt27846061",
@@ -677,6 +685,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg"
     },
     {
+      "imdb_id": "tt0437741",
+      "type": "series",
+      "title": "Project Runway",
+      "year": 2004,
+      "release_date": "2004-12-01",
+      "poster": "https://image.tmdb.org/t/p/w200/586pDee4pRZpGP6sL1l0hDA9Srw.jpg"
+    },
+    {
       "imdb_id": "tt0141842",
       "type": "series",
       "title": "The Sopranos",
@@ -1029,6 +1045,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg"
     },
     {
+      "imdb_id": "tt41956044",
+      "type": "series",
+      "title": "D&D: Dungeon Masters",
+      "year": 2026,
+      "release_date": "2026-04-22",
+      "poster": "https://image.tmdb.org/t/p/w200/IgyfRielRU2TEWGkA3U3Zdg9YI.jpg"
+    },
+    {
       "imdb_id": "tt0491738",
       "type": "series",
       "title": "Psych",
@@ -1163,14 +1187,6 @@
       "year": 2016,
       "release_date": "2016-02-21",
       "poster": "https://image.tmdb.org/t/p/w200/1MccRnw41qQjREuZkovqP2UX1i3.jpg"
-    },
-    {
-      "imdb_id": "tt0096697",
-      "type": "series",
-      "title": "The Simpsons",
-      "year": 1989,
-      "release_date": "1989-12-17",
-      "poster": "https://image.tmdb.org/t/p/w200/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg"
     }
   ]
 }
