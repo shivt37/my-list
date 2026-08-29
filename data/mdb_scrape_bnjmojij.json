@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1787962041768,
+  "scraped_at": 1788005244319,
   "items": [
     {
       "slug": "3grlc-bandar",
@@ -39,7 +39,7 @@
       "imdb_id": "tt37654096",
       "title": "The Last Sunrise",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "3PWJqDfygN0YNNjWsDUOXclCp3h.jpg",
       "description": "Ry, a college student with a chronic illness, escapes to Mallorca for the summer with her mother, where she unexpectedly falls for a local and begins to embrace living in the moment. But as her condition worsens and long-hidden family secrets come to light, everything she has found before summer's end is threatened.",
       "digital_release_date": "2026-08-26"
@@ -95,6 +95,16 @@
       "digital_release_date": "2026-08-25"
     },
     {
+      "slug": "41nkj-on-the-road",
+      "imdb_id": "tt37660509",
+      "title": "On the Road",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "u169hcLX3OsM9eRs4wtIzi0ymGZ.jpg",
+      "description": "Veneno, a rebellious young drifter, frequents roadside diners where he sleeps with truck drivers. Urgently needing a ride, he meets Muñeco, a hard-edged driver who keeps to himself. He convinces Muñeco to take him deep into the hyper-masculine world of long-haul trucking across the north of Mexico. As they travel together and an unexpected intimacy builds between them, shadows from Veneno’s past resurface, putting both their lives at risk.",
+      "digital_release_date": "2026-08-22"
+    },
+    {
       "slug": "35q62-welcome-to-the-jungle",
       "imdb_id": "tt28540171",
       "title": "Welcome To The Jungle",
@@ -112,6 +122,16 @@
       "score": 6,
       "poster_path": "eg301AEGyYX4gtc0A8DEXQ0VMhK.jpg",
       "description": "After losing her beloved father, Helen finds herself saved by an unlikely friendship with a stubborn hawk named Mabel. Through the bond, Helen rediscovers the beauty of being alive.",
+      "digital_release_date": "2026-08-21"
+    },
+    {
+      "slug": "44kh3-the-great-grand-superhero-aliens-ka-aagman",
+      "imdb_id": "tt40769151",
+      "title": "The Great Grand Superhero: Aliens Ka Aagman",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "6CYmHknTN2UGGhqQUZh4tqQ6fEr.jpg",
+      "description": "Follows a grandfather and grandson whose relationship transforms through the child's imagination when they encounter aliens.",
       "digital_release_date": "2026-08-21"
     },
     {
@@ -1422,26 +1442,6 @@
       "score": 6,
       "poster_path": "dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg",
       "description": "A covert team of elite operatives are living in the shadows. When a ruthless despot steals a billion-dollar fortune, they're sent to take it back—an impossible heist that erupts into a deadly game of strategy, deception and survival.",
-      "digital_release_date": "2026-06-02"
-    },
-    {
-      "slug": "3gvrq-case-137",
-      "imdb_id": "tt34794183",
-      "title": "Case 137",
-      "year": 2025,
-      "score": 7,
-      "poster_path": "4QL4LcsYX8mdNktst0CnyHQDRLg.jpg",
-      "description": "When Internal Affairs officer Stéphanie investigates a young man severely injured during a chaotic Paris demonstration and finds no police misconduct, the routine case hits close to home upon her discovering the victim is from her native town.",
-      "digital_release_date": "2026-06-02"
-    },
-    {
-      "slug": "3lasu-erupcja",
-      "imdb_id": "tt33712666",
-      "title": "Erupcja",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "1OMiyrpkZvu5YmWbPBtwDQHZsu1.jpg",
-      "description": "A romantic vacation goes awry when a volcanic eruption strands Bethany and her boyfriend, Rob, in Warsaw, Poland. Taking the explosive event as a sign to ditch her baggage, Bethany reunites with her childhood friend, Nel, to traipse through lofts, clubs, and back alleys—all while becoming entangled in an emotional web that challenges her sense of self.",
       "digital_release_date": "2026-06-02"
     }
   ]
