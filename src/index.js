@@ -5,7 +5,7 @@
 
 import { loadConfig } from "./config.js";
 import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
-import { checkSession, isPublic, isAdminPath, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
+import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -37,7 +37,10 @@ export default {
     }
 
     // ── GATE EVERYTHING ELSE (admin page + admin control APIs) ──
-    if (isAdminPath(pathname) && !isPublic(pathname)) {
+    // AUTH_ENABLED="false" skips the session check entirely (login page,
+    // rate limiter, cookies all stay intact but bypassed - re-enable is
+    // instant and requires no session migration).
+    if (isAuthEnabled(env) && isAdminPath(pathname) && !isPublic(pathname)) {
       const sess = await checkSession(env, request);
       if (!sess.ok) {
         const accept = request.headers.get("Accept") || "";

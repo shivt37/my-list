@@ -4,6 +4,7 @@
 
 import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
+import { isAuthEnabled } from "./auth.js";
 import { buildConfigurePage } from "./configure.js";
 
 export const ADDON_ID = "com.mylist";
@@ -51,7 +52,7 @@ export function githubPagesCatalogUrl(env, catalogId) {
 
 // Configure page returns a full Response (html helper lives here too).
 export function configureResponse(env, origin, config) {
-  return html(buildConfigurePage(origin, config));
+  return html(buildConfigurePage(origin, config, { authEnabled: isAuthEnabled(env) }));
 }
 
 export function toIST(ms) {

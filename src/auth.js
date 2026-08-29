@@ -138,6 +138,12 @@ export async function checkSession(env, request) {
 }
 
 // ── route classification ──────────────────────────────────────────────────
+// Master switch: AUTH_ENABLED="false" opens /configure + admin APIs without
+// a session. Absent/misspelled value = ON (secure default) so a typo can
+// never silently leave the admin surface open.
+export function isAuthEnabled(env) {
+  return String(env.AUTH_ENABLED ?? "true").trim().toLowerCase() !== "false";
+}
 export function isPublic(pathname) {
   if (pathname === "/" || pathname === "") return true;
   if (pathname === "/manifest.json") return true;

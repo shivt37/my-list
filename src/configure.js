@@ -3,10 +3,18 @@
 // render functions below, injected into #tabHost at load; all modules share
 // the single `state` object and re-render via rerenderActive().
 
-export function buildConfigurePage(origin, config) {
+export function buildConfigurePage(origin, config, opts = {}) {
   // </script> can escape the inline state blob (V8 JSON.stringify does not
   // escape <), so hard-escape it before embedding.
   const initial = JSON.stringify(config).replace(/</g, "\\u003c");
+  // Shown inside the accent/settings popup only when AUTH_ENABLED=false,
+  // so an unlocked admin surface is never invisible to the operator.
+  const authOffNote = opts.authEnabled === false
+    ? '<div class="auth-off-note" role="status">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>' +
+      '<span><strong>Login is off.</strong> Anyone can edit.</span>' +
+      '</div>'
+    : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -616,6 +624,15 @@ export function buildConfigurePage(origin, config) {
   }
   .swatch:hover { transform: scale(1.15); filter: none; }
   .swatch.selected { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); transform: scale(1.1); }
+  /* Auth-disabled notice, shown inside this popup when AUTH_ENABLED=false.
+     Danger token on the icon + lead word, muted explanation text. */
+  .auth-off-note {
+    display: flex; gap: 8px; align-items: flex-start;
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+    font-size: 11px; line-height: 1.45; color: var(--muted);
+  }
+  .auth-off-note svg { flex-shrink: 0; margin-top: 1px; color: var(--danger); }
+  .auth-off-note strong { color: var(--danger); font-weight: 600; }
 
   /* ── MENU ── */
   .menu-popup-wrap { position: relative; }
@@ -759,6 +776,7 @@ export function buildConfigurePage(origin, config) {
       <div class="accent-popup" id="accentPopup">
         <div class="accent-popup-title">Accent Colour</div>
         <div class="swatch-row" id="swatchRow"></div>
+        ${authOffNote}
       </div>
     </div>
     <div class="menu-popup-wrap">
