@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1788004972284,
+  "scraped_at": 1788048365486,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -909,6 +909,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/iRfSzrPS5VYWQv7KVSEg2BZZL6C.jpg"
     },
     {
+      "imdb_id": "tt43661815",
+      "type": "series",
+      "title": "Lion",
+      "year": 2026,
+      "release_date": "2026-08-19",
+      "poster": "https://image.tmdb.org/t/p/w200/mvFQIZo2DG1pyiINL2bDa5QNR4O.jpg"
+    },
+    {
       "imdb_id": "tt0052520",
       "type": "series",
       "title": "The Twilight Zone",
@@ -1083,14 +1091,6 @@
       "year": 2026,
       "release_date": "2026-05-15",
       "poster": "https://image.tmdb.org/t/p/w200/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg"
-    },
-    {
-      "imdb_id": "tt43661815",
-      "type": "series",
-      "title": "Lion",
-      "year": 2026,
-      "release_date": "2026-08-19",
-      "poster": "https://image.tmdb.org/t/p/w200/mvFQIZo2DG1pyiINL2bDa5QNR4O.jpg"
     },
     {
       "imdb_id": "tt14321914",
