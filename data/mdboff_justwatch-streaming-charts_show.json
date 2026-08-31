@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1788091370480,
+  "scraped_at": 1788134769762,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -10,7 +10,7 @@
       "title": "Lanterns",
       "year": 2026,
       "release_date": "2026-08-16",
-      "poster": "https://image.tmdb.org/t/p/w200/gpC7h43xPMEV3goYMQShfJbTtLq.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/rb94rKVIzLyfWufIN7WqLvadBDH.jpg"
     },
     {
       "imdb_id": "tt9288030",
@@ -837,14 +837,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/99PJSbcO2LeM10uOGWeFihNp77j.jpg"
     },
     {
-      "imdb_id": "tt28107213",
-      "type": "series",
-      "title": "Elixer",
-      "year": 2025,
-      "release_date": "2025-03-05",
-      "poster": "https://image.tmdb.org/t/p/w200/ueBzJjkoxbECF4OKwx247hxy1cR.jpg"
-    },
-    {
       "imdb_id": "tt7772588",
       "type": "series",
       "title": "For All Mankind",
@@ -1171,6 +1163,14 @@
       "year": 2004,
       "release_date": "2004-10-05",
       "poster": "https://image.tmdb.org/t/p/w200/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg"
+    },
+    {
+      "imdb_id": "tt28107213",
+      "type": "series",
+      "title": "Elixer",
+      "year": 2025,
+      "release_date": "2025-03-05",
+      "poster": "https://image.tmdb.org/t/p/w200/ueBzJjkoxbECF4OKwx247hxy1cR.jpg"
     },
     {
       "imdb_id": "tt0460649",
