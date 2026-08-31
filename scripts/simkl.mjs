@@ -211,17 +211,19 @@ export const TZ_LABELS = {
 };
 
 // "2026-08-31 19:00 UTC" (tz=UTC, byte-identical to the original format)
-// "2026-09-01 00:30 India (GMT+5:30)" - hint + live short zone from Intl.
+// "2026-08-31 01:30 India (2026-08-30 19:30 UTC)" - local time + hint,
+// with the same instant in UTC (instead of a GMT offset) in parentheses.
 export function airTimeLabel(iso, tz) {
   if (!iso) return "";
   const zone = normalizeTzLocal(tz);
   const d = new Date(iso);
-  const date = new Intl.DateTimeFormat("en-CA", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
-  const time = new Intl.DateTimeFormat("en-GB", { timeZone: zone, hour: "2-digit", minute: "2-digit", hour12: false }).format(d);
-  if (zone === "UTC") return `${date} ${time} UTC`;
-  const short = new Intl.DateTimeFormat("en-GB", { timeZone: zone, timeZoneName: "short" }).format(d).split(", ").pop();
+  const ymd = (z) => new Intl.DateTimeFormat("en-CA", { timeZone: z, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const hm = (z) => new Intl.DateTimeFormat("en-GB", { timeZone: z, hour: "2-digit", minute: "2-digit", hour12: false }).format(d);
+  const utc = `${ymd("UTC")} ${hm("UTC")} UTC`;
+  if (zone === "UTC") return utc;
   const hint = TZ_LABELS[zone];
-  return hint ? `${date} ${time} ${hint} (${short})` : `${date} ${time} (${short})`;
+  const local = hint ? `${ymd(zone)} ${hm(zone)} ${hint}` : `${ymd(zone)} ${hm(zone)}`;
+  return `${local} (${utc})`;
 }
 
 export async function precompute(kind, todaysEntries, metadata, filter, tz = "UTC") {
