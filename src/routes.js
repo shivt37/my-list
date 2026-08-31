@@ -300,11 +300,21 @@ export async function handleSaveConfig(env, request) {
       .filter((l) => !nextOffSlugs.has(l.slug))
       .flatMap((l) => [`mdboff_${l.slug}_movie`, `mdboff_${l.slug}_show`]);
     const prevSimById = new Map(current.simkl.lists.map((l) => [l.slug, l]));
-    const simklChanged = incoming.simkl.lists.filter((l) => {
+    let simklChanged = incoming.simkl.lists.filter((l) => {
       const prev = prevSimById.get(l.slug);
       if (!prev) return true;
       return prev.enabled !== l.enabled || JSON.stringify(prev.filter) !== JSON.stringify(l.filter);
     });
+    // Timezone is global to the simkl module - a change redefines which
+    // calendar day "today" is for BOTH lists, so every enabled kind
+    // regenerates even when its own filters are untouched. Reuses the
+    // filter-change dispatch path (before-persist, rollback on failure).
+    const simklTzChanged = (current.simkl.timezone || "UTC") !== (incoming.simkl.timezone || "UTC");
+    if (simklTzChanged) {
+      for (const l of incoming.simkl.lists) {
+        if (l.enabled && !simklChanged.some((c) => c.slug === l.slug)) simklChanged.push(l);
+      }
+    }
     const simklDispatchKinds = simklChanged.filter((l) => l.enabled).map((l) => l.slug);
     // TMDB diff: content-hash compare (name-only edits don't regenerate).
     // Added/changed enabled lists dispatch generate with their catalog ids;

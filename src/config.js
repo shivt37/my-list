@@ -61,6 +61,22 @@ export function emptyConfig() {
   return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
 }
 
+// Global simkl timezone (IANA name, e.g. "Asia/Kolkata") - decides which
+// calendar day "arriving today" means. "UTC" is the default and reproduces
+// the pre-timezone behaviour exactly. Validation is the platform's own tz
+// database: Intl throws RangeError on any name it doesn't know, so a
+// corrupted value heals to UTC instead of 500-ing or shifting days.
+export function normalizeTz(raw) {
+  const tz = typeof raw === "string" ? raw.trim() : "";
+  if (!tz) return "UTC";
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: tz });
+    return tz;
+  } catch {
+    return "UTC";
+  }
+}
+
 // The two fixed SIMKL Arriving Today lists. Slugs are permanent - they
 // produce the catalog / data file ids simkl_arriving_today_<series|anime>.
 // Each list carries its own filter block (genre/country excludes + rating
@@ -281,7 +297,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw) }, tmdb: { lists: migrateTmdb(raw) } };
+  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) } };
 }
 
 // TMDB Discover list entry. Ids are pinned at creation (client + server
@@ -438,6 +454,9 @@ export async function loadConfig(kv) {
       cfg.simkl.lists = simklDefaults();
     }
   }
+  // Timezone rides on the simkl section object; the branches above rebuild
+  // cfg.simkl in some paths, so normalize it once after the block.
+  cfg.simkl.timezone = normalizeTz(cfg.simkl?.timezone);
 
   // Normalize the tmdb section: unknown-shaped entries dropped, known
   // fields coerced. Empty is legal (tmdb module unused).

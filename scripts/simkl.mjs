@@ -57,6 +57,9 @@ export function simklUrl(kind) {
 // Worker is the source of truth for enabled simkl kinds AND their filters.
 // Falls back to built-in defaults when the worker is unreachable so a
 // worker outage can't silently stop the refresh (same as official.mjs).
+// timezone (IANA name) also comes from the worker config - it decides
+// which calendar day "arriving today" means. Missing/worker-down → UTC,
+// which reproduces the original UTC-day behaviour.
 export const DEFAULT_FILTERS = {
   series: {
     rating_source: "imdb",
@@ -84,20 +87,35 @@ export const DEFAULT_FILTERS = {
 };
 
 export async function enabledKindsAndFilters() {
-  if (!WORKER_ORIGIN) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
+  if (!WORKER_ORIGIN) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k], tz: "UTC" }));
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
       signal: AbortSignal.timeout(15000),
     });
-    if (!res.ok) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
+    if (!res.ok) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k], tz: "UTC" }));
     const cfg = await res.json();
     const enabled = new Set((cfg.simkl?.lists || []).filter((l) => l.enabled).map((l) => l.slug));
+    const tz = normalizeTzLocal(cfg.simkl?.timezone);
     return KINDS.filter((k) => enabled.has(k)).map((k) => {
       const l = (cfg.simkl?.lists || []).find((x) => x.slug === k);
-      return { kind: k, filter: l?.filter || DEFAULT_FILTERS[k] };
+      return { kind: k, filter: l?.filter || DEFAULT_FILTERS[k], tz };
     });
   } catch {
-    return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k] }));
+    return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k], tz: "UTC" }));
+  }
+}
+
+// Same tz validation as the worker's normalizeTz - Intl RangeError on a
+// bogus name heals to UTC here too, so a corrupted config can never crash
+// the refresh over a display nicety.
+export function normalizeTzLocal(raw) {
+  const tz = typeof raw === "string" ? raw.trim() : "";
+  if (!tz) return "UTC";
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: tz });
+    return tz;
+  } catch {
+    return "UTC";
   }
 }
 
@@ -181,7 +199,32 @@ const LABEL = {
 };
 const PRIORITY = { new_show: 6, new_season: 5, standard: 1 };
 
-export async function precompute(kind, todaysEntries, metadata, filter) {
+// Friendly per-zone hint for the description's air-time (city/country
+// style is the unambiguous, DST-proof convention). Offset/abbrev stays
+// dynamic via Intl - only the hint word is static. Unknown zones fall
+// back to the plain Intl form.
+export const TZ_LABELS = {
+  "Asia/Kolkata": "India",
+  "America/New_York": "New York",
+  "Europe/Paris": "Paris",
+  "Australia/Sydney": "Sydney",
+};
+
+// "2026-08-31 19:00 UTC" (tz=UTC, byte-identical to the original format)
+// "2026-09-01 00:30 India (GMT+5:30)" - hint + live short zone from Intl.
+export function airTimeLabel(iso, tz) {
+  if (!iso) return "";
+  const zone = normalizeTzLocal(tz);
+  const d = new Date(iso);
+  const date = new Intl.DateTimeFormat("en-CA", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const time = new Intl.DateTimeFormat("en-GB", { timeZone: zone, hour: "2-digit", minute: "2-digit", hour12: false }).format(d);
+  if (zone === "UTC") return `${date} ${time} UTC`;
+  const short = new Intl.DateTimeFormat("en-GB", { timeZone: zone, timeZoneName: "short" }).format(d).split(", ").pop();
+  const hint = TZ_LABELS[zone];
+  return hint ? `${date} ${time} ${hint} (${short})` : `${date} ${time} (${short})`;
+}
+
+export async function precompute(kind, todaysEntries, metadata, filter, tz = "UTC") {
   const f = filter || DEFAULT_FILTERS[kind];
   const isAnime = kind === "anime";
 
@@ -293,7 +336,7 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
         }
       }
     }
-    const airsUtc = headline?.airDate ? new Date(headline.airDate).toISOString().slice(0, 16).replace("T", " ") + " UTC" : "";
+    const airsUtc = headline?.airDate ? airTimeLabel(headline.airDate, tz) : "";
     const ratingsStr = formatRatings(item.show.ratings, isAnime ? "mal" : "imdb", isAnime ? "MAL" : "IMDb");
 
     metas.push({
@@ -314,9 +357,19 @@ export async function precompute(kind, todaysEntries, metadata, filter) {
     .map(({ _pri, _rating, ...m }) => m);
 }
 
-// v2 dates are UTC with a trailing 'Z' - no offset math needed.
-export async function fetchTodaysCalendar(kind) {
-  const todayUtc = new Date().toISOString().slice(0, 10);
+// Calendar-day key (YYYY-MM-DD) for an instant in an IANA timezone.
+// Intl owns the tz database, so DST/offset rules are always current -
+// never hand-roll +5:30 style offset math.
+export function dayKeyIn(date, tz) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(date));
+}
+
+// v2 dates are UTC with a trailing 'Z'. "Today" is keyed in the
+// operator's chosen timezone (cfg.simkl.timezone) - UTC reproduces the
+// original UTC-day behaviour exactly.
+export async function fetchTodaysCalendar(kind, tz = "UTC") {
+  const zone = normalizeTzLocal(tz);
+  const today = dayKeyIn(new Date(), zone);
   const res = await fetch(simklUrl(kind), {
     headers: { "User-Agent": `${SIMKL_APP_NAME}/${SIMKL_APP_VERSION}` },
     signal: AbortSignal.timeout(30000),
@@ -332,7 +385,7 @@ export async function fetchTodaysCalendar(kind) {
     if (!entry?.date) return false;
     const d = new Date(entry.date);
     if (isNaN(d.getTime())) return false;
-    return d.toISOString().slice(0, 10) === todayUtc;
+    return dayKeyIn(d, zone) === today;
   });
   return { todaysEntries, metadata };
 }
@@ -354,6 +407,9 @@ export function writeCatalog(kind, items, cfg) {
     catalog_id: `simkl_arriving_today_${kind}`,
     name: renamed || SIMKL_DEFAULT_NAMES[kind],
     type: "series",
+    // Which zone "today" was keyed in for this file - traceability for
+    // the operator reading the JSON on GitHub. Inert to the serving path.
+    timezone: normalizeTzLocal(cfg?.simkl?.timezone),
     scraped_at: Date.now(),
     items,
   };
@@ -430,8 +486,8 @@ export async function main({
     const startedAt = Date.now();
     const run = { catalog_id: `simkl_arriving_today_${t.kind}`, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
     try {
-      const { todaysEntries, metadata } = await fetchApi(t.kind);
-      const items = await compute(t.kind, todaysEntries, metadata, t.filter);
+      const { todaysEntries, metadata } = await fetchApi(t.kind, t.tz);
+      const items = await compute(t.kind, todaysEntries, metadata, t.filter, t.tz);
       write(t.kind, items, cfg); // empty IS a valid result here (empty day)
       run.status = "success";
       run.finished_at = Date.now();

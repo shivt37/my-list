@@ -305,6 +305,14 @@ export function buildConfigurePage(origin, config, opts = {}) {
   /* The rating-source chip (imdb/mal) reuses .id-chip, which phones hide -
      this row must stay visible at every width. */
   .simkl-filter .id-chip { display: inline-block; }
+  /* Global timezone bar: label + native select, one row. Same 11px label
+     treatment as the filter rows below. */
+  .simkl-tz-bar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: var(--s3); font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .simkl-tz-bar select { font-size: 12px; padding: 7px 26px 7px 9px; min-width: 170px; }
   /* Filter fields sit in a 2-col grid (text column + value column) - the
      CSV inputs never stretch full width, so a long genre list stays a
      contained field instead of a full-bleed strip. Mobile stacks 1-col. */
@@ -1466,8 +1474,24 @@ function renderSimkl() {
   document.getElementById('headerTitle').textContent = 'Simkl List';
   const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
 
-  host.innerHTML = toolbar + '<div class="official-note">The 2 fixed SIMKL Arriving Today lists. Filters are typed below and applied on the next refresh.</div>' + (cards || '<div class="empty">No simkl lists.</div>');
+  // Global timezone for what "today" means - one selector for both lists.
+  // Value stored in state.simkl.timezone (IANA name); dirty-gating and
+  // buildConfig pick it up through the normal input/change listeners.
+  const tz = state.simkl.timezone || 'UTC';
+  const tzOptions = ['UTC', 'Asia/Kolkata', 'America/New_York', 'Europe/Paris', 'Australia/Sydney'];
+  const tzBar = '<div class="simkl-tz-bar">' +
+    '<label class="filter-label" for="simklTzSelect">Timezone for "today"</label>' +
+    '<select id="simklTzSelect" onchange="setSimklTz(this.value)">' +
+      tzOptions.map((z) => '<option value="' + z + '"' + (z === tz ? ' selected' : '') + '>' + z + '</option>').join('') +
+    '</select>' +
+  '</div>';
+
+  host.innerHTML = toolbar + tzBar + (cards || '<div class="empty">No simkl lists.</div>');
   applyDisabledState();
+}
+
+function setSimklTz(v) {
+  state.simkl.timezone = v;
 }
 
 function toggleSimkl(i) {
