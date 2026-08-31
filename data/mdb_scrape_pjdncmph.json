@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1788091625090,
+  "scraped_at": 1788135004061,
   "items": [
+    {
+      "slug": "3gtq9-the-mongoose",
+      "imdb_id": "tt13611778",
+      "title": "The Mongoose",
+      "year": 2026,
+      "score": null,
+      "poster_path": "eSS5mvSG84UUuvtbHel5Yu3Wik4.jpg",
+      "description": "A falsely accused war hero with nothing to lose leads police on an epic televised cross-country car chase, helped by members of his former Special Forces Army battalion and closely monitored by a fascinated public rooting for his safe getaway.",
+      "digital_release_date": null
+    },
     {
       "slug": "3bk4j-coyote-vs-acme",
       "imdb_id": "tt1756855",
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "canZTWSxACSnAluir3dCtMxKpA1.jpg",
       "description": "A young woman's hilariously confessional voicemails to her late sister are unknowingly redirected to a stranger, who begins to fall in love from afar.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44rxf-that-one-summer",
-      "imdb_id": "tt38934549",
-      "title": "That One Summer",
-      "year": 2026,
-      "score": null,
-      "poster_path": "ymx6eSmUTJJbNcyEItNNkI7r9Px.jpg",
-      "description": "In the mid 1990s, four teenagers from the suburbs of Victorville, California come in contact with a retired military nurse who suffers from extreme post-traumatic stress disorder. The encounter takes them on a journey of self - discovery that they will never forget.",
       "digital_release_date": null
     }
   ]

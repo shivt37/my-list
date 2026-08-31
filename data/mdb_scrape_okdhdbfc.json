@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1788091654814,
+  "scraped_at": 1788135037259,
   "items": [
+    {
+      "slug": "455wn-death-of-the-pastor-s-wife",
+      "imdb_id": "tt44113382",
+      "title": "Death of the Pastor's Wife",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "o8H6HmQNt2qx5bIfmvuI6VJn13A.jpg",
+      "description": "What happened to Mica Miller? This documentary series retraces her promising life, toxic marriage and the mysterious circumstances of her death.",
+      "first_air_date": "2026-08-26"
+    },
     {
       "slug": "436w8-blood-sacrifice",
       "imdb_id": "tt38553367",
@@ -20,7 +30,7 @@
       "title": "Lanterns",
       "year": 2026,
       "score": 8,
-      "poster_path": "gpC7h43xPMEV3goYMQShfJbTtLq.jpg",
+      "poster_path": "rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
       "description": "Two intergalactic cops, new recruit John Stewart and Lantern legend Hal Jordan, are drawn into a dark, Earth-based mystery as they investigate a murder in the American heartland.",
       "first_air_date": "2026-08-16"
     },
@@ -59,7 +69,7 @@
       "imdb_id": "tt43725623",
       "title": "Conversations with a Killer: The Charles Manson Tapes",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "8yyWUZjItJEO5dpKyCE8IghET9i.jpg",
       "description": "Tracing Charles Manson's rise as a cult leader, the 1969 murders, and his trial, using unreleased prison recordings, interviews, and archival footage.",
       "first_air_date": "2026-08-12"
@@ -1433,16 +1443,6 @@
       "poster_path": "2CfTNVaR8kZQkWtWWE3Cntaiq33.jpg",
       "description": "A mysterious app promises wishes — then starts a countdown to death. As a group of teens becomes entangled, they must break the deadly chain to survive.",
       "first_air_date": "2026-04-24"
-    },
-    {
-      "slug": "31e98-stranger-things-tales-from-85",
-      "imdb_id": "tt27486290",
-      "title": "Stranger Things: Tales from '85",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "xyVpiSZNA2fYJUuuagkqiSHJqjr.jpg",
-      "description": "Winter. Hawkins. 1985. Welcome back to a town crawling with secrets, where beloved heroes are facing fresh mysteries... and an all-new breed of strange.",
-      "first_air_date": "2026-04-23"
     }
   ]
 }
