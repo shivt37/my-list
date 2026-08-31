@@ -2,42 +2,70 @@
   "catalog_id": "simkl_arriving_today_series",
   "name": "Arriving Today (Series) - Episodes & Premieres",
   "type": "series",
-  "scraped_at": 1788091733628,
+  "scraped_at": 1788134836138,
   "items": [
+    {
+      "id": "tmdb:329107",
+      "type": "series",
+      "name": "Fred's Ultimate Hotels",
+      "poster": "https://simkl.in/posters/20/20589343197278b0dd_m.webp",
+      "description": "🆕 New Show | S01E01 | 2026-08-31 19:00 UTC | GB | genres: Travel | Simkl n/a | IMDb n/a"
+    },
+    {
+      "id": "tt36303968",
+      "type": "series",
+      "name": "Furious",
+      "poster": "https://simkl.in/posters/20/20246795c584f30a3d_m.webp",
+      "description": "🏁 Finale (season) | S01E08 | 2026-08-31 07:00 UTC | US | genres: Crime, Drama, Thriller | Simkl 7.7 (92) | IMDb 7.8 (9754)"
+    },
+    {
+      "id": "tt0149460",
+      "type": "series",
+      "name": "Futurama",
+      "poster": "https://simkl.in/posters/18/18421459bbf0f06beb_m.webp",
+      "description": "📺 New Episode | S11E06 | 2026-08-31 10:00 UTC | US | genres: Adventure, Animation, Comedy, Science-Fiction | Simkl 8.4 (3025) | IMDb 8.5 (280209)"
+    },
+    {
+      "id": "tt26545992",
+      "type": "series",
+      "name": "Lanterns",
+      "poster": "https://simkl.in/posters/19/199190814af1785318_m.webp",
+      "description": "📺 New Episode | S01E03 | 2026-08-31 01:00 UTC | US | genres: Action, Adventure, Crime, Drama, Mystery, Science-Fiction, Thriller | Simkl 8.1 (194) | IMDb 8.0 (16062)"
+    },
+    {
+      "id": "tt18228732",
+      "type": "series",
+      "name": "Colin from Accounts",
+      "poster": "https://simkl.in/posters/15/15861969a5b2cf945f_m.webp",
+      "description": "📺 New Episode | S03E07 | 2026-08-31 02:30 UTC | AU | genres: Comedy, Drama, Romance | Simkl 7.5 (179) | IMDb 8.0 (15951)"
+    },
     {
       "id": "tt11846996",
       "type": "series",
       "name": "Vigil",
       "poster": "https://simkl.in/posters/11/117162041caef30d31_m.webp",
-      "description": "🎬 New Season | S03E01 | 2026-08-30 20:00 UTC | GB | genres: Crime, Drama, Mystery, Thriller | Simkl 7.3 (330) | IMDb 7.4 (31642)"
+      "description": "📺 New Episode | S03E02 | 2026-08-31 20:00 UTC | GB | genres: Crime, Drama, Mystery, Thriller | Simkl 7.3 (330) | IMDb 7.4 (31660)"
+    },
+    {
+      "id": "tt37692332",
+      "type": "series",
+      "name": "President Curtis",
+      "poster": "https://simkl.in/posters/20/20308563f3f44d5837_m.webp",
+      "description": "📺 New Episode | S01E06 | 2026-08-31 03:30 UTC | US | genres: Animation, Comedy | Simkl 7.2 (62) | IMDb 7.2 (1987)"
+    },
+    {
+      "id": "tt18546730",
+      "type": "series",
+      "name": "The Walking Dead: Dead City",
+      "poster": "https://simkl.in/posters/14/140392834927e8e422_m.webp",
+      "description": "📺 New Episode | S03E06 | 2026-08-31 01:00 UTC | US | genres: Action, Adventure, Drama, Horror, Thriller | Simkl 7.0 (604) | IMDb 7.0 (36433)"
     },
     {
       "id": "tt11958610",
       "type": "series",
       "name": "Trigger Point",
       "poster": "https://simkl.in/posters/14/149008656aa05305ad_m.webp",
-      "description": "🎬 New Season | S04E01 | 2026-08-30 20:00 UTC | GB | genres: Action, Crime, Drama, Mystery, Suspense, Thriller | Simkl 7.2 (143) | IMDb 6.7 (11257)"
-    },
-    {
-      "id": "tt0434695",
-      "type": "series",
-      "name": "Klovn",
-      "poster": "https://simkl.in/posters/42/42675111de77941_m.webp",
-      "description": "📺 New Episode | S11E07 | 2026-08-30 04:00 UTC | DK | genres: Comedy | Simkl 7.4 (15) | IMDb 8.5 (6772)"
-    },
-    {
-      "id": "tt13111078",
-      "type": "series",
-      "name": "Lioness",
-      "poster": "https://simkl.in/posters/14/141711093d5c64f3b4_m.webp",
-      "description": "📺 New Episode | S03E05 | 2026-08-30 07:00 UTC | US | genres: Action, Drama, Thriller | Simkl 7.8 (1010) | IMDb 7.8 (94531)"
-    },
-    {
-      "id": "tt35089718",
-      "type": "series",
-      "name": "The Muse of Section E",
-      "poster": "https://simkl.in/posters/20/20211393b7efdef86a_m.webp",
-      "description": "📺 New Episode | S02E10 | 2026-08-30 16:00 UTC | PH | genres: Comedy, Drama, Romance | Simkl 8.1 (42) | IMDb 7.3 (6942)"
+      "description": "📺 New Episode | S04E02 | 2026-08-31 20:00 UTC | GB | genres: Action, Crime, Drama, Mystery, Suspense, Thriller | Simkl 7.2 (143) | IMDb 6.7 (11258)"
     }
   ]
 }
