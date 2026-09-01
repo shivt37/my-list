@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
+import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { isAuthEnabled } from "./auth.js";
 import { buildConfigurePage } from "./configure.js";
@@ -362,12 +362,16 @@ export async function handleSaveConfig(env, request) {
     // tmdb.yml only forwards --delete_ids when action=delete, so a
     // combined generate+delete dispatch silently dropped the deletes -
     // F3A-1, the root cause of orphaned tmdb_discover_* files.)
+    // F3: every dispatch carries the configVersion it was saved for - the
+    // workflows poll /export-config until this version is visible (or
+    // abort), so a dispatched run never applies stale settings.
+    const expectedVersion = configVersion(incoming);
     let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
     // ── Phase 1: regenerations (non-destructive) ──
     if (simklDispatchKinds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
-        inputs: { kinds: simklDispatchKinds.join(",") },
+        inputs: { kinds: simklDispatchKinds.join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub simkl dispatch failed: " + dispatchResult.reason }, 502);
@@ -377,7 +381,7 @@ export async function handleSaveConfig(env, request) {
     if (officialRegenNeeded) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
-        inputs: { slugs: officialRegenSlugs.join(",") },
+        inputs: { slugs: officialRegenSlugs.join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub official dispatch failed: " + dispatchResult.reason }, 502);
@@ -386,7 +390,7 @@ export async function handleSaveConfig(env, request) {
     if (tmdbGenerateSet.size > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
-        inputs: { ids: [...tmdbGenerateSet].join(",") },
+        inputs: { ids: [...tmdbGenerateSet].join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub tmdb dispatch failed: " + dispatchResult.reason }, 502);
@@ -396,6 +400,7 @@ export async function handleSaveConfig(env, request) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         lists: dispatch.map((l) => l.id),
         action: "scrape",
+        inputs: { lists: dispatch.map((l) => l.id).join(","), action: "scrape", config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
@@ -409,7 +414,7 @@ export async function handleSaveConfig(env, request) {
     if (officialRemovedIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
-        inputs: { action: "delete", delete_ids: officialRemovedIds.join(",") },
+        inputs: { action: "delete", delete_ids: officialRemovedIds.join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub official cleanup dispatch failed: " + dispatchResult.reason }, 502);
@@ -420,7 +425,7 @@ export async function handleSaveConfig(env, request) {
     if (tmdbDeleteIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
-        inputs: { action: "delete", delete_ids: tmdbDeleteIds.join(",") },
+        inputs: { action: "delete", delete_ids: tmdbDeleteIds.join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub tmdb cleanup dispatch failed: " + dispatchResult.reason }, 502);
@@ -433,6 +438,7 @@ export async function handleSaveConfig(env, request) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         action: "scrape_delete",
         deleteIds,
+        inputs: { lists: deleteIds.join(","), action: "scrape_delete", delete_ids: deleteIds.join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);

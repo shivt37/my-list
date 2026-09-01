@@ -14,6 +14,10 @@ on:
         description: "SIMKL kinds to refresh (comma-separated: series,anime, blank = all enabled)"
         required: false
         default: ""
+      config_version:
+        description: "configVersion the save expects (12-hex; worker stamps it; blank = skip wait)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -45,9 +49,32 @@ jobs:
         id: sanitize
         run: |
           # kinds is one of: series, anime, series,anime. Whitelist to
-          # [a-z,] only.
+          # [a-z,] only. config_version is a 12-hex content hash.
           SANITIZED_KINDS=$(printf '%s' "${{ github.event.inputs.kinds }}" | tr -cd 'a-z,')
+          SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
           echo "kinds=$SANITIZED_KINDS" >> "$GITHUB_OUTPUT"
+          echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
+
+      # F3: simkl reads filters + timezone from /export-config - wait
+      # (bounded) until the config version this save dispatched for is
+      # visible, else a stale KV read applies the OLD filters to the run.
+      - name: Wait for KV consistency
+        if: ${{ steps.sanitize.outputs.config_version != '' }}
+        env:
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
+        run: |
+          for attempt in 1 2 3; do
+            VERSION=$(curl -sf "${WORKER_ORIGIN}/export-config" | grep -o '"configVersion":"[^"]*"' | cut -d'"' -f4 || echo "")
+            if [ "$VERSION" = "$INPUT_VERSION" ]; then
+              echo "Config ready (attempt $attempt)"
+              exit 0
+            fi
+            echo "Config version $INPUT_VERSION not visible yet (saw '${VERSION:-none}') - waiting 20s..."
+            sleep 20
+          done
+          echo "ERROR: config still stale after 3 attempts - aborting instead of applying old filters."
+          exit 1
 
       - name: Run SIMKL arriving-today fetcher
         working-directory: scripts

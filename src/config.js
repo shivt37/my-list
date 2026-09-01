@@ -61,6 +61,17 @@ export function emptyConfig() {
   return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
 }
 
+// F3: configVersion = content hash of the config blob. Every save stamps
+// it; dispatch inputs carry it; workflows poll /export-config until the
+// version they were dispatched for is visible (or abort), closing the KV
+// eventual-consistency race for BOTH new ids AND edited settings on
+// existing ids. Self-excluding: the stored version never feeds its own
+// hash, so identical content always hashes identically (idempotent).
+export function configVersion(cfg) {
+  const { configVersion: _ignored, ...rest } = cfg || {};
+  return createHash("sha256").update(JSON.stringify(rest)).digest("hex").slice(0, 12);
+}
+
 // Global simkl timezone (IANA name, e.g. "Asia/Kolkata") - decides which
 // calendar day "arriving today" means. "UTC" is the default and reproduces
 // the pre-timezone behaviour exactly. Validation is the platform's own tz
@@ -492,11 +503,19 @@ export async function loadConfig(kv) {
     await kv.put(CONFIG_KEY, JSON.stringify(cfg));
     if (healed) await kv.put(HEALED_KEY, "1");
   }
+  // F3: stamp the version on every read. migrateConfig rebuilds the
+  // object (dropping any stored key), and a legacy config saved before
+  // this feature has none - so loadConfig derives it from content here.
+  // Idempotent: same content -> same hash, so a workflow waiting on the
+  // version saveConfig stamped matches the one this read reports.
+  cfg.configVersion = configVersion(cfg);
   return cfg;
 }
 
 export async function saveConfig(kv, cfg) {
-  await kv.put(CONFIG_KEY, JSON.stringify(cfg));
+  // F3: stamp the version the workflows will wait for. Computed fresh at
+  // write time so even a config that arrived without one gets stamped.
+  await kv.put(CONFIG_KEY, JSON.stringify({ ...cfg, configVersion: configVersion(cfg) }));
 }
 
 // ---- scrape-run history (last 30 per module, most recent first) ----

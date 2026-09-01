@@ -22,6 +22,10 @@ on:
         description: "List ids whose data files should be deleted (comma-separated)"
         required: false
         default: ""
+      config_version:
+        description: "configVersion the save expects (12-hex; worker stamps it; blank = skip wait)"
+        required: false
+        default: ""
       debug:
         description: "Dump page HTML/screenshots for troubleshooting"
         required: false
@@ -71,11 +75,13 @@ jobs:
           SANITIZED_LISTS=$(printf '%s' "${{ github.event.inputs.lists }}" | tr -cd 'a-zA-Z0-9,_-')
           SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-zA-Z0-9,_-')
           SANITIZED_DEBUG=$(printf '%s' "${{ github.event.inputs.debug }}" | tr -cd 'a-zA-Z')
+          SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
           [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="scrape"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
           echo "lists=$SANITIZED_LISTS" >> "$GITHUB_OUTPUT"
           echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
           echo "debug=$SANITIZED_DEBUG" >> "$GITHUB_OUTPUT"
+          echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Wait for KV consistency
         # Cloudflare KV is eventually consistent: when save-config
@@ -85,31 +91,44 @@ jobs:
         # dispatched but the config still shows the pre-save state.
         # Only fires on dispatch-triggered runs with explicit list IDs
         # (cron runs scrape all enabled, no ID mismatch possible).
-        if: ${{ steps.sanitize.outputs.lists != '' }}
+        # F3: when config_version is present, ALSO wait for the exact
+        # version - the id grep below only catches newly-added ids, not
+        # edits to existing ones (same id, changed URL/pages).
+        if: ${{ steps.sanitize.outputs.lists != '' || steps.sanitize.outputs.config_version != '' }}
         env:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           INPUT_LISTS: ${{ steps.sanitize.outputs.lists }}
+          INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
         run: |
-          for attempt in 1 2; do
+          for attempt in 1 2 3; do
             CONFIG=$(curl -sf "${WORKER_ORIGIN}/export-config" || echo '{}')
             MISSING=false
-            IFS=',' read -ra IDS <<< "$INPUT_LISTS"
-            for id in "${IDS[@]}"; do
-              if ! echo "$CONFIG" | grep -q "\"$id\""; then
+            if [ -n "$INPUT_VERSION" ]; then
+              V=$(echo "$CONFIG" | grep -o '"configVersion":"[^"]*"' | cut -d'"' -f4 || echo "")
+              if [ "$V" != "$INPUT_VERSION" ]; then
                 MISSING=true
-                break
               fi
-            done
+            fi
+            if [ "$MISSING" = false ] && [ -n "$INPUT_LISTS" ]; then
+              IFS=',' read -ra IDS <<< "$INPUT_LISTS"
+              for id in "${IDS[@]}"; do
+                if ! echo "$CONFIG" | grep -q "\"$id\""; then
+                  MISSING=true
+                  break
+                fi
+              done
+            fi
             if [ "$MISSING" = false ]; then
               echo "Config ready (attempt $attempt)"
               exit 0
             fi
-            if [ "$attempt" -eq 1 ]; then
-              echo "Requested IDs not in config yet - waiting 10s for KV propagation..."
+            if [ "$attempt" -lt 3 ]; then
+              echo "Config not ready yet - waiting 20s for KV propagation..."
               sleep 20
             fi
           done
-          echo "WARNING: IDs still missing after retry - proceeding anyway"
+          echo "ERROR: config still stale after 3 attempts - aborting instead of running with old settings."
+          exit 1
 
       - name: Run scraper
         working-directory: scripts

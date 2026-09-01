@@ -26,6 +26,10 @@ on:
         description: "Catalog ids to delete when action=delete (mdboff_<slug>_<movie|show>, comma-separated)"
         required: false
         default: ""
+      config_version:
+        description: "configVersion the save expects (12-hex; worker stamps it; blank = skip wait)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -63,37 +67,51 @@ jobs:
           SANITIZED_SLUGS=$(printf '%s' "${{ github.event.inputs.slugs }}" | tr -cd 'a-z0-9,_-')
           SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-z')
           SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-z0-9,_-')
+          SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
           [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="refresh"
           echo "slugs=$SANITIZED_SLUGS" >> "$GITHUB_OUTPUT"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
           echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
+          echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
 
+      # F3: config_version wait (exact content hash) + the legacy slug
+      # grep - the grep only catches newly-added slugs, not edits.
       - name: Wait for KV consistency
-        if: ${{ steps.sanitize.outputs.slugs != '' }}
+        if: ${{ steps.sanitize.outputs.slugs != '' || steps.sanitize.outputs.config_version != '' }}
         env:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           INPUT_SLUGS: ${{ steps.sanitize.outputs.slugs }}
+          INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
         run: |
-          for attempt in 1 2; do
+          for attempt in 1 2 3; do
             CONFIG=$(curl -sf "${WORKER_ORIGIN}/export-config" || echo '{}')
             MISSING=false
-            IFS=',' read -ra SLUGS <<< "$INPUT_SLUGS"
-            for slug in "${SLUGS[@]}"; do
-              if ! echo "$CONFIG" | grep -q "\"${slug}\""; then
+            if [ -n "$INPUT_VERSION" ]; then
+              V=$(echo "$CONFIG" | grep -o '"configVersion":"[^"]*"' | cut -d'"' -f4 || echo "")
+              if [ "$V" != "$INPUT_VERSION" ]; then
                 MISSING=true
-                break
               fi
-            done
+            fi
+            if [ "$MISSING" = false ] && [ -n "$INPUT_SLUGS" ]; then
+              IFS=',' read -ra SLUGS <<< "$INPUT_SLUGS"
+              for slug in "${SLUGS[@]}"; do
+                if ! echo "$CONFIG" | grep -q "\"${slug}\""; then
+                  MISSING=true
+                  break
+                fi
+              done
+            fi
             if [ "$MISSING" = false ]; then
               echo "Config ready (attempt $attempt)"
               exit 0
             fi
-            if [ "$attempt" -eq 1 ]; then
-              echo "Requested slugs not in config yet - waiting 10s for KV propagation..."
+            if [ "$attempt" -lt 3 ]; then
+              echo "Config not ready yet - waiting 20s for KV propagation..."
               sleep 20
             fi
           done
-          echo "WARNING: Slugs still missing after retry - proceeding anyway"
+          echo "ERROR: config still stale after 3 attempts - aborting instead of running with old settings."
+          exit 1
 
       - name: Run official lists fetcher / deleter
         working-directory: scripts
