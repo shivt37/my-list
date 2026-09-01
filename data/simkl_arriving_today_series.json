@@ -3,14 +3,28 @@
   "name": "Arriving Today (Series) - Episodes & Premieres",
   "type": "series",
   "timezone": "Asia/Kolkata",
-  "scraped_at": 1788221771072,
+  "scraped_at": 1788265266447,
   "items": [
+    {
+      "id": "tmdb:330775",
+      "type": "series",
+      "name": "Civil Defense",
+      "poster": "https://simkl.in/posters/20/20603579d8c093b2ea_m.webp",
+      "description": "🆕 New Show | S01E01 | 2026-09-01 03:30 India (2026-08-31 22:00 UTC) | ?? | genres: none | Simkl n/a | IMDb n/a"
+    },
+    {
+      "id": "tt44842745",
+      "type": "series",
+      "name": "Welcome to the Family: The Murder of Dan Markel",
+      "poster": "https://simkl.in/poster_no_pic_c.png",
+      "description": "🆕 New Show | S01E04 · E01–E04 (4 eps today) | 2026-09-01 09:30 India (2026-09-01 04:00 UTC) | ?? | genres: none | Simkl n/a | IMDb n/a"
+    },
     {
       "id": "tt0472954",
       "type": "series",
       "name": "It's Always Sunny in Philadelphia",
       "poster": "https://simkl.in/posters/18/18556cd1ece989e_m.webp",
-      "description": "📺 New Episode | S18E04 | 2026-09-01 07:30 India (2026-09-01 02:00 UTC) | US | genres: Comedy | Simkl 8.4 (1844) | IMDb 8.8 (284299)"
+      "description": "📺 New Episode | S18E04 | 2026-09-01 07:30 India (2026-09-01 02:00 UTC) | US | genres: Comedy | Simkl 8.4 (1846) | IMDb 8.8 (284299)"
     },
     {
       "id": "tt11846996",
