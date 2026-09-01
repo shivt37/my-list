@@ -353,15 +353,17 @@ export async function handleSaveConfig(env, request) {
     // Both dispatches fire before the persist: save is the last step, so
     // no config write happens on any dispatch failure and no workflow
     // has read a config it shouldn't trust yet.
-    // Dispatch order: simkl + official first (non-destructive refreshes),
-    // then tmdb, scraper LAST - the scraper workflow can be destructive
-    // (scrape_delete removes data files); simkl/official only regenerate
-    // listings. If the scraper fired first and a later dispatch failed,
-    // the scraper workflow would run deleteCatalog() against a config the
-    // roll-back wants to keep. Keeping the destructive action adjacent to
-    // the persist means any failure before it = no config write and no
-    // destructive run.
+    // F2 dispatch order: ALL regenerations first (simkl, official, tmdb,
+    // scraper), then ALL destructive cleanups at the tail, immediately
+    // before the persist. Any failure during a regeneration = clean
+    // rollback with nothing destructive fired - a rejected save can never
+    // delete data files for lists the rolled-back config still
+    // advertises. (tmdb deletes MUST be their own action=delete dispatch:
+    // tmdb.yml only forwards --delete_ids when action=delete, so a
+    // combined generate+delete dispatch silently dropped the deletes -
+    // F3A-1, the root cause of orphaned tmdb_discover_* files.)
     let dispatchResult = { dispatched: false, reason: "no dispatch needed" };
+    // ── Phase 1: regenerations (non-destructive) ──
     if (simklDispatchKinds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_SIMKL_WORKFLOW || SIMKL_WORKFLOW,
@@ -381,13 +383,30 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub official dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
-    // O3: official cleanup fires after tmdb (destructive-capable) and
-    // before scraper — this puts all destructive actions at the tail,
-    // closest to persist, matching the documented invariant.
+    if (tmdbGenerateSet.size > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
+        inputs: { ids: [...tmdbGenerateSet].join(",") },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub tmdb dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+    if (dispatch.length > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        lists: dispatch.map((l) => l.id),
+        action: "scrape",
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+
+    // ── Phase 2: destructive cleanups, tail-adjacent to the persist ──
+    // Official cleanup: data-file cleanup for deleted officials. Runs like
+    // every other dispatch (accepted-204 ≠ done) but is non-critical: a
+    // failed cleanup leaves orphan JSON files that nothing serves.
     if (officialRemovedIds.length > 0) {
-      // Data-file cleanup for deleted officials. Runs like every other
-      // dispatch (accepted-204 ≠ done) but is non-critical: a failed
-      // cleanup leaves orphan JSON files that nothing serves.
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
         inputs: { action: "delete", delete_ids: officialRemovedIds.join(",") },
@@ -396,30 +415,24 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub official cleanup dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
-    // S3: tmdb fires before scraper — the scraper workflow can be
-    // destructive (scrape_delete removes data files); if tmdb fails
-    // after the persist, the scraper's delete would run against a
-    // config the rollback wants to keep.
-    if (tmdbGenerateSet.size > 0 || tmdbDeleteIds.length > 0) {
-      // One dispatch carries both: a save that deletes one list and edits
-      // another must regenerate AND delete in the same run.
+    // TMDB deletes carry action=delete explicitly - tmdb.yml only forwards
+    // --delete_ids in that mode (F3A-1: combined dispatches dropped them).
+    if (tmdbDeleteIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_TMDB_WORKFLOW || TMDB_WORKFLOW,
-        inputs: {
-          ...(tmdbGenerateSet.size > 0 && { ids: [...tmdbGenerateSet].join(",") }),
-          ...(tmdbDeleteIds.length > 0 && { delete_ids: tmdbDeleteIds.join(",") }),
-        },
+        inputs: { action: "delete", delete_ids: tmdbDeleteIds.join(",") },
       });
       if (!dispatchResult.dispatched) {
-        return json({ ok: false, error: "Save rejected - GitHub tmdb dispatch failed: " + dispatchResult.reason }, 502);
+        return json({ ok: false, error: "Save rejected - GitHub tmdb cleanup dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
-    const scraperDispatchNeeded = dispatch.length > 0 || deleteIds.length > 0;
-    if (scraperDispatchNeeded) {
+    // Scraper delete: pure delete run (no --lists) - the regen phase above
+    // already refreshed every surviving list, so this only removes the
+    // deleted ids' data files.
+    if (deleteIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
-        lists: dispatch.map((l) => l.id),
-        action: deleteIds.length > 0 ? "scrape_delete" : "scrape",
-        ...(deleteIds.length > 0 && { deleteIds }),
+        action: "scrape_delete",
+        deleteIds,
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
