@@ -2,43 +2,22 @@
   "catalog_id": "simkl_arriving_today_series",
   "name": "Arriving Today (Series) - Episodes & Premieres",
   "type": "series",
-  "timezone": "Asia/Kolkata",
-  "scraped_at": 1788265266447,
+  "timezone": "America/New_York",
+  "scraped_at": 1788277485174,
   "items": [
-    {
-      "id": "tmdb:330775",
-      "type": "series",
-      "name": "Civil Defense",
-      "poster": "https://simkl.in/posters/20/20603579d8c093b2ea_m.webp",
-      "description": "🆕 New Show | S01E01 | 2026-09-01 03:30 India (2026-08-31 22:00 UTC) | ?? | genres: none | Simkl n/a | IMDb n/a"
-    },
     {
       "id": "tt44842745",
       "type": "series",
       "name": "Welcome to the Family: The Murder of Dan Markel",
       "poster": "https://simkl.in/poster_no_pic_c.png",
-      "description": "🆕 New Show | S01E04 · E01–E04 (4 eps today) | 2026-09-01 09:30 India (2026-09-01 04:00 UTC) | ?? | genres: none | Simkl n/a | IMDb n/a"
+      "description": "🆕 New Show | S01E04 · E01–E04 (4 eps today) | 2026-09-01 00:00 New York (2026-09-01 04:00 UTC) | ?? | genres: none | Simkl n/a | IMDb n/a"
     },
     {
-      "id": "tt0472954",
+      "id": "tt18374408",
       "type": "series",
-      "name": "It's Always Sunny in Philadelphia",
-      "poster": "https://simkl.in/posters/18/18556cd1ece989e_m.webp",
-      "description": "📺 New Episode | S18E04 | 2026-09-01 07:30 India (2026-09-01 02:00 UTC) | US | genres: Comedy | Simkl 8.4 (1846) | IMDb 8.8 (284299)"
-    },
-    {
-      "id": "tt11846996",
-      "type": "series",
-      "name": "Vigil",
-      "poster": "https://simkl.in/posters/11/117162041caef30d31_m.webp",
-      "description": "📺 New Episode | S03E02 | 2026-09-01 01:30 India (2026-08-31 20:00 UTC) | GB | genres: Crime, Drama, Mystery, Thriller | Simkl 7.3 (332) | IMDb 7.4 (31695)"
-    },
-    {
-      "id": "tt11958610",
-      "type": "series",
-      "name": "Trigger Point",
-      "poster": "https://simkl.in/posters/14/149008656aa05305ad_m.webp",
-      "description": "📺 New Episode | S04E02 | 2026-09-01 01:30 India (2026-08-31 20:00 UTC) | GB | genres: Action, Crime, Drama, Mystery, Suspense, Thriller | Simkl 7.2 (145) | IMDb 6.7 (11258)"
+      "name": "Doppelhaushälfte",
+      "poster": "https://simkl.in/posters/15/158662533f41793586_m.webp",
+      "description": "📺 New Episode | S05E04 · E03–E04 (2 eps today) | 2026-09-01 15:45 New York (2026-09-01 19:45 UTC) | DE | genres: Comedy, Family | Simkl 7.7 (13) | IMDb 7.6 (1556)"
     }
   ]
 }
