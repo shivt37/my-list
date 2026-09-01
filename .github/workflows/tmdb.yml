@@ -1,4 +1,4 @@
-name: Generate TMDB Discover lists
+﻿name: Generate TMDB Discover lists
 
 on:
   schedule:
@@ -79,7 +79,7 @@ jobs:
           INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
           INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
         run: |
-          for attempt in 1 2 3; do
+          for attempt in 1 2 3 4 5; do
             CONFIG=$(curl -sf "${WORKER_ORIGIN}/export-config" || echo '{}')
             MISSING=false
             if [ -n "$INPUT_VERSION" ]; then
@@ -104,12 +104,12 @@ jobs:
               echo "Config ready (attempt $attempt)"
               exit 0
             fi
-            if [ "$attempt" -lt 3 ]; then
+            if [ "$attempt" -lt 5 ]; then
               echo "Config not ready yet - waiting 20s for KV propagation..."
               sleep 20
             fi
           done
-          echo "ERROR: config still stale after 3 attempts - aborting instead of running with old settings."
+          echo "ERROR: config still stale after 5 attempts - aborting instead of running with old settings."
           exit 1
 
       - name: Generate TMDB discover lists

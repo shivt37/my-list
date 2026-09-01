@@ -1,4 +1,4 @@
-name: Refresh SIMKL Arriving Today
+﻿name: Refresh SIMKL Arriving Today
 
 on:
   schedule:
@@ -64,16 +64,18 @@ jobs:
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
         run: |
-          for attempt in 1 2 3; do
+          for attempt in 1 2 3 4 5; do
             VERSION=$(curl -sf "${WORKER_ORIGIN}/export-config" | grep -o '"configVersion": *"[^"]*"' | grep -o '[a-f0-9]\{12\}' || echo "")
             if [ "$VERSION" = "$INPUT_VERSION" ]; then
               echo "Config ready (attempt $attempt)"
               exit 0
             fi
             echo "Config version $INPUT_VERSION not visible yet (saw '${VERSION:-none}') - waiting 20s..."
-            sleep 20
+            if [ "$attempt" -lt 5 ]; then
+              sleep 20
+            fi
           done
-          echo "ERROR: config still stale after 3 attempts - aborting instead of applying old filters."
+          echo "ERROR: config still stale after 5 attempts - aborting instead of applying old filters."
           exit 1
 
       - name: Run SIMKL arriving-today fetcher
