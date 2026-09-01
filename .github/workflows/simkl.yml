@@ -65,7 +65,7 @@ jobs:
           INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
         run: |
           for attempt in 1 2 3; do
-            VERSION=$(curl -sf "${WORKER_ORIGIN}/export-config" | grep -o '"configVersion":"[^"]*"' | cut -d'"' -f4 || echo "")
+            VERSION=$(curl -sf "${WORKER_ORIGIN}/export-config" | grep -o '"configVersion": *"[^"]*"' | grep -o '[a-f0-9]\{12\}' || echo "")
             if [ "$VERSION" = "$INPUT_VERSION" ]; then
               echo "Config ready (attempt $attempt)"
               exit 0

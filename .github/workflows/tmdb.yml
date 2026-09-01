@@ -83,7 +83,7 @@ jobs:
             CONFIG=$(curl -sf "${WORKER_ORIGIN}/export-config" || echo '{}')
             MISSING=false
             if [ -n "$INPUT_VERSION" ]; then
-              V=$(echo "$CONFIG" | grep -o '"configVersion":"[^"]*"' | cut -d'"' -f4 || echo "")
+              V=$(echo "$CONFIG" | grep -o '"configVersion": *"[^"]*"' | grep -o '[a-f0-9]\{12\}' || echo "")
               if [ "$V" != "$INPUT_VERSION" ]; then
                 MISSING=true
               fi
