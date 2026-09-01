@@ -55,11 +55,12 @@ export function simklUrl(kind) {
 }
 
 // Worker is the source of truth for enabled simkl kinds AND their filters.
-// Falls back to built-in defaults when the worker is unreachable so a
-// worker outage can't silently stop the refresh (same as official.mjs).
-// timezone (IANA name) also comes from the worker config - it decides
-// which calendar day "arriving today" means. Missing/worker-down → UTC,
-// which reproduces the original UTC-day behaviour.
+// F6: a worker/config outage returns null and main() aborts loudly -
+// mirroring official.mjs's O5 policy ("guessing during a worker outage
+// would scrape the wrong catalog"). The old fail-open path (both kinds +
+// DEFAULT_FILTERS + UTC) silently overwrote operator tuning with factory
+// output during any outage. timezone (IANA name) also comes from the
+// worker config - it decides which calendar day "arriving today" means.
 export const DEFAULT_FILTERS = {
   series: {
     rating_source: "imdb",
@@ -87,12 +88,15 @@ export const DEFAULT_FILTERS = {
 };
 
 export async function enabledKindsAndFilters() {
-  if (!WORKER_ORIGIN) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k], tz: "UTC" }));
+  // F6: null = worker unreachable/config unreadable - main() aborts.
+  // Never fail open: refreshing with factory defaults would silently
+  // overwrite the operator's tuned filters in the served data.
+  if (!WORKER_ORIGIN) return null;
   try {
     const res = await fetch(`${WORKER_ORIGIN}/export-config`, {
       signal: AbortSignal.timeout(15000),
     });
-    if (!res.ok) return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k], tz: "UTC" }));
+    if (!res.ok) return null;
     const cfg = await res.json();
     const enabled = new Set((cfg.simkl?.lists || []).filter((l) => l.enabled).map((l) => l.slug));
     const tz = normalizeTzLocal(cfg.simkl?.timezone);
@@ -101,7 +105,7 @@ export async function enabledKindsAndFilters() {
       return { kind: k, filter: l?.filter || DEFAULT_FILTERS[k], tz };
     });
   } catch {
-    return KINDS.map((k) => ({ kind: k, filter: DEFAULT_FILTERS[k], tz: "UTC" }));
+    return null;
   }
 }
 
@@ -465,6 +469,14 @@ export async function main({
   // data/ with the defaults, silently losing the operator's tuning).
   const SANE_KIND = /^[a-z][a-z0-9_-]{0,31}$/;
   const config = await fetchConfig();
+  // F6: null = worker unreachable/config unreadable - abort loudly
+  // (mirrors official.mjs O5). Never refresh with factory defaults: an
+  // outage run must not silently overwrite operator-tuned output.
+  if (config === null) {
+    console.error("Aborting: worker config unreachable - refusing to refresh with default filters.");
+    process.exitCode = 1;
+    return { refreshed: [] };
+  }
   let targets;
   if (rawKinds) {
     const wanted = new Set(rawKinds.split(",").filter(Boolean).filter((k) => SANE_KIND.test(k)));
