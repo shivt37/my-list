@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts",
   "type": "series",
-  "scraped_at": 1788177769839,
+  "scraped_at": 1788221637196,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -837,6 +837,22 @@
       "poster": "https://image.tmdb.org/t/p/w200/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg"
     },
     {
+      "imdb_id": "tt28107213",
+      "type": "series",
+      "title": "Elixer",
+      "year": 2025,
+      "release_date": "2025-03-05",
+      "poster": "https://image.tmdb.org/t/p/w200/ueBzJjkoxbECF4OKwx247hxy1cR.jpg"
+    },
+    {
+      "imdb_id": "tt8593252",
+      "type": "series",
+      "title": "Coroner",
+      "year": 2019,
+      "release_date": "2019-01-07",
+      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg"
+    },
+    {
       "imdb_id": "tt18228732",
       "type": "series",
       "title": "Colin from Accounts",
@@ -1013,14 +1029,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/oftZNfyTVNU7IfOqoGLoT8MGvNs.jpg"
     },
     {
-      "imdb_id": "tt28107213",
-      "type": "series",
-      "title": "Elixer",
-      "year": 2025,
-      "release_date": "2025-03-05",
-      "poster": "https://image.tmdb.org/t/p/w200/ueBzJjkoxbECF4OKwx247hxy1cR.jpg"
-    },
-    {
       "imdb_id": "tt32066226",
       "type": "series",
       "title": "Bookish",
@@ -1179,14 +1187,6 @@
       "year": 2016,
       "release_date": "2016-10-22",
       "poster": "https://image.tmdb.org/t/p/w200/q8oMpXPEAUJJ0KztsRs5K51T2lo.jpg"
-    },
-    {
-      "imdb_id": "tt8593252",
-      "type": "series",
-      "title": "Coroner",
-      "year": 2019,
-      "release_date": "2019-01-07",
-      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg"
     }
   ]
 }
