@@ -3,6 +3,10 @@ main = "src/index.js"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
+# Runtime vars set ONLY in the Cloudflare dashboard (Variables and Secrets)
+# survive deploys.
+keep_vars = true
+
 # UI-editable config + last-30 scrape run history live in KV.
 [[kv_namespaces]]
 binding = "STORE"
@@ -11,10 +15,6 @@ id = "36b7763e6e31445696e1a773c44de7a3"
 [vars]
 # Base URL of the GitHub Pages site hosting data/<id>.json catalog files.
 GITHUB_PAGES_BASE = "https://shivt37.github.io/my-list"
-# Login gate for /configure + admin APIs. "false" opens them without a PIN.
-# Flip via this file + deploy, or Cloudflare dashboard > Variables and Secrets.
-# Absent value = treated as "true" (secure default).
-AUTH_ENABLED = "false"
 # GitHub Actions dispatch: repo + workflow file names. The token itself is
 # NOT here - set GH_TOKEN as a Cloudflare secret (dashboard or
 # `wrangler secret put GH_TOKEN`).
