@@ -1349,7 +1349,7 @@ function renderOfficial() {
   // empty; official showed a blank gap between note and Add button.
   const emptyHint = lists.length ? '' : '<div class="empty">No official lists yet - pick one below.</div>';
 
-  host.innerHTML = toolbar + '<div class="official-note">Official MDBList lists - rename, enable or disable freely. Add more from the live MDBList catalog with the picker below; Delete removes a list (and its data files) after Save.</div>' + emptyHint + cards + addSlot;
+  host.innerHTML = toolbar + emptyHint + cards + addSlot;
   applyDisabledState();
 }
 
