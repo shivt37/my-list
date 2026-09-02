@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1788266563253,
+  "scraped_at": 1788308042305,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -533,14 +533,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg"
     },
     {
-      "imdb_id": "tt3530232",
-      "type": "series",
-      "title": "Last Week Tonight with John Oliver",
-      "year": 2014,
-      "release_date": "2014-04-27",
-      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
-    },
-    {
       "imdb_id": "tt4934214",
       "type": "series",
       "title": "Taskmaster",
@@ -853,14 +845,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg"
     },
     {
-      "imdb_id": "tt8593252",
-      "type": "series",
-      "title": "Coroner",
-      "year": 2019,
-      "release_date": "2019-01-07",
-      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg"
-    },
-    {
       "imdb_id": "tt40385200",
       "type": "series",
       "title": "World War II with Tom Hanks",
@@ -891,6 +875,14 @@
       "year": 1997,
       "release_date": "1997-08-13",
       "poster": "https://image.tmdb.org/t/p/w200/1CGwZCFX2qerXaXQJJUB3qUvxq7.jpg"
+    },
+    {
+      "imdb_id": "tt3530232",
+      "type": "series",
+      "title": "Last Week Tonight with John Oliver",
+      "year": 2014,
+      "release_date": "2014-04-27",
+      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
     },
     {
       "imdb_id": "tt4955642",
@@ -987,6 +979,14 @@
       "year": 1994,
       "release_date": "1994-09-22",
       "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg"
+    },
+    {
+      "imdb_id": "tt8593252",
+      "type": "series",
+      "title": "Coroner",
+      "year": 2019,
+      "release_date": "2019-01-07",
+      "poster": "https://image.tmdb.org/t/p/w200/7zEVxcNEDxVtRf29zvjjy6cazm4.jpg"
     },
     {
       "imdb_id": "tt0773262",
@@ -1141,14 +1141,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/f8aIvYk5h7Z8EP3dinCmVgQFYow.jpg"
     },
     {
-      "imdb_id": "tt8509922",
-      "type": "series",
-      "title": "Dolly Parton's Heartstrings",
-      "year": 2019,
-      "release_date": "2019-11-22",
-      "poster": "https://image.tmdb.org/t/p/w200/2Yy84h1juF38FjtFGp0zO4Esplc.jpg"
-    },
-    {
       "imdb_id": "tt26675358",
       "type": "series",
       "title": "Love Is Blind: UK",
@@ -1187,6 +1179,14 @@
       "year": 2022,
       "release_date": "2022-02-17",
       "poster": "https://image.tmdb.org/t/p/w200/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg"
+    },
+    {
+      "imdb_id": "tt1439629",
+      "type": "series",
+      "title": "Community",
+      "year": 2009,
+      "release_date": "2009-09-17",
+      "poster": "https://image.tmdb.org/t/p/w200/3KUjDt8XY7w2Ku70UE0SECmv1zP.jpg"
     }
   ]
 }
