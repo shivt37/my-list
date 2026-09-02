@@ -220,15 +220,38 @@ export function buildConfigurePage(origin, config, opts = {}) {
   }
   .list-card:hover { border-color: var(--border-card-hover); }
   /* A45: disabled cards stop fading wholesale (opacity .6 dragged text below
-     contrast). Quiet border + muted name/chip instead; controls are actually
-     disabled via JS (everything except the enable toggle). */
+     contrast). Quiet border instead; controls are actually disabled via JS
+     (everything except the enable toggle), and all card text dims via the
+     alpha-foreground rule below. */
   .list-card.disabled { border-color: var(--border); }
-  .list-card.disabled .name-static, .list-card.disabled .id-chip { color: var(--muted); }
   .list-card.disabled :is(input, select, button)[disabled] { opacity: 0.45; }
 /* UI-F10: the pencil/eye icon buttons carry their own colors (the eye even
  * keeps --accent when active) so the generic [disabled] dim skipped them.
  * Same treatment, extended to icon-btns - uniform "everything dims". */
 .list-card.disabled .icon-btn[disabled] { opacity: 0.45; }
+/* Owner: disabled-card text matches the dimmed input text by CONSTRUCTION -
+ * same fg token (--text), same 45% reduction the [disabled] rule applies to
+ * controls. Alpha in the color (not opacity) so it never compounds when
+ * nested and doesn't create a stacking context. Covers every text element on
+ * all 4 tabs (incl the card name + id-chip, replacing the old A45 muted rule
+ * that kept identity text brighter than the disabled controls beside it). */
+.list-card.disabled :is(.name-static, .id-chip, .pages-field, .official-hint,
+                       .filter-label, .toggle-text, .tier-head,
+                       .members-label, .include-mode-hint, .count-line) {
+  color: rgb(232 237 244 / 45%);
+}
+/* Owner: TMDB mode pills - the accent thumb (the sliding pill behind
+ * AND/Mix/OR) and the section-header AND/OR/ANY-OF chips are leaf visual
+ * elements, not controls, so the [disabled] dim skipped them: the thumb
+ * stayed full-bright accent with its glow on a disabled card. Whole-element
+ * opacity like buttons (leaf elements - no nesting-compound risk). */
+.list-card.disabled .mode-toggle-thumb,
+.list-card.disabled .dim-mode-tag { opacity: 0.45; }
+/* Owner: the card's identity row sits one tier above the 45% content - the
+ * name dims to 75% alpha-fg. The toggle slider stays at full strength: it's
+ * the one live control on a disabled card (opacity dimming is for text
+ * hierarchy; the switch keeps its native ON/OFF look). */
+.list-card.disabled .name-static { color: rgb(232 237 244 / 75%); }
 
   /* A45 two-zone card: head = identity row, body = one compact control row
      (per owner review: previous density kept - only "Pages" carries a small
@@ -1124,6 +1147,14 @@ function moduleLists() {
 function applyDisabledState() {
   document.querySelectorAll('.list-card.disabled').forEach(card => {
     card.querySelectorAll('input:not(.toggle input), select, button').forEach(el => { el.disabled = true; });
+    // Owner: spans faking buttons (the AND/OR dim-mode pills) can't carry the
+    // disabled attribute - a disabled card left them clickable (state changed
+    // while everything else was locked). Neutralize them explicitly.
+    card.querySelectorAll('span[onclick]').forEach(el => {
+      el.style.pointerEvents = 'none';
+      el.setAttribute('aria-disabled', 'true');
+      el.tabIndex = -1;
+    });
   });
   // Every renderer path funnels through here - keep the Save button honest.
   refreshDirtyUI();
@@ -1875,6 +1906,10 @@ function setTmdbAllModes(i, mode) {
 function setTmdbMode(i, kind, mode) {
   const l = state.tmdb.lists[i];
   if (!l) return;
+  // Owner: a disabled card's controls must all be dead. The AND/OR pills are
+  // spans (no disabled attribute) - programmatic clicks still fire their
+  // inline onclick, so the guard lives here at the handler.
+  if (!l.enabled) return;
   l.includeModes[kind] = mode;
   invalidateTmdbPreview(l);
   renderTmdb();
@@ -1915,6 +1950,9 @@ function removeTmdbId(i, kind, field, id) {
 }
 
 function openTmdbInlineSearch(i, kind, side) {
+  // Owner: dead controls on disabled cards - the +Add chips are spans, so
+  // the disabled guard lives here.
+  if (state.tmdb.lists[i] && !state.tmdb.lists[i].enabled) return;
   tmdbAdding = { i, kind, side };
   tmdbSearchResultsHtml = null;
   renderTmdb();
@@ -2085,6 +2123,8 @@ function toggleTmdbPreview(i) {
 function toggleTmdbPreviewView(i) {
   const l = state.tmdb.lists[i];
   if (!l) return;
+  // Owner: dead controls on disabled cards (span toggle, no disabled attr).
+  if (!l.enabled) return;
   l.previewViewMode = (l.previewViewMode || 'grid') === 'grid' ? 'list' : 'grid';
   renderTmdb();
 }
