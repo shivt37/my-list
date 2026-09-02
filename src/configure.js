@@ -2182,6 +2182,9 @@ async function saveAll() {
     const tmdbLine = []
       .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map((n) => n + ' (removed)'));
     if (tmdbLine.length) regen.push('Regenerating TMDB: ' + tmdbLine.join(', '));
+    // F10: best-effort official cleanup failed - the save still persisted;
+    // orphaned files clear on a later save or cron refresh.
+    if (data.officialCleanupPending) regen.push('Note: data cleanup could not be dispatched - it will retry with a later save or refresh');
 
     const turnedOff = []
       .concat((data.officialChanged || []).filter((n) => !(data.officialDispatched || []).includes(n)))

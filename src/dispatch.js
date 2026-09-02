@@ -24,21 +24,29 @@ export async function dispatchScraperWorkflow(env, { lists = [], action = "scrap
     action,
     ...(deleteIds.length > 0 && { delete_ids: deleteIds.join(",") }),
   };
-  const res = await fetch(`${GH_API}/repos/${env.GH_REPO}/actions/workflows/${wf}/dispatches`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.GH_TOKEN}`,
-      Accept: "application/vnd.github+json",
-      "User-Agent": "my-list-worker",
-    },
-    // Bound a hung GitHub API connection so a save/refresh fails fast
-    // with a clear reason instead of stalling the request.
-    signal: AbortSignal.timeout(15000),
-    body: JSON.stringify({
-      ref: env.GH_REF || "main",
-      inputs: payloadInputs,
-    }),
-  });
+  let res;
+  try {
+    res = await fetch(`${GH_API}/repos/${env.GH_REPO}/actions/workflows/${wf}/dispatches`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GH_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "my-list-worker",
+      },
+      // Bound a hung GitHub API connection so a save/refresh fails fast
+      // with a clear reason instead of stalling the request.
+      signal: AbortSignal.timeout(15000),
+      body: JSON.stringify({
+        ref: env.GH_REF || "main",
+        inputs: payloadInputs,
+      }),
+    });
+  } catch (e) {
+    // Network-level failure (DNS, timeout, connection reset) - same
+    // structured result as a non-204 so callers veto/warn consistently
+    // instead of the thrown error bubbling into a 500.
+    return { dispatched: false, reason: `GitHub API unreachable: ${e.message}` };
+  }
   if (res.status !== 204) {
     const detail = (await res.text()).slice(0, 200);
     return { dispatched: false, reason: `GitHub API returned ${res.status}${detail ? ": " + detail : ""}` };

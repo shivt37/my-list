@@ -408,16 +408,20 @@ export async function handleSaveConfig(env, request) {
     }
 
     // ── Phase 2: destructive cleanups, tail-adjacent to the persist ──
-    // Official cleanup: data-file cleanup for deleted officials. Runs like
-    // every other dispatch (accepted-204 ≠ done) but is non-critical: a
-    // failed cleanup leaves orphan JSON files that nothing serves.
+    // Official cleanup: data-file cleanup for deleted officials. F10:
+    // best-effort — its own comment declares failure harmless (orphan JSON
+    // files that nothing serve), so a dispatch failure must not veto the
+    // save. The response carries officialCleanupPending so the UI can say
+    // so; orphans get removed by any later successful save or cron.
+    let officialCleanupPending = false;
     if (officialRemovedIds.length > 0) {
       dispatchResult = await dispatchScraperWorkflow(env, {
         workflow: env.GH_OFFICIAL_WORKFLOW || OFFICIAL_WORKFLOW,
         inputs: { action: "delete", delete_ids: officialRemovedIds.join(","), config_version: expectedVersion },
       });
       if (!dispatchResult.dispatched) {
-        return json({ ok: false, error: "Save rejected - GitHub official cleanup dispatch failed: " + dispatchResult.reason }, 502);
+        officialCleanupPending = true;
+        console.warn("Official cleanup dispatch failed (non-critical):", dispatchResult.reason);
       }
     }
     // TMDB deletes carry action=delete explicitly - tmdb.yml only forwards
@@ -470,6 +474,10 @@ export async function handleSaveConfig(env, request) {
       officialRemoved: current.official.lists
         .filter((l) => !nextOffSlugs.has(l.slug))
         .map((l) => l.name),
+      // F10: true when the best-effort official cleanup dispatch failed —
+      // the save persisted anyway; the orphaned files clear on a later
+      // save or cron refresh.
+      officialCleanupPending,
       simklChanged: simklChanged.map((l) => l.name),
       simklDispatched: simklChanged.filter((l) => l.enabled).map((l) => l.name),
       // Display names for everything this save will regenerate - hash-path
