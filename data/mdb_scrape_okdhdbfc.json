@@ -2,14 +2,24 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1788264989879,
+  "scraped_at": 1788308525903,
   "items": [
+    {
+      "slug": "3ylnw-mousetrap",
+      "imdb_id": "tt36996011",
+      "title": "Mousetrap",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "2mwgHfOyrFrmvozjFoEXHRdfGhv.jpg",
+      "description": "A reclusive writer wakes to find his identity stolen — and must ally with a ruthless loan shark to reclaim his life from a man known as \"The Rat.\"",
+      "first_air_date": "2026-08-28"
+    },
     {
       "slug": "455wn-death-of-the-pastor-s-wife",
       "imdb_id": "tt44113382",
       "title": "Death of the Pastor's Wife",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "o8H6HmQNt2qx5bIfmvuI6VJn13A.jpg",
       "description": "What happened to Mica Miller? This documentary series retraces her promising life, toxic marriage and the mysterious circumstances of her death.",
       "first_air_date": "2026-08-26"
@@ -605,6 +615,16 @@
       "first_air_date": "2026-06-18"
     },
     {
+      "slug": "44pq2-possible-love",
+      "imdb_id": "tt43351313",
+      "title": "Possible Love",
+      "year": 2026,
+      "score": null,
+      "poster_path": "kGZ6DDHe7XrZiys3dwEAwSmHU7f.jpg",
+      "description": "Defne, a woman in her thirties, is strong and composed, having built her career through hard work. One day, she realizes just how exhausted and isolated she has become; perhaps the time has come for love. However, two men who enter her life turn everything upside down. Caught between Kadir’s unsettling demeanor and Tolga’s games that shift the balance, Defne finds that nothing will ever be the same again.",
+      "first_air_date": "2026-06-18"
+    },
+    {
       "slug": "3xz8a-never-ending-summer",
       "imdb_id": "tt36982964",
       "title": "Never-Ending Summer",
@@ -700,7 +720,7 @@
       "title": "Among Us",
       "year": 2026,
       "score": 8,
-      "poster_path": "4gPHraAEFpTIHWFTXArOsf05wNM.jpg",
+      "poster_path": "ourBbG4B1dAjfFUCzuUYEZpR101.jpg",
       "description": "Eccentric, monochromatic crewmates of a ship transporting junk across the galaxy must root out an Impostor in their midst before they fall victim to its villainous designs.",
       "first_air_date": "2026-06-05"
     },
@@ -1423,26 +1443,6 @@
       "poster_path": "rO6IPnLOuZdBAYtY9rEoxALH27x.jpg",
       "description": "When Leanne and Matty discover they are both robbing from the safe at the inner-city casino they work in, their lives are set on a collision course; with each other, the local gangster they're stealing from, and the police.",
       "first_air_date": "2026-04-26"
-    },
-    {
-      "slug": "41xg5-filing-for-love",
-      "imdb_id": "tt39010903",
-      "title": "Filing for Love",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "5dgTRxtP5g07RSH5LEOl367Fuwi.jpg",
-      "description": "A romantic comedy about Joo In-ah, a charismatic audit department head with a secret, and Noh Ki-joon, the department's ace who is suddenly demoted to deal with the company's scandals.",
-      "first_air_date": "2026-04-25"
-    },
-    {
-      "slug": "3jaz8-naughty-business",
-      "imdb_id": "tt32974250",
-      "title": "Naughty Business",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "4fccegkh4fJYCNxCzzLtTsTiIkX.jpg",
-      "description": "When her husband falls into a coma, Nines, a traditional housewife, transforms the family business into the first adult video store in Valladolid.",
-      "first_air_date": "2026-04-24"
     }
   ]
 }

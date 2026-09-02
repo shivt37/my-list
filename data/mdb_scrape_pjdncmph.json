@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1788264956359,
+  "scraped_at": 1788308492908,
   "items": [
+    {
+      "slug": "42elf-the-brink-of-war",
+      "imdb_id": "tt33070884",
+      "title": "The Brink of War",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "hFborW6HmffKL05GIWlkTFdvVpN.jpg",
+      "description": "President Ronald Reagan races against time to salvage a deal with Soviet leader Mikhail Gorbachev that could dismantle nuclear arsenals—or ignite disaster. With pressure mounting on all sides, every word spoken brings the world closer to peace... or destruction.",
+      "digital_release_date": null
+    },
     {
       "slug": "45425-cockroaches",
       "imdb_id": "tt36752924",
@@ -40,7 +50,7 @@
       "title": "Just Play Dead",
       "year": 2026,
       "score": null,
-      "poster_path": "wG0KDlzuUWE1KHaeJZcGdrJdZea.jpg",
+      "poster_path": "glALx6QaIgw1u4joXsnfHTjWi6D.jpg",
       "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
       "digital_release_date": null
     },
@@ -240,7 +250,7 @@
       "title": "Facing El Chapo",
       "year": 2026,
       "score": 7,
-      "poster_path": "alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
+      "poster_path": "z8eF0ACFFKtIZ4pUeo02PCzxRVO.jpg",
       "description": "Two Mexican officers must survive the final hours of their shift after crossing a ruthless cartel boss.",
       "digital_release_date": null
     },
@@ -409,7 +419,7 @@
       "imdb_id": "tt18316986",
       "title": "All Night Wrong",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "jFN9LcCG4a02wRWm2qfJ6nLY8BO.jpg",
       "description": "Gary and Ell (a married man with an inferiority complex, and a grieving young widow) meet on a blind date only to wind up stealing a killer's car along with a dead body and $40,000.",
       "digital_release_date": null
@@ -829,7 +839,7 @@
       "imdb_id": "tt34385135",
       "title": "Colony",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "tN799oUR0f1gUKDYdMNrDaY7I51.jpg",
       "description": "Professor Se-jeong is thrust into a bloody nightmare when a rapidly mutating virus is released during a biotech conference causing authorities to seal the facility. Trapped inside with no escape, Se-jeong along with a small group of survivors must fight to stay alive while the infected undergo horrific transformations.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": null,
       "poster_path": "4EDvc5HG5f3PvRQp5DEnNAmsD5S.jpg",
       "description": "An elusive serial killer known as the Hollywood Killer turns a high-profile film production into a grisly crime scene, murdering three actresses and casting a dark shadow over the troubled project. As fear, speculation, and chaos spread behind the cameras, the production becomes forever linked to a case that shocks Hollywood and remains unresolved. Years later, former FBI agent Thomas Scott reopens the cold case, revisiting the events surrounding the murders and uncovering secrets that refuse to stay buried.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "36r2h-blue-heron",
-      "imdb_id": "tt32252801",
-      "title": "Blue Heron",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "4hfMbVbYc2gsMnSE1K8Oc9LQH4j.jpg",
-      "description": "In the late 1990s, a family of six settles into their new home on Vancouver Island, as internal dynamics are slowly revealed through the experiences of the youngest child, Sasha. Their fresh start is interrupted by the increasingly dangerous behavior of Jeremy, the family's oldest child.",
       "digital_release_date": null
     }
   ]

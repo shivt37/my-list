@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(digital releases)",
   "type": "movie",
-  "scraped_at": 1788264937709,
+  "scraped_at": 1788308475366,
   "items": [
     {
       "slug": "3g48q-i-want-your-sex",
@@ -52,6 +52,16 @@
       "score": 6,
       "poster_path": "5FC5vUHFz0fbJOd0bhyzJpCSLrc.jpg",
       "description": "After discovering she has a family and a shipping empire, a woman with amnesia returns to a wealthy and seemingly perfect past to uncover why she left.",
+      "digital_release_date": "2026-08-28"
+    },
+    {
+      "slug": "453t7-babita-singh-reporting",
+      "imdb_id": "tt40915016",
+      "title": "Babita Singh Reporting",
+      "year": 2026,
+      "score": null,
+      "poster_path": "owuFDxJOG1nv3J2wMf5f5jQjqHn.jpg",
+      "description": "People-pleasing cop Baby accepts a fake charge to get leave for her sister-in-law’s baby shower in Rewa. There, she reunites with her childhood friend Bansi, who is murdered that very night. Defying dismissive in-laws, an indifferent husband and an apathetic local police force, she secretly investigates the murder, uncovering family betrayals while finding her own voice, courage and place as a real cop.",
       "digital_release_date": "2026-08-28"
     },
     {
@@ -202,16 +212,6 @@
       "score": 2,
       "poster_path": "6CYmHknTN2UGGhqQUZh4tqQ6fEr.jpg",
       "description": "Follows a grandfather and grandson whose relationship transforms through the child's imagination when they encounter aliens.",
-      "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "44qt0-back-to-the-90s",
-      "imdb_id": "tt37540328",
-      "title": "Back to the 90s",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "tCOvMa7bXHiRlOuhQvUOeSF0kPn.jpg",
-      "description": "When a mysterious glitch sends a rising boyband back to 1995 - just days before the biggest showcase of their lives - the five friends race to reverse the time slip. But as unexpected connections form and the past pulls them in deeper, getting home means confronting what they're willing to leave behind - and who they truly are to each other.",
       "digital_release_date": "2026-08-21"
     },
     {
@@ -1035,6 +1035,16 @@
       "digital_release_date": "2026-06-30"
     },
     {
+      "slug": "2xlcx-wild-foxes",
+      "imdb_id": "tt33362861",
+      "title": "Wild Foxes",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "izz29QpekxBLYSqYwM0do9PtBWd.jpg",
+      "description": "At a sports boarding school, talented young boxer Camille narrowly survives a fatal accident, saved by his best friend Matteo. After a swift recovery, an inexplicable pain gradually takes hold of him, threatening his dreams of greatness and his relationship with the team. In the ring and in a man's world, there’s no room for weakness.",
+      "digital_release_date": "2026-06-29"
+    },
+    {
       "slug": "2tn91-strung",
       "imdb_id": "tt15532464",
       "title": "Strung",
@@ -1433,16 +1443,6 @@
       "poster_path": "ezHZoB8TDQQIW3kt8bF6YUddAtf.jpg",
       "description": "In the years between WWI and the rise of Fascism, legendary thespian Eleonora Duse shocks everyone by getting back onstage at over 60 years of age. Struggling with the brutality of historical events unfolding and clinging to the possibility of utopia, she makes her art a revolutionary act, even at the cost of sacrificing health and affection—facing her final journey aware she could give up life itself, but not her own true nature.",
       "digital_release_date": "2026-06-06"
-    },
-    {
-      "slug": "2z136-signal-one",
-      "imdb_id": "tt21109170",
-      "title": "Signal One",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "bi7Aeaozl51cd5K6vAn8tI1lOW0.jpg",
-      "description": "A computer scientist is invited by a tech billionaire to join his private facility on a Caribbean island to investigate extraterrestrial matter on Earth. When they make contact beyond our world, chaos erupts as we’re left to wonder: do they come in peace?",
-      "digital_release_date": "2026-06-05"
     }
   ]
 }
