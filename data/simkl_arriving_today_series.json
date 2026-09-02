@@ -2,22 +2,57 @@
   "catalog_id": "simkl_arriving_today_series",
   "name": "Arriving Today (Series) - Episodes & Premieres",
   "type": "series",
-  "timezone": "America/New_York",
-  "scraped_at": 1788319484293,
+  "timezone": "UTC",
+  "scraped_at": 1788319622071,
   "items": [
     {
-      "id": "tt43729365",
+      "id": "tt42205422",
       "type": "series",
-      "name": "Slučajna obitelj",
-      "poster": "https://simkl.in/posters/20/20608911fbb747f0fa_m.webp",
-      "description": "🆕 New Show | S01E02 · E01–E02 (2 eps today) | 2026-09-01 00:00 New York (2026-09-01 04:00 UTC) | ?? | genres: none | Simkl n/a | IMDb n/a"
+      "name": "LOVESICK",
+      "poster": "https://simkl.in/posters/20/204644617e1e4ee541_m.webp",
+      "description": "🆕 New Show | S01E01 | 2026-09-02 04:00 UTC | US | genres: Drama | Simkl n/a | IMDb n/a"
     },
     {
-      "id": "tt18374408",
+      "id": "tt32909469",
       "type": "series",
-      "name": "Doppelhaushälfte",
-      "poster": "https://simkl.in/posters/15/158662533f41793586_m.webp",
-      "description": "📺 New Episode | S05E04 · E03–E04 (2 eps today) | 2026-09-01 15:45 New York (2026-09-01 19:45 UTC) | DE | genres: Comedy, Family | Simkl 7.7 (13) | IMDb 7.6 (1560)"
+      "name": "Mal de amores",
+      "poster": "https://simkl.in/posters/20/2047100916250431ce_m.webp",
+      "description": "🆕 New Show | S01E10 · E01–E10 (10 eps today) | 2026-09-02 09:00 UTC | MX | genres: Drama | Simkl n/a | IMDb n/a"
+    },
+    {
+      "id": "tt9288030",
+      "type": "series",
+      "name": "Reacher",
+      "poster": "https://simkl.in/posters/14/14805333a4805c1d33_m.webp",
+      "description": "📺 New Episode | S04E06 | 2026-09-02 07:00 UTC | US | genres: Action, Crime, Drama, Thriller | Simkl 7.9 (3165) | IMDb 8.0 (309124)"
+    },
+    {
+      "id": "tt27982433",
+      "type": "series",
+      "name": "Diarra from Detroit",
+      "poster": "https://simkl.in/posters/15/15572801f569ad6fb2_m.webp",
+      "description": "📺 New Episode | S02E07 | 2026-09-02 04:00 UTC | US | genres: Comedy, Crime, Drama, Mystery | Simkl 6.8 (18) | IMDb 7.6 (1067)"
+    },
+    {
+      "id": "tt20516590",
+      "type": "series",
+      "name": "Women in Blue",
+      "poster": "https://simkl.in/posters/20/20488315550f5e3197_m.webp",
+      "description": "📺 New Episode | S02E04 | 2026-09-02 06:00 UTC | MX | genres: Crime, Drama, Mystery | Simkl 6.8 (38) | IMDb 7.3 (1859)"
+    },
+    {
+      "id": "tt0283226",
+      "type": "series",
+      "name": "Totally Spies!",
+      "poster": "https://simkl.in/posters/51/519545435c8c03818_m.webp",
+      "description": "📺 New Episode | S08E02 | 2026-09-02 06:45 UTC | FR | genres: Action, Adventure, Animation, Children, Comedy, Crime, Family, Fantasy, Mystery, Science-Fiction, Thriller | Simkl 7.0 (222) | IMDb 7.1 (14892)"
+    },
+    {
+      "id": "tt32066226",
+      "type": "series",
+      "name": "Bookish",
+      "poster": "https://simkl.in/posters/19/19213385cf2d4b4c07_m.webp",
+      "description": "📺 New Episode | S02E04 · E03–E04 (2 eps today) | 2026-09-02 19:00 UTC | GB | genres: Crime, Drama, History, Mystery | Simkl 6.8 (68) | IMDb 6.9 (5034)"
     }
   ]
 }
