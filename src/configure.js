@@ -1477,12 +1477,19 @@ function renderSimkl() {
   // Global timezone for what "today" means - one selector for both lists.
   // Value stored in state.simkl.timezone (IANA name); dirty-gating and
   // buildConfig pick it up through the normal input/change listeners.
+  // F12: the backend accepts ANY valid IANA zone but this dropdown offers
+  // a curated five - a stored zone outside the five would silently display
+  // as "UTC" (and any Save would overwrite the real zone with UTC). Render
+  // the stored zone as its own selected option instead, so the control
+  // always tells the truth.
   const tz = state.simkl.timezone || 'UTC';
   const tzOptions = ['UTC', 'Asia/Kolkata', 'America/New_York', 'Europe/Paris', 'Australia/Sydney'];
+  const tzListed = tzOptions.includes(tz);
   const tzBar = '<div class="simkl-tz-bar">' +
     '<label class="filter-label" for="simklTzSelect">Timezone for "today"</label>' +
     '<select id="simklTzSelect" onchange="setSimklTz(this.value)">' +
       tzOptions.map((z) => '<option value="' + z + '"' + (z === tz ? ' selected' : '') + '>' + z + '</option>').join('') +
+      (tzListed ? '' : '<option value="' + escapeAttr(tz) + '" selected>' + escapeAttr(tz) + ' (from config)</option>') +
     '</select>' +
   '</div>';
 
