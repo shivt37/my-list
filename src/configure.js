@@ -979,6 +979,16 @@ function activateModule(m) {
   // session) is a silent no-op - silence beats a wrong "coming soon"
   // message for a state that can't occur through the UI.
   if (m !== 'scraper' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { return; }
+  // UI-F1: cancel any open rename BEFORE the module flips. saveName() reads
+  // the *current* module's lists at save time; committing during a tab
+  // switch would land the typed text on the new tab's same-index list
+  // (verified live: scraper text ended up on the first official list).
+  // Cancelling discards the half-typed edit - switching context abandons
+  // an in-progress rename, matching expectation.
+  if (listNameEditIndex >= 0) {
+    listNameEditIndex = -1;
+    setStatus('Rename discarded (you switched tabs)', 'error');
+  }
   activeModule = m;
   try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));
