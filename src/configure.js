@@ -225,6 +225,10 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .list-card.disabled { border-color: var(--border); }
   .list-card.disabled .name-static, .list-card.disabled .id-chip { color: var(--muted); }
   .list-card.disabled :is(input, select, button)[disabled] { opacity: 0.45; }
+/* UI-F10: the pencil/eye icon buttons carry their own colors (the eye even
+ * keeps --accent when active) so the generic [disabled] dim skipped them.
+ * Same treatment, extended to icon-btns - uniform "everything dims". */
+.list-card.disabled .icon-btn[disabled] { opacity: 0.45; }
 
   /* A45 two-zone card: head = identity row, body = one compact control row
      (per owner review: previous density kept - only "Pages" carries a small
@@ -1075,10 +1079,19 @@ function updateList(i, key, value) {
   if (key === 'maxPages') {
     const n = parseInt(value, 10);
     l.maxPages = Number.isFinite(n) ? Math.min(50, Math.max(1, n)) : 3;
+    // UI-F12: write the clamped value straight back - the field previously
+    // kept displaying what you typed (999) while state held 50, until the
+    // next re-render made it honest.
+    const f = document.querySelector('#card-' + i + ' .max-pages');
+    if (f) f.value = l.maxPages;
   } else {
     // S4: closing the post-create URL-edit path for duplicate URLs.
     if (key === 'url' && state.scraper.lists.some((other, j) => j !== i && other.url === value)) {
       setStatus('That listing URL is already added.', 'error');
+      // UI-F13: snap the field back to the list's real URL - the rejected
+      // duplicate previously stayed on screen looking like it was accepted.
+      const f = document.querySelector('#card-' + i + ' .url-input');
+      if (f) f.value = l.url;
       return; // don't commit the duplicate
     }
     l[key] = value;
@@ -1089,6 +1102,9 @@ function toggleList(i) {
   const l = state.scraper.lists[i];
   if (!l) return;
   l.enabled = !l.enabled;
+  // UI-F10: toggling a card off closes its open rename - the input
+  // otherwise survives the disable looking editable on a locked card.
+  if (!l.enabled && listNameEditIndex === i) listNameEditIndex = -1;
   renderScraper();
 }
 
@@ -1117,7 +1133,7 @@ function nameEditBlock(i, l, extraHtml) {
   return '<div class="name-wrap">' +
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
-      : '<span class="name-static">' + escapeAttr(l.name) + '</span>') +
+      : '<span class="name-static" title="' + escapeAttr(l.name) + '" aria-label="' + escapeAttr(l.name) + '">' + escapeAttr(l.name) + '</span>') +
     '<button type="button" class="icon-btn name-rename" onclick="startNameEdit(' + i + ')" title="Rename" aria-label="Rename list">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
     '</button>' +
@@ -1329,7 +1345,11 @@ function renderOfficial() {
       '</button>' +
     '</div>';
 
-  host.innerHTML = toolbar + '<div class="official-note">Official MDBList lists - rename, enable or disable freely. Add more from the live MDBList catalog with the picker below; Delete removes a list (and its data files) after Save.</div>' + cards + addSlot;
+  // UI-F8: sibling tabs (scraper, tmdb) render a friendly one-liner when
+  // empty; official showed a blank gap between note and Add button.
+  const emptyHint = lists.length ? '' : '<div class="empty">No official lists yet - pick one below.</div>';
+
+  host.innerHTML = toolbar + '<div class="official-note">Official MDBList lists - rename, enable or disable freely. Add more from the live MDBList catalog with the picker below; Delete removes a list (and its data files) after Save.</div>' + emptyHint + cards + addSlot;
   applyDisabledState();
 }
 
@@ -1337,6 +1357,8 @@ function toggleOfficial(i) {
   const l = state.official.lists[i];
   if (!l) return;
   l.enabled = !l.enabled;
+  // UI-F10: toggling off closes the card's open rename (see toggleList).
+  if (!l.enabled && listNameEditIndex === i) listNameEditIndex = -1;
   renderOfficial();
 }
 
@@ -1448,10 +1470,10 @@ function renderSimkl() {
     const f = l.filter || {};
     const tiers = (f.rating_tiers || []).map((t, ti) =>
       '<div class="tier-row">' +
-        '<input class="tier-num" type="number" step="0.1" placeholder="min" value="' + (t.min_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_rating\\\',this.value)">' +
-        '<input class="tier-num" type="number" step="0.1" placeholder="max" value="' + (t.max_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'max_rating\\\',this.value)">' +
-        '<input class="tier-num" type="number" step="1" placeholder="votes" value="' + (t.min_votes ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_votes\\\',this.value)">' +
-        '<input class="tier-num" type="number" step="0.1" placeholder="sec." value="' + (t.min_secondary_rating ?? '') + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_secondary_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="min" value="' + (t.min_rating ?? '') + '" id="tier-min-' + i + '-' + ti + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="max" value="' + (t.max_rating ?? '') + '" id="tier-max-' + i + '-' + ti + '" onchange="setTier(' + i + ',' + ti + ',\\\'max_rating\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="1" placeholder="votes" value="' + (t.min_votes ?? '') + '" id="tier-votes-' + i + '-' + ti + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_votes\\\',this.value)">' +
+        '<input class="tier-num" type="number" step="0.1" placeholder="sec." value="' + (t.min_secondary_rating ?? '') + '" id="tier-sec-' + i + '-' + ti + '" onchange="setTier(' + i + ',' + ti + ',\\\'min_secondary_rating\\\',this.value)">' +
         '<button class="danger" onclick="removeTier(' + i + ',' + ti + ')">−</button>' +
       '</div>'
     ).join('') || '<div class="empty">No rating tiers.</div>';
@@ -1517,6 +1539,8 @@ function toggleSimkl(i) {
   const l = state.simkl.lists[i];
   if (!l) return;
   l.enabled = !l.enabled;
+  // UI-F10: toggling off closes the card's open rename (see toggleList).
+  if (!l.enabled && listNameEditIndex === i) listNameEditIndex = -1;
   renderSimkl();
 }
 
@@ -1530,7 +1554,23 @@ function setTier(i, ti, field, value) {
   const l = state.simkl.lists[i];
   if (!l) return;
   const n = parseFloat(value);
-  l.filter.rating_tiers[ti][field] = Number.isFinite(n) ? n : undefined;
+  // UI-F17: clamp to the domain the pipeline actually applies - ratings are
+  // 0-10, votes can't be negative. "999" previously flowed straight into
+  // the filter and silently matched nothing until an empty catalog showed it.
+  const short = field === 'min_rating' ? 'min' : field === 'max_rating' ? 'max' : field === 'min_votes' ? 'votes' : 'sec';
+  const id = 'tier-' + short + '-' + i + '-' + ti;
+  const el = document.getElementById(id);
+  if (!Number.isFinite(n)) {
+    l.filter.rating_tiers[ti][field] = undefined;
+    if (el) el.value = '';
+    return;
+  }
+  const lo = field === 'min_votes' ? 0 : 0;          // votes >= 0
+  const hi = field === 'min_votes' ? Infinity : 10;  // ratings 0-10
+  const clamped = Math.min(hi, Math.max(lo, n));
+  l.filter.rating_tiers[ti][field] = clamped;
+  // Write the corrected value back so the field stops displaying nonsense.
+  if (el && String(clamped) !== el.value) el.value = clamped;
 }
 
 function addTier(i) {
@@ -1791,6 +1831,8 @@ function toggleTmdb(i) {
   const l = state.tmdb.lists[i];
   if (!l) return;
   l.enabled = !l.enabled;
+  // UI-F10: toggling off closes the card's open rename (see toggleList).
+  if (!l.enabled && listNameEditIndex === i) listNameEditIndex = -1;
   renderTmdb();
 }
 
@@ -2236,7 +2278,11 @@ function openRefreshConfirm() {
   const timing = m === 'simkl' ? 'a few seconds each'
     : m === 'official' ? 'about a minute each'
     : '1-3 minutes each';
-  document.getElementById('refreshAllBody').textContent = 'Queues GitHub Actions rebuilds for ' + enabledCount + ' enabled ' + (m === 'scraper' ? '' : m + ' ') + 'lists. Typically takes ' + timing + '; progress shows on the Status page.';
+  // UI-F14: compose via a scope word with explicit single spacing - the old
+  // inline ternary produced "enabled  lists" on the scraper tab (empty
+  // module word + two surrounding spaces).
+  const scope = m === 'scraper' ? '' : m + ' ';
+  document.getElementById('refreshAllBody').textContent = 'Queues GitHub Actions rebuilds for ' + enabledCount + ' enabled ' + scope + 'lists. Typically takes ' + timing + '; progress shows on the Status page.';
   document.getElementById('refreshConfirmDlg').showModal();
 }
 function closeRefreshConfirm() { document.getElementById('refreshConfirmDlg').close(); }
