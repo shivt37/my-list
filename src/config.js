@@ -33,16 +33,8 @@ export function tmdbCatalogId(list) {
   return `tmdb_discover_${list.mediaType}_${list.discoverListId}`;
 }
 
-// TMDB Discover list ids: tmdb_discover_<movie|series>_<8 base36 chars>.
-// One list = one catalog (no 'all' expansion - the operator picks the
-// media type at creation).
-export function randomTmdbListId(mediaType) {
-  let out = "";
-  for (let i = 0; i < 8; i++) {
-    out += RANDOM_ID_CHARS[Math.floor(Math.random() * RANDOM_ID_CHARS.length)];
-  }
-  return `tmdb_discover_${mediaType === "series" ? "series" : "movie"}_${out}`;
-}
+// F17: randomTmdbListId deleted - zero callers (the UI generates ids
+// client-side by its own scheme); dead exports rot the surface API.
 
 // Seeded IDs are derived from the listing URL (first 8 hex of sha256),
 // so the ID the config shows is the ID the scraper writes under - even
@@ -541,6 +533,23 @@ export async function addRun(kv, run, key = RUNS_SCRAPER_KEY) {
   }
   runs.unshift(run);
   await kv.put(key, JSON.stringify(runs.slice(0, RUNS_MAX)));
+}
+
+// F19: batched variant - one read + one write per history key instead of
+// per record. `records` must be pre-sanitized and share the same key.
+// Order: exactly matches N sequential addRun calls - each addRun unshifts
+// to the head, so the LAST record in the poster's array ends up at index
+// 0. Prepending the reversed batch reproduces that end state in one op.
+export async function addRuns(kv, records, key = RUNS_SCRAPER_KEY) {
+  let runs = [];
+  try {
+    const stored = await kv.get(key, "json");
+    if (Array.isArray(stored)) runs = stored;
+  } catch {
+    runs = [];
+  }
+  const merged = [...records.slice().reverse(), ...runs];
+  await kv.put(key, JSON.stringify(merged.slice(0, RUNS_MAX)));
 }
 
 export async function getRuns(kv, key = RUNS_SCRAPER_KEY) {

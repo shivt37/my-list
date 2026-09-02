@@ -155,9 +155,8 @@ export function isPublic(pathname) {
   if (pathname === "/runs") return true;
   return false;
 }
-export function isAuthRoute(pathname) {
-  return pathname === "/configure/login" || pathname === "/configure/logout";
-}
+// F17: isAuthRoute deleted - never imported (index.js matches the
+// login/logout routes by hand); an exported function nothing calls.
 export function isAdminPath(pathname) {
   return pathname === "/configure" || ADMIN_PREFIXES.some((p) => pathname.startsWith(p));
 }

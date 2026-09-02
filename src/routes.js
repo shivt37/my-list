@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, normalizeTmdbList, addRun, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
+import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, normalizeTmdbList, addRuns, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { isAuthEnabled } from "./auth.js";
 import { buildConfigurePage } from "./configure.js";
@@ -489,6 +489,11 @@ export async function handleSaveConfig(env, request) {
       github: dispatchResult,
     });
   } catch (e) {
+    // F20: body-parse failures (malformed JSON from a proxy hiccup or a
+    // truncated request) are the CLIENT's fault - classify as 400 with an
+    // actionable message, mirroring the preview endpoint's existing
+    // pattern. Real internal faults keep the 500.
+    if (e instanceof SyntaxError) return json({ error: "Invalid request body: " + e.message }, 400);
     return json({ error: "Save failed." }, 500);
   }
 }
@@ -624,9 +629,12 @@ export async function handleRunsPost(env, request) {
       return json({ error: "Too many run records in one request (max 50)." }, 400);
     }
     const now = Date.now();
+    // F19: sanitize ALL records first (per-record isolation: a malformed
+    // record is skipped, never poisons its siblings), then group by history
+    // key and write each key ONCE - a 50-record batch for one key goes
+    // from ~100 store operations to exactly 2.
+    const byKey = new Map();
     for (const r of body.runs) {
-      // Per-record isolation: one malformed record must not drop its valid
-      // siblings (previously any throw here 500'd the whole batch).
       try {
         const run = {
           id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : now + Math.floor(Math.random() * 1000),
@@ -639,9 +647,18 @@ export async function handleRunsPost(env, request) {
           error_message: typeof r.error_message === "string" ? r.error_message.slice(0, 500) : null,
           triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
         };
-        await addRun(env.STORE, run, runsKeyFor(run.catalog_id));
+        const key = runsKeyFor(run.catalog_id);
+        if (!byKey.has(key)) byKey.set(key, []);
+        byKey.get(key).push(run);
       } catch {
         // Skip the bad record; keep ingesting the rest of the batch.
+      }
+    }
+    for (const [key, records] of byKey) {
+      try {
+        await addRuns(env.STORE, records, key);
+      } catch {
+        // One key's write failing must not drop the other keys' records.
       }
     }
     return json({ ok: true });

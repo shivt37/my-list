@@ -955,8 +955,6 @@ function setStatus(msg, kind) {
   el.className = kind || '';
 }
 
-function soon() { setStatus('That module is coming soon - only the MDBList Scraper tab is live right now.', 'error'); }
-
 // QW9: translate known raw infra errors into plain sentences. Unknown
 // errors pass through untouched - never hide an unexpected failure.
 // new RegExp (not a /.../ literal): this code lives inside a template
@@ -977,7 +975,10 @@ let activeModule = 'scraper';
 const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
-  if (m !== 'scraper' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { soon(); return; }
+  // F17: an unknown module (e.g. a tainted localStorage value from an old
+  // session) is a silent no-op - silence beats a wrong "coming soon"
+  // message for a state that can't occur through the UI.
+  if (m !== 'scraper' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { return; }
   activeModule = m;
   try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));

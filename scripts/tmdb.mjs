@@ -23,9 +23,13 @@
  */
 
 import { writeFileSync, mkdirSync, existsSync, unlinkSync } from "node:fs";
-import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+// F16: single source of truth - the generator now imports the SAME hash
+// function the worker uses at save-time (tmdbContentHash in src/config.js).
+// The old script-local copy hashed the same fields with a different
+// serialization, so the promised "mirror" produced different digests.
+import { tmdbContentHash } from "../src/config.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const DATA_DIR = join(__dirname, "..", "data");
@@ -57,38 +61,11 @@ function arg(name) {
   return found ? found.slice(prefix.length) : undefined;
 }
 
-// Order-independent fingerprint of everything that changes what gets
-// fetched (sort IS baked into the TMDB query, so it must be hashed; name
-// and enabled only affect the manifest, so they stay out). The hash is
-// stamped onto each generated data file for future diffing/audit - the
-// worker's tmdbContentHash mirrors this field set for save-time change
-// detection. There is deliberately NO fill-mode skip here: every run
-// regenerates, and only a 0-item result skips the write.
-export function computeSourceHash(list) {
-  const modes = list.includeModes || {};
-  const inputs = {
-    mediaType: list.mediaType,
-    sort: list.sort || "release_asc",
-    includeModeGenre: modes.genre === "or" ? "or" : "and",
-    includeModeKeyword: modes.keyword === "or" ? "or" : "and",
-    includeModeCompany: modes.company === "or" ? "or" : "and",
-    includeModeCollection: modes.collection === "or" ? "or" : "and",
-    includeGenres: list.includeGenres || [],
-    excludeGenres: list.excludeGenres || [],
-    includeKeywords: list.includeKeywords || [],
-    excludeKeywords: list.excludeKeywords || [],
-    includeCompanies: list.includeCompanies || [],
-    excludeCompanies: list.excludeCompanies || [],
-    includeReleaseTypes: list.includeReleaseTypes || [],
-    includeCollections: list.includeCollections || [],
-    excludeCollections: list.excludeCollections || [],
-    minVoteCount: list.minVoteCount || null,
-  };
-  const normalized = JSON.stringify(inputs, (key, value) =>
-    Array.isArray(value) ? [...value].sort() : value
-  );
-  return createHash("sha256").update(normalized).digest("hex").slice(0, 16);
-}
+// F16: the hash is now THE worker's tmdbContentHash (imported above) -
+// one function, one digest, mirroring by construction. This alias keeps
+// any external import of the old name working; delete it when nothing
+// else references computeSourceHash.
+export const computeSourceHash = tmdbContentHash;
 
 async function tmdbFetch(pathAndQuery) {
   const res = await fetch(`${API}${pathAndQuery}`, {
