@@ -1,8 +1,8 @@
 {
   "catalog_id": "mdb_scrape_bnjmojij",
-  "name": "Latest Movie(digital releases)",
+  "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1788308475366,
+  "scraped_at": 1788351352769,
   "items": [
     {
       "slug": "3g48q-i-want-your-sex",
@@ -29,7 +29,7 @@
       "imdb_id": "tt32915652",
       "title": "MOBILE SUIT GUNDAM HATHAWAY The Sorcery of Nymph Circe",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "6YkVpc9Dn1L2FHNlLOybpSKeGc7.jpg",
       "description": "Haunted by past trauma, Hathaway Noa is drawn to a mysterious girl named Gigi Andalucia, whose strange powers stir memories within him. While swayed by her cryptic words, he continues preparing for Mafty's mission -- the attack on the Adelaide Conference. Meanwhile, Kenneth Sleg of the Earth Federation Forces prepares a defense operation for the Adelaide Conference and a plan to eliminate Mafty and is approached by Handley Yoxon of the Criminal Police Organization with a secret proposal. As Hathaway and Kenneth pursue their respective goals, Gigi also sets off for Hong Kong to fulfill her own role.",
       "digital_release_date": "2026-08-30"
@@ -49,7 +49,7 @@
       "imdb_id": "tt37275992",
       "title": "The Secret Woman",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "5FC5vUHFz0fbJOd0bhyzJpCSLrc.jpg",
       "description": "After discovering she has a family and a shipping empire, a woman with amnesia returns to a wealthy and seemingly perfect past to uncover why she left.",
       "digital_release_date": "2026-08-28"
@@ -475,6 +475,16 @@
       "digital_release_date": "2026-08-04"
     },
     {
+      "slug": "3if4v-young-washington",
+      "imdb_id": "tt32104007",
+      "title": "Young Washington",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "6CdoTKnRQHJkjRGxTefFGkPQplB.jpg",
+      "description": "Before he led a nation, George Washington was a young soldier thrown into a global conflict. With alliances crumbling and war closing in, he must choose who to trust and confront the leader he's becoming.",
+      "digital_release_date": "2026-08-04"
+    },
+    {
       "slug": "3qqb1-the-isolate-thief",
       "imdb_id": "tt35051162",
       "title": "The Isolate Thief",
@@ -840,7 +850,7 @@
       "title": "Boulevard",
       "year": 2026,
       "score": 5,
-      "poster_path": "hAKOp4AHaDiVdDMlobMNCNgJVD7.jpg",
+      "poster_path": "sQS3zYJznspQwNSCv9LMc5VHQST.jpg",
       "description": "Hasley, a girl with a list of unfulfilled dreams, and Luke, a complex and vulnerable boy marked by a tragic past, find refuge on the boulevard where they discover if love can conquer all.",
       "digital_release_date": "2026-07-10"
     },
@@ -1040,7 +1050,7 @@
       "title": "Wild Foxes",
       "year": 2026,
       "score": 4,
-      "poster_path": "izz29QpekxBLYSqYwM0do9PtBWd.jpg",
+      "poster_path": "bIHE1cDsDBrLohkthzIZf04bqXk.jpg",
       "description": "At a sports boarding school, talented young boxer Camille narrowly survives a fatal accident, saved by his best friend Matteo. After a swift recovery, an inexplicable pain gradually takes hold of him, threatening his dreams of greatness and his relationship with the team. In the ring and in a man's world, there’s no room for weakness.",
       "digital_release_date": "2026-06-29"
     },
@@ -1433,16 +1443,6 @@
       "poster_path": "th501frT01TBGdoQhwpfiGjBMWd.jpg",
       "description": "Marc’s world unravels when a secret affair with fellow officer Kay forces him to choose between the life he built and the truth he can no longer deny. Free Fall – Who You Are is a reimagined recut of the 2013 cult film Freier Fall. Expanding beyond a coming-out story, Free Fall - Who You Are asks a deeper question: what happens when an honest life truly begins?",
       "digital_release_date": "2026-06-07"
-    },
-    {
-      "slug": "3gjfp-duse",
-      "imdb_id": "tt31415482",
-      "title": "Duse",
-      "year": 2025,
-      "score": 4,
-      "poster_path": "ezHZoB8TDQQIW3kt8bF6YUddAtf.jpg",
-      "description": "In the years between WWI and the rise of Fascism, legendary thespian Eleonora Duse shocks everyone by getting back onstage at over 60 years of age. Struggling with the brutality of historical events unfolding and clinging to the possibility of utopia, she makes her art a revolutionary act, even at the cost of sacrificing health and affection—facing her final journey aware she could give up life itself, but not her own true nature.",
-      "digital_release_date": "2026-06-06"
     }
   ]
 }
