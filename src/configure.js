@@ -1213,9 +1213,10 @@ async function confirmCreateList() {
 }
 
 function askDelete(i) {
-  const l = activeModule === 'tmdb' ? state.tmdb.lists[i]
-    : activeModule === 'official' ? state.official.lists[i]
-    : state.scraper.lists[i];
+  // F13: moduleLists() covers ALL four modules (simkl included) - the old
+  // hand-rolled chain fell through to scraper on the simkl tab, so a
+  // future simkl delete button would have spliced the wrong module.
+  const l = moduleLists()[i];
   if (!l) return;
   pendingDeleteIndex = i;
   document.getElementById('deleteConfirmTitle').textContent = "Delete '" + l.name + "'?";
@@ -1247,9 +1248,9 @@ function showUndoToast(name, restore) {
 function confirmDelete() {
   if (pendingDeleteIndex < 0) return;
   const i = pendingDeleteIndex;
-  const lists = activeModule === 'tmdb' ? state.tmdb.lists
-    : activeModule === 'official' ? state.official.lists
-    : state.scraper.lists;
+  // F13: same moduleLists() helper as askDelete - all four modules route
+  // correctly; a cross-module delete can no longer happen by omission.
+  const lists = moduleLists();
   const snapshot = lists[i];
   const name = snapshot.name;
   lists.splice(i, 1);
@@ -1655,6 +1656,7 @@ function renderTmdb() {
         '<div class="count-line">' + countLine + '</div>' +
       '</div>' +
       '<div class="card-body">' +
+        '<span class="official-hint">' + (l.mediaType === 'movie' ? 'Movies' : 'Series') + ' via TMDB discover, refreshed once daily</span>' +
         '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
           '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
           '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +

@@ -145,10 +145,10 @@ Surfaces: **ADMIN** = `/configure` admin surface (single-user framing applies) �
 ### Layer 2 — GitHub Actions
 
 **Workflows** (all: checkout@v5 → setup-node@v5 Node 22 → bash input sanitization → run script → commit block `if: always()`: force-add data → skip-if-no-diff → commit `[skip ci]` → `git pull --rebase -X theirs` → push):
-- `scrape.yml` (129 ln): crons 01:30+13:30 UTC; puppeteer scrape; 30-min timeout; debug artifact upload on failure/debug.
+- `scrape.yml` (129 ln): crons 00:00+12:00 UTC; puppeteer scrape; 30-min timeout; debug artifact upload on failure/debug.
 - `official.yml` (83 ln): same crons; MDBList API; 15-min timeout.
 - `simkl.yml` (81 ln): same crons; SIMKL calendar; 15-min.
-- `tmdb.yml` (104 ln): cron 01:30 only (13:30 commented out); generate/delete actions.
+- `tmdb.yml` (104 ln): cron 00:00 UTC only (12:00 deliberately commented out - once daily by owner decision); generate/delete actions.
 
 **Scripts** (`scripts/*.mjs`, Node 22 ESM, dependency-injected `main()` pattern):
 

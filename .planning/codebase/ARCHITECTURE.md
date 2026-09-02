@@ -72,7 +72,7 @@
 | Workflow dispatcher | Single choke point for all GitHub Actions dispatches; local-dev stub via `GH_DISPATCH_STUB` | `src/dispatch.js` |
 | Configure page | Full admin UI as one exported string builder (`buildConfigurePage`) — shell, tabs, dialogs, toasts, save/refresh logic | `src/configure.js` |
 | Scraper scripts | Regenerate catalog JSON files from four sources; report runs back to `/runs` | `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs` |
-| Workflows | Cron (01:30/13:30 UTC), input sanitization, bot commit/push of `data/*.json` | `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml` |
+| Workflows | Cron (00:00/12:00 UTC), input sanitization, bot commit/push of `data/*.json` | `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml` |
 
 ## Pattern Overview
 
@@ -185,7 +185,7 @@
 
 **Scraper script mains:**
 - Location: `scripts/scrape.mjs:371` (`main()`), analogous in `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`
-- Triggers: Workflow `schedule` crons (01:30/13:30 UTC; tmdb.yml currently only 01:30) and `workflow_dispatch`
+- Triggers: Workflow `schedule` crons (00:00/12:00 UTC; tmdb.yml deliberately only 00:00 - once daily by owner decision) and `workflow_dispatch`
 - Responsibilities: Fetch config from `/export-config`, regenerate requested catalogs, write `data/*.json`, POST run records
 
 **Workflows:**

@@ -2,12 +2,15 @@
 
 on:
   schedule:
-    # Daily at 05:30 IST (= 00:00 UTC), matching the other modules' first
-    # run. GitHub Actions cron runs on UTC, so IST inputs need a -5:30
-    # offset. Full regenerate - every run regenerates from scratch;
-    # sourceHash is stamped onto each data file for diffing/audit only.
+    # Deliberately ONCE daily at 05:30 IST (= 00:00 UTC), NOT twice like
+    # the other modules (owner decision 2026-09-01, F14): the 12:00 UTC
+    # run stays commented out on purpose. GitHub Actions cron runs on UTC,
+    # so IST inputs need a -5:30 offset. Full regenerate - every run
+    # regenerates from scratch; sourceHash is stamped onto each data
+    # file for diffing/audit only.
     - cron: "0 0 * * *"
     #- cron: "0 12 * * *"
+
   workflow_dispatch:
     inputs:
       ids:

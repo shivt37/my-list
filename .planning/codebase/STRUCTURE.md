@@ -20,10 +20,10 @@ my-list/
 │   ├── tmdb.mjs             # TMDB Discover list generator
 │   └── node_modules/        # scripts-only deps (own lockfile)
 ├── .github/workflows/       # The scheduling/compute layer
-│   ├── scrape.yml           # cron 01:30+13:30 UTC; inputs lists/action/delete_ids/debug
+│   ├── scrape.yml           # cron 00:00+12:00 UTC; inputs lists/action/delete_ids/debug
 │   ├── official.yml         # same crons; inputs slugs/action/delete_ids
 │   ├── simkl.yml            # same crons; input kinds
-│   └── tmdb.yml             # cron 01:30 UTC only (13:30 commented out); ids/action/delete_ids
+│   └── tmdb.yml             # cron 00:00 UTC only (12:00 deliberately commented out - once daily); ids/action/delete_ids
 ├── data/                    # Generated catalog JSON (bot-committed, served by GH Pages)
 │   └── *.json               # mdboff_*, mdb_scrape_*, simkl_arriving_today_* files + .gitkeep
 ├── testing/                 # Local-only test/self-check scripts (gitignored)
