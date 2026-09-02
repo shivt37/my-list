@@ -1707,7 +1707,6 @@ function renderTmdb() {
         '<div class="count-line">' + countLine + '</div>' +
       '</div>' +
       '<div class="card-body">' +
-        '<span class="official-hint">' + (l.mediaType === 'movie' ? 'Movies' : 'Series') + ' via TMDB discover, refreshed once daily</span>' +
         '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
           '<option value="movie"' + (l.mediaType === 'movie' ? ' selected' : '') + '>Movie</option>' +
           '<option value="series"' + (l.mediaType === 'series' ? ' selected' : '') + '>Series</option>' +
