@@ -532,7 +532,7 @@ export async function addRun(kv, run, key = RUNS_SCRAPER_KEY) {
     runs = [];
   }
   runs.unshift(run);
-  await kv.put(key, JSON.stringify(runs.slice(0, RUNS_MAX)));
+  await kv.put(key, JSON.stringify(capRuns(runs)));
 }
 
 // F19: batched variant - one read + one write per history key instead of
@@ -540,7 +540,12 @@ export async function addRun(kv, run, key = RUNS_SCRAPER_KEY) {
 // Order: exactly matches N sequential addRun calls - each addRun unshifts
 // to the head, so the LAST record in the poster's array ends up at index
 // 0. Prepending the reversed batch reproduces that end state in one op.
-export async function addRuns(kv, records, key = RUNS_SCRAPER_KEY) {
+//
+// Orphan-aware eviction: when the cap forces a drop, rows whose list was
+// removed from config (orphans) go first so real history survives longer.
+// `liveIds` (optional) is the set of catalog ids still present in config;
+// without it the cap behaves exactly as before (oldest dropped).
+export async function addRuns(kv, records, key = RUNS_SCRAPER_KEY, liveIds = null) {
   let runs = [];
   try {
     const stored = await kv.get(key, "json");
@@ -549,7 +554,25 @@ export async function addRuns(kv, records, key = RUNS_SCRAPER_KEY) {
     runs = [];
   }
   const merged = [...records.slice().reverse(), ...runs];
-  await kv.put(key, JSON.stringify(merged.slice(0, RUNS_MAX)));
+  await kv.put(key, JSON.stringify(capRuns(merged, liveIds)));
+}
+
+// Apply the 30-run window. With liveIds, prefer evicting the OLDEST ORPHAN
+// over the oldest live row; when only orphans remain, they evict oldest-first.
+export function capRuns(runs, liveIds = null) {
+  if (runs.length <= RUNS_MAX) return runs;
+  if (!liveIds) return runs.slice(0, RUNS_MAX);
+  const need = runs.length - RUNS_MAX;
+  const isOrphan = (r) => !liveIds.has(r.catalog_id);
+  // Walk the array TAIL-first (oldest last) and mark the `need` oldest
+  // orphans for eviction; live rows and newer orphans are untouched.
+  const evict = new Set();
+  for (let i = runs.length - 1; i >= 0 && evict.size < need; i--) {
+    if (isOrphan(runs[i])) evict.add(i);
+  }
+  const kept = runs.filter((_, i) => !evict.has(i));
+  // Still over cap (few/no orphans) - oldest-first as before.
+  return kept.length > RUNS_MAX ? kept.slice(0, RUNS_MAX) : kept;
 }
 
 export async function getRuns(kv, key = RUNS_SCRAPER_KEY) {

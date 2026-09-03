@@ -656,7 +656,10 @@ export async function handleRunsPost(env, request) {
     }
     for (const [key, records] of byKey) {
       try {
-        await addRuns(env.STORE, records, key);
+        // Orphan-aware eviction: which catalog ids still exist in config
+        // for this module's history key? (orphans drop first at the cap)
+        const liveIds = await liveCatalogIdsFor(env.STORE, key);
+        await addRuns(env.STORE, records, key, liveIds);
       } catch {
         // One key's write failing must not drop the other keys' records.
       }
@@ -665,6 +668,20 @@ export async function handleRunsPost(env, request) {
   } catch (e) {
     return json({ error: "Failed to record runs." }, 500);
   }
+}
+
+// The set of catalog ids that could legitimately appear in a given runs key:
+// the ids whose runs would be keyed there by runsKeyFor(). Used to spot
+// orphaned history (list deleted from config) at ingest time.
+async function liveCatalogIdsFor(store, runsKey) {
+  const cfg = await loadConfig(store);
+  const ids = new Set();
+  const addIf = (id) => { if (runsKeyFor(id) === runsKey) ids.add(id); };
+  for (const l of cfg.scraper.lists) addIf(l.id);
+  for (const l of officialCatalogsFor(cfg.official.lists)) addIf(l.id);
+  for (const l of cfg.simkl.lists) addIf(`simkl_arriving_today_${l.slug}`);
+  for (const l of cfg.tmdb.lists) addIf(tmdbCatalogId(l));
+  return ids;
 }
 
 // ── TMDB live helpers (Discover form) ────────────────────────────────────

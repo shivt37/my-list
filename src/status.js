@@ -159,7 +159,7 @@ function renderRow(r, now) {
   }
 
   return (
-    '<div class="row' + (failed ? " is-failed" : "") + '" data-f="' + tags + '" onclick="toggleRow(this)">' +
+    '<div class="row' + (failed ? " is-failed" : "") + (unresolved ? " orphan" : "") + '" data-f="' + tags + '" onclick="toggleRow(this)">' +
     timeCell +
     '<span class="pill ' + status + '">' + status + "</span>" +
     '<div class="r-name" title="' + esc(r.catalog_name) + '">' + esc(r.catalog_name) + (unresolved ? '<small>list removed</small>' : "<small>" + esc(r.catalog_id) + "</small>") + "</div>" +
@@ -315,6 +315,10 @@ export async function statusPageResponse(env, request) {
   .row:last-of-type { border-bottom: none; }
   .row:hover { background: var(--surface2); }
   .row.is-failed { border-left: 2px solid var(--fail); padding-left: 12px; }
+  /* Orphaned run (list deleted from config): secondary presence - the
+     history stays visible but clearly reads as inactive. */
+  .row.orphan { opacity: 0.55; }
+  .row.orphan .r-name { font-style: italic; }
   .row.expanded { background: var(--surface2); }
   .r-time { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; }
   .r-time .rel { display: block; font-weight: 600; color: var(--text); font-size: 12px; }
