@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1788350734467,
+  "scraped_at": 1788394480604,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -821,14 +821,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/8iFUWLKBAWDrJ9rOunscgIDrGQ1.jpg"
     },
     {
-      "imdb_id": "tt28107213",
-      "type": "series",
-      "title": "Elixer",
-      "year": 2025,
-      "release_date": "2025-03-05",
-      "poster": "https://image.tmdb.org/t/p/w200/ueBzJjkoxbECF4OKwx247hxy1cR.jpg"
-    },
-    {
       "imdb_id": "tt0121955",
       "type": "series",
       "title": "South Park",
@@ -875,14 +867,6 @@
       "year": 2004,
       "release_date": "2004-10-18",
       "poster": "https://image.tmdb.org/t/p/w200/99PJSbcO2LeM10uOGWeFihNp77j.jpg"
-    },
-    {
-      "imdb_id": "tt41956044",
-      "type": "series",
-      "title": "D&D: Dungeon Masters",
-      "year": 2026,
-      "release_date": "2026-04-22",
-      "poster": "https://image.tmdb.org/t/p/w200/IgyfRielRU2TEWGkA3U3Zdg9YI.jpg"
     },
     {
       "imdb_id": "tt0898266",
@@ -1051,6 +1035,22 @@
       "year": 2026,
       "release_date": "2026-08-06",
       "poster": "https://image.tmdb.org/t/p/w200/zQSXfv1GiLJW2kszQUNMyrZGoqF.jpg"
+    },
+    {
+      "imdb_id": "tt28107213",
+      "type": "series",
+      "title": "Elixer",
+      "year": 2025,
+      "release_date": "2025-03-05",
+      "poster": "https://image.tmdb.org/t/p/w200/ueBzJjkoxbECF4OKwx247hxy1cR.jpg"
+    },
+    {
+      "imdb_id": "tt41956044",
+      "type": "series",
+      "title": "D&D: Dungeon Masters",
+      "year": 2026,
+      "release_date": "2026-04-22",
+      "poster": "https://image.tmdb.org/t/p/w200/IgyfRielRU2TEWGkA3U3Zdg9YI.jpg"
     },
     {
       "imdb_id": "tt34991493",
