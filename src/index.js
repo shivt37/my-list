@@ -5,6 +5,7 @@
 
 import { loadConfig } from "./config.js";
 import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
+import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
 const corsHeaders = {
@@ -78,7 +79,11 @@ export default {
     }
 
     if (pathname === "/status") {
-      return handleStatus(env, request);
+      // HTML UI by default; ?format=json keeps the raw feed (tests + tooling).
+      if (new URL(request.url).searchParams.get("format") === "json") {
+        return handleStatus(env, request);
+      }
+      return statusPageResponse(env, request);
     }
 
     if (pathname === "/save-config" && request.method === "POST") {
