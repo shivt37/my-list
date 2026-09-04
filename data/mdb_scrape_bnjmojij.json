@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1788481643170,
+  "scraped_at": 1788518505750,
   "items": [
+    {
+      "slug": "3ou37-the-runner",
+      "imdb_id": "tt34564059",
+      "title": "The Runner",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg",
+      "description": "Maia Marten, a brilliant London lawyer, has her life shattered by a single call on her morning run: her son has been taken. To get him back, she must keep running, obey every ruthless command, and trust no one-each second a test of how far a mother will go to save her child.",
+      "digital_release_date": "2026-09-02"
+    },
     {
       "slug": "3g48q-i-want-your-sex",
       "imdb_id": "tt32332915",
@@ -22,6 +32,16 @@
       "score": 6,
       "poster_path": "85EYON4oXVYTPdMuW5q5ELQLU88.jpg",
       "description": "In the chaos of post-Soviet Russia, rising KGB officer Vladimir Putin joins forces with master manipulator Vadim Baranov to reshape life behind the Iron Curtain, using violence and deception to change the world forever.",
+      "digital_release_date": "2026-09-01"
+    },
+    {
+      "slug": "3z10h-just-play-dead",
+      "imdb_id": "tt36948232",
+      "title": "Just Play Dead",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "e0WaDBrrBAMcq2stAXCR7rXEsiw.jpg",
+      "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
       "digital_release_date": "2026-09-01"
     },
     {
@@ -91,7 +111,7 @@
       "year": 2026,
       "score": 4,
       "poster_path": "nVq1Dn88NzVIVTDpGZeP7fxpLa1.jpg",
-      "description": "Over the course of ten years, a stray dog named Gohan quietly drifts into the lives of a Japanese automotive engineer, an undocumented Burmese shelter caretaker, and a young Thai couple. Throughout his journey, he longs for a place to call home.",
+      "description": "The bonds between humans and animals following a stray dog named Gohan as it moves through life with temporary owners over a decade, through good times and bad times, joy and sorrow, hellos and goodbyes.",
       "digital_release_date": "2026-08-27"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "a2grH0utOOUIVA6YydwvAZdHvru.jpg",
       "description": "1859. When a young Māori woman is summoned from New Zealand to North Yorkshire, she uncovers her horrific colonial heritage and is compelled to confront and destroy the titled Englishman who devastated her family.",
       "digital_release_date": "2026-06-09"
-    },
-    {
-      "slug": "41bj6-mr-mrs-aslan",
-      "imdb_id": "tt37249795",
-      "title": "Mr. & Mrs. Aslan",
-      "year": 2025,
-      "score": 1,
-      "poster_path": "7EJHrnYj4IbbQ3812bKTSSL7n1J.jpg",
-      "description": "Luna Aslan (Yolanthe Cabau) is an undercover agent who, with the help of her colleague Niels (Thijs Boermans), arrests top criminal Baris (Murda) after a blood-curdling mission. At home, however, Luna has to deal with an even bigger challenge: her husband Emre (Sinan Eroglu). He knows nothing about her double life, but is beginning to notice her secretive behavior. Thanks to his conniving cousin Ferhat (Nesim El Ahmadi), Emre becomes convinced that Luna is cheating. When misunderstandings pile up and it turns out that Baris is targeting both Luna and Emre, Mr. and Mrs. Aslan pull out all the stops to save their lives and marriage.",
-      "digital_release_date": "2026-06-08"
-    },
-    {
-      "slug": "44q7t-free-fall-who-you-are",
-      "imdb_id": "tt4746316",
-      "title": "Free Fall – Who You Are",
-      "year": 2026,
-      "score": null,
-      "poster_path": "th501frT01TBGdoQhwpfiGjBMWd.jpg",
-      "description": "Marc’s world unravels when a secret affair with fellow officer Kay forces him to choose between the life he built and the truth he can no longer deny. Free Fall – Who You Are is a reimagined recut of the 2013 cult film Freier Fall. Expanding beyond a coming-out story, Free Fall - Who You Are asks a deeper question: what happens when an honest life truly begins?",
-      "digital_release_date": "2026-06-07"
     }
   ]
 }
