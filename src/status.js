@@ -140,9 +140,25 @@ function renderRow(r, now) {
     (r.triggered_by === "manual" ? MANUAL_SVG : CLOCK_SVG) + r.triggered_by +
     "</span>";
 
+  // Owner format (UI-F25 decision): "Started 03-09-2026, 09:37:56 PM ·
+  // Finished 03-09-2026, 09:38:48 PM" - capitalized labels, comma after the
+  // date, numeric DD-MM-YYYY kept. Falls back to the raw feed string if the
+  // epoch round-trip ever fails (istToEpoch can't parse it).
+  const fmtStamp = (s) => {
+    const e = istToEpoch(s);
+    if (e == null) return esc(s);
+    const d = new Date(e + 5.5 * 3600 * 1000);
+    const p = (n) => String(n).padStart(2, "0");
+    let h = d.getUTCHours();
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12;
+    if (h === 0) h = 12;
+    return esc(p(d.getUTCDate()) + "-" + p(d.getUTCMonth() + 1) + "-" + d.getUTCFullYear() + ", " + p(h) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds()) + " " + ampm);
+  };
+
   const metaLine =
     "List ID: " + esc(r.catalog_id) + (unresolved ? " (list removed from config)" : "") +
-    " &middot; started " + esc(r.started_at_ist) + " &middot; finished " + esc(r.finished_at_ist);
+    " &middot; Started " + fmtStamp(r.started_at_ist) + " &middot; Finished " + fmtStamp(r.finished_at_ist);
 
   let detail;
   if (failed) {
