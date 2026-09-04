@@ -713,7 +713,10 @@ async function tmdbApi(env, pathAndQuery) {
       });
       if (!res.ok) {
         const body = await res.text().catch(() => "");
-        return json({ error: `TMDB ${res.status}: ${body.slice(0, 200)}` }, 502);
+        // Return the error as plain data (not a Response wrapper) so every
+        // caller's data.error check works: search, discover rounds, and the
+        // collection branches all surface TMDB failures to the operator.
+        return { error: `TMDB ${res.status}: ${body.slice(0, 200)}` };
       }
       return res.json();
     } catch (e) {
@@ -834,8 +837,8 @@ export async function handleTmdbPreviewDiscover(env, request) {
       );
       for (const r of results) {
         // B6: a failed lookup must be loud, not a silent filter bypass.
-        // tmdbApi returns parsed JSON on success but an (unparsed) error
-        // Response on TMDB failure - detect and unwrap that shape.
+        // tmdbApi returns parsed JSON on success or { error } on TMDB
+        // failure - the .error check below catches both shapes.
         if (r.status !== "fulfilled") {
           failedLookups.push(String(r.reason?.message || r.reason).slice(0, 120));
           continue;
