@@ -345,15 +345,24 @@ export async function statusPageResponse(env, request) {
   .feed { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; background: var(--surface-card); }
   .row-head, .row {
     display: grid;
-    grid-template-columns: 118px 88px minmax(0, 1fr) 92px 64px 88px 62px 22px;
+      grid-template-columns: 118px 88px minmax(0, 1fr) 92px 64px 88px 62px 22px;
     gap: 10px; align-items: center;
     padding: 10px 14px;
+  }
+  /* UI-F26 band: 768-900px - the fixed columns crowd the flexible List
+     column (names truncate to ~102px). Slim the forgiving columns; trigger
+     badge keeps icon+text (content max 51px). Desktop (>900) unchanged. */
+  @media (min-width: 768px) and (max-width: 900px) {
+    .row-head, .row { grid-template-columns: 118px 88px minmax(0, 1fr) 56px 44px 48px 50px 22px; }
   }
   .row-head {
     font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
     background: var(--surface2); border-bottom: 1px solid var(--border);
   }
-  .row-head .num { text-align: right; }
+  /* Header/content alignment (UI-F26 follow-up, all widths): short badge and
+     numeric columns center together (header + content as one unit); long
+     text columns (time, list) stay left. Mobile cards override below. */
+  .row-head span:nth-child(2), .row-head span:nth-child(4), .row-head .num { text-align: center; }
   .row { border-bottom: 1px solid var(--border); transition: background .12s; }
   .row:last-of-type { border-bottom: none; }
   .row:hover { background: var(--surface2); }
@@ -367,7 +376,7 @@ export async function statusPageResponse(env, request) {
   .r-time .rel { display: block; font-weight: 600; color: var(--text); font-size: 12px; }
   .r-time small { display: block; font-size: 10px; color: var(--muted); margin-top: 1px; }
   .pill {
-    display: inline-flex; align-items: center; gap: 5px; justify-self: start;
+    display: inline-flex; align-items: center; gap: 5px; justify-self: center;
     font-size: 10.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px;
     text-transform: capitalize;
   }
@@ -381,7 +390,7 @@ export async function statusPageResponse(env, request) {
   /* Trigger badges: light pill treatment like success/failed, but in a
      neutral lavender-gray so they stay visually secondary to status. */
   .trigger {
-    display: inline-flex; align-items: center; gap: 5px; justify-self: start;
+    display: inline-flex; align-items: center; gap: 5px; justify-self: center;
     font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: capitalize;
     border-radius: 999px; padding: 2px 8px;
   }
@@ -394,8 +403,8 @@ export async function statusPageResponse(env, request) {
     color: #c9b8e8; background: rgba(201,184,232,0.10); border: 1px solid rgba(201,184,232,0.28);
   }
   .trigger.manual svg { color: inherit; }
-  .r-num { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; text-align: right; }
-  .r-dur { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+  .r-num { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; text-align: center; }
+  .r-dur { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
   .chev { width: 12px; height: 12px; color: var(--muted); transition: transform .15s; justify-self: end; }
   .row.expanded .chev { transform: rotate(90deg); color: var(--text); }
 
