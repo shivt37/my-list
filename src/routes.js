@@ -645,6 +645,10 @@ export async function handleRunsPost(env, request) {
     const byKey = new Map();
     for (const r of body.runs) {
       try {
+        // Junk entries (non-objects: strings, numbers, arrays) are skipped,
+        // never manufactured into ghost rows with empty catalog ids. The
+        // scripts always send plain objects, so nothing legitimate is lost.
+        if (!r || typeof r !== "object" || Array.isArray(r)) continue;
         const run = {
           id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : now + Math.floor(Math.random() * 1000),
           catalog_id: String(r.catalog_id ?? "").slice(0, 64),
@@ -675,6 +679,9 @@ export async function handleRunsPost(env, request) {
     }
     return json({ ok: true });
   } catch (e) {
+    // F20 pattern (mirrored from handleSaveConfig): malformed JSON is the
+    // CLIENT's fault - 400 with an actionable message; real faults keep 500.
+    if (e instanceof SyntaxError) return json({ error: "Invalid request body: " + e.message }, 400);
     return json({ error: "Failed to record runs." }, 500);
   }
 }
