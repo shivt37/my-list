@@ -175,7 +175,7 @@ jobs:
 
       - name: Upload debug artifacts
         if: ${{ github.event.inputs.debug == 'true' || failure() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: scraper-debug-${{ github.run_id }}
           # scrape.mjs writes dumps to <repo-root>/debug/ (DEBUG_DIR = join(ROOT, "debug"))
