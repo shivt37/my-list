@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_most-watched-week_show",
   "name": "Most Watched Movies & Shows (Past Week)",
   "type": "series",
-  "scraped_at": 1788498155639,
+  "scraped_at": 1788535704480,
   "items": [
     {
       "imdb_id": "tt14688458",
@@ -101,20 +101,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg"
     },
     {
-      "imdb_id": "tt2861424",
-      "type": "series",
-      "title": "Rick and Morty",
-      "year": 2013,
-      "release_date": "2013-12-02",
-      "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg"
-    },
-    {
       "imdb_id": "tt12327578",
       "type": "series",
       "title": "Star Trek: Strange New Worlds",
       "year": 2022,
       "release_date": "2022-05-05",
       "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg"
+    },
+    {
+      "imdb_id": "tt2861424",
+      "type": "series",
+      "title": "Rick and Morty",
+      "year": 2013,
+      "release_date": "2013-12-02",
+      "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg"
     },
     {
       "imdb_id": "tt44113382",
@@ -173,20 +173,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/k5Qg5rgPoKdh3yTJJrLtyoyYGwC.jpg"
     },
     {
-      "imdb_id": "tt5607616",
-      "type": "series",
-      "title": "Re:ZERO -Starting Life in Another World-",
-      "year": 2016,
-      "release_date": "2016-04-04",
-      "poster": "https://image.tmdb.org/t/p/w200/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg"
-    },
-    {
       "imdb_id": "tt0149460",
       "type": "series",
       "title": "Futurama",
       "year": 1999,
       "release_date": "1999-03-28",
       "poster": "https://image.tmdb.org/t/p/w200/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg"
+    },
+    {
+      "imdb_id": "tt5607616",
+      "type": "series",
+      "title": "Re:ZERO -Starting Life in Another World-",
+      "year": 2016,
+      "release_date": "2016-04-04",
+      "poster": "https://image.tmdb.org/t/p/w200/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg"
     },
     {
       "imdb_id": "tt37532356",
@@ -197,12 +197,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/vIE1llfr1lcmzlsV4xn8vhgtlQN.jpg"
     },
     {
-      "imdb_id": "tt10293938",
+      "imdb_id": "tt13210838",
       "type": "series",
-      "title": "Outer Banks",
-      "year": 2020,
-      "release_date": "2020-04-15",
-      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg"
+      "title": "The Gentlemen",
+      "year": 2024,
+      "release_date": "2024-03-07",
+      "poster": "https://image.tmdb.org/t/p/w200/8sQ0oDunlRpesa5vIO6UPhbJNxC.jpg"
     },
     {
       "imdb_id": "tt0944947",
@@ -211,6 +211,14 @@
       "year": 2011,
       "release_date": "2011-04-17",
       "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg"
+    },
+    {
+      "imdb_id": "tt10293938",
+      "type": "series",
+      "title": "Outer Banks",
+      "year": 2020,
+      "release_date": "2020-04-15",
+      "poster": "https://image.tmdb.org/t/p/w200/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg"
     },
     {
       "imdb_id": "tt8819906",
@@ -245,14 +253,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg"
     },
     {
-      "imdb_id": "tt34866681",
-      "type": "series",
-      "title": "Lucky",
-      "year": 2026,
-      "release_date": "2026-07-14",
-      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg"
-    },
-    {
       "imdb_id": "tt18546730",
       "type": "series",
       "title": "The Walking Dead: Dead City",
@@ -269,12 +269,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg"
     },
     {
-      "imdb_id": "tt13210838",
+      "imdb_id": "tt34866681",
       "type": "series",
-      "title": "The Gentlemen",
-      "year": 2024,
-      "release_date": "2024-03-07",
-      "poster": "https://image.tmdb.org/t/p/w200/8sQ0oDunlRpesa5vIO6UPhbJNxC.jpg"
+      "title": "Lucky",
+      "year": 2026,
+      "release_date": "2026-07-14",
+      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg"
     },
     {
       "imdb_id": "tt0108778",
@@ -317,20 +317,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/9p4pNoGcuyCfHcGWKNrTopqMWtq.jpg"
     },
     {
-      "imdb_id": "tt35618070",
-      "type": "series",
-      "title": "Sterling Point",
-      "year": 2026,
-      "release_date": "2026-08-05",
-      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg"
-    },
-    {
       "imdb_id": "tt5665418",
       "type": "series",
       "title": "Below Deck Mediterranean",
       "year": 2016,
       "release_date": "2016-05-03",
       "poster": "https://image.tmdb.org/t/p/w200/u88QjNj1xyGwnZMtSZjA9jDNNro.jpg"
+    },
+    {
+      "imdb_id": "tt35618070",
+      "type": "series",
+      "title": "Sterling Point",
+      "year": 2026,
+      "release_date": "2026-08-05",
+      "poster": "https://image.tmdb.org/t/p/w200/cThLWEGs6BEqY0QZMbU4FAeWwPT.jpg"
     },
     {
       "imdb_id": "tt0121955",
@@ -349,20 +349,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg"
     },
     {
-      "imdb_id": "tt0903747",
-      "type": "series",
-      "title": "Breaking Bad",
-      "year": 2008,
-      "release_date": "2008-01-20",
-      "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg"
-    },
-    {
       "imdb_id": "tt14452776",
       "type": "series",
       "title": "The Bear",
       "year": 2022,
       "release_date": "2022-06-23",
       "poster": "https://image.tmdb.org/t/p/w200/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg"
+    },
+    {
+      "imdb_id": "tt0903747",
+      "type": "series",
+      "title": "Breaking Bad",
+      "year": 2008,
+      "release_date": "2008-01-20",
+      "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg"
     },
     {
       "imdb_id": "tt27543562",
@@ -389,12 +389,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg"
     },
     {
-      "imdb_id": "tt31938062",
+      "imdb_id": "tt31449991",
       "type": "series",
-      "title": "The Pitt",
+      "title": "Chad Powers",
       "year": 2025,
-      "release_date": "2025-01-09",
-      "poster": "https://image.tmdb.org/t/p/w200/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg"
+      "release_date": "2025-09-30",
+      "poster": "https://image.tmdb.org/t/p/w200/buPiLEtOQ7kJrRh9FsXucjkZeJn.jpg"
     },
     {
       "imdb_id": "tt36996011",

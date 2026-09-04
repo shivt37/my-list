@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1788522625380,
+  "scraped_at": 1788535705490,
   "items": [
     {
       "imdb_id": "tt0080319",
@@ -357,14 +357,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/5FC5vUHFz0fbJOd0bhyzJpCSLrc.jpg"
     },
     {
-      "imdb_id": "tt1120985",
-      "type": "movie",
-      "title": "Blue Valentine",
-      "year": 2010,
-      "release_date": "2010-12-26",
-      "poster": "https://image.tmdb.org/t/p/w200/dc8BdKnDY5Iy28KzUGtHIXuqqFK.jpg"
-    },
-    {
       "imdb_id": "tt8036976",
       "type": "movie",
       "title": "Send Help",
@@ -555,6 +547,14 @@
       "year": 2023,
       "release_date": "2023-03-23",
       "poster": "https://image.tmdb.org/t/p/w200/v7UF7ypAqjsFZFdjksjQ7IUpXdn.jpg"
+    },
+    {
+      "imdb_id": "tt1120985",
+      "type": "movie",
+      "title": "Blue Valentine",
+      "year": 2010,
+      "release_date": "2010-12-26",
+      "poster": "https://image.tmdb.org/t/p/w200/dc8BdKnDY5Iy28KzUGtHIXuqqFK.jpg"
     },
     {
       "imdb_id": "tt8879928",
@@ -1069,14 +1069,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/c9h2p2qBSb5ThgBtNPWZNQDqvEX.jpg"
     },
     {
-      "imdb_id": "tt0765010",
-      "type": "movie",
-      "title": "Brothers",
-      "year": 2009,
-      "release_date": "2009-12-02",
-      "poster": "https://image.tmdb.org/t/p/w200/skHqceAFYee0JZuYd9MVk2IQggi.jpg"
-    },
-    {
       "imdb_id": "tt32357218",
       "type": "movie",
       "title": "Shelter",
@@ -1091,14 +1083,6 @@
       "year": 2007,
       "release_date": "2007-08-17",
       "poster": "https://image.tmdb.org/t/p/w200/ek8e8txUyUwd2BNqj6lFEerJfbq.jpg"
-    },
-    {
-      "imdb_id": "tt5776858",
-      "type": "movie",
-      "title": "Phantom Thread",
-      "year": 2017,
-      "release_date": "2017-12-25",
-      "poster": "https://image.tmdb.org/t/p/w200/hgoWjp9Sh0MI97eAMZCnIoVfgvq.jpg"
     },
     {
       "imdb_id": "tt32252801",
@@ -1179,6 +1163,22 @@
       "year": 1987,
       "release_date": "1987-06-26",
       "poster": "https://image.tmdb.org/t/p/w200/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
+    },
+    {
+      "imdb_id": "tt0099685",
+      "type": "movie",
+      "title": "GoodFellas",
+      "year": 1990,
+      "release_date": "1990-09-12",
+      "poster": "https://image.tmdb.org/t/p/w200/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg"
+    },
+    {
+      "imdb_id": "tt33070884",
+      "type": "movie",
+      "title": "The Brink of War",
+      "year": 2026,
+      "release_date": "2026-08-14",
+      "poster": "https://image.tmdb.org/t/p/w200/vCIQeQ2ynVqEjIvtbOXGnKtcgAX.jpg"
     }
   ]
 }
