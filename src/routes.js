@@ -29,7 +29,7 @@ function json(body, status = 200, extraHeaders = {}) {
   });
 }
 
-function html(body, extraHeaders = {}) {
+export function html(body, extraHeaders = {}) {
   return new Response(body, {
     headers: {
       "content-type": "text/html; charset=utf-8",

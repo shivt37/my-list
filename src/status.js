@@ -8,7 +8,7 @@
 // writes) and applies the same dim/glow/soft values, so the accent colour
 // matches the configure page automatically.
 
-import { handleStatus } from "./routes.js";
+import { handleStatus, html } from "./routes.js";
 
 const MODULES = ["scraper", "official", "simkl", "tmdb"];
 
@@ -208,7 +208,7 @@ export async function statusPageResponse(env, request) {
 
   const sections = MODULES.map((m) => renderModule(m, runsByModule[m], now, active)).join("");
 
-  const html = `<!DOCTYPE html>
+  const pageHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -503,7 +503,7 @@ function applyFilter(section, mode) {
 </body>
 </html>`;
 
-  return new Response(html, {
-    headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
-  });
+  // Reuse the configure page's response helper: identical security header +
+  // nosniff. cache-control: no-store must be preserved (live diagnostics page).
+  return html(pageHtml, { "cache-control": "no-store" });
 }
