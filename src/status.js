@@ -146,10 +146,13 @@ function renderRow(r, now) {
 
   let detail;
   if (failed) {
+    // UI-F22: failed runs must carry the "how far did it get" numbers on all
+    // widths - the phone layout hides the numeric columns, so the detail line
+    // is the only place phones can see pages/items.
     detail =
       '<div class="detail"><div class="detail-inner"><div class="detail-label">Error</div>' +
       '<div class="err-box">' + esc(r.error_message || "(no error message recorded)") + "</div>" +
-      '<div class="detail-meta">' + metaLine + " &middot; " + fmtDur(r.duration_seconds) + "</div>" +
+      '<div class="detail-meta">' + metaLine + " &middot; " + fmtDur(r.duration_seconds) + " &middot; " + (pages ?? 0) + " pages &middot; " + movies + " items</div>" +
       "</div></div>";
   } else {
     detail =
