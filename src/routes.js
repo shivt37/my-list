@@ -516,7 +516,14 @@ export async function handleTriggerRefresh(env, request) {
       if (text) {
         const parsed = JSON.parse(text);
         singleId = parsed.id ?? null;
-        page = parsed.page === "official" || parsed.page === "simkl" || parsed.page === "tmdb" ? parsed.page : null;
+        page = parsed.page === "official" || parsed.page === "simkl" || parsed.page === "tmdb" || parsed.page === "scraper" ? parsed.page : null;
+        // F27: a present-but-unrecognized page must fail closed, not fall
+        // through to a full scraper refresh (a typo would scrape everything).
+        // Absent/empty page keeps the scraper-default behaviour for {id}-only
+        // bodies and legacy callers.
+        if (page === null && parsed.page != null && String(parsed.page).trim() !== "") {
+          return json({ error: "Unknown page." }, 400);
+        }
       }
     } catch {
       singleId = null;
