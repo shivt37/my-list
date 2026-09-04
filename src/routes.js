@@ -530,6 +530,9 @@ export async function handleTriggerRefresh(env, request) {
     // known-but-disabled id → 400 with an actionable message.
     if (page === "official") {
       const enabledQ = cfg.official.lists.filter((l) => l.enabled);
+      // S5 (mirrored from the scraper branch): don't dispatch a GitHub run
+      // just to print "nothing to do" when nothing is enabled.
+      if (!singleId && enabledQ.length === 0) return json({ ok: true, lists: [] });
       if (singleId) {
         const list = cfg.official.lists.find((l) => l.slug === singleId);
         if (!list) return json({ error: "Unknown official list." }, 404);
@@ -552,6 +555,9 @@ export async function handleTriggerRefresh(env, request) {
   // all enabled simkl lists.
   if (page === "simkl") {
     const enabledQ = cfg.simkl.lists.filter((l) => l.enabled);
+    // S5 (mirrored from the scraper branch): don't dispatch a GitHub run
+    // just to print "nothing to do" when nothing is enabled.
+    if (!singleId && enabledQ.length === 0) return json({ ok: true, lists: [] });
     if (singleId) {
       const list = cfg.simkl.lists.find((l) => l.slug === singleId);
       if (!list) return json({ error: "Unknown simkl list." }, 404);
@@ -573,6 +579,9 @@ export async function handleTriggerRefresh(env, request) {
   // all enabled tmdb lists.
   if (page === "tmdb") {
     const enabledQ = cfg.tmdb.lists.filter((l) => l.enabled);
+    // S5 (mirrored from the scraper branch): don't dispatch a GitHub run
+    // just to print "nothing to do" when nothing is enabled.
+    if (!singleId && enabledQ.length === 0) return json({ ok: true, lists: [] });
     let ids;
     if (singleId) {
       const list = cfg.tmdb.lists.find((l) => tmdbCatalogId(l) === singleId);

@@ -2339,6 +2339,13 @@ async function confirmRefresh() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
+    // The server returns an empty lists array when nothing is enabled (S5
+    // guard, all four modules) - no workflow fired, so say so instead of
+    // claiming a dispatch.
+    if (!data.lists || data.lists.length === 0) {
+      setStatus('Nothing to refresh - no enabled lists on this tab.', 'ok');
+      return;
+    }
     const msg = activeModule === 'official'
       ? 'Refresh dispatched - GitHub Actions is regenerating all enabled official lists (movies + shows).'
       : activeModule === 'simkl'
