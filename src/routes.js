@@ -205,12 +205,16 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
   return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType }, catalogType)) }, 200);
 }
 
-export async function handleStatus(env, request) {
+export async function handleStatus(env, request, cfg = null) {
   const page = request && new URL(request.url).searchParams.get("page");
   const official = page === "official";
   const simkl = page === "simkl";
   const tmdb = page === "tmdb";
-  const cfg = await loadConfig(env.STORE);
+  // F28: statusPageResponse loads the config once and passes it in - four
+  // module renders then cost one config read instead of four (plus the
+  // seed/heal write-window collapses from up to 4x to 1x). Direct callers
+  // (the /status?format=json route, tests) omit cfg and keep the old path.
+  if (!cfg) cfg = await loadConfig(env.STORE);
   const runs = official
     ? await getRuns(env.STORE, OFFICIAL_RUNS_KEY)
     : simkl

@@ -9,6 +9,7 @@
 // matches the configure page automatically.
 
 import { handleStatus, html } from "./routes.js";
+import { loadConfig } from "./config.js";
 
 const MODULES = ["scraper", "official", "simkl", "tmdb"];
 
@@ -80,8 +81,8 @@ const MANUAL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const REFRESH_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
 const CHEV_SVG = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
 
-async function moduleRuns(env, page) {
-  const res = await handleStatus(env, new Request("https://status.local/status?page=" + page));
+async function moduleRuns(env, page, cfg) {
+  const res = await handleStatus(env, new Request("https://status.local/status?page=" + page), cfg);
   return res.json();
 }
 
@@ -173,10 +174,14 @@ function renderRow(r, now) {
   );
 }
 
-function renderModule(m, runs, now, active) {
+function renderModule(m, runs, now, active, err = null) {
   const pagesLabel = m === "scraper" ? "Pages" : "API pages";
   let body;
-  if (!runs.length) {
+  if (err) {
+    // F28 per-module isolation: a module that fails to load shows an error
+    // note in its own tab; the other three tabs keep working.
+    body = '<div class="empty">Could not load run history for this module: ' + esc(String((err && err.message) || err).slice(0, 200)) + "</div>";
+  } else if (!runs.length) {
     body = '<div class="empty">No runs recorded yet &mdash; GitHub Actions has not fired for this module (or history was cleared).</div>';
   } else {
     body =
@@ -189,7 +194,9 @@ function renderModule(m, runs, now, active) {
   }
   return (
     '<section id="mod-' + m + '"' + (m === active ? "" : " hidden") + ">" +
-    renderSummary(runs, now) +
+    (err
+      ? '<div class="summary"><span class="chip bad"><b>!</b> failed to load</span></div>'
+      : renderSummary(runs, now)) +
     body +
     "</section>"
   );
@@ -199,14 +206,31 @@ export async function statusPageResponse(env, request) {
   const wanted = new URL(request.url).searchParams.get("page");
   const active = MODULES.includes(wanted) ? wanted : "scraper";
   const now = Date.now();
+  // F28: one shared config load (was four); parallel module fetches (was
+  // sequential); per-module try/catch so one broken module can't 500 the
+  // whole diagnostics page.
+  const cfg = await loadConfig(env.STORE);
+  const settled = await Promise.all(
+    MODULES.map(async (m) => {
+      try {
+        return [m, await moduleRuns(env, m, cfg), null];
+      } catch (e) {
+        return [m, null, e];
+      }
+    })
+  );
   const runsByModule = {};
-  for (const m of MODULES) runsByModule[m] = await moduleRuns(env, m);
+  const errByModule = {};
+  for (const [m, runs, err] of settled) {
+    runsByModule[m] = runs;
+    errByModule[m] = err;
+  }
 
   const tabs = MODULES.map(
     (m) => '<button class="tab' + (m === active ? " active" : "") + '" role="tab" aria-selected="' + (m === active) + '" data-mod="' + m + '" onclick="switchTab(this)">' + (m === "scraper" ? "Scraper" : m === "official" ? "Official" : m === "simkl" ? "Simkl" : "TMDB") + "</button>"
   ).join("");
 
-  const sections = MODULES.map((m) => renderModule(m, runsByModule[m], now, active)).join("");
+  const sections = MODULES.map((m) => renderModule(m, runsByModule[m], now, active, errByModule[m])).join("");
 
   const pageHtml = `<!DOCTYPE html>
 <html lang="en">
