@@ -450,7 +450,7 @@ export async function statusPageResponse(env, request) {
 <header>
   <div class="h-title">my-list<span class="sep">&middot;</span><span class="sub">Status</span></div>
   <div class="h-actions">
-    <button class="btn-ghost" onclick="location.reload()" title="Reload run data">${REFRESH_SVG}Refresh</button>
+    <button class="btn-ghost" onclick="location.reload()" title="Reload run data (does not re-run workflows)">${REFRESH_SVG}Reload</button>
     <a class="btn-ghost" href="/status?format=json&amp;page=${active}" title="Raw JSON feed (previous behaviour)">Raw JSON</a>
   </div>
 </header>
