@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1788518521970,
+  "scraped_at": 1788537142888,
   "items": [
+    {
+      "slug": "3ca06-splash-city",
+      "imdb_id": "tt27666105",
+      "title": "Splash City",
+      "year": 2026,
+      "score": null,
+      "poster_path": "pOdwaXV1w3vvTn1s7FTvqBQIDp.jpg",
+      "description": "Two brothers on diverging paths struggle to survive amidst the pressures of their community.",
+      "digital_release_date": null
+    },
     {
       "slug": "421ib-the-girl-in-the-river",
       "imdb_id": "tt21452628",
@@ -919,7 +929,7 @@
       "imdb_id": "tt36304003",
       "title": "72 HOURS",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "9Bu1PW2R1XayqRqnl0aDOgMcrdS.jpg",
       "description": "To save his career, a 40-year-old ad exec joins a crew of twentysomethings for a wild Miami bachelor party after they mistakenly add him to a group chat.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "hIJpXb7Xaje2mebN9ylsS7blQzP.jpg",
       "description": "A tightly wound realtor's picture-perfect life gets an extreme makeover when his lovably chaotic \"little brother\" suddenly reappears.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3c33f-savage-house",
-      "imdb_id": "tt31349852",
-      "title": "Savage House",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "uF2qGFP5uL7UWk9h1xDZpWV2P8t.jpg",
-      "description": "Against the backdrop of 18th century England, a massive pox outbreak, and Jacobite uprising – Sir Chauncey Savage and Lady Savage blindly pursue a better life. It's not without a tinge of irony that their family name is the Savages, for this is a Savage House indeed, filled with duels, decadence, and bloodshed.",
       "digital_release_date": null
     }
   ]
