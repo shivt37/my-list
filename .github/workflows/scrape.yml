@@ -178,6 +178,7 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: scraper-debug-${{ github.run_id }}
-          path: scripts/debug/*
+          # scrape.mjs writes dumps to <repo-root>/debug/ (DEBUG_DIR = join(ROOT, "debug"))
+          path: debug/*
           if-no-files-found: ignore
           retention-days: 7
