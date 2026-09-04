@@ -345,7 +345,7 @@ export async function statusPageResponse(env, request) {
   .feed { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; background: var(--surface-card); }
   .row-head, .row {
     display: grid;
-      grid-template-columns: 118px 88px minmax(0, 1fr) 92px 64px 88px 62px 22px;
+      grid-template-columns: 100px 88px minmax(0, 1fr) 92px 64px 88px 62px 22px;
     gap: 10px; align-items: center;
     padding: 10px 14px;
   }
@@ -353,7 +353,7 @@ export async function statusPageResponse(env, request) {
      column (names truncate to ~102px). Slim the forgiving columns; trigger
      badge keeps icon+text (content max 51px). Desktop (>900) unchanged. */
   @media (min-width: 768px) and (max-width: 900px) {
-    .row-head, .row { grid-template-columns: 118px 88px minmax(0, 1fr) 56px 44px 48px 50px 22px; }
+    .row-head, .row { grid-template-columns: 100px 88px minmax(0, 1fr) 56px 44px 48px 50px 22px; }
   }
   .row-head {
     font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
