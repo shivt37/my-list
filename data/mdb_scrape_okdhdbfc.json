@@ -2,14 +2,14 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1788437812501,
+  "scraped_at": 1788481693932,
   "items": [
     {
       "slug": "3ylnw-mousetrap",
       "imdb_id": "tt36996011",
       "title": "Mousetrap",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "2mwgHfOyrFrmvozjFoEXHRdfGhv.jpg",
       "description": "A reclusive writer wakes to find his identity stolen — and must ally with a ruthless loan shark to reclaim his life from a man known as \"The Rat.\"",
       "first_air_date": "2026-08-28"
@@ -72,6 +72,16 @@
       "score": 7,
       "poster_path": "fhpa8B6USatHybK04XBbPAB6Mlz.jpg",
       "description": "Restless, razor-sharp and refusing to conform, 17-year-old Sybylla Melvyn is dead set on writing her own story in an era that expects her to find a man and settle down.",
+      "first_air_date": "2026-08-13"
+    },
+    {
+      "slug": "450gx-hit-point",
+      "imdb_id": "tt37976607",
+      "title": "Hit Point",
+      "year": 2026,
+      "score": null,
+      "poster_path": "mt5R8D6DVnchastooMyzK4wvgPy.jpg",
+      "description": "Two 30-something detectives, Leo and Bella, investigate a case leading them into London's criminal underworld. As they seek answers, personal and professional boundaries fade amid twists and betrayals.",
       "first_air_date": "2026-08-13"
     },
     {
@@ -1433,16 +1443,6 @@
       "poster_path": "mxF3z6KmdDGf2jpHR2x0iqhkZyE.jpg",
       "description": "A fake relationship. A hidden agenda. A shy girl and a notorious playboy enter a dangerous game of love — where the biggest mistake they can make… is falling for each other.",
       "first_air_date": "2026-04-27"
-    },
-    {
-      "slug": "3x5ro-the-cage",
-      "imdb_id": "tt33995822",
-      "title": "The Cage",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "rO6IPnLOuZdBAYtY9rEoxALH27x.jpg",
-      "description": "When Leanne and Matty discover they are both robbing from the safe at the inner-city casino they work in, their lives are set on a collision course; with each other, the local gangster they're stealing from, and the police.",
-      "first_air_date": "2026-04-26"
     }
   ]
 }
