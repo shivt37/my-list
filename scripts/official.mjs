@@ -238,6 +238,9 @@ export async function main({
         // silent - don't overwrite the last good file with an empty one.
         if (items.length > 0) write(slug, mediatype, items, cfg);
         run.status = items.length > 0 ? "success" : "failed";
+        // Empty-as-failed must say WHY (matches tmdb.mjs) - otherwise /status
+        // shows the "(no error message recorded)" placeholder.
+        run.error_message = items.length > 0 ? null : "0 items returned";
         run.finished_at = Date.now();
         run.pages_scraped = pages;
         run.movies_found = items.length;
