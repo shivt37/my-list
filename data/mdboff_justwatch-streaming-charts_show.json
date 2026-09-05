@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1788535706510,
+  "scraped_at": 1788576713463,
   "items": [
     {
       "imdb_id": "tt36303968",
@@ -645,14 +645,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/zYPRXAImgarNSKrwd4kXobjXQNQ.jpg"
     },
     {
-      "imdb_id": "tt43740196",
-      "type": "series",
-      "title": "A Beautiful Obsession",
-      "year": 2026,
-      "release_date": "2026-08-19",
-      "poster": "https://image.tmdb.org/t/p/w200/sMGr6FeYhA799ZU50r4wjt5HVdV.jpg"
-    },
-    {
       "imdb_id": "tt1586680",
       "type": "series",
       "title": "Shameless",
@@ -1165,6 +1157,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/nBe1e3JJEZ6veGrVXNF0fRoLu56.jpg"
     },
     {
+      "imdb_id": "tt7491982",
+      "type": "series",
+      "title": "FBI",
+      "year": 2018,
+      "release_date": "2018-09-25",
+      "poster": "https://image.tmdb.org/t/p/w200/zfKS4WL0OZ9udpNoSYZw91VB3aH.jpg"
+    },
+    {
       "imdb_id": "tt41956044",
       "type": "series",
       "title": "D&D: Dungeon Masters",
@@ -1173,12 +1173,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/IgyfRielRU2TEWGkA3U3Zdg9YI.jpg"
     },
     {
-      "imdb_id": "tt7491982",
+      "imdb_id": "tt33265765",
       "type": "series",
-      "title": "FBI",
-      "year": 2018,
-      "release_date": "2018-09-25",
-      "poster": "https://image.tmdb.org/t/p/w200/zfKS4WL0OZ9udpNoSYZw91VB3aH.jpg"
+      "title": "Legends",
+      "year": 2026,
+      "release_date": "2026-05-07",
+      "poster": "https://image.tmdb.org/t/p/w200/eYYTgBtsvvA3fC1feyvoqv0G9Gl.jpg"
     }
   ]
 }
