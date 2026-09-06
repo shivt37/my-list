@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1788617768758,
+  "scraped_at": 1788663013763,
   "items": [
     {
       "imdb_id": "tt0080319",
@@ -73,8 +73,8 @@
       "type": "movie",
       "title": "Mayday",
       "year": 2026,
-      "release_date": "2026-09-02",
-      "poster": "https://image.tmdb.org/t/p/w200/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg"
+      "release_date": "2026-09-03",
+      "poster": "https://image.tmdb.org/t/p/w200/7tlkTHxcTSlrPYURo0VuglaLPXv.jpg"
     },
     {
       "imdb_id": "tt0073629",
@@ -1133,14 +1133,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/hPNSToNIIpRO6y5Rh973leqQqNr.jpg"
     },
     {
-      "imdb_id": "tt0093058",
-      "type": "movie",
-      "title": "Full Metal Jacket",
-      "year": 1987,
-      "release_date": "1987-06-26",
-      "poster": "https://image.tmdb.org/t/p/w200/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
-    },
-    {
       "imdb_id": "tt37671737",
       "type": "movie",
       "title": "Buffet Infinity",
@@ -1187,6 +1179,14 @@
       "year": 1978,
       "release_date": "1978-10-24",
       "poster": "https://image.tmdb.org/t/p/w200/wijlZ3HaYMvlDTPqJoTCWKFkCPU.jpg"
+    },
+    {
+      "imdb_id": "tt0086066",
+      "type": "movie",
+      "title": "The Outsiders",
+      "year": 1983,
+      "release_date": "1983-03-25",
+      "poster": "https://image.tmdb.org/t/p/w200/l9os0HcXY8BOkvUWAx4rvby3j6L.jpg"
     }
   ]
 }
