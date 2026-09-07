@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1788705567641,
+  "scraped_at": 1788749280848,
   "items": [
     {
       "imdb_id": "tt0080319",
@@ -1157,6 +1157,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/qsYQflQhOuhDpQ0W2aOcwqgDAeI.jpg"
     },
     {
+      "imdb_id": "tt0086066",
+      "type": "movie",
+      "title": "The Outsiders",
+      "year": 1983,
+      "release_date": "1983-03-25",
+      "poster": "https://image.tmdb.org/t/p/w200/l9os0HcXY8BOkvUWAx4rvby3j6L.jpg"
+    },
+    {
       "imdb_id": "tt4263482",
       "type": "movie",
       "title": "The Witch",
@@ -1179,14 +1187,6 @@
       "year": 2003,
       "release_date": "2003-12-05",
       "poster": "https://image.tmdb.org/t/p/w200/a8jmJPs5eZBARmnuEEvZwbjwyz4.jpg"
-    },
-    {
-      "imdb_id": "tt37671737",
-      "type": "movie",
-      "title": "Buffet Infinity",
-      "year": 2026,
-      "release_date": "2026-04-24",
-      "poster": "https://image.tmdb.org/t/p/w200/c9h2p2qBSb5ThgBtNPWZNQDqvEX.jpg"
     }
   ]
 }
