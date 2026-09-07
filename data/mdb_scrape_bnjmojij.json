@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1788706885891,
+  "scraped_at": 1788752220190,
   "items": [
+    {
+      "slug": "3uiam-at-work",
+      "imdb_id": "tt37660587",
+      "title": "At Work",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "iqeF5Yr65hPlEJojJGESjVclf6h.jpg",
+      "description": "A successful photographer gives up everything to devote himself to writing and discovers poverty.",
+      "digital_release_date": "2026-09-07"
+    },
+    {
+      "slug": "2xzrr-the-disappearance-of-josef-mengele",
+      "imdb_id": "tt22852560",
+      "title": "The Disappearance of Josef Mengele",
+      "year": 2025,
+      "score": 4,
+      "poster_path": "eFS1Aj5VjK6p7aVuqTcJIv4HSyU.jpg",
+      "description": "In the aftermath of the Second World War, Josef Mengele, the Nazi doctor at Auschwitz, escapes to South America to rebuild his life in hiding. Through the eyes of his son who finds him again, Mengele is confronted with a past he can no longer ignore. From Buenos Aires to Paraguay via Brazil, the man who became known as “The Angel of Death” will organize his methodical disappearance to avoid any form of trial.",
+      "digital_release_date": "2026-09-04"
+    },
     {
       "slug": "3hni0-dhamaal-4",
       "imdb_id": "tt27548557",
@@ -13,6 +33,26 @@
       "poster_path": "oVij5aEEE6iI4PxB4i0CgKp8h0m.jpg",
       "description": "The Dhamaal boys are back for another treasure hunt, facing hilarious challenges in their quest for the Treasure of Life.",
       "digital_release_date": "2026-09-04"
+    },
+    {
+      "slug": "33368-mayday",
+      "imdb_id": "tt28014327",
+      "title": "Mayday",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "7tlkTHxcTSlrPYURo0VuglaLPXv.jpg",
+      "description": "When a U.S. Navy pilot on a top-secret mission during the Cold War gets trapped behind enemy lines, his only chance at survival is to form an alliance with an eccentric ex-KGB agent.",
+      "digital_release_date": "2026-09-03"
+    },
+    {
+      "slug": "3m8c8-gandhari",
+      "imdb_id": "tt33354945",
+      "title": "Gandhari",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "aF3IhwS1mrVfvM9OMXmTaXAT0l8.jpg",
+      "description": "When a mother loses her eyesight and her daughter in a kidnapping, she takes matters into her own hands to hunt down those responsible.",
+      "digital_release_date": "2026-09-03"
     },
     {
       "slug": "3ou37-the-runner",
@@ -72,6 +112,16 @@
       "score": 5,
       "poster_path": "3RRA8UBAdPC08spbDgnU0ykQ2MR.jpg",
       "description": "TV star Samar's life spirals when his ex Gayatri accuses him of rape after he blocks contact with her. Despite his new relationship with Khushi, he faces arrest and encounters a corrupt justice system.",
+      "digital_release_date": "2026-08-28"
+    },
+    {
+      "slug": "3y0gw-spider-island",
+      "imdb_id": "tt22406048",
+      "title": "Spider Island",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "eKw6aF7oNEaTnVvN396Q1is9R1n.jpg",
+      "description": "A group of social media influencers go to the launch of a new hotel on a tropical island, where they find deadly spiders.",
       "digital_release_date": "2026-08-28"
     },
     {
@@ -265,22 +315,12 @@
       "digital_release_date": "2026-08-20"
     },
     {
-      "slug": "3sewg-here-the-whole-time",
-      "imdb_id": "tt40001699",
-      "title": "Here the Whole Time",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
-      "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
-      "digital_release_date": "2026-08-19"
-    },
-    {
       "slug": "2z2cy-toy-story-5",
       "imdb_id": "tt29355505",
       "title": "Toy Story 5",
       "year": 2026,
       "score": 8,
-      "poster_path": "9VWplgfRcYkUao9QGQXUP3rWQK7.jpg",
+      "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
       "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
       "digital_release_date": "2026-08-18"
     },
@@ -292,6 +332,16 @@
       "score": 7,
       "poster_path": "aDBZ2PGgUbcGjyX7ZCXLOk4AFQH.jpg",
       "description": "A mysterious boat returns to a village 30 years after vanishing. Two men join its crew hoping for better fortune. After one voyage, they find themselves transported back in time, mistaken for the original crew.",
+      "digital_release_date": "2026-08-18"
+    },
+    {
+      "slug": "3sewg-here-the-whole-time",
+      "imdb_id": "tt40001699",
+      "title": "Here the Whole Time",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
+      "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
       "digital_release_date": "2026-08-18"
     },
     {
@@ -571,7 +621,7 @@
       "year": 2026,
       "score": 6,
       "poster_path": "vADal7sH7E9xFr4w2k4V3EPSzF6.jpg",
-      "description": "Plucky dishwasher Maddie vaults into viral superstardom at a trendy food content company, but beneath her seemingly picture-perfect life, mounting professional pressures threaten to expose a dark secret from her past.",
+      "description": "A plucky dishwasher leaps to viral superstardom at a trendy food content creation company. While her life seems picturesque — complete with an adoring husband, ride-or-die best friend and a cupboard full of woman-owned ethically-sourced chili crisp to boot — mounting professional pressures threaten to reawaken a hidden secret from her troubled past.",
       "digital_release_date": "2026-07-31"
     },
     {
@@ -1393,56 +1443,6 @@
       "poster_path": "tkCQjcvLKG5HhvVyqkNriifLgLW.jpg",
       "description": "The extraordinary life of Sergiu Celibidache, from his childhood in Romania to his exile in pursuit of a career in music, his struggle for survival in wartime Germany and his rise, fall and rise again, in an unimaginable life journey.",
       "digital_release_date": "2026-06-10"
-    },
-    {
-      "slug": "43359-colors-of-evil-black",
-      "imdb_id": "tt38681832",
-      "title": "Colors of Evil: Black",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "reeKdj7BSznr7wSGzAtIMrPFgKo.jpg",
-      "description": "Investigating the disappearance of children in a remote Polish town, prosecutor Leopold Bilski must unravel a sinister local legend before it's too late.",
-      "digital_release_date": "2026-06-10"
-    },
-    {
-      "slug": "2vbt2-mortal-kombat-ii",
-      "imdb_id": "tt17490712",
-      "title": "Mortal Kombat II",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "hwRdDFIhaEmpRgoki805YvyyjZf.jpg",
-      "description": "The fan favorite champions—now joined by Johnny Cage himself—are pitted against one another in the ultimate, no-holds barred, gory battle to defeat the dark rule of Shao Kahn that threatens the very existence of the Earthrealm and its defenders.",
-      "digital_release_date": "2026-06-09"
-    },
-    {
-      "slug": "2vg3u-michael",
-      "imdb_id": "tt11378946",
-      "title": "Michael",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "dueFqKLvjftnELZaGYwY7xinfaI.jpg",
-      "description": "The story of Michael Jackson, one of the most influential artists the world has ever known, and his life beyond the music. His journey from the discovery of his extraordinary talent as the lead of the Jackson Five, to the visionary artist whose creative ambition fueled a relentless pursuit to become the biggest entertainer in the world, highlighting both his life off-stage and some of the most iconic performances from his early solo career.",
-      "digital_release_date": "2026-06-09"
-    },
-    {
-      "slug": "3fagz-out-of-love",
-      "imdb_id": "tt35455855",
-      "title": "Out of Love",
-      "year": 2025,
-      "score": 7,
-      "poster_path": "qLEyWZUTYyeBiGvNUz9wmqT6cFd.jpg",
-      "description": "When Jeanne, a meticulous insurance assessor, is suddenly left to care for her estranged sister’s two children after their mother vanishes, her carefully ordered life begins to unravel. Confronted with unexpected responsibilities, she must balance the fragile task of earning the children’s trust while also tending to her own relationship with her girlfriend, who struggles to adjust to Jeanne’s new role. As grief, uncertainty, and shifting loyalties mount, Jeanne finds herself redefining what family and love truly mean.",
-      "digital_release_date": "2026-06-09"
-    },
-    {
-      "slug": "3n7j2-marama",
-      "imdb_id": "tt15284556",
-      "title": "Mārama",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "a2grH0utOOUIVA6YydwvAZdHvru.jpg",
-      "description": "1859. When a young Māori woman is summoned from New Zealand to North Yorkshire, she uncovers her horrific colonial heritage and is compelled to confront and destroy the titled Englishman who devastated her family.",
-      "digital_release_date": "2026-06-09"
     }
   ]
 }
