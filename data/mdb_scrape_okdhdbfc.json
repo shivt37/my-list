@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1788838950638,
+  "scraped_at": 1788883642734,
   "items": [
     {
       "slug": "3ylnw-mousetrap",
@@ -1415,6 +1415,16 @@
       "first_air_date": "2026-04-29"
     },
     {
+      "slug": "44jah-new-zealand-spy",
+      "imdb_id": "tt42321618",
+      "title": "New Zealand Spy",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7cIOwTqZDcUm0NMriuIZMGTx9az.jpg",
+      "description": "The New Zealand Intelligence Agency’s on the hunt for new recruits. When the agency places an ad in the newspaper, only three decidedly unlikely candidates respond. Thrown headfirst into the murky world of espionage, the mismatched trio fumbles its way through betrayal, romance and escalating absurdity.",
+      "first_air_date": "2026-04-29"
+    },
+    {
       "slug": "3ihzs-half-man",
       "imdb_id": "tt32767294",
       "title": "Half Man",
@@ -1433,16 +1443,6 @@
       "poster_path": "vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
       "description": "The mayor of a New England town resolves to turn it into the next tourist hot spot, despite local warnings that it's cursed.",
       "first_air_date": "2026-04-28"
-    },
-    {
-      "slug": "3x9nn-secret-service",
-      "imdb_id": "tt32477632",
-      "title": "Secret Service",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "f7tksyddK3VvismfoWCwpXPqz0x.jpg",
-      "description": "A British intelligence officer Kate Henderson races against time to uncover a UK politician's potential ties with the Kremlin, risking her reputation and family, as a murder and election loom.",
-      "first_air_date": "2026-04-27"
     }
   ]
 }
