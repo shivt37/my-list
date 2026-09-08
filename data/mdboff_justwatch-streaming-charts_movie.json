@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1788800020166,
+  "scraped_at": 1788836287776,
   "items": [
     {
       "imdb_id": "tt28014327",
@@ -10,7 +10,7 @@
       "title": "Mayday",
       "year": 2026,
       "release_date": "2026-09-03",
-      "poster": "https://image.tmdb.org/t/p/w200/7tlkTHxcTSlrPYURo0VuglaLPXv.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg"
     },
     {
       "imdb_id": "tt37287335",
@@ -1163,30 +1163,6 @@
       "year": 2015,
       "release_date": "2015-12-25",
       "poster": "https://image.tmdb.org/t/p/w200/ji3ecJphATlVgWNY0B0RVXZizdf.jpg"
-    },
-    {
-      "imdb_id": "tt0119081",
-      "type": "movie",
-      "title": "Event Horizon",
-      "year": 1997,
-      "release_date": "1997-08-15",
-      "poster": "https://image.tmdb.org/t/p/w200/qfluaDXv0cIdLwgQWzNB2piHL2q.jpg"
-    },
-    {
-      "imdb_id": "tt0147800",
-      "type": "movie",
-      "title": "10 Things I Hate About You",
-      "year": 1999,
-      "release_date": "1999-03-30",
-      "poster": "https://image.tmdb.org/t/p/w200/ujERk3aKABXU3NDXOAxEQYTHe9A.jpg"
-    },
-    {
-      "imdb_id": "tt37671737",
-      "type": "movie",
-      "title": "Buffet Infinity",
-      "year": 2026,
-      "release_date": "2026-04-24",
-      "poster": "https://image.tmdb.org/t/p/w200/c9h2p2qBSb5ThgBtNPWZNQDqvEX.jpg"
     }
   ]
 }
