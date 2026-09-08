@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1788836288644,
+  "scraped_at": 1788882087233,
   "items": [
     {
       "imdb_id": "tt36303968",
@@ -765,14 +765,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/jmwdx7qsfiXUZP2C22DkGpcjd1o.jpg"
     },
     {
-      "imdb_id": "tt0168366",
-      "type": "series",
-      "title": "Pokémon",
-      "year": 1997,
-      "release_date": "1997-04-01",
-      "poster": "https://image.tmdb.org/t/p/w200/lP4zwr0F7hWTbAFltfoFTc2AxRG.jpg"
-    },
-    {
       "imdb_id": "tt27790101",
       "type": "series",
       "title": "Conan O'Brien Must Go",
@@ -867,14 +859,6 @@
       "year": 2012,
       "release_date": "2012-08-13",
       "poster": "https://image.tmdb.org/t/p/w200/fZ502JXujnxVtprmigTO2jA205P.jpg"
-    },
-    {
-      "imdb_id": "tt4378376",
-      "type": "series",
-      "title": "Babylon Berlin",
-      "year": 2017,
-      "release_date": "2017-10-13",
-      "poster": "https://image.tmdb.org/t/p/w200/hr18RHPMQSA0zbCzAZN2asIOqy5.jpg"
     },
     {
       "imdb_id": "tt27497448",
@@ -1109,28 +1093,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/f8aIvYk5h7Z8EP3dinCmVgQFYow.jpg"
     },
     {
-      "imdb_id": "tt27550719",
-      "type": "series",
-      "title": "The Hawk",
-      "year": 2026,
-      "release_date": "2026-07-16",
-      "poster": "https://image.tmdb.org/t/p/w200/6XCbqv7t0rYE2U1jzjh52fBxczj.jpg"
-    },
-    {
       "imdb_id": "tt7772588",
       "type": "series",
       "title": "For All Mankind",
       "year": 2019,
       "release_date": "2019-11-01",
       "poster": "https://image.tmdb.org/t/p/w200/JP3DItWMbrrLiKR5AYUfpsNf2b.jpg"
-    },
-    {
-      "imdb_id": "tt6794990",
-      "type": "series",
-      "title": "Absentia",
-      "year": 2017,
-      "release_date": "2017-09-25",
-      "poster": "https://image.tmdb.org/t/p/w200/t3yVaAlmCLBwbqTrKGcWHwuCmkh.jpg"
     },
     {
       "imdb_id": "tt0118276",
@@ -1171,30 +1139,6 @@
       "year": 2018,
       "release_date": "2018-05-06",
       "poster": "https://image.tmdb.org/t/p/w200/aidMXRzL7awi404nDCdl4CXrCID.jpg"
-    },
-    {
-      "imdb_id": "tt31849235",
-      "type": "series",
-      "title": "The Westies",
-      "year": 2026,
-      "release_date": "2026-07-12",
-      "poster": "https://image.tmdb.org/t/p/w200/6nNxw6SsbEtSpktVEGdoYDqPH7C.jpg"
-    },
-    {
-      "imdb_id": "tt2402207",
-      "type": "series",
-      "title": "The Last Ship",
-      "year": 2014,
-      "release_date": "2014-06-22",
-      "poster": "https://image.tmdb.org/t/p/w200/xH529hDtPxhslAEeCrN7gD64ZMX.jpg"
-    },
-    {
-      "imdb_id": "tt1399664",
-      "type": "series",
-      "title": "The Night Manager",
-      "year": 2016,
-      "release_date": "2016-02-21",
-      "poster": "https://image.tmdb.org/t/p/w200/1MccRnw41qQjREuZkovqP2UX1i3.jpg"
     }
   ]
 }
