@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1788883595636,
+  "scraped_at": 1788925623714,
   "items": [
     {
       "slug": "312cl-moana",
@@ -105,6 +105,16 @@
       "digital_release_date": "2026-09-02"
     },
     {
+      "slug": "3a6x6-the-wrong-girls",
+      "imdb_id": "tt35060353",
+      "title": "The Wrong Girls",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "iEJshwO6g4WKTP4HJgCHRTJMWEd.jpg",
+      "description": "Two codependent best friends living paycheck to paycheck and bong rip to bong rip get caught in a case of mistaken identity that throws their lives into chaos.",
+      "digital_release_date": "2026-09-01"
+    },
+    {
       "slug": "3g48q-i-want-your-sex",
       "imdb_id": "tt32332915",
       "title": "I Want Your Sex",
@@ -132,6 +142,16 @@
       "score": 4,
       "poster_path": "glALx6QaIgw1u4joXsnfHTjWi6D.jpg",
       "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
+      "digital_release_date": "2026-09-01"
+    },
+    {
+      "slug": "42elf-the-brink-of-war",
+      "imdb_id": "tt33070884",
+      "title": "The Brink of War",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "vCIQeQ2ynVqEjIvtbOXGnKtcgAX.jpg",
+      "description": "President Ronald Reagan races against time to salvage a deal with Soviet leader Mikhail Gorbachev that could dismantle nuclear arsenals—or ignite disaster. With pressure mounting on all sides, every word spoken brings the world closer to peace... or destruction.",
       "digital_release_date": "2026-09-01"
     },
     {
@@ -820,7 +840,7 @@
       "title": "The Mandalorian and Grogu",
       "year": 2026,
       "score": 6,
-      "poster_path": "7GV5rrUJf0BRUhoh2cyFoeNthlQ.jpg",
+      "poster_path": "cE9LAdexd9ju0yIkmCJBOKZg9JR.jpg",
       "description": "The evil Empire has fallen, and Imperial warlords remain scattered throughout the galaxy. As the fledgling New Republic works to protect everything the Rebellion fought for, they have enlisted the help of legendary Mandalorian bounty hunter Din Djarin and his young apprentice Grogu.",
       "digital_release_date": "2026-07-21"
     },
@@ -1423,26 +1443,6 @@
       "poster_path": "z7aBU98usPaaFymldN6IcYRsHZr.jpg",
       "description": "A pair of idiot friends believe that if they become waiters, all of their problems will be solved. They aren't entirely wrong, but they aren't entirely right.",
       "digital_release_date": "2026-06-16"
-    },
-    {
-      "slug": "3pxr9-blue-film",
-      "imdb_id": "tt34915693",
-      "title": "Blue Film",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "7yqMtaRMPgntGcDtYySv7XfTsDB.jpg",
-      "description": "Drawn by the promise of easy money and anonymous sex, queer camboy Aaron Eagle is shocked to discover a personal connection with the mysterious stranger who has paid for his company.",
-      "digital_release_date": "2026-06-12"
-    },
-    {
-      "slug": "40qfr-a-family-of-bastards",
-      "imdb_id": "tt36963493",
-      "title": "A Family of Bastards",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "lJRVhYwrJq9IfXOE5FvSxUxXfnf.jpg",
-      "description": "After the death of his father, Mohamed discovers the living of a step-brother and a step-sister. Together, they must manage the suspicious bar they inherited of linked to criminality, drug traffic and prostitution.",
-      "digital_release_date": "2026-06-12"
     }
   ]
 }
