@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1789011900863,
+  "scraped_at": 1789055737158,
   "items": [
     {
       "slug": "3h9up-my-friend-eva",
@@ -99,7 +99,7 @@
       "imdb_id": "tt33354945",
       "title": "Gandhari",
       "year": 2026,
-      "score": 2,
+      "score": 3,
       "poster_path": "aF3IhwS1mrVfvM9OMXmTaXAT0l8.jpg",
       "description": "When a mother loses her eyesight and her daughter in a kidnapping, she takes matters into her own hands to hunt down those responsible.",
       "digital_release_date": "2026-09-03"
@@ -232,6 +232,16 @@
       "score": 5,
       "poster_path": "6UqflU8Qqkz7Dq4swJPqs0ZJjY4.jpg",
       "description": "When his young son vanishes, a widower enlists help from his estranged father, a retired detective who put away the serial killer now linked to the case.",
+      "digital_release_date": "2026-08-27"
+    },
+    {
+      "slug": "3c73g-levitating",
+      "imdb_id": "tt31382021",
+      "title": "Levitating",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "o8OCBngD7ded6iieicpDdXsk1xD.jpg",
+      "description": "In a town where pleasure equals being possessed by spiritual beings, Bayu aspires to be the shaman of a trance party so he can fundraise enough money to prevent an impending eviction.",
       "digital_release_date": "2026-08-27"
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "gFjEggtrejCN79r6SXRjM269OtG.jpg",
       "description": "In the tense 72 hours before D-Day, and the fate of the free world hanging in the balance, General Dwight D. Eisenhower and Captain James Stagg face an impossible choice—launch the largest and most dangerous seaborne invasion in history or risk losing the war altogether.",
-      "digital_release_date": "2026-06-16"
-    },
-    {
-      "slug": "3kydg-two-pianos",
-      "imdb_id": "tt33518607",
-      "title": "Two Pianos",
-      "year": 2025,
-      "score": 6,
-      "poster_path": "vdmbyk5iic557hCKs0F7gV6DMNh.jpg",
-      "description": "Returning to France after a long exile, pianist Mathias Vogler reunites with his mentor, Elena, to prepare a concert. In a park, an encounter with a child who looks just like him will lead him to Claude, the woman he once loved.",
       "digital_release_date": "2026-06-16"
     }
   ]
