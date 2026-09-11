@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1789054296757,
+  "scraped_at": 1789095328205,
   "items": [
     {
       "imdb_id": "tt31449991",
@@ -827,6 +827,14 @@
       "year": 1994,
       "release_date": "1994-09-22",
       "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg"
+    },
+    {
+      "imdb_id": "tt30150289",
+      "type": "series",
+      "title": "The Last Anniversary",
+      "year": 2025,
+      "release_date": "2025-03-27",
+      "poster": "https://image.tmdb.org/t/p/w200/rNKFzacuEpMaQkuvFgP2SKmimU9.jpg"
     },
     {
       "imdb_id": "tt1442437",
