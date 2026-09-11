@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1789055737158,
+  "scraped_at": 1789098164906,
   "items": [
+    {
+      "slug": "3o1qx-the-money-maker",
+      "imdb_id": "tt35495035",
+      "title": "The Money Maker",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "8hBGDCNJmBljmKbmFvt6Nk3Feua.jpg",
+      "description": "A Polish engineer relocates to France and becomes a legendary counterfeiter. Working solo, he crafts flawless fake francs worth millions over 14 years, earning the nickname \"Cézanne of counterfeit money\" for his artistic skill and output.",
+      "digital_release_date": "2026-09-11"
+    },
+    {
+      "slug": "33myp-my-tennis-maestro",
+      "imdb_id": "tt5179884",
+      "title": "My Tennis Maestro",
+      "year": 2025,
+      "score": 4,
+      "poster_path": "6tJSUT4sG1b5H1RLfxsv8mMjoCa.jpg",
+      "description": "Italy, 1989. After years of hard training, 13-year-old Felice, carrying his father's expectations on his shoulders, finally sets out to compete in the national tennis tournaments. While dreaming of a simple summer vacation, he's instead placed under the wing of ex tennis champion Raul, an unconventional coach hired by his father. Match after match, the two embark on a journey that will lead Felice to discover the taste of freedom, and Raul to glimpse the possibility of a fresh start. As they travel along the Italian coast, an unexpected, deep, and sincere bond between them develops.",
+      "digital_release_date": "2026-09-10"
+    },
     {
       "slug": "3h9up-my-friend-eva",
       "imdb_id": "tt32372983",
@@ -769,7 +789,7 @@
       "imdb_id": "tt31272500",
       "title": "The Fires",
       "year": 2025,
-      "score": null,
+      "score": 1,
       "poster_path": "gxy00nU5mmlLljh8ys6bLXIP1uw.jpg",
       "description": "Top volcanologist Anna Arnardóttir faces two disasters at once: a volcanic eruption that threatens the safety of the capital city and a love affair that could destroy her marriage.",
       "digital_release_date": "2026-07-27"
@@ -1423,26 +1443,6 @@
       "poster_path": "yuNToCHZyZybJQ89HSiAR91JEiI.jpg",
       "description": "In 2008, the graduating class of North Meadows High School had their senior year cut short due to a disastrous tornado. Now in their mid-30s, they're being forced to return home and finish high school once and for all.",
       "digital_release_date": "2026-06-17"
-    },
-    {
-      "slug": "32d82-deep-water",
-      "imdb_id": "tt29516222",
-      "title": "Deep Water",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "ZWHxL2ETItcZzeVsVfs6gv3SZ7.jpg",
-      "description": "A group of international passengers on a flight from Los Angeles to Shanghai is forced to make an emergency landing in shark-infested waters. The terrified group is forced to work together and overcome their differences if they hope to escape their sinking plane and the frenzy of sharks drawn to the wreckage.",
-      "digital_release_date": "2026-06-16"
-    },
-    {
-      "slug": "3jnz0-pressure",
-      "imdb_id": "tt32547691",
-      "title": "Pressure",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "gFjEggtrejCN79r6SXRjM269OtG.jpg",
-      "description": "In the tense 72 hours before D-Day, and the fate of the free world hanging in the balance, General Dwight D. Eisenhower and Captain James Stagg face an impossible choice—launch the largest and most dangerous seaborne invasion in history or risk losing the war altogether.",
-      "digital_release_date": "2026-06-16"
     }
   ]
 }

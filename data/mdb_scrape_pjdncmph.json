@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1789055751544,
+  "scraped_at": 1789098181044,
   "items": [
+    {
+      "slug": "45456-breach",
+      "imdb_id": "tt41142128",
+      "title": "Breach",
+      "year": 2026,
+      "score": null,
+      "poster_path": "vQ8amOlqlcsUmydMqHOl1VqcZGR.jpg",
+      "description": "Five haunting visions of the future collide in this gripping sci-fi anthology where technology spirals out of control, society begins to collapse, and humanity is pushed to its limits.",
+      "digital_release_date": null
+    },
     {
       "slug": "3fk4d-corina",
       "imdb_id": "tt33366456",
@@ -45,12 +55,22 @@
       "digital_release_date": null
     },
     {
+      "slug": "45alo-breaking-point",
+      "imdb_id": "tt43701184",
+      "title": "Breaking Point",
+      "year": 2026,
+      "score": null,
+      "poster_path": "tJ7piW0Awz9DJfJ2kgxWSpvL1qm.jpg",
+      "description": "Three people are pushed to their limits in this dark thriller anthology: an armed robber faces the fallout of a violent night, a troubled young man questions his own mind, and a pregnant woman fights to escape an abusive marriage.",
+      "digital_release_date": null
+    },
+    {
       "slug": "3n8zr-call-my-agent-the-movie",
       "imdb_id": "tt38267923",
       "title": "Call My Agent! The Movie",
       "year": 2026,
-      "score": null,
-      "poster_path": "s0NJyZcmuG91MgFwflfGyQFeg41.jpg",
+      "score": 3,
+      "poster_path": "p4SvSFIkjCs4y0C7yAcYP9XNmP2.jpg",
       "description": "Five years after ASK Agency closed, debut director Andréa loses her lead actor just days before filming and reunited with her old team — for better or worse.",
       "digital_release_date": null
     },
@@ -99,7 +119,7 @@
       "imdb_id": "tt32331644",
       "title": "A Mosquito in the Ear",
       "year": 2026,
-      "score": null,
+      "score": 3,
       "poster_path": "kiU9L3YUi8IWmsZw8V1YHiwYtqE.jpg",
       "description": "Andrew and Daniela travel to Goa, India, to meet their newly adopted 4-year-old daughter, Sarvari, and bring her back to the US. However, their world begins to crumble when Sarvari refuses to leave the orphanage that she calls home behind. The couple’s attempts to welcome their child into her new family and travel back with her prove to be a chaotic challenge that not only tests their patience but also profoundly reshapes their ideas of family, parenthood, and their relationship as a couple.",
       "digital_release_date": null
@@ -120,7 +140,7 @@
       "title": "Sheep in the Box",
       "year": 2026,
       "score": 5,
-      "poster_path": "9rOCIYYT8Q76FHgl3Nm5ofuc6TQ.jpg",
+      "poster_path": "sxAwnj01pLfDBTA4WobJtJw7y9q.jpg",
       "description": "In the near future, architect Otone Komoto is married to Kensuke, who runs a construction company. The married couple decide to welcome a humanoid robot into their home as their son.",
       "digital_release_date": null
     },
@@ -307,7 +327,7 @@
     {
       "slug": "453ke-untold-raygun-breaking-badly",
       "imdb_id": "tt43700441",
-      "title": "Untold: Raygun: Breaking Badly",
+      "title": "Untold Raygun: Breaking Badly",
       "year": 2026,
       "score": 4,
       "poster_path": "3pnlJjsGtrUp3cPEOLzkR0sPQAK.jpg",
@@ -419,7 +439,7 @@
       "imdb_id": "tt10794054",
       "title": "The Weight",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
       "description": "When Samuel is torn from his daughter and sent to a brutal prison, Warden Clancy offers him a high-stakes proposition: smuggle gold out of a remote mine with a dangerous crew of prisoners and he’ll win his freedom.",
       "digital_release_date": null
@@ -1422,26 +1442,6 @@
       "score": 3,
       "poster_path": "iFcTM6blJ4YFCbfbo1Bh9GiYzta.jpg",
       "description": "A mockumentary about an absolute moron attempting to make an independent film.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "33zfj-gangland",
-      "imdb_id": "tt28263483",
-      "title": "Gangland",
-      "year": 2025,
-      "score": 3,
-      "poster_path": "zLwuYxDnZ6U64poRnDKFFdwjLcj.jpg",
-      "description": "A weathered tribal cop and his new trainee must find a ruthless fugitive, whose return to their rural Indigenous reservation has exposed its darkest secrets and could ignite a violent gang war.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3x105-corporate-retreat",
-      "imdb_id": "tt36460286",
-      "title": "Corporate Retreat",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "sciPl4coQWdsWtRQBUau7xnNYue.jpg",
-      "description": "Blending the dread of survival horror with dark laughs and shocking twists, \"Corporate Retreat\" centers around a group of young executives whose luxury team-building trip descends into a bloody fight for survival against a vengeful retreat leader.",
       "digital_release_date": null
     }
   ]
