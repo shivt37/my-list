@@ -249,8 +249,12 @@ export async function buildDiscoverItems(list, mediaType) {
   // without_genres gap; keyword/company excludes remain discover-only
   // (parts carry no such fields - ponytail: enrich on first real combo).
   const exGenres = list.excludeGenres || [];
+  // OR-collection lists a source, not a filter (mirrors the preview's
+  // routes.js logic): only AND-mode collections gate admission. Previously
+  // any includeCollections made every discover item pass through the
+  // membership gate, so OR lists collapsed to the collection's members only.
   const passesFilters = (item) =>
-    (!includeSet || includeSet.has(item.id)) &&
+    (!collectionIsPostFilter || !includeSet || includeSet.has(item.id)) &&
     !excludeSet.has(item.id) &&
     !exGenres.some((g) => (item.genre_ids || []).includes(g));
 
@@ -293,7 +297,9 @@ export async function buildDiscoverItems(list, mediaType) {
       page <= totalPages &&
       page <= effectiveCap &&
       dedup.size < MAX_ITEMS &&
-      !(includeSet && dedup.size >= includeSet.size)
+      // Early-stop is AND-collection only ("we have every member") - an
+      // OR list keeps scanning: collection members can also fail excludes.
+      !(collectionIsPostFilter && includeSet && dedup.size >= includeSet.size)
     );
   } else {
     for (const p of includeParts) admit(p);
@@ -318,12 +324,12 @@ export async function buildDiscoverItems(list, mediaType) {
       page <= totalPages &&
       page <= effectiveCap &&
       dedup.size < MAX_ITEMS &&
-      !(includeSet && dedup.size >= includeSet.size)
+      !(collectionIsPostFilter && includeSet && dedup.size >= includeSet.size)
     );
   }
 
   let warning = null;
-  if (includeSet && dedup.size < includeSet.size) {
+  if (collectionIsPostFilter && includeSet && dedup.size < includeSet.size) {
     warning = `collected ${dedup.size}/${includeSet.size} collection members within ${effectiveCap}-page scan budget`;
     console.warn(`  [tmdb] ${warning}`);
   }
