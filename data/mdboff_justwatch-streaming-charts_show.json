@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1789140811714,
+  "scraped_at": 1789182117862,
   "items": [
     {
       "imdb_id": "tt31449991",
@@ -749,6 +749,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/f2wbC7fxiOJqzTb6HPr4N6bsjLF.jpg"
     },
     {
+      "imdb_id": "tt6038954",
+      "type": "series",
+      "title": "Picnic at Hanging Rock",
+      "year": 2018,
+      "release_date": "2018-05-06",
+      "poster": "https://image.tmdb.org/t/p/w200/aidMXRzL7awi404nDCdl4CXrCID.jpg"
+    },
+    {
       "imdb_id": "tt27790101",
       "type": "series",
       "title": "Conan O'Brien Must Go",
@@ -1179,14 +1187,6 @@
       "year": 2006,
       "release_date": "2006-07-07",
       "poster": "https://image.tmdb.org/t/p/w200/fDI15gTVbtW5Sbv5QenqecRxWKJ.jpg"
-    },
-    {
-      "imdb_id": "tt17491088",
-      "type": "series",
-      "title": "The Diplomat",
-      "year": 2023,
-      "release_date": "2023-04-20",
-      "poster": "https://image.tmdb.org/t/p/w200/cOKXV0FalCYixNmZYCfHXgyQ0VX.jpg"
     }
   ]
 }
