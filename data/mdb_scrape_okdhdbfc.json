@@ -2,16 +2,26 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789184828688,
+  "scraped_at": 1789225667965,
   "items": [
     {
       "slug": "3ylnw-mousetrap",
       "imdb_id": "tt36996011",
       "title": "Mousetrap",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "2mwgHfOyrFrmvozjFoEXHRdfGhv.jpg",
       "description": "A reclusive writer wakes to find his identity stolen — and must ally with a ruthless loan shark to reclaim his life from a man known as \"The Rat.\"",
+      "first_air_date": "2026-08-28"
+    },
+    {
+      "slug": "3zn18-all-the-truth-in-my-lies",
+      "imdb_id": "tt37053085",
+      "title": "All the Truth in My Lies",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "2udseY0mzsvkytPcSL4Vp612M1D.jpg",
+      "description": "Two roommates join a bachelorette road trip, where unspoken feelings ignite and shake up their entire friend group.",
       "first_air_date": "2026-08-28"
     },
     {
@@ -759,7 +769,7 @@
       "imdb_id": "tt39749708",
       "title": "The Evil Lawyer",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "srwzPdGdkCdDzmhBpNoOGwNrBNf.jpg",
       "description": "When a young attorney is accused of murdering a police officer's son, he teams up with the \"Evil Lawyer\" to exploit loopholes and prove his innocence.",
       "first_air_date": "2026-06-11"
@@ -1433,16 +1443,6 @@
       "poster_path": "zDjl6FOCuCy8gyug54VDlLgxa1l.jpg",
       "description": "A young and ambitious prison officer finds herself in the middle of a battle for the criminal underworld as crime lords try to evade justice. But in order to do that, she will have to learn quickly to put her faith in one of the very men she wants to put behind bars.",
       "first_air_date": "2026-04-30"
-    },
-    {
-      "slug": "3jvup-the-house-of-the-spirits",
-      "imdb_id": "tt33022938",
-      "title": "The House of the Spirits",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "yb682O0KCZlS5qRydxOytO5A6co.jpg",
-      "description": "The epic tale of a proud and passionate family, secret loves, and bloody revolution. The Trueba family's passions, struggles, and secrets span a century of violent social change, culminating in a crisis that hurls the proud, tyrannical patriarch and his beloved granddaughter towards opposite sides of the fence.",
-      "first_air_date": "2026-04-29"
     }
   ]
 }
