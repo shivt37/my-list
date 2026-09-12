@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1789142302000,
+  "scraped_at": 1789184779601,
   "items": [
     {
       "slug": "3o1qx-the-money-maker",
@@ -219,7 +219,7 @@
       "imdb_id": "tt22406048",
       "title": "Spider Island",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "eKw6aF7oNEaTnVvN396Q1is9R1n.jpg",
       "description": "A group of social media influencers go to the launch of a new hotel on a tropical island, where they find deadly spiders.",
       "digital_release_date": "2026-08-28"
@@ -793,16 +793,6 @@
       "poster_path": "gnAsZvBygplNpp8PtjoTEYv3VPB.jpg",
       "description": "Two teenage boys must escape a violent entity that takes the form of the person they desire most:  each other.",
       "digital_release_date": "2026-07-28"
-    },
-    {
-      "slug": "3i5wk-the-fires",
-      "imdb_id": "tt31272500",
-      "title": "The Fires",
-      "year": 2025,
-      "score": 1,
-      "poster_path": "gxy00nU5mmlLljh8ys6bLXIP1uw.jpg",
-      "description": "Top volcanologist Anna Arnardóttir faces two disasters at once: a volcanic eruption that threatens the safety of the capital city and a love affair that could destroy her marriage.",
-      "digital_release_date": "2026-07-27"
     },
     {
       "slug": "2wnkv-avatar-aang-the-last-airbender",
@@ -1442,6 +1432,16 @@
       "score": null,
       "poster_path": "rHOTaT34vaxzN7TAzgSWHiqCA5p.jpg",
       "description": "Based on the true story of Operation Shaman Shield, when Hungarian soldiers evacuated 540 people, including 180 children, from Afghanistan as NATO forces withdrew. Coming Fall 2025.",
+      "digital_release_date": "2026-06-17"
+    },
+    {
+      "slug": "430h1-never-change",
+      "imdb_id": "tt37899019",
+      "title": "Never Change!",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "yuNToCHZyZybJQ89HSiAR91JEiI.jpg",
+      "description": "In 2008, the graduating class of North Meadows High School had their senior year cut short due to a disastrous tornado. Now in their mid-30s, they're being forced to return home and finish high school once and for all.",
       "digital_release_date": "2026-06-17"
     }
   ]
