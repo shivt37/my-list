@@ -1,0 +1,53 @@
+{
+  "catalog_id": "tmdb_discover_movie_jkkcdihc",
+  "name": "DC - Movies",
+  "type": "movie",
+  "scraped_at": 1789215553111,
+  "sourceHash": "8267029a680b71d8",
+  "items": [
+    {
+      "adult": false,
+      "backdrop_path": "/AVWlQpVhpudyFsSh3OQIieHHYf.jpg",
+      "id": 889737,
+      "title": "Joker: Folie à Deux",
+      "original_title": "Joker: Folie à Deux",
+      "overview": "While struggling with his dual identity, Arthur Fleck not only stumbles upon true love, but also finds the music that's always been inside him.",
+      "poster_path": "/if8QiqCI7WAGImKcJCfzp6VTyKA.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        18,
+        80,
+        53
+      ],
+      "popularity": 12.649,
+      "release_date": "2024-10-01",
+      "softcore": false,
+      "video": false,
+      "vote_average": 5.402,
+      "vote_count": 3058
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/rlay2M5QYvi6igbGcFjq8jxeusY.jpg",
+      "id": 475557,
+      "title": "Joker",
+      "original_title": "Joker",
+      "overview": "During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
+      "poster_path": "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        80,
+        53,
+        18
+      ],
+      "popularity": 31.1249,
+      "release_date": "2019-10-01",
+      "softcore": false,
+      "video": false,
+      "vote_average": 8.116,
+      "vote_count": 28284
+    }
+  ]
+}
