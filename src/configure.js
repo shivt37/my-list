@@ -1984,9 +1984,38 @@ function excludeTmdbItem(i, id, name) {
   l.excludeItemNames.push(name);
   // Remove instantly from the cached preview - no refetch round-trip; the
   // server endpoint filters excludeItems on the next load anyway.
-  if (Array.isArray(l.previewItems)) l.previewItems = l.previewItems.filter((p) => p.id !== id);
-  if (typeof l.count === 'number') l.count = l.previewItems ? l.previewItems.length : l.count - 1;
-  renderTmdb();
+  if (Array.isArray(l.previewItems)) {
+    l.previewItems = l.previewItems.filter((p) => p.id !== id);
+    if (typeof l.count === 'number') l.count = l.previewItems.length;
+  }
+  // Owner fix: surgical DOM update instead of renderTmdb() - the full tab
+  // rebuild reset scroll, so removing the last preview item flung the
+  // operator back to the start after every click. Same container node
+  // survives, scroll position never moves, removals chain uninterrupted.
+  const card = document.getElementById('tcard-' + i);
+  if (!card) { renderTmdb(); return; }
+  const row = card.querySelector('[data-pid="' + id + '"]');
+  if (row) row.remove();
+  card.querySelectorAll('.preview-list-num').forEach((el, k) => { el.textContent = (k + 1) + '.'; });
+  const container = card.querySelector('.preview-scroll, .preview-list');
+  if (container && Array.isArray(l.previewItems) && l.previewItems.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'preview-msg';
+    empty.textContent = 'No results found.';
+    container.replaceWith(empty);
+  }
+  const cl = card.querySelector('.card-head .count-line');
+  if (cl && typeof l.count === 'number') {
+    cl.textContent = l.count + (l.previewTruncated ? '+' : '') + ' results';
+  }
+  // Rebuild just the Excluded Titles section so the new chip shows. Skipped
+  // while the item search is open on this card - the swap would destroy the
+  // live input the operator is typing in.
+  if (!(tmdbAdding && tmdbAdding.i === i && tmdbAdding.kind === 'item')) {
+    const sec = document.getElementById('excl-section-' + i);
+    if (sec) sec.outerHTML = excludedItemsSection(i, l);
+  }
+  refreshDirtyUI();
 }
 
 function removeExcludedTmdbItem(i, id) {
@@ -2168,7 +2197,7 @@ function excludedItemsSection(i, l) {
   const adder = adding
     ? ''
     : '<span class="exclude-chip-add" onclick="openTmdbInlineSearch(' + i + ',\\\'item\\\',\\\'exclude\\\')">+ Exclude</span>';
-  return '<div class="tmdb-dim">' +
+  return '<div class="tmdb-dim" id="excl-section-' + i + '">' +
     '<div class="exclude-label"><button type="button" class="exclude-label-toggle" onclick="toggleTmdbSection(' + i + ',\\\'item\\\')" aria-expanded="' + (isOpen ? 'true' : 'false') + '">' +
       '<span class="filter-label">Excluded Titles' + (ids.length > 0 ? ' (' + ids.length + ')' : '') + '</span>' +
       '<svg class="exclude-chevron' + (isOpen ? ' open' : '') + '" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
@@ -2279,7 +2308,7 @@ function tmdbPreviewHtml(i, l) {
   else if (!(l.previewItems || []).length) body = '<div class="preview-msg">No results found.</div>';
   else if (!isGrid) {
     body = '<div class="preview-list">' + l.previewItems.map((p, idx) =>
-      '<div class="preview-list-item">' +
+      '<div class="preview-list-item" data-pid="' + p.id + '">' +
         '<span class="preview-list-num">' + (idx + 1) + '.</span>' +
         '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + escapeAttr(p.year) + ')' : '') + '</span>' +
         '<a class="icon-btn preview-list-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
@@ -2289,7 +2318,7 @@ function tmdbPreviewHtml(i, l) {
       '</div>').join('') + '</div>';
   } else {
     body = '<div class="preview-scroll">' + l.previewItems.map((p) =>
-      '<div class="preview-item">' +
+      '<div class="preview-item" data-pid="' + p.id + '">' +
         (p.poster ? '<img src="' + escapeAttr(p.poster) + '" alt="" loading="lazy">' : '<div class="preview-poster-placeholder"></div>') +
         '<button type="button" class="icon-btn preview-item-x" onclick="excludeTmdbItem(' + i + ',' + p.id + ',\\\'' + escapeForOnclick(p.name + (p.year ? ' (' + p.year + ')' : '')) + '\\\')" title="Exclude from this list" aria-label="Exclude ' + escapeAttr(p.name) + ' from this list">' +
           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
