@@ -628,6 +628,20 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .preview-item-link:hover { color: var(--accent); border-color: var(--accent); }
   .preview-item:hover .preview-item-link,
   .preview-item-link:focus-visible { opacity: 1; }
+  /* Owner feature: per-title exclude ✕ - danger-styled twin of the
+     open-link button. Grid: top-LEFT corner (full poster width separates
+     it from the open-link at top-right = no mis-taps). */
+  .preview-item-x {
+    position: absolute; top: 5px; left: 5px; width: 20px; height: 20px;
+    border-radius: var(--r-sm); opacity: 0; transition: opacity 0.12s, color 0.12s, border-color 0.12s;
+    background: rgba(10,10,13,0.72); color: var(--danger);
+  }
+  .preview-item-x:hover { color: var(--danger); border-color: var(--danger); }
+  .preview-item:hover .preview-item-x,
+  .preview-item-x:focus-visible { opacity: 1; }
+  /* List view: ✕ sits rightmost, after the open-link. */
+  .preview-list-x { width: 18px; height: 18px; flex-shrink: 0; align-self: center; margin-left: 4px; opacity: 0.55; color: var(--danger); transition: opacity 0.12s, color 0.12s, border-color 0.12s; }
+  .preview-list-x:hover { opacity: 1; color: var(--danger); border-color: var(--danger); }
   .preview-list-link { width: 18px; height: 18px; flex-shrink: 0; align-self: center; margin-left: 4px; opacity: 0.55; transition: opacity 0.12s, color 0.12s, border-color 0.12s; }
   .preview-list-link:hover { opacity: 1; color: var(--accent); border-color: var(--accent); }
   .preview-list { display: flex; flex-direction: column; max-height: 260px; overflow-y: auto; }
@@ -786,7 +800,9 @@ export function buildConfigurePage(origin, config, opts = {}) {
     .preview-item-title { font-size: 9.5px; }
     /* No hover on touch - keep TMDB links always visible */
     .preview-item-link { opacity: 1; width: 17px; height: 17px; top: 4px; right: 4px; }
+    .preview-item-x { opacity: 1; width: 17px; height: 17px; top: 4px; left: 4px; }
     .preview-list-link { opacity: 1; width: 17px; height: 17px; }
+    .preview-list-x { opacity: 1; width: 17px; height: 17px; }
     .inline-add-search button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
   }
   @media (max-width: 380px) {
@@ -1691,6 +1707,7 @@ function tmdbEmptyList(mediaType) {
     includeCompanies: [], includeCompanyNames: [], excludeCompanies: [], excludeCompanyNames: [],
     includeReleaseTypes: [],
     includeCollections: [], includeCollectionNames: [], excludeCollections: [], excludeCollectionNames: [],
+    excludeItems: [], excludeItemNames: [],
   };
 }
 
@@ -1773,6 +1790,7 @@ function renderTmdb() {
         '<span class="include-mode-hint">' + pillHint + '</span>' +
       '</div>' +
       dims +
+      excludedItemsSection(i, l) +
       // A1: persistent education for the zero-filter footgun.
       (!(l.includeGenres || []).length && !(l.includeKeywords || []).length &&
         !(l.includeCompanies || []).length && !(l.includeReleaseTypes || []).length &&
@@ -1881,9 +1899,13 @@ function updateTmdb(i, key, value) {
     l.includeCollectionNames = [];
     l.excludeCollections = [];
     l.excludeCollectionNames = [];
+    // Owner feature: excluded title ids are type-bound (TMDB movie 12345 is
+    // NOT tv 12345) - stale ids would silently filter the other type.
+    l.excludeItems = [];
+    l.excludeItemNames = [];
     delete l.count;
     invalidateTmdbPreview(l);
-    setStatus('Media type changed - genre, release-type and collection filters were cleared.', 'ok');
+    setStatus('Media type changed - genre, release-type, collection, and excluded-title filters were cleared.', 'ok');
     if (l.previewOpen) { loadTmdbPreview(i); return; }
     renderTmdb();
     return;
@@ -1949,6 +1971,36 @@ function removeTmdbId(i, kind, field, id) {
   renderTmdb();
 }
 
+// ── Owner feature: per-title exclude (preview ✕ + Excluded Titles section) ──
+
+function excludeTmdbItem(i, id, name) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  // Owner rule: dead controls on disabled cards.
+  if (!l.enabled) return;
+  if (!l.excludeItems) { l.excludeItems = []; l.excludeItemNames = []; }
+  if (l.excludeItems.includes(id)) return;
+  l.excludeItems.push(id);
+  l.excludeItemNames.push(name);
+  // Remove instantly from the cached preview - no refetch round-trip; the
+  // server endpoint filters excludeItems on the next load anyway.
+  if (Array.isArray(l.previewItems)) l.previewItems = l.previewItems.filter((p) => p.id !== id);
+  if (typeof l.count === 'number') l.count = l.previewItems ? l.previewItems.length : l.count - 1;
+  renderTmdb();
+}
+
+function removeExcludedTmdbItem(i, id) {
+  const l = state.tmdb.lists[i];
+  if (!l || !Array.isArray(l.excludeItems)) return;
+  const idx = l.excludeItems.indexOf(id);
+  if (idx !== -1) {
+    l.excludeItems.splice(idx, 1);
+    if (Array.isArray(l.excludeItemNames)) l.excludeItemNames.splice(idx, 1);
+  }
+  invalidateTmdbPreview(l);
+  renderTmdb();
+}
+
 function openTmdbInlineSearch(i, kind, side) {
   // Owner: dead controls on disabled cards - the +Add chips are spans, so
   // the disabled guard lives here.
@@ -1978,20 +2030,27 @@ async function runTmdbInlineSearch() {
   }
   tmdbSearchTimer = setTimeout(async () => {
     try {
-      const res = await fetch(ORIGIN + '/tmdb/search-' + tmdbAdding.kind + '?query=' + encodeURIComponent(q));
+      // 'item' searches titles (type-scoped) for the Excluded Titles section;
+      // keyword/company/collection keep their own TMDB search endpoints.
+      const isItem = tmdbAdding.kind === 'item';
+      const searchKind = isItem ? 'title' : tmdbAdding.kind;
+      const typeQs = isItem ? '&type=' + encodeURIComponent((state.tmdb.lists[tmdbAdding.i] || {}).mediaType || 'movie') : '';
+      const res = await fetch(ORIGIN + '/tmdb/search-' + searchKind + '?query=' + encodeURIComponent(q) + typeQs);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       const l = state.tmdb.lists[tmdbAdding.i];
-      const idsKey = TMDB_FIELD_KEYS[tmdbAdding.kind][tmdbAdding.side];
+      const idsKey = tmdbAdding.kind === 'item'
+        ? 'excludeItems'
+        : TMDB_FIELD_KEYS[tmdbAdding.kind][tmdbAdding.side];
       tmdbSearchResultsHtml = data.results.length === 0
         ? '<div class="empty-msg">No results found.</div>'
         : data.results.map((r) => {
-            const already = l && l[idsKey].includes(r.id);
+            const already = l && (l[idsKey] || []).includes(r.id);
             return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
-              (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + tmdbAdding.kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name) + '\\\')"') + '>' +
+              (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + tmdbAdding.kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name + (r.year ? ' (' + r.year + ')' : '')) + '\\\')"') + '>' +
               (r.poster ? '<img class="result-thumb" src="' + escapeAttr(r.poster) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
-              '<div><div class="result-title">' + escapeAttr(r.name) + '</div>' +
-              '<div class="result-meta">' + (already ? 'Already added' : 'Click to add') + '</div></div></div>';
+              '<div><div class="result-title">' + escapeAttr(r.name) + (r.year ? ' (' + escapeAttr(r.year) + ')' : '') + '</div>' +
+              '<div class="result-meta">' + (already ? 'Already excluded' : 'Click to exclude') + '</div></div></div>';
           }).join('');
     } catch (e) {
       tmdbSearchResultsHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
@@ -2011,6 +2070,15 @@ function rerenderKeepInput(text) {
 function pickTmdbResult(i, kind, side, id, name) {
   const l = state.tmdb.lists[i];
   if (!l) return;
+  if (kind === 'item') {
+    if (!l.excludeItems) { l.excludeItems = []; l.excludeItemNames = []; }
+    if ((l.excludeItems || []).includes(id)) { setStatus('That is already excluded.', 'error'); return; }
+    l.excludeItems.push(id);
+    l.excludeItemNames.push(name);
+    invalidateTmdbPreview(l);
+    closeTmdbInlineSearch();
+    return;
+  }
   const idsKey = TMDB_FIELD_KEYS[kind][side];
   const namesKey = TMDB_NAME_KEYS[kind][side];
   if (l[idsKey].includes(id)) { setStatus('That is already added.', 'error'); return; }
@@ -2081,6 +2149,52 @@ function tmdbDimSection(i, l, dim) {
     (isOpen
       ? chipRow('include', 'Include', 'member-chip') + (dim.hasExclude ? chipRow('exclude', 'Exclude', 'exclude-chip') : '')
       : '') +
+  '</div>';
+}
+
+// Owner feature: "Excluded Titles" section - per-list excludeItems/excludeItemNames
+// chips (red, .exclude-chip style) + inline title search for manual adds.
+// Collapsible like the dimension sections, keyed 'item' in tmdbOpenSections.
+function excludedItemsSection(i, l) {
+  const isOpen = tmdbOpenSections.has(i + ':item');
+  const ids = l.excludeItems || [];
+  const names = l.excludeItemNames || [];
+  const adding = tmdbAdding && tmdbAdding.i === i && tmdbAdding.kind === 'item';
+  const chips = ids.map((id, idx) => {
+    const shown = names[idx] != null ? names[idx] : String(id);
+    return '<span class="exclude-chip">' + escapeAttr(shown) +
+      '<button type="button" class="chip-remove" onclick="removeExcludedTmdbItem(' + i + ',' + id + ')" title="Remove" aria-label="Remove ' + escapeAttr(shown) + '">×</button></span>';
+  }).join('');
+  const adder = adding
+    ? ''
+    : '<span class="exclude-chip-add" onclick="openTmdbInlineSearch(' + i + ',\\\'item\\\',\\\'exclude\\\')">+ Exclude</span>';
+  return '<div class="tmdb-dim">' +
+    '<div class="exclude-label"><button type="button" class="exclude-label-toggle" onclick="toggleTmdbSection(' + i + ',\\\'item\\\')" aria-expanded="' + (isOpen ? 'true' : 'false') + '">' +
+      '<span class="filter-label">Excluded Titles' + (ids.length > 0 ? ' (' + ids.length + ')' : '') + '</span>' +
+      '<svg class="exclude-chevron' + (isOpen ? ' open' : '') + '" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+    '</button></div>' +
+    (isOpen
+      ? '<div class="members-label" style="margin-top:8px;">Excluded (never appear in this list)</div>' +
+        '<div class="members-chips">' + chips +
+          (ids.length === 0 ? '<span class="members-empty">Nothing excluded</span>' : '') + adder + '</div>' +
+          (adding ? excludedItemsSearchHtml(i) : '')
+      : '') +
+  '</div>';
+}
+
+function excludedItemsSearchHtml(i) {
+  return '<div class="inline-add-search">' +
+    '<div class="search-row">' +
+      '<div class="search-input-wrap">' +
+        '<input class="search-input" id="tmdbInlineInput" type="text" placeholder="Search for a title…" autocomplete="off" spellcheck="false"' +
+          ' oninput="runTmdbInlineSearch()"' +
+          ' onkeydown="if(event.key===&quot;Escape&quot;)closeTmdbInlineSearch();">' +
+        '<span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>' +
+      '</div>' +
+      '<button onclick="runTmdbInlineSearchNow()">Add</button>' +
+      '<button class="secondary" onclick="closeTmdbInlineSearch()">Cancel</button>' +
+    '</div>' +
+    '<div class="search-results">' + (tmdbSearchResultsHtml || '') + '</div>' +
   '</div>';
 }
 
@@ -2167,14 +2281,18 @@ function tmdbPreviewHtml(i, l) {
     body = '<div class="preview-list">' + l.previewItems.map((p, idx) =>
       '<div class="preview-list-item">' +
         '<span class="preview-list-num">' + (idx + 1) + '.</span>' +
-        '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + p.year + ')' : '') + '</span>' +
+        '<span class="preview-list-name">' + escapeAttr(p.name) + (p.year ? ' (' + escapeAttr(p.year) + ')' : '') + '</span>' +
         '<a class="icon-btn preview-list-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
+        '<button type="button" class="icon-btn preview-list-x" onclick="excludeTmdbItem(' + i + ',' + p.id + ',\\\'' + escapeForOnclick(p.name + (p.year ? ' (' + p.year + ')' : '')) + '\\\')" title="Exclude from this list" aria-label="Exclude ' + escapeAttr(p.name) + ' from this list">' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
       '</div>').join('') + '</div>';
   } else {
     body = '<div class="preview-scroll">' + l.previewItems.map((p) =>
       '<div class="preview-item">' +
         (p.poster ? '<img src="' + escapeAttr(p.poster) + '" alt="" loading="lazy">' : '<div class="preview-poster-placeholder"></div>') +
+        '<button type="button" class="icon-btn preview-item-x" onclick="excludeTmdbItem(' + i + ',' + p.id + ',\\\'' + escapeForOnclick(p.name + (p.year ? ' (' + p.year + ')' : '')) + '\\\')" title="Exclude from this list" aria-label="Exclude ' + escapeAttr(p.name) + ' from this list">' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
         '<a class="icon-btn preview-item-link" href="' + tmdbUrlFor(p) + '" target="_blank" rel="noopener noreferrer" title="Open on TMDB">' +
           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
         '<div class="preview-item-title">' + escapeAttr(p.name) + '</div>' +

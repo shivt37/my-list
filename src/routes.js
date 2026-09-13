@@ -755,7 +755,7 @@ async function tmdbApi(env, pathAndQuery) {
 
 const TMDB_SEARCH_MAX = 12;
 
-export async function handleTmdbSearch(env, kind, query) {
+export async function handleTmdbSearch(env, kind, query, type) {
   const guard = tmdbTokenOrError(env);
   if (guard) return guard;
   const q = String(query || "").trim();
@@ -764,6 +764,10 @@ export async function handleTmdbSearch(env, kind, query) {
     keyword: `/search/keyword?query=${encodeURIComponent(q)}`,
     company: `/search/company?query=${encodeURIComponent(q)}`,
     collection: `/search/collection?query=${encodeURIComponent(q)}`,
+    // Title search must stay type-scoped: /search/multi mixes movie+tv+person
+    // ids and a person id could collide with a movie id, so an excluded
+    // "title" could silently veto an unrelated catalog item.
+    title: `/search/${type === "series" ? "tv" : "movie"}?query=${encodeURIComponent(q)}&include_adult=false`,
   };
   const path = paths[kind];
   if (!path) return json({ error: "Unknown search kind." }, 400);
@@ -772,6 +776,7 @@ export async function handleTmdbSearch(env, kind, query) {
   const results = (data.results || []).slice(0, TMDB_SEARCH_MAX).map((r) => ({
     id: r.id,
     name: r.name || r.title,
+    year: String(r.release_date || r.first_air_date || "").slice(0, 4) || null,
     poster: r.poster_path ? `https://image.tmdb.org/t/p/w92${r.poster_path}` : null,
   }));
   return json({ results });
@@ -930,6 +935,12 @@ export async function handleTmdbPreviewDiscover(env, request) {
     }
     if (mediaType !== "series" && isAnd("collection") && entry.includeCollections.length > 0 && collectionIdSet.size > 0) {
       items = items.filter((p) => collectionIdSet.has(p.id));
+    }
+    // Owner feature: per-title exclusions picked from the preview - same
+    // gate as the generator so preview always mirrors the saved catalog.
+    if (entry.excludeItems && entry.excludeItems.length > 0) {
+      const exItems = new Set(entry.excludeItems);
+      items = items.filter((p) => !exItems.has(p.id));
     }
 
     // sortPreviewItems filters undated movies (returns a new array) -

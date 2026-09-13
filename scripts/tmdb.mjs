@@ -248,6 +248,17 @@ export async function buildDiscoverItems(list, mediaType) {
   // Genre excludes re-check genre_ids so parts can't slip through the
   // without_genres gap; keyword/company excludes remain discover-only
   // (parts carry no such fields - ponytail: enrich on first real combo).
+  // Owner feature: per-title exclusions picked from the preview. Collection
+  // members go through the same gate, so excluding a collection member works.
+  const exclItems = list.excludeItems || [];
+  const exclItemSet = new Set(exclItems);
+  // AND-collection early-stop counts members still IN the list - excluded
+  // members must not keep the scan hunting for items that can never be
+  // admitted (and would make the "collected X/Y" warning permanently wrong).
+  const includeTarget = includeSet
+    ? [...includeSet].filter((id) => !exclItemSet.has(id)).length
+    : 0;
+
   const exGenres = list.excludeGenres || [];
   // OR-collection lists a source, not a filter (mirrors the preview's
   // routes.js logic): only AND-mode collections gate admission. Previously
@@ -256,6 +267,7 @@ export async function buildDiscoverItems(list, mediaType) {
   const passesFilters = (item) =>
     (!collectionIsPostFilter || !includeSet || includeSet.has(item.id)) &&
     !excludeSet.has(item.id) &&
+    !exclItemSet.has(item.id) &&
     !exGenres.some((g) => (item.genre_ids || []).includes(g));
 
   const dedup = new Map();
@@ -299,7 +311,7 @@ export async function buildDiscoverItems(list, mediaType) {
       dedup.size < MAX_ITEMS &&
       // Early-stop is AND-collection only ("we have every member") - an
       // OR list keeps scanning: collection members can also fail excludes.
-      !(collectionIsPostFilter && includeSet && dedup.size >= includeSet.size)
+      !(collectionIsPostFilter && includeSet && includeTarget > 0 && dedup.size >= includeTarget)
     );
   } else {
     for (const p of includeParts) admit(p);
@@ -324,13 +336,13 @@ export async function buildDiscoverItems(list, mediaType) {
       page <= totalPages &&
       page <= effectiveCap &&
       dedup.size < MAX_ITEMS &&
-      !(collectionIsPostFilter && includeSet && dedup.size >= includeSet.size)
+      !(collectionIsPostFilter && includeSet && includeTarget > 0 && dedup.size >= includeTarget)
     );
   }
 
   let warning = null;
-  if (collectionIsPostFilter && includeSet && dedup.size < includeSet.size) {
-    warning = `collected ${dedup.size}/${includeSet.size} collection members within ${effectiveCap}-page scan budget`;
+  if (collectionIsPostFilter && includeSet && includeTarget > 0 && dedup.size < includeTarget) {
+    warning = `collected ${dedup.size}/${includeTarget} collection members within ${effectiveCap}-page scan budget`;
     console.warn(`  [tmdb] ${warning}`);
   }
   return finalize(dedup, list, mediaType, pagesFetched, warning);

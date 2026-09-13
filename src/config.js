@@ -327,6 +327,9 @@ export function normalizeTmdbList(raw) {
   const excCo = numArr(raw.excludeCompanies);
   const incCl = numArr(raw.includeCollections);
   const excCl = numArr(raw.excludeCollections);
+  // Per-title exclusions picked from the preview (owner feature): ids +
+  // index-aligned display names, same pattern as keyword/company/collection.
+  const excIt = numArr(raw.excludeItems);
   // B4: movie-only dimensions cannot survive a series list - /discover/tv
   // has no release-type or belongs-to-collection filter, and stored values
   // would silently poison generation. Coerce server-side so imported or
@@ -361,6 +364,8 @@ export function normalizeTmdbList(raw) {
     includeCollectionNames: nameArr(raw.includeCollectionNames, effIncCl.length),
     excludeCollections: effExcCl,
     excludeCollectionNames: nameArr(raw.excludeCollectionNames, effExcCl.length),
+    excludeItems: excIt,
+    excludeItemNames: nameArr(raw.excludeItemNames, excIt.length),
     // B7: optional TMDB vote-count floor - only meaningful with the rating
     // sort, but stored per-list so it survives sort round-trips.
     minVoteCount: Number.isInteger(raw.minVoteCount) && raw.minVoteCount > 0 ? raw.minVoteCount : null,
@@ -405,6 +410,7 @@ export function tmdbContentHash(list) {
         [...(list.includeReleaseTypes || [])].sort(),
         [...(list.includeCollections || [])].sort(),
         [...(list.excludeCollections || [])].sort(),
+        [...(list.excludeItems || [])].sort(),
         list.minVoteCount ?? null,
       ])
     )

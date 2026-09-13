@@ -103,10 +103,10 @@ export default {
     }
 
     // TMDB live helpers (Discover form search boxes + preview).
-    const tmdbSearchMatch = pathname.match(/^\/tmdb\/search-(keyword|company|collection)$/);
+    const tmdbSearchMatch = pathname.match(/^\/tmdb\/search-(keyword|company|collection|title)$/);
     if (tmdbSearchMatch) {
       const query = url.searchParams.get("query") || "";
-      return handleTmdbSearch(env, tmdbSearchMatch[1], query);
+      return handleTmdbSearch(env, tmdbSearchMatch[1], query, url.searchParams.get("type"));
     }
 
     if (pathname === "/tmdb/preview-discover" && request.method === "POST") {
