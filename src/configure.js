@@ -547,11 +547,11 @@ export function buildConfigurePage(origin, config, opts = {}) {
   }
   .chip-remove:hover { background: rgba(255,95,102,0.14); color: var(--danger); filter: none; }
   .member-chip-add {
-    cursor: pointer; color: var(--accent); border-color: rgba(6,182,212,0.5);
-    background: var(--accent-soft); padding: 4px 12px;
+    cursor: pointer; color: var(--accent); border-color: transparent;
+    background: var(--accent-dim); padding: 4px 12px;
     transition: border-color 0.12s, background 0.12s;
   }
-  .member-chip-add:hover { opacity: 1; border-color: var(--accent); }
+  .member-chip-add:hover { opacity: 1; border-color: transparent; background: var(--accent-glow); }
   .exclude-chip {
     display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--danger);
     background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: 999px;
@@ -562,9 +562,9 @@ export function buildConfigurePage(origin, config, opts = {}) {
     cursor: pointer; color: var(--dim); border-color: var(--border2); background: var(--surface2);
     padding: 4px 12px; display: inline-flex; align-items: center; font-size: 11.5px;
     border-radius: 999px; border-width: 1px; border-style: solid;
-    transition: color 0.12s, border-color 0.12s, background 0.12s;
+    transition: color 0.12s, background 0.12s;
   }
-  .exclude-chip-add:hover { color: var(--text); border-color: var(--dim); }
+  .exclude-chip-add:hover { color: var(--text); background: var(--surface3); }
   .exclude-genre-select-inline {
     flex: 0 0 auto; width: fit-content; min-width: 0;
     color: var(--dim); border-color: var(--border2); background: var(--surface2);
