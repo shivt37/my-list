@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789271706052,
+  "scraped_at": 1789314235142,
   "items": [
+    {
+      "slug": "44np7-last-seen",
+      "imdb_id": "tt6037988",
+      "title": "Last Seen",
+      "year": 2026,
+      "score": null,
+      "poster_path": "vozJZjHv0Yyv4PjoOxF5tVMUGFI.jpg",
+      "description": "When emergency dispatcher Ian Ridley receives a frantic call from a teenager he believes could be his long-missing daughter, he stops at nothing to find her.",
+      "first_air_date": "2026-09-09"
+    },
     {
       "slug": "457b8-welcome-to-the-family-the-murder-of-dan-markel",
       "imdb_id": "tt44842745",
@@ -559,7 +569,7 @@
       "imdb_id": "tt39393581",
       "title": "The Husband",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "z74qJEf1MRsEEIKFgbeyBAHmJXg.jpg",
       "description": "Taeju and Seyun are on the verge of divorce. But when a drunken comment from Taeju gets Seyun kidnapped, everything changes. Even worse, he's now the prime suspect. Forced to go on the run, Taeju must rescue his wife on his own. To save her, he pushes himself to the absolute limit.",
       "first_air_date": "2026-07-04"
@@ -1433,16 +1443,6 @@
       "poster_path": "s9kyXsqJ8hEv1S3WNx8dySDWQAU.jpg",
       "description": "Stockholm 1997. Eco-criminal Joachim Posener, recently released from prison, dreams of building an empire. He wants to show his parents and his seven-year-old son that he can achieve anything. Joachim joins forces with his boundless cousin, Thomas Jisander. They call themselves the Golden Boys and party hard, dream big and plan an extremely illegal business scheme. The series is inspired by the Trustor affair.",
       "first_air_date": "2026-05-01"
-    },
-    {
-      "slug": "30vhm-man-on-fire",
-      "imdb_id": "tt27331527",
-      "title": "Man on Fire",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "9cZzmT8rhBXbZ1QFBPs3ggABYB3.jpg",
-      "description": "Haunted by his past and hunted by his enemies, a Special Forces veteran fights to keep a teenage girl alive on the deadly streets of Rio de Janeiro.",
-      "first_air_date": "2026-04-30"
     }
   ]
 }
