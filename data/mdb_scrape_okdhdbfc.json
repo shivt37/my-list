@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789225667965,
+  "scraped_at": 1789271706052,
   "items": [
+    {
+      "slug": "457b8-welcome-to-the-family-the-murder-of-dan-markel",
+      "imdb_id": "tt44842745",
+      "title": "Welcome to the Family: The Murder of Dan Markel",
+      "year": 2026,
+      "score": null,
+      "poster_path": "2Do6U54cg31Y9DWWmjT69O6lFow.jpg",
+      "description": "How far would you go for your family? The brutal murder of a prominent law professor in Tallahassee, Florida reveals the dark secrets of a wealthy family. A series of larger-than-life suspects leads to a mind-bending story of a murder-for-hire-plot, a messy custody battle, ex-lovers – and family dentistry. With exclusive access to those at the center of this extraordinary story, many of whom have never spoken before, this is the definitive telling of a case which took 11 years to solve.",
+      "first_air_date": "2026-09-01"
+    },
     {
       "slug": "3ylnw-mousetrap",
       "imdb_id": "tt36996011",
@@ -29,7 +39,7 @@
       "imdb_id": "tt37884717",
       "title": "The Early Spring",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "lGFngmJWMO4HTPcI0sUGKBAFqMe.jpg",
       "description": "New to Beijing, Shang Zhitao crosses paths with Luan Nian, a true creative genius. Bold and open-hearted, she grows stronger step by step and gradually breaks through the defenses around Luan's guarded heart. Drawn to each other, they find themselves caught in an intense, on-again, off-again relationship in the urban jungle. To love is to summon all your courage and leave no regrets, to heal each other, and to grow together. But when love and her career pull her in different directions, she puts her career first. When she has come into her own and he has learned to soften his sharp edges, they finally stand as equals, ready to write a new ending together...",
       "first_air_date": "2026-08-26"
@@ -329,7 +339,7 @@
       "imdb_id": "tt39390494",
       "title": "My Daughter's Father",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "wUUS9lwm82R8nlYMIaijt8dQbIz.jpg",
       "description": "Follows Julieta who, during her graduation party suffers a life-threatening health crisis that forces her mother, Maca, to face secrets from the past.",
       "first_air_date": "2026-07-22"
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "9cZzmT8rhBXbZ1QFBPs3ggABYB3.jpg",
       "description": "Haunted by his past and hunted by his enemies, a Special Forces veteran fights to keep a teenage girl alive on the deadly streets of Rio de Janeiro.",
-      "first_air_date": "2026-04-30"
-    },
-    {
-      "slug": "440o2-prisoner",
-      "imdb_id": "tt34273502",
-      "title": "Prisoner",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "zDjl6FOCuCy8gyug54VDlLgxa1l.jpg",
-      "description": "A young and ambitious prison officer finds herself in the middle of a battle for the criminal underworld as crime lords try to evade justice. But in order to do that, she will have to learn quickly to put her faith in one of the very men she wants to put behind bars.",
       "first_air_date": "2026-04-30"
     }
   ]
