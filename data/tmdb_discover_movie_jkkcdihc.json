@@ -2,51 +2,9 @@
   "catalog_id": "tmdb_discover_movie_jkkcdihc",
   "name": "DC - Movies",
   "type": "movie",
-  "scraped_at": 1789273809351,
-  "sourceHash": "8267029a680b71d8",
+  "scraped_at": 1789274745247,
+  "sourceHash": "6aef1e27cdac3feb",
   "items": [
-    {
-      "adult": false,
-      "backdrop_path": "/4uaHnYDDpUTj0nCg6YqBKab50YW.jpg",
-      "genre_ids": [
-        9648,
-        18,
-        80
-      ],
-      "id": 806704,
-      "title": "The Batman: Part II",
-      "original_language": "en",
-      "original_title": "The Batman: Part II",
-      "overview": "Sequel to the 2022 film The Batman.",
-      "popularity": 4.8126,
-      "poster_path": "/r5fl4aMsmTjgc8DdDqQaM84roWp.jpg",
-      "release_date": "2028-02-17",
-      "softcore": false,
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/lX2TpAZxdIus6cnMCDBOrs96NBY.jpg",
-      "genre_ids": [
-        28,
-        878,
-        12
-      ],
-      "id": 1523140,
-      "title": "Man of Tomorrow",
-      "original_language": "en",
-      "original_title": "Man of Tomorrow",
-      "overview": "Superman and Lex Luthor find themselves forced to work together—to a certain degree—against a much, much bigger threat when Brainiac sets his sights on Earth.",
-      "popularity": 5.1755,
-      "poster_path": "/tYLgfKk3cEk7LskgxWyW37Nty01.jpg",
-      "release_date": "2027-07-07",
-      "softcore": false,
-      "video": false,
-      "vote_average": 0,
-      "vote_count": 0
-    },
     {
       "adult": false,
       "backdrop_path": "/1A7s8zG4PF6YoJrncrTO6N4r0Sx.jpg",
