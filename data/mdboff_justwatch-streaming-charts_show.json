@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1789223986435,
+  "scraped_at": 1789268559280,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -973,14 +973,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/pb9oYHHNzauiCQZT03MpDAg46GI.jpg"
     },
     {
-      "imdb_id": "tt30150289",
-      "type": "series",
-      "title": "The Last Anniversary",
-      "year": 2025,
-      "release_date": "2025-03-27",
-      "poster": "https://image.tmdb.org/t/p/w200/rNKFzacuEpMaQkuvFgP2SKmimU9.jpg"
-    },
-    {
       "imdb_id": "tt3960394",
       "type": "series",
       "title": "Interview with the Vampire",
@@ -1082,7 +1074,7 @@
       "title": "Crew Girl",
       "year": 2026,
       "release_date": "2026-09-10",
-      "poster": "https://image.tmdb.org/t/p/w200/uzwf0Xn1XNmB5IHYBEjYEnVbGuO.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/jkPZW1iHNvlI6077NxSxwITa1tj.jpg"
     },
     {
       "imdb_id": "tt32596156",
@@ -1147,6 +1139,14 @@
       "year": 2008,
       "release_date": "2008-09-09",
       "poster": "https://image.tmdb.org/t/p/w200/sY9hg5dLJ93RJOyKEiu1nAtBRND.jpg"
+    },
+    {
+      "imdb_id": "tt30150289",
+      "type": "series",
+      "title": "The Last Anniversary",
+      "year": 2025,
+      "release_date": "2025-03-27",
+      "poster": "https://image.tmdb.org/t/p/w200/rNKFzacuEpMaQkuvFgP2SKmimU9.jpg"
     },
     {
       "imdb_id": "tt3006802",
