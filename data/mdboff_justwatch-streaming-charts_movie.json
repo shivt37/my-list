@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1789312800486,
+  "scraped_at": 1789355797390,
   "items": [
     {
       "imdb_id": "tt0120791",
@@ -58,7 +58,7 @@
       "title": "The Mandalorian and Grogu",
       "year": 2026,
       "release_date": "2026-05-20",
-      "poster": "https://image.tmdb.org/t/p/w200/cE9LAdexd9ju0yIkmCJBOKZg9JR.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg"
     },
     {
       "imdb_id": "tt0475276",
@@ -789,14 +789,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
     },
     {
-      "imdb_id": "tt1855199",
-      "type": "movie",
-      "title": "End of Watch",
-      "year": 2012,
-      "release_date": "2012-09-20",
-      "poster": "https://image.tmdb.org/t/p/w200/pDeVKQICkcdwwjHxGj0MeS14YJ6.jpg"
-    },
-    {
       "imdb_id": "tt0111257",
       "type": "movie",
       "title": "Speed",
@@ -818,7 +810,7 @@
       "title": "Jurassic Park",
       "year": 1993,
       "release_date": "1993-06-11",
-      "poster": "https://image.tmdb.org/t/p/w200/63viWuPfYQjRYLSZSZNq7dglJP5.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/d9mtMGQDLANKieb9PbD3yK7xxzo.jpg"
     },
     {
       "imdb_id": "tt33070884",
@@ -842,7 +834,7 @@
       "title": "Insidious",
       "year": 2011,
       "release_date": "2011-03-31",
-      "poster": "https://image.tmdb.org/t/p/w200/1egpmVXuXed58TH2UOnX1nATTrf.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/8su4HXNbbOHBDT3dIc9aWlL5aZ6.jpg"
     },
     {
       "imdb_id": "tt1001520",
@@ -882,7 +874,7 @@
       "title": "The Substance",
       "year": 2024,
       "release_date": "2024-09-07",
-      "poster": "https://image.tmdb.org/t/p/w200/vhbQQdPnfLUxhdXhREITF5cYppT.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/lqoMzCcZYEFK729d6qzt349fB4o.jpg"
     },
     {
       "imdb_id": "tt0089218",
@@ -941,12 +933,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/j7umuMiLCHvWT7wYhFKJOTFSokF.jpg"
     },
     {
-      "imdb_id": "tt8488126",
+      "imdb_id": "tt1855199",
       "type": "movie",
-      "title": "The Inventor: Out for Blood in Silicon Valley",
-      "year": 2019,
-      "release_date": "2019-01-24",
-      "poster": "https://image.tmdb.org/t/p/w200/u21ImPnHHX2SFgkdHIjwlpEwRux.jpg"
+      "title": "End of Watch",
+      "year": 2012,
+      "release_date": "2012-09-20",
+      "poster": "https://image.tmdb.org/t/p/w200/pDeVKQICkcdwwjHxGj0MeS14YJ6.jpg"
     },
     {
       "imdb_id": "tt0068646",
@@ -1019,6 +1011,14 @@
       "year": 2026,
       "release_date": "2026-04-24",
       "poster": "https://image.tmdb.org/t/p/w200/c9h2p2qBSb5ThgBtNPWZNQDqvEX.jpg"
+    },
+    {
+      "imdb_id": "tt0114681",
+      "type": "movie",
+      "title": "To Die For",
+      "year": 1995,
+      "release_date": "1995-09-22",
+      "poster": "https://image.tmdb.org/t/p/w200/ji0F2HvO58iIrNfbo41lrnYybed.jpg"
     },
     {
       "imdb_id": "tt0105481",
@@ -1133,14 +1133,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/ts996lKsxvjkO2yiYG0ht4qAicO.jpg"
     },
     {
-      "imdb_id": "tt13429362",
-      "type": "movie",
-      "title": "In the Earth",
-      "year": 2021,
-      "release_date": "2021-04-16",
-      "poster": "https://image.tmdb.org/t/p/w200/a2e9GLb14xX1DFv80nsioci5Zld.jpg"
-    },
-    {
       "imdb_id": "tt32252801",
       "type": "movie",
       "title": "Blue Heron",
@@ -1171,6 +1163,14 @@
       "year": 1993,
       "release_date": "1993-12-25",
       "poster": "https://image.tmdb.org/t/p/w200/wGFCvylul8iEQhJOKfwZGGvXMzA.jpg"
+    },
+    {
+      "imdb_id": "tt4627382",
+      "type": "movie",
+      "title": "Roofman",
+      "year": 2025,
+      "release_date": "2025-10-06",
+      "poster": "https://image.tmdb.org/t/p/w200/wXDFtcnYtevleGzCmAD2ReQnJ4l.jpg"
     }
   ]
 }
