@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789358523777,
+  "scraped_at": 1789408212887,
   "items": [
+    {
+      "slug": "3dx0s-the-revolutionaries",
+      "imdb_id": "tt31924802",
+      "title": "The Revolutionaries",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7oikzZ6QgHsTjZ2JqkmKH1NRS9A.jpg",
+      "description": "The Revolutionaries narrates the inspiring tale of brave young Indian freedom fighters who fought for ending British Raj with their unwavering spirit and ideology.",
+      "first_air_date": "2026-09-11"
+    },
     {
       "slug": "44np7-last-seen",
       "imdb_id": "tt6037988",
@@ -470,7 +480,7 @@
       "title": "Lucky",
       "year": 2026,
       "score": 6,
-      "poster_path": "xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
+      "poster_path": "qdobPy3No4Fi3dCzcIDP9n8AjcO.jpg",
       "description": "When a multi-million-dollar heist goes sideways, con artist Lucky is forced to go on the run. Pursued by both the FBI and a ruthless crime boss, Lucky must fight for her life—and a way out.",
       "first_air_date": "2026-07-14"
     },
@@ -1432,16 +1442,6 @@
       "score": null,
       "poster_path": "g6NaDwfnNctv1JDjhWIQzOnnPgV.jpg",
       "description": "A determined immigrant builds his way up from zero in Quebec's competitive 1990s business landscape, navigating challenges and opportunities while creating a successful enterprise.",
-      "first_air_date": "2026-05-01"
-    },
-    {
-      "slug": "44j2c-golden-boys",
-      "imdb_id": "tt36854075",
-      "title": "Golden Boys",
-      "year": 2026,
-      "score": null,
-      "poster_path": "s9kyXsqJ8hEv1S3WNx8dySDWQAU.jpg",
-      "description": "Stockholm 1997. Eco-criminal Joachim Posener, recently released from prison, dreams of building an empire. He wants to show his parents and his seven-year-old son that he can achieve anything. Joachim joins forces with his boundless cousin, Thomas Jisander. They call themselves the Golden Boys and party hard, dream big and plan an extremely illegal business scheme. The series is inspired by the Trustor affair.",
       "first_air_date": "2026-05-01"
     }
   ]
