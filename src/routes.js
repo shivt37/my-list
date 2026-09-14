@@ -797,7 +797,10 @@ const PREVIEW_PAGE_SIZE = 20;
 function sortPreviewItems(items, sortKey, mediaType) {
   const dateField = mediaType === "series" ? "first_air_date" : "release_date";
   const hasDate = (i) => Boolean(i[dateField]);
-  if (mediaType !== "series") items = items.filter(hasDate);
+  // Owner request 2026-09-14: the preview NEVER drops undated titles for
+  // either type - they sink to the end, always visible with no year. The
+  // final file drops them (see sortItems in scripts/tmdb.mjs), so preview
+  // is deliberately a superset of the saved catalog.
   const cmp = {
     release_asc: (a, b) => String(a[dateField] || "9999").localeCompare(String(b[dateField] || "9999")),
     release_desc: (a, b) => String(b[dateField] || "0000").localeCompare(String(a[dateField] || "0000")),
@@ -943,8 +946,9 @@ export async function handleTmdbPreviewDiscover(env, request) {
       items = items.filter((p) => !exItems.has(p.id));
     }
 
-    // sortPreviewItems filters undated movies (returns a new array) -
-    // capture the result, don't rely on in-place sorting.
+    // sortPreviewItems sinks undated titles last without dropping them
+    // (preview is a superset of the file) - capture the result, don't
+    // rely on in-place sorting.
     items = sortPreviewItems(items, entry.sort, mediaType);
     const truncated = totalPages > PREVIEW_PAGES;
     const metas = items.slice(0, PREVIEW_PAGES * PREVIEW_PAGE_SIZE).map((item) => ({

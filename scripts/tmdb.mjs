@@ -196,14 +196,13 @@ async function collectionPartsStrict(collectionIds) {
 }
 
 // Client-side sort matching the preview's sortPreviewItems.
-// Owner request 2026-08-25: MOVIES without any release date are dropped
-// entirely instead of sinking to the end (all sort modes). SERIES keep the
-// old sink behavior - undated entries are unreleased future titles the
-// owner still wants listed last.
+// Owner request 2026-09-14: BOTH movies and series without any release date
+// are dropped from the final file entirely instead of sinking to the end
+// (all sort modes). The preview keeps them sunk last - never dropped.
 export function sortItems(items, sortKey, mediaType) {
   const dateField = mediaType === "series" ? "first_air_date" : "release_date";
   const hasDate = (i) => Boolean(i[dateField] || i.release_date || i.first_air_date);
-  if (mediaType !== "series") items = items.filter(hasDate);
+  items = items.filter(hasDate);
   const cmp = {
     release_asc: (a, b) => String(a[dateField] || "9999").localeCompare(String(b[dateField] || "9999")),
     release_desc: (a, b) => String(b[dateField] || "0000").localeCompare(String(a[dateField] || "0000")),
@@ -348,7 +347,7 @@ export async function buildDiscoverItems(list, mediaType) {
   return finalize(dedup, list, mediaType, pagesFetched, warning);
 }
 
-// Shared tail: sort (drops undated movies per owner rule), cap, series
+// Shared tail: sort (drops undated movies AND series per owner rule), cap, series
 // aliasing. Both the shortcut and loop paths return this shape.
 function finalize(dedup, list, mediaType, pagesFetched, warning) {
   let items = [...dedup.values()];
