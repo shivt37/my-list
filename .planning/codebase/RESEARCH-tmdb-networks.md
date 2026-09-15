@@ -30,11 +30,13 @@ Status: researched + code-audited, parked. Owner to green-light before any code 
 ### P2. Include: pure native fit
 Fold `with_networks` into `andQs` for AND-mode, fan out as own OR-source for OR-mode — exact companies/keywords pattern in `buildDiscoverSources` (tmdb.mjs:87-142, routes.js mirror). Mode: new 5th `includeModes.network`.
 
-### P3. Picker (no search/all endpoints exist at all)
-- (a) **CHOSEN: curated static list `TMDB_NETWORKS` (~30)** rendered as the existing static `<select>` adder (same component as Genres / Release Type) — zero new endpoints for the 95% path. Seed set (verify every id via /3/network/{id} at build time, don't trust memory): Netflix 213, HBO 49, AMC 174, FX 88, BBC One 354, BBC America 340, Hulu 453, Prime Video 1024, Disney+ 2709, Max (HBO Max) 3186, Apple TV 2552, CBS 16, NBC 221, ABC 2791, The CW 71, Fox 1891, Starz 384, Showtime 310, Syfy 127, Adult Swim 315, Cartoon Network 99?, Nickelodeon 421?, PBS 142?, CNN 211?, Netflix Kids?, Peacock 3357?, Paramount+ 4335?, Roku Channel?, Crackle?, Channel 4 45?, ITV 1094?, Sony SAB 3847? — ids marked "?" = must be verified against /3/network/{id} before shipping.
-- (b) **CHOSEN companion: id-input + resolve** — for anything not curated: new worker proxy `GET /tmdb/network/{id}` -> forwards `/3/network/{id}`, returns {id, name, logo}; UI shows resolved name before accepting the chip. (Client can't call TMDB directly: token is worker-secret.)
-- (c) scrape TMDB web UI's bundled list — REJECTED (brittle + ToS grey).
-- (d) reuse /search/company ids — REJECTED (company ids are a different space than network ids).
+### P3. Picker — REVISED 2026-09-14: network SEARCH is possible (web route, not v3 API)
+- **DISCOVERY: `https://www.themoviedb.org/search/remote/tv_network?query=<q>`** — the route powering TMDB's own discover-page Networks typeahead (found embedded in the site JS: `/search/remote/tv_network`). Public GET, no auth, no api_key; returns `{"total_results":N,"results":[{id, logo_path, name, origin_country}]}` — the exact shape our `/ajax/{keyword,company,collection}`-style pickers already speak. Verified live 2026-09-14: bbc->64 (incl. BBC Two 332, CBBC 15), netflix->213, crunchy->1112 (Crunchyroll IS a network after all), peacock->3353, colors->524 [IN].
+  - Caveats: undocumented site route (can change anytime) -> (1) call it SERVER-side via new worker proxy `GET /tmdb/search-network?query=` (UA/Referer set there, CORS-free, cache 10min KV like the official-catalog cache pattern), (2) graceful fallback = curated static list below, (3) ultimate escape hatch = id-input.
+- (a) **CHOSEN: search-first** — `/tmdb/search-network` proxy -> inline typeahead identical UX to Keywords/Companies/Part of Collection; logo_path renders as chip/thumb via image.tmdb.org base (attribution stays: data is TMDB's).
+- (b) **Fallback offline seed (curated 36, LIVE-VERIFIED ids)** used when search route fails or returns empty: US broadcast ABC 2, CBS 16, NBC 6, FOX 19, The CW 71, PBS 14; US cable FX 88, AMC 174, Adult Swim 80, Cartoon Network 56, Nickelodeon 13, Comedy Central 47, TBS 68, USA Network 30, Syfy 77, History 65, National Geographic 43, Disney Channel 54, Discovery 64, Hallmark 384, Star One 540, StarPlus 159, Sony SAB 1708, Zee TV 526; streaming HBO 49, HBO Max 3186, Showtime 67, Paramount+ w/ Showtime 6631, STARZ 318, Netflix 213, Prime Video 1024, Hulu 453, Disney+ 2739, Paramount+ 4330, Apple TV 2552, Peacock 3353, Disney+ Hotstar 3919; UK BBC One 4, BBC Two 332, ITV1 9, Channel 4 26
+- (c) **Escape hatch (keep): id-input + resolve** via proxy `GET /tmdb/network/{id}` -> `/3/network/{id}` (verified: 526->Zee TV etc), shows name+logo before accepting chip.
+- (d) Scrape/reuse approaches rejected: /search/company ids = different space; note provider ids (8=Netflix) vs network ids (213=Netflix) are separate namespaces — site search returns the correct (network) ones; probe confirmed 283 was provider-Crunchyroll vs 1112 network-Crunchyroll.
 
 ### P4. Movie lists must never keep network values
 Movie endpoint ACCEPTS-AND-IGNORES the param (probe E) — a stale value silently poisons nothing on TMDB but breaks preview/file parity assumptions and lies in the config. Enforce B4-mirror everywhere:
@@ -69,8 +71,8 @@ Excluded-network veto sets scan with the SAME query flags as base; undated rows 
 | scripts/tmdb.mjs | buildDiscoverSources 87-142 | network AND-fold fragment + OR-source fan-out (series-only) |
 | scripts/tmdb.mjs | buildDiscoverItems 220-349 | veto scan (P1c) feeding passesFilters; new helper near collectionIdSet |
 | src/routes.js | handleTmdbPreviewDiscover 814-957 | mirror fan-out + veto scan |
-| src/routes.js + index.js | ~758-778 / ~105-114 | GET /tmdb/network/{id} proxy (P3b) |
-| src/configure.js | ~1644-1697 | TMDB_NETWORKS static table (verified ids) + FIELD_KEYS/NAME_KEYS/DIMS (seriesOnly flag) + render filter at 1741 |
+| src/routes.js + index.js | ~758-778 / ~105-114 | `GET /tmdb/search-network?query=` proxy (site route, 10min KV cache) + `GET /tmdb/network/{id}` detail proxy (P3) |
+| src/configure.js | ~1644-1697 | TMDB_NETWORKS fallback seed (36 verified) + FIELD_KEYS/NAME_KEYS/DIMS (seriesOnly flag, searchKind 'network') + render filter at 1741 |
 | src/configure.js | 1701-1706, 1895-1901, 1720, 1745-1748, 1919-1923, 2373-2380 | empty-list fields, switch-clear, 5-kind pill loop + copy, footgun check |
 | src/configure.js | new ~60 lines | id-input adder row for non-curated networks (uses P3b proxy) |
 | testing | verify-tmdb.mjs + e2e | normalize/hash/source-plan units + live preview-vs-file count check |
