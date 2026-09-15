@@ -337,6 +337,11 @@ export function normalizeTmdbList(raw) {
   const isSeries = mediaType === "series";
   const effIncCl = isSeries ? [] : incCl;
   const effExcCl = isSeries ? [] : excCl;
+  // Networks are the INVERSE: series-only. /discover/movie silently accepts
+  // and IGNORES with_networks (live-verified 2026-09-14), so a stale value
+  // on a movie list would be invisible but lying - strip at the boundary.
+  const incNet = isSeries ? numArr(raw.includeNetworks) : [];
+  const excNet = isSeries ? numArr(raw.excludeNetworks) : [];
   return {
     discoverListId: raw.discoverListId,
     name: String(raw.name || "").trim().slice(0, 200) || "Untitled",
@@ -348,6 +353,7 @@ export function normalizeTmdbList(raw) {
       keyword: mode(modesRaw.keyword),
       company: mode(modesRaw.company),
       collection: mode(modesRaw.collection),
+      network: mode(modesRaw.network),
     },
     includeGenres: numArr(raw.includeGenres),
     excludeGenres: numArr(raw.excludeGenres),
@@ -366,6 +372,10 @@ export function normalizeTmdbList(raw) {
     excludeCollectionNames: nameArr(raw.excludeCollectionNames, effExcCl.length),
     excludeItems: excIt,
     excludeItemNames: nameArr(raw.excludeItemNames, excIt.length),
+    includeNetworks: incNet,
+    includeNetworkNames: nameArr(raw.includeNetworkNames, incNet.length),
+    excludeNetworks: excNet,
+    excludeNetworkNames: nameArr(raw.excludeNetworkNames, excNet.length),
     // B7: optional TMDB vote-count floor - only meaningful with the rating
     // sort, but stored per-list so it survives sort round-trips.
     minVoteCount: Number.isInteger(raw.minVoteCount) && raw.minVoteCount > 0 ? raw.minVoteCount : null,
@@ -401,6 +411,7 @@ export function tmdbContentHash(list) {
         m.keyword === "or" ? "or" : "and",
         m.company === "or" ? "or" : "and",
         m.collection === "or" ? "or" : "and",
+        m.network === "or" ? "or" : "and",
         [...(list.includeGenres || [])].sort(),
         [...(list.excludeGenres || [])].sort(),
         [...(list.includeKeywords || [])].sort(),
@@ -411,6 +422,8 @@ export function tmdbContentHash(list) {
         [...(list.includeCollections || [])].sort(),
         [...(list.excludeCollections || [])].sort(),
         [...(list.excludeItems || [])].sort(),
+        [...(list.includeNetworks || [])].sort(),
+        [...(list.excludeNetworks || [])].sort(),
         list.minVoteCount ?? null,
       ])
     )

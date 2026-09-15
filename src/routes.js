@@ -782,6 +782,57 @@ export async function handleTmdbSearch(env, kind, query, type) {
   return json({ results });
 }
 
+// ── Network picker helpers (TMDB has no /search/network API endpoint) ──
+// Search: proxies TMDB's own website typeahead route (the one powering
+// themoviedb.org's discover-page Networks box; live-verified 2026-09-14,
+// returns {id,name,logo_path,origin_country}). Undocumented web route =>
+// 10-min KV cache + UI fallback seed + /tmdb/network/{id} escape hatch.
+const NETWORK_SEARCH_CACHE_MS = 10 * 60 * 1000;
+
+export async function handleTmdbNetworkSearch(env, url) {
+  const q = String(url.searchParams.get("query") || "").trim();
+  if (!q) return json({ results: [] });
+  const cacheKey = "cache:network-search:" + q.toLowerCase();
+  try {
+    const cached = await env.STORE.get(cacheKey, "json");
+    if (cached && Array.isArray(cached.results) && Date.now() - cached.fetched_at < NETWORK_SEARCH_CACHE_MS) {
+      return json({ results: cached.results });
+    }
+  } catch { /* cache miss falls through to live */ }
+  let data = null;
+  try {
+    const res = await fetch(`https://www.themoviedb.org/search/remote/tv_network?query=${encodeURIComponent(q)}`, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (my-list configure page picker)",
+        Accept: "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (res.ok) data = await res.json();
+  } catch { /* fall through to error - UI uses its seed list */ }
+  if (!data || !Array.isArray(data.results)) {
+    return json({ error: "TMDB network search route unavailable - pick from the built-in list or enter a network id." }, 502);
+  }
+  const results = data.results.slice(0, TMDB_SEARCH_MAX).map((r) => ({
+    id: r.id,
+    name: r.name,
+    poster: r.logo_path ? `https://image.tmdb.org/t/p/w92${r.logo_path}` : null,
+  }));
+  // Best-effort cache - a KV hiccup must not fail the request.
+  try { await env.STORE.put(cacheKey, JSON.stringify({ fetched_at: Date.now(), results })); } catch { }
+  return json({ results });
+}
+
+export async function handleTmdbNetworkDetail(env, networkId) {
+  const guard = tmdbTokenOrError(env);
+  if (guard) return guard;
+  const data = await tmdbApi(env, `/network/${networkId}`);
+  if (data.error) return json({ error: data.error }, 502);
+  if (!data.id) return json({ error: "Network not found on TMDB." }, 404);
+  return json({ id: data.id, name: data.name, logo: data.logo_path ? `https://image.tmdb.org/t/p/w92${data.logo_path}` : null });
+}
+
 // Port of the old tmdb worker's buildDiscoverSources/fetch logic, live
 // variant: same AND/OR fragment plan, collection post-filter, capped at
 // 25 pages × 20 = up to 500 items (old worker's MAX_PREVIEW_PAGES). Body is
@@ -846,12 +897,14 @@ export async function handleTmdbPreviewDiscover(env, request) {
     if (isAnd("genre") && entry.includeGenres.length > 0) andQs += `&with_genres=${encodeURIComponent(entry.includeGenres.join("|"))}`;
     if (isAnd("keyword") && entry.includeKeywords.length > 0) andQs += `&with_keywords=${encodeURIComponent(entry.includeKeywords.join("|"))}`;
     if (isAnd("company") && entry.includeCompanies.length > 0) andQs += `&with_companies=${encodeURIComponent(entry.includeCompanies.join("|"))}`;
+    if (isAnd("network") && entry.includeNetworks.length > 0) andQs += `&with_networks=${encodeURIComponent(entry.includeNetworks.join("|"))}`;
     andQs += releaseTypeQs;
 
     const sources = [];
     if (!isAnd("genre") && entry.includeGenres.length > 0) sources.push(`&with_genres=${encodeURIComponent(entry.includeGenres.join("|"))}${andQs}`);
     if (!isAnd("keyword") && entry.includeKeywords.length > 0) sources.push(`&with_keywords=${encodeURIComponent(entry.includeKeywords.join("|"))}${andQs}`);
     if (!isAnd("company") && entry.includeCompanies.length > 0) sources.push(`&with_companies=${encodeURIComponent(entry.includeCompanies.join("|"))}${andQs}`);
+    if (!isAnd("network") && entry.includeNetworks.length > 0) sources.push(`&with_networks=${encodeURIComponent(entry.includeNetworks.join("|"))}${andQs}`);
     const collectionSource = mediaType !== "series" && !isAnd("collection") && entry.includeCollections.length > 0;
     const hasDiscover = sources.length > 0;
     if (andQs && collectionSource && !hasDiscover) sources.push(andQs);
@@ -944,6 +997,26 @@ export async function handleTmdbPreviewDiscover(env, request) {
     if (entry.excludeItems && entry.excludeItems.length > 0) {
       const exItems = new Set(entry.excludeItems);
       items = items.filter((p) => !exItems.has(p.id));
+    }
+    // Exclude networks (series-only): no without_networks param exists, so
+    // the same base query is re-run with the excluded ids piped in - the
+    // hits ARE the veto set (mirror of scripts/tmdb.mjs P1c).
+    if (mediaType === "series" && entry.excludeNetworks && entry.excludeNetworks.length > 0) {
+      const netQs = `&with_networks=${encodeURIComponent([...new Set(entry.excludeNetworks)].join("|"))}`;
+      const baseQsList = sources.length > 0 ? sources : [andQs];
+      const veto = new Set();
+      for (const qs of baseQsList) {
+        let np = 1;
+        let nTotal = 1;
+        do {
+          const data = await tmdbApi(env, `${endpoint}?${(qs + netQs).replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${np}${excludeQs}${voteFloorQs}`);
+          if (data.error) return json(data, 502);
+          for (const item of data.results || []) veto.add(item.id);
+          nTotal = Number.isFinite(data.total_pages) ? data.total_pages : np;
+          np++;
+        } while (np <= nTotal && np <= PREVIEW_PAGES);
+      }
+      items = items.filter((p) => !veto.has(p.id));
     }
 
     // sortPreviewItems sinks undated titles last without dropping them

@@ -1675,6 +1675,7 @@ const TMDB_FIELD_KEYS = {
   company:     { include: 'includeCompanies', exclude: 'excludeCompanies' },
   releaseType: { include: 'includeReleaseTypes', exclude: null },
   collection:  { include: 'includeCollections', exclude: 'excludeCollections' },
+  network:     { include: 'includeNetworks', exclude: 'excludeNetworks' },
 };
 const TMDB_DIMS = [
   { kind: 'genre', label: 'Genres', hasExclude: true, isStatic: true, searchKind: null, movieOnly: false },
@@ -1682,14 +1683,27 @@ const TMDB_DIMS = [
   { kind: 'company', label: 'Companies', hasExclude: true, isStatic: false, searchKind: 'company', movieOnly: false },
   { kind: 'releaseType', label: 'Release Type', hasExclude: false, isStatic: true, searchKind: null, movieOnly: true },
   { kind: 'collection', label: 'Part of Collection', hasExclude: true, isStatic: false, searchKind: 'collection', movieOnly: true },
+  { kind: 'network', label: 'Networks', hasExclude: true, isStatic: false, searchKind: 'network', movieOnly: false, seriesOnly: true },
 ];
-// Names for the dims that carry them (keyword/company/collection). Genre and
+// Names for the dims that carry them (keyword/company/collection/network). Genre and
 // releaseType names resolve from their static option lists instead.
 const TMDB_NAME_KEYS = {
   keyword:   { include: 'includeKeywordNames', exclude: 'excludeKeywordNames' },
   company:   { include: 'includeCompanyNames', exclude: 'excludeCompanyNames' },
   collection:{ include: 'includeCollectionNames', exclude: 'excludeCollectionNames' },
+  network:   { include: 'includeNetworkNames', exclude: 'excludeNetworkNames' },
 };
+// Offline seed for the Networks picker: TMDB has no /search/network API and
+// the worker proxies the site's undocumented typeahead route. If that fails,
+// inline search matches this curated list locally. All ids live-verified
+// 2026-09-14 via /3/network/{id} and show-detail networks.
+const TMDB_NETWORKS_FALLBACK = [
+  { id: 2, name: 'ABC' }, { id: 16, name: 'CBS' }, { id: 6, name: 'NBC' }, { id: 19, name: 'FOX' }, { id: 71, name: 'The CW' }, { id: 14, name: 'PBS' },
+  { id: 88, name: 'FX' }, { id: 174, name: 'AMC' }, { id: 80, name: 'Adult Swim' }, { id: 56, name: 'Cartoon Network' }, { id: 13, name: 'Nickelodeon' }, { id: 47, name: 'Comedy Central' }, { id: 68, name: 'TBS' }, { id: 30, name: 'USA Network' }, { id: 77, name: 'Syfy' }, { id: 65, name: 'History' }, { id: 43, name: 'National Geographic' }, { id: 54, name: 'Disney Channel' }, { id: 64, name: 'Discovery' }, { id: 384, name: 'Hallmark Channel' },
+  { id: 49, name: 'HBO' }, { id: 3186, name: 'HBO Max' }, { id: 67, name: 'Showtime' }, { id: 6631, name: 'Paramount+ with Showtime' }, { id: 318, name: 'STARZ' }, { id: 213, name: 'Netflix' }, { id: 1024, name: 'Prime Video' }, { id: 453, name: 'Hulu' }, { id: 2739, name: 'Disney+' }, { id: 4330, name: 'Paramount+' }, { id: 2552, name: 'Apple TV' }, { id: 3353, name: 'Peacock' }, { id: 1112, name: 'Crunchyroll' },
+  { id: 4, name: 'BBC One' }, { id: 332, name: 'BBC Two' }, { id: 9, name: 'ITV1' }, { id: 26, name: 'Channel 4' },
+  { id: 540, name: 'Star One' }, { id: 159, name: 'StarPlus' }, { id: 1708, name: 'Sony SAB' }, { id: 526, name: 'Zee TV' }, { id: 3919, name: 'Disney+ Hotstar' }, { id: 524, name: 'Colors' },
+];
 function tmdbStaticName(kind, id, mediaType) {
   const opts = kind === 'releaseType' ? TMDB_RELEASE_TYPES : tmdbGenresFor(mediaType);
   const opt = opts.find((o) => o.id === id);
@@ -1701,13 +1715,14 @@ let tmdbSearchTimer = null;
 function tmdbEmptyList(mediaType) {
   return {
     discoverListId: '', name: '', mediaType: mediaType || 'movie', sort: 'release_asc', enabled: true,
-    includeModes: { genre: 'and', keyword: 'and', company: 'and', collection: 'and' },
+    includeModes: { genre: 'and', keyword: 'and', company: 'and', collection: 'and', network: 'and' },
     includeGenres: [], excludeGenres: [],
     includeKeywords: [], includeKeywordNames: [], excludeKeywords: [], excludeKeywordNames: [],
     includeCompanies: [], includeCompanyNames: [], excludeCompanies: [], excludeCompanyNames: [],
     includeReleaseTypes: [],
     includeCollections: [], includeCollectionNames: [], excludeCollections: [], excludeCollectionNames: [],
     excludeItems: [], excludeItemNames: [],
+    includeNetworks: [], includeNetworkNames: [], excludeNetworks: [], excludeNetworkNames: [],
   };
 }
 
@@ -1717,7 +1732,7 @@ function tmdbEmptyList(mediaType) {
 // pill, inline search rows, dropdown-add for static dims, eye-icon preview
 // with grid/list toggle + TMDB links + caching.
 
-const TMDB_MODE_KINDS = ['genre', 'keyword', 'company', 'collection'];
+const TMDB_MODE_KINDS = ['genre', 'keyword', 'company', 'collection', 'network'];
 const tmdbOpenSections = new Set();
 let tmdbAdding = null; // { i, kind, side }
 let tmdbSearchResultsHtml = null;
@@ -1738,14 +1753,14 @@ function renderTmdb() {
   const host = document.getElementById('tabHost');
   const lists = state.tmdb.lists;
   const cards = lists.map((l, i) => {
-    const dims = TMDB_DIMS.filter((d) => !(d.movieOnly && l.mediaType === 'series'))
+    const dims = TMDB_DIMS.filter((d) => !(d.movieOnly && l.mediaType === 'series') && !(d.seriesOnly && l.mediaType === 'movie'))
       .map((dim) => tmdbDimSection(i, l, dim)).join('');
     const summary = tmdbModeSummary(l);
     const countLine = typeof l.count === 'number' ? l.count + (l.previewTruncated ? '+' : '') + ' results' : '';
     const pillHint = summary === 'mixed'
-      ? "Genres, Keywords, Companies, and Part of Collection are not all set the same way - use each dimension's own AND/OR tag to adjust individually, or click AND/OR here to set all four at once."
+      ? "Genres, Keywords, Companies, Part of Collection, and Networks are not all set the same way - use each dimension's own AND/OR tag to adjust individually, or click AND/OR here to set them all at once."
       : summary === 'or'
-        ? 'Each genre, keyword, company, release type, and collection is an independent source; results are unioned.'
+        ? 'Each genre, keyword, company, release type, collection, and network is an independent source; results are unioned.'
         : "All include dimensions are AND'd into one TMDB query (often returns few or no results).";
     return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="tcard-' + i + '">' +
       '<div class="card-head">' +
@@ -1794,7 +1809,7 @@ function renderTmdb() {
       // A1: persistent education for the zero-filter footgun.
       (!(l.includeGenres || []).length && !(l.includeKeywords || []).length &&
         !(l.includeCompanies || []).length && !(l.includeReleaseTypes || []).length &&
-        !(l.includeCollections || []).length
+        !(l.includeCollections || []).length && !(l.includeNetworks || []).length
         ? '<div class="sort-fallback-note">No filters yet - this would match the entire TMDB database.</div>'
         : '') +
       (l.previewOpen ? tmdbPreviewHtml(i, l) : '') +
@@ -1903,9 +1918,15 @@ function updateTmdb(i, key, value) {
     // NOT tv 12345) - stale ids would silently filter the other type.
     l.excludeItems = [];
     l.excludeItemNames = [];
+    // Networks are series-only (movie discover ignores with_networks
+    // silently) - never carry them across a type switch.
+    l.includeNetworks = [];
+    l.includeNetworkNames = [];
+    l.excludeNetworks = [];
+    l.excludeNetworkNames = [];
     delete l.count;
     invalidateTmdbPreview(l);
-    setStatus('Media type changed - genre, release-type, collection, and excluded-title filters were cleared.', 'ok');
+    setStatus('Media type changed - genre, release-type, collection, network, and excluded-title filters were cleared.', 'ok');
     if (l.previewOpen) { loadTmdbPreview(i); return; }
     renderTmdb();
     return;
@@ -1920,7 +1941,7 @@ function updateTmdb(i, key, value) {
 function setTmdbAllModes(i, mode) {
   const l = state.tmdb.lists[i];
   if (!l) return;
-  l.includeModes = { genre: mode, keyword: mode, company: mode, collection: mode };
+  l.includeModes = { genre: mode, keyword: mode, company: mode, collection: mode, network: mode };
   invalidateTmdbPreview(l);
   renderTmdb();
 }
@@ -2052,37 +2073,72 @@ async function runTmdbInlineSearch() {
   if (!input) return;
   const q = input.value.trim();
   if (tmdbSearchTimer) clearTimeout(tmdbSearchTimer);
-  if (q.length < 2) {
+  if (q.length < 2 && !(tmdbAdding.kind === 'network' && /^[0-9]$/.test(q))) {
     tmdbSearchResultsHtml = null;
     rerenderKeepInput(q);
     return;
   }
   tmdbSearchTimer = setTimeout(async () => {
+    let netId = NaN;
     try {
       // 'item' searches titles (type-scoped) for the Excluded Titles section;
       // keyword/company/collection keep their own TMDB search endpoints.
       const isItem = tmdbAdding.kind === 'item';
+      const isNet = tmdbAdding.kind === 'network';
       const searchKind = isItem ? 'title' : tmdbAdding.kind;
       const typeQs = isItem ? '&type=' + encodeURIComponent((state.tmdb.lists[tmdbAdding.i] || {}).mediaType || 'movie') : '';
+      if (isNet) {
+        netId = tmdbNetworkIdFromQuery(q);
+        // A pasted themoviedb.org/network link is pure id input - the URL
+        // text is meaningless to fuzzy search, resolve the id directly.
+        if (q.indexOf('themoviedb.org') !== -1) {
+          const urlRow = Number.isInteger(netId) ? await networkIdRowHtml(netId, false) : '';
+          tmdbSearchResultsHtml = urlRow || '<div class="empty-msg">Not a TMDB network link.</div>';
+          rerenderKeepInput(q);
+          return;
+        }
+      }
       const res = await fetch(ORIGIN + '/tmdb/search-' + searchKind + '?query=' + encodeURIComponent(q) + typeQs);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       const l = state.tmdb.lists[tmdbAdding.i];
-      const idsKey = tmdbAdding.kind === 'item'
+      const idsKey = isItem
         ? 'excludeItems'
         : TMDB_FIELD_KEYS[tmdbAdding.kind][tmdbAdding.side];
-      tmdbSearchResultsHtml = data.results.length === 0
-        ? '<div class="empty-msg">No results found.</div>'
-        : data.results.map((r) => {
-            const already = l && (l[idsKey] || []).includes(r.id);
-            return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
-              (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + tmdbAdding.kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name + (r.year ? ' (' + r.year + ')' : '')) + '\\\')"') + '>' +
-              (r.poster ? '<img class="result-thumb" src="' + escapeAttr(r.poster) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
-              '<div><div class="result-title">' + escapeAttr(r.name) + (r.year ? ' (' + escapeAttr(r.year) + ')' : '') + '</div>' +
-              '<div class="result-meta">' + (already ? 'Already excluded' : 'Click to exclude') + '</div></div></div>';
-          }).join('');
+      const excl = tmdbAdding.side === 'exclude';
+      const rowHtml = (r) => {
+        const already = l && (l[idsKey] || []).includes(r.id);
+        return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
+          (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + tmdbAdding.kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name + (r.year ? ' (' + r.year + ')' : '')) + '\\\')"') + '>' +
+          (r.poster ? '<img class="result-thumb" src="' + escapeAttr(r.poster) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
+          '<div><div class="result-title">' + escapeAttr(r.name) + (r.year ? ' (' + escapeAttr(r.year) + ')' : '') + '</div>' +
+          '<div class="result-meta">' + (already ? (excl ? 'Already excluded' : 'Already added') : (excl ? 'Click to exclude' : 'Click to add')) + '</div></div></div>';
+      };
+      let rows = data.results.map(rowHtml).join('');
+      // Networks share ONE bar: a pure-numeric query also resolves as an
+      // exact TMDB network id (API proxy, independent of the site route).
+      if (isNet && Number.isInteger(netId)) {
+        rows = await networkIdRowHtml(netId, data.results.some((r) => r.id === netId)) + rows;
+      }
+      tmdbSearchResultsHtml = rows || '<div class="empty-msg">No results found.</div>';
     } catch (e) {
-      tmdbSearchResultsHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
+      // The Networks search is a proxied undocumented site route - if it
+      // breaks, match the offline seed list so the picker keeps working.
+      // The numeric-id row uses the API proxy and still works meanwhile.
+      if (tmdbAdding && tmdbAdding.kind === 'network') {
+        const idRow = Number.isInteger(netId) ? await networkIdRowHtml(netId, false) : '';
+        const fb = networkFallbackResultsHtml(q);
+        if (idRow) {
+          tmdbSearchResultsHtml = fb.indexOf('result-item') === -1 ? idRow : idRow + fb;
+        } else {
+          // Both the site search AND the id-resolver failed - almost always
+          // a transient upstream hiccup, so offer a one-click retry.
+          tmdbSearchResultsHtml = '<div class="empty-msg">Network lookup failed. ' +
+            '<button type="button" class="secondary" style="font-size:11px;padding:2px 8px;" onclick="runTmdbInlineSearchNow()">Retry</button></div>';
+        }
+      } else {
+        tmdbSearchResultsHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
+      }
     }
     rerenderKeepInput(q);
   }, 400);
@@ -2110,6 +2166,9 @@ function pickTmdbResult(i, kind, side, id, name) {
   }
   const idsKey = TMDB_FIELD_KEYS[kind][side];
   const namesKey = TMDB_NAME_KEYS[kind][side];
+  // Older saved lists predate a dimension's arrays - initialize lazily so
+  // the first pick never reads undefined.includes().
+  if (!Array.isArray(l[idsKey])) { l[idsKey] = []; l[namesKey] = []; }
   if (l[idsKey].includes(id)) { setStatus('That is already added.', 'error'); return; }
   l[idsKey].push(id);
   l[namesKey].push(name);
@@ -2228,7 +2287,7 @@ function excludedItemsSearchHtml(i) {
 }
 
 function tmdbInlineSearchHtml(i, dim, side) {
-  const placeholder = { keyword: 'Search for a keyword…', company: 'Search for a company…', collection: 'Search for a collection…' }[dim.searchKind] || 'Search…';
+  const placeholder = { keyword: 'Search for a keyword…', company: 'Search for a company…', collection: 'Search for a collection…', network: 'Search a network by name… or paste its id / themoviedb.org link' }[dim.searchKind] || 'Search…';
   return '<div class="inline-add-search">' +
     '<div class="search-row">' +
       '<div class="search-input-wrap">' +
@@ -2242,6 +2301,57 @@ function tmdbInlineSearchHtml(i, dim, side) {
     '</div>' +
     '<div class="search-results">' + (tmdbSearchResultsHtml || '') + '</div>' +
   '</div>';
+}
+
+// Offline seed match for the Networks picker when the search proxy fails.
+function networkFallbackResultsHtml(q) {
+  const l = state.tmdb.lists[tmdbAdding.i];
+  const idsKey = TMDB_FIELD_KEYS.network[tmdbAdding.side];
+  const matches = TMDB_NETWORKS_FALLBACK.filter((n) => n.name.toLowerCase().includes(q.toLowerCase()));
+  if (matches.length === 0) return '<div class="empty-msg">No matches - type a TMDB network id instead.</div>';
+  return matches.map((r) => {
+    const already = l && (l[idsKey] || []).includes(r.id);
+    return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
+      (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + 'network' + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name) + '\\\')"') + '>' +
+      '<div><div class="result-title">' + escapeAttr(r.name) + '</div>' +
+      '<div class="result-meta">' + (already ? 'Already added' : 'Click to add') + '</div></div></div>';
+  }).join('');
+}
+
+// Exact-id row for the shared Networks search bar: resolves via the
+// /tmdb/network/{id} API proxy (works even when the site search route is
+// down). Returns '' when unresolvable or already shown by the fuzzy list.
+// Regex NOTE: this file renders inside one giant template literal - raw
+// backslash escapes get eaten in transit, so ALL regexes here use [0-9]
+// style classes, never \d.
+function tmdbNetworkIdFromQuery(q) {
+  var s = String(q).trim().toLowerCase();
+  var cut = s.indexOf("/network/");
+  if (cut !== -1) {
+    s = s.slice(cut + 9);
+  } else if (s.indexOf("themoviedb.org") !== -1) {
+    var t = s.split("themoviedb.org/")[1] || "";
+    if (t.indexOf("network/") === 0) { s = t.slice(8); } else { return NaN; }
+  }
+  s = s.split(/[?#]/)[0].split(/[-_/]/)[0];
+  return /^[0-9]{1,8}$/.test(s) ? parseInt(s, 10) : NaN;
+}
+
+async function networkIdRowHtml(id, inResults) {
+  if (inResults) return '';
+  try {
+    const data = await (await fetch(ORIGIN + '/tmdb/network/' + id)).json();
+    if (!data || data.error || !data.id) return '';
+    const l = state.tmdb.lists[tmdbAdding.i];
+    const idsKey = TMDB_FIELD_KEYS.network[tmdbAdding.side];
+    const already = l && (l[idsKey] || []).includes(data.id);
+    const excl = tmdbAdding.side === 'exclude';
+    return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
+      (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'network\\\',\\\'' + tmdbAdding.side + '\\\',' + data.id + ',\\\'' + escapeForOnclick(data.name) + '\\\')"') + '>' +
+      (data.logo ? '<img class="result-thumb" src="' + escapeAttr(data.logo) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
+      '<div><div class="result-title">' + escapeAttr(data.name) + ' · #' + data.id + '</div>' +
+      '<div class="result-meta">' + (already ? (excl ? 'Already excluded' : 'Already added') : 'Exact network id - click to add') + '</div></div></div>';
+  } catch { return ''; }
 }
 
 function runTmdbInlineSearchNow() {
@@ -2402,7 +2512,7 @@ async function saveAll() {
   const emptyTmdb = state.tmdb.lists.find(l =>
     !(l.includeGenres || []).length && !(l.includeKeywords || []).length &&
     !(l.includeCompanies || []).length && !(l.includeReleaseTypes || []).length &&
-    !(l.includeCollections || []).length);
+    !(l.includeCollections || []).length && !(l.includeNetworks || []).length);
   if (emptyTmdb) {
     setStatus("List '" + (emptyTmdb.name || 'Untitled') + "' has no filters - it would match all 1.1M TMDB titles. Add at least one filter.", 'error');
     return;

@@ -4,7 +4,7 @@
 // schedules are the workflows' own cron lines, edited on github.com.
 
 import { loadConfig } from "./config.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
@@ -111,6 +111,15 @@ export default {
 
     if (pathname === "/tmdb/preview-discover" && request.method === "POST") {
       return handleTmdbPreviewDiscover(env, request);
+    }
+
+    // Network picker helpers: site-route search proxy + id resolver.
+    if (pathname === "/tmdb/search-network") {
+      return handleTmdbNetworkSearch(env, url);
+    }
+    const tmdbNetworkMatch = pathname.match(/^\/tmdb\/network\/(\d{1,8})$/);
+    if (tmdbNetworkMatch) {
+      return handleTmdbNetworkDetail(env, Number(tmdbNetworkMatch[1]));
     }
 
     // Official picker: live MDBList catalog minus already-configured slugs.

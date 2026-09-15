@@ -90,6 +90,9 @@ export function buildDiscoverSources(list, mediaType) {
   const includeCompanies = list.includeCompanies || [];
   const includeReleaseTypes = list.includeReleaseTypes || [];
   const includeCollections = list.includeCollections || [];
+  // Networks: series-only dimension (movie discover silently ignores the
+  // param; normalize already strips it for movies - double guard here).
+  const includeNetworks = mediaType === "series" ? list.includeNetworks || [] : [];
   const modes = list.includeModes || {};
   const isAnd = (dim) => modes[dim] !== "or";
 
@@ -108,6 +111,9 @@ export function buildDiscoverSources(list, mediaType) {
   if (isAnd("company") && includeCompanies.length > 0) {
     andQs += `&with_companies=${encodeURIComponent([...new Set(includeCompanies)].join("|"))}`;
   }
+  if (isAnd("network") && includeNetworks.length > 0) {
+    andQs += `&with_networks=${encodeURIComponent([...new Set(includeNetworks)].join("|"))}`;
+  }
   andQs += releaseTypeQs;
 
   const sources = [];
@@ -119,6 +125,9 @@ export function buildDiscoverSources(list, mediaType) {
   }
   if (!isAnd("company") && includeCompanies.length > 0) {
     sources.push({ kind: "discover", qs: `&with_companies=${encodeURIComponent([...new Set(includeCompanies)].join("|"))}${andQs}` });
+  }
+  if (!isAnd("network") && includeNetworks.length > 0) {
+    sources.push({ kind: "discover", qs: `&with_networks=${encodeURIComponent([...new Set(includeNetworks)].join("|"))}${andQs}` });
   }
   if (mediaType !== "series" && !isAnd("collection") && includeCollections.length > 0) {
     sources.push({ kind: "collection", ids: includeCollections });
@@ -242,6 +251,33 @@ export async function buildDiscoverItems(list, mediaType) {
   }
   const excludeSet = await collectionIdSet(list.excludeCollections);
 
+  // Exclude networks (series-only): TMDB has NO without_networks param, so
+  // the veto set is built by re-running the SAME base queries with the
+  // excluded ids piped into with_networks. Identical sort + filters mean
+  // net∩base rows appear in the same order as in the base scan, so a
+  // same-capped prefix scan catches every item the window would admit
+  // (items past the window can't leak in regardless). (P1c, 2026-09-14)
+  const exclNets = mediaType === "series" ? [...new Set(list.excludeNetworks || [])] : [];
+  const netVeto = new Set();
+  let netVetoPages = 0;
+  if (exclNets.length > 0) {
+    const netQs = `&with_networks=${encodeURIComponent(exclNets.join("|"))}`;
+    const baseQsList = singleQueryMode
+      ? [singleQueryQs]
+      : sources.filter((s) => s.kind === "discover").map((s) => s.qs);
+    for (const qs of baseQsList) {
+      let np = 1;
+      let nTotal = 1;
+      do {
+        const data = await tmdbFetch(`${endpoint}?${(qs + netQs).replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${np}${excludeQs}${voteFloorQs}`);
+        netVetoPages++;
+        for (const item of data.results || []) netVeto.add(item.id);
+        nTotal = Number.isFinite(data.total_pages) ? data.total_pages : np;
+        np++;
+      } while (np <= nTotal && np <= maxPages);
+    }
+  }
+
   // Shared admission predicate - one bouncer for every entrance (B5):
   // discover results and collection-direct parts are screened identically.
   // Genre excludes re-check genre_ids so parts can't slip through the
@@ -266,6 +302,7 @@ export async function buildDiscoverItems(list, mediaType) {
   const passesFilters = (item) =>
     (!collectionIsPostFilter || !includeSet || includeSet.has(item.id)) &&
     !excludeSet.has(item.id) &&
+    !netVeto.has(item.id) &&
     !exclItemSet.has(item.id) &&
     !exGenres.some((g) => (item.genre_ids || []).includes(g));
 
@@ -273,7 +310,7 @@ export async function buildDiscoverItems(list, mediaType) {
   const admit = (item) => {
     if (!dedup.has(item.id) && passesFilters(item)) dedup.set(item.id, item);
   };
-  let pagesFetched = 0;
+  let pagesFetched = netVetoPages;
 
   // A2 shortcut: AND-collection with no other contributing dimension. The
   // members ARE the whole result - skip discover entirely. Without this, a
