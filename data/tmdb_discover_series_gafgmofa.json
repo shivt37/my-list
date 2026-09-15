@@ -2,8 +2,8 @@
   "catalog_id": "tmdb_discover_series_gafgmofa",
   "name": "DC - Shows",
   "type": "series",
-  "scraped_at": 1789446996232,
-  "sourceHash": "f103883ce59ee9ad",
+  "scraped_at": 1789450572229,
+  "sourceHash": "eba14a7c176166c4",
   "items": [
     {
       "adult": false,
@@ -48,34 +48,10 @@
       "first_air_date": "2026-08-16",
       "softcore": false,
       "name": "Lanterns",
-      "vote_average": 8.3,
-      "vote_count": 334,
+      "vote_average": 8.269,
+      "vote_count": 335,
       "title": "Lanterns",
       "release_date": "2026-08-16"
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        10759,
-        10765
-      ],
-      "id": 330647,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC x Sonic the Hedgehog",
-      "overview": "In the heat of battle, Sonic the Hedgehog and his friends are blasted across dimensions into the world of the Justice League. While the DC Super Heroes fight to save the multiverse, Sonic and friends don their costumes in an attempt to maintain order in an unfamiliar world.",
-      "popularity": 1.4123,
-      "poster_path": null,
-      "first_air_date": "2026-04-28",
-      "softcore": false,
-      "name": "DC x Sonic the Hedgehog",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "DC x Sonic the Hedgehog",
-      "release_date": "2026-04-28"
     },
     {
       "adult": false,
@@ -100,55 +76,6 @@
       "vote_count": 17,
       "title": "BAT-FAM",
       "release_date": "2025-11-10"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/5XEBvnGpOZJgdzcjzzrH7QA0hl2.jpg",
-      "genre_ids": [
-        16,
-        10762
-      ],
-      "id": 320096,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Krypto Saves the Day!",
-      "overview": "Krypto the Superdog wants to be a good boy, but he can't help but make mischief for the citizens of Metropolis.",
-      "popularity": 2.9813,
-      "poster_path": "/peMK4Kze9OxRGOdIOi0wn4lKYkr.jpg",
-      "first_air_date": "2025-08-13",
-      "softcore": false,
-      "name": "Krypto Saves the Day!",
-      "vote_average": 8,
-      "vote_count": 2,
-      "title": "Krypto Saves the Day!",
-      "release_date": "2025-08-13"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/56xUNGzDPIA2XUHqLOefMb9yQtv.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10762
-      ],
-      "id": 277587,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC Metal Force",
-      "overview": "A mysterious entity has brought the powers of good and evil together to participate in the ultimate super-powered showdown!",
-      "popularity": 2.2833,
-      "poster_path": "/9S2CtfSartZUFc0MX4h7aOPm1.jpg",
-      "first_air_date": "2024-12-06",
-      "softcore": false,
-      "name": "DC Metal Force",
-      "vote_average": 7.3,
-      "vote_count": 3,
-      "title": "DC Metal Force",
-      "release_date": "2024-12-06"
     },
     {
       "adult": false,
@@ -274,31 +201,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/gMk4uyWJnsgauRIjJyE63ECDTNa.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765
-      ],
-      "id": 229926,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "ja",
-      "original_name": "異世界スーサイド・スクワッド",
-      "overview": "In the crime-ridden city of Gotham, Amanda Waller, the head of A.R.G.U.S., assembles a group of notorious criminals—Harley Quinn, Deadshot, Peacemaker, Clayface and King Shark—for a mission into an otherworldly realm that's connected to this world through a gate. It's a realm of swords and magic where orcs rampage and dragons rule the skies. Can Harley Quinn and her crew conquer this perilous realm?",
-      "popularity": 11.4935,
-      "poster_path": "/AbVwsBJnLoqJzPJn8dlGFSGfygy.jpg",
-      "first_air_date": "2024-06-27",
-      "softcore": false,
-      "name": "Suicide Squad Isekai",
-      "vote_average": 7.259,
-      "vote_count": 114,
-      "title": "Suicide Squad Isekai",
-      "release_date": "2024-06-27"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/ySQuGiSNMC3dbL1rdiVivrwsD5C.jpg",
       "genre_ids": [
         18,
@@ -370,31 +272,6 @@
       "vote_count": 173,
       "title": "Gotham Knights",
       "release_date": "2023-03-14"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/tRo9pMhE2OOrePz4Pw3eirPBnxr.jpg",
-      "genre_ids": [
-        10762,
-        16,
-        35
-      ],
-      "id": 155780,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Batwheels",
-      "overview": "The Batwheels are a team of sentient super-powered crimefighting vehicles that help Batman, Robin and Batgirl—as well as a host of additional DC Super Heroes—keep Gotham City safe. Created only recently by the Batcomputer, our mechanized heroes must navigate the growing pains of being a newly formed super-team as well as the growing pains that come with just being a kid.",
-      "popularity": 31.3993,
-      "poster_path": "/nDNUuNNoFaZFNjSwWCG5XwaOf9f.jpg",
-      "first_air_date": "2022-10-15",
-      "softcore": false,
-      "name": "Batwheels",
-      "vote_average": 7,
-      "vote_count": 22,
-      "title": "Batwheels",
-      "release_date": "2022-10-15"
     },
     {
       "adult": false,
@@ -495,30 +372,6 @@
       "vote_count": 28,
       "title": "Aquaman: King of Atlantis",
       "release_date": "2021-10-14"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/xpba0Dxz3sxV3QgYLR8UIe1LAAX.jpg",
-      "genre_ids": [
-        18,
-        10765
-      ],
-      "id": 103768,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Sweet Tooth",
-      "overview": "On an epic adventure across a postapocalyptic world, a lovable boy who's part human and part deer searches for family and home with a gruff protector.",
-      "popularity": 19.7283,
-      "poster_path": "/rgMfhcrVZjuy5b7Pn0KzCRCEnMX.jpg",
-      "first_air_date": "2021-06-04",
-      "softcore": false,
-      "name": "Sweet Tooth",
-      "vote_average": 7.734,
-      "vote_count": 1656,
-      "title": "Sweet Tooth",
-      "release_date": "2021-06-04"
     },
     {
       "adult": false,
@@ -719,34 +572,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/7JEEoYSAn7kG7dveImqCBVEK3UI.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10751,
-        10765,
-        10762,
-        35
-      ],
-      "id": 87491,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC Super Hero Girls",
-      "overview": "The world may know them as Wonder Woman, Supergirl and Batgirl, but not-so-typical teenagers Diana, Kara and Barbara, alongside their Super Hero friends have much more to deal with than just protecting Metropolis from some of the most sinister school-aged Super-Villains. After all, being teens is tough enough, what with school, friends, family and the chaos that comes with managing a social life. But add super powers and a secret identity to the mix, and things can get a lot more complicated.",
-      "popularity": 13.9845,
-      "poster_path": "/sjjyQ0OKUnUTzJpLi5CDOzZCE88.jpg",
-      "first_air_date": "2019-03-08",
-      "softcore": false,
-      "name": "DC Super Hero Girls",
-      "vote_average": 7.9,
-      "vote_count": 184,
-      "title": "DC Super Hero Girls",
-      "release_date": "2019-03-08"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/sSJZVwCS0tFzcLSaQOjLpv5mFau.jpg",
       "genre_ids": [
         10765,
@@ -891,32 +716,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/oBY4hKjS80M60gEvtJ3gtqPTVpn.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765,
-        10762
-      ],
-      "id": 68837,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Justice League Action",
-      "overview": "Batman, Superman and Wonder Woman lead the DC Super Heroes against their most infamous foes.",
-      "popularity": 21.3566,
-      "poster_path": "/AdTh5kAXYwo0dwHONqCFO7y8Jmf.jpg",
-      "first_air_date": "2016-12-16",
-      "softcore": false,
-      "name": "Justice League Action",
-      "vote_average": 7.181,
-      "vote_count": 94,
-      "title": "Justice League Action",
-      "release_date": "2016-12-16"
-    },
-    {
-      "adult": false,
       "backdrop_path": null,
       "genre_ids": [
         10759,
@@ -938,30 +737,6 @@
       "vote_count": 14,
       "title": "The Flash: Chronicles of Cisco",
       "release_date": "2016-04-19"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/ta5oblpMlEcIPIS2YGcq9XEkWK2.jpg",
-      "genre_ids": [
-        80,
-        10765
-      ],
-      "id": 63174,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Lucifer",
-      "overview": "Bored and unhappy as the Lord of Hell, Lucifer Morningstar abandoned his throne and retired to Los Angeles, where he has teamed up with LAPD detective Chloe Decker to take down criminals. But the longer he's away from the underworld, the greater the threat that the worst of humanity could escape.",
-      "popularity": 84.3429,
-      "poster_path": "/ekZobS8isE6mA53RAiGDG93hBxL.jpg",
-      "first_air_date": "2016-01-25",
-      "softcore": false,
-      "name": "Lucifer",
-      "vote_average": 8.429,
-      "vote_count": 15678,
-      "title": "Lucifer",
-      "release_date": "2016-01-25"
     },
     {
       "adult": false,
@@ -1061,31 +836,6 @@
       "vote_count": 132,
       "title": "Vixen",
       "release_date": "2015-08-25"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/bIzbjckUAkQWzyMVGuedTlB1WFb.jpg",
-      "genre_ids": [
-        10762,
-        10751,
-        10759
-      ],
-      "id": 100535,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Batman Unlimited",
-      "overview": "This merchandise show displays short episodic battles, and other encounters, around Batman and his Batfamily like Nightwing, Red Robin and Robin. The episodes manage without dialogues.",
-      "popularity": 4.7095,
-      "poster_path": "/xwFsHsa8VQeUUuiLygiDmypLo0D.jpg",
-      "first_air_date": "2015-05-04",
-      "softcore": false,
-      "name": "Batman Unlimited",
-      "vote_average": 7.1,
-      "vote_count": 10,
-      "title": "Batman Unlimited",
-      "release_date": "2015-05-04"
     },
     {
       "adult": false,
@@ -1369,31 +1119,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/yFpUE2IyBZqzNVcHkAEYusAbAma.jpg",
-      "genre_ids": [
-        10759,
-        16,
-        10762
-      ],
-      "id": 41676,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Beware the Batman",
-      "overview": "Set during Bruce Wayne's early years as the Batman, following his initial period of battling organized crime. He hones his skills with the assistance of his butler, Alfred Pennyworth. Bruce is introduced to Alfred's goddaughter, Tatsu Yamashiro. Tatsu is a martial arts swordsmaster hired to act as Bruce's bodyguard, but also recruited to act as a superhero partner to Batman.",
-      "popularity": 13.52,
-      "poster_path": "/4BoJaShIuo6Mwpz6yrwc0ffBdwz.jpg",
-      "first_air_date": "2013-07-13",
-      "softcore": false,
-      "name": "Beware the Batman",
-      "vote_average": 7.219,
-      "vote_count": 96,
-      "title": "Beware the Batman",
-      "release_date": "2013-07-13"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/sGxrZSZLyqkLohIUBCxXW2fTfj8.jpg",
       "genre_ids": [
         16,
@@ -1521,33 +1246,6 @@
       "vote_average": 7,
       "vote_count": 4,
       "title": "Thunder and Lightning",
-      "release_date": "2013-01-05"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/hj1bcZR8zQ2upwgiI2LganMTS1Z.jpg",
-      "genre_ids": [
-        16,
-        10765,
-        10759,
-        10762
-      ],
-      "id": 75395,
-      "origin_country": [
-        "JP",
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Amethyst: Princess of Gemworld",
-      "overview": "An ordinary girl is pulled into the fantasy realm of Gemworld to save it from a monstrous villain.",
-      "popularity": 2.9658,
-      "poster_path": "/4QEpxGAedGPDlSuHVrezPTbj02h.jpg",
-      "first_air_date": "2013-01-05",
-      "softcore": false,
-      "name": "Amethyst: Princess of Gemworld",
-      "vote_average": 7.6,
-      "vote_count": 7,
-      "title": "Amethyst: Princess of Gemworld",
       "release_date": "2013-01-05"
     },
     {
@@ -1807,32 +1505,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/wajrzbvqaKbAnK4MXbPh3FsrbY5.jpg",
-      "genre_ids": [
-        10759,
-        16,
-        10765,
-        10762
-      ],
-      "id": 40351,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Green Lantern: The Animated Series",
-      "overview": "The Green Lanterns Hal and his partner Kilowog fight against the forces of the Red Lanterns.",
-      "popularity": 19.1442,
-      "poster_path": "/xJwEpFAoedQ6POM9dD83ijFk5ME.jpg",
-      "first_air_date": "2011-11-11",
-      "softcore": false,
-      "name": "Green Lantern: The Animated Series",
-      "vote_average": 7.769,
-      "vote_count": 219,
-      "title": "Green Lantern: The Animated Series",
-      "release_date": "2011-11-11"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/pOKcw45cAMPu8DN7E3bN5FEvxM3.jpg",
       "genre_ids": [
         16,
@@ -1927,83 +1599,6 @@
       "vote_count": 290,
       "title": "Batman: The Brave and the Bold",
       "release_date": "2008-11-14"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/2CsVkDPeCs0VZ3pTE6aLFlW1lUp.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765,
-        10762
-      ],
-      "id": 4028,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Legion of Super Heroes",
-      "overview": "The series centers on a young Superman's adventures in the 31st century, fighting alongside a group of futuristic superheroes known as the Legion of Super-Heroes.",
-      "popularity": 10.6214,
-      "poster_path": "/bz92ox9DKUTJr1Or1CqJ8zWffi2.jpg",
-      "first_air_date": "2006-09-23",
-      "softcore": false,
-      "name": "Legion of Super Heroes",
-      "vote_average": 7.674,
-      "vote_count": 43,
-      "title": "Legion of Super Heroes",
-      "release_date": "2006-09-23"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/fEGnbraSlUFHajfv8JcFbE8eX59.jpg",
-      "genre_ids": [
-        16,
-        10762,
-        10751
-      ],
-      "id": 1453,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Krypto the Superdog",
-      "overview": "Krypto, the Superdog, chronicles the comedic canine adventures of Metropolis' day-saving superdog from Planet Krypton. Krypto jettisons to Earth after traveling across the galaxies as a test-pilot puppy aboard a malfunctioning rocket ship built by Superman's father. Landing astray on unfamiliar terrain, the fully-grown Krypto swiftly seeks out companionship on Earth and flips over Kevin Whitney, a young boy who too longs for friendship. With an amazing array of super hero powers, ranging from heat vision to super strength to flying, Krypto partners with best pal Kevin to fight evil forces that threaten the safety and well-being of the people and animals of Metropolis.",
-      "popularity": 14.7035,
-      "poster_path": "/xEs98CDgA6xKeUct9Z1ZPrdWsVg.jpg",
-      "first_air_date": "2005-03-25",
-      "softcore": false,
-      "name": "Krypto the Superdog",
-      "vote_average": 6.908,
-      "vote_count": 71,
-      "title": "Krypto the Superdog",
-      "release_date": "2005-03-25"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/k5r2N22yTSIlLZBraf9792MK1gN.jpg",
-      "genre_ids": [
-        16,
-        10765,
-        10759,
-        10762
-      ],
-      "id": 2022,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "The Batman",
-      "overview": "A young billionaire Bruce Wayne fights crime and evil as the mysterious vigilante, The Batman.",
-      "popularity": 24.9377,
-      "poster_path": "/3w7koeOR2x71XYMJDGpygxYtScI.jpg",
-      "first_air_date": "2004-09-11",
-      "softcore": false,
-      "name": "The Batman",
-      "vote_average": 8.032,
-      "vote_count": 511,
-      "title": "The Batman",
-      "release_date": "2004-09-11"
     },
     {
       "adult": false,
@@ -2178,32 +1773,6 @@
       "vote_count": 408,
       "title": "The New Batman Adventures",
       "release_date": "1997-09-13"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/yDsLb8WRHplh7X5EpHDFHl7TP8T.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765,
-        10762
-      ],
-      "id": 4303,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Superman: The Animated Series",
-      "overview": "Superman, an incredibly powerful alien from the planet Krypton, defends Metropolis from supercriminals. Superman hides his identity behind the glasses of Clark Kent; a mild-mannered reporter for the newspaper the Daily Planet. At the Daily Planet Superman works with fellow reporter Lois Lane and photographer Jimmy Olsen.",
-      "popularity": 35.2052,
-      "poster_path": "/p7FauEh0yeZtIPWnD3pBvG6j8sd.jpg",
-      "first_air_date": "1996-09-06",
-      "softcore": false,
-      "name": "Superman: The Animated Series",
-      "vote_average": 7.68,
-      "vote_count": 389,
-      "title": "Superman: The Animated Series",
-      "release_date": "1996-09-06"
     },
     {
       "adult": false,
