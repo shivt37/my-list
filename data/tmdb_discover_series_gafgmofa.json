@@ -2,8 +2,8 @@
   "catalog_id": "tmdb_discover_series_gafgmofa",
   "name": "DC - Shows",
   "type": "series",
-  "scraped_at": 1789474364720,
-  "sourceHash": "89b42b2fcc331a68",
+  "scraped_at": 1789475548611,
+  "sourceHash": "247530ba67a1abdb",
   "items": [
     {
       "adult": false,
@@ -52,30 +52,6 @@
       "vote_count": 334,
       "title": "Lanterns",
       "release_date": "2026-08-16"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/yZJ6ecQCRsXg3rx7hJbwYPHuzD3.jpg",
-      "genre_ids": [
-        16,
-        10751
-      ],
-      "id": 225361,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "BAT-FAM",
-      "overview": "Follow Batman, Alfred, and young Damian Wayne—who has taken on the mantle of Little Batman—alongside a few newcomers to Wayne Manor, as they navigate the fun and frustrations of life as a super family",
-      "popularity": 14.538,
-      "poster_path": "/8C34YTylNBt4DWM1a9oAAXqmTSr.jpg",
-      "first_air_date": "2025-11-10",
-      "softcore": false,
-      "name": "BAT-FAM",
-      "vote_average": 4.206,
-      "vote_count": 17,
-      "title": "BAT-FAM",
-      "release_date": "2025-11-10"
     },
     {
       "adult": false,
@@ -469,8 +445,8 @@
       "first_air_date": "2019-10-20",
       "softcore": false,
       "name": "Watchmen",
-      "vote_average": 7.624,
-      "vote_count": 1687,
+      "vote_average": 7.625,
+      "vote_count": 1688,
       "title": "Watchmen",
       "release_date": "2019-10-20"
     },
@@ -573,27 +549,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/h6MAjhYKuX5a2ww2xoRMVeIm8ML.jpg",
-      "genre_ids": [],
-      "id": 232618,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC Super Hero Girls: Super Shorts",
-      "overview": "Following the adventures of teen-aged versions of DC's superheroines and female supervillains attending Super Hero High.",
-      "popularity": 1.6918,
-      "poster_path": "/AtEumN6EOqR1mO7n9fzybBrICZc.jpg",
-      "first_air_date": "2019-01-17",
-      "softcore": false,
-      "name": "DC Super Hero Girls: Super Shorts",
-      "vote_average": 3.8,
-      "vote_count": 5,
-      "title": "DC Super Hero Girls: Super Shorts",
-      "release_date": "2019-01-17"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/iAzH3jFEaDMkjEsNNBUpGzSJ6VR.jpg",
       "genre_ids": [
         18,
@@ -666,30 +621,6 @@
       "vote_count": 25,
       "title": "Freedom Fighters: The Ray",
       "release_date": "2017-12-08"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/a3ybbVF4aXVal37OHzMQC5jr2dh.jpg",
-      "genre_ids": [
-        10765,
-        35
-      ],
-      "id": 68001,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Powerless",
-      "overview": "Emily Locke lands her dream job as Director of Research and Development for Wayne Security in Charm City, home to super heroes and villains and citizens fed up with the collateral damage of their constant fighting.",
-      "popularity": 6.1701,
-      "poster_path": "/oAAAqgKiWVeZbotsR0zukHjM9B1.jpg",
-      "first_air_date": "2017-02-02",
-      "softcore": false,
-      "name": "Powerless",
-      "vote_average": 6.2,
-      "vote_count": 180,
-      "title": "Powerless",
-      "release_date": "2017-02-02"
     },
     {
       "adult": false,
@@ -940,54 +871,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/6R0X3XKaBkXKBsRgkHb1bBp3x4t.jpg",
-      "genre_ids": [
-        16
-      ],
-      "id": 57110,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Batman: Black and White Motion Comics",
-      "overview": "",
-      "popularity": 4.3343,
-      "poster_path": "/vaMbitWw9r0hyMhMaTlaggla8Ot.jpg",
-      "first_air_date": "2008-12-09",
-      "softcore": false,
-      "name": "Batman: Black and White Motion Comics",
-      "vote_average": 7,
-      "vote_count": 3,
-      "title": "Batman: Black and White Motion Comics",
-      "release_date": "2008-12-09"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/52RDZfNW98uq1Iin2tYOVk5DZAM.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        35
-      ],
-      "id": 133616,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Zatanna: Trial of the Crystal Wand",
-      "overview": "This adaptation of an iconic DC heroine focuses on Zatanna as a teenager.",
-      "popularity": 2.041,
-      "poster_path": "/riJdtkPeZLDj7JUaxPwwWQSTch.jpg",
-      "first_air_date": "2003-07-08",
-      "softcore": false,
-      "name": "Zatanna: Trial of the Crystal Wand",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Zatanna: Trial of the Crystal Wand",
-      "release_date": "2003-07-08"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/ypudZKKSSUQ0dkvyZydiNPZZglW.jpg",
       "genre_ids": [],
       "id": 39783,
@@ -1052,37 +935,10 @@
       "first_air_date": "2001-10-16",
       "softcore": false,
       "name": "Smallville",
-      "vote_average": 8.187,
-      "vote_count": 4592,
+      "vote_average": 8.188,
+      "vote_count": 4593,
       "title": "Smallville",
       "release_date": "2001-10-16"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/wHnl7DOegE1czhrxhNunWJl33FV.jpg",
-      "genre_ids": [
-        18,
-        16,
-        35,
-        10759,
-        80
-      ],
-      "id": 15185,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Gotham Girls",
-      "overview": "A Flash animation series staring Harley Quinn, Poison Ivy, Batgirl, Catwoman and Zatanna in short stories about the daily lives of the characters.",
-      "popularity": 7.1838,
-      "poster_path": "/nx5288muDMdOM5fNHEovKYEnDCo.jpg",
-      "first_air_date": "2000-07-27",
-      "softcore": false,
-      "name": "Gotham Girls",
-      "vote_average": 6.542,
-      "vote_count": 24,
-      "title": "Gotham Girls",
-      "release_date": "2000-07-27"
     },
     {
       "adult": false,
@@ -1109,32 +965,6 @@
       "vote_count": 408,
       "title": "The New Batman Adventures",
       "release_date": "1997-09-13"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/4QnFxk03yAn7U2ZTL5oMCCqxlPc.jpg",
-      "genre_ids": [
-        10759,
-        16,
-        18,
-        9648
-      ],
-      "id": 2098,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Batman: The Animated Series",
-      "overview": "Vowing to avenge the murder of his parents, Bruce Wayne devotes his life to wiping out crime in Gotham City as the masked vigilante \"Batman\".",
-      "popularity": 36.9735,
-      "poster_path": "/lBomQFW1vlm1yUYMNSbFZ45R4Ox.jpg",
-      "first_air_date": "1992-09-05",
-      "softcore": false,
-      "name": "Batman: The Animated Series",
-      "vote_average": 8.583,
-      "vote_count": 1896,
-      "title": "Batman: The Animated Series",
-      "release_date": "1992-09-05"
     },
     {
       "adult": false,
