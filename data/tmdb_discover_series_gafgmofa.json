@@ -2,8 +2,8 @@
   "catalog_id": "tmdb_discover_series_gafgmofa",
   "name": "DC - Shows",
   "type": "series",
-  "scraped_at": 1789475548611,
-  "sourceHash": "247530ba67a1abdb",
+  "scraped_at": 1789484138887,
+  "sourceHash": "773b133627a10e74",
   "items": [
     {
       "adult": false,
@@ -127,30 +127,6 @@
       "vote_count": 282,
       "title": "Batman: Caped Crusader",
       "release_date": "2024-08-01"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/cdY1KD6dFlWf0XB787RJLCaSqsE.jpg",
-      "genre_ids": [
-        16,
-        35
-      ],
-      "id": 200753,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Kite Man: Hell Yeah!",
-      "overview": "Lovable loser Kite Man and his new squeeze Golden Glider moonlight as criminals to support their foolish purchase of Noonan's, Gotham's seediest dive bar, where everybody knows your name, but not necessarily your secret identity!",
-      "popularity": 10.3649,
-      "poster_path": "/cebce4aQiO4gRLiILxoZbzWUoEJ.jpg",
-      "first_air_date": "2024-07-18",
-      "softcore": false,
-      "name": "Kite Man: Hell Yeah!",
-      "vote_average": 6.648,
-      "vote_count": 44,
-      "title": "Kite Man: Hell Yeah!",
-      "release_date": "2024-07-18"
     },
     {
       "adult": false,
