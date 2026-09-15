@@ -587,6 +587,10 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .result-thumb, .result-thumb-placeholder {
     width: 28px; height: 42px; border-radius: var(--r-sm); object-fit: cover; flex-shrink: 0; background: var(--surface2);
   }
+  /* Network logos are horizontal wordmarks - wide box, contain (never
+     crop), light pad so black or white wordmarks stay readable. */
+  .result-thumb.result-thumb-wide { width: 48px; height: 28px; padding: 2px; object-fit: contain; background: #3a3d4d; }
+  .result-thumb-placeholder.result-thumb-wide { width: 48px; height: 28px; }
   .result-thumb-placeholder { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; }
   .result-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .result-meta { font-size: 10.5px; color: var(--muted); }
@@ -2110,7 +2114,7 @@ async function runTmdbInlineSearch() {
         const already = l && (l[idsKey] || []).includes(r.id);
         return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
           (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + tmdbAdding.kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + r.id + ',\\\'' + escapeForOnclick(r.name + (r.year ? ' (' + r.year + ')' : '')) + '\\\')"') + '>' +
-          (r.poster ? '<img class="result-thumb" src="' + escapeAttr(r.poster) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
+          (r.poster ? '<img class="result-thumb' + (isNet ? ' result-thumb-wide' : '') + '" src="' + escapeAttr(r.poster) + '">' : '<div class="result-thumb-placeholder' + (isNet ? ' result-thumb-wide' : '') + '">⬚</div>') +
           '<div><div class="result-title">' + escapeAttr(r.name) + (r.year ? ' (' + escapeAttr(r.year) + ')' : '') + '</div>' +
           '<div class="result-meta">' + (already ? (excl ? 'Already excluded' : 'Already added') : (excl ? 'Click to exclude' : 'Click to add')) + '</div></div></div>';
       };
@@ -2348,7 +2352,7 @@ async function networkIdRowHtml(id, inResults) {
     const excl = tmdbAdding.side === 'exclude';
     return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
       (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'network\\\',\\\'' + tmdbAdding.side + '\\\',' + data.id + ',\\\'' + escapeForOnclick(data.name) + '\\\')"') + '>' +
-      (data.logo ? '<img class="result-thumb" src="' + escapeAttr(data.logo) + '">' : '<div class="result-thumb-placeholder">⬚</div>') +
+      (data.logo ? '<img class="result-thumb result-thumb-wide" src="' + escapeAttr(data.logo) + '">' : '<div class="result-thumb-placeholder result-thumb-wide">⬚</div>') +
       '<div><div class="result-title">' + escapeAttr(data.name) + ' · #' + data.id + '</div>' +
       '<div class="result-meta">' + (already ? (excl ? 'Already excluded' : 'Already added') : 'Exact network id - click to add') + '</div></div></div>';
   } catch { return ''; }

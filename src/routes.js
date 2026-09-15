@@ -817,7 +817,7 @@ export async function handleTmdbNetworkSearch(env, url) {
   const results = data.results.slice(0, TMDB_SEARCH_MAX).map((r) => ({
     id: r.id,
     name: r.name,
-    poster: r.logo_path ? `https://image.tmdb.org/t/p/w92${r.logo_path}` : null,
+    poster: r.logo_path ? `https://image.tmdb.org/t/p/w185${r.logo_path}` : null,
   }));
   // Best-effort cache - a KV hiccup must not fail the request.
   try { await env.STORE.put(cacheKey, JSON.stringify({ fetched_at: Date.now(), results })); } catch { }
@@ -830,7 +830,7 @@ export async function handleTmdbNetworkDetail(env, networkId) {
   const data = await tmdbApi(env, `/network/${networkId}`);
   if (data.error) return json({ error: data.error }, 502);
   if (!data.id) return json({ error: "Network not found on TMDB." }, 404);
-  return json({ id: data.id, name: data.name, logo: data.logo_path ? `https://image.tmdb.org/t/p/w92${data.logo_path}` : null });
+  return json({ id: data.id, name: data.name, logo: data.logo_path ? `https://image.tmdb.org/t/p/w185${data.logo_path}` : null });
 }
 
 // Port of the old tmdb worker's buildDiscoverSources/fetch logic, live
