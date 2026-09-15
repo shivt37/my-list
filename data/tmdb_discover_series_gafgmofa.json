@@ -2,8 +2,8 @@
   "catalog_id": "tmdb_discover_series_gafgmofa",
   "name": "DC - Shows",
   "type": "series",
-  "scraped_at": 1789450572229,
-  "sourceHash": "eba14a7c176166c4",
+  "scraped_at": 1789474364720,
+  "sourceHash": "89b42b2fcc331a68",
   "items": [
     {
       "adult": false,
@@ -48,8 +48,8 @@
       "first_air_date": "2026-08-16",
       "softcore": false,
       "name": "Lanterns",
-      "vote_average": 8.269,
-      "vote_count": 335,
+      "vote_average": 8.28,
+      "vote_count": 334,
       "title": "Lanterns",
       "release_date": "2026-08-16"
     },
@@ -98,32 +98,9 @@
       "softcore": false,
       "name": "Creature Commandos",
       "vote_average": 7.765,
-      "vote_count": 378,
+      "vote_count": 379,
       "title": "Creature Commandos",
       "release_date": "2024-12-05"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/vjmx4Sf2UuCYLULNdNnMPh6wBgh.jpg",
-      "genre_ids": [
-        16
-      ],
-      "id": 260192,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC Heroes United",
-      "overview": "When the story of Earth-212 begin,s our favorite Super Heroes and Super-Villains remain in the shadows, largely unknown to one another and mostly serving as legend and rumor to civilians. The appearance of the magical Tower of Fate in Gotham City thrusts these fledgling heroes into the spotlight – together and in opposition.",
-      "popularity": 1.4741,
-      "poster_path": "/jpYTKKw8NYsu3cRQEXUqlGPWJPt.jpg",
-      "first_air_date": "2024-11-20",
-      "softcore": false,
-      "name": "DC Heroes United",
-      "vote_average": 4.5,
-      "vote_count": 2,
-      "title": "DC Heroes United",
-      "release_date": "2024-11-20"
     },
     {
       "adult": false,
@@ -144,8 +121,8 @@
       "first_air_date": "2024-09-19",
       "softcore": false,
       "name": "The Penguin",
-      "vote_average": 8.3,
-      "vote_count": 1478,
+      "vote_average": 8.349,
+      "vote_count": 1480,
       "title": "The Penguin",
       "release_date": "2024-09-19"
     },
@@ -294,7 +271,7 @@
       "softcore": false,
       "name": "The Sandman",
       "vote_average": 7.848,
-      "vote_count": 2732,
+      "vote_count": 2734,
       "title": "The Sandman",
       "release_date": "2022-08-05"
     },
@@ -319,7 +296,7 @@
       "softcore": false,
       "name": "Peacemaker",
       "vote_average": 8.182,
-      "vote_count": 3540,
+      "vote_count": 3541,
       "title": "Peacemaker",
       "release_date": "2022-01-13"
     },
@@ -790,30 +767,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/Twh7Jx3kkbdY3EV0SME0iBkTt5.jpg",
-      "genre_ids": [
-        16,
-        10751
-      ],
-      "id": 64365,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC Super Hero Girls",
-      "overview": "At Super Hero High, iconic Super Heroes like Wonder Woman, Supergirl, Batgirl, Harley Quinn, Bumblebee, Poison Ivy, and Katana navigate all the twists and turns of high school. United by friendship, the DC Super Hero Girls empower kids to shine with confidence and courage, especially while they combat those overwhelming, exciting, and awesomely awkward moments of growing up (sometimes super powers can be super stressful!).",
-      "popularity": 15.5506,
-      "poster_path": "/6BIHNmQHktFWkprlKPv7Q5h7Nb7.jpg",
-      "first_air_date": "2015-10-01",
-      "softcore": false,
-      "name": "DC Super Hero Girls",
-      "vote_average": 6.697,
-      "vote_count": 33,
-      "title": "DC Super Hero Girls",
-      "release_date": "2015-10-01"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/n9I6q0oHVKrSSxt9wSc7q3peuZW.jpg",
       "genre_ids": [
         16,
@@ -938,318 +891,6 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/xErQo76ngKVJ0oKhc5HXARG038J.jpg",
-      "genre_ids": [
-        16,
-        10765,
-        35,
-        10751
-      ],
-      "id": 281000,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "The Creature Commandos",
-      "overview": "Dubbed the \"Creature Commandos,\" a military squad of soldiers-turned-monsters use their new found powers to do missions for the government and save the world from potential world domination.",
-      "popularity": 1.898,
-      "poster_path": "/4VigdQfEdW6gTUXr8KWwsrUMxlv.jpg",
-      "first_air_date": "2014-07-05",
-      "softcore": false,
-      "name": "The Creature Commandos",
-      "vote_average": 6.667,
-      "vote_count": 6,
-      "title": "The Creature Commandos",
-      "release_date": "2014-07-05"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/kH3iGcrVJlCzDVKNpX5NJHpRWMd.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 246090,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Shazam!",
-      "overview": "Billy Batson is gifted with the magical ability to transform into the hero Shazam by saying his name. Billy, being only a kid, uses these special powers in ridiculous ways.",
-      "popularity": 2.2989,
-      "poster_path": "/IlEpH7pkqeVcuPzfui1nzRfoOh.jpg",
-      "first_air_date": "2014-04-30",
-      "softcore": false,
-      "name": "Shazam!",
-      "vote_average": 8,
-      "vote_count": 1,
-      "title": "Shazam!",
-      "release_date": "2014-04-30"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/ZRx4wsBMxcMxI6laJCUfKFsTu.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        80,
-        10751
-      ],
-      "id": 293001,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Green Arrow",
-      "overview": "Follow the Emerald Archer and his super artificial intelligence bow as he takes on crime alongside Black Canary.",
-      "popularity": 2.5251,
-      "poster_path": "/nqGtcYk8OVgkE99gfN6um5RTczn.jpg",
-      "first_air_date": "2014-04-16",
-      "softcore": false,
-      "name": "Green Arrow",
-      "vote_average": 7.5,
-      "vote_count": 2,
-      "title": "Green Arrow",
-      "release_date": "2014-04-16"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/BfXO4RJC3oGRIDSz7rwBGWd1OH.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 293466,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Deadman",
-      "overview": "Deadman, an innocent, lonely little ghost, tries his best to do the right thing using his powers.",
-      "popularity": 1.9055,
-      "poster_path": "/b2N6EBgjcRkPMbhybXZYmhnVb2j.jpg",
-      "first_air_date": "2013-09-28",
-      "softcore": false,
-      "name": "Deadman",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Deadman",
-      "release_date": "2013-09-28"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/hsq7LsZpzfdttjDqQAaYTwZbBpj.jpg",
-      "genre_ids": [
-        16,
-        10765,
-        10751
-      ],
-      "id": 293392,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Doom Patrol",
-      "overview": "Doom Patrol was a series of animated shorts about the world's strangest heroes. Written by Tom Peyer and directed by Thomas Perkins, the shorts took much inspiration from Arnold Drake's original run on Doom Patrol.",
-      "popularity": 3.1504,
-      "poster_path": "/1O6oxXU9ecpTEpYHklYzfR3YJyc.jpg",
-      "first_air_date": "2013-08-24",
-      "softcore": false,
-      "name": "Doom Patrol",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Doom Patrol",
-      "release_date": "2013-08-24"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/xdFVdhuCbxlDehc5RungHjHOIWb.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10765,
-        10751
-      ],
-      "id": 292997,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Metal Men",
-      "overview": "The misadventures of Dr. Magnus's team of stumblebum robot superheroes.",
-      "popularity": 1.7587,
-      "poster_path": "/677l2ymSXJ9oUcxQCriT1ttOcu9.jpg",
-      "first_air_date": "2013-08-10",
-      "softcore": false,
-      "name": "Metal Men",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Metal Men",
-      "release_date": "2013-08-10"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/cqDGFX5tAjUOT0ZRM6m2olaZJS8.jpg",
-      "genre_ids": [
-        16,
-        10751,
-        10759
-      ],
-      "id": 293343,
-      "origin_country": [
-        "CA",
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Wonder Woman",
-      "overview": "Blending mythology and modern conflict, this journey redefines the Amazon warrior for a new generation.",
-      "popularity": 2.2266,
-      "poster_path": "/98dEQjgBGWWr1aLNno6WG94e10G.jpg",
-      "first_air_date": "2013-07-13",
-      "softcore": false,
-      "name": "Wonder Woman",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Wonder Woman",
-      "release_date": "2013-07-13"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/sGxrZSZLyqkLohIUBCxXW2fTfj8.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 292851,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Tales of Metropolis",
-      "overview": "Tales of Metropolis is a series of animated shorts as part of the DC Nation block on Cartoon Network. The series stars a different character every episode and follows the every day adventures of Superman's fellow Metropolis citizens such as Bizarro and Lois Lane.",
-      "popularity": 3.5095,
-      "poster_path": "/idzAyMcXcc87lZse3lptncJ4VEL.jpg",
-      "first_air_date": "2013-05-25",
-      "softcore": false,
-      "name": "Tales of Metropolis",
-      "vote_average": 10,
-      "vote_count": 1,
-      "title": "Tales of Metropolis",
-      "release_date": "2013-05-25"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/ocnP7cY9mlnbZZqwKpa110nZtME.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 293547,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "DC Super-Pets",
-      "overview": "The adventures of the pets of superheroes.",
-      "popularity": 2.7892,
-      "poster_path": "/sX1J8cy6QmBON6OugtsVD39nOnn.jpg",
-      "first_air_date": "2013-05-18",
-      "softcore": false,
-      "name": "DC Super-Pets",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "DC Super-Pets",
-      "release_date": "2013-05-18"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/bIHCUqaapZdRjd2kzSDiwzYyrpC.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        35,
-        10751,
-        10765
-      ],
-      "id": 45140,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Teen Titans Go!",
-      "overview": "Robin, Starfire, Raven, Beast Boy and Cyborg return in all-new, comedic adventures. They may be super heroes who save the world every day ... but somebody still has to do the laundry!",
-      "popularity": 179.189,
-      "poster_path": "/kPKAigYUlWRpnfo4Ptiwlz4FWXU.jpg",
-      "first_air_date": "2013-04-23",
-      "softcore": false,
-      "name": "Teen Titans Go!",
-      "vote_average": 6.407,
-      "vote_count": 734,
-      "title": "Teen Titans Go!",
-      "release_date": "2013-04-23"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/6WUbZMHlWjriE0kuDVvojT5seb0.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 293346,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Farm League",
-      "overview": "The adventures of the Justice League on a comedic animal version that includes Bat-Mongoose, Wonder Wombat, and Super-Manatee",
-      "popularity": 4.4979,
-      "poster_path": "/g4XqXKXvZfDoW7Lc3IwPEdg1OV0.jpg",
-      "first_air_date": "2013-01-26",
-      "softcore": false,
-      "name": "Farm League",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Farm League",
-      "release_date": "2013-01-26"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/zUuIEOQgnTBAf5rfUW7fxQHuGeq.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10751,
-        10765
-      ],
-      "id": 112875,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Thunder and Lightning",
-      "overview": "Growing up a superhero is hard enough, but it's even harder with a super dad and a super sister.",
-      "popularity": 1.7801,
-      "poster_path": "/3EgGq6tDwkllEjO2xrcZFrWc1nq.jpg",
-      "first_air_date": "2013-01-05",
-      "softcore": false,
-      "name": "Thunder and Lightning",
-      "vote_average": 7,
-      "vote_count": 4,
-      "title": "Thunder and Lightning",
-      "release_date": "2013-01-05"
-    },
-    {
-      "adult": false,
       "backdrop_path": "/wAFuDJfZJrnh6a1wf1Vt7PqYBvR.jpg",
       "genre_ids": [
         80,
@@ -1272,261 +913,6 @@
       "vote_count": 6475,
       "title": "Arrow",
       "release_date": "2012-10-10"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/pHdwHzsiWkZrgHGXGJJ2NVp5up2.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        80
-      ],
-      "id": 55853,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "The Bat Man of Shanghai",
-      "overview": "A reimagining of the DC Comics character, as he fights crime in 1930's Shanghai.",
-      "popularity": 1.6901,
-      "poster_path": "/immBsD4mW9cVFzM5XFKuqCsnIbG.jpg",
-      "first_air_date": "2012-07-14",
-      "softcore": false,
-      "name": "The Bat Man of Shanghai",
-      "vote_average": 7.556,
-      "vote_count": 18,
-      "title": "The Bat Man of Shanghai",
-      "release_date": "2012-07-14"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/oqKwZgHKrRQZphvGaopxDS7koGY.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765,
-        10751
-      ],
-      "id": 293484,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Sword of the Atom",
-      "overview": "On an expedition to the Amazon rain forest, Ray Palmer aka The Atom crashes en route, is trapped at being shrunk at 6 inches and must survive the natives he finds.",
-      "popularity": 3.2141,
-      "poster_path": "/udf6ja5rafrIh3RoguOOgXkdRjr.jpg",
-      "first_air_date": "2012-05-26",
-      "softcore": false,
-      "name": "Sword of the Atom",
-      "vote_average": 7,
-      "vote_count": 1,
-      "title": "Sword of the Atom",
-      "release_date": "2012-05-26"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/zKtSlfmQQlkIGTPC92At8Tgygd8.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10751,
-        35
-      ],
-      "id": 293419,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Vibe",
-      "overview": "Vibe competes in a break-dancing competition with his sidekick Daniel. They must defeat the robot Extreme-O, created by Professor Ivo, who is disguised as the judge of the competition.",
-      "popularity": 1.7073,
-      "poster_path": "/srtssgHMhjFu0h8aOvQvnG3SWdn.jpg",
-      "first_air_date": "2012-05-19",
-      "softcore": false,
-      "name": "Vibe",
-      "vote_average": 8,
-      "vote_count": 3,
-      "title": "Vibe",
-      "release_date": "2012-05-19"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/qMubdgR9Ah4AdGKjORe8GkDbRt3.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 139432,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Animal Man",
-      "overview": "Granted the power to borrow the abilities of animals, Buddy Baker aka Animal Man is dedicated to saving them. And humans. Maybe.",
-      "popularity": 3.8358,
-      "poster_path": "/9TM3wkGnU5RrPvEE4Q91bs0lEUj.jpg",
-      "first_air_date": "2012-04-07",
-      "softcore": false,
-      "name": "Animal Man",
-      "vote_average": 4,
-      "vote_count": 1,
-      "title": "Animal Man",
-      "release_date": "2012-04-07"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/r4WxAu9qSeDrVP2bIs4CBpd1s2K.jpg",
-      "genre_ids": [
-        16,
-        10765,
-        35,
-        10751
-      ],
-      "id": 285638,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Super Best Friends Forever",
-      "overview": "Supergirl, Batgirl and Wonder Girl are the Super Best Friends Forever.",
-      "popularity": 2.5269,
-      "poster_path": "/pNps0MT9nEZjkKPKAffMbUpscse.jpg",
-      "first_air_date": "2012-03-17",
-      "softcore": false,
-      "name": "Super Best Friends Forever",
-      "vote_average": 0,
-      "vote_count": 0,
-      "title": "Super Best Friends Forever",
-      "release_date": "2012-03-17"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/bKN9DqtKPruJZLgxIgMEtxiU9x8.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751,
-        10765
-      ],
-      "id": 292845,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "スーパーマン @ Tokyo",
-      "overview": "Superman of Tokyo (stylized as スーパーマン @ Tokyo) is a 2012 series of animated shorts that appeared as part of the DC Nation programming block on Cartoon Network. The series drastically re-imagines the mythos of Superman as the title passes on from one hero to a diaper-wearing baby.",
-      "popularity": 2.0179,
-      "poster_path": "/tY5D39x7p0sBka39k6bqTicDrG6.jpg",
-      "first_air_date": "2012-03-10",
-      "softcore": false,
-      "name": "スーパーマン @ Tokyo",
-      "vote_average": 6,
-      "vote_count": 1,
-      "title": "スーパーマン @ Tokyo",
-      "release_date": "2012-03-10"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/x09kH8ZpoJ6HvU1VNFhdpERSpob.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751
-      ],
-      "id": 293546,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Plastic Man",
-      "overview": "The misadventures of the original stretchable superhero.",
-      "popularity": 2.5421,
-      "poster_path": "/sP0BVjYHDepBw3OptIhqWLhpCvQ.jpg",
-      "first_air_date": "2012-03-03",
-      "softcore": false,
-      "name": "Plastic Man",
-      "vote_average": 6.5,
-      "vote_count": 2,
-      "title": "Plastic Man",
-      "release_date": "2012-03-03"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/nyTlzn3QHr1NbILTszxkZyrC4kq.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        35
-      ],
-      "id": 283746,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "New Teen Titans",
-      "overview": "A series of shorts based on 2003's Teen Titans following the antics of crime-fighting teenagers, showcasing their bite-sized adventures.",
-      "popularity": 6.6955,
-      "poster_path": "/xrLWmgYlOwmm9J43Ddq0Iv5wdzg.jpg",
-      "first_air_date": "2011-11-11",
-      "softcore": false,
-      "name": "New Teen Titans",
-      "vote_average": 7,
-      "vote_count": 1,
-      "title": "New Teen Titans",
-      "release_date": "2011-11-11"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/uuKHDgDW64x4TyrSd6TfYGLPfIz.jpg",
-      "genre_ids": [
-        16,
-        35,
-        10751
-      ],
-      "id": 51676,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "World's Funnest",
-      "overview": "A stop-motion animated series that follows a cast of kooky reimaginings of our favorite DC characters, sound-biting on a specific topic each episode. It is the only unscripted series in the DC Nation lineup, with Aardman animating over interviews of children with DC characters in their place, in the same style as their “Creature Comforts” series.",
-      "popularity": 1.9511,
-      "poster_path": "/yhzojzFtRIA84EeLtGA8HcBnp1r.jpg",
-      "first_air_date": "2011-11-11",
-      "softcore": false,
-      "name": "World's Funnest",
-      "vote_average": 7.5,
-      "vote_count": 2,
-      "title": "World's Funnest",
-      "release_date": "2011-11-11"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/pOKcw45cAMPu8DN7E3bN5FEvxM3.jpg",
-      "genre_ids": [
-        16,
-        10765,
-        10759
-      ],
-      "id": 33217,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Young Justice",
-      "overview": "Teenage superheroes strive to prove themselves as members of the Justice League.",
-      "popularity": 67.689,
-      "poster_path": "/zMJw34G4OJhcd9NjKSRjJdDqjbR.jpg",
-      "first_air_date": "2010-11-26",
-      "softcore": false,
-      "name": "Young Justice",
-      "vote_average": 8.379,
-      "vote_count": 1250,
-      "title": "Young Justice",
-      "release_date": "2010-11-26"
     },
     {
       "adult": false,
@@ -1574,56 +960,6 @@
       "vote_count": 3,
       "title": "Batman: Black and White Motion Comics",
       "release_date": "2008-12-09"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/gPJZKiqBU5OVPhalvNDkU6NF8jQ.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765
-      ],
-      "id": 15804,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Batman: The Brave and the Bold",
-      "overview": "The Caped Crusader is teamed up with Blue Beetle, Green Arrow, Aquaman and countless others in his quest to uphold justice.",
-      "popularity": 41.2744,
-      "poster_path": "/tv2mOIRcPP4H0DhOH84xPgqui7d.jpg",
-      "first_air_date": "2008-11-14",
-      "softcore": false,
-      "name": "Batman: The Brave and the Bold",
-      "vote_average": 7.629,
-      "vote_count": 290,
-      "title": "Batman: The Brave and the Bold",
-      "release_date": "2008-11-14"
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/ilKbbbCYjerHXQr6NRuKPu9DBsJ.jpg",
-      "genre_ids": [
-        16,
-        10759,
-        10765
-      ],
-      "id": 604,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Teen Titans",
-      "overview": "Fighting for truth, justice and the last slice of pizza, these five superheroes are living proof you're never too young to save the planet. Protecting Earth and beyond, the Teen Titans use martial arts and gadgetry to battle villains.",
-      "popularity": 27.174,
-      "poster_path": "/7DCq6XbJx5WGKPvSMBxYK9uJQWQ.jpg",
-      "first_air_date": "2003-07-19",
-      "softcore": false,
-      "name": "Teen Titans",
-      "vote_average": 8.346,
-      "vote_count": 1363,
-      "title": "Teen Titans",
-      "release_date": "2003-07-19"
     },
     {
       "adult": false,
