@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789444867034,
+  "scraped_at": 1789489539649,
   "items": [
     {
       "slug": "3dx0s-the-revolutionaries",
@@ -13,6 +13,16 @@
       "poster_path": "7oikzZ6QgHsTjZ2JqkmKH1NRS9A.jpg",
       "description": "The Revolutionaries narrates the inspiring tale of brave young Indian freedom fighters who fought for ending British Raj with their unwavering spirit and ideology.",
       "first_air_date": "2026-09-11"
+    },
+    {
+      "slug": "44stx-the-perfect-lie",
+      "imdb_id": "tt37439410",
+      "title": "The Perfect Lie",
+      "year": 2026,
+      "score": null,
+      "poster_path": "a8qjbVX7lo1v7m5Awzhx7Ptk8gO.jpg",
+      "description": "When one of their own is killed in a house fire, four picture-perfect couples are forced to question everything they thought they knew about each other.",
+      "first_air_date": "2026-09-10"
     },
     {
       "slug": "44np7-last-seen",
@@ -1432,16 +1442,6 @@
       "score": 4,
       "poster_path": "juAQ7fFQGu2n3A2gW5tfNub1cW8.jpg",
       "description": "In a small-town boxing hub, two brothers investigate a shocking murder while navigating a troubled reunion with their father, a renowned coach.",
-      "first_air_date": "2026-05-01"
-    },
-    {
-      "slug": "3zp95-the-glass-house",
-      "imdb_id": "tt37091702",
-      "title": "The Glass House",
-      "year": 2026,
-      "score": null,
-      "poster_path": "g6NaDwfnNctv1JDjhWIQzOnnPgV.jpg",
-      "description": "A determined immigrant builds his way up from zero in Quebec's competitive 1990s business landscape, navigating challenges and opportunities while creating a successful enterprise.",
       "first_air_date": "2026-05-01"
     }
   ]
