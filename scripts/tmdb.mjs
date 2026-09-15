@@ -261,15 +261,38 @@ export async function buildDiscoverItems(list, mediaType) {
   const netVeto = new Set();
   let netVetoPages = 0;
   if (exclNets.length > 0) {
-    const netQs = `&with_networks=${encodeURIComponent(exclNets.join("|"))}`;
+    const inclNets = mediaType === "series" ? [...new Set(list.includeNetworks || [])] : [];
+    if (inclNets.length * exclNets.length > 100) {
+      throw new Error(`too many network include x exclude combinations (${inclNets.length * exclNets.length}, cap 100)`);
+    }
+    // When a base query already pins networks (include), a second
+    // with_networks param would make TMDB reject the request (400 status 5 -
+    // live-verified). Veto those as include x exclude PAIR scans instead:
+    // comma = AND, so with_networks=i,e returns shows airing on both - and a
+    // window candidate is on an excluded network exactly when it is on some
+    // included i AND some excluded e. Queries without a pinned network keep
+    // the single pipe-append (exclude-only behavior, unchanged).
+    const stripNetworks = (qs) =>
+      "&" + qs.replace(/^&/, "").split("&").filter((p) => !p.startsWith("with_networks=")).join("&");
     const baseQsList = singleQueryMode
       ? [singleQueryQs]
       : sources.filter((s) => s.kind === "discover").map((s) => s.qs);
+    const vetoQueries = [];
     for (const qs of baseQsList) {
+      if (inclNets.length > 0 && qs.indexOf("with_networks=") !== -1) {
+        const stripped = stripNetworks(qs);
+        for (const inc of inclNets) for (const exc of exclNets) {
+          vetoQueries.push(stripped + `&with_networks=${inc},${exc}`);
+        }
+      } else {
+        vetoQueries.push(qs + `&with_networks=${encodeURIComponent(exclNets.join("|"))}`);
+      }
+    }
+    for (const vq of vetoQueries) {
       let np = 1;
       let nTotal = 1;
       do {
-        const data = await tmdbFetch(`${endpoint}?${(qs + netQs).replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${np}${excludeQs}${voteFloorQs}`);
+        const data = await tmdbFetch(`${endpoint}?${vq.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${np}${excludeQs}${voteFloorQs}`);
         netVetoPages++;
         for (const item of data.results || []) netVeto.add(item.id);
         nTotal = Number.isFinite(data.total_pages) ? data.total_pages : np;

@@ -807,7 +807,7 @@ export function buildConfigurePage(origin, config, opts = {}) {
     .preview-item-x { opacity: 1; width: 17px; height: 17px; top: 4px; left: 4px; }
     .preview-list-link { opacity: 1; width: 17px; height: 17px; }
     .preview-list-x { opacity: 1; width: 17px; height: 17px; }
-    .inline-add-search button { flex: 1 1 auto; padding: 6px 10px; font-size: 11px; }
+    .inline-add-search button { flex: 0 0 auto; padding: 6px 10px; font-size: 11px; }
   }
   @media (max-width: 380px) {
     .right-col { gap: 6px; }
@@ -1740,6 +1740,21 @@ const TMDB_MODE_KINDS = ['genre', 'keyword', 'company', 'collection', 'network']
 const tmdbOpenSections = new Set();
 let tmdbAdding = null; // { i, kind, side }
 let tmdbSearchResultsHtml = null;
+// Sequence token for inline search: the debounce fires search N+1 while
+// search N may still be in flight. Late responses from a superseded query
+// are dropped instead of repainting the box and (formerly) restoring a
+// stale captured value over the user's newer keystrokes.
+let tmdbSearchSeq = 0;
+
+// Paints inline-search results WITHOUT remounting the tab: touches only
+// the results container, so the live input keeps its text, caret and focus
+// no matter what the user types while a fetch is in flight.
+function writeSearchResults(seq, html) {
+  if (seq !== tmdbSearchSeq) return;
+  tmdbSearchResultsHtml = html;
+  const box = document.querySelector('#tabHost .search-results');
+  if (box) box.innerHTML = html;
+}
 
 function tmdbModeSummary(l) {
   const values = TMDB_MODE_KINDS.map((k) => (l.includeModes[k] === 'or' ? 'or' : 'and'));
@@ -2060,6 +2075,7 @@ function openTmdbInlineSearch(i, kind, side) {
   // the disabled guard lives here.
   if (state.tmdb.lists[i] && !state.tmdb.lists[i].enabled) return;
   tmdbAdding = { i, kind, side };
+  tmdbSearchSeq++; // invalidate any in-flight result from a previous search
   tmdbSearchResultsHtml = null;
   renderTmdb();
   const input = document.getElementById('tmdbInlineInput');
@@ -2067,6 +2083,7 @@ function openTmdbInlineSearch(i, kind, side) {
 }
 function closeTmdbInlineSearch() {
   tmdbAdding = null;
+  tmdbSearchSeq++; // late async paints must not repopulate a closed box
   tmdbSearchResultsHtml = null;
   renderTmdb();
 }
@@ -2078,12 +2095,14 @@ async function runTmdbInlineSearch() {
   const q = input.value.trim();
   if (tmdbSearchTimer) clearTimeout(tmdbSearchTimer);
   if (q.length < 2 && !(tmdbAdding.kind === 'network' && /^[0-9]$/.test(q))) {
-    tmdbSearchResultsHtml = null;
-    rerenderKeepInput(q);
+    tmdbSearchSeq++;
+    writeSearchResults(tmdbSearchSeq, '');
     return;
   }
   tmdbSearchTimer = setTimeout(async () => {
+    const seq = ++tmdbSearchSeq;
     let netId = NaN;
+    let resultHtml = '';
     try {
       // 'item' searches titles (type-scoped) for the Excluded Titles section;
       // keyword/company/collection keep their own TMDB search endpoints.
@@ -2097,8 +2116,7 @@ async function runTmdbInlineSearch() {
         // text is meaningless to fuzzy search, resolve the id directly.
         if (q.indexOf('themoviedb.org') !== -1) {
           const urlRow = Number.isInteger(netId) ? await networkIdRowHtml(netId, false) : '';
-          tmdbSearchResultsHtml = urlRow || '<div class="empty-msg">Not a TMDB network link.</div>';
-          rerenderKeepInput(q);
+          writeSearchResults(seq, urlRow || '<div class="empty-msg">Not a TMDB network link.</div>');
           return;
         }
       }
@@ -2124,7 +2142,7 @@ async function runTmdbInlineSearch() {
       if (isNet && Number.isInteger(netId)) {
         rows = await networkIdRowHtml(netId, data.results.some((r) => r.id === netId)) + rows;
       }
-      tmdbSearchResultsHtml = rows || '<div class="empty-msg">No results found.</div>';
+      resultHtml = rows || '<div class="empty-msg">No results found.</div>';
     } catch (e) {
       // The Networks search is a proxied undocumented site route - if it
       // breaks, match the offline seed list so the picker keeps working.
@@ -2133,29 +2151,23 @@ async function runTmdbInlineSearch() {
         const idRow = Number.isInteger(netId) ? await networkIdRowHtml(netId, false) : '';
         const fb = networkFallbackResultsHtml(q);
         if (idRow) {
-          tmdbSearchResultsHtml = fb.indexOf('result-item') === -1 ? idRow : idRow + fb;
+          resultHtml = fb.indexOf('result-item') === -1 ? idRow : idRow + fb;
         } else {
           // Both the site search AND the id-resolver failed - almost always
           // a transient upstream hiccup, so offer a one-click retry.
-          tmdbSearchResultsHtml = '<div class="empty-msg">Network lookup failed. ' +
+          resultHtml = '<div class="empty-msg">Network lookup failed. ' +
             '<button type="button" class="secondary" style="font-size:11px;padding:2px 8px;" onclick="runTmdbInlineSearchNow()">Retry</button></div>';
         }
       } else {
-        tmdbSearchResultsHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
+        resultHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
       }
     }
-    rerenderKeepInput(q);
+    writeSearchResults(seq, resultHtml);
   }, 400);
 }
 
-// Re-render then restore the inline input's text + caret - innerHTML swap
-// would otherwise wipe what the user typed mid-search.
-function rerenderKeepInput(text) {
-  renderTmdb();
-  const fresh = document.getElementById('tmdbInlineInput');
-  if (fresh) { fresh.value = text; fresh.focus(); fresh.setSelectionRange(text.length, text.length); }
-}
-
+// Guard against a search closed while its debounce was queued: open/close
+// bump tmdbSearchSeq, so the fired body's stale seq check discards itself.
 function pickTmdbResult(i, kind, side, id, name) {
   const l = state.tmdb.lists[i];
   if (!l) return;

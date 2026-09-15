@@ -1000,16 +1000,35 @@ export async function handleTmdbPreviewDiscover(env, request) {
     }
     // Exclude networks (series-only): no without_networks param exists, so
     // the same base query is re-run with the excluded ids piped in - the
-    // hits ARE the veto set (mirror of scripts/tmdb.mjs P1c).
+    // hits ARE the veto set (mirror of scripts/tmdb.mjs P1c). When the base
+    // query already pins include-networks, a second with_networks param is
+    // a 400 - those veto as include x exclude comma-AND pair scans instead.
     if (mediaType === "series" && entry.excludeNetworks && entry.excludeNetworks.length > 0) {
-      const netQs = `&with_networks=${encodeURIComponent([...new Set(entry.excludeNetworks)].join("|"))}`;
-      const baseQsList = sources.length > 0 ? sources : [andQs];
+      const inclNets = [...new Set(entry.includeNetworks || [])];
+      const exclNets = [...new Set(entry.excludeNetworks)];
       const veto = new Set();
+      if (inclNets.length * exclNets.length > 100) {
+        return json({ error: `too many network include x exclude combinations (${inclNets.length * exclNets.length}, cap 100)` }, 400);
+      }
+      const stripNetworks = (qs) =>
+        "&" + qs.replace(/^&/, "").split("&").filter((p) => !p.startsWith("with_networks=")).join("&");
+      const baseQsList = sources.length > 0 ? sources : [andQs];
+      const vetoQueries = [];
       for (const qs of baseQsList) {
+        if (inclNets.length > 0 && qs.indexOf("with_networks=") !== -1) {
+          const stripped = stripNetworks(qs);
+          for (const inc of inclNets) for (const exc of exclNets) {
+            vetoQueries.push(stripped + `&with_networks=${inc},${exc}`);
+          }
+        } else {
+          vetoQueries.push(qs + `&with_networks=${encodeURIComponent(exclNets.join("|"))}`);
+        }
+      }
+      for (const vq of vetoQueries) {
         let np = 1;
         let nTotal = 1;
         do {
-          const data = await tmdbApi(env, `${endpoint}?${(qs + netQs).replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${np}${excludeQs}${voteFloorQs}`);
+          const data = await tmdbApi(env, `${endpoint}?${vq.replace(/^&/, "")}&sort_by=${encodeURIComponent(sortBy)}&page=${np}${excludeQs}${voteFloorQs}`);
           if (data.error) return json(data, 502);
           for (const item of data.results || []) veto.add(item.id);
           nTotal = Number.isFinite(data.total_pages) ? data.total_pages : np;
