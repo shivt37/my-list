@@ -1,126 +1,157 @@
-# STRUCTURE
+# Codebase Structure
 
-**Analysis Date:** 2026-09-03
+**Analysis Date:** 2026-09-15
 
-<!-- refreshed: 2026-09-03 -->
-
-## Top-level layout
+## Directory Layout
 
 ```
 my-list/
-├── src/                  Cloudflare Worker (deployed; zero npm deps)
-├── scripts/              GitHub Actions job scripts (puppeteer only dep)
-├── data/                 Catalog JSON files (bot-written, git add -f, Pages-served)
-├── .github/workflows/    4 CI workflows (cron + dispatch)
-├── testing/              Standalone assert tests + fixtures (GITIGNORED)
-├── audit/                UI/functional audit artifacts + reports (GITIGNORED)
-├── .audit/               Earlier audit phase captures (GITIGNORED)
-├── scratch/              One-off probe scripts, screenshots, logs (GITIGNORED)
-├── .planning/            Planning/codebase docs (STACK.md, INTEGRATIONS.md, codebase/)
-├── .claude/              Agent config
-├── .wrangler/            Wrangler local state (GITIGNORED)
-├── wrangler.toml         Worker config (KV binding STORE, vars)
-├── .dev.vars             Local dev secrets (GITIGNORED)
-├── PRODUCT.md            Product notes (GITIGNORED)
-└── .gitignore
+├── src/                # Cloudflare Worker (all request handling)
+│   ├── index.js        # Router + auth gate
+│   ├── routes.js       # Stremio + control API handlers (~1100 lines)
+│   ├── config.js       # Config normalize/hash + KV store (~600 lines)
+│   ├── auth.js         # PIN login, session cookie, rate limit
+│   ├── dispatch.js     # GitHub workflow_dispatch client
+│   ├── configure.js    # /configure admin SPA (single-file HTML/JS, ~2700 lines)
+│   └── status.js       # /status dashboard page (server-rendered)
+├── scripts/            # GitHub Actions generators (Node, run via workflows)
+│   ├── scrape.mjs      # MDBList DOM scraper (puppeteer + stealth)
+│   ├── official.mjs    # MDBList official-lists API puller
+│   ├── simkl.mjs       # SIMKL calendar v2 → arriving-today filter
+│   └── tmdb.mjs        # TMDB Discover generator
+├── .github/workflows/  # Cron + dispatch schedules per module
+│   ├── scrape.yml
+│   ├── official.yml
+│   ├── simkl.yml
+│   └── tmdb.yml
+├── data/               # Generated catalog JSON (committed, served via Pages)
+├── testing/            # Node assert scripts + live/verify helpers
+├── audit/report/       # Phase 1 + Phase 2 functional/UI audit reports + screenshots
+├── scratch/            # Reference material (MDBList API yaml, SIMKL notes)
+├── .planning/codebase/ # GSD codebase maps + research notes
+├── wrangler.toml       # Worker name, entry, KV binding, public vars
+└── README.md           # System overview, layout table, module docs
 ```
 
-No root `package.json` — the worker has zero dependencies; only `scripts/package.json` exists
-(`my-list-scraper`, deps: `puppeteer`, `puppeteer-extra`, `puppeteer-extra-plugin-stealth`; script:
-`npm run scrape`).
+## Directory Purposes
 
-## `src/` — the worker (camelCase, one concern per file)
+**`src/`:**
+- Purpose: Entire Worker runtime. No subdirectories — 7 flat ES modules.
+- Contains: Request routing, business logic, KV access, HTML page builders.
+- Key files: `src/index.js` (entry, `wrangler.toml` `main`), `src/routes.js` (bulk of logic), `src/config.js` (state shape), `src/configure.js` (largest file, admin UI).
 
-| File | Lines | Purpose |
-|---|---|---|
-| `src/index.js` | 123 | Worker `fetch` handler. Thin router: CORS preflight, auth routes (always open), session gate, then exact pathname matches delegating to routes.js. |
-| `src/routes.js` | 978 | All handlers: `buildManifest`, `handleCatalog` + `CATALOG_RE`, `handleStatus`, `handleSaveConfig` (per-module diff + phased dispatch), `handleExportConfig`, `handleTriggerRefresh`, `handleRunsPost`, TMDB helpers (`handleTmdbSearch`, `handleTmdbPreviewDiscover`), official picker (`handleMdblistOfficialCatalog`, KV-cached 10 min under `cache:mdblist-official`), `configureResponse`. Also the four `rowToMeta*` mappers (one per module). |
-| `src/config.js` | 585 | Config schema + KV. `loadConfig`/`saveConfig`, `migrateConfig` + per-module normalizers, seeds (`SEED_LISTS`, `OFFICIAL_LISTS`, `SIMKL_LISTS`), id schemes (`randomScraperId`, `tmdbCatalogId`, `officialCatalogsFor`), hashes (`configVersion`, `listContentHash`, `tmdbContentHash`), run history (`addRun`, `addRuns`, `capRuns`, `getRuns`, `runsKeyFor`). |
-| `src/configure.js` | 2267 | `/configure` page — ONE giant template literal (server-rendered shell + CSS + inline client JS + 4 module tabs). Backticks/`${` illegal in body; strings via `+`. Single `state` object, `rerenderActive()`. |
-| `src/status.js` | 470 | `/status` page — normal template literal, `statusPageResponse()`; renders all 4 modules from `handleStatus`; `?format=json` bypasses to raw feed. Hand-mirrors `ACCENT_COLORS`. |
-| `src/auth.js` | 376 | Login gate: HMAC stateless session cookie (`mylist_session`, `v1|exp|pinfp|nonce.hmac`), constant-time PIN compare, KV fixed-window rate limit (10/IP, 60/global per 5 min), route classification (`isPublic`, `isAdminPath`, `isAuthEnabled`), `loginPageHtml`. |
-| `src/dispatch.js` | 53 | `dispatchScraperWorkflow` — single GitHub dispatch call site; 15s `AbortSignal.timeout`; `GH_DISPATCH_STUB` local no-op. |
+**`scripts/`:**
+- Purpose: Data-plane generators, executed only in GitHub Actions (never imported by Worker, except `scripts/tmdb.mjs` imports `tmdbContentHash` from `src/config.js`).
+- Contains: 4 `.mjs` CLIs with `--ids/--slugs/--kinds/--lists/--action/--delete-ids` argv parsing, shared wrapper output shape `{ catalog_id, name, type, scraped_at, sourceHash, items }`.
+- Key files: `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`.
+- Note: `scripts/node_modules/` is a local install (puppeteer etc.) used by Actions; root `node_modules/` holds test/verify deps (jsdom, playwright).
 
-## `scripts/` — CI job mains (kebab/mixed naming, `.mjs`)
+**`.github/workflows/`:**
+- Purpose: One workflow per module, each with own cron + `workflow_dispatch` inputs + shared `my-list-scrape` concurrency group (`queue: max`).
+- Contains: Input sanitization (`tr -cd` whitelist), KV-consistency wait loop, `node <script>.mjs`, `git add -f 'data/*.json'` + rebase-push commit step.
+- Key files: `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml`.
 
-| File | Lines | Purpose |
-|---|---|---|
-| `scripts/scrape.mjs` | 528 | DOM scraper: puppeteer-extra + stealth; `buildPageUrl` pagination rule; fetch config via `/export-config`; `writeCatalog` → `data/<id>.json`; `postRuns` (chunks of 50); `--action=scrape\|scrape_delete`, `--lists=`, `--delete-ids=`, `--debug`. |
-| `scripts/official.mjs` | 257 | MDBList API for enabled official slugs × 2 mediatypes → `data/mdboff_<slug>_<movie\|show>.json`; `--slugs=`, `--action=refresh\|delete`, `--delete-ids=`. |
-| `scripts/simkl.mjs` | 494 | SIMKL v2 calendar (tv + anime); per-list filter blocks (genres/countries/rating tiers) + global timezone; empty result is legitimate and overwrites; `--kinds=series\|anime`. |
-| `scripts/tmdb.mjs` | 485 | TMDB `/discover` generator; AND/OR include modes; collection post-filter (no native param); 500-item cap; imports `tmdbContentHash` from `../src/config.js` (single hash source); items stored pre-sorted. |
-| `scripts/package.json`, `scripts/package-lock.json` | — | Scraper deps (puppeteer only). `npm ci` in workflow. |
+**`data/`:**
+- Purpose: Generated catalog files, one per catalog id, committed to git and served as static JSON via GitHub Pages (`{GITHUB_PAGES_BASE}/data/<id>.json`).
+- Contains: `mdb_scrape_*.json`, `mdboff_<slug>_<movie|show>.json`, `simkl_arriving_today_*.json`, `tmdb_discover_*_*.json`, plus `.gitkeep`.
+- Generated: Yes (by Actions). Committed: Yes (deliberately — audit trail + survives worker downtime).
 
-Shared script conventions: `export const ROOT/DATA_DIR` (repo-relative), `arg(name)` CLI parser,
-`isMain` entry guard, `writeCatalog` per script, run-record shape `{catalog_id, pages_scraped,
-triggered_by, movies_found, status, error_message, started_at, finished_at}`, id regex validation
-before `join()` (path-traversal guard).
+**`testing/`:**
+- Purpose: Standalone Node verification scripts (no test runner; `node testing/<file>.mjs`).
+- Contains: `*.test.mjs` (assert-based: `save-config`, `scrape-serve`, `tmdb-sort`, `preview-excl-dom`, `network-picker-dom`), `verify-*.mjs` / `*-live.mjs` / `*-repro.mjs` / `dry-test.mjs` (manual/live helpers), `theme-preview.html`.
+- Key files: `testing/save-config.test.mjs` (save dispatch regression), `testing/scrape-serve.test.mjs`, `testing/tmdb-sort.test.mjs`.
 
-## `data/` — catalog data plane
+**`audit/report/`:**
+- Purpose: Historical QA evidence (Phase 1 + Phase 2 functional + UI audits with screenshots).
+- Contains: `Phase 1/FUNCTIONAL-AUDIT.md`, `Phase 1/UI-AUDIT.md`, `Phase 2/FUNCTIONAL-AUDIT-2.md`, `Phase 2/UI-AUDIT-2.md`, `images/` per phase.
+- Read-only reference; never import from it.
 
-Bot-owned artifacts, **gitignored as `data/*.json`** then force-added (`git add -f data/*.json`)
-by workflows. `data/.gitkeep` keeps the dir in fresh clones. Files:
+**`scratch/`:**
+- Purpose: External API reference material for generator authors.
+- Contains: `scratch/MDBList API.yaml`, `scratch/simkl-llms-full.txt`.
 
-- `mdb_scrape_<id>.json` — scraper rows (3 files)
-- `mdboff_<slug>_<movie|show>.json` — official lists (`justwatch-streaming-charts`, `most-watched-week`)
-- `simkl_arriving_today_<series|anime>.json`
-- `tmdb_discover_<movie|series>_<id>.json`
+**`.planning/`:**
+- Purpose: GSD planning artifacts + codebase maps.
+- Contains: `.planning/codebase/ARCHITECTURE.md`, `.planning/codebase/STRUCTURE.md`, `.planning/codebase/RESEARCH-own-mdblist-platform.md`.
 
-Wrapper shape: `{ catalog_id, name, type, scraped_at, sourceHash, items }` (tmdb documented;
-others equivalent). Never hand-edited — throwaway artifacts, regenerated per cron; conflicts resolved
-by `git pull --rebase -X theirs`.
+## Key File Locations
 
-## `.github/workflows/` — CI
+**Entry Points:**
+- `src/index.js`: Worker `fetch` handler — start here for any request-path question.
+- `scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`: Generator CLIs — start here for data-shape questions.
+- `.github/workflows/*.yml`: Cron/dispatch wiring — start here for scheduling questions.
 
-- `scrape.yml` — 2 crons (00:00/12:00 UTC = 05:30/17:30 IST), inputs `lists/action/delete_ids/config_version/debug`, input sanitization step, KV-consistency wait, 30-min timeout, debug artifact upload.
-- `official.yml` — same crons; inputs `slugs/action/delete_ids/config_version`; 15-min timeout.
-- `simkl.yml` — same crons; inputs `kinds/config_version`.
-- `tmdb.yml` — ONE cron daily (12:00 UTC line deliberately commented out, owner decision); inputs `ids/action/delete_ids/config_version`.
+**Configuration:**
+- `wrangler.toml`: Worker name (`my-list`), `main = "src/index.js"`, `STORE` KV binding id, public vars (`GITHUB_PAGES_BASE`, `GH_REPO`, `GH_WORKFLOW*`). Secrets (`GH_TOKEN`, `ADMIN_PIN`, `TMDB_READ_ACCESS_TOKEN`, `MDBLIST_API_KEY`, `SIMKL_CLIENT_ID`) live only in Cloudflare dashboard / GitHub secrets — never in repo.
+- KV `STORE` keys (runtime, not files): `config`, `runs:scraper`, `runs:official`, `runs:simkl`, `runs:tmdb`, `healed`, `rl:login:*`, `cache:network-search:*`, `cache:mdblist-official`.
 
-All four: `permissions: contents: write`, shared `concurrency: my-list-scrape` + `queue: max`,
-bot commit `chore(data): … [skip ci]`.
+**Core Logic:**
+- `src/routes.js`: `buildManifest`, `handleCatalog`, `handleSaveConfig`, `handleExportConfig`, `handleTriggerRefresh`, `handleRunsPost`, `handleStatus`, TMDB/MDBList proxies.
+- `src/config.js`: `loadConfig`, `saveConfig`, `migrateConfig`, `normalizeTmdbList`, `normalizeSimklList`, `migrateOfficial`, `listContentHash`, `tmdbContentHash`, `configVersion`, `addRuns`, `capRuns`.
+- `src/configure.js`: `buildConfigurePage` + embedded SPA (`renderScraper`, `renderOfficial`, `renderSimkl`, `renderTmdb`, preview/picker/save flows).
+- `src/auth.js`: `isPublic`, `isAdminPath`, `checkSession`, `handleLogin`, `handleLogout`, `rateLimitLogin`.
+- `src/dispatch.js`: `dispatchScraperWorkflow`.
+- `src/status.js`: `statusPageResponse`.
 
-## Supporting dirs
+**Testing:**
+- `testing/save-config.test.mjs`: Save-dispatch matrix (regen-on-enable, phased dispatch order).
+- `testing/scrape-serve.test.mjs`: Catalog serving shape.
+- `testing/tmdb-sort.test.mjs`, `testing/preview-excl-dom.test.mjs`, `testing/network-picker-dom.test.mjs`: TMDB sort/exclusion/network DOM+logic checks.
+- `testing/verify-ui.mjs`, `testing/verify-tmdb.mjs`, `testing/tmdb-repro.mjs`, `testing/tmdb-exclude-e2e.mjs`, `testing/networks-live.mjs`, `testing/undated-live.mjs`, `testing/dry-test.mjs`: Manual/live verification helpers.
 
-- `testing/` — GITIGNORED. Standalone tests (no framework, `node:assert/strict`, stub `fetch` + fake KV):
-  `save-config.test.mjs` (regen-on-enable + scraper regressions), `scrape-serve.test.mjs` (S1 typing
-  regression), `tmdb-sort.test.mjs`, `verify-tmdb.mjs`, `verify-ui.mjs`, `dry-test.mjs`,
-  `theme-preview.html`.
-- `audit/` — GITIGNORED. `audit/report/FUNCTIONAL-AUDIT.md`, `audit/report/UI-AUDIT.md` +
-  `audit/report/images/F*.png` (F01–F18 before/after evidence), `audit/status-design/`
-  (`mockup-a/b/c.html`, `REPORT.md`, `STATUS-REVIEW.md`, `mockup-b/option-*.html`).
-- `.audit/` — GITIGNORED. Earlier audit phase captures (phase1–4 notes, DOM/style JSON dumps,
-  probe scripts, wrangler logs, html smoke screenshots, `build-xlsx.py`, `mockups/`).
-- `scratch/` — GITIGNORED. One-off probes and screenshots: `*.mjs` verification scripts
-  (`agent-review-*.mjs`, `ui-f*.mjs`, `dim-*.mjs`, `status-verify.mjs`, `sync-local-from-prod.mjs`),
-  `MDBList API.yaml`, `wrangler-dev.log`, screenshots (`look-*.png`, `status-*.png`, `*-dim-*.png`),
-  `scratch/audit/` subfolder (live-test outputs, config snapshots, UI screenshot corpus 01–96).
-- `.planning/` — tracked planning docs: `STACK.md`, `INTEGRATIONS.md`, `FUNCTIONAL-AUDIT.md`,
-  `codebase/` (this mapping).
+## Naming Conventions
 
-## Gitignored areas (`.gitignore`)
+**Files:**
+- Worker: flat `src/*.js`, lowercase, one concern per file (`auth.js`, `dispatch.js`, `status.js`). No subdirectories, no barrel files, no framework.
+- Generators: `scripts/<module>.mjs` (`.mjs` = ESM CLI with shebang + `process.argv` parsing). Workflows mirror module names: `scripts/tmdb.mjs` ↔ `.github/workflows/tmdb.yml`.
+- Tests: `testing/<topic>.test.mjs` (assert suites) vs `testing/verify-*.mjs` / `testing/*-live.mjs` (manual/live) vs `testing/*-repro.mjs` / `testing/*-e2e.mjs` (reproductions).
+- Data: `<catalog-id>.json` where id embeds module: `mdb_scrape_<8>`, `mdboff_<slug>_<movie|show>`, `simkl_arriving_today_<series|anime>`, `tmdb_discover_<movie|series>_<8base36>`.
 
-`node_modules/`, `.wrangler/`, `dev-dist/`, `debug/`, `scratch/`, `.audit/`, `audit/`, `.dev.vars`,
-`PRODUCT.md`, `data/*.json` (force-added by bots), `testing/`, `implementation/`, `.DS_Store`.
+**Directories:**
+- Lowercase, no nesting beyond one level (`audit/report/Phase N/`, `.github/workflows/`, `.planning/codebase/`). `node_modules/` at root and under `scripts/` are installs, not source.
 
-## Naming conventions
+**Code identifiers:**
+- Handlers: `handle<Thing>` (`handleCatalog`, `handleSaveConfig`, `handleTmdbPreviewDiscover` in `src/routes.js`; `handleLogin`/`handleLogout` in `src/auth.js`).
+- Config: `migrate<Section>` (whole-section sanitize), `normalize<Thing>` (single-entry coerce), `<thing>Defaults`/`seed<Thing>Defaults` (fresh-install seeds), `<thing>ContentHash` (regen diff), `runsKeyFor` (prefix → history key) — all in `src/config.js`.
+- KV keys: `runs:<module>`, `cache:<what>:<key>`, `rl:login:<ip>:<window>` (`src/config.js`, `src/routes.js`, `src/auth.js`).
+- Configure SPA: `render<Module>` + `toggle<Thing>`/`set<Thing>`/`updateTmdb` + `tmdb*` helpers, all inside the single `<script>` in `src/configure.js`.
 
-- **`src/`** — camelCase filenames (`config.js`, `configure.js`, `routes.js`, `status.js`, `auth.js`,
-  `dispatch.js`, `index.js`); ES modules, ESM imports; exported `handleX` / `buildX` verbs.
-- **`scripts/`** — lowercase single-word `.mjs` mains (`scrape`, `official`, `simkl`, `tmdb`), one per
-  module; kebab-case in workflow names (`official.yml`).
-- **Data files** — flat `<prefix>_<identifier>.json`, never nested dirs (id = filename = catalog id).
-- **Catalog id prefixes** — module-dispatch contract: `mdb_scrape_` / `mdboff_` / `simkl_` /
-  `tmdb_discover_`; `runsKeyFor()` and `handleCatalog` branch on prefix.
-- **KV keys** — `config`, `runs:<module>` (`runs:scraper`, `runs:official`, `runs:simkl`, `runs:tmdb`),
-  `healed`, `cache:mdblist-official`, `rl:login:<ip>:<window>`, `rl:login:global:<window>`.
-- **Env/secrets** — UPPER_SNAKE (`ADMIN_PIN`, `GH_TOKEN`, `WORKER_ORIGIN`, `MDBLIST_API_KEY`,
-  `SIMKL_CLIENT_ID`, `TMDB_READ_ACCESS_TOKEN`, `GH_DISPATCH_STUB`, `AUTH_ENABLED`, `SESSION_SECRET`,
-  `GH_SIMKL_WORKFLOW`, `GH_TMDB_WORKFLOW`, `GH_OFFICIAL_WORKFLOW`, `GITHUB_PAGES_BASE`).
-- **Workflows** — one file per module (`scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml`); cron
-  lines edited on github.com, never worker-side.
-- **Tests** — `*.test.mjs` (behavior) + `verify-*.mjs` (manual verification) + `dry-test.mjs`.
+## Where to Add New Code
+
+**New Worker endpoint:**
+- Route entry: `src/index.js` `fetch` (pathname + method match, following existing order: auth bypass → gate → public → admin → proxies → 404).
+- Handler: `src/routes.js` as `export async function handle<Thing>`; auth classification in `src/auth.js` (`isPublic` vs `ADMIN_PREFIXES`/`isAdminPath`).
+- Tests: `testing/<topic>.test.mjs` with fake-KV + stubbed `fetch` harness (see `testing/save-config.test.mjs:13`).
+
+**New catalog module (5th data source):**
+- Config section: `src/config.js` — `migrate<Section>` + `normalize*` + catalog-id builder + content hash + `RUNS_<MOD>_KEY` + `runsKeyFor` branch + `loadConfig` seeding branch.
+- Serving: `src/routes.js` — `rowToMeta<Mod>`, `buildManifest` block, `handleCatalog` registry lookup, `handleStatus` name map + `liveCatalogIdsFor` branch.
+- Save/refresh: `handleSaveConfig` diff + phased dispatch, `handleTriggerRefresh` page branch, new `*_WORKFLOW` const.
+- Admin UI: `render<Mod>` tab + `buildConfig`/`isDirty` branches in `src/configure.js`; status tab in `MODULES` in `src/status.js`.
+- Pipeline: `scripts/<mod>.mjs` + `.github/workflows/<mod>.yml` (same concurrency group, same `data/*.json` + `/runs` contract).
+- Data file: `data/<new-id-scheme>.json`.
+
+**New TMDB discover dimension:**
+- Shape: `normalizeTmdbList` in `src/config.js:318` + `tmdbContentHash` field list + `TMDB_DIMS`/`TMDB_FIELD_KEYS`/`TMDB_NAME_KEYS` + `tmdbDimSection` + add/remove helpers in `src/configure.js` + `buildDiscoverSources` in `scripts/tmdb.mjs:87` + preview query plan in `handleTmdbPreviewDiscover` (`src/routes.js:868`). All four must stay in sync or preview diverges from generated files.
+
+**Utilities:**
+- Shared Worker helpers: `src/routes.js` (`json`/`html`) or `src/config.js` (pure functions). No `utils/` dir exists — keep it that way; colocate with the layer that owns the concern.
+- Shared test harness: inline per file (fake KV + fetch stub at top of `testing/save-config.test.mjs`); no shared test helper module.
+
+## Special Directories
+
+**`data/`:**
+- Purpose: Committed build artifacts doubling as the production CDN (via GitHub Pages).
+- Generated: Yes. Committed: Yes (with `-f` — `data/*.json` would otherwise risk ignore rules; see workflow commit steps).
+
+**`node_modules/` (root) and `scripts/node_modules/`:**
+- Purpose: Installed deps (jsdom/playwright at root for tests; puppeteer-extra stack under `scripts/` for the scraper).
+- Generated: Yes. Committed: No.
+
+**`audit/`:**
+- Purpose: Frozen QA reports + screenshots.
+- Generated: No (human/assistant-written). Committed: Yes.
 
 ---
 
-*Structure analysis: 2026-09-03*
+*Structure analysis: 2026-09-15*

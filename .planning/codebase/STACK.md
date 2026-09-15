@@ -1,91 +1,79 @@
-# STACK.md — Technology Stack
+# Technology Stack
 
-**Analysis Date:** 2026-09-03
-**Scope:** full repo (`D:\New folder (5)\my-list`)
+**Analysis Date:** 2026-09-15
 
-## What This Is
+## Languages
 
-Stremio addon ("my-list") backed by a Cloudflare Worker. The worker serves
-catalog metadata live (thin fetcher), all heavy data generation runs in
-GitHub Actions, and generated catalog files are served as static JSON from
-GitHub Pages. Config + run history live in Cloudflare KV.
+**Primary:**
+- JavaScript (ES modules, `"type": "module"`) - all Worker code in `src/*.js`, all CI scripts in `scripts/*.mjs`, all tests in `testing/*.mjs`
+- No TypeScript, no build/transpile step - Worker ships raw `src/index.js` as entry
 
-## Language & Runtime
+**Secondary:**
+- HTML/CSS/vanilla JS (template literals) - admin SPA in `src/configure.js`, status page in `src/status.js`, preview page in `testing/theme-preview.html`
+- Bash (inline `run:` blocks) - input sanitization + KV-consistency polling inside `.github/workflows/*.yml`
+- PowerShell - documented local-dev shell in `README.md`
 
-- **Language:** JavaScript ES modules throughout (`"type": "module"` in `scripts/package.json`; worker uses ESM `import` in `src/*.js`).
-- **Worker runtime:** Cloudflare Workers (workerd). `wrangler.toml` sets `compatibility_date = "2026-01-01"` and `compatibility_flags = ["nodejs_compat"]`.
-- **Script runtime:** Node.js 22 (`actions/setup-node@v5`, `node-version: 22` in `.github/workflows/scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml`).
-- **No root `package.json`:** the worker itself has **zero npm dependencies**. The only manifest is `scripts/package.json` (the GitHub Actions scraper).
+## Runtime
 
-## Framework
+**Environment:**
+- Cloudflare Workers - entry `src/index.js` (`export default { async fetch }`), `compatibility_date = "2026-01-01"`, `compatibility_flags = ["nodejs_compat"]` in `wrangler.toml`
+- Web-standard APIs only in `src/`: `fetch`, `Response`, `URL`, `crypto.subtle` (HMAC sessions in `src/auth.js`), `AbortSignal.timeout`, `TextEncoder`, `Intl` (timezone in SIMKL path)
+- Node.js 22 - GitHub Actions runners (`actions/setup-node@v5`, `node-version: 22` in all four `.github/workflows/*.yml`); local script runs via `node scripts/<x>.mjs`
 
-- **None.** Raw `fetch` handler: `export default { async fetch(request, env) }` in `src/index.js` with a hand-rolled pathname router (regex matches such as `CATALOG_RE` in `src/routes.js`).
-- No Hono/itty-router/Express; responses are hand-built `Response` objects with inline CORS + security headers (`src/index.js:11-21`, `src/routes.js:20-42`).
+**Package Manager:**
+- npm (`npm ci`) in `scripts/` only; lockfile present at `scripts/package-lock.json`
+- Worker itself has zero runtime dependencies and no root `package.json` - intentional, keeps Worker bundle dependency-free
 
-## Source Layout (worker)
+## Frameworks
 
-| File | Role |
-|---|---|
-| `src/index.js` | Router: routes, CORS, auth gate |
-| `src/routes.js` | Manifest, catalog serving, save-config, refresh dispatch, run ingestion, TMDB proxies, MDBList official picker |
-| `src/config.js` | KV config load/save/migrate, catalog id derivation, run history (KV), content hashes (`node:crypto` sha256) |
-| `src/auth.js` | PIN login, HMAC session cookie, KV rate limiting, login page HTML |
-| `src/configure.js` | `/configure` admin page (single server-rendered template literal, ~2400 lines) |
-| `src/status.js` | `/status` HTML page (template literal) |
-| `src/dispatch.js` | GitHub Actions `workflow_dispatch` client |
+**Core:**
+- None - no web framework. Thin router in `src/index.js` dispatches to handlers in `src/routes.js`; HTML pages built as string templates in `src/configure.js` and `src/status.js`
 
-## Data Layer
+**Testing:**
+- Node built-in test runner + `node:assert/strict` - tests import Worker modules directly, e.g. `testing/scrape-serve.test.mjs`, `testing/save-config.test.mjs`, `testing/tmdb-sort.test.mjs`, `testing/preview-excl-dom.test.mjs`, `testing/network-picker-dom.test.mjs`
+- Ad-hoc live/verify scripts (manual, hit real APIs): `testing/verify-tmdb.mjs`, `testing/verify-ui.mjs`, `testing/networks-live.mjs`, `testing/undated-live.mjs`, `testing/tmdb-repro.mjs`, `testing/tmdb-exclude-e2e.mjs`
+- No assertion library, no coverage tool, no test config file
 
-- **Cloudflare KV**, single binding `STORE` (`wrangler.toml` `[[kv_namespaces]]`, id `36b7763e6e31445696e1a773c44de7a3`).
-- No D1, no R2, no Durable Objects, no database.
-- See `INTEGRATIONS.md` for the KV key schema.
+**Build/Dev:**
+- Wrangler CLI (`npx wrangler dev src/index.js`, local dev on `http://127.0.0.1:9090`) - deploy + `wrangler secret put` for secrets; `keep_vars = true` in `wrangler.toml` so dashboard vars survive deploys
+- Puppeteer stack (CI scraper only, `scripts/package.json`): `puppeteer@^25.3.0`, `puppeteer-extra@^3.3.6`, `puppeteer-extra-plugin-stealth@^2.11.2` - used by `scripts/scrape.mjs` with headless Chromium (1920x1080, realistic UA)
 
-## Static Data Hosting
+## Key Dependencies
 
-- **GitHub Pages**: `GITHUB_PAGES_BASE` var (`https://shivt37.github.io/my-list`) in `wrangler.toml`; catalog files at `data/<catalogId>.json` in the repo, fetched by the worker per request (`githubPagesCatalogUrl` in `src/routes.js:49-51`). Files are written by GitHub Actions scripts (`scripts/scrape.mjs`, `scripts/official.mjs`, `scripts/simkl.mjs`, `scripts/tmdb.mjs`) and committed by the workflows.
+**Critical:**
+- `puppeteer` + `puppeteer-extra` + `puppeteer-extra-plugin-stealth` (`scripts/package.json`) - DOM scraping of mdblist.com listing pages in `scripts/scrape.mjs`; only `scrape.yml` runs `npm ci`, the other three workflows need no install
+- `node:crypto` (`createHash` sha256) in `src/config.js` - `randomScraperId` (seeded list ids) and `configVersion` content hashing; `scripts/tmdb.mjs` imports `tmdbContentHash` from `../src/config.js` as single source of truth
+- `node:fs` / `node:path` / `node:url` in `scripts/*.mjs` - write `data/*.json` catalog files, resolve repo root
+- Google Fonts `Inter` (external stylesheet link in `src/configure.js`) - only third-party asset loaded by the UI
 
-## CI/CD (GitHub Actions)
-
-- 4 workflows in `.github/workflows/`: `scrape.yml`, `official.yml`, `simkl.yml`, `tmdb.yml`.
-- `ubuntu-latest`, `actions/checkout@v5`, `actions/setup-node@v5`, Node 22, `actions/upload-artifact@v5` (scrape debug artifacts).
-- Shared `concurrency` group `my-list-scrape`, `cancel-in-progress: false`, `queue: max` (all four serialize — protects the KV read-modify-write + data-commit race).
-- All data commits use `git pull --rebase -X theirs` (data files are throwaway artifacts).
-- Schedules are cron lines in the workflow files themselves (no worker scheduled handler).
-
-## Dependencies
-
-- **Worker:** none (stdlib only; `node:crypto`, WebCrypto `crypto.subtle`, `Intl`).
-- **Scripts (`scripts/package.json`):** `puppeteer ^25.3.0`, `puppeteer-extra ^3.3.6`, `puppeteer-extra-plugin-stealth ^2.11.2` — headless-Chromium DOM scraping of mdblist.com listing pages.
-- **Test tooling (ambient, undeclared):** `jsdom` used by `testing/verify-ui.mjs` / `testing/verify-tmdb.mjs` but declared nowhere (known gap, see `.planning/codebase/FUNCTIONAL-AUDIT.md` m9). An orphaned `playwright-core` was used ad hoc during audits, not part of the repo.
+**Infrastructure:**
+- Cloudflare KV (`STORE` binding, id `36b7763e6e31445696e1a773c44de7a3` in `wrangler.toml`) - single `config` key + `runs:<module>` history keys (30 capped) via `src/config.js` (`loadConfig`/`saveConfig`/`addRuns`/`getRuns`)
+- GitHub Actions (4 workflows, shared concurrency group `my-list-scrape` with `queue: max`): `.github/workflows/scrape.yml` (30 min timeout), `official.yml`, `simkl.yml`, `tmdb.yml` (15 min each)
+- GitHub Pages - serves committed `data/*.json` at `{GITHUB_PAGES_BASE}/data/<catalog_id>.json` (see `githubPagesCatalogUrl` in `src/routes.js`)
 
 ## Configuration
 
-- `wrangler.toml`: worker name `my-list`, `main = "src/index.js"`, `keep_vars = true` (dashboard vars survive deploys), KV binding, and vars:
-  - `GITHUB_PAGES_BASE`, `GH_REPO` (`shivt37/my-list`), `GH_WORKFLOW` (`scrape.yml`), `GH_OFFICIAL_WORKFLOW` (`official.yml`), `GH_TMDB_WORKFLOW` (`tmdb.yml`).
-- **Secrets** (never in repo; dashboard / `wrangler secret put` / GitHub secrets): `GH_TOKEN`, `SESSION_SECRET`, `MDBLIST_API_KEY`, `TMDB_READ_ACCESS_TOKEN`, `SIMKL_CLIENT_ID`, `ADMIN_PIN`, `AUTH_ENABLED`, `WORKER_ORIGIN` (GitHub repo secret).
-- `.dev.vars` (gitignored, local-only) carries the same key names for `wrangler dev` plus `GH_DISPATCH_STUB` (routes dispatches to a console-log stub) and `AUTH_ENABLED=false` (keeps login gate off on 127.0.0.1:8787). Values live only in that file — never copied into docs or commits.
+**Environment:**
+- `wrangler.toml` `[vars]`: `GITHUB_PAGES_BASE`, `GH_REPO`, `GH_WORKFLOW`, `GH_OFFICIAL_WORKFLOW`, `GH_TMDB_WORKFLOW` (SIMKL workflow name is a code constant `SIMKL_WORKFLOW = "simkl.yml"` in `src/routes.js`)
+- Secrets (Cloudflare dashboard / `wrangler secret put`, mirrored as GitHub repo secrets for CI): `GH_TOKEN`, `ADMIN_PIN`, `MDBLIST_API_KEY`, `TMDB_READ_ACCESS_TOKEN`, `SIMKL_CLIENT_ID`, plus `SESSION_SECRET` (optional HMAC key fallback), `WORKER_ORIGIN` (CI-only), `AUTH_ENABLED` (bool kill-switch var), `GH_DISPATCH_STUB` (local-dev only)
+- `.dev.vars` file present at repo root - local dev vars for `wrangler dev` (existence only; never read or commit real values). `.gitignore` excludes `.dev.vars`, `node_modules/`, `.wrangler/`, `debug/`, `scratch/`, `audit/`, `testing/`
 
-## HTML / Frontend
+**Build:**
+- No build config: no `tsconfig.json`, no bundler, no linter/formatter config, no root `package.json`
+- Deploy unit is `wrangler.toml` (`name = "my-list"`, `main = "src/index.js"`); CI has no build step - workflows checkout, optionally `npm ci` (scrape only), then `node <script>.mjs`
 
-Server-rendered, no build step, no bundler. Three inline template-literal pages:
-- `/configure` → `buildConfigurePage` (`src/configure.js`), Inter font from Google Fonts, dark theme, inline vanilla JS.
-- `/status` → `src/status.js` (tabs for the 4 modules; `?format=json` keeps the raw feed).
-- `/configure/login` → `loginPageHtml` (`src/auth.js`).
-CSP set on HTML responses in `src/routes.js:37` (`script-src 'self' 'unsafe-inline'`, Google Fonts allowed).
+## Platform Requirements
 
-## Testing
+**Development:**
+- Node 22, Wrangler CLI, `AUTH_ENABLED=false` for frictionless local admin (`README.md` local-development section)
+- `scripts/*.mjs` run from `scripts/` with env set (`WORKER_ORIGIN` + per-module API key); TMDB calls may need retries on flaky links
+- Windows PowerShell noted: no `&&`/`||` chaining, use `if ($?)`
 
-No test framework or runner config — plain scripts run directly with `node`:
-- `testing/save-config.test.mjs`, `testing/scrape-serve.test.mjs`, `testing/tmdb-sort.test.mjs` — `node:assert/strict` suites with stubbed `fetch` + fake KV.
-- `testing/dry-test.mjs` — full-route integration dry run (in-memory KV, stub GitHub API).
-- `testing/verify-ui.mjs`, `testing/verify-tmdb.mjs` — jsdom headless UI checks.
-- `scripts/package.json` `npm run scrape` → `node scrape.mjs` (manual).
-
-## Deployment
-
-`wrangler deploy` (standard); `wrangler dev` for local (`127.0.0.1:8787`). No custom build, no CI deploy pipeline found in-repo — deploys appear manual.
+**Production:**
+- Cloudflare Workers (serves Stremio manifest/catalogs, `/configure` admin SPA, `/status` dashboard)
+- GitHub Actions ubuntu-latest runners (cron 00:00 + 12:00 UTC; TMDB once daily 00:00 UTC) commit `data/*.json` via `git add -f` (files are gitignored but force-added)
+- GitHub Pages hosts the static catalog JSON the Worker proxies; Stremio clients consume `https://my-list.st87.workers.dev`
 
 ---
 
-*tech stack + integrations analysis: 2026-09-03*
-<!-- refreshed: 2026-09-03 -->
+*Stack analysis: 2026-09-15*
