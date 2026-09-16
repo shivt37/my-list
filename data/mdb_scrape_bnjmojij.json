@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1789489493970,
+  "scraped_at": 1789531090423,
   "items": [
     {
       "slug": "30eay-the-end-of-oak-street",
@@ -12,6 +12,16 @@
       "score": 7,
       "poster_path": "fYXqpgPmHMphSF2W30GbTeJVIa5.jpg",
       "description": "After a mysterious cosmic event rips Oak Street from suburbia and transports their neighborhood to someplace unknown, the Platt family soon discovers that their very survival depends on them sticking together as they navigate their now unrecognizable surroundings.",
+      "digital_release_date": "2026-09-15"
+    },
+    {
+      "slug": "324v3-the-rivals-of-amziah-king",
+      "imdb_id": "tt27706593",
+      "title": "The Rivals of Amziah King",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg",
+      "description": "Deep within the backwoods of rural Oklahoma, charismatic and musically gifted Amziah King herds a bluegrass-playing band of misfits while overseeing the premier honey-making operation in town. When Amziah’s estranged foster daughter unexpectedly returns, Amziah leaps at the possibility to renew connection and create a family business. But the honey game is ruthless, and Amziah’s rivals threaten to destroy everything he has built.",
       "digital_release_date": "2026-09-15"
     },
     {
@@ -65,6 +75,16 @@
       "digital_release_date": "2026-09-10"
     },
     {
+      "slug": "3j2g0-nino",
+      "imdb_id": "tt35519445",
+      "title": "Nino",
+      "year": 2025,
+      "score": 7,
+      "poster_path": "s7kmHzYxMnKuSqTD1XIwW0qg9hz.jpg",
+      "description": "Nino is a young man on a journey to reconnect with the world and himself in the streets of Paris, following the suggestion of his doctors. In three days, he will face a major challenge.",
+      "digital_release_date": "2026-09-10"
+    },
+    {
       "slug": "3n8zr-call-my-agent-the-movie",
       "imdb_id": "tt38267923",
       "title": "Call My Agent! The Movie",
@@ -79,9 +99,9 @@
       "imdb_id": "tt36073210",
       "title": "Drawn Together",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "6rpvddXbaQPOi0fB2HKWbZ3uUSg.jpg",
-      "description": "After a wealthy Spanish heiress is kidnapped, she falls into a dangerous attraction with the newly hired bodyguard assigned to protect her in a world full of deception.",
+      "description": "Marfil, daughter of a powerful Spanish businessman, sees her life in New York turned upside down when she is kidnapped and released without explanation. Her father hires Sebastian Moore as bodyguard and, forced to spend every minute together, an inevitable attraction ignites in a world where nothing is as it seems.",
       "digital_release_date": "2026-09-09"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "iKy5460GdsoknM8ppmGlJbKxAKa.jpg",
       "description": "George Hardy is a shepherd who reads detective novels to his beloved sheep every night, assuming they can't possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. As they follow the clues and investigate human suspects, they prove that even sheep can be brilliant crime-solvers.",
       "digital_release_date": "2026-06-24"
-    },
-    {
-      "slug": "3aa5e-i-love-boosters",
-      "imdb_id": "tt30827810",
-      "title": "I Love Boosters",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "4pNKIUFy7tkZiBx0rnSmG9ysRy.jpg",
-      "description": "A group of shoplifters take aim at a cutthroat fashion maven by stealing from her stores and reselling them at a lower price — what they call 'fashion-forward philanthropy'.",
-      "digital_release_date": "2026-06-23"
-    },
-    {
-      "slug": "3ftyg-power-ballad",
-      "imdb_id": "tt32267691",
-      "title": "Power Ballad",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "sGgX2K0SJqw90Ju8TONdhDVwlzT.jpg",
-      "description": "When Rick, a past-his-prime wedding singer, meets fading boy-band star Danny during a gig, the two bond over music and a late-night jam session. But when Danny turns one of Rick’s songs into the hit that reignites his career, Rick sets out to reclaim the recognition he believes he deserves - even if it means risking everything he cares about.",
-      "digital_release_date": "2026-06-23"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789489539649,
+  "scraped_at": 1789531135943,
   "items": [
     {
       "slug": "3dx0s-the-revolutionaries",
@@ -1425,6 +1425,16 @@
       "first_air_date": "2026-05-07"
     },
     {
+      "slug": "43qgn-love-beyond-dreams",
+      "imdb_id": "tt42322841",
+      "title": "Love Beyond Dreams",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "5e1oNIUAfUCVqf4PGuiIRUKKSVT.jpg",
+      "description": "Aran, 21, believed her bond with Lene was more than sisterly-until a harsh rejection sent her abroad. A letter calls her back to Thailand, where she finds Lene dead. After the funeral, she wakes five years earlier, determined to save her.",
+      "first_air_date": "2026-05-06"
+    },
+    {
       "slug": "43p9t-enemies-with-benefits",
       "imdb_id": "tt39044698",
       "title": "Enemies with Benefits",
@@ -1433,16 +1443,6 @@
       "poster_path": "5QKQeDL0by7n7csuga1qbqN23Jt.jpg",
       "description": "Head of Sales Lal is determined to triumph over Head of Accounting Wine. Wine is her polar opposite and known for her mercilessness. When a wild night leads them to a friends with benefits relationship, they'll do anything to keep it a secret, pretending to be enemies so that absolutely no one at work finds out. Without realising it, however, their newfound closeness begins to give way to love.",
       "first_air_date": "2026-05-03"
-    },
-    {
-      "slug": "3uafv-glory",
-      "imdb_id": "tt35668375",
-      "title": "Glory",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "juAQ7fFQGu2n3A2gW5tfNub1cW8.jpg",
-      "description": "In a small-town boxing hub, two brothers investigate a shocking murder while navigating a troubled reunion with their father, a renowned coach.",
-      "first_air_date": "2026-05-01"
     }
   ]
 }
