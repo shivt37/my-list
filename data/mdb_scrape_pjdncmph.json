@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1789531106751,
+  "scraped_at": 1789575387583,
   "items": [
+    {
+      "slug": "44cyd-the-other-people",
+      "imdb_id": "tt32844466",
+      "title": "The Other People",
+      "year": 2025,
+      "score": null,
+      "poster_path": "qU9TnSJ5g6xn9upRT8z9az2O1Ee.jpg",
+      "description": "In a town plagued with sudden deaths and missing persons, a troubled eight-year-old girl befriends a boy that lives in the shadows, and her new stepmom learns why things that live in the dark don’t want to be seen.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "44pdp-run-hide-fight-infidels",
+      "imdb_id": "tt40231163",
+      "title": "Run Hide Fight: Infidels",
+      "year": 2026,
+      "score": null,
+      "poster_path": "gkVq1Pd46NF7AP5XQZfRHjQfCXX.jpg",
+      "description": "After Islamist terrorists hijack a college's pro-Palestine encampment with the goal of enforcing Sharia law on students and executing dissidents whom they deem \"infidels\", a group of students, a security guard, and a Delta Force veteran team up to fight back.",
+      "digital_release_date": null
+    },
     {
       "slug": "44sk1-26f-seeking-friend",
       "imdb_id": "tt43528022",
@@ -35,16 +55,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "44n2h-gator-face",
-      "imdb_id": "tt38630008",
-      "title": "Gator Face",
-      "year": 2026,
-      "score": null,
-      "poster_path": "fM7S2VWp3yziqQwO9vNEu3Epb8v.jpg",
-      "description": "A Florida vacation becomes a blood-soaked fight for survival when a group of friends are hunted through the swamps by a savage cult that feeds its victims to ravenous alligators in the name of an ancient reptilian god.",
-      "digital_release_date": null
-    },
-    {
       "slug": "324v3-the-rivals-of-amziah-king",
       "imdb_id": "tt27706593",
       "title": "The Rivals of Amziah King",
@@ -52,16 +62,6 @@
       "score": 7,
       "poster_path": "3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg",
       "description": "Deep within the backwoods of rural Oklahoma, charismatic and musically gifted Amziah King herds a bluegrass-playing band of misfits while overseeing the premier honey-making operation in town. When Amziah’s estranged foster daughter unexpectedly returns, Amziah leaps at the possibility to renew connection and create a family business. But the honey game is ruthless, and Amziah’s rivals threaten to destroy everything he has built.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3ks7i-tony",
-      "imdb_id": "tt33095251",
-      "title": "Tony",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "3WN0JWwRI7oGH7Ni2R6poVWej05.jpg",
-      "description": "A 19-year-old Anthony Bourdain travels to Provincetown and stumbles into the chaotic world of a restaurant kitchen, setting off a summer that will shape the course of his life.",
       "digital_release_date": null
     },
     {
@@ -200,8 +200,8 @@
       "title": "Bigfoot I Love You",
       "year": 2026,
       "score": null,
-      "poster_path": "arSZl8UpfErb3Gh1dqDq8jxJaHm.jpg",
-      "description": "N/A",
+      "poster_path": "eTMSS2K3qGRLiwJoveBqRUiNQJG.jpg",
+      "description": "When two young filmmakers search for Bigfoot in the forests of Normandy, they first must get through the crazy French townspeople who guard his secret.",
       "digital_release_date": null
     },
     {
@@ -475,16 +475,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "3ux4o-one-night-only",
-      "imdb_id": "tt37853455",
-      "title": "One Night Only",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "46q8z1TbbVcF8uhRHsvt5s0h2SH.jpg",
-      "description": "Two love-starved strangers crash into each other on the one night of the year when single people are allowed to have sex.",
-      "digital_release_date": null
-    },
-    {
       "slug": "39j9e-cognitive",
       "imdb_id": "tt22497932",
       "title": "Cognitive",
@@ -602,16 +592,6 @@
       "score": 2,
       "poster_path": "2TmWYXesOwCq7zPTDjvjLivJw2S.jpg",
       "description": "When a group of friends accidentally commits murder after smoking abandoned marijuana in remote New Zealand, the drug's cannibalistic side effects force them to keep smoking to devour the evidence, triggering a paranoid struggle for survival as their food supply dwindles.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "453ke-untold-raygun-breaking-badly",
-      "imdb_id": "tt43700441",
-      "title": "Untold Raygun: Breaking Badly",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "3pnlJjsGtrUp3cPEOLzkR0sPQAK.jpg",
-      "description": "Nobody, least of all Rachael Gunn, expected to be an Olympian. But as Raygun’s performance at the 2024 Paris Olympics went viral overnight, so did an avalanche of memes, misinformation, and conspiracy theories questioning how she ever got there.",
       "digital_release_date": null
     },
     {
@@ -825,16 +805,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "3ydw9-her-private-hell",
-      "imdb_id": "tt36629665",
-      "title": "Her Private Hell",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "1gNVzTlpNLaX8sm9Wocl5rLgldU.jpg",
-      "description": "When a mysterious mist engulfs a futuristic metropolis, unleashing a deadly and elusive entity, a troubled young woman searches for her father. Her quest collides with an American GI on a harrowing odyssey to rescue his daughter from Hell.",
-      "digital_release_date": null
-    },
-    {
       "slug": "n80k-motor-city",
       "imdb_id": "tt2012616",
       "title": "Motor City",
@@ -915,16 +885,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "3ankh-pinocchio-unstrung",
-      "imdb_id": "tt30887701",
-      "title": "Pinocchio: Unstrung",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "eUJXk3bTvLBi5Zcb0BCedZU7lVL.jpg",
-      "description": "Influenced by a sinister Cricket and created by Geppetto, Pinocchio launches a violent crusade to carve himself into a real boy like his brother James, one piece at a time.",
-      "digital_release_date": null
-    },
-    {
       "slug": "3pdsv-ghost-in-the-cell",
       "imdb_id": "tt9000310",
       "title": "Ghost in the Cell",
@@ -982,16 +942,6 @@
       "score": 2,
       "poster_path": "760SP4VsZagpyB9WLfeZykE3DFg.jpg",
       "description": "A grieving mother is haunted by the tragic loss of her daughter in a car accident that left her abusive husband in a coma. As she battles a surreal descent into darkness, her sleepwalking episodes intensify. Plagued by haunting visions of her husband inside their home, she grapples with the blurred lines between reality and nightmare.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "2z2cy-toy-story-5",
-      "imdb_id": "tt29355505",
-      "title": "Toy Story 5",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
-      "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
       "digital_release_date": null
     },
     {
@@ -1275,16 +1225,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "38vwp-evil-dead-burn",
-      "imdb_id": "tt31170389",
-      "title": "Evil Dead Burn",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
-      "description": "After her husband's abrupt death, Alice seeks solace with his remaining family — descendants of a leading researcher on demonic possession. As her in-laws transform one by one into creatures that feed on fear, she comes to discover that the vows she took in life survive even in death.",
-      "digital_release_date": null
-    },
-    {
       "slug": "44zuu-jared-leto-hollywood-s-dark-secret",
       "imdb_id": "tt43724724",
       "title": "Jared Leto: Hollywood's Dark Secret",
@@ -1305,16 +1245,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "41ogx-maddie-s-secret",
-      "imdb_id": "tt37675037",
-      "title": "Maddie's Secret",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "vADal7sH7E9xFr4w2k4V3EPSzF6.jpg",
-      "description": "A plucky dishwasher leaps to viral superstardom at a trendy food content creation company. While her life seems picturesque — complete with an adoring husband, ride-or-die best friend and a cupboard full of woman-owned ethically-sourced chili crisp to boot — mounting professional pressures threaten to reawaken a hidden secret from her troubled past.",
-      "digital_release_date": null
-    },
-    {
       "slug": "2w90z-nightborn",
       "imdb_id": "tt34383465",
       "title": "Nightborn",
@@ -1332,16 +1262,6 @@
       "score": 5,
       "poster_path": "bNErActDctl6cdUGw9pnjSCmyhQ.jpg",
       "description": "After a ruthless tech giant acquires a small robotics company, a grieving engineer is tasked with testing their new AI companion. But when he attempts to reprogram her to be a truly sentient soulmate, she develops needs of her own—unleashing a relentless spree of precision-engineered mayhem.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3q3z4-rose-of-nevada",
-      "imdb_id": "tt35674521",
-      "title": "Rose of Nevada",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "1x34FPfKP8uYO7LlzopbHpJFGAh.jpg",
-      "description": "When a fishing boat, the Rose of Nevada, lost with all hands 30 years ago, mysteriously reappears in the old harbour of a forgotten Cornish village, for those who remember, it’s surely a sign. The boat must go out to sea again and maybe then the luck of the devastated village will turn. Young father Nick and enigmatic newcomer Liam join captain Murgey, and they head to sea. But when they return, satisfied with their haul, something is amiss – they’ve slipped back in time, and the villagers greet them as if they are the original crew.",
       "digital_release_date": null
     },
     {
@@ -1425,16 +1345,6 @@
       "digital_release_date": null
     },
     {
-      "slug": "436il-leviticus",
-      "imdb_id": "tt39143902",
-      "title": "Leviticus",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "gnAsZvBygplNpp8PtjoTEYv3VPB.jpg",
-      "description": "Two teenage boys must escape a violent entity that takes the form of the person they desire most:  each other.",
-      "digital_release_date": null
-    },
-    {
       "slug": "rpp7-tinsman-road",
       "imdb_id": "tt13259900",
       "title": "Tinsman Road",
@@ -1442,6 +1352,96 @@
       "score": 2,
       "poster_path": "x9Yt3fxEl5ITDK1BZCxhwpIsXSD.jpg",
       "description": "In the backwoods of New Jersey a young man navigates the serpentine mystery surrounding his long-missing sister and their family home.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3mb84-cruel-hands",
+      "imdb_id": "tt31116756",
+      "title": "Cruel Hands",
+      "year": 2025,
+      "score": null,
+      "poster_path": "v05PSRSJtcGHGmI5Egte76sav7g.jpg",
+      "description": "Maria and her 12-year-old son, Dai, seek refuge in an abandoned farmhouse after fleeing from her violent husband, Jason. As fires rage across the region and emergency services struggle to locate the missing family, Maria tries to build a safe new life for Dai, while Jason embarks on a relentless quest to find them.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3ydw9-her-private-hell",
+      "imdb_id": "tt36629665",
+      "title": "Her Private Hell",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "1gNVzTlpNLaX8sm9Wocl5rLgldU.jpg",
+      "description": "When a mysterious mist engulfs a futuristic metropolis, unleashing a deadly and elusive entity, a troubled young woman searches for her father. Her quest collides with an American GI on a harrowing odyssey to rescue his daughter from Hell.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "43div-72-hours",
+      "imdb_id": "tt36304003",
+      "title": "72 HOURS",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "9Bu1PW2R1XayqRqnl0aDOgMcrdS.jpg",
+      "description": "To save his career, a 40-year-old ad exec joins a crew of twentysomethings for a wild Miami bachelor party after they mistakenly add him to a group chat.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3nzfk-colony",
+      "imdb_id": "tt34385135",
+      "title": "Colony",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "tN799oUR0f1gUKDYdMNrDaY7I51.jpg",
+      "description": "Professor Se-jeong is thrust into a bloody nightmare when a rapidly mutating virus is released during a biotech conference causing authorities to seal the facility. Trapped inside with no escape, Se-jeong along with a small group of survivors must fight to stay alive while the infected undergo horrific transformations.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "44qjr-red-rabbit-lodge",
+      "imdb_id": "tt37541719",
+      "title": "Red Rabbit Lodge",
+      "year": 2026,
+      "score": null,
+      "poster_path": "Zv5DucyzMnGKWBeO0zbYKLkfQ1.jpg",
+      "description": "In an attempt to put her traumatic past behind her Abigail Mason moves to Red Rabbit Lodge, a sanctuary for foreign students. Unbeknownst to her, he house has a history of blood, mayhem and a sadistic killer residing within the walls.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "1kt4-masters-of-the-universe",
+      "imdb_id": "tt0427340",
+      "title": "Masters of the Universe",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "oRuyGUHdoaQxWP3SDfafGkStxTC.jpg",
+      "description": "After being separated for 15 years, the Sword of Power leads Prince Adam back to Eternia, where he discovers his home shattered under the fiendish rule of Skeletor. To save his family and his world, Adam must join forces with his closest allies, Teela and Duncan/Man-At-Arms, and embrace his true destiny as He-Man — the most powerful man in the universe.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3fve1-the-death-of-robin-hood",
+      "imdb_id": "tt32273171",
+      "title": "The Death of Robin Hood",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "13MmRwmG5NmaMfU8qNrtgGXisiD.jpg",
+      "description": "Grappling with his past after a life of crime and murder, Robin Hood finds himself gravely injured after a battle he thought would be his last. In the hands of a mysterious woman, he is offered a chance at salvation.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "40ad0-the-caretaker",
+      "imdb_id": "tt32502645",
+      "title": "The Caretaker",
+      "year": 2026,
+      "score": null,
+      "poster_path": "9JWtu9Rk3szuJ33tAAWmxC2cN07.jpg",
+      "description": "A recently bereaved man takes up a caretaker position at an elite academy and soon uncovers dark secrets.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3r8tt-the-turkish-coffee-table",
+      "imdb_id": "tt35692176",
+      "title": "The Turkish Coffee Table",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "keGMCONOSK0omAk1uMdilSftePd.jpg",
+      "description": "When Zehra and İbrahim, a couple adjusting to new parenthood, argue over a coffee table, it seems like a harmless domestic spat. Wanting to assert himself for once, İbrahim insists on buying it. But when he’s left alone to assemble it, he makes a single irreversible mistake — and begins spiraling into a pit of lies, panic, and performative calm as he tries to hide the truth from the people he loves the most.",
       "digital_release_date": null
     }
   ]
