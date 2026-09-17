@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1789573704351,
+  "scraped_at": 1789615214753,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -210,7 +210,7 @@
       "title": "Lucky",
       "year": 2026,
       "release_date": "2026-07-14",
-      "poster": "https://image.tmdb.org/t/p/w200/qdobPy3No4Fi3dCzcIDP9n8AjcO.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg"
     },
     {
       "imdb_id": "tt0106179",
@@ -669,14 +669,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/zEFKMNPBKq6JG7uuDkzTQ9WwErn.jpg"
     },
     {
-      "imdb_id": "tt0096639",
-      "type": "series",
-      "title": "Lonesome Dove",
-      "year": 1989,
-      "release_date": "1989-02-05",
-      "poster": "https://image.tmdb.org/t/p/w200/qK4iseZGf0YhYx53ecawSGhL0sl.jpg"
-    },
-    {
       "imdb_id": "tt26656917",
       "type": "series",
       "title": "The Agency",
@@ -698,7 +690,15 @@
       "title": "Parks and Recreation",
       "year": 2009,
       "release_date": "2009-04-09",
-      "poster": "https://image.tmdb.org/t/p/w200/dDuzrl9rUIBYieZjqmtNCdncrmZ.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/5IOj62y2Eb2ngyYmEn1IJ7bFhzH.jpg"
+    },
+    {
+      "imdb_id": "tt0096639",
+      "type": "series",
+      "title": "Lonesome Dove",
+      "year": 1989,
+      "release_date": "1989-02-05",
+      "poster": "https://image.tmdb.org/t/p/w200/qK4iseZGf0YhYx53ecawSGhL0sl.jpg"
     },
     {
       "imdb_id": "tt27497448",
