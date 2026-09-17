@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1789617862693,
+  "scraped_at": 1789662184375,
   "items": [
+    {
+      "slug": "40adx-firstborn",
+      "imdb_id": "tt31617935",
+      "title": "Firstborn",
+      "year": 2025,
+      "score": null,
+      "poster_path": "vxQkbh5MEOEkFAGviLjSxW7feg1.jpg",
+      "description": "Ada and her partner Rino move into a secluded villa surrounded by nature. Expecting their second child, Ada finds herself haunted by the unresolved grief of losing their firstborn. As the due date approaches, the sorrow she has long suppressed resurfaces, and she begins to sense a disturbing presence-convinced that her late son has returned from beyond to prevent the birth of his sibling. Is something truly supernatural at play, or is Ada slowly losing her grip on reality?",
+      "digital_release_date": null
+    },
     {
       "slug": "40sbx-do-us-part",
       "imdb_id": "tt35936560",
@@ -739,7 +749,7 @@
       "imdb_id": "tt10794054",
       "title": "The Weight",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
       "description": "When Samuel is torn from his daughter and sent to a brutal prison, Warden Clancy offers him a high-stakes proposition: smuggle gold out of a remote mine with a dangerous crew of prisoners and he’ll win his freedom.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "tN799oUR0f1gUKDYdMNrDaY7I51.jpg",
       "description": "Professor Se-jeong is thrust into a bloody nightmare when a rapidly mutating virus is released during a biotech conference causing authorities to seal the facility. Trapped inside with no escape, Se-jeong along with a small group of survivors must fight to stay alive while the infected undergo horrific transformations.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44qjr-red-rabbit-lodge",
-      "imdb_id": "tt37541719",
-      "title": "Red Rabbit Lodge",
-      "year": 2026,
-      "score": null,
-      "poster_path": "Zv5DucyzMnGKWBeO0zbYKLkfQ1.jpg",
-      "description": "In an attempt to put her traumatic past behind her Abigail Mason moves to Red Rabbit Lodge, a sanctuary for foreign students. Unbeknownst to her, he house has a history of blood, mayhem and a sadistic killer residing within the walls.",
       "digital_release_date": null
     }
   ]
