@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1789703484010,
+  "scraped_at": 1789747044114,
   "items": [
+    {
+      "slug": "3n5hq-neagley",
+      "imdb_id": "tt33539520",
+      "title": "Neagley",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "lKOPmO0ah17ogQ9hWg7lSd40kIr.jpg",
+      "description": "Frances Neagley is a private investigator in Chicago and former military colleague of Jack Reacher in the Army's 110th Special Investigations Unit. When she learns that a beloved friend from her past has been killed in a suspicious accident, she becomes hell-bent on justice.",
+      "first_air_date": "2026-09-16"
+    },
     {
       "slug": "3dx0s-the-revolutionaries",
       "imdb_id": "tt31924802",
@@ -13,6 +23,16 @@
       "poster_path": "5fLyYAxXWP4BxZCBN79NV1eiT4d.jpg",
       "description": "The Revolutionaries narrates the inspiring tale of brave young Indian freedom fighters who fought for ending British Raj with their unwavering spirit and ideology.",
       "first_air_date": "2026-09-11"
+    },
+    {
+      "slug": "44ay4-chumbak",
+      "imdb_id": "tt39640519",
+      "title": "Chumbak",
+      "year": 2026,
+      "score": null,
+      "poster_path": "r2TJ9s9uhfxTssar1gBAWcxIXx7.jpg",
+      "description": "Five quirky families navigate life as neighbors in Chumbak Colony, where chaotic conflicts and hilarious antics turn each day into a new chapter.",
+      "first_air_date": "2026-09-10"
     },
     {
       "slug": "44stx-the-perfect-lie",
@@ -29,10 +49,30 @@
       "imdb_id": "tt6037988",
       "title": "Last Seen",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "vozJZjHv0Yyv4PjoOxF5tVMUGFI.jpg",
       "description": "When emergency dispatcher Ian Ridley receives a frantic call from a teenager he believes could be his long-missing daughter, he stops at nothing to find her.",
       "first_air_date": "2026-09-09"
+    },
+    {
+      "slug": "452tq-dang",
+      "imdb_id": "tt40003445",
+      "title": "Dang!",
+      "year": 2026,
+      "score": null,
+      "poster_path": "wSDM4tIC5praLH9GxZisiIBIkz.jpg",
+      "description": "After their sister Ruthie blows up her perfect life, Andrew and Eunice show her the fun in being flawed as she helps them adult.",
+      "first_air_date": "2026-09-08"
+    },
+    {
+      "slug": "3ylpk-lovesick",
+      "imdb_id": "tt32909469",
+      "title": "Lovesick",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "91s80WxRqIirFSpGVtiXJoS1GA5.jpg",
+      "description": "Set during the Mexican Revolution, follow Emilia Sauri, a woman torn between two passionate loves while navigating a world dominated by violence and revolution.",
+      "first_air_date": "2026-09-02"
     },
     {
       "slug": "457b8-welcome-to-the-family-the-murder-of-dan-markel",
@@ -65,6 +105,16 @@
       "first_air_date": "2026-08-28"
     },
     {
+      "slug": "3o42v-my-name-is-gutierrez",
+      "imdb_id": "tt39278978",
+      "title": "My Name Is Gutierrez",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "7zT7FbS0mwJdjKoPPX7xOhySlNN.jpg",
+      "description": "Deputy Commissioner Gutierrez competes with the CIA to solve the murder of the Russian Ambassador with his unique style.",
+      "first_air_date": "2026-08-26"
+    },
+    {
       "slug": "42gl4-the-early-spring",
       "imdb_id": "tt37884717",
       "title": "The Early Spring",
@@ -95,6 +145,16 @@
       "first_air_date": "2026-08-26"
     },
     {
+      "slug": "44ziv-9-11-reunited",
+      "imdb_id": "tt41991040",
+      "title": "9/11: Reunited",
+      "year": 2026,
+      "score": null,
+      "poster_path": "3t0igkTYWQctmC9fL4mW3MY5fM6.jpg",
+      "description": "The story of September 11 through the eyes of survivors who experienced life-or-death moments with strangers that day and now want to meet again.",
+      "first_air_date": "2026-08-21"
+    },
+    {
       "slug": "436w8-blood-sacrifice",
       "imdb_id": "tt38553367",
       "title": "Blood Sacrifice",
@@ -112,6 +172,16 @@
       "score": null,
       "poster_path": "mvFQIZo2DG1pyiINL2bDa5QNR4O.jpg",
       "description": "The extraordinary true story of lion cub Kio, on his journey to become a king.",
+      "first_air_date": "2026-08-19"
+    },
+    {
+      "slug": "4547q-a-beautiful-obsession",
+      "imdb_id": "tt43740196",
+      "title": "A Beautiful Obsession",
+      "year": 2026,
+      "score": null,
+      "poster_path": "sMGr6FeYhA799ZU50r4wjt5HVdV.jpg",
+      "description": "An intimate, raw portrait of Manchester City FC across two era-defining seasons. With unprecedented access, the film follows their worst run in decades and fightback to glory.",
       "first_air_date": "2026-08-19"
     },
     {
@@ -189,7 +259,7 @@
       "imdb_id": "tt36937503",
       "title": "Anna Pigeon",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "iLhi3wqsLOdHB61vySJRm7y09XS.jpg",
       "description": "Anna Pigeon flees city life for the solitude of America's stunning national parks following a devastating loss; while Anna tries to outrun her demons, her focus turns to solving crimes that have taken place within national park grounds.",
       "first_air_date": "2026-08-07"
@@ -199,7 +269,7 @@
       "imdb_id": "tt36955608",
       "title": "Our Sticky Love",
       "year": 2026,
-      "score": 8,
+      "score": null,
       "poster_path": "tSZ4aFpTGc8Oj52SuzPUUZ7WKL0.jpg",
       "description": "An ambitious prosecutor loses her memory and moves in with a boxing coach who claims to be her boyfriend. Can this sticky situation turn into real love?",
       "first_air_date": "2026-08-07"
@@ -262,6 +332,16 @@
       "score": 4,
       "poster_path": "wUqUxv3ZhF1spAx4HLxhP1NUK8G.jpg",
       "description": "A disgraced, formerly incarcerated boxing champion returns to London to seek vengeance against the crime syndicate he thinks betrayed him.",
+      "first_air_date": "2026-07-31"
+    },
+    {
+      "slug": "40ose-a-bona-fide-killer",
+      "imdb_id": "tt43616775",
+      "title": "A Bona Fide Killer",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "e9ziA4Y6md4Ytr62r5y9vRdv4ll.jpg",
+      "description": "A seemingly ordinary working mother secretly lives as a legendary sniper who delivers justice where the law fails. After returning from a three-year hiatus, she must balance protecting her family with eliminating dangerous criminals, all while a determined journalist and a relentless detective close in on her hidden identity.",
       "first_air_date": "2026-07-31"
     },
     {
@@ -329,7 +409,7 @@
       "imdb_id": "tt39665097",
       "title": "Musafir Cafe",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "1SbKjtoRKIpVQG5iYnumnfQIqhd.jpg",
       "description": "Chander feels an undeniable connection with Sudha. Years later, he builds a new life in the hills with Preeti, but memories of the past linger.",
       "first_air_date": "2026-07-24"
@@ -339,7 +419,7 @@
       "imdb_id": "tt38672679",
       "title": "Summer of 1985",
       "year": 2026,
-      "score": 2,
+      "score": null,
       "poster_path": "AnOLTlmM3jPHeC6GuKoPS0F3UBv.jpg",
       "description": "In the summer of 1985, a young boy is found mysteriously drowned in the waters off Särsö. During a forbidden excursion to the legendary island of Svärtan, Johannes and his friends make a discovery that changes them forever.",
       "first_air_date": "2026-07-24"
@@ -479,7 +559,7 @@
       "imdb_id": "tt43658562",
       "title": "Night of a Century",
       "year": 2026,
-      "score": 2,
+      "score": null,
       "poster_path": "gzP0Fvt5jvKJTCRqK8XcVF7UGIa.jpg",
       "description": "Fifteen of july 2016. That night, heroes proved that they exist. In that very night, Turkish nation stood up against traitors. Enemies of the state were brutally beaten by the Turkish nation. This is a story of betrayal, a heinous coup and a nation fighting for her freedom.",
       "first_air_date": "2026-07-15"
@@ -579,7 +659,7 @@
       "imdb_id": "tt36742917",
       "title": "I'm Not Afraid",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "ydUCCsKWNkGFecRPKHViWi0lppz.jpg",
       "description": "10-year-old Miguel stumbles upon a terrifying secret involving a boy trapped in a hole near his home.",
       "first_air_date": "2026-07-08"
@@ -929,7 +1009,7 @@
       "imdb_id": "tt42873612",
       "title": "Michael Jackson: The Verdict",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "8R40yI5AJ931Hd3P4Yf8pdFgwJ1.jpg",
       "description": "Told by key players who were inside the courtroom, this comprehensive documentary dissects the trial of Michael Jackson and his complex legacy.",
       "first_air_date": "2026-06-03"
@@ -999,7 +1079,7 @@
       "imdb_id": "tt42764103",
       "title": "Torn Apart",
       "year": 2026,
-      "score": 4,
+      "score": null,
       "poster_path": "erd75Gon5bXL38kngnH6DCrOUj2.jpg",
       "description": "Aras, a fearless seventeen-year-old boy, comes to Bodrum to search for his younger sibling, the only remaining member of his family whom he lost at the age of five. His new life in Bodrum will turn into a challenging struggle when his path crosses with the Akkaya family, the most powerful family in the city.",
       "first_air_date": "2026-05-31"
@@ -1149,7 +1229,7 @@
       "imdb_id": "tt35509002",
       "title": "Ravalear: Not for Sale",
       "year": 2026,
-      "score": 4,
+      "score": null,
       "poster_path": "4kHnq56sxfhNJbFGd0kNJGcIQVu.jpg",
       "description": "In Barcelona’s Raval neighbourhood, the family-run restaurant “Can Mosques” faces eviction after an investment fund buys the building. The family’s fight to survive escalates, pushing them to cross any and all boundaries.",
       "first_air_date": "2026-05-22"
@@ -1339,7 +1419,7 @@
       "imdb_id": "tt32604054",
       "title": "Regular Show: The Lost Tapes",
       "year": 2026,
-      "score": 7,
+      "score": null,
       "poster_path": "jqY3dj70ffSqKpM8XVUEToOEeLG.jpg",
       "description": "Familiar duo Mordecai and Rigby navigate mundane park jobs that inevitably spiral into surreal, chaotic disasters.",
       "first_air_date": "2026-05-11"
@@ -1363,86 +1443,6 @@
       "poster_path": "g8qiv2FzpjAlQ8bWrucVDlpbKSG.jpg",
       "description": "The horrific true story of John Worboys, one of the most notorious serial rapists in British history. His modus operandi was to tell women in his cab that he’d won some money and then persistently offer them a glass of champagne, which he’d laced with drugs, and which rendered his victims unconscious. He was convicted in 2009 for sexually assaulting 12 women between 2006 and 2008, with their cases selected from a large number of suspected further victims.",
       "first_air_date": "2026-05-10"
-    },
-    {
-      "slug": "435lo-my-royal-nemesis",
-      "imdb_id": "tt38828946",
-      "title": "My Royal Nemesis",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "rYLQbyIvbEd0lF84iXrx7CbPcBB.jpg",
-      "description": "A Joseon-era villain doomed to die opens her eyes in modern-day Seoul — where a ruthless chaebol heir may be her last chance to rewrite her fate.",
-      "first_air_date": "2026-05-08"
-    },
-    {
-      "slug": "44ita-the-palu-family-under-a-dark-spell",
-      "imdb_id": "tt41634339",
-      "title": "The Palu Family: Under a Dark Spell",
-      "year": 2026,
-      "score": null,
-      "poster_path": "i70MAvdqFuXGFXwhbFVkgylFbgg.jpg",
-      "description": "An investigation into one of Turkey's most shocking cases -- and how one man was able to enact total control over a tight-knit family.",
-      "first_air_date": "2026-05-08"
-    },
-    {
-      "slug": "44jj0-double-helix",
-      "imdb_id": "tt42152890",
-      "title": "Double Helix",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "udcrxC8tceOSAZ41jKtLCc47j6F.jpg",
-      "description": "Years after being torn apart by family and fate, two former lovers reunite as boss and employee, forced to confront a love they can't escape.",
-      "first_air_date": "2026-05-08"
-    },
-    {
-      "slug": "3l925-legends",
-      "imdb_id": "tt33265765",
-      "title": "Legends",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "eYYTgBtsvvA3fC1feyvoqv0G9Gl.jpg",
-      "description": "As drugs flood the streets of '90s Britain, a team of civil servants is thrust undercover to topple the gangs behind it.",
-      "first_air_date": "2026-05-07"
-    },
-    {
-      "slug": "3laz2-m-i-a",
-      "imdb_id": "tt33253070",
-      "title": "M.I.A.",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "uvocuo6mgQTtNa7O6a3MQoTfuh4.jpg",
-      "description": "Restless in the Florida Keys, Etta Tiger Jonze dreams of a life in Miami's glittering, sub-tropical kingdom. When her family's drug-running business shatters in tragedy, however, Etta embarks on a dangerous journey through Miami's neon-lit underbelly that will define who she is and what she's ultimately capable of.",
-      "first_air_date": "2026-05-07"
-    },
-    {
-      "slug": "44rcj-the-terror-devil-in-silver",
-      "imdb_id": "tt31186255",
-      "title": "The Terror: Devil in Silver",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "bdblQNZ4rP8AVJPqvGi82woxZkg.jpg",
-      "description": "Wrongfully committed to New Hyde Psychiatric Hospital, one man faces secretive doctors, dangerous patients, and something even worse …",
-      "first_air_date": "2026-05-07"
-    },
-    {
-      "slug": "43qgn-love-beyond-dreams",
-      "imdb_id": "tt42322841",
-      "title": "Love Beyond Dreams",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "5e1oNIUAfUCVqf4PGuiIRUKKSVT.jpg",
-      "description": "Aran, 21, believed her bond with Lene was more than sisterly-until a harsh rejection sent her abroad. A letter calls her back to Thailand, where she finds Lene dead. After the funeral, she wakes five years earlier, determined to save her.",
-      "first_air_date": "2026-05-06"
-    },
-    {
-      "slug": "43p9t-enemies-with-benefits",
-      "imdb_id": "tt39044698",
-      "title": "Enemies with Benefits",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "5QKQeDL0by7n7csuga1qbqN23Jt.jpg",
-      "description": "Head of Sales Lal is determined to triumph over Head of Accounting Wine. Wine is her polar opposite and known for her mercilessness. When a wild night leads them to a friends with benefits relationship, they'll do anything to keep it a secret, pretending to be enemies so that absolutely no one at work finds out. Without realising it, however, their newfound closeness begins to give way to love.",
-      "first_air_date": "2026-05-03"
     }
   ]
 }
