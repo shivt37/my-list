@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1789662170780,
+  "scraped_at": 1789703440545,
   "items": [
+    {
+      "slug": "37u2u-bad-apples",
+      "imdb_id": "tt29714073",
+      "title": "Bad Apples",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "sDgb5jVuZ6ZOh4YjtSMMnbovkCi.jpg",
+      "description": "A struggling primary school teacher is forced to take drastic action because of a foul-mouthed, violent student, and uncovers how her community will turn a blind eye to the most outrageous events to preserve harmony and their sense of safety.",
+      "digital_release_date": "2026-09-18"
+    },
     {
       "slug": "30eay-the-end-of-oak-street",
       "imdb_id": "tt27165187",
@@ -72,16 +82,6 @@
       "score": 3,
       "poster_path": "8bQtzFJoLelplIgfIe2i37JGGls.jpg",
       "description": "Eva has just turned 50. She’s been married for over 20 years and has two, teenage children. So far, nothing remarkable. But on a business trip to Rome something happens that turns her life upside down. She meets Alex, a scriptwriter who’s spending a few days in the Italian city. The instant attraction she feels for him, the butterflies in her tummy, the seductive hint of possibility… After all this time, she remembers what it feels like to fall in love and it shifts something inside of her. It reignites a fire that had long been extinguished.",
-      "digital_release_date": "2026-09-10"
-    },
-    {
-      "slug": "3j2g0-nino",
-      "imdb_id": "tt35519445",
-      "title": "Nino",
-      "year": 2025,
-      "score": 7,
-      "poster_path": "s7kmHzYxMnKuSqTD1XIwW0qg9hz.jpg",
-      "description": "Nino is a young man on a journey to reconnect with the world and himself in the streets of Paris, following the suggestion of his doctors. In three days, he will face a major challenge.",
       "digital_release_date": "2026-09-10"
     },
     {
@@ -262,16 +262,6 @@
       "score": 6,
       "poster_path": "85EYON4oXVYTPdMuW5q5ELQLU88.jpg",
       "description": "In the chaos of post-Soviet Russia, rising KGB officer Vladimir Putin joins forces with master manipulator Vadim Baranov to reshape life behind the Iron Curtain, using violence and deception to change the world forever.",
-      "digital_release_date": "2026-09-01"
-    },
-    {
-      "slug": "3z10h-just-play-dead",
-      "imdb_id": "tt36948232",
-      "title": "Just Play Dead",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "glALx6QaIgw1u4joXsnfHTjWi6D.jpg",
-      "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
       "digital_release_date": "2026-09-01"
     },
     {
@@ -773,6 +763,16 @@
       "poster_path": "glYJbEs9MBPAGAj2EL0jFPlmEAT.jpg",
       "description": "Gudo is a Soul Keeper, a spirit who guides human souls into their next life. When he befriends a young girl named Yuri, he discovers that her untimely death has left her cursed with unresolved rage and regret. As Yuri’s soul teeters on the edge of annihilation, Gudo embarks on a dangerous journey to stop her from unleashing horrible destruction on both the human world and the spirit realm.",
       "digital_release_date": "2026-08-03"
+    },
+    {
+      "slug": "3z10h-just-play-dead",
+      "imdb_id": "tt36948232",
+      "title": "Just Play Dead",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "glALx6QaIgw1u4joXsnfHTjWi6D.jpg",
+      "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
+      "digital_release_date": "2026-08-01"
     },
     {
       "slug": "3id1u-hai-jawani-toh-ishq-hona-hai",

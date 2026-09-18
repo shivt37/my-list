@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1789662184375,
+  "scraped_at": 1789703455805,
   "items": [
+    {
+      "slug": "42m9u-cat-cam",
+      "imdb_id": "tt37070274",
+      "title": "Cat Cam",
+      "year": 2026,
+      "score": null,
+      "poster_path": "xq35gT1mjqbaM9admu1AHDa7nvg.jpg",
+      "description": "When two cat owners decide to put up pet cameras in their new home while they’re away on a trip, they soon make a terrifying discovery as to why their cat has been acting so strange.",
+      "digital_release_date": null
+    },
     {
       "slug": "40adx-firstborn",
       "imdb_id": "tt31617935",
@@ -30,7 +40,7 @@
       "title": "Ricky",
       "year": 2025,
       "score": 6,
-      "poster_path": "encCAwXxOVILpYB75jmUVbIWb7M.jpg",
+      "poster_path": "hjwRewif47Tcxri4O4a62DVsyDz.jpg",
       "description": "Newly released after being locked up in his teens, 30-year-old Ricky navigates the challenging realities of life post-incarceration, and the complexity of gaining independence for the first time as an adult.",
       "digital_release_date": null
     },
@@ -330,7 +340,7 @@
       "title": "Corina",
       "year": 2025,
       "score": 7,
-      "poster_path": "pXS4A7VmWT3p1Bc4KyTapOviUmw.jpg",
+      "poster_path": "8iEAU6fKvqizHeHgd5NJ4LomZdO.jpg",
       "description": "Corina is 20 years old and does not leave her house except to work in a publishing house located in the neighborhood where she lives. After making a serious mistake with the end of the company's most famous book saga, Corina must overcome her fears with the help of Carlos and embark on a journey in search of a mysterious writer to save her job and that of her colleagues.",
       "digital_release_date": null
     },
@@ -900,7 +910,7 @@
       "title": "Back to the 90s",
       "year": 2026,
       "score": 4,
-      "poster_path": "tCOvMa7bXHiRlOuhQvUOeSF0kPn.jpg",
+      "poster_path": "2T0j25ofU6aUei6J6ek2hlTL1wc.jpg",
       "description": "When a mysterious glitch sends a rising boyband back to 1995 - just days before the biggest showcase of their lives - the five friends race to reverse the time slip. But as unexpected connections form and the past pulls them in deeper, getting home means confronting what they're willing to leave behind - and who they truly are to each other.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "9Bu1PW2R1XayqRqnl0aDOgMcrdS.jpg",
       "description": "To save his career, a 40-year-old ad exec joins a crew of twentysomethings for a wild Miami bachelor party after they mistakenly add him to a group chat.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3nzfk-colony",
-      "imdb_id": "tt34385135",
-      "title": "Colony",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "tN799oUR0f1gUKDYdMNrDaY7I51.jpg",
-      "description": "Professor Se-jeong is thrust into a bloody nightmare when a rapidly mutating virus is released during a biotech conference causing authorities to seal the facility. Trapped inside with no escape, Se-jeong along with a small group of survivors must fight to stay alive while the infected undergo horrific transformations.",
       "digital_release_date": null
     }
   ]
