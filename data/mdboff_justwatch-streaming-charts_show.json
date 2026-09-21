@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1789916857100,
+  "scraped_at": 1789960429211,
   "items": [
     {
       "imdb_id": "tt33332385",
@@ -634,7 +634,7 @@
       "title": "True Detective",
       "year": 2014,
       "release_date": "2014-01-12",
-      "poster": "https://image.tmdb.org/t/p/w200/cuV2O5ZyDLHSOWzg3nLVljp1ubw.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/zYqVTiHK5ZajYcNzAW7qWte5NWS.jpg"
     },
     {
       "imdb_id": "tt44113382",
@@ -651,6 +651,14 @@
       "year": 2011,
       "release_date": "2011-01-09",
       "poster": "https://image.tmdb.org/t/p/w200/ifo31fMWLmyOVpdak9K0kY4jldQ.jpg"
+    },
+    {
+      "imdb_id": "tt0758745",
+      "type": "series",
+      "title": "Friday Night Lights",
+      "year": 2006,
+      "release_date": "2006-10-03",
+      "poster": "https://image.tmdb.org/t/p/w200/Eu7MzZY1DldJ683z7vLkILHNRD.jpg"
     },
     {
       "imdb_id": "tt2802850",
