@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1790049507444,
+  "scraped_at": 1790094268717,
   "items": [
+    {
+      "slug": "2rlda-legend-of-the-white-dragon",
+      "imdb_id": "tt12446086",
+      "title": "Legend of the White Dragon",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "kaMEYF6bMuOO3z504EIm7P1zprT.jpg",
+      "description": "Forced to hide in the shadows, fugitive hero Erik Reed must clear his name to reunite with his family. Standing in his way is a mysterious villain obsessed with destroying the White Dragon for good.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "2pa7s-idiots",
+      "imdb_id": "tt6628920",
+      "title": "Idiots",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "l1JFNC1SdgyXVr7BaD5ehaYBvOC.jpg",
+      "description": "When two unqualified bozos are hired to transfer a rich teen to rehab, their straightforward gig quickly spirals into dangerous mayhem.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "43yfd-one-last-shot",
+      "imdb_id": "tt37971717",
+      "title": "One Last Shot",
+      "year": 2026,
+      "score": null,
+      "poster_path": "qFftNQnlYqWYEkzml9h64vIDp6j.jpg",
+      "description": "Navy Seal Jake Harris must stop a team of mercenaries, led by his disillusioned former comrade, from disabling the US missile defense network.",
+      "digital_release_date": null
+    },
     {
       "slug": "2wpwk-super-troopers-3",
       "imdb_id": "tt8820258",
@@ -99,7 +129,7 @@
       "imdb_id": "tt27558029",
       "title": "Goody Goody",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "9DyaSMQ6W3NvJ9BYTV2piiAXlCX.jpg",
       "description": "Lulled into a necessary sense of comfort during a long home birth process, expecting parents and their midwife begin to realize that something may be horribly wrong. As labor complications ensue, a blizzard rages outside trapping the family in their home – sitting ducks for whatever sinister presence might be in there with them.",
       "digital_release_date": null
@@ -629,7 +659,7 @@
       "imdb_id": "tt29543015",
       "title": "Portal to Hell",
       "year": 2025,
-      "score": 1,
+      "score": 2,
       "poster_path": "xuXCPJZjmP2FuGG3U16sI1TYEdR.jpg",
       "description": "After a debt-collector finds a portal to hell in a washing machine at his local laundromat, he’s propositioned into feeding it sinners to save his neighbor’s soul, maybe even at the expense of his own.",
       "digital_release_date": null
@@ -1049,7 +1079,7 @@
       "imdb_id": "tt9000310",
       "title": "Ghost in the Cell",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "zxcMdx0w5Zmg8yZuuiS7CJ8vOea.jpg",
       "description": "In a notorious prison, an invisible force begins killing inmates brutally, compelling enemy gangs and corrupt guards to work together as they try to survive the mounting bloodshed.",
       "digital_release_date": null
@@ -1059,7 +1089,7 @@
       "imdb_id": "tt40001699",
       "title": "Here the Whole Time",
       "year": 2026,
-      "score": 7,
+      "score": 6,
       "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
       "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
       "digital_release_date": null
@@ -1412,36 +1442,6 @@
       "score": 5,
       "poster_path": "e9ALgOANOJbcFpw84MbafK3xvD2.jpg",
       "description": "In Finnish forest, Saga and her husband Jon embark on a new chapter as parents. But Saga's joy is overshadowed by a chilling suspicion about their newborn, unbeknownst to Jon, causing a rift as she alone grapples with the disturbing truth.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3l35w-soulm8te",
-      "imdb_id": "tt32654916",
-      "title": "Soulm8te",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "bNErActDctl6cdUGw9pnjSCmyhQ.jpg",
-      "description": "After a ruthless tech giant acquires a small robotics company, a grieving engineer is tasked with testing their new AI companion. But when he attempts to reprogram her to be a truly sentient soulmate, she develops needs of her own—unleashing a relentless spree of precision-engineered mayhem.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3x5lf-due-west",
-      "imdb_id": "tt32361599",
-      "title": "Due West",
-      "year": 2026,
-      "score": null,
-      "poster_path": "ornHNCuXiz5kxWPD4uoZLqrE6cd.jpg",
-      "description": "A small-town woman in need of medical care in West Texas is forced to break the law.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "1wrs6-capps-crossing-wrong-side-of-dead",
-      "imdb_id": "tt8502306",
-      "title": "Capps Crossing: Wrong Side of Dead",
-      "year": 2026,
-      "score": null,
-      "poster_path": "dv41YlAt2ANxP2twCCEUSjj85uq.jpg",
-      "description": "When a behavioral science major investigates murders at Capps Crossing, she finds herself trapped in a twisted web of lies surrounding the local ranger and his son.",
       "digital_release_date": null
     }
   ]
