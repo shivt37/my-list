@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_most-watched-week_show",
   "name": "Most Watched Movies & Shows (Past Week)",
   "type": "series",
-  "scraped_at": 1790133198484,
+  "scraped_at": 1790178511895,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -61,6 +61,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg"
     },
     {
+      "imdb_id": "tt33539520",
+      "type": "series",
+      "title": "Neagley",
+      "year": 2026,
+      "release_date": "2026-09-16",
+      "poster": "https://image.tmdb.org/t/p/w200/tEPDFIa21VK0Q2YLuzhTt2xrw5W.jpg"
+    },
+    {
       "imdb_id": "tt13210838",
       "type": "series",
       "title": "The Gentlemen",
@@ -75,14 +83,6 @@
       "year": 2023,
       "release_date": "2023-05-04",
       "poster": "https://image.tmdb.org/t/p/w200/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg"
-    },
-    {
-      "imdb_id": "tt33539520",
-      "type": "series",
-      "title": "Neagley",
-      "year": 2026,
-      "release_date": "2026-09-16",
-      "poster": "https://image.tmdb.org/t/p/w200/tEPDFIa21VK0Q2YLuzhTt2xrw5W.jpg"
     },
     {
       "imdb_id": "tt19231492",
@@ -141,20 +141,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/lc9riW73Oee2pBxi1UrDPgyQjEr.jpg"
     },
     {
-      "imdb_id": "tt5607616",
-      "type": "series",
-      "title": "Re:ZERO -Starting Life in Another World-",
-      "year": 2016,
-      "release_date": "2016-04-04",
-      "poster": "https://image.tmdb.org/t/p/w200/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg"
-    },
-    {
       "imdb_id": "tt9054364",
       "type": "series",
       "title": "That Time I Got Reincarnated as a Slime",
       "year": 2018,
       "release_date": "2018-10-02",
       "poster": "https://image.tmdb.org/t/p/w200/pzujcdPAoH361NObVrtbA7zACE7.jpg"
+    },
+    {
+      "imdb_id": "tt5607616",
+      "type": "series",
+      "title": "Re:ZERO -Starting Life in Another World-",
+      "year": 2016,
+      "release_date": "2016-04-04",
+      "poster": "https://image.tmdb.org/t/p/w200/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg"
     },
     {
       "imdb_id": "tt1196946",
@@ -229,6 +229,22 @@
       "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
     },
     {
+      "imdb_id": "tt4934214",
+      "type": "series",
+      "title": "Taskmaster",
+      "year": 2015,
+      "release_date": "2015-07-28",
+      "poster": "https://image.tmdb.org/t/p/w200/oHLZyN7G7EpXCHxYdpMcuUNCUgS.jpg"
+    },
+    {
+      "imdb_id": "tt0096697",
+      "type": "series",
+      "title": "The Simpsons",
+      "year": 1989,
+      "release_date": "1989-12-17",
+      "poster": "https://image.tmdb.org/t/p/w200/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg"
+    },
+    {
       "imdb_id": "tt0108778",
       "type": "series",
       "title": "Friends",
@@ -245,28 +261,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg"
     },
     {
-      "imdb_id": "tt0096697",
-      "type": "series",
-      "title": "The Simpsons",
-      "year": 1989,
-      "release_date": "1989-12-17",
-      "poster": "https://image.tmdb.org/t/p/w200/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg"
-    },
-    {
       "imdb_id": "tt0386676",
       "type": "series",
       "title": "The Office",
       "year": 2005,
       "release_date": "2005-03-24",
       "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg"
-    },
-    {
-      "imdb_id": "tt4934214",
-      "type": "series",
-      "title": "Taskmaster",
-      "year": 2015,
-      "release_date": "2015-07-28",
-      "poster": "https://image.tmdb.org/t/p/w200/oHLZyN7G7EpXCHxYdpMcuUNCUgS.jpg"
     },
     {
       "imdb_id": "tt33049767",
@@ -293,14 +293,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/euKFiO5M125rpngFRBbSW83beeI.jpg"
     },
     {
-      "imdb_id": "tt0434665",
-      "type": "series",
-      "title": "Bleach",
-      "year": 2004,
-      "release_date": "2004-10-05",
-      "poster": "https://image.tmdb.org/t/p/w200/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg"
-    },
-    {
       "imdb_id": "tt27846061",
       "type": "series",
       "title": "Ludwig",
@@ -317,20 +309,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/ySA5MvhoxTdezNUMe0ifPmhxH4w.jpg"
     },
     {
-      "imdb_id": "tt5665418",
+      "imdb_id": "tt0434665",
       "type": "series",
-      "title": "Below Deck Mediterranean",
-      "year": 2016,
-      "release_date": "2016-05-03",
-      "poster": "https://image.tmdb.org/t/p/w200/u88QjNj1xyGwnZMtSZjA9jDNNro.jpg"
-    },
-    {
-      "imdb_id": "tt31091039",
-      "type": "series",
-      "title": "The Secret Lives of Mormon Wives",
-      "year": 2024,
-      "release_date": "2024-09-06",
-      "poster": "https://image.tmdb.org/t/p/w200/xsBMFVUMxvmV2ZK6t1yrBwN6JAX.jpg"
+      "title": "Bleach",
+      "year": 2004,
+      "release_date": "2004-10-05",
+      "poster": "https://image.tmdb.org/t/p/w200/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg"
     },
     {
       "imdb_id": "tt37614297",
@@ -341,36 +325,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/n8ZvVflzDKN3vXe85F1KdC5CFf9.jpg"
     },
     {
-      "imdb_id": "tt7678620",
-      "type": "series",
-      "title": "Bluey",
-      "year": 2018,
-      "release_date": "2018-10-01",
-      "poster": "https://image.tmdb.org/t/p/w200/9p4pNoGcuyCfHcGWKNrTopqMWtq.jpg"
-    },
-    {
       "imdb_id": "tt33334216",
       "type": "series",
       "title": "The Exiled Heavy Knight Knows How to Game the System",
       "year": 2026,
       "release_date": "2026-07-03",
       "poster": "https://image.tmdb.org/t/p/w200/bADzMfofNWYdxLnlqNuMkO6du34.jpg"
-    },
-    {
-      "imdb_id": "tt0397306",
-      "type": "series",
-      "title": "American Dad!",
-      "year": 2005,
-      "release_date": "2005-02-06",
-      "poster": "https://image.tmdb.org/t/p/w200/eb9sH2am9IUSQ8GhXTNAVoujk8W.jpg"
-    },
-    {
-      "imdb_id": "tt0141842",
-      "type": "series",
-      "title": "The Sopranos",
-      "year": 1999,
-      "release_date": "1999-01-10",
-      "poster": "https://image.tmdb.org/t/p/w200/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg"
     },
     {
       "imdb_id": "tt3530232",
@@ -381,6 +341,46 @@
       "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
     },
     {
+      "imdb_id": "tt7678620",
+      "type": "series",
+      "title": "Bluey",
+      "year": 2018,
+      "release_date": "2018-10-01",
+      "poster": "https://image.tmdb.org/t/p/w200/9p4pNoGcuyCfHcGWKNrTopqMWtq.jpg"
+    },
+    {
+      "imdb_id": "tt5665418",
+      "type": "series",
+      "title": "Below Deck Mediterranean",
+      "year": 2016,
+      "release_date": "2016-05-03",
+      "poster": "https://image.tmdb.org/t/p/w200/u88QjNj1xyGwnZMtSZjA9jDNNro.jpg"
+    },
+    {
+      "imdb_id": "tt0141842",
+      "type": "series",
+      "title": "The Sopranos",
+      "year": 1999,
+      "release_date": "1999-01-10",
+      "poster": "https://image.tmdb.org/t/p/w200/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg"
+    },
+    {
+      "imdb_id": "tt31091039",
+      "type": "series",
+      "title": "The Secret Lives of Mormon Wives",
+      "year": 2024,
+      "release_date": "2024-09-06",
+      "poster": "https://image.tmdb.org/t/p/w200/xsBMFVUMxvmV2ZK6t1yrBwN6JAX.jpg"
+    },
+    {
+      "imdb_id": "tt0397306",
+      "type": "series",
+      "title": "American Dad!",
+      "year": 2005,
+      "release_date": "2005-02-06",
+      "poster": "https://image.tmdb.org/t/p/w200/eb9sH2am9IUSQ8GhXTNAVoujk8W.jpg"
+    },
+    {
       "imdb_id": "tt0903747",
       "type": "series",
       "title": "Breaking Bad",
@@ -389,20 +389,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg"
     },
     {
-      "imdb_id": "tt31449991",
-      "type": "series",
-      "title": "Chad Powers",
-      "year": 2025,
-      "release_date": "2025-09-30",
-      "poster": "https://image.tmdb.org/t/p/w200/aXetUcD4wfalCj90QmT6kSvwO6D.jpg"
-    },
-    {
       "imdb_id": "tt9813792",
       "type": "series",
       "title": "FROM",
       "year": 2022,
       "release_date": "2022-02-20",
       "poster": "https://image.tmdb.org/t/p/w200/pRtJagIxpfODzzb0T0NAvZSzErC.jpg"
+    },
+    {
+      "imdb_id": "tt31938062",
+      "type": "series",
+      "title": "The Pitt",
+      "year": 2025,
+      "release_date": "2025-01-09",
+      "poster": "https://image.tmdb.org/t/p/w200/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg"
     }
   ]
 }
