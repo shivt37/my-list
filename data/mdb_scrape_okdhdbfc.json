@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1790221773313,
+  "scraped_at": 1790267943851,
   "items": [
     {
       "slug": "3o1zs-the-scandal",
@@ -925,16 +925,6 @@
       "first_air_date": "2026-06-09"
     },
     {
-      "slug": "44l1p-norway-the-dark-horse",
-      "imdb_id": "tt42604310",
-      "title": "Norway: The Dark Horse",
-      "year": 2026,
-      "score": null,
-      "poster_path": "kZgzZsVgNruGRWKzTbAIfvvrvHJ.jpg",
-      "description": "After 26 years of tournament drought, Norway's 2026 World Cup hopes were next to nil. But what followed rekindled belief.",
-      "first_air_date": "2026-06-09"
-    },
-    {
       "slug": "44i17-alice-and-steve",
       "imdb_id": "tt35728748",
       "title": "Alice and Steve",
@@ -1443,6 +1433,16 @@
       "poster_path": "nmYgPJiZebWUtL6D72D0Qp9ce0H.jpg",
       "description": "A plastic-spoon man is on his way to becoming a legendary army cook—uncovering dark secrets within the base through his cooking skills.",
       "first_air_date": "2026-05-11"
+    },
+    {
+      "slug": "44jjo-believe-me",
+      "imdb_id": "tt36789130",
+      "title": "Believe Me",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "g8qiv2FzpjAlQ8bWrucVDlpbKSG.jpg",
+      "description": "The horrific true story of John Worboys, one of the most notorious serial rapists in British history. His modus operandi was to tell women in his cab that he’d won some money and then persistently offer them a glass of champagne, which he’d laced with drugs, and which rendered his victims unconscious. He was convicted in 2009 for sexually assaulting 12 women between 2006 and 2008, with their cases selected from a large number of suspected further victims.",
+      "first_air_date": "2026-05-10"
     }
   ]
 }

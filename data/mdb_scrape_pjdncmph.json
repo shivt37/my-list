@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1790221740057,
+  "scraped_at": 1790267841853,
   "items": [
+    {
+      "slug": "44xy4-chat",
+      "imdb_id": "tt37547609",
+      "title": "CHAT",
+      "year": 2026,
+      "score": null,
+      "poster_path": "vrRq1li3Yfbz5ntRnH7k7zRkarO.jpg",
+      "description": "A family's fresh start unravels when their son discovers an AI powered tablet, unleashing a wave of terror tied not only to the supernatural but to dark secrets of greed and corruption that surround them.",
+      "digital_release_date": null
+    },
     {
       "slug": "3z0oz-clutch",
       "imdb_id": "tt14604836",
@@ -141,7 +151,7 @@
       "year": 2026,
       "score": null,
       "poster_path": "niQ4NBh2jqAf1hDZP5m6ReWFAb7.jpg",
-      "description": "Seasoned Navy SEAL Jake Harris is called back into action when the world is threatened by a former comrade. To track down and prevent the mastermind from extracting the nuclear codes, Harris must lead his team into enemy territory against a brutal barrage of mercenaries, deadly traps, and a reckoning with his own checkered past.",
+      "description": "Navy Seal Jake Harris must stop a team of mercenaries, led by his disillusioned former comrade, from disabling the US missile defense network.",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": null,
       "poster_path": "d11G12RZ0gkoQIzrIwpqmLiGQDk.jpg",
       "description": "Love was their greatest rebellion. Set on the enchanting island of Mauritius in 1925, recently orphaned Lucy is sent to live with her charming but controlling uncle. When she defies his plans to marry her off for financial gain, she falls deeply in love with Krishna, a handsome local worker. But the world has other plans, and Lucy and Krishna must risk everything and defy the forces determined to tear them apart.  Starring Ellie Bamber (William Tell, The Serpent), Rhona Mitra (Hollow Man, Red Sonja), Rupert Penry-Jones (Match Point, Spooks), Mehdi Dehbi (Messiah). Directed by Mitch Jenkins (A Million Days, The Show).  Inspired by the lives of Alan and Maria Govinden and the book 'Prisoner of Paradise' written by Romesh Gunesekera.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "43vr2-jackass-best-and-last",
-      "imdb_id": "tt39316472",
-      "title": "Jackass: Best and Last",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "tfgccePxnswMqhmtxafliLlcCVR.jpg",
-      "description": "The fifth and final installment to Jackass franchise where the crew go on one last insane crusade.",
       "digital_release_date": null
     }
   ]

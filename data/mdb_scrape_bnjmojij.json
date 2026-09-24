@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1790221726034,
+  "scraped_at": 1790267824527,
   "items": [
     {
       "slug": "2pa7s-idiots",
@@ -45,6 +45,16 @@
       "digital_release_date": "2026-09-22"
     },
     {
+      "slug": "41gva-baby-do-die-do",
+      "imdb_id": "tt37544992",
+      "title": "Baby Do Die Do",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "jvfqp6gMlvHODYnBXoogqRyIs0k.jpg",
+      "description": "A deaf and mute serial killer in Mumbai can only hear her dead sister's voice as she commits murders for mysterious reasons.",
+      "digital_release_date": "2026-09-22"
+    },
+    {
       "slug": "34whr-parallel-tales",
       "imdb_id": "tt36646880",
       "title": "Parallel Tales",
@@ -72,16 +82,6 @@
       "score": 7,
       "poster_path": "kereiSEFjFa2Rc0hIVpfeqwuXq4.jpg",
       "description": "After years of slapdash sequels, the Camp Miasma franchise is handed over to an enthusiastic young director for resurrection. But when she visits the original’s star, a now-reclusive actress shrouded in mystery, the two women fall into a blood-soaked world of desire, fear, and delirium.",
-      "digital_release_date": "2026-09-18"
-    },
-    {
-      "slug": "3x242-lust-stories-3",
-      "imdb_id": "tt39667834",
-      "title": "Lust Stories 3",
-      "year": 2026,
-      "score": null,
-      "poster_path": "cLA83DD1qMEBwbRIYXf29RKjMja.jpg",
-      "description": "Through four bite-sized yet emotionally resonant films, the anthology once again explores lust, love, relationships, and repressed desire, offering fresh perspectives on intimacy, longing, and human connection in all their complexity.",
       "digital_release_date": "2026-09-18"
     },
     {
@@ -1265,6 +1265,16 @@
       "digital_release_date": "2026-07-10"
     },
     {
+      "slug": "44vwi-dread",
+      "imdb_id": "tt43662509",
+      "title": "Dread",
+      "year": 2026,
+      "score": null,
+      "poster_path": "2GtykQnr2L0fmI3zxEsaTEaunXF.jpg",
+      "description": "Terror takes many forms. In five chilling tales, the mundane becomes monstrous and no one gets out clean.",
+      "digital_release_date": "2026-07-10"
+    },
+    {
       "slug": "3jvfp-pati-patni-aur-woh-do",
       "imdb_id": "tt33054858",
       "title": "Pati Patni Aur Woh Do",
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "7kRYHH9H9PjBFwz1FprbHB2AAjI.jpg",
       "description": "Adventure follows detective Enola Holmes to Malta, where her plans to tie the knot unravel when Sherlock's disappearance plunges her into a perilous case.",
-      "digital_release_date": "2026-06-30"
-    },
-    {
-      "slug": "3fg3w-the-get-out",
-      "imdb_id": "tt32321803",
-      "title": "The Get Out",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "zlkeH0s7dDxcnuPcHBqAyXFUxqN.jpg",
-      "description": "A nightclub owner is on the verge of leaving his dangerous past behind for retirement with his girlfriend. When masked gunmen rob him and he finds himself squeezed by ruthless cartels, a mysterious newcomer arrives with an interest in buying the business. With danger closing in from all sides, he must navigate a deadly web of deception, power, and survival  -  where escape may no longer be an option.",
       "digital_release_date": "2026-06-30"
     }
   ]
