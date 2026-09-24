@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1790178514792,
+  "scraped_at": 1790219016421,
   "items": [
     {
       "imdb_id": "tt33539520",
@@ -106,7 +106,7 @@
       "title": "Youth",
       "year": 2026,
       "release_date": "2026-09-21",
-      "poster": "https://image.tmdb.org/t/p/w200/bk1zbzbu0xaYQuIANv4Pe8HHyAY.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/zKaTNcWmP2dxYnxmOAVhBvSqNy9.jpg"
     },
     {
       "imdb_id": "tt19231492",
@@ -171,6 +171,14 @@
       "year": 2005,
       "release_date": "2005-08-04",
       "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg"
+    },
+    {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "release_date": "2022-05-05",
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg"
     },
     {
       "imdb_id": "tt31449991",
@@ -459,6 +467,14 @@
       "year": 2024,
       "release_date": "2024-05-23",
       "poster": "https://image.tmdb.org/t/p/w200/cNHTFUV39qyEsm7edSaJdSqJYtJ.jpg"
+    },
+    {
+      "imdb_id": "tt6773088",
+      "type": "series",
+      "title": "Brothers",
+      "year": 2026,
+      "release_date": "2026-09-22",
+      "poster": "https://image.tmdb.org/t/p/w200/jD7ZQpDEZzAVReJzkOtmuFoIl2m.jpg"
     },
     {
       "imdb_id": "tt0436992",
@@ -842,7 +858,7 @@
       "title": "Friends",
       "year": 1994,
       "release_date": "1994-09-22",
-      "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/kuqCom4s0htI5POztRTxxYrswqt.jpg"
     },
     {
       "imdb_id": "tt1442437",
@@ -1139,14 +1155,6 @@
       "year": 2024,
       "release_date": "2024-01-11",
       "poster": "https://image.tmdb.org/t/p/w200/cPn71YFDENH0JkWUezlsLyWmLfN.jpg"
-    },
-    {
-      "imdb_id": "tt0168366",
-      "type": "series",
-      "title": "Pokémon",
-      "year": 1997,
-      "release_date": "1997-04-01",
-      "poster": "https://image.tmdb.org/t/p/w200/lP4zwr0F7hWTbAFltfoFTc2AxRG.jpg"
     },
     {
       "imdb_id": "tt13951052",
