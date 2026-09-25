@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1790267824527,
+  "scraped_at": 1790309053328,
   "items": [
     {
       "slug": "2pa7s-idiots",
@@ -75,6 +75,16 @@
       "digital_release_date": "2026-09-20"
     },
     {
+      "slug": "3aegp-the-fix",
+      "imdb_id": "tt9601292",
+      "title": "The Fix",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "yopXjun3ICFfJci2ukcEzceZjUs.jpg",
+      "description": "Disillusioned by the end of the war in Afghanistan, a group of disgraced, war-torn ex-CIA operatives set out to Tehran to take down a life-changing score.",
+      "digital_release_date": "2026-09-18"
+    },
+    {
       "slug": "3bi9t-teenage-sex-and-death-at-camp-miasma",
       "imdb_id": "tt35298123",
       "title": "Teenage Sex and Death at Camp Miasma",
@@ -111,7 +121,7 @@
       "year": 2026,
       "score": 4,
       "poster_path": "gkVq1Pd46NF7AP5XQZfRHjQfCXX.jpg",
-      "description": "When radical Islamic terrorists hijack a liberal college's pro-Palestine encampment, a ragtag band of red-blooded students, a security guard, and a Delta Force vet must arm up to save their clueless peers.",
+      "description": "When radical Islamist terrorists hijack a liberal college's pro-Palestine encampment, a ragtag band of red-blooded students, a security guard, and a Delta Force vet must arm up to save their clueless peers.",
       "digital_release_date": "2026-09-16"
     },
     {
@@ -130,7 +140,7 @@
       "title": "The Rivals of Amziah King",
       "year": 2026,
       "score": 7,
-      "poster_path": "j2ajSnvBSb0rvDJrlTWTsxsmHWJ.jpg",
+      "poster_path": "3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg",
       "description": "Deep within the backwoods of rural Oklahoma, charismatic and musically gifted Amziah King herds a bluegrass-playing band of misfits while overseeing the premier honey-making operation in town. When Amziah’s estranged foster daughter unexpectedly returns, Amziah leaps at the possibility to renew connection and create a family business. But the honey game is ruthless, and Amziah’s rivals threaten to destroy everything he has built.",
       "digital_release_date": "2026-09-15"
     },
@@ -183,16 +193,6 @@
       "poster_path": "7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg",
       "description": "A group of friends set off for an unforgettable vacation. What begins as an adventure of partying and diving quickly turns into a nightmare when they are attacked by criminals in open waters.",
       "digital_release_date": "2026-09-15"
-    },
-    {
-      "slug": "3aegp-the-fix",
-      "imdb_id": "tt9601292",
-      "title": "The Fix",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "yopXjun3ICFfJci2ukcEzceZjUs.jpg",
-      "description": "Disillusioned by the end of the war in Afghanistan, a group of disgraced, war-torn ex-CIA operatives set out to Tehran to take down a life-changing score.",
-      "digital_release_date": "2026-09-11"
     },
     {
       "slug": "3o1qx-the-money-maker",
@@ -470,7 +470,7 @@
       "title": "Babita Singh Reporting",
       "year": 2026,
       "score": 4,
-      "poster_path": "owuFDxJOG1nv3J2wMf5f5jQjqHn.jpg",
+      "poster_path": "nA3xIA93Wenbuc5I5RQwPSUPXU.jpg",
       "description": "People-pleasing cop Baby accepts a fake charge to get leave for her sister-in-law’s baby shower in Rewa. There, she reunites with her childhood friend Bansi, who is murdered that very night. Defying dismissive in-laws, an indifferent husband and an apathetic local police force, she secretly investigates the murder, uncovering family betrayals while finding her own voice, courage and place as a real cop.",
       "digital_release_date": "2026-08-28"
     },
@@ -1125,16 +1125,6 @@
       "digital_release_date": "2026-07-21"
     },
     {
-      "slug": "44hm9-the-party-s-over",
-      "imdb_id": "tt32916648",
-      "title": "The Party's Over!",
-      "year": 2025,
-      "score": 5,
-      "poster_path": "mtR5sUSugZlbcN0mXVVMX0mlWzn.jpg",
-      "description": "Mehdi had planned to spend a quiet summer in his in-laws' sumptuous home. But as soon as he arrives, a conflict breaks out between his girfriend's family and the villa's janitor couple. As Mehdi comes from a modest background, he thinks he can lead the negotiations between the two parties and bring everyone back to their senses. But things start to escalate...",
-      "digital_release_date": "2026-07-21"
-    },
-    {
       "slug": "3eq9q-scary-movie",
       "imdb_id": "tt32093575",
       "title": "Scary Movie",
@@ -1442,6 +1432,16 @@
       "score": 6,
       "poster_path": "7kRYHH9H9PjBFwz1FprbHB2AAjI.jpg",
       "description": "Adventure follows detective Enola Holmes to Malta, where her plans to tie the knot unravel when Sherlock's disappearance plunges her into a perilous case.",
+      "digital_release_date": "2026-06-30"
+    },
+    {
+      "slug": "3fg3w-the-get-out",
+      "imdb_id": "tt32321803",
+      "title": "The Get Out",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "zlkeH0s7dDxcnuPcHBqAyXFUxqN.jpg",
+      "description": "A nightclub owner is on the verge of leaving his dangerous past behind for retirement with his girlfriend. When masked gunmen rob him and he finds himself squeezed by ruthless cartels, a mysterious newcomer arrives with an interest in buying the business. With danger closing in from all sides, he must navigate a deadly web of deception, power, and survival  -  where escape may no longer be an option.",
       "digital_release_date": "2026-06-30"
     }
   ]
