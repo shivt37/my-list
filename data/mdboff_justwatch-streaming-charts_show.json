@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1790266211164,
+  "scraped_at": 1790306446492,
   "items": [
     {
       "imdb_id": "tt33539520",
@@ -202,7 +202,7 @@
       "title": "American Horror Story",
       "year": 2011,
       "release_date": "2011-10-05",
-      "poster": "https://image.tmdb.org/t/p/w200/6znF7sratRw5dvVx6Sx5gslv7sN.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/yCkPLQ10qKIUgRBXmQVVMF1h96d.jpg"
     },
     {
       "imdb_id": "tt33049767",
@@ -1013,14 +1013,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/k8yARbD9iYn2nRX2HvsopfKDN2r.jpg"
     },
     {
-      "imdb_id": "tt45403168",
-      "type": "series",
-      "title": "Stolen Heartbeats",
-      "year": 2026,
-      "release_date": "2026-09-11",
-      "poster": "https://image.tmdb.org/t/p/w200/rmoGrMzPRCKGMGccNxda3eyCq48.jpg"
-    },
-    {
       "imdb_id": "tt30460310",
       "type": "series",
       "title": "Spider-Noir",
@@ -1179,6 +1171,14 @@
       "year": 2019,
       "release_date": "2019-06-16",
       "poster": "https://image.tmdb.org/t/p/w200/aJrG7OkoTMPWG5c8opz8a93AZPY.jpg"
+    },
+    {
+      "imdb_id": "tt14824792",
+      "type": "series",
+      "title": "ted",
+      "year": 2024,
+      "release_date": "2024-01-11",
+      "poster": "https://image.tmdb.org/t/p/w200/cPn71YFDENH0JkWUezlsLyWmLfN.jpg"
     }
   ]
 }
