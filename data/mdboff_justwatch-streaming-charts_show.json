@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1790352647510,
+  "scraped_at": 1790393120725,
   "items": [
     {
       "imdb_id": "tt5875444",
@@ -341,20 +341,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/wXfTsO7pqAqo94f0AHaas9rjBNh.jpg"
     },
     {
-      "imdb_id": "tt4934214",
-      "type": "series",
-      "title": "Taskmaster",
-      "year": 2015,
-      "release_date": "2015-07-28",
-      "poster": "https://image.tmdb.org/t/p/w200/oHLZyN7G7EpXCHxYdpMcuUNCUgS.jpg"
-    },
-    {
       "imdb_id": "tt0115243",
       "type": "series",
       "title": "Lexx",
       "year": 1997,
       "release_date": "1997-04-18",
       "poster": "https://image.tmdb.org/t/p/w200/oSDZ9YpDvAbXxzbC3YdknfyBR3W.jpg"
+    },
+    {
+      "imdb_id": "tt4934214",
+      "type": "series",
+      "title": "Taskmaster",
+      "year": 2015,
+      "release_date": "2015-07-28",
+      "poster": "https://image.tmdb.org/t/p/w200/oHLZyN7G7EpXCHxYdpMcuUNCUgS.jpg"
     },
     {
       "imdb_id": "tt31974367",
@@ -611,6 +611,14 @@
       "year": 2005,
       "release_date": "2005-03-24",
       "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg"
+    },
+    {
+      "imdb_id": "tt0239195",
+      "type": "series",
+      "title": "Survivor",
+      "year": 2000,
+      "release_date": "2000-05-31",
+      "poster": "https://image.tmdb.org/t/p/w200/1usR1nanbDvnc0LJlWd5TOylT9M.jpg"
     },
     {
       "imdb_id": "tt30494226",
