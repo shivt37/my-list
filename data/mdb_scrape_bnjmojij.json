@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1790395762868,
+  "scraped_at": 1790438085443,
   "items": [
+    {
+      "slug": "38xmk-toxic-a-fairy-tale-for-grown-ups",
+      "imdb_id": "tt27530512",
+      "title": "Toxic: A Fairy Tale for Grown-ups",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "tZ8eSBXbza96vzCYeVTG9RBJ78E.jpg",
+      "description": "A powerful drug cartel pulls the strings behind a facade of sun-soaked beaches as a gritty, violent underworld power struggle emerges during the crumbling of Portuguese colonial rule.",
+      "digital_release_date": "2026-09-26"
+    },
     {
       "slug": "2xwba-the-love-hypothesis",
       "imdb_id": "tt22526100",
@@ -62,6 +72,16 @@
       "score": 4,
       "poster_path": "jvfqp6gMlvHODYnBXoogqRyIs0k.jpg",
       "description": "A deaf and mute serial killer in Mumbai can only hear her dead sister's voice as she commits murders for mysterious reasons.",
+      "digital_release_date": "2026-09-22"
+    },
+    {
+      "slug": "43yfd-one-last-shot",
+      "imdb_id": "tt37971717",
+      "title": "One Last Shot",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "niQ4NBh2jqAf1hDZP5m6ReWFAb7.jpg",
+      "description": "Navy Seal Jake Harris must stop a team of mercenaries, led by his disillusioned former comrade, from disabling the US missile defense network.",
       "digital_release_date": "2026-09-22"
     },
     {
@@ -239,7 +259,7 @@
       "imdb_id": "tt38267923",
       "title": "Call My Agent! The Movie",
       "year": 2026,
-      "score": 7,
+      "score": 6,
       "poster_path": "p4SvSFIkjCs4y0C7yAcYP9XNmP2.jpg",
       "description": "Five years after ASK Agency closed, debut director Andréa loses her lead actor just days before filming and reunited with her old team — for better or worse.",
       "digital_release_date": "2026-09-10"
@@ -489,7 +509,7 @@
       "imdb_id": "tt11561116",
       "title": "The Whisper Man",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "ndRs5lADYm0PeVjuOxaMcInY0o2.jpg",
       "description": "When his young son vanishes, a widower enlists help from his estranged father, a retired detective who put away the serial killer now linked to the case.",
       "digital_release_date": "2026-08-27"
@@ -819,7 +839,7 @@
       "imdb_id": "tt37333137",
       "title": "Main Vaapas Aaunga",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "wHTNsZxvlfRAndc52hGlbdCUXKS.jpg",
       "description": "Haunted by a childhood romance and recollections of love lost during the 1947 Partition of India, 95-year-old Ishar Singh Grewal shares his story with his grandson Nirvair, the past unfolding through memories of migration, longing, and a romance that endures across generations.",
       "digital_release_date": "2026-08-07"
@@ -1423,26 +1443,6 @@
       "poster_path": "hKbQjE5ZcZUpuzApEjyoVCUWwdx.jpg",
       "description": "A grandmother’s mishap with a social media post causes consternation amongst her children and threatens the prospect of her granddaughter’s wedding.",
       "digital_release_date": "2026-07-02"
-    },
-    {
-      "slug": "42zjr-raavi-de-kande",
-      "imdb_id": "tt37701965",
-      "title": "Raavi de Kande",
-      "year": 2025,
-      "score": null,
-      "poster_path": "7Ux1Kmd2Rnnd1WeK37XKQU8Ikgx.jpg",
-      "description": "When his daughter is falsely defamed, Chaman Lal's four daughters lose marriage prospects. A traveler named Sikander helps him find inner peace over social approval, leading to hope and his family's restoration.",
-      "digital_release_date": "2026-07-02"
-    },
-    {
-      "slug": "385b0-enola-holmes-3",
-      "imdb_id": "tt32278481",
-      "title": "Enola Holmes 3",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "7kRYHH9H9PjBFwz1FprbHB2AAjI.jpg",
-      "description": "Adventure follows detective Enola Holmes to Malta, where her plans to tie the knot unravel when Sherlock's disappearance plunges her into a perilous case.",
-      "digital_release_date": "2026-06-30"
     }
   ]
 }
