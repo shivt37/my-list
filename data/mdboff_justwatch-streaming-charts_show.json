@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1790480033898,
+  "scraped_at": 1790525027051,
   "items": [
     {
       "imdb_id": "tt5875444",
@@ -1042,7 +1042,7 @@
       "title": "The Final Problem",
       "year": 2026,
       "release_date": "2026-09-25",
-      "poster": "https://image.tmdb.org/t/p/w200/vIiBBq2yelS3HuBA8uRM83ug2vb.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/v7LQJ8GUvvvKhGRNp8F4hiRzwiI.jpg"
     },
     {
       "imdb_id": "tt3006802",
@@ -1149,14 +1149,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/lasNCd45fpPLirlA7QxkuopWro.jpg"
     },
     {
-      "imdb_id": "tt0759364",
-      "type": "series",
-      "title": "America's Got Talent",
-      "year": 2006,
-      "release_date": "2006-06-21",
-      "poster": "https://image.tmdb.org/t/p/w200/y9Lee4CQ7mAD8B5PAExU6D4oEp5.jpg"
-    },
-    {
       "imdb_id": "tt37692332",
       "type": "series",
       "title": "President Curtis",
@@ -1179,6 +1171,14 @@
       "year": 2026,
       "release_date": "2026-03-01",
       "poster": "https://image.tmdb.org/t/p/w200/tJsS5oFvcKsJ3NdlTbuG7nyCDIK.jpg"
+    },
+    {
+      "imdb_id": "tt36984433",
+      "type": "series",
+      "title": "S.W.A.T. Exiles",
+      "year": 2026,
+      "release_date": "2026-09-25",
+      "poster": "https://image.tmdb.org/t/p/w200/pPiEujhVa2MBSowmvnNWqEzxH0x.jpg"
     }
   ]
 }
