@@ -2,18 +2,8 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1790569489408,
+  "scraped_at": 1790623184394,
   "items": [
-    {
-      "slug": "38xmk-toxic-a-fairy-tale-for-grown-ups",
-      "imdb_id": "tt27530512",
-      "title": "Toxic: A Fairy Tale for Grown-ups",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "tZ8eSBXbza96vzCYeVTG9RBJ78E.jpg",
-      "description": "A powerful drug cartel pulls the strings behind a facade of sun-soaked beaches as a gritty, violent underworld power struggle emerges during the crumbling of Portuguese colonial rule.",
-      "digital_release_date": "2026-09-26"
-    },
     {
       "slug": "3zzsi-unabomber",
       "imdb_id": "tt6933238",
@@ -191,7 +181,7 @@
       "year": 2026,
       "score": 7,
       "poster_path": "3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg",
-      "description": "Deep within the backwoods of rural Oklahoma, charismatic and musically gifted Amziah King herds a bluegrass-playing band of misfits while overseeing the premier honey-making operation in town. When Amziah’s estranged foster daughter unexpectedly returns, Amziah leaps at the possibility to renew connection and create a family business. But the honey game is ruthless, and Amziah’s rivals threaten to destroy everything he has built.",
+      "description": "Deep within the backwoods of rural Oklahoma, charismatic and musically gifted Amziah King herds a bluegrass-playing band of misfits while overseeing the premier honey-making operation in town. But the honey game is ruthless, and Amziah's rivals threaten to destroy everything he's built.",
       "digital_release_date": "2026-09-15"
     },
     {
@@ -243,6 +233,16 @@
       "poster_path": "7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg",
       "description": "A group of friends set off for an unforgettable vacation. What begins as an adventure of partying and diving quickly turns into a nightmare when they are attacked by criminals in open waters.",
       "digital_release_date": "2026-09-15"
+    },
+    {
+      "slug": "36617-gerald-the-conqueror",
+      "imdb_id": "tt29312656",
+      "title": "Gerald the Conqueror",
+      "year": 2025,
+      "score": 5,
+      "poster_path": "lyjO7qEAxtMF4hZhzp3haPdeBde.jpg",
+      "description": "A Duchy of Normandy crank nostalgic wants to give his homeland back its power of days gone by. He wants to create a huge historic park to the glory of William the Conqueror, helped by an upstart documentaries director.",
+      "digital_release_date": "2026-09-13"
     },
     {
       "slug": "3o1qx-the-money-maker",
@@ -419,7 +419,7 @@
       "imdb_id": "tt35485652",
       "title": "Solomamma",
       "year": 2025,
-      "score": 2,
+      "score": 1,
       "poster_path": "l57DviQNrx9p23vGwDmpAkUZKIo.jpg",
       "description": "Edith is a curiosity-driven journalist and single mother. Solo parenting proves to be complicated, but when the identity of the man who donated the sperm that got her pregnant surfaces, she seeks him out under the false pretext of interviewing him about his company.",
       "digital_release_date": "2026-09-02"
@@ -795,6 +795,16 @@
       "digital_release_date": "2026-08-13"
     },
     {
+      "slug": "3t3bv-julian",
+      "imdb_id": "tt13597298",
+      "title": "Julian",
+      "year": 2025,
+      "score": 4,
+      "poster_path": "dPuEkF7dbyPNpzy7x4OarqtoxA9.jpg",
+      "description": "After an unexpected encounter, Fleur and Julian fall madly in love. Soon after Julian proposes, an ambitious, yet challenging idea starts to dawn on Fleur. Slowly but surely, she works out a plan to get married in every country where she and her wife are allowed to do so. Fueled by their love and a rising sense of urgency, they take a leap of faith. After only four marriages, their journey comes to an inevitable, painful halt.",
+      "digital_release_date": "2026-08-12"
+    },
+    {
       "slug": "3jda6-minions-monsters",
       "imdb_id": "tt32890033",
       "title": "Minions & Monsters",
@@ -1069,7 +1079,7 @@
       "imdb_id": "tt31116756",
       "title": "Cruel Hands",
       "year": 2025,
-      "score": null,
+      "score": 1,
       "poster_path": "v05PSRSJtcGHGmI5Egte76sav7g.jpg",
       "description": "Maria and her 12-year-old son, Dai, seek refuge in an abandoned farmhouse after fleeing from her violent husband, Jason. As fires rage across the region and emergency services struggle to locate the missing family, Maria tries to build a safe new life for Dai, while Jason embarks on a relentless quest to find them.",
       "digital_release_date": "2026-07-24"
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "8N3H6JxSt7v8mR2O3z18abe4Qyr.jpg",
       "description": "When an aid worker vanishes in the first hours of war in Ukraine, a former Navy SEAL and CIA operative crosses into the shattered country to bring her home-facing mercenaries, shifting battle lines, and ghosts he thought he left behind.",
-      "digital_release_date": "2026-07-03"
-    },
-    {
-      "slug": "44ue3-simpsley",
-      "imdb_id": "tt43140642",
-      "title": "Simpsley",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "qkJefER6Ym4v2KC1v4qK34AlcVo.jpg",
-      "description": "When penniless con-artist Marge Bouvier is sent to Italy to convince wealthy sap Seymour Skinner to come home, she’s tempted by the trappings of his affluent lifestyle. But there’s a big fat fly in the ointment: Skinner’s clingy, dim-witted mooch of a houseguest, Homer Simpsley. Lies, lust and Italian lira are abound.",
       "digital_release_date": "2026-07-03"
     }
   ]
