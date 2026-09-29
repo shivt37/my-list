@@ -2,16 +2,26 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1790657743154,
+  "scraped_at": 1790703978670,
   "items": [
     {
       "slug": "3ytuz-the-final-problem",
       "imdb_id": "tt36832679",
       "title": "The Final Problem",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "v7LQJ8GUvvvKhGRNp8F4hiRzwiI.jpg",
       "description": "In the spring of 1959, a retired actor, who previously played Sherlock Holmes, must investigate a murder at a small hotel on a tiny island near Mallorca.",
+      "first_air_date": "2026-09-25"
+    },
+    {
+      "slug": "457u1-hunkkaar-the-roar",
+      "imdb_id": "tt44934375",
+      "title": "Hunkkaar: The Roar",
+      "year": 2026,
+      "score": null,
+      "poster_path": "uL2qCVBou6WYMRxMbP5olmBpTjD.jpg",
+      "description": "When a teenager accuses a revered cult leader of sexual assault, it sparks a national conflict. As the truth unravels, the line between faith and justice blurs.",
       "first_air_date": "2026-09-25"
     },
     {
@@ -389,7 +399,7 @@
       "imdb_id": "tt41559147",
       "title": "Moria",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "96vBblVKQfYn24zh1kaC27sPs2H.jpg",
       "description": "Moria Casán transforms her life story into a symbolic spectacle of fame, controversy and ceaseless reinvention.",
       "first_air_date": "2026-08-14"
@@ -849,7 +859,7 @@
       "imdb_id": "tt28077038",
       "title": "Pritam and Pedro",
       "year": 2026,
-      "score": null,
+      "score": 7,
       "poster_path": "uA5hAexR9Xis3BzSOMKjNuYQUsj.jpg",
       "description": "The dynamic between the two contrasting personalities, a seasoned cop who prefers old-school methods and a tech-savvy cop who relies on modern technology for investigations, as they navigate their partnership in solving crimes.",
       "first_air_date": "2026-07-03"
@@ -1259,7 +1269,7 @@
       "imdb_id": "tt34930106",
       "title": "Ticket to Heaven",
       "year": 2026,
-      "score": null,
+      "score": 8,
       "poster_path": "2pPxVn4nK5KnJEx39xUHkYpmqXC.jpg",
       "description": "A grieving student pursuing priesthood faces a crisis of faith when he falls for a troubled new classmate in a world ruled by strict dogma.",
       "first_air_date": "2026-05-30"
@@ -1299,7 +1309,7 @@
       "imdb_id": "tt37041010",
       "title": "Brazil '70: The Third Star",
       "year": 2026,
-      "score": null,
+      "score": 7,
       "poster_path": "u6PBGDVs0CZJsq8IpWI5C4u0eyl.jpg",
       "description": "In 1970, the Brazilian national team took the field with big dreams and an even bigger challenge: to become the first three-time world champions.",
       "first_air_date": "2026-05-29"
@@ -1433,16 +1443,6 @@
       "poster_path": "uMo4RmoVJN1dW9KUPPVuCMrP8Tp.jpg",
       "description": "N/A",
       "first_air_date": "2026-05-21"
-    },
-    {
-      "slug": "3vza1-maximum-pleasure-guaranteed",
-      "imdb_id": "tt35946742",
-      "title": "Maximum Pleasure Guaranteed",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "oeD9rnfk7AohNiJTRoCx4SOKhXj.jpg",
-      "description": "A newly divorced mom falls down a dangerous rabbit hole of blackmail, murder, and youth soccer.",
-      "first_air_date": "2026-05-19"
     }
   ]
 }
