@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1790623204195,
+  "scraped_at": 1790657710288,
   "items": [
+    {
+      "slug": "3ks7i-tony",
+      "imdb_id": "tt33095251",
+      "title": "Tony",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "uwZF5guNR5EnXkjIVTk4UPTVGiS.jpg",
+      "description": "A 19-year-old Anthony Bourdain travels to Provincetown and stumbles into the chaotic world of a restaurant kitchen, setting off a summer that will shape the course of his life.",
+      "digital_release_date": null
+    },
     {
       "slug": "31vuy-zion",
       "imdb_id": "tt30330486",
@@ -100,7 +110,7 @@
       "title": "Hands Up Who'd Like a Hug?",
       "year": 2026,
       "score": null,
-      "poster_path": "obGGu69v3njcscUYP1hg5KWJqyh.jpg",
+      "poster_path": "3htJBluj19sBh8ytmLzuhrlpToA.jpg",
       "description": "An oddball young millionaire who can't make friends, sobers up a homeless drunk in an effort to make him his first friend.",
       "digital_release_date": null
     },
@@ -130,7 +140,7 @@
       "title": "The Snare",
       "year": 2026,
       "score": null,
-      "poster_path": "aHSFvU7iEmJqyo9A9gsMnYC1yfq.jpg",
+      "poster_path": "qqvzyCbEYamv604xPctkfbUC9JR.jpg",
       "description": "When a high school student is arrested with a small amount of drugs, the police pressure her to become an informant—forcing her to choose between the people she most loves and the future she's worked so hard to create.",
       "digital_release_date": null
     },
@@ -250,7 +260,7 @@
       "title": "Boorman and the Devil",
       "year": 2026,
       "score": 8,
-      "poster_path": "gAjei5EpYkyRVB0DP9vKaQGtJSA.jpg",
+      "poster_path": "4HJzmhP8iMzkIQ7cjr2zfIcReiK.jpg",
       "description": "Featuring commentary from surviving participants, as well as other filmmakers and critics, this documentary chronicles the career of director John Boorman and the tumultuous production of his film Exorcist II: The Heretic, exploring its critical and commercial failure, how it changed the industry, and the importance of risk-taking in art.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
       "description": "Two Mexican officers must survive the final hours of their shift after crossing a ruthless cartel boss.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3uuzf-bury-the-devil",
-      "imdb_id": "tt29719182",
-      "title": "Bury the Devil",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "yQ3GeVsebrhOPIBhIdoSslbndEv.jpg",
-      "description": "When a hospice nurse finds herself trapped with a dementia patient, she begins to suspect something else is wrong with the woman, something otherworldly, and must fight to survive the night.",
       "digital_release_date": null
     }
   ]
