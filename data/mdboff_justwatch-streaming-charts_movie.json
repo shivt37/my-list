@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1790827364477,
+  "scraped_at": 1790876677919,
   "items": [
     {
       "imdb_id": "tt26657236",
@@ -501,20 +501,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/3zQMhutUMJP6lK49x7i2YfsOHL9.jpg"
     },
     {
-      "imdb_id": "tt1099212",
-      "type": "movie",
-      "title": "Twilight",
-      "year": 2008,
-      "release_date": "2008-11-20",
-      "poster": "https://image.tmdb.org/t/p/w200/3Gkb6jm6962ADUPaCBqzz9CTbn9.jpg"
-    },
-    {
       "imdb_id": "tt29439114",
       "type": "movie",
       "title": "The Room Next Door",
       "year": 2024,
       "release_date": "2024-10-07",
       "poster": "https://image.tmdb.org/t/p/w200/qMibLyArrlBJ87AoqQBeVaFeRXp.jpg"
+    },
+    {
+      "imdb_id": "tt1099212",
+      "type": "movie",
+      "title": "Twilight",
+      "year": 2008,
+      "release_date": "2008-11-20",
+      "poster": "https://image.tmdb.org/t/p/w200/3Gkb6jm6962ADUPaCBqzz9CTbn9.jpg"
     },
     {
       "imdb_id": "tt46060457",
@@ -933,14 +933,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/iNZdSIfhSCMtRILDNyhLn8UKeSG.jpg"
     },
     {
-      "imdb_id": "tt16478058",
-      "type": "movie",
-      "title": "Best of the Best",
-      "year": 2026,
-      "release_date": "2026-09-18",
-      "poster": "https://image.tmdb.org/t/p/w200/9soOjsZ91vtMzypK2F3MC378JI5.jpg"
-    },
-    {
       "imdb_id": "tt22207786",
       "type": "movie",
       "title": "Red Rooms",
@@ -1027,14 +1019,6 @@
       "year": 2001,
       "release_date": "2001-11-16",
       "poster": "https://image.tmdb.org/t/p/w200/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
-    },
-    {
-      "imdb_id": "tt0318627",
-      "type": "movie",
-      "title": "Resident Evil: Apocalypse",
-      "year": 2004,
-      "release_date": "2004-09-10",
-      "poster": "https://image.tmdb.org/t/p/w200/yzNQSLlZb7NAkA4C5uADfNDJ7hm.jpg"
     },
     {
       "imdb_id": "tt34564059",
@@ -1149,6 +1133,22 @@
       "poster": "https://image.tmdb.org/t/p/w200/o1K7be85FAauSbVPzCQ0GjOXUqu.jpg"
     },
     {
+      "imdb_id": "tt16478058",
+      "type": "movie",
+      "title": "Best of the Best",
+      "year": 2026,
+      "release_date": "2026-09-18",
+      "poster": "https://image.tmdb.org/t/p/w200/9soOjsZ91vtMzypK2F3MC378JI5.jpg"
+    },
+    {
+      "imdb_id": "tt0099685",
+      "type": "movie",
+      "title": "GoodFellas",
+      "year": 1990,
+      "release_date": "1990-09-12",
+      "poster": "https://image.tmdb.org/t/p/w200/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg"
+    },
+    {
       "imdb_id": "tt0120737",
       "type": "movie",
       "title": "The Lord of the Rings: The Fellowship of the Ring",
@@ -1165,12 +1165,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/nSlKzxvXWOeDC9qZiwkhGuTAKkq.jpg"
     },
     {
-      "imdb_id": "tt0089218",
+      "imdb_id": "tt0318627",
       "type": "movie",
-      "title": "The Goonies",
-      "year": 1985,
-      "release_date": "1985-06-07",
-      "poster": "https://image.tmdb.org/t/p/w200/eBU7gCjTCj9n2LTxvCSIXXOvHkD.jpg"
+      "title": "Resident Evil: Apocalypse",
+      "year": 2004,
+      "release_date": "2004-09-10",
+      "poster": "https://image.tmdb.org/t/p/w200/yzNQSLlZb7NAkA4C5uADfNDJ7hm.jpg"
     },
     {
       "imdb_id": "tt0093779",
