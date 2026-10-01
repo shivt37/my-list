@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1790830426120,
+  "scraped_at": 1790878046774,
   "items": [
+    {
+      "slug": "35nmu-racewalkers",
+      "imdb_id": "tt31194464",
+      "title": "Racewalkers",
+      "year": 2025,
+      "score": null,
+      "poster_path": "pIjr6zMhT7k7NHa06rYTSgyc6C2.jpg",
+      "description": "Will could never compete in the sport he’s always loved: racewalking. While struggling to find respect as a coach, Will’s fortunes change when he spots a burnout pitcher with the most impeccable racewalking stride he’s ever seen. Together, Will and Matt team up, face the challenges of a sport that doesn’t want them, and to try to take down the best walker in the country.",
+      "digital_release_date": null
+    },
     {
       "slug": "3ux4o-one-night-only",
       "imdb_id": "tt37853455",
@@ -279,7 +289,7 @@
       "imdb_id": "tt33253206",
       "title": "The Last Kiss",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "cLZ7iFZc25vluSIKt3XtdSTait4.jpg",
       "description": "Laurel always imagined her first kiss would be a fairy tale. Instead, that fantasy turns frightening when she's cursed with an ability to see the death of anyone she kisses. After a vision reveals her crush is doomed to die in a strange murder spree targeting her closest friends, she races to unmask the killer before the mystery becomes a massacre.",
       "digital_release_date": null
@@ -1089,7 +1099,7 @@
       "imdb_id": "tt38629827",
       "title": "Flood",
       "year": 2025,
-      "score": 2,
+      "score": 1,
       "poster_path": "qtom3MULMUp4vFA3rEkTwEIfWVe.jpg",
       "description": "In communist Czechoslovakia in 1980, 15-year-old Mara dreams of leaving her village to study in the city and become a pilot. But her father, a widowed Ruthenian farmer, insists she stay and work the land. When her village faces destruction due to a new dam, their generational conflict intensifies, revealing the struggle between tradition, identity, and the desire for freedom in a context of historical change.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "gFjEggtrejCN79r6SXRjM269OtG.jpg",
       "description": "In the tense 72 hours before D-Day, and the fate of the free world hanging in the balance, General Dwight D. Eisenhower and Captain James Stagg face an impossible choice—launch the largest and most dangerous seaborne invasion in history or risk losing the war altogether.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "4388u-monsters",
-      "imdb_id": "tt38573622",
-      "title": "Monsters",
-      "year": 2025,
-      "score": null,
-      "poster_path": "thebZURuxbS6VdrV7A52OKaLfyO.jpg",
-      "description": "A small town somewhere in the north. The body of a brutally murdered young girl, Anna, is found by the river. The investigation is taken up by the determined criminalist Laura Linhartová (Kristýna Ryška), and her old colleague Adam Beneš (Kryštof Hádek) is assigned to her. The main suspect is a recently convicted perpetrator who is responsible for a similar murder. Just when it seems that the search for Anna's murderer is over, new evidence appears that brings the whole case back to the beginning. The criminalists thus embark on a complicated investigation full of unexpected twists and turns. The circle of suspects in the small town expands dramatically. The tension between Laura and Adam rises, not to mention their different characters and shared past. And the question still hangs in the air: Who killed Anna Pittnerová?",
       "digital_release_date": null
     }
   ]
