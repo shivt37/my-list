@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1790790152083,
+  "scraped_at": 1790830454559,
   "items": [
     {
       "slug": "3ytuz-the-final-problem",
@@ -25,6 +25,16 @@
       "first_air_date": "2026-09-25"
     },
     {
+      "slug": "45ddk-steel-ball-run-jojo-s-bizarre-adventure",
+      "imdb_id": "tt38268282",
+      "title": "STEEL BALL RUN JoJo's Bizarre Adventure",
+      "year": 2026,
+      "score": null,
+      "poster_path": "https://m.media-amazon.com/images/M/MV5BZDFmY2JjYmYtNjZhOC00ODJkLTliMjYtM2Y4YzBjMWE0ZGZjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+      "description": "A paraplegic ex-jockey joins forces with an outlaw to compete in the first cross-continental horse race across North America in the 1800s.",
+      "first_air_date": "2026-09-25"
+    },
+    {
       "slug": "3vo52-shaque-trust-no-one",
       "imdb_id": "tt35929525",
       "title": "Shaque: Trust No One",
@@ -39,9 +49,19 @@
       "imdb_id": "tt33081352",
       "title": "A Different World",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "mmE4RNbsPOwwRo5rnVRd1IXzgcZ.jpg",
       "description": "Deborah Wayne enters her freshman year at her parents' HBCU alma mater and finds their shadow difficult to escape. She sets out to build her own legacy – while having the time of her life – alongside a whole new generation of Hillman’s best and brightest.",
+      "first_air_date": "2026-09-24"
+    },
+    {
+      "slug": "43vnu-my-sad-dead",
+      "imdb_id": "tt37158600",
+      "title": "My Sad Dead",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7FEUvXEgpsevAse8gNFk1h1RPRd.jpg",
+      "description": "Emma can see the dead. But when her niece arrives, thousands of lives are shaken.",
       "first_air_date": "2026-09-24"
     },
     {
@@ -49,7 +69,7 @@
       "imdb_id": "tt6773088",
       "title": "Brothers",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "jD7ZQpDEZzAVReJzkOtmuFoIl2m.jpg",
       "description": "Hollywood actors Matthew McConaughey and Woody Harrelson have been best friends for years, but a shocking family secret suggests their connection might be closer.",
       "first_air_date": "2026-09-22"
@@ -59,7 +79,7 @@
       "imdb_id": "tt28765828",
       "title": "Minerva Academy",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "mVXUJjlOSiYMpApFoPyWTnqBhUm.jpg",
       "description": "At Minerva Military High School, teens navigate discipline, rivalry and family pressure as a young cadet searches for answers about his missing friend.",
       "first_air_date": "2026-09-22"
@@ -90,7 +110,7 @@
       "title": "American Hostage",
       "year": 2026,
       "score": null,
-      "poster_path": "cJX6cFqJsX4cWe3DeZBJzg7w4rH.jpg",
+      "poster_path": "dzoPQ13XrRUGl8Yoz1P66V8rRUy.jpg",
       "description": "A psychological thriller anthology series focusing on a different hostage case every season.",
       "first_air_date": "2026-09-20"
     },
@@ -199,7 +219,7 @@
       "imdb_id": "tt33023009",
       "title": "The Trial",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "3k5HpocqX4grgmqCecT2OdYMyT0.jpg",
       "description": "A teenager and her father struggle for justice after she is sexually assaulted by the scion of a successful businessman. Not only will the father and daughter have to navigate a failed judicial system, but they must also contend with a wealthy adversary bent on using all his power to protect his son.",
       "first_air_date": "2026-09-11"
@@ -262,6 +282,16 @@
       "score": null,
       "poster_path": "3WfgRJBIaOTsiu2bQO23xWb08ro.jpg",
       "description": "Returning to England, Susan Ryeland is reluctantly drawn into a new Atticus Pünd mystery, this time written by a new, young writer. 'Pünd’s Last Case\" is a story set in 1955, in an exotic villa in Corfu – but the identity of a real killer is hidden in the text, and once again Susan is going to find herself in grave danger.",
+      "first_air_date": "2026-09-06"
+    },
+    {
+      "slug": "42u7m-a-tale-of-two-cities",
+      "imdb_id": "tt38128417",
+      "title": "A Tale of Two Cities",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "ht3OVVRBTrTeVtUVQiKSekjIFVH.jpg",
+      "description": "A pair of lookalikes, one a former French aristocrat and the other an alcoholic English lawyer, fall in love with the same woman amidst the turmoil of the French Revolution.",
       "first_air_date": "2026-09-06"
     },
     {
@@ -1413,36 +1443,6 @@
       "poster_path": "m2N08g1l1nniOQX993EEKuv2R9N.jpg",
       "description": "One of the most feared clans in Romania tells its inside story for the first time. This is not just the history of a clan. It is the story of a transition, of a Romania that paid dearly for the price of freedom.",
       "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "44ni4-the-many-lives-of-benjaman-kyle",
-      "imdb_id": "tt41978418",
-      "title": "The Many Lives of Benjaman Kyle",
-      "year": 2026,
-      "score": null,
-      "poster_path": "oVYZZpAz7CC4DJF8b0xJKkY5WaE.jpg",
-      "description": "The producers set out to help amnesiac Benjaman Kyle but uncover mob ties, twisted lies, and a sinister plan. He claims memory loss, but as the story unfolds, he turns on them. They soon learn he may be a hitman and a possible murderer.",
-      "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "3uxax-two-weeks-in-august",
-      "imdb_id": "tt36118374",
-      "title": "Two Weeks in August",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "xjkR648bH8FzQVKG9RvQtNCVVDa.jpg",
-      "description": "A Greek holiday with friends to relax and reconnect. But when Zoe acts on her desires, heaven quickly turns into hell. Witty, painfully relatable drama starring Jessica Raine.",
-      "first_air_date": "2026-05-23"
-    },
-    {
-      "slug": "3t3s7-ravalear-not-for-sale",
-      "imdb_id": "tt35509002",
-      "title": "Ravalear: Not for Sale",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "4kHnq56sxfhNJbFGd0kNJGcIQVu.jpg",
-      "description": "In Barcelona’s Raval neighbourhood, the family-run restaurant “Can Mosques” faces eviction after an investment fund buys the building. The family’s fight to survive escalates, pushing them to cross any and all boundaries.",
-      "first_air_date": "2026-05-22"
     }
   ]
 }
