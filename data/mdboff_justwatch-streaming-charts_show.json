@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1790913499632,
+  "scraped_at": 1790960679954,
   "items": [
     {
       "imdb_id": "tt5875444",
@@ -91,6 +91,14 @@
       "year": 2026,
       "release_date": "2026-04-28",
       "poster": "https://image.tmdb.org/t/p/w200/5lcxWLVAEICkFpuAiV1aMy7ZZj3.jpg"
+    },
+    {
+      "imdb_id": "tt21097264",
+      "type": "series",
+      "title": "East of Eden",
+      "year": 2026,
+      "release_date": "2026-10-01",
+      "poster": "https://image.tmdb.org/t/p/w200/axdUor6gLMTrrB1UF4Qfy0TTSyX.jpg"
     },
     {
       "imdb_id": "tt19231492",
@@ -1053,14 +1061,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg"
     },
     {
-      "imdb_id": "tt0459159",
-      "type": "series",
-      "title": "The Thick of It",
-      "year": 2005,
-      "release_date": "2005-05-19",
-      "poster": "https://image.tmdb.org/t/p/w200/xuOz95tUuXclfnlOID7ejtREYqf.jpg"
-    },
-    {
       "imdb_id": "tt0200276",
       "type": "series",
       "title": "The West Wing",
@@ -1093,14 +1093,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/utHIefqz4rxTh6JntqSOST8rroS.jpg"
     },
     {
-      "imdb_id": "tt0387764",
-      "type": "series",
-      "title": "Peep Show",
-      "year": 2003,
-      "release_date": "2003-09-19",
-      "poster": "https://image.tmdb.org/t/p/w200/6rdoQ0cTjsEQLIwEjhBV8U98oUm.jpg"
-    },
-    {
       "imdb_id": "tt1839578",
       "type": "series",
       "title": "Person of Interest",
@@ -1115,6 +1107,14 @@
       "year": 2017,
       "release_date": "2017-08-01",
       "poster": "https://image.tmdb.org/t/p/w200/9ukZcwaqcObmmxxfcIXTgVMvalJ.jpg"
+    },
+    {
+      "imdb_id": "tt0387764",
+      "type": "series",
+      "title": "Peep Show",
+      "year": 2003,
+      "release_date": "2003-09-19",
+      "poster": "https://image.tmdb.org/t/p/w200/6rdoQ0cTjsEQLIwEjhBV8U98oUm.jpg"
     },
     {
       "imdb_id": "tt27497448",
@@ -1149,6 +1149,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/uWqEnvpwa2U28QheMdUdEcr4U0M.jpg"
     },
     {
+      "imdb_id": "tt0459159",
+      "type": "series",
+      "title": "The Thick of It",
+      "year": 2005,
+      "release_date": "2005-05-19",
+      "poster": "https://image.tmdb.org/t/p/w200/xuOz95tUuXclfnlOID7ejtREYqf.jpg"
+    },
+    {
       "imdb_id": "tt27543562",
       "type": "series",
       "title": "The Shards",
@@ -1163,14 +1171,6 @@
       "year": 2019,
       "release_date": "2019-07-25",
       "poster": "https://image.tmdb.org/t/p/w200/in1R2dDc421JxsoRWaIIAqVI2KE.jpg"
-    },
-    {
-      "imdb_id": "tt3006802",
-      "type": "series",
-      "title": "Outlander",
-      "year": 2014,
-      "release_date": "2014-08-09",
-      "poster": "https://image.tmdb.org/t/p/w200/oftZNfyTVNU7IfOqoGLoT8MGvNs.jpg"
     }
   ]
 }
