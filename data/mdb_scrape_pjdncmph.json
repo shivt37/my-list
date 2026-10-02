@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1790878046774,
+  "scraped_at": 1790916256654,
   "items": [
+    {
+      "slug": "3agau-family",
+      "imdb_id": "tt30834999",
+      "title": "Family",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "cTXGUz1Mle56A6vAK2GAf1j8Wtn.jpg",
+      "description": "A 10-year-old girl begins to believe her parents are trying to kill her. Convinced a sinister spirit is to blame, she spirals into a haunting fantasy world that mirrors her deepest fears.",
+      "digital_release_date": null
+    },
     {
       "slug": "35nmu-racewalkers",
       "imdb_id": "tt31194464",
@@ -117,7 +127,7 @@
     {
       "slug": "44xyb-pulp-what-do-you-do-for-an-encore",
       "imdb_id": "tt43596978",
-      "title": "Pulp - What Do You Do for an Encore?",
+      "title": "Pulp: What Do You Do for an Encore?",
       "year": 2026,
       "score": 4,
       "poster_path": "iOdcLIc1mAlczfD1Mq6dg4IupIh.jpg",
@@ -159,7 +169,7 @@
       "imdb_id": "tt12446086",
       "title": "Legend of the White Dragon",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "yygzww0GACtCMmwhtPG1P01qSx5.jpg",
       "description": "Forced to hide in the shadows, fugitive hero Erik Reed must clear his name to reunite with his family. Standing in his way is a mysterious villain obsessed with destroying the White Dragon for good.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 1,
       "poster_path": "nCL9LCKau7c0PBbkRMh7fKHjRRI.jpg",
       "description": "Migrant Nina takes a hotel job in the Maldives, but her island paradise turns nightmarish after an incident. Falsely accused, she must evade traps to escape her unjust life sentence.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3jnz0-pressure",
-      "imdb_id": "tt32547691",
-      "title": "Pressure",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "gFjEggtrejCN79r6SXRjM269OtG.jpg",
-      "description": "In the tense 72 hours before D-Day, and the fate of the free world hanging in the balance, General Dwight D. Eisenhower and Captain James Stagg face an impossible choice—launch the largest and most dangerous seaborne invasion in history or risk losing the war altogether.",
       "digital_release_date": null
     }
   ]
