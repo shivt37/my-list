@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1790916286660,
+  "scraped_at": 1790962445805,
   "items": [
     {
       "slug": "3ytuz-the-final-problem",
@@ -79,7 +79,7 @@
       "imdb_id": "tt28765828",
       "title": "Minerva Academy",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "mVXUJjlOSiYMpApFoPyWTnqBhUm.jpg",
       "description": "At Minerva Military High School, teens navigate discipline, rivalry and family pressure as a young cadet searches for answers about his missing friend.",
       "first_air_date": "2026-09-22"
@@ -133,6 +133,16 @@
       "poster_path": "4TU0PcHBIl0wPW5B6aVRGExOnHE.jpg",
       "description": "In Joseon, a secret proposal ignites hidden desires in a gifted noblewoman, a famed lover and an unsuspecting lady caught in their dangerous game.",
       "first_air_date": "2026-09-18"
+    },
+    {
+      "slug": "41zr4-plastic-beauty",
+      "imdb_id": "tt37884325",
+      "title": "Plastic Beauty",
+      "year": 2026,
+      "score": null,
+      "poster_path": "u0mCeqVvQW2HEfrRy1we9UklsQd.jpg",
+      "description": "When a gifted ER surgeon is thrust into cosmetic medicine, her clash with a celebrity doctor exposes the greed and desire beneath the glamour.",
+      "first_air_date": "2026-09-17"
     },
     {
       "slug": "457ta-not-a-stranger",
@@ -209,7 +219,7 @@
       "imdb_id": "tt31924802",
       "title": "The Revolutionaries",
       "year": 2026,
-      "score": 4,
+      "score": 3,
       "poster_path": "5fLyYAxXWP4BxZCBN79NV1eiT4d.jpg",
       "description": "The Revolutionaries narrates the inspiring tale of brave young Indian freedom fighters who fought for ending British Raj with their unwavering spirit and ideology.",
       "first_air_date": "2026-09-11"
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "MPN0glmZV3JnZfmXtKF32SRhDD.jpg",
       "description": "Explores WWII from Germany's invasion of Poland through the atomic age, examining pivotal battles, wartime leaders like Churchill and Roosevelt, and the human cost of total war.",
-      "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "44naq-camatarii",
-      "imdb_id": "tt42667822",
-      "title": "Camatarii",
-      "year": 2026,
-      "score": null,
-      "poster_path": "m2N08g1l1nniOQX993EEKuv2R9N.jpg",
-      "description": "One of the most feared clans in Romania tells its inside story for the first time. This is not just the history of a clan. It is the story of a transition, of a Romania that paid dearly for the price of freedom.",
       "first_air_date": "2026-05-25"
     }
   ]

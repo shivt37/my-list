@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1790916256654,
+  "scraped_at": 1790962414164,
   "items": [
+    {
+      "slug": "43uj5-infirmary",
+      "imdb_id": "tt35682658",
+      "title": "Infirmary",
+      "year": 2026,
+      "score": null,
+      "poster_path": "bHiAp8WWHgfUrJmRnoiw4URYGcq.jpg",
+      "description": "A guard vanished on his first night at an old psych hospital in 2023. His bodycam footage shows unexplainable incidents that continue to baffle investigators.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3z69b-union-county",
+      "imdb_id": "tt36981462",
+      "title": "Union County",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "73Dt773ChYDF5ZgTPDyH6E7qZhs.jpg",
+      "description": "Assigned to a county-mandated drug court program, Cody Parsons embarks on the tenuous journey toward recovery amid the opioid epidemic in rural Ohio.",
+      "digital_release_date": null
+    },
     {
       "slug": "3agau-family",
       "imdb_id": "tt30834999",
@@ -1422,26 +1442,6 @@
       "score": 7,
       "poster_path": "hOinKSq03z7L6aXbsmmppgMeBJX.jpg",
       "description": "After the explosion of the Earth, the Ukrainian space trucker Andriy becomes the only human in the Universe until French woman Catherine calls him from the faraway space station. Andriy decides to see her despite all the obstacles.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "32d82-deep-water",
-      "imdb_id": "tt29516222",
-      "title": "Deep Water",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "ZWHxL2ETItcZzeVsVfs6gv3SZ7.jpg",
-      "description": "A group of international passengers on a flight from Los Angeles to Shanghai is forced to make an emergency landing in shark-infested waters. The terrified group is forced to work together and overcome their differences if they hope to escape their sinking plane and the frenzy of sharks drawn to the wreckage.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3ij68-hell-in-paradise",
-      "imdb_id": "tt32296243",
-      "title": "Hell in Paradise",
-      "year": 2025,
-      "score": 1,
-      "poster_path": "nCL9LCKau7c0PBbkRMh7fKHjRRI.jpg",
-      "description": "Migrant Nina takes a hotel job in the Maldives, but her island paradise turns nightmarish after an incident. Falsely accused, she must evade traps to escape her unjust life sentence.",
       "digital_release_date": null
     }
   ]
