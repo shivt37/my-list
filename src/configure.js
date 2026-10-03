@@ -237,7 +237,7 @@ export function buildConfigurePage(origin, config, opts = {}) {
  * that kept identity text brighter than the disabled controls beside it). */
 .list-card.disabled :is(.name-static, .id-chip, .pages-field, .official-hint,
                        .filter-label, .toggle-text, .tier-head,
-                       .members-label, .include-mode-hint, .count-line) {
+                       .members-label, .include-mode-hint, .count-line, .filter-summary) {
   color: rgb(232 237 244 / 45%);
 }
 /* Owner: TMDB mode pills - the accent thumb (the sliding pill behind
@@ -270,9 +270,10 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .fold-btn svg { transition: transform 0.15s; }
   .list-card.filters-collapsed .fold-btn svg { transform: rotate(-90deg); }
   .list-card.filters-collapsed .tmdb-filters { display: none; }
-  /* Folded digest: mode + only dims holding values, single ellipsis line so
-     folded cards stay distinguishable without growing the head. */
-  .filter-summary { flex-basis: 100%; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Folded digest: mode + only dims holding values. Wraps with a 2-line
+     clamp - a truncated digest hides the trailing dims it exists to show,
+     while the clamp keeps a monster list from growing a paragraph. */
+  .filter-summary { flex-basis: 100%; font-size: 11px; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   .tcard-name { cursor: pointer; }
   .card-body { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px; }
   .card-body .url-input { flex: 1 1 220px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
@@ -1187,8 +1188,10 @@ function applyDisabledState() {
     card.querySelectorAll('input:not(.toggle input), select, button:not(.fold-btn)').forEach(el => { el.disabled = true; });
     // Owner: spans faking buttons (the AND/OR dim-mode pills) can't carry the
     // disabled attribute - a disabled card left them clickable (state changed
-    // while everything else was locked). Neutralize them explicitly.
-    card.querySelectorAll('span[onclick]').forEach(el => {
+    // while everything else was locked). Neutralize them explicitly. The
+    // TMDB name span is exempt: folding is a view control and stays live on
+    // disabled cards (same as the chevron), per owner decision.
+    card.querySelectorAll('span[onclick]:not(.tcard-name)').forEach(el => {
       el.style.pointerEvents = 'none';
       el.setAttribute('aria-disabled', 'true');
       el.tabIndex = -1;
