@@ -833,6 +833,35 @@ export async function handleTmdbNetworkDetail(env, networkId) {
   return json({ id: data.id, name: data.name, logo: data.logo_path ? `https://image.tmdb.org/t/p/w185${data.logo_path}` : null });
 }
 
+// ── Pasted-link id resolver for keyword/company/collection pickers ──
+// Mirrors /tmdb/network/{id}: the picker search boxes only do fuzzy text
+// search, so a pasted themoviedb.org/<kind>/<id> link (or a bare id) resolves
+// here to an exact {id, name, image} row. Company exposes logo_path,
+// collection exposes poster_path, keyword exposes no image at all - the UI
+// renders a text-only row for it.
+const TMDB_DETAIL_SPECS = {
+  company: { api: (id) => `/company/${id}`, image: (d) => (d.logo_path ? { url: `https://image.tmdb.org/t/p/w185${d.logo_path}`, wide: true } : null) },
+  collection: { api: (id) => `/collection/${id}`, image: (d) => (d.poster_path ? { url: `https://image.tmdb.org/t/p/w92${d.poster_path}`, wide: false } : null) },
+  keyword: { api: (id) => `/keyword/${id}`, image: () => null },
+};
+
+export async function handleTmdbDetail(env, kind, detailId) {
+  const spec = TMDB_DETAIL_SPECS[kind];
+  if (!spec) return json({ error: "Unknown detail kind." }, 400);
+  const guard = tmdbTokenOrError(env);
+  if (guard) return guard;
+  let data;
+  try {
+    data = await tmdbApi(env, spec.api(detailId));
+  } catch (e) {
+    return json({ error: "TMDB request failed: " + String((e && e.message) || e).slice(0, 160) }, 502);
+  }
+  if (data.error) return json({ error: data.error }, 502);
+  if (!data.id) return json({ error: "Not found on TMDB." }, 404);
+  const img = spec.image(data) || { url: null, wide: false };
+  return json({ id: data.id, name: data.name, image: img.url, wide: img.wide });
+}
+
 // Port of the old tmdb worker's buildDiscoverSources/fetch logic, live
 // variant: same AND/OR fragment plan, collection post-filter, capped at
 // 25 pages × 20 = up to 500 items (old worker's MAX_PREVIEW_PAGES). Body is

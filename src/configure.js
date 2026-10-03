@@ -1697,6 +1697,10 @@ const TMDB_NAME_KEYS = {
   collection:{ include: 'includeCollectionNames', exclude: 'excludeCollectionNames' },
   network:   { include: 'includeNetworkNames', exclude: 'excludeNetworkNames' },
 };
+// Link-paste markers for the keyword/company/collection pickers - same
+// network-bar treatment: a pasted themoviedb.org/<kind>/<id> link (or a bare
+// id) resolves to an exact row via /tmdb/detail/<kind>/<id>.
+const TMDB_PASTABLE = { keyword: 'keyword/', company: 'company/', collection: 'collection/' };
 // Offline seed for the Networks picker: TMDB has no /search/network API and
 // the worker proxies the site's undocumented typeahead route. If that fails,
 // inline search matches this curated list locally. All ids live-verified
@@ -2094,7 +2098,11 @@ async function runTmdbInlineSearch() {
   if (!input) return;
   const q = input.value.trim();
   if (tmdbSearchTimer) clearTimeout(tmdbSearchTimer);
-  if (q.length < 2 && !(tmdbAdding.kind === 'network' && /^[0-9]$/.test(q))) {
+  // Bare ids are valid input for the network bar and the pastable
+  // keyword/company/collection bars - let a single digit through so
+  // company 1 (Lucasfilm) etc. resolve instead of clearing the results.
+  const idEntryKind = tmdbAdding.kind === 'network' || !!TMDB_PASTABLE[tmdbAdding.kind];
+  if (q.length < 2 && !(idEntryKind && /^[0-9]$/.test(q))) {
     tmdbSearchSeq++;
     writeSearchResults(tmdbSearchSeq, '');
     return;
@@ -2108,6 +2116,7 @@ async function runTmdbInlineSearch() {
       // keyword/company/collection keep their own TMDB search endpoints.
       const isItem = tmdbAdding.kind === 'item';
       const isNet = tmdbAdding.kind === 'network';
+      const pastableMarker = TMDB_PASTABLE[tmdbAdding.kind] || null;
       const searchKind = isItem ? 'title' : tmdbAdding.kind;
       const typeQs = isItem ? '&type=' + encodeURIComponent((state.tmdb.lists[tmdbAdding.i] || {}).mediaType || 'movie') : '';
       if (isNet) {
@@ -2119,6 +2128,21 @@ async function runTmdbInlineSearch() {
           writeSearchResults(seq, urlRow || '<div class="empty-msg">Not a TMDB network link.</div>');
           return;
         }
+      }
+      if (pastableMarker && q.indexOf('themoviedb.org') !== -1) {
+        // Same pure-id treatment as the Networks bar: a pasted
+        // themoviedb.org/<kind> link skips fuzzy search entirely. A parsed
+        // id that TMDB won't resolve is a lookup failure, NOT a bad link -
+        // say so and offer a retry instead of the misleading rejection.
+        const pastedId = tmdbPastedIdFromQuery(q, pastableMarker);
+        if (!Number.isInteger(pastedId)) {
+          writeSearchResults(seq, '<div class="empty-msg">Not a TMDB ' + tmdbAdding.kind + ' link.</div>');
+          return;
+        }
+        const urlRow = await tmdbDetailRowHtml(tmdbAdding.kind, pastedId, false);
+        writeSearchResults(seq, urlRow || '<div class="empty-msg">TMDB did not resolve #' + pastedId + '. ' +
+          '<button type="button" class="secondary" style="font-size:11px;padding:2px 8px;" onclick="runTmdbInlineSearchNow()">Retry</button></div>');
+        return;
       }
       const res = await fetch(ORIGIN + '/tmdb/search-' + searchKind + '?query=' + encodeURIComponent(q) + typeQs);
       const data = await res.json();
@@ -2139,8 +2163,15 @@ async function runTmdbInlineSearch() {
       let rows = data.results.map(rowHtml).join('');
       // Networks share ONE bar: a pure-numeric query also resolves as an
       // exact TMDB network id (API proxy, independent of the site route).
+      // Keyword/company/collection bars do the same via /tmdb/detail.
       if (isNet && Number.isInteger(netId)) {
         rows = await networkIdRowHtml(netId, data.results.some((r) => r.id === netId)) + rows;
+      }
+      if (pastableMarker) {
+        const bareId = tmdbPastedIdFromQuery(q, pastableMarker);
+        if (Number.isInteger(bareId)) {
+          rows = await tmdbDetailRowHtml(tmdbAdding.kind, bareId, data.results.some((r) => r.id === bareId)) + rows;
+        }
       }
       resultHtml = rows || '<div class="empty-msg">No results found.</div>';
     } catch (e) {
@@ -2158,6 +2189,13 @@ async function runTmdbInlineSearch() {
           resultHtml = '<div class="empty-msg">Network lookup failed. ' +
             '<button type="button" class="secondary" style="font-size:11px;padding:2px 8px;" onclick="runTmdbInlineSearchNow()">Retry</button></div>';
         }
+      } else if (tmdbAdding && TMDB_PASTABLE[tmdbAdding.kind]) {
+        // Fuzzy search failed but the API id-resolver is independent - a
+        // pasted link or bare id may still resolve.
+        const kind = tmdbAdding.kind;
+        const pid = tmdbPastedIdFromQuery(q, TMDB_PASTABLE[kind]);
+        const idRow = Number.isInteger(pid) ? await tmdbDetailRowHtml(kind, pid, false) : '';
+        resultHtml = idRow || '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
       } else {
         resultHtml = '<div class="empty-msg">Search failed: ' + escapeAttr(e.message) + '</div>';
       }
@@ -2303,7 +2341,7 @@ function excludedItemsSearchHtml(i) {
 }
 
 function tmdbInlineSearchHtml(i, dim, side) {
-  const placeholder = { keyword: 'Search for a keyword…', company: 'Search for a company…', collection: 'Search for a collection…', network: 'Search a network by name… or paste its id / themoviedb.org link' }[dim.searchKind] || 'Search…';
+  const placeholder = { keyword: 'Search keywords… or paste id / themoviedb.org link', company: 'Search companies… or paste id / themoviedb.org link', collection: 'Search collections… or paste id / themoviedb.org link', network: 'Search a network by name… or paste its id / themoviedb.org link' }[dim.searchKind] || 'Search…';
   return '<div class="inline-add-search">' +
     '<div class="search-row">' +
       '<div class="search-input-wrap">' +
@@ -2367,6 +2405,47 @@ async function networkIdRowHtml(id, inResults) {
       (data.logo ? '<img class="result-thumb result-thumb-wide" src="' + escapeAttr(data.logo) + '">' : '<div class="result-thumb-placeholder result-thumb-wide">⬚</div>') +
       '<div><div class="result-title">' + escapeAttr(data.name) + ' · #' + data.id + '</div>' +
       '<div class="result-meta">' + (already ? (excl ? 'Already excluded' : 'Already added') : 'Exact network id - click to add') + '</div></div></div>';
+  } catch { return ''; }
+}
+
+// Pasted-link parser for the keyword/company/collection pickers - same shape
+// as tmdbNetworkIdFromQuery: sniff /<kind>/ in pasted text, strip ?# and the
+// -slug tail, validate digits. Regex NOTE ([0-9] classes only) applies here
+// too - this file renders inside one giant template literal.
+function tmdbPastedIdFromQuery(q, marker) {
+  var s = String(q).trim().toLowerCase();
+  var cut = s.indexOf('/' + marker);
+  if (cut !== -1) {
+    s = s.slice(cut + marker.length + 1);
+  } else if (s.indexOf('themoviedb.org') !== -1) {
+    var t = s.split('themoviedb.org/')[1] || '';
+    if (t.indexOf(marker) === 0) { s = t.slice(marker.length); } else { return NaN; }
+  }
+  s = s.split(/[?#]/)[0].split(/[-_/]/)[0];
+  return /^[0-9]{1,8}$/.test(s) ? parseInt(s, 10) : NaN;
+}
+
+// Exact-id row for the keyword/company/collection search bars: resolves via
+// the /tmdb/detail/<kind>/<id> API proxy. Company rows show the logo in the
+// wide box, collection rows the poster, keyword rows are text-only (TMDB
+// exposes no keyword image). Returns '' when unresolvable or already shown.
+async function tmdbDetailRowHtml(kind, id, inResults) {
+  if (inResults) return '';
+  try {
+    const data = await (await fetch(ORIGIN + '/tmdb/detail/' + kind + '/' + id)).json();
+    if (!data || data.error || !data.id) return '';
+    const l = state.tmdb.lists[tmdbAdding.i];
+    const idsKey = TMDB_FIELD_KEYS[kind][tmdbAdding.side];
+    const already = l && (l[idsKey] || []).includes(data.id);
+    const excl = tmdbAdding.side === 'exclude';
+    const thumb = data.image
+      ? '<img class="result-thumb' + (data.wide ? ' result-thumb-wide' : '') + '" src="' + escapeAttr(data.image) + '">'
+      : '<div class="result-thumb-placeholder">⬚</div>';
+    return '<div class="result-item' + (already ? ' disabled' : '') + '"' +
+      (already ? '' : ' onclick="pickTmdbResult(' + tmdbAdding.i + ',\\\'' + kind + '\\\',\\\'' + tmdbAdding.side + '\\\',' + data.id + ',\\\'' + escapeForOnclick(data.name) + '\\\')"') + '>' +
+      thumb +
+      '<div><div class="result-title">' + escapeAttr(data.name) + ' · #' + data.id + '</div>' +
+      '<div class="result-meta">' + (already ? (excl ? 'Already excluded' : 'Already added') : 'Exact ' + kind + ' id - click to add') + '</div></div></div>';
   } catch { return ''; }
 }
 

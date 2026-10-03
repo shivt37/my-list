@@ -4,7 +4,7 @@
 // schedules are the workflows' own cron lines, edited on github.com.
 
 import { loadConfig } from "./config.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
@@ -120,6 +120,11 @@ export default {
     const tmdbNetworkMatch = pathname.match(/^\/tmdb\/network\/(\d{1,8})$/);
     if (tmdbNetworkMatch) {
       return handleTmdbNetworkDetail(env, Number(tmdbNetworkMatch[1]));
+    }
+    // Pasted-link id resolver for keyword/company/collection pickers.
+    const tmdbDetailMatch = pathname.match(/^\/tmdb\/detail\/(company|collection|keyword)\/(\d{1,8})$/);
+    if (tmdbDetailMatch) {
+      return handleTmdbDetail(env, tmdbDetailMatch[1], Number(tmdbDetailMatch[2]));
     }
 
     // Official picker: live MDBList catalog minus already-configured slugs.
