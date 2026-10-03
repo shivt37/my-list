@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1790962445805,
+  "scraped_at": 1791001615496,
   "items": [
+    {
+      "slug": "3iraw-east-of-eden",
+      "imdb_id": "tt21097264",
+      "title": "East of Eden",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "axdUor6gLMTrrB1UF4Qfy0TTSyX.jpg",
+      "description": "In the early 1900s, a fiercely independent woman drives a rift between two brothers, igniting a saga that unfolds across two generations.",
+      "first_air_date": "2026-10-01"
+    },
     {
       "slug": "3ytuz-the-final-problem",
       "imdb_id": "tt36832679",
@@ -12,6 +22,16 @@
       "score": 6,
       "poster_path": "v7LQJ8GUvvvKhGRNp8F4hiRzwiI.jpg",
       "description": "In the spring of 1959, a retired actor, who previously played Sherlock Holmes, must investigate a murder at a small hotel on a tiny island near Mallorca.",
+      "first_air_date": "2026-09-25"
+    },
+    {
+      "slug": "3zpaq-s-w-a-t-exiles",
+      "imdb_id": "tt36984433",
+      "title": "S.W.A.T. Exiles",
+      "year": 2026,
+      "score": null,
+      "poster_path": "pPiEujhVa2MBSowmvnNWqEzxH0x.jpg",
+      "description": "After a high-profile mission goes sideways, Daniel 'Hondo' Harrelson is pulled out of forced retirement to lead a last-chance experimental SWAT unit made up of untested, unpredictable young recruits. Hondo must bridge a generational divide, navigate clashing personalities, and turn a squad of outsiders into a team capable of protecting the city and saving the program that made him who he is.",
       "first_air_date": "2026-09-25"
     },
     {
@@ -61,8 +81,18 @@
       "year": 2026,
       "score": null,
       "poster_path": "7FEUvXEgpsevAse8gNFk1h1RPRd.jpg",
-      "description": "Emma can see the dead. But when her niece arrives, thousands of lives are shaken.",
+      "description": "A reclusive doctor with supernatural abilities faces a disruption when her young niece visits, bringing a different and more intense approach to their shared gift of communicating with spirits.",
       "first_air_date": "2026-09-24"
+    },
+    {
+      "slug": "43qzn-habeas-corpus",
+      "imdb_id": "tt39369819",
+      "title": "Habeas Corpus",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "cojcROwZe8681XzroVIOE9VK4zV.jpg",
+      "description": "A renowned law professor and a team of students attempt to prove the innocence of a convicted man, but the brightest student is secretly connected to his past.",
+      "first_air_date": "2026-09-23"
     },
     {
       "slug": "3e284-brothers",
@@ -1413,36 +1443,6 @@
       "poster_path": "h2PPKwJbrTgYHQJoY9fT0qr4MJr.jpg",
       "description": "The series was inspired by the adult film industry of the 1990s and its well-known stars. It focuses not on the behind-the-scenes drama, but on people’s lives and the decisions they make. The new series from the creators of *The King* tells a story inspired by real events and wild fantasies.",
       "first_air_date": "2026-05-28"
-    },
-    {
-      "slug": "44ikg-my-2-cents",
-      "imdb_id": "tt38821531",
-      "title": "My 2 Cents",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "ezu9oAG68yRoFRsx5qzb1yt5MMJ.jpg",
-      "description": "When his friend Wild Boar lands himself in hot water with organized crime, Zero and the gang unite to save him while barely coping with their own lives.",
-      "first_air_date": "2026-05-27"
-    },
-    {
-      "slug": "2z170-spider-noir",
-      "imdb_id": "tt30460310",
-      "title": "Spider-Noir",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "oD8WSVqz84ZRfelkr7JPeJwR9Iv.jpg",
-      "description": "Ben Reilly, an aging and down on his luck private investigator in 1930s New York, is forced to grapple with his past life as the city's one and only superhero.",
-      "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "44hfo-world-war-ii-with-tom-hanks",
-      "imdb_id": "tt40385200",
-      "title": "World War II with Tom Hanks",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "MPN0glmZV3JnZfmXtKF32SRhDD.jpg",
-      "description": "Explores WWII from Germany's invasion of Poland through the atomic age, examining pivotal battles, wartime leaders like Churchill and Roosevelt, and the human cost of total war.",
-      "first_air_date": "2026-05-25"
     }
   ]
 }

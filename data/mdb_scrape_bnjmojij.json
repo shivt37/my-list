@@ -2,14 +2,14 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1790962395995,
+  "scraped_at": 1791001565863,
   "items": [
     {
       "slug": "44vis-ohh-my-dog",
       "imdb_id": "tt36626888",
       "title": "Ohh My Dog",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "3zVHaUphvyc3O5dDEkzJe9Faf3P.jpg",
       "description": "In Assam, 14-year-old Apu embarks on a desperate quest to rescue his beloved dog, Momo, after he is kidnapped. Elsewhere, in Bihar, a devoted dog named Oscar sets out on a perilous journey to find his kidnapped owner, a 15-year-old child labourer. As their journeys unfold, it becomes clear that the two kidnappings may be connected to a larger, sinister plan.",
       "digital_release_date": "2026-10-01"
@@ -63,6 +63,16 @@
       "poster_path": "c4YZf6cw7pNJzyMtXMd6PGagJoE.jpg",
       "description": "A gangster-in-training kidnaps the daughter of a prominent businessman in an attempt to win his boss' favour, but gets caught up in a web of deceit and conflict.",
       "digital_release_date": "2026-09-27"
+    },
+    {
+      "slug": "3gjjt-the-deputy",
+      "imdb_id": "tt29494959",
+      "title": "The Deputy",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "qL654LNOfBu49e12jnnQIv6mny.jpg",
+      "description": "A young sheriff's deputy finds himself in the crosshairs of dangerous criminals when the dead body he is assigned to keep an eye on disappears from a crime scene.",
+      "digital_release_date": "2026-09-25"
     },
     {
       "slug": "3wec8-awarapan-2",
@@ -1433,16 +1443,6 @@
       "poster_path": "ythRDmlwOIa4QtWotEKB34HEbBk.jpg",
       "description": "Street racers go against bad guy. Bad guy gets very angry. Bad guy gets back at good guys. Good guys win against bad guy. Movie has all the G's - Guts, Gears, Guns, and Girls. Good.",
       "digital_release_date": "2026-07-10"
-    },
-    {
-      "slug": "3jvfp-pati-patni-aur-woh-do",
-      "imdb_id": "tt33054858",
-      "title": "Pati Patni Aur Woh Do",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "x0RUPvba4JlCCkyyEZGlQFIFVuF.jpg",
-      "description": "A seemingly perfect marriage in Prayagraj takes an unexpected turn when one decision leads to a chain of misunderstandings, suspicion, and comedic chaos.",
-      "digital_release_date": "2026-07-09"
     }
   ]
 }
