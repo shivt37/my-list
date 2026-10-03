@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1790999011030,
+  "scraped_at": 1791041181845,
   "items": [
     {
       "imdb_id": "tt26545992",
@@ -135,9 +135,9 @@
     {
       "imdb_id": "tt37972251",
       "type": "series",
-      "title": "War",
+      "title": "WAR",
       "year": 2026,
-      "release_date": "2026-10-01",
+      "release_date": "2026-10-02",
       "poster": "https://image.tmdb.org/t/p/w200/AtCR5LMuvwepTi1kipKq878Rbuq.jpg"
     },
     {
@@ -589,14 +589,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/ySA5MvhoxTdezNUMe0ifPmhxH4w.jpg"
     },
     {
-      "imdb_id": "tt9280400",
-      "type": "series",
-      "title": "A Killer Story",
-      "year": 2026,
-      "release_date": "2026-09-10",
-      "poster": "https://image.tmdb.org/t/p/w200/aq9m0ZiiNVquFFrTMeL9dCDstkJ.jpg"
-    },
-    {
       "imdb_id": "tt1196946",
       "type": "series",
       "title": "The Mentalist",
@@ -818,7 +810,7 @@
       "title": "Dexter",
       "year": 2006,
       "release_date": "2006-10-01",
-      "poster": "https://image.tmdb.org/t/p/w200/q8dWfc4JwQuv3HayIZeO84jAXED.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/i8ORB1biusVy703lGxUi5Rle6zA.jpg"
     },
     {
       "imdb_id": "tt26656917",
@@ -947,6 +939,14 @@
       "year": 2025,
       "release_date": "2025-07-13",
       "poster": "https://image.tmdb.org/t/p/w200/o2Oyi3boT100bY5kCP4MBiTeetO.jpg"
+    },
+    {
+      "imdb_id": "tt9280400",
+      "type": "series",
+      "title": "A Killer Story",
+      "year": 2026,
+      "release_date": "2026-09-10",
+      "poster": "https://image.tmdb.org/t/p/w200/aq9m0ZiiNVquFFrTMeL9dCDstkJ.jpg"
     },
     {
       "imdb_id": "tt33546863",

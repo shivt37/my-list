@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1790999010185,
+  "scraped_at": 1791041180959,
   "items": [
     {
       "imdb_id": "tt26657236",
@@ -661,6 +661,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/zap5hpFCWSvdWSuPGAQyjUv2wAC.jpg"
     },
     {
+      "imdb_id": "tt0072431",
+      "type": "movie",
+      "title": "Young Frankenstein",
+      "year": 1974,
+      "release_date": "1974-12-15",
+      "poster": "https://image.tmdb.org/t/p/w200/3BvvVKPg9yucChlSvQtJxAbLmj9.jpg"
+    },
+    {
       "imdb_id": "tt2543164",
       "type": "movie",
       "title": "Arrival",
@@ -923,14 +931,6 @@
       "year": 1997,
       "release_date": "1997-12-05",
       "poster": "https://image.tmdb.org/t/p/w200/z2FnLKpFi1HPO7BEJxdkv6hpJSU.jpg"
-    },
-    {
-      "imdb_id": "tt0443701",
-      "type": "movie",
-      "title": "The X-Files: I Want to Believe",
-      "year": 2008,
-      "release_date": "2008-07-24",
-      "poster": "https://image.tmdb.org/t/p/w200/3zQMhutUMJP6lK49x7i2YfsOHL9.jpg"
     },
     {
       "imdb_id": "tt0361748",
