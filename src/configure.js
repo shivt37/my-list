@@ -259,6 +259,21 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
   .card-head > .id-chip { margin-left: auto; }
   .card-head > .count-line { flex-basis: 100%; }
+  /* TMDB master fold: one chevron collapses the whole filter region (mode
+     row + dims + excluded titles). Preview + errors render outside the fold
+     so they stay visible. The chevron sits before the id-chip (both pack
+     right via margin-left:auto); on mobile the chip hides and the chevron
+     holds the right edge alone. */
+  .card-head > .fold-btn { margin-left: auto; }
+  .fold-btn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; background: transparent; border: 1px solid transparent; border-radius: 6px; color: var(--dim); cursor: pointer; flex-shrink: 0; }
+  .fold-btn:hover { color: var(--text); border-color: var(--border); }
+  .fold-btn svg { transition: transform 0.15s; }
+  .list-card.filters-collapsed .fold-btn svg { transform: rotate(-90deg); }
+  .list-card.filters-collapsed .tmdb-filters { display: none; }
+  /* Folded digest: mode + only dims holding values, single ellipsis line so
+     folded cards stay distinguishable without growing the head. */
+  .filter-summary { flex-basis: 100%; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tcard-name { cursor: pointer; }
   .card-body { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px; }
   .card-body .url-input { flex: 1 1 220px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
   .card-body select { font-size: 12px; padding-top: 7px; padding-bottom: 7px; flex-shrink: 0; }
@@ -1166,7 +1181,10 @@ function moduleLists() {
 // inputs can't be edited, buttons can't be clicked, text stays readable.
 function applyDisabledState() {
   document.querySelectorAll('.list-card.disabled').forEach(card => {
-    card.querySelectorAll('input:not(.toggle input), select, button').forEach(el => { el.disabled = true; });
+    // The fold chevron stays live on disabled cards (same category as the
+    // enable toggle excluded below): folding is view-state, and collapsing
+    // is the only way to shrink a disabled TMDB card for inspection.
+    card.querySelectorAll('input:not(.toggle input), select, button:not(.fold-btn)').forEach(el => { el.disabled = true; });
     // Owner: spans faking buttons (the AND/OR dim-mode pills) can't carry the
     // disabled attribute - a disabled card left them clickable (state changed
     // while everything else was locked). Neutralize them explicitly.
@@ -1184,7 +1202,7 @@ function nameEditBlock(i, l, extraHtml) {
   return '<div class="name-wrap">' +
     (editing
       ? '<input class="name-edit" id="nameInput-' + i + '" value="' + escapeAttr(l.name) + '" onkeydown="if(event.key===\\\'Enter\\\')saveName(' + i + ');if(event.key===\\\'Escape\\\')cancelName(' + i + ')" onblur="saveName(' + i + ')">'
-      : '<span class="name-static" title="' + escapeAttr(l.name) + '" aria-label="' + escapeAttr(l.name) + '">' + escapeAttr(l.name) + '</span>') +
+      : '<span class="name-static' + (activeModule === 'tmdb' ? ' tcard-name' : '') + '" title="' + escapeAttr(l.name) + '" aria-label="' + escapeAttr(l.name) + '"' + (activeModule === 'tmdb' ? ' onclick="toggleTmdbFold(' + i + ')"' : '') + '>' + escapeAttr(l.name) + '</span>') +
     '<button type="button" class="icon-btn name-rename" onclick="startNameEdit(' + i + ')" title="Rename" aria-label="Rename list">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>' +
     '</button>' +
@@ -1742,6 +1760,45 @@ function tmdbEmptyList(mediaType) {
 
 const TMDB_MODE_KINDS = ['genre', 'keyword', 'company', 'collection', 'network'];
 const tmdbOpenSections = new Set();
+// Master fold for TMDB cards: folded by default; a list with no filters set
+// stays expanded (covers brand-new lists too). UI-only Map id->bool, so the
+// fold never touches the save payload or content hash. Keyed by
+// discoverListId - indices shift on delete, ids don't.
+const tmdbFoldState = new Map();
+function tmdbHasFilters(l) {
+  return ['includeGenres', 'excludeGenres', 'includeKeywords', 'excludeKeywords',
+    'includeCompanies', 'excludeCompanies', 'includeReleaseTypes',
+    'includeCollections', 'excludeCollections', 'includeNetworks', 'excludeNetworks'
+  ].some((k) => (l[k] || []).length > 0) || (l.excludeItems || []).length > 0;
+}
+function tmdbFiltersCollapsed(l) {
+  if (tmdbFoldState.has(l.discoverListId)) return tmdbFoldState.get(l.discoverListId);
+  return tmdbHasFilters(l);
+}
+function toggleTmdbFold(i) {
+  const l = state.tmdb.lists[i];
+  if (!l) return;
+  tmdbFoldState.set(l.discoverListId, !tmdbFiltersCollapsed(l));
+  // Same courtesy as collapsing a dim section: don't strand an open search
+  // box inside the hidden region.
+  if (tmdbFiltersCollapsed(l) && tmdbAdding && tmdbAdding.i === i) closeTmdbInlineSearch();
+  else renderTmdb();
+}
+// One-line digest for a folded head: mode + only dims holding values.
+// Keeps folded cards distinguishable without growing the head.
+function tmdbFilterSummary(l, mode) {
+  const parts = [mode.toUpperCase()];
+  const labels = { genre: 'Genres', keyword: 'Keywords', company: 'Companies', releaseType: 'Release', collection: 'Collection', network: 'Networks' };
+  TMDB_DIMS.forEach((d) => {
+    if ((d.movieOnly && l.mediaType === 'series') || (d.seriesOnly && l.mediaType === 'movie')) return;
+    const f = TMDB_FIELD_KEYS[d.kind];
+    const n = (l[f.include] || []).length + (f.exclude ? (l[f.exclude] || []).length : 0);
+    if (n > 0) parts.push(labels[d.kind] + ' ' + n);
+  });
+  const ex = (l.excludeItems || []).length;
+  if (ex > 0) parts.push('Excluded ' + ex);
+  return parts.join(' · ');
+}
 let tmdbAdding = null; // { i, kind, side }
 let tmdbSearchResultsHtml = null;
 // Sequence token for inline search: the debounce fires search N+1 while
@@ -1785,12 +1842,17 @@ function renderTmdb() {
       : summary === 'or'
         ? 'Each genre, keyword, company, release type, collection, and network is an independent source; results are unioned.'
         : "All include dimensions are AND'd into one TMDB query (often returns few or no results).";
-    return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="tcard-' + i + '">' +
+    const folded = tmdbFiltersCollapsed(l);
+    return '<div class="list-card' + (l.enabled ? '' : ' disabled') + (folded ? ' filters-collapsed' : '') + '" id="tcard-' + i + '">' +
       '<div class="card-head">' +
         '<label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleTmdb(' + i + ')"><span class="toggle-slider"></span></label>' +
         nameEditBlock(i, l) +
+        '<button type="button" class="fold-btn" onclick="toggleTmdbFold(' + i + ')" title="' + (folded ? 'Expand filters' : 'Collapse filters') + '" aria-label="' + (folded ? 'Expand filters' : 'Collapse filters') + '" aria-expanded="' + (folded ? 'false' : 'true') + '">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>' +
+        '</button>' +
         '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
         '<div class="count-line">' + countLine + '</div>' +
+        (folded ? '<div class="filter-summary">' + escapeAttr(tmdbFilterSummary(l, summary)) + '</div>' : '') +
       '</div>' +
       '<div class="card-body">' +
         '<select onchange="updateTmdb(' + i + ', \\\'mediaType\\\', this.value)" title="Media type">' +
@@ -1817,6 +1879,11 @@ function renderTmdb() {
       (l.sort === 'title_asc' && l.mediaType === 'series'
         ? '<div class="sort-fallback-note">Title (A-Z) is not supported by TMDB for series - showing Popularity instead.</div>'
         : '') +
+      // Master fold region: combine-modes + dims + excluded titles + the
+      // zero-filter note. Sort note, preview and errors render outside so
+      // they stay visible on a folded card; the eye opens preview WITHOUT
+      // unfolding (toggleTmdbPreview never touches the fold state).
+      '<div class="tmdb-filters">' +
       '<div class="include-mode-row">' +
         '<span class="members-label">Combine includes</span>' +
         '<div class="mode-toggle" data-mode="' + summary + '" role="group" aria-label="Combine include filters">' +
@@ -1835,6 +1902,7 @@ function renderTmdb() {
         !(l.includeCollections || []).length && !(l.includeNetworks || []).length
         ? '<div class="sort-fallback-note">No filters yet - this would match the entire TMDB database.</div>'
         : '') +
+      '</div>' +
       (l.previewOpen ? tmdbPreviewHtml(i, l) : '') +
       '<div class="card-error" id="tcardError-' + i + '"></div>' +
     '</div>';
