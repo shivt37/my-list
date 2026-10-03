@@ -1851,7 +1851,9 @@ function renderTmdb() {
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>' +
         '</button>' +
         '<span class="id-chip">tmdb_discover_' + escapeAttr(l.mediaType) + '_' + escapeAttr(l.discoverListId) + '</span>' +
-        '<div class="count-line">' + countLine + '</div>' +
+        // No phantom row: an empty count-line still ate the 10px head row-gap
+        // plus its own 3px margin on every card. Render it only with content.
+        (countLine ? '<div class="count-line">' + countLine + '</div>' : '') +
         (folded ? '<div class="filter-summary">' + escapeAttr(tmdbFilterSummary(l, summary)) + '</div>' : '') +
       '</div>' +
       '<div class="card-body">' +
