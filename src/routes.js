@@ -1021,6 +1021,15 @@ export async function handleTmdbPreviewDiscover(env, request) {
     if (mediaType !== "series" && isAnd("collection") && entry.includeCollections.length > 0 && collectionIdSet.size > 0) {
       items = items.filter((p) => collectionIdSet.has(p.id));
     }
+    // F31: genre excludes must also screen seeded collection parts. Discover
+    // rows arrive genre-clean from TMDB (without_genres rides the query),
+    // but OR/collection-only seeding bypasses that - without this, the
+    // preview shows members the generator's passesFilters drops from the
+    // file. Same predicate as scripts/tmdb.mjs; no-op for everything else.
+    if (entry.excludeGenres.length > 0) {
+      const exGenres = new Set(entry.excludeGenres);
+      items = items.filter((p) => !(p.genre_ids || []).some((g) => exGenres.has(g)));
+    }
     // Owner feature: per-title exclusions picked from the preview - same
     // gate as the generator so preview always mirrors the saved catalog.
     if (entry.excludeItems && entry.excludeItems.length > 0) {
