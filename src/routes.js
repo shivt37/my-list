@@ -324,6 +324,20 @@ export async function handleSaveConfig(env, request) {
     // Added/changed enabled lists dispatch generate with their catalog ids;
     // removed lists dispatch delete.
     const prevTmdbById = new Map(current.tmdb.lists.map((l) => [l.discoverListId, l]));
+    // F40: a media-type switch orphans per-title exclusions - TMDB movie
+    // 12345 is NOT tv 12345, so stale ids would silently veto unrelated
+    // titles. The UI clears them on switch, but a direct-API save bypasses
+    // the UI - same belt-and-braces as the B4 collections/networks coercion
+    // (normalizeTmdbList can't do it: it's stateless, only this diff sees
+    // the transition). Cleared BEFORE the content-hash diff below so the
+    // regen still fires; the cleared object is what gets persisted.
+    for (const l of incoming.tmdb.lists) {
+      const prev = prevTmdbById.get(l.discoverListId);
+      if (prev && prev.mediaType !== l.mediaType && ((l.excludeItems || []).length > 0 || (l.excludeItemNames || []).length > 0)) {
+        l.excludeItems = [];
+        l.excludeItemNames = [];
+      }
+    }
     const tmdbAddedOrChanged = incoming.tmdb.lists.filter((l) => {
       const prev = prevTmdbById.get(l.discoverListId);
       if (!prev) return true;
