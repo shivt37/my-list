@@ -1006,6 +1006,10 @@ export async function handleTmdbPreviewDiscover(env, request) {
     };
     let page = 1;
     let totalPages = 1;
+    // F39: rounds actually fetched, so veto queries below scan no further -
+    // same sort+filters means a veto-hit at base position N sits at veto
+    // position <= N. Always >= 1 here (series never takes collectionOnly).
+    let basePages = 0;
     if (!collectionOnly) {
       do {
         const queries = sources.length > 0 ? sources : [andQs];
@@ -1022,6 +1026,7 @@ export async function handleTmdbPreviewDiscover(env, request) {
         }
         totalPages = maxTotal;
         page++;
+        basePages++;
       } while (page <= totalPages && page <= previewCap && !(collectionPostFilter && includeTarget > 0 && admittedCount() >= includeTarget));
     }
 
@@ -1090,7 +1095,10 @@ export async function handleTmdbPreviewDiscover(env, request) {
           for (const item of data.results || []) veto.add(item.id);
           nTotal = Number.isFinite(data.total_pages) ? data.total_pages : np;
           np++;
-        } while (np <= nTotal && np <= PREVIEW_PAGES);
+        // F39: veto scans no further than the base scan fetched (same
+        // sort+filters => every admittable veto-hit sits within those
+        // pages). Pure savings - coverage identical.
+        } while (np <= nTotal && np <= PREVIEW_PAGES && np <= basePages);
       }
       items = items.filter((p) => !veto.has(p.id));
     }
