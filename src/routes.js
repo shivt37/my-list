@@ -985,6 +985,22 @@ export async function handleTmdbPreviewDiscover(env, request) {
     // skip the discover round-trips. Otherwise a release-sorted 25-page
     // window almost never intersects an older collection and the preview
     // reads as empty.
+    // F32: mirror the generator's scan economics (scripts/tmdb.mjs
+    // effectiveCap + includeTarget early-stop). A flat 25-page preview
+    // misses members the 100-page file scan finds; typical lists still stop
+    // after a handful of pages via the early-stop, so only pathological
+    // windows ever approach the cap.
+    const collectionPostFilter = mediaType !== "series" && isAnd("collection") && entry.includeCollections.length > 0;
+    const previewCap = collectionPostFilter ? Math.max(PREVIEW_PAGES, 100) : PREVIEW_PAGES;
+    const excludedIds = new Set(entry.excludeItems || []);
+    const includeTarget = collectionPostFilter
+      ? [...collectionIdSet].filter((id) => !excludedIds.has(id)).length
+      : 0;
+    const admittedCount = () => {
+      let n = 0;
+      for (const id of collectionIdSet) if (dedup.has(id) && !excludedIds.has(id)) n++;
+      return n;
+    };
     let page = 1;
     let totalPages = 1;
     if (!collectionOnly) {
@@ -1003,7 +1019,7 @@ export async function handleTmdbPreviewDiscover(env, request) {
         }
         totalPages = maxTotal;
         page++;
-      } while (page <= totalPages && page <= PREVIEW_PAGES);
+      } while (page <= totalPages && page <= previewCap && !(collectionPostFilter && includeTarget > 0 && admittedCount() >= includeTarget));
     }
 
     let items = [...dedup.values()];
@@ -1080,7 +1096,7 @@ export async function handleTmdbPreviewDiscover(env, request) {
     // (preview is a superset of the file) - capture the result, don't
     // rely on in-place sorting.
     items = sortPreviewItems(items, entry.sort, mediaType);
-    const truncated = totalPages > PREVIEW_PAGES;
+    const truncated = totalPages > previewCap;
     const metas = items.slice(0, PREVIEW_PAGES * PREVIEW_PAGE_SIZE).map((item) => ({
       id: item.id,
       type: mediaType === "series" ? "series" : "movie",
