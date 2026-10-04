@@ -112,6 +112,10 @@ export async function buildManifest(env) {
     description: ADDON_DESCRIPTION,
     resources: ["catalog"],
     types: ["movie", "series"],
+    // F41: advertise the /configure admin SPA - Stremio shows a Configure
+    // button next to Install pointing at /configure. configurationRequired
+    // stays absent (false): the addon works unconfigured.
+    behaviorHints: { configurable: true },
     catalogs,
   };
 }
