@@ -53,7 +53,7 @@ Live: `https://my-list.st87.workers.dev`
 | Route | Auth | Purpose |
 |---|---|---|
 | `GET /` | public | Plain-text index of the three URLs above |
-| `GET /manifest.json` | public | Stremio addon manifest; only **enabled** modules appear |
+| `GET /manifest.json` | public | Stremio addon manifest; only **enabled** modules appear; advertises the Configure button |
 | `GET /catalog/<type>/<id>.json[?skip=N]` | public | Catalog page, 100 metas per request (Stremio pagination) |
 | `GET /configure` | PIN | Admin SPA — edit all four modules |
 | `POST /save-config` | PIN | Validate + normalize + store config; dispatches refresh when needed |
@@ -61,11 +61,12 @@ Live: `https://my-list.st87.workers.dev`
 | `GET/POST /status` | public | HTML status dashboard (`?format=json` for raw feed) |
 | `POST /runs` | public | CI scripts report run records here (batch cap 50, history 30 per module) |
 | `POST /trigger-refresh` | PIN | Manual "Reload" → GitHub `workflow_dispatch` |
-| `GET /tmdb/search/<movie\|series>?query=` | public | TMDB title search (used by pickers) |
-| `GET /tmdb/search-network?query=` | public | Network typeahead proxy (TMDB remote search, 10-min KV cache) |
-| `GET /tmdb/network/<id>` | public | Network detail (logo, country) for the picker |
+| `GET /tmdb/search/<movie\|series>?query=` | PIN | TMDB title search (used by pickers) |
+| `GET /tmdb/search-network?query=` | PIN | Network typeahead proxy (TMDB remote search, 10-min KV cache) |
+| `GET /tmdb/network/<id>` | PIN | Network detail (logo, country) for the picker |
+| `GET /tmdb/detail/<company\|collection\|keyword>/<id>` | PIN | Exact id resolver for paste-link rows (logo/poster/name) |
 | `POST /tmdb/preview-discover` | PIN | Live preview of a TMDB list, same code path as the generator |
-| `GET /mdblist/official-catalog` | public | Full official-list slug catalog for the picker (10-min KV cache) |
+| `GET /mdblist/official-catalog` | PIN | Full official-list slug catalog for the picker (10-min KV cache) |
 | `/configure/login`, `/configure/logout` | — | PIN session (12 h, 30 d with "remember") |
 
 Catalog serving rule: unknown ids return `{ metas: [] }`; ids of **disabled**
@@ -249,7 +250,7 @@ networks, per-title exclusions) that generates a catalog daily.
 ## Local development
 
 ```powershell
-npx wrangler dev src/index.js   # dev server http://127.0.0.1:9090
+npx wrangler dev src/index.js   # dev server http://127.0.0.1:8787
 ```
 Supply the keys above as local dev vars for `wrangler dev`
 (`AUTH_ENABLED=false` for frictionless local admin). CI scripts run locally
