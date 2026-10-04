@@ -270,10 +270,10 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .fold-btn svg { transition: transform 0.15s; }
   .list-card.filters-collapsed .fold-btn svg { transform: rotate(-90deg); }
   .list-card.filters-collapsed .tmdb-filters { display: none; }
-  /* Folded digest: mode + only dims holding values. Wraps with a 2-line
+  /* Folded digest: mode + only dims holding values. Wraps with a 4-line
      clamp - a truncated digest hides the trailing dims it exists to show,
      while the clamp keeps a monster list from growing a paragraph. */
-  .filter-summary { flex-basis: 100%; font-size: 11px; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .filter-summary { flex-basis: 100%; font-size: 11px; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
   .tcard-name { cursor: pointer; }
   .card-body { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px; }
   .card-body .url-input { flex: 1 1 220px; min-width: 0; font-family: ui-monospace, monospace; font-size: 12px; padding: 7px 9px; }
