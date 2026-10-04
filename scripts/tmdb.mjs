@@ -411,7 +411,18 @@ export async function buildDiscoverItems(list, mediaType) {
 // aliasing. Both the shortcut and loop paths return this shape.
 function finalize(dedup, list, mediaType, pagesFetched, warning) {
   let items = [...dedup.values()];
+  // F33: the sort is the ONLY place undated titles disappear (the 500-cap
+  // slice below only trims dated overflow), so pre/post delta is exactly the
+  // undated count. Surfaced in the run warning - otherwise preview shows N
+  // titles, Stremio gets fewer, and /status stays silent about why.
+  const preSort = items.length;
   items = sortItems(items, list.sort, mediaType);
+  const droppedUndated = preSort - items.length;
+  if (droppedUndated > 0) {
+    const note = `dropped ${droppedUndated} undated title${droppedUndated === 1 ? "" : "s"}`;
+    warning = warning ? `${warning}; ${note}` : note;
+    console.warn(`  [tmdb] ${note}`);
+  }
 
   items = items.slice(0, MAX_ITEMS);
 

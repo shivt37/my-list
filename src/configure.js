@@ -613,7 +613,7 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .empty-msg { font-size: 11.5px; color: var(--muted); padding: 6px 2px; }
   .sort-fallback-note {
     font-size: 11px; color: var(--muted); background: var(--surface2);
-    border-radius: var(--r-sm); padding: 6px 10px; margin-top: 8px;
+    border-radius: var(--r-sm); padding: 6px 10px; margin: 8px 0;
   }
   /* ── PREVIEW ROW (horizontal scroll strip, ported from old worker) ── */
   .preview-row {
@@ -622,7 +622,10 @@ export function buildConfigurePage(origin, config, opts = {}) {
     animation: tmdb-preview-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
   }
   @keyframes tmdb-preview-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-  .preview-toolbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .preview-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+  /* F33 inline note: left side of the toolbar row (toggle holds right via
+     flex-end + auto margin). Plain muted text, wraps on narrow screens. */
+  .preview-note-inline { margin-right: auto; font-size: 11px; color: var(--muted); min-width: 0; }
   .preview-msg { font-size: 12px; color: var(--dim); padding: 6px 2px; }
   .preview-msg.error { color: var(--danger); }
   .preview-scroll {
@@ -2580,6 +2583,9 @@ async function loadTmdbPreview(i) {
 
 function tmdbPreviewHtml(i, l) {
   const isGrid = (l.previewViewMode || 'grid') === 'grid';
+  // F33: preview metas carry year:'' when dateless - count them for the note
+  // below (no server change needed).
+  const dateless = (l.previewItems || []).filter((p) => !p.year).length;
   let body;
   if (l.previewLoading) body = '<div class="preview-msg">Loading…</div>';
   else if (l.previewError) body = '<div class="preview-msg error">' + escapeAttr(l.previewError) + '</div>';
@@ -2608,6 +2614,13 @@ function tmdbPreviewHtml(i, l) {
   }
   return '<div class="preview-row">' +
     '<div class="preview-toolbar">' +
+    // F33 note lives in the toolbar row (left) instead of its own banner:
+    // the row had dead space, and a full-width box for one short sentence
+    // looked heavy. Wraps naturally on narrow screens - no ellipsis, the
+    // info is the point.
+    (dateless > 0
+      ? '<span class="preview-note-inline" title="' + dateless + ' title' + (dateless === 1 ? '' : 's') + ' without a release date shown here but not in the catalog.">Titles without a date (' + dateless + ') shown here, not in the catalog.</span>'
+      : '') +
       '<span class="icon-btn" onclick="toggleTmdbPreviewView(' + i + ')" title="' + (isGrid ? 'Switch to list view' : 'Switch to grid view') + '">' +
         (isGrid
           ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
@@ -2615,7 +2628,7 @@ function tmdbPreviewHtml(i, l) {
       '</span>' +
     '</div>' +
     (l.previewTruncated
-      ? '<div class="sort-fallback-note">This filter combination matches a very large number of titles - showing the first ' + (l.previewItems || []).length + ' for preview. Your actual Stremio catalog will still show everything as you scroll.</div>'
+      ? '<div class="sort-fallback-note">This filter combination matches a very large number of titles - showing the first ' + (l.previewItems || []).length + ' for preview. Your actual Stremio catalog will still show everything' + (dateless > 0 ? ' with a release date' : '') + ' as you scroll.</div>'
       : '') +
     body +
   '</div>';
