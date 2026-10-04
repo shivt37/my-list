@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1791089840258,
+  "scraped_at": 1791131532584,
   "items": [
+    {
+      "slug": "35fjv-de-gaulle-resistance",
+      "imdb_id": "tt28553375",
+      "title": "De Gaulle: Résistance",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "4ri8KO5i7ldQiS3807KXn6awQEs.jpg",
+      "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
+      "digital_release_date": null
+    },
     {
       "slug": "43uj5-infirmary",
       "imdb_id": "tt35682658",
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "nLxu237EJAisFCYKK48hN9Plobx.jpg",
       "description": "Nick and Noah are both embarking on life-changing adventures that are threatening to pull them apart—Nick in business with his father and Noah starting a fresh chapter at Oxford University. Now living separate lives, and meeting new people, they find themselves entangled in temptations, rivalries, and betrayals and their bond is tested like never before. As secrets unravel and temptation rises, they must fight to hold onto each other—or risk losing everything.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "2xegl-u-are-the-universe",
-      "imdb_id": "tt19783734",
-      "title": "U Are the Universe",
-      "year": 2025,
-      "score": 7,
-      "poster_path": "hOinKSq03z7L6aXbsmmppgMeBJX.jpg",
-      "description": "After the explosion of the Earth, the Ukrainian space trucker Andriy becomes the only human in the Universe until French woman Catherine calls him from the faraway space station. Andriy decides to see her despite all the obstacles.",
       "digital_release_date": null
     }
   ]
