@@ -728,6 +728,9 @@ async function tmdbApi(env, pathAndQuery) {
   // local network drops ~40% of outbound connections (fast-fail, not
   // timeouts), and preview fires dozens of sequential calls where one loss
   // would 502 the whole request. Remove when local networking is stable.
+  // F35: never throw on final failure - every caller already routes
+  // { error } to a clean 502, while a throw escapes the worker as a
+  // platform 500. Same message shape the detail resolver already produced.
   let lastErr;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
@@ -750,7 +753,7 @@ async function tmdbApi(env, pathAndQuery) {
       lastErr = e;
     }
   }
-  throw lastErr;
+  return { error: `TMDB request failed: ${String((lastErr && lastErr.message) || lastErr).slice(0, 160)}` };
 }
 
 const TMDB_SEARCH_MAX = 12;
