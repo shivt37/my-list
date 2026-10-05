@@ -8,7 +8,7 @@ on:
     # so IST inputs need a -5:30 offset. Full regenerate - every run
     # regenerates from scratch; sourceHash is stamped onto each data
     # file for diffing/audit only.
-    - cron: "0 0 * * *"
+    - cron: "7 0 * * *"
     #- cron: "0 12 * * *"
 
   workflow_dispatch:
