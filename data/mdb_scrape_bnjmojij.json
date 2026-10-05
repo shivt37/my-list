@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1791131516334,
+  "scraped_at": 1791175481465,
   "items": [
+    {
+      "slug": "3xk3g-doing-life",
+      "imdb_id": "tt36429458",
+      "title": "Doing Life",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "5nZVjsCk5tWyyhLGt5U2TxsR85w.jpg",
+      "description": "A single mother and an incarcerated man forge an unlikely bond through heartfelt letters, unlocking a door to redemption, hope and love against all odds.",
+      "digital_release_date": "2026-10-02"
+    },
+    {
+      "slug": "3z69b-union-county",
+      "imdb_id": "tt36981462",
+      "title": "Union County",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "1HW5lVwsuLo6CHW3i9Cm240jLL2.jpg",
+      "description": "Assigned to a county-mandated drug court program, Cody Parsons embarks on the tenuous journey toward recovery amid the opioid epidemic in rural Ohio.",
+      "digital_release_date": "2026-10-02"
+    },
+    {
+      "slug": "43uj5-infirmary",
+      "imdb_id": "tt35682658",
+      "title": "Infirmary",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "bHiAp8WWHgfUrJmRnoiw4URYGcq.jpg",
+      "description": "A guard vanished on his first night at an old psych hospital in 2023. His bodycam footage shows unexplainable incidents that continue to baffle investigators.",
+      "digital_release_date": "2026-10-02"
+    },
     {
       "slug": "44vis-ohh-my-dog",
       "imdb_id": "tt36626888",
@@ -55,16 +85,6 @@
       "digital_release_date": "2026-09-29"
     },
     {
-      "slug": "443e9-bebe-main-badmash-banuga",
-      "imdb_id": "tt39319045",
-      "title": "Bebe Main Badmash Banuga",
-      "year": 2026,
-      "score": null,
-      "poster_path": "c4YZf6cw7pNJzyMtXMd6PGagJoE.jpg",
-      "description": "A gangster-in-training kidnaps the daughter of a prominent businessman in an attempt to win his boss' favour, but gets caught up in a web of deceit and conflict.",
-      "digital_release_date": "2026-09-27"
-    },
-    {
       "slug": "3gjjt-the-deputy",
       "imdb_id": "tt29494959",
       "title": "The Deputy",
@@ -113,6 +133,16 @@
       "poster_path": "uLftvCgy9WFGRnrGbMer7i61Zkn.jpg",
       "description": "A group of sorority sisters end up trapped with a murderer. Nora’s tipsy memories hold the clues to figuring out who is killing their friends, but she can only remember them when she’s drunk.",
       "digital_release_date": "2026-09-25"
+    },
+    {
+      "slug": "443e9-bebe-main-badmash-banuga",
+      "imdb_id": "tt39319045",
+      "title": "Bebe Main Badmash Banuga",
+      "year": 2026,
+      "score": null,
+      "poster_path": "c4YZf6cw7pNJzyMtXMd6PGagJoE.jpg",
+      "description": "A gangster-in-training kidnaps the daughter of a prominent businessman in an attempt to win his boss' favour, but gets caught up in a web of deceit and conflict.",
+      "digital_release_date": "2026-09-24"
     },
     {
       "slug": "2xwba-the-love-hypothesis",
@@ -970,7 +1000,7 @@
       "title": "Lucky Strike",
       "year": 2026,
       "score": 5,
-      "poster_path": "7AEBdyGYXumXWmMFeynE8227KeZ.jpg",
+      "poster_path": "kzRAd7mj39ZY3FGNrDdZjqx56tn.jpg",
       "description": "A wounded American soldier fights to survive behind enemy lines during WWII's Battle of the Bulge against the Germans, relying on his instinct, spy craft and a hand-radio to evade capture and find his way back to his unit.",
       "digital_release_date": "2026-08-11"
     },
@@ -1412,36 +1442,6 @@
       "score": 6,
       "poster_path": "kiPGcHX0YT49nrab76G0bqw3gHW.jpg",
       "description": "Elsa is an advertising director whose mother dies during a long December holiday. She works non-stop and, without realizing, doesn’t give herself time to mourn her mother’s absence. After a crisis, Elsa decides to travel to the island of Lanzarote accompanied by her friend Patricia, who also needs to get away from the city. The story of these characters runs parallel to that of a screenwriter and film director, exploring how life and fiction are inseparably linked, sometimes painfully so.",
-      "digital_release_date": "2026-07-10"
-    },
-    {
-      "slug": "3za3t-ikka",
-      "imdb_id": "tt39632269",
-      "title": "Ikka",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "fp5EAKE8nTx402n1fWz55QsuYY9.jpg",
-      "description": "With a loved one's life at stake, a celebrated lawyer must defend a man he suspects is guilty — battling his conscience every step of the way.",
-      "digital_release_date": "2026-07-10"
-    },
-    {
-      "slug": "447ab-boulevard",
-      "imdb_id": "tt38235625",
-      "title": "Boulevard",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "sQS3zYJznspQwNSCv9LMc5VHQST.jpg",
-      "description": "Hasley, a girl with a list of unfulfilled dreams, and Luke, a complex and vulnerable boy marked by a tragic past, find refuge on the boulevard where they discover if love can conquer all.",
-      "digital_release_date": "2026-07-10"
-    },
-    {
-      "slug": "44vwi-dread",
-      "imdb_id": "tt43662509",
-      "title": "Dread",
-      "year": 2026,
-      "score": null,
-      "poster_path": "2GtykQnr2L0fmI3zxEsaTEaunXF.jpg",
-      "description": "Terror takes many forms. In five chilling tales, the mundane becomes monstrous and no one gets out clean.",
       "digital_release_date": "2026-07-10"
     }
   ]
