@@ -6,8 +6,8 @@ on:
     # lines on github.com to change the schedule - per-page cron, separate
     # from scrape.yml and official.yml. GitHub Actions cron runs on UTC,
     # so IST inputs need a -5:30 offset.
-    - cron: "0 0 * * *"
-    - cron: "0 12 * * *"
+    - cron: "7 0 * * *"
+    - cron: "7 12 * * *"
   workflow_dispatch:
     inputs:
       kinds:
