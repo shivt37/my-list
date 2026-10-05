@@ -530,7 +530,7 @@ export async function main({
   const results = [];
   for (const list of targets) {
     const startedAt = Date.now();
-    const triggeredBy = process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual";
+    const triggeredBy = process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual");
     try {
       const sourceHash = computeSourceHash(list);
       const built = await build(list, list.mediaType);

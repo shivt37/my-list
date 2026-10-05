@@ -1,18 +1,18 @@
 ﻿name: Generate TMDB Discover lists
 
 on:
-  schedule:
-    # Deliberately ONCE daily at 05:30 IST (= 00:00 UTC), NOT twice like
-    # the other modules (owner decision 2026-09-01, F14): the 12:00 UTC
-    # run stays commented out on purpose. GitHub Actions cron runs on UTC,
-    # so IST inputs need a -5:30 offset. Full regenerate - every run
-    # regenerates from scratch; sourceHash is stamped onto each data
-    # file for diffing/audit only.
-    - cron: "7 0 * * *"
-    #- cron: "0 12 * * *"
+  # No `schedule:` block - the clock is Cloudflare Cron Triggers
+  # (wrangler.toml [triggers] + src/cron.js), which dispatch this workflow
+  # with blank inputs (= all enabled) at 00:00 UTC only. Deliberately ONCE
+  # daily (owner decision 2026-09-01, F14) - enforced by the SCHEDULE map in
+  # src/cron.js, not here. To change times, edit wrangler.toml + src/cron.js.
 
   workflow_dispatch:
     inputs:
+      origin:
+        description: "Where the run was triggered from (cron clock sends cron; default manual)"
+        required: false
+        default: "manual"
       ids:
         description: "Catalog ids to generate (comma-separated, blank = all enabled)"
         required: false
@@ -69,7 +69,10 @@ jobs:
           SANITIZED_DELETE=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-z0-9,_-')
           SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-z_')
           SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
+          SANITIZED_ORIGIN=$(printf '%s' "${{ github.event.inputs.origin }}" | tr -cd 'a-z')
+          [ -z "$SANITIZED_ORIGIN" ] && SANITIZED_ORIGIN="manual"
           echo "ids=$SANITIZED_IDS" >> "$GITHUB_OUTPUT"
+          echo "origin=$SANITIZED_ORIGIN" >> "$GITHUB_OUTPUT"
           echo "delete_ids=$SANITIZED_DELETE" >> "$GITHUB_OUTPUT"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
           echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
@@ -123,6 +126,7 @@ jobs:
           INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
           INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
           INPUT_DELETE_IDS: ${{ steps.sanitize.outputs.delete_ids }}
+          INPUT_ORIGIN: ${{ steps.sanitize.outputs.origin }}
         run: |
           ARGS=()
           [ -n "${INPUT_ACTION}" ] && ARGS+=("--action=${INPUT_ACTION}")

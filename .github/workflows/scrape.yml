@@ -1,15 +1,17 @@
 ﻿name: Scrape MDBList lists
 
 on:
-  schedule:
-    # Daily at 05:30 and 17:30 IST (= 00:00 and 12:00 UTC). Edit these
-    # lines on github.com to change the schedule - no worker-side timing
-    # involved. GitHub Actions cron runs on UTC, so IST inputs need a
-    # -5:30 offset.
-    - cron: "7 0 * * *"
-    - cron: "7 12 * * *"
+  # No `schedule:` block - the clock is Cloudflare Cron Triggers
+  # (wrangler.toml [triggers] + src/cron.js), which dispatch this workflow
+  # with blank inputs (= all enabled) at 00:00 and 12:00 UTC. GitHub's own
+  # scheduler is best-effort with hours-long delays - see
+  # audit/report/cron-reliability.md. To change times, edit wrangler.toml.
   workflow_dispatch:
     inputs:
+      origin:
+        description: "Where the run was triggered from (cron clock sends cron; default manual)"
+        required: false
+        default: "manual"
       lists:
         description: "List ids to scrape (comma-separated, blank = all enabled)"
         required: false
@@ -76,8 +78,11 @@ jobs:
           SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-zA-Z0-9,_-')
           SANITIZED_DEBUG=$(printf '%s' "${{ github.event.inputs.debug }}" | tr -cd 'a-zA-Z')
           SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
+          SANITIZED_ORIGIN=$(printf '%s' "${{ github.event.inputs.origin }}" | tr -cd 'a-z')
           [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="scrape"
+          [ -z "$SANITIZED_ORIGIN" ] && SANITIZED_ORIGIN="manual"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
+          echo "origin=$SANITIZED_ORIGIN" >> "$GITHUB_OUTPUT"
           echo "lists=$SANITIZED_LISTS" >> "$GITHUB_OUTPUT"
           echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
           echo "debug=$SANITIZED_DEBUG" >> "$GITHUB_OUTPUT"
@@ -140,6 +145,7 @@ jobs:
           INPUT_LISTS: ${{ steps.sanitize.outputs.lists }}
           INPUT_DEL: ${{ steps.sanitize.outputs.delete_ids }}
           INPUT_DEBUG: ${{ steps.sanitize.outputs.debug }}
+          INPUT_ORIGIN: ${{ steps.sanitize.outputs.origin }}
         run: |
           # Inputs reached bash only after char-class sanitization - no
           # quoting escape can turn a sanitized string back into a

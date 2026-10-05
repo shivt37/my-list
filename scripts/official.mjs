@@ -231,7 +231,7 @@ export async function main({
   for (const slug of slugs) {
     for (const mediatype of MEDIATYPES) {
       const startedAt = Date.now();
-      const run = { catalog_id: `mdboff_${slug}_${mediatype}`, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
+      const run = { catalog_id: `mdboff_${slug}_${mediatype}`, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
       try {
         const { items, pages } = await fetchApi(slug, mediatype);
         // Empty result may mean a legitimate empty list or a scrape gone

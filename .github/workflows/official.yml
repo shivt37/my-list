@@ -1,15 +1,16 @@
 ﻿name: Refresh MDBList official lists
 
 on:
-  schedule:
-    # Daily at 05:30 and 17:30 IST (= 00:00 and 12:00 UTC). Edit these
-    # lines on github.com to change the schedule - per-page cron, separate
-    # from scrape.yml. GitHub Actions cron runs on UTC, so IST inputs need
-    # a -5:30 offset.
-    - cron: "7 0 * * *"
-    - cron: "7 12 * * *"
+  # No `schedule:` block - the clock is Cloudflare Cron Triggers
+  # (wrangler.toml [triggers] + src/cron.js), which dispatch this workflow
+  # with blank inputs (= all enabled) at 00:00 and 12:00 UTC. To change
+  # times, edit wrangler.toml.
   workflow_dispatch:
     inputs:
+      origin:
+        description: "Where the run was triggered from (cron clock sends cron; default manual)"
+        required: false
+        default: "manual"
       slugs:
         description: "Official slugs to refresh (comma-separated, blank = all enabled)"
         required: false
@@ -68,8 +69,11 @@ jobs:
           SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-z')
           SANITIZED_DEL=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-z0-9,_-')
           SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
+          SANITIZED_ORIGIN=$(printf '%s' "${{ github.event.inputs.origin }}" | tr -cd 'a-z')
           [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="refresh"
+          [ -z "$SANITIZED_ORIGIN" ] && SANITIZED_ORIGIN="manual"
           echo "slugs=$SANITIZED_SLUGS" >> "$GITHUB_OUTPUT"
+          echo "origin=$SANITIZED_ORIGIN" >> "$GITHUB_OUTPUT"
           echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
           echo "delete_ids=$SANITIZED_DEL" >> "$GITHUB_OUTPUT"
           echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
@@ -121,6 +125,7 @@ jobs:
           INPUT_SLUGS: ${{ steps.sanitize.outputs.slugs }}
           INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
           INPUT_DEL: ${{ steps.sanitize.outputs.delete_ids }}
+          INPUT_ORIGIN: ${{ steps.sanitize.outputs.origin }}
         run: |
           ARGS=()
           if [ "${INPUT_ACTION}" = "delete" ]; then

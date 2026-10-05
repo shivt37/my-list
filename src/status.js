@@ -486,7 +486,7 @@ export async function statusPageResponse(env, request) {
 <main>
   <div class="tabs" role="tablist">${tabs}</div>
   ${sections}
-  <div class="foot">Shows the last 30 runs per module, newest first &middot; all times IST &middot; scheduled runs fire on GitHub Actions cron</div>
+  <div class="foot">Shows the last 30 runs per module, newest first &middot; all times IST &middot; scheduled runs fire on the Cloudflare clock</div>
 </main>
 
 <script>

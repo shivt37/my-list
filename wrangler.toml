@@ -12,6 +12,16 @@ keep_vars = true
 binding = "STORE"
 id = "36b7763e6e31445696e1a773c44de7a3"
 
+# The clock: Cloudflare Cron Triggers replace the workflows' own `schedule:`
+# blocks (GitHub's scheduler is best-effort with hours-long delays - see
+# audit/report/cron-reliability.md). Each firing dispatches the due
+# workflows through the same workflow_dispatch endpoint the manual paths
+# use, with blank inputs (= all enabled). tmdb stays once-daily (owner
+# decision, F14) - enforced by the SCHEDULE map in src/cron.js, not here.
+# Times are UTC: 00:00 = 05:30 IST, 12:00 = 17:30 IST.
+[triggers]
+crons = ["0 0 * * *", "0 12 * * *"]
+
 [vars]
 # Base URL of the GitHub Pages site hosting data/<id>.json catalog files.
 GITHUB_PAGES_BASE = "https://shivt37.github.io/my-list"

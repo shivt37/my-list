@@ -498,7 +498,7 @@ export async function main({
   const results = [];
   for (const t of targets) {
     const startedAt = Date.now();
-    const run = { catalog_id: `simkl_arriving_today_${t.kind}`, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
+    const run = { catalog_id: `simkl_arriving_today_${t.kind}`, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
     try {
       const { todaysEntries, metadata } = await fetchApi(t.kind, t.tz);
       const items = await compute(t.kind, todaysEntries, metadata, t.filter, t.tz);

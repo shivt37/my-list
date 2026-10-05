@@ -446,7 +446,7 @@ export async function main({ getConfig = fetchConfig, write = writeCatalog, reco
         break;
       }
       const startedAt = Date.now();
-      const run = { catalog_id: list.id, started_at: startedAt, status: "failed", triggered_by: process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual" };
+      const run = { catalog_id: list.id, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
       try {
         // Sanity check: must be an mdblist.com listing URL matching the type.
         const expectedPath = list.type === "series" ? "/shows/" : "/movies/";

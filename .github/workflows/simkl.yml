@@ -1,15 +1,16 @@
 ﻿name: Refresh SIMKL Arriving Today
 
 on:
-  schedule:
-    # Daily at 05:30 and 17:30 IST (= 00:00 and 12:00 UTC). Edit these
-    # lines on github.com to change the schedule - per-page cron, separate
-    # from scrape.yml and official.yml. GitHub Actions cron runs on UTC,
-    # so IST inputs need a -5:30 offset.
-    - cron: "7 0 * * *"
-    - cron: "7 12 * * *"
+  # No `schedule:` block - the clock is Cloudflare Cron Triggers
+  # (wrangler.toml [triggers] + src/cron.js), which dispatch this workflow
+  # with blank inputs (= all enabled) at 00:00 and 12:00 UTC. To change
+  # times, edit wrangler.toml.
   workflow_dispatch:
     inputs:
+      origin:
+        description: "Where the run was triggered from (cron clock sends cron; default manual)"
+        required: false
+        default: "manual"
       kinds:
         description: "SIMKL kinds to refresh (comma-separated: series,anime, blank = all enabled)"
         required: false
@@ -52,8 +53,11 @@ jobs:
           # [a-z,] only. config_version is a 12-hex content hash.
           SANITIZED_KINDS=$(printf '%s' "${{ github.event.inputs.kinds }}" | tr -cd 'a-z,')
           SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
+          SANITIZED_ORIGIN=$(printf '%s' "${{ github.event.inputs.origin }}" | tr -cd 'a-z')
+          [ -z "$SANITIZED_ORIGIN" ] && SANITIZED_ORIGIN="manual"
           echo "kinds=$SANITIZED_KINDS" >> "$GITHUB_OUTPUT"
           echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
+          echo "origin=$SANITIZED_ORIGIN" >> "$GITHUB_OUTPUT"
 
       # F3: simkl reads filters + timezone from /export-config - wait
       # (bounded) until the config version this save dispatched for is
@@ -84,6 +88,7 @@ jobs:
           SIMKL_CLIENT_ID: ${{ secrets.SIMKL_CLIENT_ID }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           INPUT_KINDS: ${{ steps.sanitize.outputs.kinds }}
+          INPUT_ORIGIN: ${{ steps.sanitize.outputs.origin }}
         run: |
           ARGS=()
           [ -n "${INPUT_KINDS}" ] && ARGS+=("--kinds=${INPUT_KINDS}")

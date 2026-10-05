@@ -1,9 +1,11 @@
 // my-list worker - phase 1: MDBList scraper module only.
 // Thin router: config lives in KV, catalog data in repo data/ (GitHub
-// Pages), scraping happens in GitHub Actions. No scheduled handler -
-// schedules are the workflows' own cron lines, edited on github.com.
+// Pages), scraping happens in GitHub Actions. The clock is Cloudflare Cron
+// Triggers ([triggers] in wrangler.toml) - each firing dispatches the due
+// workflows via handleCronDispatch, same endpoint as manual triggers.
 
 import { loadConfig } from "./config.js";
+import { handleCronDispatch } from "./cron.js";
 import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
@@ -21,6 +23,14 @@ function json(body, status = 200, extraHeaders = {}) {
 }
 
 export default {
+  // Cloudflare clock (wrangler.toml [triggers]): dispatch the due
+  // workflows through the same workflow_dispatch endpoint manual triggers
+  // use. Never throws after partial success - a throw would make the
+  // runtime redeliver and double-dispatch (see src/cron.js).
+  async scheduled(controller, env) {
+    await handleCronDispatch(env, controller.cron);
+  },
+
   async fetch(request, env) {
     const url = new URL(request.url);
     const { pathname } = url;
