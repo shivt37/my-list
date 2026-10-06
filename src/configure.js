@@ -782,10 +782,13 @@ export function buildConfigurePage(origin, config, opts = {}) {
     }
     /* Schedule popup: left-anchored to the mid-header gear button, so on
        phones its 300px width runs off the right edge. Viewport-relative
-       full-width dropdown under the sticky header instead. */
+       full-width dropdown under the sticky header instead. max-height keeps
+       long rule lists inside the viewport with internal scroll. The exact
+       top comes from schedDockPopup (measured header); 60px is the fallback. */
     .sched-popup {
       position: fixed; left: 12px; right: 12px; top: 60px;
       width: auto; max-width: none;
+      max-height: calc(100vh - 140px); overflow-y: auto;
     }
   }
   .confirm-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
@@ -1101,7 +1104,24 @@ function toggleSched() {
   document.getElementById('menuPopup').classList.remove('visible');
   p.classList.toggle('visible', open);
   if (open) renderSchedPopup();
+  schedDockPopup();
 }
+// Measured anchor: dock the phone panel exactly 8px under the real header
+// height (wraps, font scaling and padding changes included). Runs on open
+// and on viewport changes while open; the 60px CSS top stays as fallback.
+// Inline style is cleared off-phone so desktop keeps its CSS positioning.
+function schedDockPopup() {
+  var p = document.getElementById('schedPopup');
+  if (!p) return;
+  if (window.innerWidth <= 767 && p.classList.contains('visible')) {
+    var h = document.querySelector('header');
+    if (h) p.style.top = (h.getBoundingClientRect().height + 8) + 'px';
+  } else {
+    p.style.top = '';
+  }
+}
+window.addEventListener('resize', function () { schedDockPopup(); });
+window.addEventListener('orientationchange', function () { schedDockPopup(); });
 function schedValidTime(v) {
   if (typeof v !== 'string' || v.length !== 5 || v.charAt(2) !== ':') return false;
   var h = Number(v.slice(0, 2)), m = Number(v.slice(3, 5));
@@ -1195,7 +1215,7 @@ function renderSchedPopup() {
       '<option value="everyNDays">Every N days</option>' +
       '</select><button type="button" class="btn-icon" onclick="schedAddRule()" title="Add rule" aria-label="Add rule" style="font-size:15px;line-height:1;">+</button></div>';
   }
-  html += '<div class="sched-note">All times shown and entered in IST. Save applies changes immediately - the clock re-arms on save.</div>';
+  html += '<div class="sched-note">All times shown and entered in IST.</div>';
   host.innerHTML = html;
   loadSchedNext();
 }
