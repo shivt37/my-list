@@ -2,7 +2,7 @@
   "catalog_id": "tmdb_discover_series_gafgmofa",
   "name": "DC - Shows",
   "type": "series",
-  "scraped_at": 1791177421424,
+  "scraped_at": 1791244820754,
   "sourceHash": "773b133627a10e74",
   "items": [
     {
@@ -31,7 +31,7 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/6gqezQJ2mkm4jreWwLyOZy2Vf6i.jpg",
+      "backdrop_path": "/wJjnJbVUwPz0GADAgpFt9nWtzUu.jpg",
       "genre_ids": [
         18,
         9648,
@@ -49,8 +49,8 @@
       "first_air_date": "2026-08-16",
       "softcore": false,
       "name": "Lanterns",
-      "vote_average": 8.374,
-      "vote_count": 523,
+      "vote_average": 8.346,
+      "vote_count": 576,
       "title": "Lanterns",
       "release_date": "2026-08-16"
     },
@@ -74,7 +74,7 @@
       "first_air_date": "2024-12-05",
       "softcore": false,
       "name": "Creature Commandos",
-      "vote_average": 7.79,
+      "vote_average": 7.8,
       "vote_count": 396,
       "title": "Creature Commandos",
       "release_date": "2024-12-05"
@@ -98,8 +98,8 @@
       "first_air_date": "2024-09-19",
       "softcore": false,
       "name": "The Penguin",
-      "vote_average": 8.353,
-      "vote_count": 1510,
+      "vote_average": 8.351,
+      "vote_count": 1513,
       "title": "The Penguin",
       "release_date": "2024-09-19"
     },
@@ -124,7 +124,7 @@
       "first_air_date": "2024-08-01",
       "softcore": false,
       "name": "Batman: Caped Crusader",
-      "vote_average": 7.34,
+      "vote_average": 7.3,
       "vote_count": 290,
       "title": "Batman: Caped Crusader",
       "release_date": "2024-08-01"
@@ -224,7 +224,7 @@
       "softcore": false,
       "name": "The Sandman",
       "vote_average": 7.839,
-      "vote_count": 2755,
+      "vote_count": 2756,
       "title": "The Sandman",
       "release_date": "2022-08-05"
     },
@@ -248,8 +248,8 @@
       "first_air_date": "2022-01-13",
       "softcore": false,
       "name": "Peacemaker",
-      "vote_average": 8.181,
-      "vote_count": 3574,
+      "vote_average": 8.2,
+      "vote_count": 3575,
       "title": "Peacemaker",
       "release_date": "2022-01-13"
     },
@@ -347,7 +347,7 @@
       "first_air_date": "2020-05-18",
       "softcore": false,
       "name": "DC's Stargirl",
-      "vote_average": 7.664,
+      "vote_average": 7.7,
       "vote_count": 1198,
       "title": "DC's Stargirl",
       "release_date": "2020-05-18"
@@ -396,7 +396,7 @@
       "first_air_date": "2019-11-29",
       "softcore": false,
       "name": "Harley Quinn",
-      "vote_average": 8.283,
+      "vote_average": 8.3,
       "vote_count": 1191,
       "title": "Harley Quinn",
       "release_date": "2019-11-29"
@@ -422,8 +422,8 @@
       "first_air_date": "2019-10-20",
       "softcore": false,
       "name": "Watchmen",
-      "vote_average": 7.625,
-      "vote_count": 1703,
+      "vote_average": 7.624,
+      "vote_count": 1704,
       "title": "Watchmen",
       "release_date": "2019-10-20"
     },
@@ -495,8 +495,8 @@
       "first_air_date": "2019-05-31",
       "softcore": false,
       "name": "Swamp Thing",
-      "vote_average": 7.418,
-      "vote_count": 1089,
+      "vote_average": 7.419,
+      "vote_count": 1090,
       "title": "Swamp Thing",
       "release_date": "2019-05-31"
     },
@@ -519,7 +519,7 @@
       "first_air_date": "2019-02-15",
       "softcore": false,
       "name": "Doom Patrol",
-      "vote_average": 7.478,
+      "vote_average": 7.5,
       "vote_count": 1498,
       "title": "Doom Patrol",
       "release_date": "2019-02-15"
@@ -544,7 +544,7 @@
       "first_air_date": "2018-10-12",
       "softcore": false,
       "name": "Titans",
-      "vote_average": 7.846,
+      "vote_average": 7.8,
       "vote_count": 2907,
       "title": "Titans",
       "release_date": "2018-10-12"
@@ -569,7 +569,7 @@
       "first_air_date": "2018-03-21",
       "softcore": false,
       "name": "Krypton",
-      "vote_average": 7.113,
+      "vote_average": 7.1,
       "vote_count": 510,
       "title": "Krypton",
       "release_date": "2018-03-21"
@@ -643,7 +643,7 @@
       "first_air_date": "2016-01-21",
       "softcore": false,
       "name": "DC's Legends of Tomorrow",
-      "vote_average": 7.238,
+      "vote_average": 7.2,
       "vote_count": 2525,
       "title": "DC's Legends of Tomorrow",
       "release_date": "2016-01-21"
@@ -669,7 +669,7 @@
       "softcore": false,
       "name": "Supergirl",
       "vote_average": 7.26,
-      "vote_count": 4471,
+      "vote_count": 4472,
       "title": "Supergirl",
       "release_date": "2015-10-26"
     },
@@ -693,7 +693,7 @@
       "first_air_date": "2015-08-25",
       "softcore": false,
       "name": "Vixen",
-      "vote_average": 6.906,
+      "vote_average": 6.9,
       "vote_count": 133,
       "title": "Vixen",
       "release_date": "2015-08-25"
@@ -767,8 +767,8 @@
       "first_air_date": "2014-10-07",
       "softcore": false,
       "name": "The Flash",
-      "vote_average": 7.745,
-      "vote_count": 11793,
+      "vote_average": 7.7,
+      "vote_count": 11796,
       "title": "The Flash",
       "release_date": "2014-10-07"
     },
@@ -792,8 +792,8 @@
       "first_air_date": "2014-09-22",
       "softcore": false,
       "name": "Gotham",
-      "vote_average": 7.594,
-      "vote_count": 3811,
+      "vote_average": 7.6,
+      "vote_count": 3812,
       "title": "Gotham",
       "release_date": "2014-09-22"
     },
@@ -818,7 +818,7 @@
       "softcore": false,
       "name": "Arrow",
       "vote_average": 6.834,
-      "vote_count": 6494,
+      "vote_count": 6497,
       "title": "Arrow",
       "release_date": "2012-10-10"
     },
@@ -913,7 +913,7 @@
       "softcore": false,
       "name": "Smallville",
       "vote_average": 8.189,
-      "vote_count": 4621,
+      "vote_count": 4623,
       "title": "Smallville",
       "release_date": "2001-10-16"
     },
