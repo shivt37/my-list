@@ -5,6 +5,7 @@
 // only enabled-toggled. Their catalog files live in data/mdboff_*_*.json.
 
 import { createHash } from "node:crypto";
+import { normalizeSchedules } from "./schedule.js";
 
 const CONFIG_KEY = "config";
 const RUNS_SCRAPER_KEY = "runs:scraper";
@@ -300,7 +301,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) } };
+  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
 }
 
 // TMDB Discover list entry. Ids are pinned at creation (client + server

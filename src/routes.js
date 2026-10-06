@@ -4,6 +4,7 @@
 
 import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, normalizeTmdbList, addRuns, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
+import { normalizeSchedules } from "./schedule.js";
 import { isAuthEnabled } from "./auth.js";
 import { buildConfigurePage } from "./configure.js";
 
@@ -265,6 +266,11 @@ export async function handleSaveConfig(env, request) {
     // each other. Accepted for a single-operator admin page.
     const current = await loadConfig(env.STORE);
     const incoming = migrateConfig(body);
+    // Schedules (DO clock timetable) survive saves from clients that don't
+    // send them yet (current /configure builds no schedules key): a body
+    // without schedules keeps the stored ones instead of silently resetting
+    // to defaults. A body WITH schedules normalizes them via migrateConfig.
+    if (body.schedules === undefined) incoming.schedules = normalizeSchedules(current.schedules);
 
     const prevById = new Map(current.scraper.lists.map((l) => [l.id, l]));
     const nextById = new Map(incoming.scraper.lists.map((l) => [l.id, l]));

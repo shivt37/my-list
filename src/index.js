@@ -1,11 +1,16 @@
 // my-list worker - phase 1: MDBList scraper module only.
 // Thin router: config lives in KV, catalog data in repo data/ (GitHub
-// Pages), scraping happens in GitHub Actions. The clock is Cloudflare Cron
-// Triggers ([triggers] in wrangler.toml) - each firing dispatches the due
-// workflows via handleCronDispatch, same endpoint as manual triggers.
+// Pages), scraping happens in GitHub Actions. The clock is the Clock
+// Durable Object (src/clock.js) - a single hourly Cron Trigger only acts
+// as its watchdog via /ensure.
 
 import { loadConfig } from "./config.js";
-import { handleCronDispatch } from "./cron.js";
+import { handleClockWatchdog } from "./cron.js";
+
+// Durable Object class must be exported from the entry module for the
+// CLOCK binding (wrangler.toml). Re-export keeps the class in clock.js,
+// which has zero worker-only imports so it loads under plain node tests.
+export { Clock } from "./clock.js";
 import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
@@ -23,12 +28,12 @@ function json(body, status = 200, extraHeaders = {}) {
 }
 
 export default {
-  // Cloudflare clock (wrangler.toml [triggers]): dispatch the due
-  // workflows through the same workflow_dispatch endpoint manual triggers
-  // use. Never throws after partial success - a throw would make the
-  // runtime redeliver and double-dispatch (see src/cron.js).
+  // Watchdog tick for the Clock DO - the clock itself owns all schedule
+  // times (config.schedules); this trigger only verifies its alarm chain.
+  // Never throws after partial success - a throw would make the runtime
+  // redeliver (see src/clock.js).
   async scheduled(controller, env) {
-    await handleCronDispatch(env, controller.cron);
+    await handleClockWatchdog(env);
   },
 
   async fetch(request, env) {
