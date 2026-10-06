@@ -4,7 +4,7 @@
 
 import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, normalizeTmdbList, addRuns, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
-import { normalizeSchedules } from "./schedule.js";
+import { normalizeSchedules, nextSlotAfter, upcomingFires, SCHEDULE_MODULES } from "./schedule.js";
 import { isAuthEnabled } from "./auth.js";
 import { buildConfigurePage } from "./configure.js";
 
@@ -483,6 +483,18 @@ export async function handleSaveConfig(env, request) {
     // above.)
     await saveConfig(env.STORE, incoming);
 
+    // Timetable edits take effect immediately: nudge the Clock to recompute
+    // its alarm instead of waiting for the hourly watchdog. Best-effort and
+    // gated on schedule-aware callers - never fails the save (local dev has
+    // no CLOCK binding at all).
+    if (body.schedules !== undefined && env.CLOCK && typeof env.CLOCK.getByName === "function") {
+      try {
+        await env.CLOCK.getByName("clock").fetch("https://clock/rearm");
+      } catch {
+        // Watchdog repairs within the hour; the save itself succeeded.
+      }
+    }
+
     return json({
       ok: true,
       changed: changed.map((l) => l.name),
@@ -529,6 +541,30 @@ export async function handleSaveConfig(env, request) {
 export async function handleExportConfig(env, request) {
   const cfg = await loadConfig(env.STORE);
   return json(cfg);
+}
+
+// GET /clock-next[?module=] - next scheduled fire per module (or one
+// module), computed from the live KV timetable with the same code the
+// Clock uses. Powers the schedule editor's "next fire" line - must come
+// from the server so client and clock can never disagree.
+export async function handleClockNext(env, request) {
+  const cfg = await loadConfig(env.STORE);
+  const schedules = normalizeSchedules(cfg && cfg.schedules);
+  const now = Date.now();
+  const only = new URL(request.url).searchParams.get("module");
+  if (only !== null) {
+    if (!SCHEDULE_MODULES.includes(only)) return json({ error: "Unknown module." }, 400);
+    const single = {};
+    for (const m of SCHEDULE_MODULES) single[m] = m === only ? schedules[m] : { enabled: false, times: [], rules: [] };
+    return json({ now, module: only, next: nextSlotAfter(single, now), upcoming: upcomingFires(single, now, 3) });
+  }
+  const next = {};
+  for (const m of SCHEDULE_MODULES) {
+    const single = {};
+    for (const mm of SCHEDULE_MODULES) single[mm] = mm === m ? schedules[m] : { enabled: false, times: [], rules: [] };
+    next[m] = nextSlotAfter(single, now);
+  }
+  return json({ now, next });
 }
 
 export async function handleTriggerRefresh(env, request) {

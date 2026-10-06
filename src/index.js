@@ -11,7 +11,7 @@ import { handleClockWatchdog } from "./cron.js";
 // CLOCK binding (wrangler.toml). Re-export keeps the class in clock.js,
 // which has zero worker-only imports so it loads under plain node tests.
 export { Clock } from "./clock.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleClockNext, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
@@ -107,6 +107,10 @@ export default {
 
     if (pathname === "/export-config") {
       return handleExportConfig(env, request);
+    }
+
+    if (pathname === "/clock-next") {
+      return handleClockNext(env, request);
     }
 
     if (pathname === "/trigger-refresh" && request.method === "POST") {

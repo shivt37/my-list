@@ -98,7 +98,36 @@ export function buildConfigurePage(origin, config, opts = {}) {
     -webkit-backdrop-filter: blur(14px);
   }
   .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; margin: 0; }
+  .header-title-wrap { display: flex; align-items: center; }
+  #schedBtn { padding: 4px 6px; margin-left: 6px; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
+
+  /* ── SCHEDULE DROPDOWN (accent-popup pattern, left-anchored, wider) ── */
+  .sched-popup-wrap { position: relative; }
+  .sched-popup {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r);
+    padding: 14px; z-index: 200; width: 300px; max-width: calc(100vw - 48px);
+    box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .sched-popup.visible { display: block; }
+  .sched-pop-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px; }
+  .sched-pop-title { font-size: 12px; font-weight: 600; }
+  .sched-pop-mod { font-size: 11px; color: var(--dim); margin-bottom: 8px; }
+  .sched-next { font-size: 12px; color: var(--dim); margin: 0 0 10px; }
+  .sched-next b { color: var(--text); font-weight: 600; }
+  .sched-rule { border: 1px solid var(--border); border-radius: var(--r); padding: 10px 12px; margin-bottom: 8px; }
+  .sched-rule-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .sched-rule-kind { font-size: 12px; font-weight: 600; }
+  .sched-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--dim); }
+  .sched-row input[type="time"], .sched-row input[type="number"], .sched-row input[type="date"], .sched-row select {
+    font-size: 12px; padding: 5px 8px;
+  }
+  .sched-row input[type="number"] { width: 64px; }
+  .sched-ist { color: var(--muted); font-size: 11.5px; }
+  .sched-chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .sched-add-row { display: flex; gap: 8px; align-items: center; margin-top: 4px; font-size: 12px; color: var(--dim); }
+  .sched-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
   /* ── BUTTONS (solid accent, no color-mix) ── */
   button {
@@ -837,7 +866,15 @@ export function buildConfigurePage(origin, config, opts = {}) {
 <body>
 
 <header>
-  <h1 class="header-title" id="headerTitle">MDBList Scraper</h1>
+  <div class="header-title-wrap">
+    <h1 class="header-title" id="headerTitle">MDBList Scraper</h1>
+    <div class="sched-popup-wrap">
+      <button class="btn-icon" id="schedBtn" onclick="toggleSched()" title="Refresh schedule">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </button>
+      <div class="sched-popup" id="schedPopup"></div>
+    </div>
+  </div>
   <div class="header-actions">
     <button class="btn-save" id="saveBtn">Save</button>
     <button class="btn-icon" id="refreshBtn" onclick="openRefreshConfirm()" title="Refresh - regenerate all enabled lists">
@@ -1015,6 +1052,267 @@ function initSwatches() {
 }
 
 function toggleAccentPopup() { document.getElementById('accentPopup').classList.toggle('visible'); }
+
+// ─── Refresh schedule dropdown (Clock timetable, per module) ───
+// Accent-popup pattern: clock button beside the page title toggles a
+// floating panel; content follows the active module. Edits land in
+// state.schedules, so the normal dirty-gated Save persists them; the
+// server re-arms the Clock on save. Storage is UTC HH:MM - every time
+// shown with its IST twin (UTC +5:30).
+var SCHED_KEY = { scraper: 'scrape', official: 'official', simkl: 'simkl', tmdb: 'tmdb' };
+var SCHED_NAMES = { scraper: 'MDBList Scraper', official: 'MDBList Official', simkl: 'Simkl', tmdb: 'TMDB Discover' };
+
+function schedEntry() {
+  if (!state.schedules || typeof state.schedules !== 'object') state.schedules = defaultSchedules();
+  var key = SCHED_KEY[activeModule];
+  if (!state.schedules[key]) state.schedules = defaultSchedules();
+  // Owner decision: the clock is always on - there is no pause switch.
+  // Forced here so no client path can persist a paused timetable.
+  state.schedules[key].enabled = true;
+  return state.schedules[key];
+}
+// Client mirror of the server defaults (src/schedule.js) - only used when
+// the server sent no schedules key at all; the server normalizes on read.
+function defaultSchedules() {
+  var d = function (times) { return { enabled: true, times: times, rules: [{ kind: 'daily', times: times.slice() }] }; };
+  return {
+    scrape: d(['00:00', '12:00']),
+    official: d(['00:00', '12:00']),
+    simkl: d(['00:00', '12:00']),
+    tmdb: d(['00:00']),
+  };
+}
+function schedIsOpen() {
+  var p = document.getElementById('schedPopup');
+  return !!(p && p.classList.contains('visible'));
+}
+function toggleSched() {
+  var p = document.getElementById('schedPopup');
+  var open = !p.classList.contains('visible');
+  // One dropdown at a time - opening this closes accent + menu.
+  document.getElementById('accentPopup').classList.remove('visible');
+  document.getElementById('menuPopup').classList.remove('visible');
+  p.classList.toggle('visible', open);
+  if (open) renderSchedPopup();
+}
+function schedValidTime(v) {
+  if (typeof v !== 'string' || v.length !== 5 || v.charAt(2) !== ':') return false;
+  var h = Number(v.slice(0, 2)), m = Number(v.slice(3, 5));
+  return Number.isInteger(h) && Number.isInteger(m) && h >= 0 && h < 24 && m >= 0 && m < 60;
+}
+function schedValidDate(v) {
+  if (typeof v !== 'string' || v.length !== 10 || v.charAt(4) !== '-' || v.charAt(7) !== '-') return false;
+  var Y = Number(v.slice(0, 4)), M = Number(v.slice(5, 7)), D = Number(v.slice(8, 10));
+  if (!Number.isInteger(Y) || !Number.isInteger(M) || !Number.isInteger(D)) return false;
+  if (M < 1 || M > 12 || D < 1 || D > 31) return false;
+  var c = new Date(Date.UTC(Y, M - 1, D));
+  return c.getUTCFullYear() === Y && c.getUTCMonth() === M - 1 && c.getUTCDate() === D;
+}
+function schedPad(n) { return (n < 10 ? '0' : '') + n; }
+// 24h HH:MM -> 12h "5:30 PM". No regex (template-literal file).
+function schedTo12(hhmm) {
+  var h = Number(hhmm.slice(0, 2)), m = hhmm.slice(3, 5);
+  var ap = h < 12 ? 'AM' : 'PM';
+  var h12 = h % 12;
+  if (h12 === 0) h12 = 12;
+  return h12 + ':' + m + ' ' + ap;
+}
+// Stored UTC HH:MM -> IST display twin, 12h. IST has no DST so +5:30 never
+// shifts. Everything the operator sees and types is IST; UTC never surfaces.
+function schedIST(hhmm) {
+  var t = Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5)) + 330;
+  var plus = '';
+  if (t >= 1440) { t -= 1440; plus = ' +1 day'; }
+  return schedTo12(schedPad(Math.floor(t / 60)) + ':' + schedPad(t % 60)) + ' IST' + plus;
+}
+// IST wall time for <input type="time"> (24h value): what the operator
+// types is IST; conversion back to UTC happens on change/add.
+function schedISTValue(hhmmUTC) {
+  var t = Number(hhmmUTC.slice(0, 2)) * 60 + Number(hhmmUTC.slice(3, 5)) + 330;
+  if (t >= 1440) t -= 1440;
+  return schedPad(Math.floor(t / 60)) + ':' + schedPad(t % 60);
+}
+// Typed IST HH:MM -> UTC HH:MM for storage. Null when invalid.
+function istToUTC(hhmmIST) {
+  if (!schedValidTime(hhmmIST)) return null;
+  var t = Number(hhmmIST.slice(0, 2)) * 60 + Number(hhmmIST.slice(3, 5)) - 330;
+  t = ((t % 1440) + 1440) % 1440;
+  return schedPad(Math.floor(t / 60)) + ':' + schedPad(t % 60);
+}
+// Stored UTC date+time -> IST wall pair for the N-day inputs.
+function schedISTDateTime(refUTC, atUTC) {
+  var p = String(refUTC || '').split('-');
+  var ms = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2])) +
+    (Number(String(atUTC || '00:00').slice(0, 2)) * 60 + Number(String(atUTC || '00:00').slice(3, 5))) * 60000 +
+    330 * 60000;
+  var d = new Date(ms);
+  return {
+    date: d.getUTCFullYear() + '-' + schedPad(d.getUTCMonth() + 1) + '-' + schedPad(d.getUTCDate()),
+    time: schedPad(d.getUTCHours()) + ':' + schedPad(d.getUTCMinutes()),
+  };
+}
+// Typed IST date+time -> UTC pair for storage. Assumes validated inputs.
+function istDateTimeToUTC(dateIST, timeIST) {
+  var p = dateIST.split('-');
+  var ms = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2])) +
+    (Number(timeIST.slice(0, 2)) * 60 + Number(timeIST.slice(3, 5))) * 60000 - 330 * 60000;
+  var d = new Date(ms);
+  return {
+    ref: d.getUTCFullYear() + '-' + schedPad(d.getUTCMonth() + 1) + '-' + schedPad(d.getUTCDate()),
+    at: schedPad(d.getUTCHours()) + ':' + schedPad(d.getUTCMinutes()),
+  };
+}
+function schedTodayUTC() {
+  var now = new Date();
+  return now.getUTCFullYear() + '-' + schedPad(now.getUTCMonth() + 1) + '-' + schedPad(now.getUTCDate());
+}
+var SCHED_WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function fmtNextIST(ms) {
+  var d = new Date(ms + 330 * 60000);
+  return SCHED_WD[d.getUTCDay()] + ' ' + schedTo12(schedPad(d.getUTCHours()) + ':' + schedPad(d.getUTCMinutes())) + ' IST';
+}
+function renderSchedPopup() {
+  var host = document.getElementById('schedPopup');
+  var S = schedEntry();
+  var rules = Array.isArray(S.rules) ? S.rules : [];
+  var html = '<div class="sched-pop-head"><span class="sched-pop-title">Refresh schedule</span></div>' +
+    '<div class="sched-pop-mod">' + SCHED_NAMES[activeModule] + '</div>' +
+    '<div class="sched-next" id="schedNext">Next fire: loading…</div>';
+  rules.forEach(function (r, ri) {
+    html += schedRuleRow(r, ri);
+  });
+  if (rules.length < 4) {
+    html += '<div class="sched-add-row"><select id="schedKindSel">' +
+      '<option value="daily">At specific times</option>' +
+      '<option value="interval">Every N hours</option>' +
+      '<option value="everyNDays">Every N days</option>' +
+      '</select><button type="button" class="btn-icon" onclick="schedAddRule()" title="Add rule" aria-label="Add rule" style="font-size:15px;line-height:1;">+</button></div>';
+  }
+  html += '<div class="sched-note">All times shown and entered in IST. Save applies changes immediately - the clock re-arms on save.</div>';
+  host.innerHTML = html;
+  loadSchedNext();
+}
+function schedRuleRow(r, ri) {
+  var head = '<div class="sched-rule-head"><span class="sched-rule-kind">' +
+    (r.kind === 'interval' ? 'Every N hours' : r.kind === 'everyNDays' ? 'Every N days' : 'At specific times') +
+    '</span><button type="button" class="chip-remove" onclick="schedDelRule(' + ri + ')" title="Remove rule" aria-label="Remove rule">×</button></div>';
+  var body = '';
+  if (r.kind === 'interval') {
+    body = '<div class="sched-row">Every <input type="number" min="1" max="24" value="' + Number(r.everyHours || 6) + '" onchange="schedRuleField(' + ri + ', \\\'everyHours\\\', this.value)"> hours, starting ' +
+      '<input type="time" value="' + escapeAttr(schedISTValue(r.anchor || '00:00')) + '" onchange="schedRuleField(' + ri + ', \\\'anchor\\\', this.value)"></div>';
+  } else if (r.kind === 'everyNDays') {
+    var ist = schedISTDateTime(schedValidDate(r.ref) ? r.ref : schedTodayUTC(), r.at || '00:00');
+    body = '<div class="sched-row">Every <input type="number" min="1" max="30" value="' + Number(r.everyDays || 2) + '" onchange="schedRuleField(' + ri + ', \\\'everyDays\\\', this.value)"> days at ' +
+      '<input type="time" id="schedNTime' + ri + '" value="' + escapeAttr(ist.time) + '" onchange="schedRuleField(' + ri + ', \\\'at\\\', this.value)">' +
+      '<span>starting</span><input type="date" id="schedNDate' + ri + '" value="' + escapeAttr(ist.date) + '" onchange="schedRuleField(' + ri + ', \\\'ref\\\', this.value)"></div>';
+  } else {
+    var times = Array.isArray(r.times) ? r.times : [];
+    var chips = times.map(function (t) {
+      return '<span class="member-chip"><span>' + schedIST(t) + '</span>' +
+        '<button type="button" class="chip-remove" onclick="schedDelTime(' + ri + ', \\\'' + escapeAttr(t) + '\\\')" title="Remove" aria-label="Remove time">×</button></span>';
+    }).join('');
+    body = '<div class="sched-row"><span class="sched-chips">' + (chips || '<span class="sched-ist">No times yet</span>') + '</span>';
+    if (times.length < 4) {
+      body += '<input type="time" id="schedTimeInput' + ri + '"><button type="button" class="btn-icon" onclick="schedAddTime(' + ri + ')" title="Add time" aria-label="Add time" style="font-size:15px;line-height:1;">+</button>';
+    } else {
+      body += '<span class="sched-ist">Max 4 times</span>';
+    }
+    body += '</div>';
+  }
+  return '<div class="sched-rule">' + head + body + '</div>';
+}
+function schedAddTime(ri) {
+  var input = document.getElementById('schedTimeInput' + ri);
+  var v = input ? input.value : '';
+  var utc = istToUTC(v);
+  if (!utc) { setStatus('Enter a valid time.', 'error'); return; }
+  var r = schedEntry().rules[ri];
+  if (!r || r.kind !== 'daily') return;
+  if (r.times.indexOf(utc) === -1 && r.times.length < 4) r.times.push(utc);
+  r.times.sort();
+  renderSchedPopup();
+  refreshDirtyUI();
+  var added = document.getElementById('schedTimeInput' + ri);
+  if (added) added.focus();
+}
+function schedDelTime(ri, t) {
+  var r = schedEntry().rules[ri];
+  if (!r || !Array.isArray(r.times)) return;
+  r.times = r.times.filter(function (x) { return x !== t; });
+  renderSchedPopup();
+  refreshDirtyUI();
+}
+function schedRuleField(ri, field, value) {
+  var r = schedEntry().rules[ri];
+  if (!r) return;
+  // Field edits update state in place - no full re-render, so focus never
+  // jumps and the popup never flickers. Times are typed in IST and stored
+  // as UTC; the N-day pair converts date+time together.
+  if (field === 'everyHours') {
+    var h = Math.floor(Number(value));
+    if (!Number.isFinite(h) || h < 1 || h > 24) { setStatus('Hours must be 1 to 24.', 'error'); renderSchedPopup(); return; }
+    r.everyHours = h;
+  } else if (field === 'everyDays') {
+    var d = Math.floor(Number(value));
+    if (!Number.isFinite(d) || d < 1 || d > 30) { setStatus('Days must be 1 to 30.', 'error'); renderSchedPopup(); return; }
+    r.everyDays = d;
+  } else if (field === 'anchor') {
+    var au = istToUTC(value);
+    if (!au) { setStatus('Enter a valid time.', 'error'); renderSchedPopup(); return; }
+    r.anchor = au;
+  } else if (field === 'at' || field === 'ref') {
+    var tInp = document.getElementById('schedNTime' + ri);
+    var dInp = document.getElementById('schedNDate' + ri);
+    var tv = tInp ? tInp.value : '', dv = dInp ? dInp.value : '';
+    if (!schedValidTime(tv) || !schedValidDate(dv)) { setStatus('Enter a valid time and date.', 'error'); renderSchedPopup(); return; }
+    var conv = istDateTimeToUTC(dv, tv);
+    r.at = conv.at;
+    r.ref = conv.ref;
+  }
+  refreshDirtyUI();
+  loadSchedNext();
+}
+function schedAddRule() {
+  var sel = document.getElementById('schedKindSel');
+  var kind = sel ? sel.value : 'daily';
+  var S = schedEntry();
+  if (S.rules.length >= 4) return;
+  if (kind === 'interval') S.rules.push({ kind: 'interval', everyHours: 6, anchor: '00:00' });
+  else if (kind === 'everyNDays') {
+    var now = new Date();
+    var ref = now.getUTCFullYear() + '-' + schedPad(now.getUTCMonth() + 1) + '-' + schedPad(now.getUTCDate());
+    S.rules.push({ kind: 'everyNDays', everyDays: 2, at: '00:00', ref: ref });
+  } else S.rules.push({ kind: 'daily', times: [] });
+  renderSchedPopup();
+  refreshDirtyUI();
+}
+function schedDelRule(ri) {
+  schedEntry().rules.splice(ri, 1);
+  renderSchedPopup();
+  refreshDirtyUI();
+}
+async function loadSchedNext() {
+  var el = document.getElementById('schedNext');
+  if (!el) return;
+  // The line reflects the SAVED timetable (server KV) - flag it whenever
+  // the page holds unsaved schedule edits so the value is never mistaken
+  // for the edited one. Save refreshes the line via the saveAll hook.
+  var stale = '';
+  try { if (isDirty()) stale = ' <span class="sched-ist">(unsaved changes - Save to update)</span>'; } catch (e) {}
+  try {
+    var res = await fetch(ORIGIN + '/clock-next?module=' + SCHED_KEY[activeModule]);
+    var data = await res.json();
+    if (!data.next) { el.innerHTML = 'Next fire: <b>nothing scheduled</b>' + stale; return; }
+    var line = 'Next fire: <b>' + fmtNextIST(data.next.atMs) + '</b>';
+    if (Array.isArray(data.upcoming) && data.upcoming.length > 1) {
+      var rest = data.upcoming.slice(1).map(function (u) { return fmtNextIST(u.atMs); }).join(', ');
+      line += ' <span class="sched-ist">· then ' + rest + '</span>';
+    }
+    el.innerHTML = line + stale;
+  } catch (e) {
+    el.innerHTML = 'Next fire: could not load';
+  }
+}
 function setStatus(msg, kind) {
   const el = document.getElementById('status');
   el.textContent = msg;
@@ -1062,6 +1360,7 @@ function activateModule(m) {
   else if (m === 'official') renderOfficial();
   else if (m === 'tmdb') renderTmdb();
   else renderSimkl();
+  if (schedIsOpen()) renderSchedPopup();
 }
 document.addEventListener('click', (e) => {
   const popup = document.getElementById('menuPopup');
@@ -1072,6 +1371,13 @@ document.addEventListener('click', (e) => {
   const accentWrap = e.target.closest('.accent-popup-wrap');
   if (accentPopup.classList.contains('visible') && !accentWrap) {
     accentPopup.classList.remove('visible');
+  }
+  const schedPopup = document.getElementById('schedPopup');
+  if (schedPopup && schedPopup.classList.contains('visible') && !e.target.closest('.sched-popup-wrap')) {
+    // A click that re-rendered the popup mid-dispatch (add/remove rule or
+    // time) detaches its own target - that is an inside click, not an
+    // outside one. Only a still-attached outsider closes the popup.
+    if (e.target.isConnected) schedPopup.classList.remove('visible');
   }
 });
 
@@ -2736,6 +3042,7 @@ async function saveAll() {
     else msg = 'Saved - no regeneration needed.';
     setStatus(msg, 'ok');
     lastSavedJson = JSON.stringify(payload);
+    if (schedIsOpen()) loadSchedNext();
   } catch (e) {
     setStatus('Save failed: ' + humanizeError(e.message), 'error');
   } finally {
