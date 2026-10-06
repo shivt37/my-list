@@ -102,10 +102,13 @@ export function buildConfigurePage(origin, config, opts = {}) {
   #schedBtn { padding: 4px 6px; margin-left: 6px; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
 
-  /* ── SCHEDULE DROPDOWN (accent-popup pattern, left-anchored, wider) ── */
+  /* ── SCHEDULE DROPDOWN (accent-popup pattern, left-anchored, wider) ──
+     top is 100%+11px (not +8px like accent): the gear button is 6px shorter
+     AND centers 3px lower in the row, so +11px lands this panel exactly
+     where the accent panel lands (measured equal in headless Chrome). */
   .sched-popup-wrap { position: relative; }
   .sched-popup {
-    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    display: none; position: absolute; top: calc(100% + 11px); left: 0;
     background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r);
     padding: 14px; z-index: 200; width: 300px; max-width: calc(100vw - 48px);
     box-shadow: 0 20px 48px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
@@ -783,10 +786,12 @@ export function buildConfigurePage(origin, config, opts = {}) {
     /* Schedule popup: left-anchored to the mid-header gear button, so on
        phones its 300px width runs off the right edge. Viewport-relative
        full-width dropdown under the sticky header instead. max-height keeps
-       long rule lists inside the viewport with internal scroll. The exact
-       top comes from schedDockPopup (measured header); 60px is the fallback. */
+       long rule lists inside the viewport with internal scroll. top tucks
+       3px over the header bottom like the accent panel (see schedDockPopup);
+       the calc fallback docks the same way because backdrop-filter makes
+       the header the containing block, so 100% == header height. */
     .sched-popup {
-      position: fixed; left: 12px; right: 12px; top: 60px;
+      position: fixed; left: 12px; right: 12px; top: calc(100% - 3px);
       width: auto; max-width: none;
       max-height: calc(100vh - 140px); overflow-y: auto;
     }
@@ -1106,16 +1111,18 @@ function toggleSched() {
   if (open) renderSchedPopup();
   schedDockPopup();
 }
-// Measured anchor: dock the phone panel exactly 8px under the real header
-// height (wraps, font scaling and padding changes included). Runs on open
-// and on viewport changes while open; the 60px CSS top stays as fallback.
-// Inline style is cleared off-phone so desktop keeps its CSS positioning.
+// Measured anchor: tuck the phone panel 3px over the header's real bottom
+// edge - the same "stuck to header" landing the accent panel has (measured
+// equal in headless Chrome). rect.bottom tracks wraps, font scaling, mobile
+// padding and button sizes. Runs on open and on viewport changes while open;
+// the CSS calc(100% - 3px) fallback docks the same way. Inline style is
+// cleared off-phone so desktop keeps its CSS positioning.
 function schedDockPopup() {
   var p = document.getElementById('schedPopup');
   if (!p) return;
   if (window.innerWidth <= 767 && p.classList.contains('visible')) {
     var h = document.querySelector('header');
-    if (h) p.style.top = (h.getBoundingClientRect().height + 8) + 'px';
+    if (h) p.style.top = (h.getBoundingClientRect().bottom - 3) + 'px';
   } else {
     p.style.top = '';
   }
