@@ -882,8 +882,10 @@ export async function handleTmdbNetworkSearch(env, url) {
     name: r.name,
     poster: r.logo_path ? `https://image.tmdb.org/t/p/w185${r.logo_path}` : null,
   }));
-  // Best-effort cache - a KV hiccup must not fail the request.
-  try { await env.STORE.put(cacheKey, JSON.stringify({ fetched_at: Date.now(), results })); } catch { }
+  // Best-effort cache - a KV hiccup must not fail the request. 1h TTL
+  // (comfortably above the 10-min trust window above): per-query keys for
+  // one-off searches auto-delete instead of lingering in KV forever.
+  try { await env.STORE.put(cacheKey, JSON.stringify({ fetched_at: Date.now(), results }), { expirationTtl: 3600 }); } catch { }
   return json({ results });
 }
 
@@ -1219,7 +1221,9 @@ export async function handleMdblistOfficialCatalog(env) {
       all = await res.json();
       if (!Array.isArray(all)) return json({ error: "Unexpected MDBList catalog shape." }, 502);
       // Best-effort cache write - a KV hiccup must not fail the request.
-      try { await env.STORE.put(OFFICIAL_CATALOG_CACHE_KEY, JSON.stringify({ fetched_at: Date.now(), lists: all })); } catch { }
+      // 1h TTL like the network-search cache: orphaned catalog snapshots
+      // auto-delete instead of lingering in KV forever.
+      try { await env.STORE.put(OFFICIAL_CATALOG_CACHE_KEY, JSON.stringify({ fetched_at: Date.now(), lists: all }), { expirationTtl: 3600 }); } catch { }
     } catch (e) {
       return json({ error: "Failed to reach MDBList: " + e.message }, 502);
     }
