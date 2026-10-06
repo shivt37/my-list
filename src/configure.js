@@ -780,6 +780,13 @@ export function buildConfigurePage(origin, config, opts = {}) {
       content: ''; display: block; width: 36px; height: 4px;
       border-radius: 999px; background: var(--border2); margin: 0 auto 14px;
     }
+    /* Schedule popup: left-anchored to the mid-header gear button, so on
+       phones its 300px width runs off the right edge. Viewport-relative
+       full-width dropdown under the sticky header instead. */
+    .sched-popup {
+      position: fixed; left: 12px; right: 12px; top: 60px;
+      width: auto; max-width: none;
+    }
   }
   .confirm-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
   .confirm-body { font-size: 12.5px; color: var(--dim); line-height: 1.5; margin-bottom: 18px; }
