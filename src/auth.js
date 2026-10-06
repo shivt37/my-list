@@ -249,6 +249,7 @@ export function loginPageHtml({ error = null, blocked = false } = {}) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050508">
 <meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2306b6d4'/><g stroke='white' stroke-width='6' stroke-linecap='round'><line x1='20' y1='22' x2='44' y2='22'/><line x1='20' y1='32' x2='44' y2='32'/><line x1='20' y1='42' x2='36' y2='42'/></g></svg>">
 <title>my-list &mdash; Sign in</title>
 <style>
   :root {
