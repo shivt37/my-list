@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1791288130037,
+  "scraped_at": 1791331311325,
   "items": [
     {
       "imdb_id": "tt26657236",
@@ -389,14 +389,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/nH1lvyQvfbL5GKScTtT6zkIvDEn.jpg"
     },
     {
-      "imdb_id": "tt11378946",
-      "type": "movie",
-      "title": "Michael",
-      "year": 2026,
-      "release_date": "2026-04-22",
-      "poster": "https://image.tmdb.org/t/p/w200/dueFqKLvjftnELZaGYwY7xinfaI.jpg"
-    },
-    {
       "imdb_id": "tt0377092",
       "type": "movie",
       "title": "Mean Girls",
@@ -595,14 +587,6 @@
       "year": 2016,
       "release_date": "2016-02-19",
       "poster": "https://image.tmdb.org/t/p/w200/zap5hpFCWSvdWSuPGAQyjUv2wAC.jpg"
-    },
-    {
-      "imdb_id": "tt32093575",
-      "type": "movie",
-      "title": "Scary Movie",
-      "year": 2026,
-      "release_date": "2026-06-03",
-      "poster": "https://image.tmdb.org/t/p/w200/znHT8peERZRWG1ME3r0Db0EV8k8.jpg"
     },
     {
       "imdb_id": "tt31195136",
@@ -1061,6 +1045,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/vNVFt6dtcqnI7hqa6LFBUibuFiw.jpg"
     },
     {
+      "imdb_id": "tt5867314",
+      "type": "movie",
+      "title": "The Empty Man",
+      "year": 2020,
+      "release_date": "2020-10-22",
+      "poster": "https://image.tmdb.org/t/p/w200/8apzu9JFTUMtOpYkHk6LNPOs3pY.jpg"
+    },
+    {
       "imdb_id": "tt0104070",
       "type": "movie",
       "title": "Death Becomes Her",
@@ -1163,14 +1155,6 @@
       "year": 2026,
       "release_date": "2026-06-03",
       "poster": "https://image.tmdb.org/t/p/w200/oRuyGUHdoaQxWP3SDfafGkStxTC.jpg"
-    },
-    {
-      "imdb_id": "tt0095488",
-      "type": "movie",
-      "title": "The Lair of the White Worm",
-      "year": 1988,
-      "release_date": "1988-09-21",
-      "poster": "https://image.tmdb.org/t/p/w200/mHY7MwqrsCJNEAPt6K5PcNXmAfL.jpg"
     },
     {
       "imdb_id": "tt10638522",
