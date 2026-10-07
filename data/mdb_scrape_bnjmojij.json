@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1791288071129,
+  "scraped_at": 1791331251350,
   "items": [
     {
       "slug": "32uh4-spider-man-brand-new-day",
@@ -142,6 +142,16 @@
       "score": 5,
       "poster_path": "qL654LNOfBu49e12jnnQIv6mny.jpg",
       "description": "A young sheriff's deputy finds himself in the crosshairs of dangerous criminals when the dead body he is assigned to keep an eye on disappears from a crime scene.",
+      "digital_release_date": "2026-09-25"
+    },
+    {
+      "slug": "3j6pn-bloody-tennis",
+      "imdb_id": "tt34735922",
+      "title": "Bloody Tennis",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "3lc1DsvKGUEtAcd8Od0viYk327Y.jpg",
+      "description": "Sophie joins a prestigious tennis academy, where the brutality of competitive sports is taken to its extreme and only the hungriest survive.",
       "digital_release_date": "2026-09-25"
     },
     {
@@ -672,6 +682,16 @@
       "score": 6,
       "poster_path": "vCIQeQ2ynVqEjIvtbOXGnKtcgAX.jpg",
       "description": "President Ronald Reagan races against time to salvage a deal with Soviet leader Mikhail Gorbachev that could dismantle nuclear arsenals—or ignite disaster. With pressure mounting on all sides, every word spoken brings the world closer to peace... or destruction.",
+      "digital_release_date": "2026-09-01"
+    },
+    {
+      "slug": "450qv-confinement",
+      "imdb_id": "tt38907741",
+      "title": "Confinement",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "i92X6pBSqZgHAvIX28p0AZJU8xz.jpg",
+      "description": "Pregnant and recently widowed, Stella is taken in by her late husband’s estranged family. But beneath their generosity lies something deeply unsettling, leaving Stella fighting for her life as their obsession with her unborn child turns deadly.",
       "digital_release_date": "2026-09-01"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "cNYTQKXvlSI62WacK35SfL22xs2.jpg",
       "description": "A group of young people sets sail for the Mediterranean to save the lives of refugees — a mission that puts their ideas of law and justice to the test.",
       "digital_release_date": "2026-07-17"
-    },
-    {
-      "slug": "3ybq4-heartstopper-forever",
-      "imdb_id": "tt36619926",
-      "title": "Heartstopper Forever",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "r4lVJVO1BeBb11cBcXBdbHc9e9k.jpg",
-      "description": "It's a new school year for the Truham-Higgs gang. As Nick and Charlie's relationship deepens, their thoughts turn to life after the last bell rings.",
-      "digital_release_date": "2026-07-16"
-    },
-    {
-      "slug": "2z1g2-backrooms",
-      "imdb_id": "tt26657236",
-      "title": "Backrooms",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg",
-      "description": "A strange doorway appears in the basement of a furniture showroom.",
-      "digital_release_date": "2026-07-14"
     }
   ]
 }

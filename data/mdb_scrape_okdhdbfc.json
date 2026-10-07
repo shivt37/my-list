@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1791288118574,
+  "scraped_at": 1791331294688,
   "items": [
     {
       "slug": "3v7tm-kill-jackie",
@@ -12,6 +12,16 @@
       "score": 3,
       "poster_path": "vvMpr6wO4EMtA7lqftffTel5c1R.jpg",
       "description": "Jackie Price has been living a wealthy, luxurious life for the past 20 years after escaping a dangerous past as an international cocaine dealer. But just as life begins to feel a little boring, she discovers that The Seven Demons, a group of the world’s most terrifying hitmen, have been hired to kill her.",
+      "first_air_date": "2026-10-02"
+    },
+    {
+      "slug": "425uc-war",
+      "imdb_id": "tt37972251",
+      "title": "WAR",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "AtCR5LMuvwepTi1kipKq878Rbuq.jpg",
+      "description": "An anthology series set in the elite world of London law following two rival firms, Cathcarts and Taylor & Byrne, as they face off in a different headline-making legal battle each season.",
       "first_air_date": "2026-10-02"
     },
     {
@@ -29,7 +39,7 @@
       "imdb_id": "tt36064406",
       "title": "Coven Academy",
       "year": 2026,
-      "score": 5,
+      "score": 7,
       "poster_path": "f4R4YGeMQrXEu6jm3oAbSPeGC3M.jpg",
       "description": "A coven protects their magic school from a dark fate.",
       "first_air_date": "2026-10-01"
@@ -182,6 +192,16 @@
       "score": 5,
       "poster_path": "5ZeHhMqi7tDTgKvfUdy9rs7VKUt.jpg",
       "description": "Detectives Tom Radley and Emma Crane fall in love while investigating the small-town murder of a figure skater, until one becomes a suspect.",
+      "first_air_date": "2026-09-20"
+    },
+    {
+      "slug": "45ap5-the-split-up",
+      "imdb_id": "tt31709918",
+      "title": "The Split Up",
+      "year": 2026,
+      "score": null,
+      "poster_path": "jzuDyQQLpJcNM1l7kKcjgg8QsjE.jpg",
+      "description": "For Manchester's elite, family firm Kishan Law are the go-to divorce lawyers. But amid the messiness of love, marriage and deception, the personal and professional will collide.",
       "first_air_date": "2026-09-20"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "kPHv37XVpyWCsae3gtHujw1wPyW.jpg",
       "description": "After a powerful conglomerate chairman is betrayed by his children and wakes up in the body of a young soccer player, he uses his business genius and athletic physique to seek ultimate revenge against his family.",
       "first_air_date": "2026-05-30"
-    },
-    {
-      "slug": "44htq-payback",
-      "imdb_id": "tt39380468",
-      "title": "Payback",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "616HQHGVqEh0ZbQIRdyjIBQfqhU.jpg",
-      "description": "A grieving debt collector enters the entertainment world for revenge, only to fall into a dangerous attraction with a powerful executive.",
-      "first_air_date": "2026-05-30"
-    },
-    {
-      "slug": "3pe35-a-dog-and-a-plane",
-      "imdb_id": "tt34929415",
-      "title": "A Dog and a Plane",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "d7VEPr11cZc5mUTHyYJXfbblbeJ.jpg",
-      "description": "After a chaotic luggage mix-up, a broke paramedic and an ambitious flight attendant grow closer while exposing a cheating boyfriend’s secrets.",
-      "first_air_date": "2026-05-29"
     }
   ]
 }
