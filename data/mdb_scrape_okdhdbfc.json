@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1791374499901,
+  "scraped_at": 1791417706340,
   "items": [
     {
       "slug": "3v7tm-kill-jackie",
@@ -19,7 +19,7 @@
       "imdb_id": "tt37972251",
       "title": "WAR",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "AtCR5LMuvwepTi1kipKq878Rbuq.jpg",
       "description": "An anthology series set in the elite world of London law following two rival firms, Cathcarts and Taylor & Byrne, as they face off in a different headline-making legal battle each season.",
       "first_air_date": "2026-10-02"
@@ -43,6 +43,16 @@
       "poster_path": "f4R4YGeMQrXEu6jm3oAbSPeGC3M.jpg",
       "description": "A coven protects their magic school from a dark fate.",
       "first_air_date": "2026-10-01"
+    },
+    {
+      "slug": "44jj1-winter",
+      "imdb_id": "tt39101592",
+      "title": "Winter",
+      "year": 2026,
+      "score": null,
+      "poster_path": "r6Uf6RXvvnAgQphfpRuw47XJnhe.jpg",
+      "description": "Dr Ethan Winter, an analytical detective, partners with driven DI Lauren Bell. His deductive genius aids her murder squad, but he's haunted by an unsolved murder of someone close to him.",
+      "first_air_date": "2026-09-30"
     },
     {
       "slug": "44ifh-lego-one-piece",
@@ -79,7 +89,7 @@
       "imdb_id": "tt44934375",
       "title": "Hunkkaar: The Roar",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "5gaEiZDfTfSX7dPrUhOwSSBXDCM.jpg",
       "description": "When a teenager accuses a revered cult leader of sexual assault, it sparks a national conflict. As the truth unravels, the line between faith and justice blurs.",
       "first_air_date": "2026-09-25"
@@ -99,7 +109,7 @@
       "imdb_id": "tt35929525",
       "title": "Shaque: Trust No One",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "xddc9KBcqffXjLEYLX8cZzRwYkS.jpg",
       "description": "A mother receives yearly photos of her missing child. After nine years of searching, she discovers the truth about the abduction lies not far away, but hidden among her closest circle.",
       "first_air_date": "2026-09-24"
@@ -159,7 +169,7 @@
       "imdb_id": "tt35949226",
       "title": "Youth",
       "year": 2026,
-      "score": null,
+      "score": 6,
       "poster_path": "t0X9TVBkqJlTsdWZCTADsQqg4gC.jpg",
       "description": "A 50-year-old divorcee searches for sex and love whilst juggling caring for her ailing parents and parenting her should-be grown up son.",
       "first_air_date": "2026-09-21"
@@ -269,7 +279,7 @@
       "imdb_id": "tt37578538",
       "title": "The Doll",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "zJSceCJMF7C6AtdRycZjNjavCT.jpg",
       "description": "When Stanisław falls in love with the aristocratic Izabela, he dedicates his entire life to winning her over.",
       "first_air_date": "2026-09-16"
@@ -279,7 +289,7 @@
       "imdb_id": "tt32642114",
       "title": "City of Blood",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "Njr0Rlb4CobAfrGE8NVffYDGqx.jpg",
       "description": "Berlin — a city-state on the brink. While a privileged few live beneath a climate-controlled dome, those outside struggle to survive in a world ravaged by heat, corruption, and crime. After years apart, sisters Bea and Phoebe are reunited and uncover a dark secret: Vampires are determined to seize political power — and blood has become the city's new currency.",
       "first_air_date": "2026-09-16"
@@ -329,7 +339,7 @@
       "imdb_id": "tt39640519",
       "title": "Chumbak",
       "year": 2026,
-      "score": 2,
+      "score": 4,
       "poster_path": "r2TJ9s9uhfxTssar1gBAWcxIXx7.jpg",
       "description": "Five quirky families navigate life as neighbors in Chumbak Colony, where chaotic conflicts and hilarious antics turn each day into a new chapter.",
       "first_air_date": "2026-09-10"
@@ -1059,7 +1069,7 @@
       "imdb_id": "tt32603995",
       "title": "Adventure Time: Side Quests",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "9CzcOB5J2ld2mIRMzHIwYGYx1Cn.jpg",
       "description": "Young hero Finn and his magical dog best friend Jake embark on adventures across the fantastical land of Ooo — partying with cloud people and punching evil in the butt along the way.",
       "first_air_date": "2026-06-29"
@@ -1432,16 +1442,6 @@
       "score": 8,
       "poster_path": "2pPxVn4nK5KnJEx39xUHkYpmqXC.jpg",
       "description": "A grieving student pursuing priesthood faces a crisis of faith when he falls for a troubled new classmate in a world ruled by strict dogma.",
-      "first_air_date": "2026-05-30"
-    },
-    {
-      "slug": "42axm-reborn-rookie",
-      "imdb_id": "tt42206645",
-      "title": "Reborn Rookie",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "kPHv37XVpyWCsae3gtHujw1wPyW.jpg",
-      "description": "After a powerful conglomerate chairman is betrayed by his children and wakes up in the body of a young soccer player, he uses his business genius and athletic physique to seek ultimate revenge against his family.",
       "first_air_date": "2026-05-30"
     }
   ]
