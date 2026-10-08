@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1791417706340,
+  "scraped_at": 1791460911037,
   "items": [
     {
       "slug": "3v7tm-kill-jackie",
@@ -95,16 +95,6 @@
       "first_air_date": "2026-09-25"
     },
     {
-      "slug": "45ddk-steel-ball-run-jojo-s-bizarre-adventure",
-      "imdb_id": "tt38268282",
-      "title": "STEEL BALL RUN JoJo's Bizarre Adventure",
-      "year": 2026,
-      "score": null,
-      "poster_path": "https://m.media-amazon.com/images/M/MV5BZDFmY2JjYmYtNjZhOC00ODJkLTliMjYtM2Y4YzBjMWE0ZGZjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-      "description": "A paraplegic ex-jockey joins forces with an outlaw to compete in the first cross-continental horse race across North America in the 1800s.",
-      "first_air_date": "2026-09-25"
-    },
-    {
       "slug": "3vo52-shaque-trust-no-one",
       "imdb_id": "tt35929525",
       "title": "Shaque: Trust No One",
@@ -189,7 +179,7 @@
       "imdb_id": "tt30051064",
       "title": "American Hostage",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "dzoPQ13XrRUGl8Yoz1P66V8rRUy.jpg",
       "description": "A psychological thriller anthology series focusing on a different hostage case every season.",
       "first_air_date": "2026-09-20"
@@ -1442,6 +1432,16 @@
       "score": 8,
       "poster_path": "2pPxVn4nK5KnJEx39xUHkYpmqXC.jpg",
       "description": "A grieving student pursuing priesthood faces a crisis of faith when he falls for a troubled new classmate in a world ruled by strict dogma.",
+      "first_air_date": "2026-05-30"
+    },
+    {
+      "slug": "42axm-reborn-rookie",
+      "imdb_id": "tt42206645",
+      "title": "Reborn Rookie",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "kPHv37XVpyWCsae3gtHujw1wPyW.jpg",
+      "description": "After a powerful conglomerate chairman is betrayed by his children and wakes up in the body of a young soccer player, he uses his business genius and athletic physique to seek ultimate revenge against his family.",
       "first_air_date": "2026-05-30"
     }
   ]
