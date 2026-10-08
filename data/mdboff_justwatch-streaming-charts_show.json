@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1791374520028,
+  "scraped_at": 1791417725548,
   "items": [
     {
       "imdb_id": "tt21097264",
@@ -285,6 +285,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/sZeGoeE4pfPClCLEZHuC8ocReOw.jpg"
     },
     {
+      "imdb_id": "tt0239195",
+      "type": "series",
+      "title": "Survivor",
+      "year": 2000,
+      "release_date": "2000-05-31",
+      "poster": "https://image.tmdb.org/t/p/w200/Ap0qf8VxF9DW4NXLYvMmpg3WkdF.jpg"
+    },
+    {
       "imdb_id": "tt13875494",
       "type": "series",
       "title": "Tracker",
@@ -307,6 +315,14 @@
       "year": 2026,
       "release_date": "2026-03-03",
       "poster": "https://image.tmdb.org/t/p/w200/iNOXveSqB5tUTmGKxp5flQuQ72f.jpg"
+    },
+    {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "release_date": "2022-05-05",
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg"
     },
     {
       "imdb_id": "tt2149175",
@@ -347,6 +363,14 @@
       "year": 2022,
       "release_date": "2022-02-20",
       "poster": "https://image.tmdb.org/t/p/w200/pRtJagIxpfODzzb0T0NAvZSzErC.jpg"
+    },
+    {
+      "imdb_id": "tt0106179",
+      "type": "series",
+      "title": "The X-Files",
+      "year": 1993,
+      "release_date": "1993-09-10",
+      "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg"
     },
     {
       "imdb_id": "tt1877368",
@@ -603,6 +627,14 @@
       "year": 2025,
       "release_date": "2025-09-04",
       "poster": "https://image.tmdb.org/t/p/w200/ySA5MvhoxTdezNUMe0ifPmhxH4w.jpg"
+    },
+    {
+      "imdb_id": "tt11198330",
+      "type": "series",
+      "title": "House of the Dragon",
+      "year": 2022,
+      "release_date": "2022-08-21",
+      "poster": "https://image.tmdb.org/t/p/w200/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg"
     },
     {
       "imdb_id": "tt0096708",
