@@ -765,6 +765,12 @@ export function buildConfigurePage(origin, config, opts = {}) {
     background: var(--surface);
     border: 1px solid var(--border2); border-radius: var(--r2);
     padding: 20px; width: min(400px, calc(100vw - 40px));
+    /* True viewport centering: the UA dialog style only centers
+       horizontally, leaving the dialog docked to the viewport top.
+       inset:0 + margin:auto + fit-content height centers both axes.
+       The mobile bottom-sheet below overrides position/inset/margin. */
+    position: fixed; inset: 0; height: fit-content;
+    max-height: calc(100vh - 40px); overflow-y: auto;
     margin: auto;
     box-shadow: 0 28px 60px -16px rgba(0,0,0,0.9);
   }
