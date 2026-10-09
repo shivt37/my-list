@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1791460925989,
+  "scraped_at": 1791504111654,
   "items": [
     {
       "imdb_id": "tt26657236",
@@ -421,6 +421,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/dueFqKLvjftnELZaGYwY7xinfaI.jpg"
     },
     {
+      "imdb_id": "tt6662736",
+      "type": "movie",
+      "title": "What They Had",
+      "year": 2018,
+      "release_date": "2018-10-19",
+      "poster": "https://image.tmdb.org/t/p/w200/60aPLuGddsdmSq7fONzvUP1idTH.jpg"
+    },
+    {
       "imdb_id": "tt0862856",
       "type": "movie",
       "title": "Trick 'r Treat",
@@ -467,14 +475,6 @@
       "year": 2026,
       "release_date": "2026-09-27",
       "poster": "https://image.tmdb.org/t/p/w200/lW2E1jC61YNJq46Wald6kvcUInF.jpg"
-    },
-    {
-      "imdb_id": "tt0088930",
-      "type": "movie",
-      "title": "Clue",
-      "year": 1985,
-      "release_date": "1985-12-13",
-      "poster": "https://image.tmdb.org/t/p/w200/aRxbYOYHS8T73nzR8hsLousoplR.jpg"
     },
     {
       "imdb_id": "tt1341338",
@@ -637,14 +637,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/znHT8peERZRWG1ME3r0Db0EV8k8.jpg"
     },
     {
-      "imdb_id": "tt6662736",
-      "type": "movie",
-      "title": "What They Had",
-      "year": 2018,
-      "release_date": "2018-10-19",
-      "poster": "https://image.tmdb.org/t/p/w200/60aPLuGddsdmSq7fONzvUP1idTH.jpg"
-    },
-    {
       "imdb_id": "tt9764362",
       "type": "movie",
       "title": "The Menu",
@@ -781,20 +773,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/tmlDFIUpGRKiuWm9Ixc6CYDk4y0.jpg"
     },
     {
-      "imdb_id": "tt0061931",
-      "type": "movie",
-      "title": "Mad Monster Party?",
-      "year": 1967,
-      "release_date": "1967-03-08",
-      "poster": "https://image.tmdb.org/t/p/w200/6DsTP8PSrOPxlO1926sFZF6VPd0.jpg"
-    },
-    {
       "imdb_id": "tt0258463",
       "type": "movie",
       "title": "The Bourne Identity",
       "year": 2002,
       "release_date": "2002-06-14",
       "poster": "https://image.tmdb.org/t/p/w200/aP8swke3gmowbkfZ6lmNidu0y9p.jpg"
+    },
+    {
+      "imdb_id": "tt0061931",
+      "type": "movie",
+      "title": "Mad Monster Party?",
+      "year": 1967,
+      "release_date": "1967-03-08",
+      "poster": "https://image.tmdb.org/t/p/w200/6DsTP8PSrOPxlO1926sFZF6VPd0.jpg"
     },
     {
       "imdb_id": "tt8772262",
@@ -1203,6 +1195,14 @@
       "year": 1968,
       "release_date": "1968-10-04",
       "poster": "https://image.tmdb.org/t/p/w200/rb2NWyb008u1EcKCOyXs2Nmj0ra.jpg"
+    },
+    {
+      "imdb_id": "tt0128853",
+      "type": "movie",
+      "title": "You've Got Mail",
+      "year": 1998,
+      "release_date": "1998-12-18",
+      "poster": "https://image.tmdb.org/t/p/w200/rJLUSpmdxSMqqEsyzeCni3vy1ca.jpg"
     }
   ]
 }
