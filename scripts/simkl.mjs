@@ -409,10 +409,17 @@ export function writeCatalog(kind, items, cfg) {
   // list is called. Constant fallback if cfg is missing or the kind
   // disappeared from the saved simkl section.
   const renamed = cfg?.simkl?.lists?.find((l) => l.slug === kind)?.name;
+  // File-level type is honest about mixed feeds: the anime calendar
+  // carries theatrical films (type "movie") next to episodes. Nothing in
+  // the serving path reads this field (handleCatalog uses the catalog URL
+  // type + per-row type), but raw-JSON consumers see truth. Empty days
+  // keep the historical "series" value.
+  const hasMovie = items.some((i) => i.type === "movie");
+  const hasSeries = items.some((i) => i.type !== "movie");
   const out = {
     catalog_id: `simkl_arriving_today_${kind}`,
     name: renamed || SIMKL_DEFAULT_NAMES[kind],
-    type: "series",
+    type: hasMovie && hasSeries ? "mixed" : hasMovie ? "movie" : "series",
     // Which zone "today" was keyed in for this file - traceability for
     // the operator reading the JSON on GitHub. Inert to the serving path.
     timezone: normalizeTzLocal(cfg?.simkl?.timezone),

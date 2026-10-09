@@ -207,7 +207,13 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
   const slice = rows.slice(skip, skip + 100);
   // Forward catalogType positionally too: rowToMetaTmdb(row, type) reads its
   // second argument - row.type alone never reached it (B1 fix).
-  return json({ metas: slice.map((r) => metaOf({ ...r, type: catalogType }, catalogType)) }, 200);
+  // Simkl rows are the exception: they carry their own per-item type
+  // (anime films are "movie") and stomping them with the catalog type
+  // breaks movie detail/stream resolution downstream - so they pass
+  // through untouched. rowToMetaSimkl falls back to "series" only when
+  // the row itself has no type.
+  const withType = simkl ? (r) => r : (r) => ({ ...r, type: catalogType });
+  return json({ metas: slice.map((r) => metaOf(withType(r), catalogType)) }, 200);
 }
 
 export async function handleStatus(env, request, cfg = null) {
