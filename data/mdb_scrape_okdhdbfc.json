@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1791547294274,
+  "scraped_at": 1791590495397,
   "items": [
+    {
+      "slug": "3vwmh-below",
+      "imdb_id": "tt35934755",
+      "title": "Below",
+      "year": 2026,
+      "score": null,
+      "poster_path": "vgLqqhMUbljp585qPp1EFCyJtcz.jpg",
+      "description": "When a mysterious sea creature terrorizes a small Newfoundland town, a hard-bitten fisherman and his family fight to protect their close-knit community.",
+      "first_air_date": "2026-10-08"
+    },
+    {
+      "slug": "3xzbl-carrie",
+      "imdb_id": "tt11540908",
+      "title": "Carrie",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "6mUMquPQBFJGqTACS3Azkwwrx8d.jpg",
+      "description": "After her father's sudden, untimely death thrusts her into the unforgiving ecosystem of public high school, Carrie is forced to navigate a viral bullying scandal that tears through her community, the relentless pressure and casual cruelty of the social‑media age, and the awakening of mysterious telekinetic powers that rise alongside her adolescence.",
+      "first_air_date": "2026-10-07"
+    },
     {
       "slug": "3v7tm-kill-jackie",
       "imdb_id": "tt35726020",
@@ -169,7 +189,7 @@
       "imdb_id": "tt39365612",
       "title": "Line of Fire",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "cXG4WDOPNog1kt6pkDqEDQCkJyz.jpg",
       "description": "A family of law enforcement agents bridges personal differences and crosses professional boundaries as they tackle cases for the FBI, US Marshals, Secret Service and Department of Justice. After a seemingly cut-and-dry case turns into a deadly conspiracy, they must use the expertise from a lifetime of protecting civilians and politicians to protect one another and bring the killer to justice … even if it means betraying their sworn code.",
       "first_air_date": "2026-09-21"
@@ -349,7 +369,7 @@
       "imdb_id": "tt9280400",
       "title": "A Killer Story",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "aq9m0ZiiNVquFFrTMeL9dCDstkJ.jpg",
       "description": "Investigative journalist Joe Sexton looks into a 2002 double homicide case in Kansas after receiving thousands of emails from Eileen Umbehr, a homemaker turned citizen sleuth. Eileen and her husband Keen are convinced that Dana Chandler, the woman accused of killing her ex-husband and his girlfriend, did not commit the crime and devote their lives to fighting for Chandler's innocence.",
       "first_air_date": "2026-09-10"
@@ -1423,26 +1443,6 @@
       "poster_path": "erd75Gon5bXL38kngnH6DCrOUj2.jpg",
       "description": "Aras, a fearless seventeen-year-old boy, comes to Bodrum to search for his younger sibling, the only remaining member of his family whom he lost at the age of five. His new life in Bodrum will turn into a challenging struggle when his path crosses with the Akkaya family, the most powerful family in the city.",
       "first_air_date": "2026-05-31"
-    },
-    {
-      "slug": "3pe2y-ticket-to-heaven",
-      "imdb_id": "tt34930106",
-      "title": "Ticket to Heaven",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "2pPxVn4nK5KnJEx39xUHkYpmqXC.jpg",
-      "description": "A grieving student pursuing priesthood faces a crisis of faith when he falls for a troubled new classmate in a world ruled by strict dogma.",
-      "first_air_date": "2026-05-30"
-    },
-    {
-      "slug": "42axm-reborn-rookie",
-      "imdb_id": "tt42206645",
-      "title": "Reborn Rookie",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "kPHv37XVpyWCsae3gtHujw1wPyW.jpg",
-      "description": "After a powerful conglomerate chairman is betrayed by his children and wakes up in the body of a young soccer player, he uses his business genius and athletic physique to seek ultimate revenge against his family.",
-      "first_air_date": "2026-05-30"
     }
   ]
 }
