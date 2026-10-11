@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1791676850854,
+  "scraped_at": 1791720050862,
   "items": [
+    {
+      "slug": "3yxca-keu-bole-biplobi-keu-bole-dakat",
+      "imdb_id": "tt37707854",
+      "title": "Keu Bole Biplobi, Keu Bole Dakat",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "vT3VllVhSFw2D7t2M91WmM7Dsqc.jpg",
+      "description": "A biopic of Ananta Singha. Some calls him dacoit, some calls him a rebellion. This adaptation gives the viewer a chance to know him as a whole, a person and as a revolutionary communist leader.",
+      "digital_release_date": "2026-10-09"
+    },
     {
       "slug": "32uh4-spider-man-brand-new-day",
       "imdb_id": "tt22084616",
@@ -83,6 +93,16 @@
       "poster_path": "bHiAp8WWHgfUrJmRnoiw4URYGcq.jpg",
       "description": "A guard vanished on his first night at an old psych hospital in 2023. His bodycam footage shows unexplainable incidents that continue to baffle investigators.",
       "digital_release_date": "2026-10-02"
+    },
+    {
+      "slug": "35fjv-de-gaulle-resistance",
+      "imdb_id": "tt28553375",
+      "title": "De Gaulle: Résistance",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "4ri8KO5i7ldQiS3807KXn6awQEs.jpg",
+      "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
+      "digital_release_date": "2026-10-01"
     },
     {
       "slug": "44vis-ohh-my-dog",
@@ -599,7 +619,7 @@
       "imdb_id": "tt27548557",
       "title": "Dhamaal 4",
       "year": 2026,
-      "score": 4,
+      "score": 3,
       "poster_path": "oVij5aEEE6iI4PxB4i0CgKp8h0m.jpg",
       "description": "The Dhamaal boys are back for another treasure hunt, facing hilarious challenges in their quest for the Treasure of Life.",
       "digital_release_date": "2026-09-04"
@@ -1423,26 +1443,6 @@
       "poster_path": "AnJ8IQJI23hNpYXVNaythu061Ru.jpg",
       "description": "A cybersecurity expert becomes a whistleblower after uncovering secrets about aliens, putting him on the run from a corporation. Meanwhile, a meteorologist experiencing strange phenomena joins forces with him to prove there's life beyond our understanding.",
       "digital_release_date": "2026-07-21"
-    },
-    {
-      "slug": "3eq9q-scary-movie",
-      "imdb_id": "tt32093575",
-      "title": "Scary Movie",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "znHT8peERZRWG1ME3r0Db0EV8k8.jpg",
-      "description": "Twenty-six years after outrunning a suspiciously familiar masked killer, the Core Four are back in the killer's crosshairs and no horror movie IP is safe.",
-      "digital_release_date": "2026-07-20"
-    },
-    {
-      "slug": "2x5yh-flashback-to-the-80s",
-      "imdb_id": "tt37319567",
-      "title": "Flashback to the 80s",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "2HD9MuSt5Fk6i7uAgI3m75VATjk.jpg",
-      "description": "Paris, 1980s. When his old cop partner is killed in action, Yvon Kastendeuch is propelled to the head of a new unit : Police Flash 80. There, he'll have to team up with young recruits who will challenge his old \"dominant male\" habits.",
-      "digital_release_date": "2026-07-17"
     }
   ]
 }
