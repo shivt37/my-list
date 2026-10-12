@@ -101,7 +101,9 @@ export function buildConfigurePage(origin, config, opts = {}) {
   .header-title { font-weight: 600; font-size: 15px; letter-spacing: 0.01em; margin: 0; min-width: 0; }
   /* flex:1 + min-width:0 lets the wrap absorb free space; a long title
      wraps instead of squeezing the clock button into Save, and the
-     margin-right holds a constant gap to the actions cluster. */
+     margin-right holds a constant gap to the actions cluster. (Inline-flow
+     was tried: on narrow screens the button orphaned onto its own line -
+     worse. Flex keeps button beside the title block on all widths.) */
   .header-title-wrap { display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 8px; }
   #schedBtn { padding: 4px 6px; margin-left: 6px; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
