@@ -47,6 +47,13 @@ jobs:
         with:
           node-version: 22
 
+      # tvstats.mjs falls back to headless Chrome (puppeteer + stealth)
+      # when the site challenges datacenter IPs - needs the full
+      # dependency tree including the downloaded Chromium.
+      - name: Install dependencies
+        working-directory: scripts
+        run: npm ci
+
       - name: Sanitize workflow inputs
         id: sanitize
         run: |

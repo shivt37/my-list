@@ -86,6 +86,63 @@ export async function fetchText(url, fetchFn = fetch) {
   throw new Error(`GET ${url} -> repeated 429, giving up`);
 }
 
+// ── headless-Chrome fallback (Cloudflare "Just a moment" challenge) ──
+// The site 403-challenges datacenter IPs (CI runners) while serving homes
+// fine. Headers can't pass that - only a real browser engine with JS can.
+// One browser per run, reused for every page; puppeteer(-extra/stealth)
+// load lazily so unit tests and API-only paths never need the dependency.
+// If the challenge ever turns interactive (CAPTCHA), waitForFunction times
+// out and the run fails LOUD - that is the stop-and-contact-them signal,
+// never something to engineer around.
+let _browser = null;
+async function chromeBrowser() {
+  if (!_browser) {
+    const { default: puppeteer } = await import("puppeteer-extra");
+    const { default: StealthPlugin } = await import("puppeteer-extra-plugin-stealth");
+    puppeteer.use(StealthPlugin());
+    _browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+    });
+  }
+  return _browser;
+}
+
+export async function closeBrowser() {
+  if (_browser) {
+    try { await _browser.close(); } catch { /* already dead */ }
+    _browser = null;
+  }
+}
+
+export async function chromeFetchText(url, browserFn = chromeBrowser) {
+  const browser = await browserFn();
+  const page = await browser.newPage();
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
+    // The challenge page has no data blob - only return once the real
+    // page (challenge auto-resolved) carries it.
+    await page.waitForFunction(() => !!document.getElementById("__NEXT_DATA__"), { timeout: 90000 });
+    return await page.content();
+  } finally {
+    await page.close().catch(() => {});
+  }
+}
+
+export function isChallengeError(e) {
+  return /HTTP 403|Just a moment/i.test(String((e && e.message) || e));
+}
+
+// Node-first (fast where unblocked), Chrome only on challenge blocks.
+export async function fetchTextSmart(url, fetchFn = fetch, chromeFn = chromeFetchText) {
+  try {
+    return await fetchText(url, fetchFn);
+  } catch (e) {
+    if (!isChallengeError(e)) throw e;
+    return chromeFn(url);
+  }
+}
+
 export async function tmdbGet(path, params = {}, fetchFn = fetch) {
   if (!TMDB_TOKEN) throw new Error("TMDB_READ_ACCESS_TOKEN is not set - cannot resolve show IDs.");
   const url = `https://api.themoviedb.org/3${path}?${new URLSearchParams(params)}`;
@@ -170,8 +227,8 @@ export function detailUrl(kind, slug) {
 
 // Movies: imdb_id comes from TS's own detail record - exact by
 // construction. Verified by format + chart/detail title agreement.
-export async function resolveMovie(row, fetchTextFn = fetchText) {
-  const pp = pageProps(await fetchTextFn(detailUrl("movie", row.slug)));
+export async function resolveMovie(row, fetchTextFn = fetchText, chromeFn = chromeFetchText) {
+  const pp = pageProps(await fetchTextSmart(detailUrl("movie", row.slug), fetchTextFn, chromeFn));
   const mv = pp.movie || {};
   const imdb = mv.imdb_id || null;
   if (!imdb || !/^tt\d{7,8}$/.test(imdb)) throw new Error(`no imdb_id for movie slug ${row.slug}`);
@@ -182,8 +239,8 @@ export async function resolveMovie(row, fetchTextFn = fetchText) {
 // Shows: TS carries no IDs, so one TMDB tv-search (year-filtered) plus
 // one external_ids call, accepted ONLY on exact first_air_date + title
 // agreement. imdb missing on the TMDB record -> tmdb:<id> fallback id.
-export async function resolveShow(row, fetchTextFn = fetchText, tmdbGetFn = tmdbGet) {
-  const pp = pageProps(await fetchTextFn(detailUrl("series", row.slug)));
+export async function resolveShow(row, fetchTextFn = fetchText, tmdbGetFn = tmdbGet, chromeFn = chromeFetchText) {
+  const pp = pageProps(await fetchTextSmart(detailUrl("series", row.slug), fetchTextFn, chromeFn));
   const sh = pp.show || {};
   const title = sh.name || row.title;
   const firstAir = sh.first_air_date || row.date;
@@ -295,6 +352,7 @@ export async function main({
   deleteIds = deleteIdsArg,
   fetchCfg = fetchConfig,
   fetchTextFn = fetchText,
+  chromeFn = chromeFetchText,
   tmdbGetFn = tmdbGet,
   write = writeCatalog,
   recordRuns = postRuns,
@@ -333,7 +391,7 @@ export async function main({
     const startedAt = Date.now();
     const run = { catalog_id: t.id, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
     try {
-      const rows = chartRows(t.kind, await fetchTextFn(t.url)).slice(0, t.maxItems || 100);
+      const rows = chartRows(t.kind, await fetchTextSmart(t.url, fetchTextFn, chromeFn)).slice(0, t.maxItems || 100);
       if (rows.length === 0) throw new Error(`chart ${t.url} returned no rows - refusing to overwrite`);
       const items = await pmap(rows, async (row) => {
         const key = `${t.kind === "movie" ? "m" : "s"}:${row.slug}`;
@@ -342,9 +400,9 @@ export async function main({
         if (hit && (hit.imdb || hit.tmdb)) {
           resolved = hit;
         } else if (t.kind === "movie") {
-          resolved = await resolveMovie(row, fetchTextFn);
+          resolved = await resolveMovie(row, fetchTextFn, chromeFn);
         } else {
-          resolved = await resolveShow(row, fetchTextFn, tmdbGetFn);
+          resolved = await resolveShow(row, fetchTextFn, tmdbGetFn, chromeFn);
         }
         cache[key] = { kind: t.kind, imdb: resolved.imdb || null, tmdb: resolved.tmdb || null, title: resolved.title, date: resolved.date || row.date || null };
         return rowToItem(t.kind, resolved, row);
@@ -369,6 +427,7 @@ export async function main({
   }
 
   await recordRuns(runs);
+  await closeBrowser(); // no-op unless a challenge forced a launch
 
   console.log("\nSummary:", JSON.stringify(results, null, 2));
   const failed = results.filter((r) => r.error);
