@@ -55,23 +55,15 @@ const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 const REALISTIC_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
-let warmedUpBrowser = null;
+let warmedUpContext = null;
 
 // Mimics a real visitor: homepage → chart, once per run. Jumping straight
 // to a chart URL with no browsing history is what trips bot detection.
-async function warmUpSession(browser) {
-  // Warm-up is per browser object (cookies/history die with it) - a fresh
-  // launch after a close must warm up again.
-  if (warmedUpBrowser === browser) return;
-  const context = await browser.newContext({
-    userAgent: REALISTIC_USER_AGENT,
-    viewport: { width: 1920, height: 1080 },
-    locale: "en-US",
-    timezoneId: "UTC",
-  });
-  await context.addInitScript(() => {
-    Object.defineProperty(navigator, "webdriver", { get: () => false });
-  });
+// Runs on the run's ONE shared context: the Cloudflare clearance cookie
+// from the solved challenge must ride along on every later request - a
+// fresh context per page would re-challenge every fetch from zero.
+async function warmUpSession(context) {
+  if (warmedUpContext === context) return;
   const page = await context.newPage();
   try {
     console.log("[warmUp] Visiting homepage...");
@@ -83,25 +75,15 @@ async function warmUpSession(browser) {
     console.log("[warmUp] Visiting chart...");
     await page.goto("https://televisionstats.com/topmovies", { waitUntil: "domcontentloaded", timeout: 60000, referer: "https://televisionstats.com/" });
     await sleep(2000 + Math.random() * 2000);
-    warmedUpBrowser = browser;
+    warmedUpContext = context;
     console.log("[warmUp] Done.");
   } finally {
     await page.close();
-    await context.close();
   }
 }
 
-export async function fetchPageBrowser(browser, url) {
-  await warmUpSession(browser);
-  const context = await browser.newContext({
-    userAgent: REALISTIC_USER_AGENT,
-    viewport: { width: 1920, height: 1080 },
-    locale: "en-US",
-    timezoneId: "UTC",
-  });
-  await context.addInitScript(() => {
-    Object.defineProperty(navigator, "webdriver", { get: () => false });
-  });
+export async function fetchPageBrowser(context, url) {
+  await warmUpSession(context);
   const page = await context.newPage();
   try {
     const response = await page.goto(url, {
@@ -129,7 +111,6 @@ export async function fetchPageBrowser(browser, url) {
     return page.content();
   } finally {
     await page.close();
-    await context.close();
   }
 }
 
@@ -393,7 +374,27 @@ export async function main({
     headless: process.env.HEADFUL !== "1",
     args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
   });
-  const getHtml = (url) => fetchPageBrowser(browser, url);
+  // ONE shared context for the whole run: warm-up history and the
+  // Cloudflare clearance cookie must ride along on every later request -
+  // a fresh context per page would re-challenge every fetch from zero.
+  const context = await browser.newContext({
+    userAgent: REALISTIC_USER_AGENT,
+    viewport: { width: 1920, height: 1080 },
+    locale: "en-US",
+    timezoneId: "UTC",
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+  });
+  // Operator-supplied clearance cookie (TS_CF_CLEARANCE secret): copied
+  // once from a home browser where the site serves clean. Lets CI ride an
+  // already-cleared session instead of solving the challenge from a
+  // datacenter IP. Never logged.
+  if (process.env.TS_CF_CLEARANCE) {
+    await context.addCookies([{ name: "cf_clearance", value: process.env.TS_CF_CLEARANCE, url: "https://televisionstats.com/" }]);
+    console.log("[cookies] operator clearance loaded.");
+  }
+  const getHtml = (url) => fetchPageBrowser(context, url);
   const runs = [];
   const results = [];
   let consecutiveFailures = 0;
@@ -445,6 +446,7 @@ export async function main({
     await sleep(2500 + Math.random() * 2500);
   }
   } finally {
+    await context.close().catch(() => {});
     await browser.close().catch(() => {});
   }
 
