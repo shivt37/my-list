@@ -47,18 +47,9 @@ jobs:
         with:
           node-version: 22
 
-      # tvstats.mjs browses with headless Chromium (playwright-extra +
-      # stealth) because the site challenges datacenter IPs - needs the
-      # full dependency tree including the downloaded Chromium build.
-      - name: Install dependencies
-        working-directory: scripts
-        run: npm ci
-
-      # playwright-extra needs a Playwright driver package + its Chromium
-      # build (neither ships inside playwright-extra itself).
-      - name: Install Playwright Chromium
-        working-directory: scripts
-        run: npx playwright install chromium
+      # No dependency install, no browser: tvstats.mjs imports node
+      # builtins only - all page fetches go through the worker's
+      # /ts-fetch proxy (TS_FETCH_BASE below).
 
       - name: Sanitize workflow inputs
         id: sanitize
@@ -107,8 +98,6 @@ jobs:
           TMDB_READ_ACCESS_TOKEN: ${{ secrets.TMDB_READ_ACCESS_TOKEN }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
           TS_FETCH_BASE: ${{ secrets.WORKER_ORIGIN }}
-          TS_CF_CLEARANCE: ${{ secrets.TS_CF_CLEARANCE }}
-          HEADFUL: "1"
           INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
           INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
           INPUT_DELETE_IDS: ${{ steps.sanitize.outputs.delete_ids }}
@@ -120,9 +109,7 @@ jobs:
           if [ "${INPUT_ACTION}" = "delete" ]; then
             [ -n "${INPUT_DELETE_IDS}" ] && ARGS+=("--delete_ids=${INPUT_DELETE_IDS}")
           fi
-          # Headed browser under Xvfb: headed Chromium is what passes bot
-          # checks from datacenter IPs (xvfb preinstalled on runners).
-          xvfb-run -a node tvstats.mjs "${ARGS[@]}"
+          node tvstats.mjs "${ARGS[@]}"
 
       - name: Commit data changes
         if: always()
