@@ -47,12 +47,18 @@ jobs:
         with:
           node-version: 22
 
-      # tvstats.mjs falls back to headless Chrome (puppeteer + stealth)
-      # when the site challenges datacenter IPs - needs the full
-      # dependency tree including the downloaded Chromium.
+      # tvstats.mjs browses with headless Chromium (playwright-extra +
+      # stealth) because the site challenges datacenter IPs - needs the
+      # full dependency tree including the downloaded Chromium build.
       - name: Install dependencies
         working-directory: scripts
         run: npm ci
+
+      # playwright-extra needs a Playwright driver package + its Chromium
+      # build (neither ships inside playwright-extra itself).
+      - name: Install Playwright Chromium
+        working-directory: scripts
+        run: npx playwright install chromium
 
       - name: Sanitize workflow inputs
         id: sanitize
