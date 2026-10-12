@@ -2,7 +2,7 @@
 // live in the repo's data/ dir (GitHub Pages); the worker is a thin
 // fetcher, never touching mdblist itself.
 
-import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, normalizeTmdbList, addRuns, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
+import { loadConfig, migrateConfig, configVersion, listContentHash, tmdbContentHash, tvstatsContentHash, normalizeTmdbList, addRuns, getRuns, saveConfig, runsKeyFor, tmdbCatalogId, officialCatalogsFor, OFFICIAL_RUNS_KEY, SIMKL_CATALOGS, SIMKL_RUNS_KEY, TMDB_RUNS_KEY, TVSTATS_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
 import { normalizeSchedules, nextSlotAfter, upcomingFires, SCHEDULE_MODULES } from "./schedule.js";
 import { isAuthEnabled } from "./auth.js";
@@ -17,6 +17,7 @@ export const ADDON_DESCRIPTION = "Community-built catalogs: MDBList scraper list
 export const OFFICIAL_WORKFLOW = "official.yml";
 export const SIMKL_WORKFLOW = "simkl.yml";
 export const TMDB_WORKFLOW = "tmdb.yml";
+export const TVSTATS_WORKFLOW = "tvstats.yml";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -95,6 +96,12 @@ export async function buildManifest(env) {
       type: l.mediaType,
       extra: [{ name: "skip", isRequired: false }],
     }));
+  // TVStats chart lists: one list = one catalog (kind baked into the id
+  // at creation, same shape as scraper lists). Single-shot arrival
+  // listings, not paginated - no skip extra, like simkl.
+  const tvstatsCatalogs = cfg.tvstats.lists
+    .filter((l) => l.enabled)
+    .map((l) => ({ name: l.name, id: l.id, type: l.kind, extra: [] }));
   const catalogs = [
     ...enabled.map((l) => ({
       name: l.name,
@@ -102,6 +109,7 @@ export async function buildManifest(env) {
       type: l.type,
       extra: [{ name: "skip", isRequired: false }],
     })),
+    ...tvstatsCatalogs,
     ...officialCatalogs,
     ...simklCatalogs,
     ...tmdbCatalogs,
@@ -167,6 +175,19 @@ function rowToMetaSimkl(row) {
   };
 }
 
+// TVStats data files (data/tvstats_*.json) carry 5-field mdblist-parity
+// metas { id, type, name, poster, releaseInfo } - id/name pass through,
+// type passes through with a series fallback for typeless rows.
+function rowToMetaTvstats(row) {
+  return {
+    id: row.id || row.imdb_id,
+    type: row.type === "movie" ? "movie" : "series",
+    name: row.name || row.title,
+    poster: row.poster || undefined,
+    releaseInfo: row.releaseInfo || undefined,
+  };
+}
+
 // TMDB discover data files store raw TMDB result objects (parts shape from
 // the old tmdb worker, plus series title/release_date aliases). Stremio
 // metas use tmdb:<id> ids.
@@ -186,13 +207,14 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
   const simkl = SIMKL_CATALOGS.find((c) => c.id === catalogId);
   const list = cfg.scraper.lists.find((l) => l.id === catalogId);
   const tmdbList = cfg.tmdb.lists.find((l) => tmdbCatalogId(l) === catalogId);
-  const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : tmdbList ? rowToMetaTmdb : rowToMeta;
+  const tvstatsList = cfg.tvstats.lists.find((l) => l.id === catalogId);
+  const metaOf = official ? rowToMetaOfficial : simkl ? rowToMetaSimkl : tmdbList ? rowToMetaTmdb : tvstatsList ? rowToMetaTvstats : rowToMeta;
 
   // B11 (actual contract): unknown ids return empty; ids of DISABLED
   // modules keep serving their data on purpose - the manifest gates what
   // clients can discover, while direct catalog URLs stay valid across a
   // disable/enable cycle.
-  if (!official && !simkl && !list && !tmdbList) return json({ metas: [] });
+  if (!official && !simkl && !list && !tmdbList && !tvstatsList) return json({ metas: [] });
 
   let data;
   try {
@@ -211,8 +233,10 @@ export async function handleCatalog(env, catalogType, catalogId, skip) {
   // (anime films are "movie") and stomping them with the catalog type
   // breaks movie detail/stream resolution downstream - so they pass
   // through untouched. rowToMetaSimkl falls back to "series" only when
-  // the row itself has no type.
-  const withType = simkl ? (r) => r : (r) => ({ ...r, type: catalogType });
+  // the row itself has no type. TVStats rows are the same: the script
+  // stamps each row's type from the chart kind (movies vs shows), so a
+  // mixed-kind URL can never leak the wrong type into a catalog.
+  const withType = simkl || tvstatsList ? (r) => r : (r) => ({ ...r, type: catalogType });
   return json({ metas: slice.map((r) => metaOf(withType(r), catalogType)) }, 200);
 }
 
@@ -221,6 +245,7 @@ export async function handleStatus(env, request, cfg = null) {
   const official = page === "official";
   const simkl = page === "simkl";
   const tmdb = page === "tmdb";
+  const tvstats = page === "tvstats";
   // F28: statusPageResponse loads the config once and passes it in - four
   // module renders then cost one config read instead of four (plus the
   // seed/heal write-window collapses from up to 4x to 1x). Direct callers
@@ -232,7 +257,9 @@ export async function handleStatus(env, request, cfg = null) {
       ? await getRuns(env.STORE, SIMKL_RUNS_KEY)
       : tmdb
         ? await getRuns(env.STORE, TMDB_RUNS_KEY)
-        : await getRuns(env.STORE, "runs:scraper");
+        : tvstats
+          ? await getRuns(env.STORE, TVSTATS_RUNS_KEY)
+          : await getRuns(env.STORE, "runs:scraper");
   const listById = new Map(cfg.scraper.lists.map((l) => [l.id, l.name]));
   // Official/simkl runs are keyed by catalog id (mdboff_<slug>_<movie|show>),
   // but the operator-renamed name lives on the config list - resolve the
@@ -243,11 +270,15 @@ export async function handleStatus(env, request, cfg = null) {
   const officialByName = new Map(officialCatalogsFor(cfg.official.lists).map((c) => [c.id, cfgoffNames.get(c.slug) || c.name]));
   const simklByName = new Map(SIMKL_CATALOGS.map((c) => [c.id, cfgSimNames.get(c.slug) || c.name]));
   const tmdbByName = new Map(cfg.tmdb.lists.map((l) => [tmdbCatalogId(l), l.name]));
-  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? tmdbByName.get(r.catalog_id) ?? r.catalog_id;
+  const tvstatsByName = new Map(cfg.tvstats.lists.map((l) => [l.id, l.name]));
+  const nameFor = (r) => listById.get(r.catalog_id) ?? officialByName.get(r.catalog_id) ?? simklByName.get(r.catalog_id) ?? tmdbByName.get(r.catalog_id) ?? tvstatsByName.get(r.catalog_id) ?? r.catalog_id;
   const out = runs.slice(0, 30).map((r) => ({
     catalog_name: nameFor(r),
     catalog_id: r.catalog_id,
-    ...(official || simkl || tmdb ? { api_pages: r.pages_scraped } : { pages_scraped: r.pages_scraped }),
+    // TVStats runs are single-chart fetches - a "pages" count would always
+    // read 1 and mislead, so the field is omitted and the status page
+    // renders a dash. The item count rides in movies_found as usual.
+    ...(official || simkl || tmdb ? { api_pages: r.pages_scraped } : tvstats ? {} : { pages_scraped: r.pages_scraped }),
     triggered_by: r.triggered_by === "scheduled" ? "scheduled" : "manual",
     movies_found: r.movies_found,
     status: r.status,
@@ -265,8 +296,9 @@ export async function handleSaveConfig(env, request) {
     if (!body || !body.scraper || !Array.isArray(body.scraper.lists) ||
         !body.official || !Array.isArray(body.official.lists) ||
         !body.simkl || !Array.isArray(body.simkl.lists) ||
-        !body.tmdb || !Array.isArray(body.tmdb.lists)) {
-      return json({ error: "Invalid config body - expected { scraper, official, simkl, tmdb: { lists: [] } }" }, 400);
+        !body.tmdb || !Array.isArray(body.tmdb.lists) ||
+        !body.tvstats || !Array.isArray(body.tvstats.lists)) {
+      return json({ error: "Invalid config body - expected { scraper, official, simkl, tmdb, tvstats: { lists: [] } }" }, 400);
     }
     // Note: read-modify-write has no lock - concurrent saves can clobber
     // each other. Accepted for a single-operator admin page.
@@ -383,6 +415,20 @@ export async function handleSaveConfig(env, request) {
     const dispatch = [];
     for (const l of [...changed, ...added]) if (l.enabled) dispatch.push(l);
     const deleteIds = removed.map((l) => l.id);
+    // TVStats diff: content-hash compare (name-only edits don't regenerate).
+    // Added/changed/enabled-flip lists dispatch generate with their ids
+    // (the hash covers enabled, so OFF->ON regenerates); removed lists
+    // dispatch delete. Mirrors the scraper branch above.
+    const prevTvstatsById = new Map(current.tvstats.lists.map((l) => [l.id, l]));
+    const tvstatsAddedOrChanged = incoming.tvstats.lists.filter((l) => {
+      const prev = prevTvstatsById.get(l.id);
+      if (!prev) return true;
+      return tvstatsContentHash(l) !== tvstatsContentHash(prev);
+    });
+    const nextTvstatsIds = new Set(incoming.tvstats.lists.map((l) => l.id));
+    const tvstatsRemoved = current.tvstats.lists.filter((l) => !nextTvstatsIds.has(l.id));
+    const tvstatsGenerateIds = tvstatsAddedOrChanged.filter((l) => l.enabled).map((l) => l.id);
+    const tvstatsDeleteIds = tvstatsRemoved.map((l) => l.id);
 
     // Both dispatches fire before the persist: save is the last step, so
     // no config write happens on any dispatch failure and no workflow
@@ -428,6 +474,15 @@ export async function handleSaveConfig(env, request) {
       });
       if (!dispatchResult.dispatched) {
         return json({ ok: false, error: "Save rejected - GitHub tmdb dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
+    if (tvstatsGenerateIds.length > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_TVSTATS_WORKFLOW || TVSTATS_WORKFLOW,
+        inputs: { ids: tvstatsGenerateIds.join(","), config_version: expectedVersion },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub tvstats dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
     if (dispatch.length > 0) {
@@ -482,6 +537,18 @@ export async function handleSaveConfig(env, request) {
         return json({ ok: false, error: "Save rejected - GitHub dispatch failed: " + dispatchResult.reason }, 502);
       }
     }
+    // TVStats deletes carry action=delete explicitly - tvstats.yml only
+    // forwards --delete_ids in that mode, same contract as tmdb.yml
+    // (a combined generate+delete dispatch would silently drop them).
+    if (tvstatsDeleteIds.length > 0) {
+      dispatchResult = await dispatchScraperWorkflow(env, {
+        workflow: env.GH_TVSTATS_WORKFLOW || TVSTATS_WORKFLOW,
+        inputs: { action: "delete", delete_ids: tvstatsDeleteIds.join(","), config_version: expectedVersion },
+      });
+      if (!dispatchResult.dispatched) {
+        return json({ ok: false, error: "Save rejected - GitHub tvstats cleanup dispatch failed: " + dispatchResult.reason }, 502);
+      }
+    }
 
     // Both dispatches accepted - now persist. (Worker fires 204 on GH's
     // accept; the workflow may still fail 5min later, but by then the
@@ -532,6 +599,11 @@ export async function handleSaveConfig(env, request) {
         .filter((l) => l.enabled && tmdbGenerateSet.has(tmdbCatalogId(l)))
         .map((l) => l.name),
       tmdbRemoved: tmdbRemoved.map((l) => l.name),
+      tvstatsChanged: tvstatsAddedOrChanged.map((l) => l.name),
+      tvstatsDispatched: incoming.tvstats.lists
+        .filter((l) => l.enabled && tvstatsGenerateIds.includes(l.id))
+        .map((l) => l.name),
+      tvstatsRemoved: tvstatsRemoved.map((l) => l.name),
       github: dispatchResult,
     });
   } catch (e) {
@@ -586,7 +658,7 @@ export async function handleTriggerRefresh(env, request) {
       if (text) {
         const parsed = JSON.parse(text);
         singleId = parsed.id ?? null;
-        page = parsed.page === "official" || parsed.page === "simkl" || parsed.page === "tmdb" || parsed.page === "scraper" ? parsed.page : null;
+        page = parsed.page === "official" || parsed.page === "simkl" || parsed.page === "tmdb" || parsed.page === "tvstats" || parsed.page === "scraper" ? parsed.page : null;
         // F27: a present-but-unrecognized page must fail closed, not fall
         // through to a full scraper refresh (a typo would scrape everything).
         // Absent/empty page keeps the scraper-default behaviour for {id}-only
@@ -676,6 +748,32 @@ export async function handleTriggerRefresh(env, request) {
       return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
     }
     return json({ ok: true, lists: ids, workflow: TMDB_WORKFLOW });
+  }
+
+  // TVStats page-scoped refresh: one id refresh → one chart list; no id →
+  // all enabled tvstats lists.
+  if (page === "tvstats") {
+    const enabledQ = cfg.tvstats.lists.filter((l) => l.enabled);
+    // S5 (mirrored from the other branches): don't dispatch a GitHub run
+    // just to print "nothing to do" when nothing is enabled.
+    if (!singleId && enabledQ.length === 0) return json({ ok: true, lists: [] });
+    let ids;
+    if (singleId) {
+      const list = cfg.tvstats.lists.find((l) => l.id === singleId);
+      if (!list) return json({ error: "Unknown TVStats list." }, 404);
+      if (!list.enabled) return json({ error: `"${list.name}" is disabled - enable it first.` }, 400);
+      ids = [singleId];
+    } else {
+      ids = enabledQ.map((l) => l.id);
+    }
+    const result = await dispatchScraperWorkflow(env, {
+      workflow: env.GH_TVSTATS_WORKFLOW || TVSTATS_WORKFLOW,
+      inputs: { ids: ids.join(",") },
+    });
+    if (!result.dispatched) {
+      return json({ error: "GitHub Actions dispatch failed: " + result.reason }, 501);
+    }
+    return json({ ok: true, lists: ids, workflow: TVSTATS_WORKFLOW });
   }
 
   // Scraper page default (no body / no page): all enabled scraper lists.
@@ -774,6 +872,7 @@ async function liveCatalogIdsFor(store, runsKey) {
   for (const l of officialCatalogsFor(cfg.official.lists)) addIf(l.id);
   for (const l of cfg.simkl.lists) addIf(`simkl_arriving_today_${l.slug}`);
   for (const l of cfg.tmdb.lists) addIf(tmdbCatalogId(l));
+  for (const l of cfg.tvstats.lists) addIf(l.id);
   return ids;
 }
 

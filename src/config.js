@@ -3,6 +3,10 @@
 // id = mdb_scrape_<8 random alnum chars>, generated once at creation, permanent.
 // Official module: 3 fixed MDBList official lists, never editable/deletable,
 // only enabled-toggled. Their catalog files live in data/mdboff_*_*.json.
+// TVStats module: each list = { id, name, url, kind, maxItems, enabled }.
+// id = tvstats_<8 alnum chars derived from the chart URL>, permanent.
+// Only televisionstats.com Attention-chart families accepted (see
+// TVSTATS_MOVIE_RES / TVSTATS_SHOW_RES); kind auto-detects from the URL.
 
 import { createHash } from "node:crypto";
 import { normalizeSchedules } from "./schedule.js";
@@ -12,6 +16,7 @@ const RUNS_SCRAPER_KEY = "runs:scraper";
 const RUNS_OFFICIAL_KEY = "runs:official";
 const RUNS_SIMKL_KEY = "runs:simkl";
 const RUNS_TMDB_KEY = "runs:tmdb";
+const RUNS_TVSTATS_KEY = "runs:tvstats";
 const RUNS_MAX = 30;
 const HEALED_KEY = "healed";
 const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -20,12 +25,14 @@ export function runsKeyFor(catalogId) {
   if (catalogId.startsWith("mdboff_")) return RUNS_OFFICIAL_KEY;
   if (catalogId.startsWith("simkl_")) return RUNS_SIMKL_KEY;
   if (catalogId.startsWith("tmdb_")) return RUNS_TMDB_KEY;
+  if (catalogId.startsWith("tvstats_")) return RUNS_TVSTATS_KEY;
   return RUNS_SCRAPER_KEY;
 }
 
 export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
 export const SIMKL_RUNS_KEY = RUNS_SIMKL_KEY;
 export const TMDB_RUNS_KEY = RUNS_TMDB_KEY;
+export const TVSTATS_RUNS_KEY = RUNS_TVSTATS_KEY;
 
 // Single source of truth for the TMDB catalog-id string. The manifest,
 // catalog lookup, refresh routing, and status naming all build this same
@@ -51,7 +58,7 @@ export function randomScraperId(seedUrl) {
 }
 
 export function emptyConfig() {
-  return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
+  return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] }, tvstats: { lists: [] } };
 }
 
 // F3: configVersion = content hash of the config blob. Every save stamps
@@ -145,6 +152,89 @@ export function simklDefaults() {
       rating_tiers: s.filter.rating_tiers.map((t) => ({ ...t })),
     },
   }));
+}
+
+// Television Stats lists. Kind auto-detects from the chart URL - movie
+// charts (/topmovies*, /mg/*) vs show charts (everything else accepted).
+// Alt-metric charts (/torrent, /reddit, /twitter, /wiki) are show-kind;
+// their value isn't an Attention Score, but lists only need rank order.
+// Reject: people (/topactors*), compare (/vs*), timelines, coming-soon,
+// /networks, /top-seasons (no title arrays to scrape).
+const TVSTATS_MOVIE_RES = [/^\/topmovies(\/year|\/peak)?$/, /^\/mg\/[a-z0-9][a-z0-9-]*(\/year|\/peak)?$/];
+const TVSTATS_SHOW_RES = [/^\/top(\/year|\/peak)?$/, /^\/n\/[a-z0-9][a-z0-9+.-]*(\/year|\/peak|\/[a-z-]+)?$/, /^\/g\/[a-z0-9][a-z0-9-]*(\/year|\/peak)?$/, /^\/(torrent|reddit|twitter|wiki)$/];
+
+export function tvstatsKindForUrl(rawUrl) {
+  let path = "";
+  try {
+    const u = new URL(String(rawUrl || ""));
+    if (u.hostname !== "televisionstats.com" && u.hostname !== "www.televisionstats.com") return null;
+    path = u.pathname.replace(/\/+$/, "") || "/";
+  } catch {
+    return null;
+  }
+  if (TVSTATS_MOVIE_RES.some((re) => re.test(path))) return "movie";
+  if (TVSTATS_SHOW_RES.some((re) => re.test(path))) return "series";
+  return null;
+}
+
+// Seeded IDs derive from the chart URL (first 8 of sha256, alnum), so the
+// ID the config shows is the ID the scraper writes under - same contract
+// as randomScraperId. The UI generates ids client-side by the same scheme.
+export function tvstatsIdFor(chartUrl) {
+  const seed = chartUrl || Math.random().toString(36).slice(2);
+  const hex = createHash("sha256").update(seed).digest("hex").slice(0, 8);
+  let out = "";
+  for (let i = 0; i < 8; i++) {
+    out += RANDOM_ID_CHARS[parseInt(hex[i], 16) % RANDOM_ID_CHARS.length];
+  }
+  return "tvstats_" + out;
+}
+
+// Out-of-the-box pair on fresh installs. Operators add more chart URLs
+// and delete freely - same openness as the scraper module.
+export function tvstatsDefaults() {
+  return [
+    { url: "https://televisionstats.com/topmovies", name: "Top 100 Movies", maxItems: 100, enabled: true },
+    { url: "https://televisionstats.com/top", name: "Top 100 Shows", maxItems: 100, enabled: true },
+  ].map((s) => ({ id: tvstatsIdFor(s.url), name: s.name, url: s.url, kind: tvstatsKindForUrl(s.url), maxItems: s.maxItems, enabled: s.enabled }));
+}
+
+// Hard ceiling per config save - each active list costs chart + detail
+// fetches per cron run; detail pages are cached by slug downstream.
+export const MAX_TVSTATS_LISTS = 30;
+const SANE_TVSTATS_ID = /^tvstats_[a-z0-9]{8}$/;
+
+// Unknown-shaped entries are dropped rather than healed - a bad id or a
+// non-chart URL can't reach data/ paths. Kind always re-derives from the
+// URL so a stale kind can never survive a save.
+export function normalizeTvstatsList(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const url = String(raw.url || "").slice(0, 2000);
+  const kind = tvstatsKindForUrl(url);
+  if (!kind) return null;
+  return {
+    id: typeof raw.id === "string" && SANE_TVSTATS_ID.test(raw.id) ? raw.id : tvstatsIdFor(url),
+    name: String(raw.name || "").trim().slice(0, 200) || "Untitled",
+    url,
+    kind,
+    maxItems: Number.isFinite(raw.maxItems) ? Math.min(200, Math.max(1, Math.floor(raw.maxItems))) : 100,
+    enabled: raw.enabled !== false,
+  };
+}
+
+export function migrateTvstats(raw) {
+  const rawLists = Array.isArray(raw?.tvstats?.lists) ? raw.tvstats.lists : [];
+  return rawLists.map(normalizeTvstatsList).filter(Boolean).slice(0, MAX_TVSTATS_LISTS);
+}
+
+// Fields that affect the scraped data file: url, maxItems, enabled, kind.
+// Name only affects the manifest (built live from config), so renaming a
+// list must not re-scrape - same contract as listContentHash.
+export function tvstatsContentHash(list) {
+  return createHash("sha256")
+    .update([list.url, list.maxItems, list.enabled ? 1 : 0, list.kind].join(" "))
+    .digest("hex")
+    .slice(0, 16);
 }
 
 // Seed defaults for fresh installs. The slug set is OPEN - operators add
@@ -301,7 +391,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
+  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, tvstats: { lists: migrateTvstats(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
 }
 
 // TMDB Discover list entry. Ids are pinned at creation (client + server
@@ -487,6 +577,15 @@ export async function loadConfig(kv) {
     cfg.tmdb.lists = cfg.tmdb.lists.map(normalizeTmdbList).filter(Boolean);
   } else {
     cfg.tmdb = { lists: [] };
+  }
+
+  // Normalize the tvstats section. Entries were already sanitized by
+  // migrateTvstats (bad ids healed, non-chart URLs dropped). Seed the
+  // out-of-the-box pair only when the key is missing entirely (fresh
+  // install) - an explicit empty array means the operator deleted all.
+  const tvstatsKeyAbsent = !(raw && typeof raw === "object" && Array.isArray(raw.tvstats?.lists));
+  if (tvstatsKeyAbsent) {
+    cfg.tvstats = { lists: tvstatsDefaults() };
   }
 
   // One-shot healing: if any persisted list matches a seed entry by URL

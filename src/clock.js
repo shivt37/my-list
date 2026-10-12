@@ -13,9 +13,9 @@
 // into a storm. Every fault is caught, logged, and (for dispatches)
 // recorded as a failed /status row.
 
-import { loadConfig, addRuns, runsKeyFor, OFFICIAL_RUNS_KEY, SIMKL_RUNS_KEY, TMDB_RUNS_KEY } from "./config.js";
+import { loadConfig, addRuns, runsKeyFor, OFFICIAL_RUNS_KEY, SIMKL_RUNS_KEY, TMDB_RUNS_KEY, TVSTATS_RUNS_KEY } from "./config.js";
 import { dispatchScraperWorkflow } from "./dispatch.js";
-import { OFFICIAL_WORKFLOW, SIMKL_WORKFLOW, TMDB_WORKFLOW } from "./routes.js";
+import { OFFICIAL_WORKFLOW, SIMKL_WORKFLOW, TMDB_WORKFLOW, TVSTATS_WORKFLOW } from "./routes.js";
 import { normalizeSchedules, nextSlotAfter, dueModulesAt } from "./schedule.js";
 
 const MODULE_DEFS = {
@@ -23,6 +23,7 @@ const MODULE_DEFS = {
   scrape: { workflowEnv: "GH_WORKFLOW", workflow: "scrape.yml", runsKey: runsKeyFor("mdb_scrape_cron"), hasEnabled: (cfg) => cfg.scraper.lists.some((l) => l.enabled) },
   official: { workflowEnv: "GH_OFFICIAL_WORKFLOW", workflow: OFFICIAL_WORKFLOW, runsKey: OFFICIAL_RUNS_KEY, hasEnabled: (cfg) => cfg.official.lists.some((l) => l.enabled) },
   simkl: { workflowEnv: "GH_SIMKL_WORKFLOW", workflow: SIMKL_WORKFLOW, runsKey: SIMKL_RUNS_KEY, hasEnabled: (cfg) => cfg.simkl.lists.some((l) => l.enabled) },
+  tvstats: { workflowEnv: "GH_TVSTATS_WORKFLOW", workflow: TVSTATS_WORKFLOW, runsKey: TVSTATS_RUNS_KEY, hasEnabled: (cfg) => cfg.tvstats.lists.some((l) => l.enabled) },
 };
 
 // An alarm more than this far in the past means the chain is stuck, not

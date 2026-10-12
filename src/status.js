@@ -11,7 +11,7 @@
 import { handleStatus, html } from "./routes.js";
 import { loadConfig } from "./config.js";
 
-const MODULES = ["scraper", "official", "simkl", "tmdb"];
+const MODULES = ["scraper", "tvstats", "official", "simkl", "tmdb"];
 
 // Mirrors ACCENT_COLORS in configure.js (that file is one template literal -
 // not importable). Keep in sync if the configure palette ever changes.
@@ -119,6 +119,8 @@ function renderFilters(runs) {
 function renderRow(r, now) {
   const epoch = istToEpoch(r.started_at_ist);
   const d = epoch != null ? istDisplay(epoch) : null;
+  // Modules without a page concept (tvstats: single-chart fetch) omit the
+  // field - render a dash, never a misleading 0 or 1.
   const pages = r.pages_scraped != null ? r.pages_scraped : r.api_pages;
   const movies = r.movies_found ?? 0;
   // Coerce status to its enum like handleStatus does for triggered_by -
@@ -168,12 +170,12 @@ function renderRow(r, now) {
     detail =
       '<div class="detail"><div class="detail-inner"><div class="detail-label">Error</div>' +
       '<div class="err-box">' + esc(r.error_message || "(no error message recorded)") + "</div>" +
-      '<div class="detail-meta">' + metaLine + " &middot; " + fmtDur(r.duration_seconds) + " &middot; " + (pages ?? 0) + " pages &middot; " + movies + " items</div>" +
+      '<div class="detail-meta">' + metaLine + " &middot; " + fmtDur(r.duration_seconds) + " &middot; " + (pages ?? "—") + " pages &middot; " + movies + " items</div>" +
       "</div></div>";
   } else {
     detail =
       '<div class="detail"><div class="detail-inner"><div class="detail-label">Run detail</div>' +
-      '<div class="ok-box">Pages: ' + (pages ?? 0) + " &middot; items found: " + movies + " &middot; duration: " + fmtDur(r.duration_seconds) + "</div>" +
+      '<div class="ok-box">Pages: ' + (pages ?? "—") + " &middot; items found: " + movies + " &middot; duration: " + fmtDur(r.duration_seconds) + "</div>" +
       '<div class="detail-meta">' + metaLine + "</div>" +
       "</div></div>";
   }
@@ -184,7 +186,7 @@ function renderRow(r, now) {
     '<span class="pill ' + status + '">' + status + "</span>" +
     '<div class="r-name" title="' + esc(r.catalog_name) + '">' + esc(r.catalog_name) + (unresolved ? '<small>list removed</small>' : "<small>" + esc(r.catalog_id) + "</small>") + "</div>" +
     triggerCell +
-    '<div class="r-num">' + (pages ?? 0) + "</div>" +
+    '<div class="r-num">' + (pages ?? "—") + "</div>" +
     '<div class="r-num">' + movies + "</div>" +
     '<div class="r-dur">' + fmtDur(r.duration_seconds) + "</div>" +
     CHEV_SVG +
@@ -246,7 +248,7 @@ export async function statusPageResponse(env, request) {
   }
 
   const tabs = MODULES.map(
-    (m) => '<button class="tab' + (m === active ? " active" : "") + '" role="tab" aria-selected="' + (m === active) + '" data-mod="' + m + '" onclick="switchTab(this)">' + (m === "scraper" ? "Scraper" : m === "official" ? "Official" : m === "simkl" ? "Simkl" : "TMDB") + "</button>"
+    (m) => '<button class="tab' + (m === active ? " active" : "") + '" role="tab" aria-selected="' + (m === active) + '" data-mod="' + m + '" onclick="switchTab(this)">' + (m === "scraper" ? "Scraper" : m === "tvstats" ? "TS" : m === "official" ? "Official" : m === "simkl" ? "Simkl" : "TMDB") + "</button>"
   ).join("");
 
   const sections = MODULES.map((m) => renderModule(m, runsByModule[m], now, active, errByModule[m])).join("");
@@ -511,7 +513,7 @@ function switchTab(btn) {
   });
   btn.classList.add('active');
   btn.setAttribute('aria-selected', 'true');
-  ['scraper', 'official', 'simkl', 'tmdb'].forEach(function (m) {
+  ['scraper', 'tvstats', 'official', 'simkl', 'tmdb'].forEach(function (m) {
     var sec = document.getElementById('mod-' + m);
     if (sec) sec.hidden = m !== btn.dataset.mod;
   });
