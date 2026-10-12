@@ -1,0 +1,707 @@
+{
+  "catalog_id": "tvstats_iifeniam",
+  "name": "Action",
+  "type": "movie",
+  "scraped_at": 1791818612512,
+  "items": [
+    {
+      "id": "tt22084616",
+      "type": "movie",
+      "name": "Spider-Man: Brand New Day",
+      "poster": "https://image.tmdb.org/t/p/w500/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg",
+      "releaseInfo": "2026-07-29"
+    },
+    {
+      "id": "tt28498219",
+      "type": "movie",
+      "name": "Matchbox the Movie",
+      "poster": "https://image.tmdb.org/t/p/w500/lFKA4GMz36dImEy3DQPdPF7G4V9.jpg",
+      "releaseInfo": "2026-10-05"
+    },
+    {
+      "id": "tt0295701",
+      "type": "movie",
+      "name": "xXx",
+      "poster": "https://image.tmdb.org/t/p/w500/xeEw3eLeSFmJgXZzmF2Efww0q3s.jpg",
+      "releaseInfo": "2002-08-09"
+    },
+    {
+      "id": "tt33764258",
+      "type": "movie",
+      "name": "The Odyssey",
+      "poster": "https://image.tmdb.org/t/p/w500/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
+      "releaseInfo": "2026-07-15"
+    },
+    {
+      "id": "tt27419420",
+      "type": "movie",
+      "name": "Street Fighter",
+      "poster": "https://image.tmdb.org/t/p/w500/dJPT2Uf12X6aFg8i5N67NTpIZ9t.jpg",
+      "releaseInfo": "2026-10-13"
+    },
+    {
+      "id": "tt36983905",
+      "type": "movie",
+      "name": "The Uprising",
+      "poster": "https://image.tmdb.org/t/p/w500/7TUl15TOsIvndKlgMWTtLgtEzZP.jpg",
+      "releaseInfo": "2026-09-10"
+    },
+    {
+      "id": "tt4154796",
+      "type": "movie",
+      "name": "Avengers: Endgame",
+      "poster": "https://image.tmdb.org/t/p/w500/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg",
+      "releaseInfo": "2019-04-24"
+    },
+    {
+      "id": "tt0343818",
+      "type": "movie",
+      "name": "I, Robot",
+      "poster": "https://image.tmdb.org/t/p/w500/efwv6F2lGaghjPpBRSINHtoEiZB.jpg",
+      "releaseInfo": "2004-07-15"
+    },
+    {
+      "id": "tt21357150",
+      "type": "movie",
+      "name": "Avengers: Doomsday",
+      "poster": "https://image.tmdb.org/t/p/w500/jzPwsojjFStf5lR5Nm07w2hH56G.jpg",
+      "releaseInfo": "2026-12-16"
+    },
+    {
+      "id": "tt28014327",
+      "type": "movie",
+      "name": "Mayday",
+      "poster": "https://image.tmdb.org/t/p/w500/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
+      "releaseInfo": "2026-09-03"
+    },
+    {
+      "id": "tt32268691",
+      "type": "movie",
+      "name": "Onslaught",
+      "poster": "https://image.tmdb.org/t/p/w500/cOGtvhc6Ij9KvzM6jZsfQyg0B0O.jpg",
+      "releaseInfo": "2026-09-02"
+    },
+    {
+      "id": "tt31193180",
+      "type": "movie",
+      "name": "Sinners",
+      "poster": "https://image.tmdb.org/t/p/w500/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg",
+      "releaseInfo": "2025-04-16"
+    },
+    {
+      "id": "tt27681354",
+      "type": "movie",
+      "name": "In the Grey",
+      "poster": "https://image.tmdb.org/t/p/w500/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg",
+      "releaseInfo": "2026-05-13"
+    },
+    {
+      "id": "tt10872600",
+      "type": "movie",
+      "name": "Spider-Man: No Way Home",
+      "poster": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+      "releaseInfo": "2021-12-15"
+    },
+    {
+      "id": "tt8814476",
+      "type": "movie",
+      "name": "Supergirl",
+      "poster": "https://image.tmdb.org/t/p/w500/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg",
+      "releaseInfo": "2026-06-24"
+    },
+    {
+      "id": "tt31349844",
+      "type": "movie",
+      "name": "Runner",
+      "poster": "https://image.tmdb.org/t/p/w500/yBKMAIj7clP42UkFejhGDBBoTpb.jpg",
+      "releaseInfo": "2026-09-07"
+    },
+    {
+      "id": "tt32273171",
+      "type": "movie",
+      "name": "The Death of Robin Hood",
+      "poster": "https://image.tmdb.org/t/p/w500/13MmRwmG5NmaMfU8qNrtgGXisiD.jpg",
+      "releaseInfo": "2026-06-18"
+    },
+    {
+      "id": "tt30825738",
+      "type": "movie",
+      "name": "The Mandalorian and Grogu",
+      "poster": "https://image.tmdb.org/t/p/w500/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg",
+      "releaseInfo": "2026-05-20"
+    },
+    {
+      "id": "tt5177120",
+      "type": "movie",
+      "name": "The Ministry of Ungentlemanly Warfare",
+      "poster": "https://image.tmdb.org/t/p/w500/8aF0iAKH9MJMYAZdi0Slg77RYa2.jpg",
+      "releaseInfo": "2024-04-18"
+    },
+    {
+      "id": "tt8367814",
+      "type": "movie",
+      "name": "The Gentlemen",
+      "poster": "https://image.tmdb.org/t/p/w500/jtrhTYB7xSrJxR1vusu99nvnZ1g.jpg",
+      "releaseInfo": "2020-01-01"
+    },
+    {
+      "id": "tt4154756",
+      "type": "movie",
+      "name": "Avengers: Infinity War",
+      "poster": "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      "releaseInfo": "2018-04-25"
+    },
+    {
+      "id": "tt1745960",
+      "type": "movie",
+      "name": "Top Gun: Maverick",
+      "poster": "https://image.tmdb.org/t/p/w500/n0YuM4f5lvGAP6MAW2kBIzugXnc.jpg",
+      "releaseInfo": "2022-05-21"
+    },
+    {
+      "id": "tt0120804",
+      "type": "movie",
+      "name": "Resident Evil",
+      "poster": "https://image.tmdb.org/t/p/w500/1UKNef590A0ZaMnxsscIcWuK1Em.jpg",
+      "releaseInfo": "2002-03-15"
+    },
+    {
+      "id": "tt5950044",
+      "type": "movie",
+      "name": "Superman",
+      "poster": "https://image.tmdb.org/t/p/w500/ldyfo0BKmz5rWtJJKCvwaNS4cJT.jpg",
+      "releaseInfo": "2025-07-09"
+    },
+    {
+      "id": "tt34385135",
+      "type": "movie",
+      "name": "Colony",
+      "poster": "https://image.tmdb.org/t/p/w500/tN799oUR0f1gUKDYdMNrDaY7I51.jpg",
+      "releaseInfo": "2026-05-21"
+    },
+    {
+      "id": "tt18259538",
+      "type": "movie",
+      "name": "Avatar Aang: The Last Airbender",
+      "poster": "https://image.tmdb.org/t/p/w500/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg",
+      "releaseInfo": "2026-07-24"
+    },
+    {
+      "id": "tt33311069",
+      "type": "movie",
+      "name": "The Furious",
+      "poster": "https://image.tmdb.org/t/p/w500/ivQ1Z3lI1xWvAeGDHBw3CCYZDGJ.jpg",
+      "releaseInfo": "2026-06-10"
+    },
+    {
+      "id": "tt1341338",
+      "type": "movie",
+      "name": "Good Luck, Have Fun, Don't Die",
+      "poster": "https://image.tmdb.org/t/p/w500/rWcfOdY7TU6lTdazWj0ebDZnAfO.jpg",
+      "releaseInfo": "2026-02-13"
+    },
+    {
+      "id": "tt32333324",
+      "type": "movie",
+      "name": "Batman: Knightfall Part 1: Knightfall",
+      "poster": "https://image.tmdb.org/t/p/w500/360qdtu2hLnqMu8SVHMywn420w1.jpg",
+      "releaseInfo": "2026-06-23"
+    },
+    {
+      "id": "tt1375666",
+      "type": "movie",
+      "name": "Inception",
+      "poster": "https://image.tmdb.org/t/p/w500/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
+      "releaseInfo": "2010-07-15"
+    },
+    {
+      "id": "tt0468569",
+      "type": "movie",
+      "name": "The Dark Knight",
+      "poster": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+      "releaseInfo": "2008-07-16"
+    },
+    {
+      "id": "tt32338669",
+      "type": "movie",
+      "name": "Mutiny",
+      "poster": "https://image.tmdb.org/t/p/w500/pu2VxGlpGwffOx292w18b1tv96j.jpg",
+      "releaseInfo": "2026-08-19"
+    },
+    {
+      "id": "tt0133093",
+      "type": "movie",
+      "name": "The Matrix",
+      "poster": "https://image.tmdb.org/t/p/w500/aOIuZAjPaRIE6CMzbazvcHuHXDc.jpg",
+      "releaseInfo": "1999-03-31"
+    },
+    {
+      "id": "tt17490712",
+      "type": "movie",
+      "name": "Mortal Kombat II",
+      "poster": "https://image.tmdb.org/t/p/w500/hwRdDFIhaEmpRgoki805YvyyjZf.jpg",
+      "releaseInfo": "2026-05-06"
+    },
+    {
+      "id": "tt39316472",
+      "type": "movie",
+      "name": "Jackass: Best and Last",
+      "poster": "https://image.tmdb.org/t/p/w500/tfgccePxnswMqhmtxafliLlcCVR.jpg",
+      "releaseInfo": "2026-06-25"
+    },
+    {
+      "id": "tt0427340",
+      "type": "movie",
+      "name": "Masters of the Universe",
+      "poster": "https://image.tmdb.org/t/p/w500/oRuyGUHdoaQxWP3SDfafGkStxTC.jpg",
+      "releaseInfo": "2026-06-03"
+    },
+    {
+      "id": "tt6920084",
+      "type": "movie",
+      "name": "Resident Evil: Welcome to Raccoon City",
+      "poster": "https://image.tmdb.org/t/p/w500/bArhvjRHl535XMaSh9VjInF2mSZ.jpg",
+      "releaseInfo": "2021-11-24"
+    },
+    {
+      "id": "tt32558705",
+      "type": "movie",
+      "name": "The Hunger Games: Sunrise on the Reaping",
+      "poster": "https://image.tmdb.org/t/p/w500/jNcZH8yplxttRlf0wwqfGGMKHxX.jpg",
+      "releaseInfo": "2026-11-18"
+    },
+    {
+      "id": "tt10545296",
+      "type": "movie",
+      "name": "The Hunger Games: The Ballad of Songbirds & Snakes",
+      "poster": "https://image.tmdb.org/t/p/w500/mBaXZ95R2OxueZhvQbcEWy2DqyO.jpg",
+      "releaseInfo": "2023-11-15"
+    },
+    {
+      "id": "tt20969586",
+      "type": "movie",
+      "name": "Thunderbolts*",
+      "poster": "https://image.tmdb.org/t/p/w500/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg",
+      "releaseInfo": "2025-04-30"
+    },
+    {
+      "id": "tt2395427",
+      "type": "movie",
+      "name": "Avengers: Age of Ultron",
+      "poster": "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
+      "releaseInfo": "2015-04-22"
+    },
+    {
+      "id": "tt0848228",
+      "type": "movie",
+      "name": "The Avengers",
+      "poster": "https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
+      "releaseInfo": "2012-04-25"
+    },
+    {
+      "id": "tt0320661",
+      "type": "movie",
+      "name": "Kingdom of Heaven",
+      "poster": "https://image.tmdb.org/t/p/w500/2NaFdWy9hkM35vZB1hkqsnTcms8.jpg",
+      "releaseInfo": "2005-05-03"
+    },
+    {
+      "id": "tt32642706",
+      "type": "movie",
+      "name": "The Rip",
+      "poster": "https://image.tmdb.org/t/p/w500/4wsYWH73Hb1B6noGIFaRQSAkuXj.jpg",
+      "releaseInfo": "2026-01-13"
+    },
+    {
+      "id": "tt1950186",
+      "type": "movie",
+      "name": "Ford v Ferrari",
+      "poster": "https://image.tmdb.org/t/p/w500/dR1Ju50iudrOh3YgfwkAU1g2HZe.jpg",
+      "releaseInfo": "2019-11-13"
+    },
+    {
+      "id": "tt10676052",
+      "type": "movie",
+      "name": "The Fantastic 4: First Steps",
+      "poster": "https://image.tmdb.org/t/p/w500/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg",
+      "releaseInfo": "2025-07-23"
+    },
+    {
+      "id": "tt6263850",
+      "type": "movie",
+      "name": "Deadpool & Wolverine",
+      "poster": "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
+      "releaseInfo": "2024-07-24"
+    },
+    {
+      "id": "tt9601292",
+      "type": "movie",
+      "name": "The Fix",
+      "poster": "https://image.tmdb.org/t/p/w500/yopXjun3ICFfJci2ukcEzceZjUs.jpg",
+      "releaseInfo": "2026-09-10"
+    },
+    {
+      "id": "tt0145487",
+      "type": "movie",
+      "name": "Spider-Man",
+      "poster": "https://image.tmdb.org/t/p/w500/or6XJBVpcEbIkma0V9zshnbEtx4.jpg",
+      "releaseInfo": "2002-05-01"
+    },
+    {
+      "id": "tt3480822",
+      "type": "movie",
+      "name": "Black Widow",
+      "poster": "https://image.tmdb.org/t/p/w500/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg",
+      "releaseInfo": "2021-07-07"
+    },
+    {
+      "id": "tt1951266",
+      "type": "movie",
+      "name": "The Hunger Games: Mockingjay - Part 2",
+      "poster": "https://image.tmdb.org/t/p/w500/lImKHDfExAulp16grYm8zD5eONE.jpg",
+      "releaseInfo": "2015-11-18"
+    },
+    {
+      "id": "tt37833661",
+      "type": "movie",
+      "name": "Man of Tomorrow",
+      "poster": "https://image.tmdb.org/t/p/w500/tYLgfKk3cEk7LskgxWyW37Nty01.jpg",
+      "releaseInfo": "2027-07-07"
+    },
+    {
+      "id": "tt1640215",
+      "type": "movie",
+      "name": "Crossed",
+      "poster": "https://image.tmdb.org/t/p/w500/zAVBLd4f721CVo9bn9KXjRjDvUP.jpg"
+    },
+    {
+      "id": "tt9603208",
+      "type": "movie",
+      "name": "Mission: Impossible - The Final Reckoning",
+      "poster": "https://image.tmdb.org/t/p/w500/iKPsC9EFUafRP9SrUznI61getVP.jpg",
+      "releaseInfo": "2025-05-17"
+    },
+    {
+      "id": "tt34384661",
+      "type": "movie",
+      "name": "Godzilla Minus Zero",
+      "poster": "https://image.tmdb.org/t/p/w500/hSmIJluOJmTWvJs4d7kHRxjc8s8.jpg",
+      "releaseInfo": "2026-11-03"
+    },
+    {
+      "id": "tt6320628",
+      "type": "movie",
+      "name": "Spider-Man: Far From Home",
+      "poster": "https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg",
+      "releaseInfo": "2019-06-28"
+    },
+    {
+      "id": "tt0120737",
+      "type": "movie",
+      "name": "The Lord of the Rings: The Fellowship of the Ring",
+      "poster": "https://image.tmdb.org/t/p/w500/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+      "releaseInfo": "2001-12-18"
+    },
+    {
+      "id": "tt0120903",
+      "type": "movie",
+      "name": "X-Men",
+      "poster": "https://image.tmdb.org/t/p/w500/bRDAc4GogyS9ci3ow7UnInOcriN.jpg",
+      "releaseInfo": "2000-07-13"
+    },
+    {
+      "id": "tt27369017",
+      "type": "movie",
+      "name": "Hope",
+      "poster": "https://image.tmdb.org/t/p/w500/1n37BJchWHLiSYQkuFxe5KjB951.jpg",
+      "releaseInfo": "2026-07-15"
+    },
+    {
+      "id": "tt0318627",
+      "type": "movie",
+      "name": "Resident Evil: Apocalypse",
+      "poster": "https://image.tmdb.org/t/p/w500/yzNQSLlZb7NAkA4C5uADfNDJ7hm.jpg",
+      "releaseInfo": "2004-09-10"
+    },
+    {
+      "id": "tt0103064",
+      "type": "movie",
+      "name": "Terminator 2: Judgment Day",
+      "poster": "https://image.tmdb.org/t/p/w500/jFTVD4XoWQTcg7wdyJKa8PEds5q.jpg",
+      "releaseInfo": "1991-07-03"
+    },
+    {
+      "id": "tt10954600",
+      "type": "movie",
+      "name": "Ant-Man and the Wasp: Quantumania",
+      "poster": "https://image.tmdb.org/t/p/w500/qnqGbB22YJ7dSs4o6M7exTpNxPz.jpg",
+      "releaseInfo": "2023-02-15"
+    },
+    {
+      "id": "tt5433140",
+      "type": "movie",
+      "name": "Fast X",
+      "poster": "https://image.tmdb.org/t/p/w500/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
+      "releaseInfo": "2023-05-17"
+    },
+    {
+      "id": "tt15940132",
+      "type": "movie",
+      "name": "War Machine",
+      "poster": "https://image.tmdb.org/t/p/w500/rFhKkXhk7ClU03jQ5rHIApJDwev.jpg",
+      "releaseInfo": "2026-02-12"
+    },
+    {
+      "id": "tt0120616",
+      "type": "movie",
+      "name": "The Mummy",
+      "poster": "https://image.tmdb.org/t/p/w500/yhIsVvcUm7QxzLfT6HW2wLf5ajY.jpg",
+      "releaseInfo": "1999-04-16"
+    },
+    {
+      "id": "tt0088247",
+      "type": "movie",
+      "name": "The Terminator",
+      "poster": "https://image.tmdb.org/t/p/w500/qvktm0BHcnmDpul4Hz01GIazWPr.jpg",
+      "releaseInfo": "1984-10-26"
+    },
+    {
+      "id": "tt9419884",
+      "type": "movie",
+      "name": "Doctor Strange in the Multiverse of Madness",
+      "poster": "https://image.tmdb.org/t/p/w500/ddJcSKbcp4rKZTmuyWaMhuwcfMz.jpg",
+      "releaseInfo": "2022-05-04"
+    },
+    {
+      "id": "tt2250912",
+      "type": "movie",
+      "name": "Spider-Man: Homecoming",
+      "poster": "https://image.tmdb.org/t/p/w500/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg",
+      "releaseInfo": "2017-07-05"
+    },
+    {
+      "id": "tt16311594",
+      "type": "movie",
+      "name": "F1",
+      "poster": "https://image.tmdb.org/t/p/w500/9PXZIUsSDh4alB80jheWX4fhZmy.jpg",
+      "releaseInfo": "2025-06-25"
+    },
+    {
+      "id": "tt0371746",
+      "type": "movie",
+      "name": "Iron Man",
+      "poster": "https://image.tmdb.org/t/p/w500/78lPtwv72eTNqFW9COBYI0dWDJa.jpg",
+      "releaseInfo": "2008-04-30"
+    },
+    {
+      "id": "tt1345836",
+      "type": "movie",
+      "name": "The Dark Knight Rises",
+      "poster": "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg",
+      "releaseInfo": "2012-07-17"
+    },
+    {
+      "id": "tt3397884",
+      "type": "movie",
+      "name": "Sicario",
+      "poster": "https://image.tmdb.org/t/p/w500/lz8vNyXeidqqOdJW9ZjnDAMb5Vr.jpg",
+      "releaseInfo": "2015-09-17"
+    },
+    {
+      "id": "tt31195136",
+      "type": "movie",
+      "name": "Normal",
+      "poster": "https://image.tmdb.org/t/p/w500/t13MdGCKRZvkmrFW2A7Vih3QjwD.jpg",
+      "releaseInfo": "2026-04-16"
+    },
+    {
+      "id": "tt6723592",
+      "type": "movie",
+      "name": "Tenet",
+      "poster": "https://image.tmdb.org/t/p/w500/rrKH3VhHssGTCfPuaEQkxvEoElv.jpg",
+      "releaseInfo": "2020-08-22"
+    },
+    {
+      "id": "tt4495098",
+      "type": "movie",
+      "name": "Gran Turismo",
+      "poster": "https://image.tmdb.org/t/p/w500/51tqzRtKMMZEYUpSYkrUE7v9ehm.jpg",
+      "releaseInfo": "2023-08-09"
+    },
+    {
+      "id": "tt36042156",
+      "type": "movie",
+      "name": "The Punisher: One Last Kill",
+      "poster": "https://image.tmdb.org/t/p/w500/qQclTgLMDvGBuUBFGHRipxkEwWR.jpg",
+      "releaseInfo": "2026-05-12"
+    },
+    {
+      "id": "tt2015381",
+      "type": "movie",
+      "name": "Guardians of the Galaxy",
+      "poster": "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg",
+      "releaseInfo": "2014-07-30"
+    },
+    {
+      "id": "tt2382320",
+      "type": "movie",
+      "name": "No Time to Die",
+      "poster": "https://image.tmdb.org/t/p/w500/iUgygt3fscRoKWCV1d0C7FbM9TP.jpg",
+      "releaseInfo": "2021-09-29"
+    },
+    {
+      "id": "tt31227572",
+      "type": "movie",
+      "name": "Predator: Badlands",
+      "poster": "https://image.tmdb.org/t/p/w500/pHpq9yNUIo6aDoCXEBzjSolywgz.jpg",
+      "releaseInfo": "2025-11-05"
+    },
+    {
+      "id": "tt4633694",
+      "type": "movie",
+      "name": "Spider-Man: Into the Spider-Verse",
+      "poster": "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
+      "releaseInfo": "2018-12-06"
+    },
+    {
+      "id": "tt31189814",
+      "type": "movie",
+      "name": "Fuze",
+      "poster": "https://image.tmdb.org/t/p/w500/oMFdQE5hMJ9JjhNORegwTo0GKmh.jpg",
+      "releaseInfo": "2026-03-23"
+    },
+    {
+      "id": "tt1392170",
+      "type": "movie",
+      "name": "The Hunger Games",
+      "poster": "https://image.tmdb.org/t/p/w500/apa5G43Hha7kH7wJG0gkkHT7FA9.jpg",
+      "releaseInfo": "2012-03-12"
+    },
+    {
+      "id": "tt3498820",
+      "type": "movie",
+      "name": "Captain America: Civil War",
+      "poster": "https://image.tmdb.org/t/p/w500/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg",
+      "releaseInfo": "2016-04-27"
+    },
+    {
+      "id": "tt7888964",
+      "type": "movie",
+      "name": "Nobody",
+      "poster": "https://image.tmdb.org/t/p/w500/oBgWY00bEFeZ9N25wWVyuQddbAo.jpg",
+      "releaseInfo": "2021-03-18"
+    },
+    {
+      "id": "tt0258463",
+      "type": "movie",
+      "name": "The Bourne Identity",
+      "poster": "https://image.tmdb.org/t/p/w500/aP8swke3gmowbkfZ6lmNidu0y9p.jpg",
+      "releaseInfo": "2002-06-14"
+    },
+    {
+      "id": "tt6791350",
+      "type": "movie",
+      "name": "Guardians of the Galaxy Vol. 3",
+      "poster": "https://image.tmdb.org/t/p/w500/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg",
+      "releaseInfo": "2023-05-03"
+    },
+    {
+      "id": "tt2012616",
+      "type": "movie",
+      "name": "Motor City",
+      "poster": "https://image.tmdb.org/t/p/w500/rKws4iqKhrzWHVLHnwtMnCpEHhF.jpg",
+      "releaseInfo": "2026-07-23"
+    },
+    {
+      "id": "tt0172495",
+      "type": "movie",
+      "name": "Gladiator",
+      "poster": "https://image.tmdb.org/t/p/w500/aDb548BOkFfI4nFm0kx8A3Ezh7H.jpg",
+      "releaseInfo": "2000-05-04"
+    },
+    {
+      "id": "tt2592614",
+      "type": "movie",
+      "name": "Resident Evil: The Final Chapter",
+      "poster": "https://image.tmdb.org/t/p/w500/gytKL6fimeiTIjd9kl5bfjY2k4C.jpg",
+      "releaseInfo": "2016-12-23"
+    },
+    {
+      "id": "tt12446086",
+      "type": "movie",
+      "name": "Legend of the White Dragon",
+      "poster": "https://image.tmdb.org/t/p/w500/yygzww0GACtCMmwhtPG1P01qSx5.jpg",
+      "releaseInfo": "2026-08-28"
+    },
+    {
+      "id": "tt0499549",
+      "type": "movie",
+      "name": "Avatar",
+      "poster": "https://image.tmdb.org/t/p/w500/gKY6q7SjCkAU6FqvqWybDYgUKIF.jpg",
+      "releaseInfo": "2009-12-16"
+    },
+    {
+      "id": "tt0113277",
+      "type": "movie",
+      "name": "Heat",
+      "poster": "https://image.tmdb.org/t/p/w500/umSVjVdbVwtx5ryCA2QXL44Durm.jpg",
+      "releaseInfo": "1995-12-15"
+    },
+    {
+      "id": "tt9376612",
+      "type": "movie",
+      "name": "Shang-Chi and the Legend of the Ten Rings",
+      "poster": "https://image.tmdb.org/t/p/w500/9f2Q0U3IOsLgrI2HkvldwSABZy5.jpg",
+      "releaseInfo": "2021-09-01"
+    },
+    {
+      "id": "tt40231163",
+      "type": "movie",
+      "name": "Run Hide Fight: Infidels",
+      "poster": "https://image.tmdb.org/t/p/w500/gkVq1Pd46NF7AP5XQZfRHjQfCXX.jpg",
+      "releaseInfo": "2026-09-15"
+    },
+    {
+      "id": "tt31036941",
+      "type": "movie",
+      "name": "Jurassic World Rebirth",
+      "poster": "https://image.tmdb.org/t/p/w500/1RICxzeoNCAO5NpcRMIgg1XT6fm.jpg",
+      "releaseInfo": "2025-06-23"
+    },
+    {
+      "id": "tt0076759",
+      "type": "movie",
+      "name": "Star Wars",
+      "poster": "https://image.tmdb.org/t/p/w500/fai0rspsNeJCS69wHNjOdWxcI7P.jpg",
+      "releaseInfo": "1977-05-25"
+    },
+    {
+      "id": "tt10648342",
+      "type": "movie",
+      "name": "Thor: Love and Thunder",
+      "poster": "https://image.tmdb.org/t/p/w500/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg",
+      "releaseInfo": "2022-07-06"
+    },
+    {
+      "id": "tt0139414",
+      "type": "movie",
+      "name": "Lake Placid",
+      "poster": "https://image.tmdb.org/t/p/w500/pEszakCP8j9E9S0UPLfEa3Cad3O.jpg",
+      "releaseInfo": "1999-07-15"
+    },
+    {
+      "id": "tt3741700",
+      "type": "movie",
+      "name": "Godzilla: King of the Monsters",
+      "poster": "https://image.tmdb.org/t/p/w500/mzOHg7Q5q9yUmY0b9Esu8Qe6Nnm.jpg",
+      "releaseInfo": "2019-05-29"
+    },
+    {
+      "id": "tt35856037",
+      "type": "movie",
+      "name": "Your Mother Your Mother Your Mother",
+      "poster": "https://image.tmdb.org/t/p/w500/4KaPZSKnInnArErTTgy9Oy14leR.jpg",
+      "releaseInfo": "2026-09-25"
+    }
+  ]
+}
