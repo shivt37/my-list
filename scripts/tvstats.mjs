@@ -389,9 +389,11 @@ export async function main({
   // Operator-supplied clearance cookie (TS_CF_CLEARANCE secret): copied
   // once from a home browser where the site serves clean. Lets CI ride an
   // already-cleared session instead of solving the challenge from a
-  // datacenter IP. Never logged.
-  if (process.env.TS_CF_CLEARANCE) {
-    await context.addCookies([{ name: "cf_clearance", value: process.env.TS_CF_CLEARANCE, url: "https://televisionstats.com/" }]);
+  // datacenter IP. Trimmed: secret pastes often smuggle a trailing
+  // newline, which Chrome rejects as an invalid cookie field. Never logged.
+  const clearance = String(process.env.TS_CF_CLEARANCE || "").trim();
+  if (clearance) {
+    await context.addCookies([{ name: "cf_clearance", value: clearance, url: "https://televisionstats.com/" }]);
     console.log("[cookies] operator clearance loaded.");
   }
   const getHtml = (url) => fetchPageBrowser(context, url);
