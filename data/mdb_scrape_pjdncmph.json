@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1791720067533,
+  "scraped_at": 1791763268820,
   "items": [
+    {
+      "slug": "456bf-funny-money-the-dane-cook-story",
+      "imdb_id": "tt23148884",
+      "title": "Funny Money: The Dane Cook Story",
+      "year": 2026,
+      "score": null,
+      "poster_path": "5oKnnzzoOJk8v1wR4Qal8iRgllg.jpg",
+      "description": "At the height of his career, Dane Cook wasn't just selling out arenas; he was redefining what a stand-up comedian could be. Then, in a shocking betrayal, the person he trusted most stole millions of dollars, forever changing his life. FUNNY MONEY: THE DANECOOK STORY is a gripping documentary about fame, family, greed, and survival, revealing the extraordinary true story behind one of comedy's biggest icons.",
+      "digital_release_date": null
+    },
     {
       "slug": "418z2-flush",
       "imdb_id": "tt37520267",
@@ -59,7 +69,7 @@
       "imdb_id": "tt28498219",
       "title": "Matchbox the Movie",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "lFKA4GMz36dImEy3DQPdPF7G4V9.jpg",
       "description": "When a group of former childhood friends reconnect, their reunion takes a wild turn as they stumble upon a dangerous international plot—and must save the world.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 8,
       "poster_path": "zfFvltKHntGBupFuubx3r61v48e.jpg",
       "description": "Captured during Billie Eilish's sold-out world tour, a concert experience from one of the most celebrated and successful artists of her generation, presented in immersive 3D.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3fzci-chapter-51",
-      "imdb_id": "tt32166005",
-      "title": "Chapter 51",
-      "year": 2026,
-      "score": null,
-      "poster_path": "4EDvc5HG5f3PvRQp5DEnNAmsD5S.jpg",
-      "description": "An elusive serial killer known as the Hollywood Killer turns a high-profile film production into a grisly crime scene, murdering three actresses and casting a dark shadow over the troubled project. As fear, speculation, and chaos spread behind the cameras, the production becomes forever linked to a case that shocks Hollywood and remains unresolved. Years later, former FBI agent Thomas Scott reopens the cold case, revisiting the events surrounding the murders and uncovering secrets that refuse to stay buried.",
       "digital_release_date": null
     }
   ]
