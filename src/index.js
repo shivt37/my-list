@@ -11,7 +11,7 @@ import { handleClockWatchdog } from "./cron.js";
 // CLOCK binding (wrangler.toml). Re-export keeps the class in clock.js,
 // which has zero worker-only imports so it loads under plain node tests.
 export { Clock } from "./clock.js";
-import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleClockNext, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
+import { buildManifest, handleCatalog, handleStatus, handleSaveConfig, handleExportConfig, handleTriggerRefresh, handleRunsPost, handleClockNext, handleTsFetch, handleTmdbSearch, handleTmdbPreviewDiscover, handleTmdbNetworkSearch, handleTmdbNetworkDetail, handleTmdbDetail, handleMdblistOfficialCatalog, configureResponse, CATALOG_RE } from "./routes.js";
 import { statusPageResponse } from "./status.js";
 import { checkSession, isPublic, isAdminPath, isAuthEnabled, handleLogin, handleLogout, loginPageHtml } from "./auth.js";
 
@@ -119,6 +119,11 @@ export default {
 
     if (pathname === "/runs" && request.method === "POST") {
       return handleRunsPost(env, request);
+    }
+
+    // Television Stats fetch proxy (host-allowlisted in the handler).
+    if (pathname === "/ts-fetch") {
+      return handleTsFetch(env, request);
     }
 
     // TMDB live helpers (Discover form search boxes + preview).

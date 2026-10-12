@@ -153,6 +153,10 @@ export function isPublic(pathname) {
   // (they call /export-config and POST /runs with no browser cookie).
   if (pathname === "/export-config") return true;
   if (pathname === "/runs") return true;
+  // /ts-fetch is the same category: the tvstats workflow fetches chart
+  // HTML through it with no session. Host-allowlisted server-side, so
+  // openness here cannot turn it into a general proxy.
+  if (pathname === "/ts-fetch") return true;
   return false;
 }
 // F17: isAuthRoute deleted - never imported (index.js matches the

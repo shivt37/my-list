@@ -621,6 +621,39 @@ export async function handleExportConfig(env, request) {
   return json(cfg);
 }
 
+// GET /ts-fetch?url= - server-side fetch proxy for the Television Stats
+// workflow. Rationale: the site challenges datacenter IPs (CI runners)
+// while serving Cloudflare's own egress clean, so the worker fetches on
+// the workflow's behalf. Host-allowlisted to televisionstats.com ONLY -
+// anything else is a 400, so this can never become an open proxy.
+// Machine endpoint (like /runs): listed in isPublic, no session.
+export async function handleTsFetch(env, request) {
+  const raw = request ? new URL(request.url).searchParams.get("url") : null;
+  let u;
+  try {
+    u = new URL(String(raw || ""));
+  } catch {
+    return json({ error: "Missing or invalid url." }, 400);
+  }
+  if ((u.hostname !== "televisionstats.com" && u.hostname !== "www.televisionstats.com") || u.protocol !== "https:") {
+    return json({ error: "Only https://televisionstats.com URLs accepted." }, 400);
+  }
+  try {
+    const res = await fetch(u.toString(), {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      },
+      signal: AbortSignal.timeout(60000),
+    });
+    if (!res.ok) return json({ error: `Upstream ${res.status} for ${u.pathname}.` }, 502);
+    return new Response(await res.text(), { headers: { "content-type": "text/html; charset=utf-8" } });
+  } catch (e) {
+    return json({ error: "Upstream fetch failed: " + String((e && e.message) || e).slice(0, 200) }, 502);
+  }
+}
+
 // GET /clock-next[?module=] - next scheduled fire per module (or one
 // module), computed from the live KV timetable with the same code the
 // Clock uses. Powers the schedule editor's "next fire" line - must come

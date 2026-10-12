@@ -368,35 +368,50 @@ export async function main({
     targets = lists.filter((l) => l.enabled);
   }
   const cache = loadCacheFn();
-  // Headed under xvfb in CI (HEADFUL=1): a headed browser is what passes
-  // bot checks; headless locally is unchallenged either way.
-  const browser = launchBrowser ? await launchBrowser() : await chromium.launch({
-    headless: process.env.HEADFUL !== "1",
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-  });
-  // ONE shared context for the whole run: warm-up history and the
-  // Cloudflare clearance cookie must ride along on every later request -
-  // a fresh context per page would re-challenge every fetch from zero.
-  const context = await browser.newContext({
-    userAgent: REALISTIC_USER_AGENT,
-    viewport: { width: 1920, height: 1080 },
-    locale: "en-US",
-    timezoneId: "UTC",
-  });
-  await context.addInitScript(() => {
-    Object.defineProperty(navigator, "webdriver", { get: () => false });
-  });
-  // Operator-supplied clearance cookie (TS_CF_CLEARANCE secret): copied
-  // once from a home browser where the site serves clean. Lets CI ride an
-  // already-cleared session instead of solving the challenge from a
-  // datacenter IP. Trimmed: secret pastes often smuggle a trailing
-  // newline, which Chrome rejects as an invalid cookie field. Never logged.
-  const clearance = String(process.env.TS_CF_CLEARANCE || "").trim();
-  if (clearance) {
-    await context.addCookies([{ name: "cf_clearance", value: clearance, url: "https://televisionstats.com/" }]);
-    console.log("[cookies] operator clearance loaded.");
+  // Page source: worker proxy when TS_FETCH_BASE is set (CI - the worker's
+  // Cloudflare egress is unchallenged where datacenter IPs are not),
+  // headless browser otherwise (local runs). Proxy mode launches no
+  // browser at all.
+  const proxyBase = (process.env.TS_FETCH_BASE || "").replace(/\/+$/, "");
+  const getHtml = proxyBase
+    ? async (url) => {
+        const res = await fetch(`${proxyBase}/ts-fetch?url=${encodeURIComponent(url)}`);
+        if (!res.ok) throw new Error(`proxy fetch ${res.status} for ${url}`);
+        return res.text();
+      }
+    : async (url) => fetchPageBrowser(context, url);
+  let browser = null;
+  let context = null;
+  if (!proxyBase) {
+    // Headed under xvfb in CI (HEADFUL=1): a headed browser is what passes
+    // bot checks; headless locally is unchallenged either way.
+    browser = launchBrowser ? await launchBrowser() : await chromium.launch({
+      headless: process.env.HEADFUL !== "1",
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+    });
+    // ONE shared context for the whole run: warm-up history and the
+    // Cloudflare clearance cookie must ride along on every later request -
+    // a fresh context per page would re-challenge every fetch from zero.
+    context = await browser.newContext({
+      userAgent: REALISTIC_USER_AGENT,
+      viewport: { width: 1920, height: 1080 },
+      locale: "en-US",
+      timezoneId: "UTC",
+    });
+    await context.addInitScript(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => false });
+    });
+    // Operator-supplied clearance cookie (TS_CF_CLEARANCE secret): copied
+    // once from a home browser where the site serves clean. Lets CI ride an
+    // already-cleared session instead of solving the challenge from a
+    // datacenter IP. Trimmed: secret pastes often smuggle a trailing
+    // newline, which Chrome rejects as an invalid cookie field. Never logged.
+    const clearance = String(process.env.TS_CF_CLEARANCE || "").trim();
+    if (clearance) {
+      await context.addCookies([{ name: "cf_clearance", value: clearance, url: "https://televisionstats.com/" }]);
+      console.log("[cookies] operator clearance loaded.");
+    }
   }
-  const getHtml = (url) => fetchPageBrowser(context, url);
   const runs = [];
   const results = [];
   let consecutiveFailures = 0;
@@ -448,8 +463,8 @@ export async function main({
     await sleep(2500 + Math.random() * 2500);
   }
   } finally {
-    await context.close().catch(() => {});
-    await browser.close().catch(() => {});
+    if (context) await context.close().catch(() => {});
+    if (browser) await browser.close().catch(() => {});
   }
 
   await recordRuns(runs);
