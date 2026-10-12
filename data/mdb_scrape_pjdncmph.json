@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1791763268820,
+  "scraped_at": 1791806467323,
   "items": [
+    {
+      "slug": "45flp-clown-panic",
+      "imdb_id": "tt46659729",
+      "title": "Clown Panic",
+      "year": 2026,
+      "score": null,
+      "poster_path": "pZ15WSO7UzzJ297SLBMvxHNQDC1.jpg",
+      "description": "Revisits the bizarre nationwide hysteria of 2016, which began with reports of creepy clowns hiding near woods in South Carolina and quickly spiraled into widespread panic, school lockdowns, and police interventions across the United States. This in-depth documentary features interviews with eyewitnesses, law enforcement officials, cultural commentators, and professional clowns whose livelihoods were impacted by the craze.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3hlbi-practical-magic-2",
+      "imdb_id": "tt32588798",
+      "title": "Practical Magic 2",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg",
+      "description": "The Owens sisters must confront the dark curse that threatens to unravel their family once and for all.",
+      "digital_release_date": null
+    },
     {
       "slug": "456bf-funny-money-the-dane-cook-story",
       "imdb_id": "tt23148884",
@@ -871,7 +891,7 @@
       "year": 2026,
       "score": 7,
       "poster_path": "dgTKahWonzVLeN8Lm22WR2S7D0A.jpg",
-      "description": "Sophie Birenbaum is ready for the spotlight as the lead in her high school musical — until she's suddenly facing more drama at home than on the stage.",
+      "description": "Sophie Birenbaum is ready for the spotlight as the lead in her high school musical—until she's suddenly facing more drama at home than on the stage.",
       "digital_release_date": null
     },
     {
@@ -1422,26 +1442,6 @@
       "score": 3,
       "poster_path": "7I797gF8aGuTRSVeM3lu84PZouk.jpg",
       "description": "After thirty-five years abroad, Donal returns to his native Scotland to make amends with his estranged brother Sandy.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3lhnt-finding-emily",
-      "imdb_id": "tt32499466",
-      "title": "Finding Emily",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "bfEQ6C702oPsN4kzIiY7n4JsrxF.jpg",
-      "description": "When a lovesick musician is given the wrong number for his dream girl, he teams up with a driven psychology student to find her. Together, they spark a hilarious campus-wide frenzy that tests their own hearts and ambitions along the way.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "41m4p-billie-eilish-hit-me-hard-and-soft-the-tour-live-in-3d",
-      "imdb_id": "tt39018643",
-      "title": "Billie Eilish - Hit Me Hard and Soft: The Tour (Live in 3D)",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "zfFvltKHntGBupFuubx3r61v48e.jpg",
-      "description": "Captured during Billie Eilish's sold-out world tour, a concert experience from one of the most celebrated and successful artists of her generation, presented in immersive 3D.",
       "digital_release_date": null
     }
   ]
