@@ -7,10 +7,9 @@
  * data/tvstats_<id>.json (served via GitHub Pages), and POSTs run records
  * to the worker's /runs endpoint.
  *
- * Page fetching mirrors scripts/scrape.mjs exactly: one headless-Chromium
- * browser per run (puppeteer-extra + stealth), warm-up visit, fresh page
- * per URL, challenge-title + 403 checks that fail LOUD. No fallback
- * mechanism - a block is a failed run, never a silent workaround.
+ * Page fetching goes through the worker's /ts-fetch proxy (TS_FETCH_BASE):
+ * the worker's Cloudflare egress is unchallenged where datacenter IPs are
+ * not, so no browser machinery is needed anywhere in this script.
  *
  * Identity cache: data/ts_cache.json maps slug -> { kind, imdb, tmdb }.
  * A title's identity never changes, so each slug resolves once ever;
@@ -33,10 +32,6 @@
 import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
-import { chromium } from "playwright-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-
-chromium.use(StealthPlugin());
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, "..");
@@ -46,72 +41,16 @@ export const CACHE_FILE = join(DATA_DIR, "ts_cache.json");
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
 const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 
-// ── page fetching (Playwright + stealth, current-gen anti-bot stack) ──
-// One browser per run, warm-up visit, fresh context+page per URL,
-// challenge and 403 checks that fail LOUD. No fallback layer: a block is
-// a failed run. CI runs headed under xvfb (HEADFUL=1); local runs stay
-// headless (home IPs are unchallenged either way).
+// ── page fetching: worker proxy only ──
+// All chart/detail HTML flows through GET <TS_FETCH_BASE>/ts-fetch?url=.
+// The worker's Cloudflare egress is unchallenged where datacenter IPs are
+// not, so no browser machinery is needed anywhere in this script.
 
-const REALISTIC_USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
-
-let warmedUpContext = null;
-
-// Mimics a real visitor: homepage → chart, once per run. Jumping straight
-// to a chart URL with no browsing history is what trips bot detection.
-// Runs on the run's ONE shared context: the Cloudflare clearance cookie
-// from the solved challenge must ride along on every later request - a
-// fresh context per page would re-challenge every fetch from zero.
-async function warmUpSession(context) {
-  if (warmedUpContext === context) return;
-  const page = await context.newPage();
-  try {
-    console.log("[warmUp] Visiting homepage...");
-    // domcontentloaded + sleeps (not networkidle): the site's persistent
-    // connections never settle, so networkidle hangs. Content readiness
-    // is enforced per-page by waitForSelector below.
-    await page.goto("https://televisionstats.com/", { waitUntil: "domcontentloaded", timeout: 60000 });
-    await sleep(3000 + Math.random() * 2000);
-    console.log("[warmUp] Visiting chart...");
-    await page.goto("https://televisionstats.com/topmovies", { waitUntil: "domcontentloaded", timeout: 60000, referer: "https://televisionstats.com/" });
-    await sleep(2000 + Math.random() * 2000);
-    warmedUpContext = context;
-    console.log("[warmUp] Done.");
-  } finally {
-    await page.close();
-  }
-}
-
-export async function fetchPageBrowser(context, url) {
-  await warmUpSession(context);
-  const page = await context.newPage();
-  try {
-    const response = await page.goto(url, {
-      waitUntil: "domcontentloaded",
-      timeout: 120000,
-      referer: "https://televisionstats.com/",
-    });
-
-    const title = await page.title();
-    if (/just a moment|attention required|checking your browser/i.test(title)) {
-      throw new Error(`Blocked by Cloudflare challenge (page title: "${title}")`);
-    }
-    if (response?.status() === 403) {
-      throw new Error(`Blocked by televisionstats.com (HTTP 403, page title: "${title}")`);
-    }
-
-    try {
-      // state "attached": the blob lives in a <script> tag, which is
-      // never "visible" - the default visibility wait would time out
-      // on a perfectly loaded page.
-      await page.waitForSelector("#__NEXT_DATA__", { state: "attached", timeout: 20000 });
-    } catch {
-      throw new Error(`data blob not found within 20s at ${url} - page may be blocked or slow`);
-    }
-    return page.content();
-  } finally {
-    await page.close();
-  }
+export async function fetchProxyHtml(url, base = process.env.TS_FETCH_BASE) {
+  if (!base) throw new Error("TS_FETCH_BASE is not set - point it at the worker origin.");
+  const res = await fetch(`${String(base).replace(/\/+$/, "")}/ts-fetch?url=${encodeURIComponent(url)}`);
+  if (!res.ok) throw new Error(`proxy fetch ${res.status} for ${url}`);
+  return res.text();
 }
 
 export function arg(name) {
@@ -210,7 +149,7 @@ export function detailUrl(kind, slug) {
 
 // Movies: imdb_id comes from TS's own detail record - exact by
 // construction. Verified by format + chart/detail title agreement.
-// getHtml(url) returns page HTML (browser-backed in prod, stub in tests).
+// getHtml(url) returns page HTML (proxy-backed in prod, stub in tests).
 export async function resolveMovie(row, getHtml) {
   const pp = pageProps(await getHtml(detailUrl("movie", row.slug)));
   const mv = pp.movie || {};
@@ -340,7 +279,6 @@ export async function main({
   recordRuns = postRuns,
   loadCacheFn = loadCache,
   saveCacheFn = saveCache,
-  launchBrowser = null,
 } = {}) {
   const SANE_ID = /^tvstats_[a-z0-9]{8}$/;
   if (action === "delete") {
@@ -368,54 +306,10 @@ export async function main({
     targets = lists.filter((l) => l.enabled);
   }
   const cache = loadCacheFn();
-  // Page source: worker proxy when TS_FETCH_BASE is set (CI - the worker's
-  // Cloudflare egress is unchallenged where datacenter IPs are not),
-  // headless browser otherwise (local runs). Proxy mode launches no
-  // browser at all.
-  const proxyBase = (process.env.TS_FETCH_BASE || "").replace(/\/+$/, "");
-  const getHtml = proxyBase
-    ? async (url) => {
-        const res = await fetch(`${proxyBase}/ts-fetch?url=${encodeURIComponent(url)}`);
-        if (!res.ok) throw new Error(`proxy fetch ${res.status} for ${url}`);
-        return res.text();
-      }
-    : async (url) => fetchPageBrowser(context, url);
-  let browser = null;
-  let context = null;
-  if (!proxyBase) {
-    // Headed under xvfb in CI (HEADFUL=1): a headed browser is what passes
-    // bot checks; headless locally is unchallenged either way.
-    browser = launchBrowser ? await launchBrowser() : await chromium.launch({
-      headless: process.env.HEADFUL !== "1",
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-    });
-    // ONE shared context for the whole run: warm-up history and the
-    // Cloudflare clearance cookie must ride along on every later request -
-    // a fresh context per page would re-challenge every fetch from zero.
-    context = await browser.newContext({
-      userAgent: REALISTIC_USER_AGENT,
-      viewport: { width: 1920, height: 1080 },
-      locale: "en-US",
-      timezoneId: "UTC",
-    });
-    await context.addInitScript(() => {
-      Object.defineProperty(navigator, "webdriver", { get: () => false });
-    });
-    // Operator-supplied clearance cookie (TS_CF_CLEARANCE secret): copied
-    // once from a home browser where the site serves clean. Lets CI ride an
-    // already-cleared session instead of solving the challenge from a
-    // datacenter IP. Trimmed: secret pastes often smuggle a trailing
-    // newline, which Chrome rejects as an invalid cookie field. Never logged.
-    const clearance = String(process.env.TS_CF_CLEARANCE || "").trim();
-    if (clearance) {
-      await context.addCookies([{ name: "cf_clearance", value: clearance, url: "https://televisionstats.com/" }]);
-      console.log("[cookies] operator clearance loaded.");
-    }
-  }
+  const getHtml = (url) => fetchProxyHtml(url);
   const runs = [];
   const results = [];
   let consecutiveFailures = 0;
-  try {
   for (const t of targets) {
     if (consecutiveFailures >= 3) {
       console.error(`Stopping - ${consecutiveFailures} consecutive failed lists (likely blocked); aborting remaining batch.`);
@@ -458,13 +352,10 @@ export async function main({
       console.error(`[${run.catalog_id}] failed: ${e.message}`);
       consecutiveFailures++;
     }
+    runs.push(run);
     // S8 (mirrored from scrape.mjs): breathe between lists - back-to-back
     // chart + detail bursts are what trips bot detection.
     await sleep(2500 + Math.random() * 2500);
-  }
-  } finally {
-    if (context) await context.close().catch(() => {});
-    if (browser) await browser.close().catch(() => {});
   }
 
   await recordRuns(runs);
