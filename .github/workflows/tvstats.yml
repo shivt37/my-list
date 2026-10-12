@@ -100,6 +100,7 @@ jobs:
         env:
           TMDB_READ_ACCESS_TOKEN: ${{ secrets.TMDB_READ_ACCESS_TOKEN }}
           WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          HEADFUL: "1"
           INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
           INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
           INPUT_DELETE_IDS: ${{ steps.sanitize.outputs.delete_ids }}
@@ -111,7 +112,9 @@ jobs:
           if [ "${INPUT_ACTION}" = "delete" ]; then
             [ -n "${INPUT_DELETE_IDS}" ] && ARGS+=("--delete_ids=${INPUT_DELETE_IDS}")
           fi
-          node tvstats.mjs "${ARGS[@]}"
+          # Headed browser under Xvfb: headed Chromium is what passes bot
+          # checks from datacenter IPs (xvfb preinstalled on runners).
+          xvfb-run -a node tvstats.mjs "${ARGS[@]}"
 
       - name: Commit data changes
         if: always()

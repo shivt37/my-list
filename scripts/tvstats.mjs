@@ -33,10 +33,10 @@
 import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
-import puppeteer from "puppeteer-extra";
+import { chromium } from "playwright-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
-puppeteer.use(StealthPlugin());
+chromium.use(StealthPlugin());
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, "..");
@@ -46,9 +46,11 @@ export const CACHE_FILE = join(DATA_DIR, "ts_cache.json");
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
 const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 
-// ── page fetching (mirrors scripts/scrape.mjs) ──
-// One browser per run, warm-up visit, fresh page per URL, challenge and
-// 403 checks that fail LOUD. No fallback layer: a block is a failed run.
+// ── page fetching (Playwright + stealth, current-gen anti-bot stack) ──
+// One browser per run, warm-up visit, fresh context+page per URL,
+// challenge and 403 checks that fail LOUD. No fallback layer: a block is
+// a failed run. CI runs headed under xvfb (HEADFUL=1); local runs stay
+// headless (home IPs are unchallenged either way).
 
 const REALISTIC_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
@@ -61,40 +63,49 @@ async function warmUpSession(browser) {
   // Warm-up is per browser object (cookies/history die with it) - a fresh
   // launch after a close must warm up again.
   if (warmedUpBrowser === browser) return;
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    userAgent: REALISTIC_USER_AGENT,
+    viewport: { width: 1920, height: 1080 },
+    locale: "en-US",
+    timezoneId: "UTC",
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+  });
+  const page = await context.newPage();
   try {
-    await page.setUserAgent(REALISTIC_USER_AGENT);
-    await page.setViewport({ width: 1920, height: 1080 });
-    await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, "webdriver", { get: () => false });
-    });
     console.log("[warmUp] Visiting homepage...");
-    await page.goto("https://televisionstats.com/", { waitUntil: "networkidle2", timeout: 60000 });
+    // domcontentloaded + sleeps (not networkidle): the site's persistent
+    // connections never settle, so networkidle hangs. Content readiness
+    // is enforced per-page by waitForSelector below.
+    await page.goto("https://televisionstats.com/", { waitUntil: "domcontentloaded", timeout: 60000 });
     await sleep(3000 + Math.random() * 2000);
     console.log("[warmUp] Visiting chart...");
-    await page.goto("https://televisionstats.com/topmovies", { waitUntil: "networkidle2", timeout: 60000, referer: "https://televisionstats.com/" });
+    await page.goto("https://televisionstats.com/topmovies", { waitUntil: "domcontentloaded", timeout: 60000, referer: "https://televisionstats.com/" });
     await sleep(2000 + Math.random() * 2000);
     warmedUpBrowser = browser;
     console.log("[warmUp] Done.");
   } finally {
     await page.close();
+    await context.close();
   }
 }
 
 export async function fetchPageBrowser(browser, url) {
   await warmUpSession(browser);
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    userAgent: REALISTIC_USER_AGENT,
+    viewport: { width: 1920, height: 1080 },
+    locale: "en-US",
+    timezoneId: "UTC",
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+  });
+  const page = await context.newPage();
   try {
-    await page.setUserAgent(REALISTIC_USER_AGENT);
-    await page.setViewport({ width: 1920, height: 1080 });
-    await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, "webdriver", { get: () => false });
-    });
-
     const response = await page.goto(url, {
-      waitUntil: "networkidle2",
+      waitUntil: "domcontentloaded",
       timeout: 120000,
       referer: "https://televisionstats.com/",
     });
@@ -108,13 +119,17 @@ export async function fetchPageBrowser(browser, url) {
     }
 
     try {
-      await page.waitForSelector("#__NEXT_DATA__", { timeout: 20000 });
+      // state "attached": the blob lives in a <script> tag, which is
+      // never "visible" - the default visibility wait would time out
+      // on a perfectly loaded page.
+      await page.waitForSelector("#__NEXT_DATA__", { state: "attached", timeout: 20000 });
     } catch {
       throw new Error(`data blob not found within 20s at ${url} - page may be blocked or slow`);
     }
     return page.content();
   } finally {
     await page.close();
+    await context.close();
   }
 }
 
@@ -372,17 +387,11 @@ export async function main({
     targets = lists.filter((l) => l.enabled);
   }
   const cache = loadCacheFn();
-  const browser = launchBrowser ? await launchBrowser() : await puppeteer.launch({
-    headless: true,
-    protocolTimeout: 120000,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-blink-features=AutomationControlled",
-      "--disable-features=IsolateOrigins,site-per-process",
-      "--window-size=1920,1080",
-    ],
+  // Headed under xvfb in CI (HEADFUL=1): a headed browser is what passes
+  // bot checks; headless locally is unchallenged either way.
+  const browser = launchBrowser ? await launchBrowser() : await chromium.launch({
+    headless: process.env.HEADFUL !== "1",
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
   });
   const getHtml = (url) => fetchPageBrowser(browser, url);
   const runs = [];
