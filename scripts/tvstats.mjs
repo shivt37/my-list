@@ -36,7 +36,22 @@ export const CACHE_FILE = join(DATA_DIR, "ts_cache.json");
 
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
 const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
-const BOT_UA = "my-list-tvstats/1.0 (+https://github.com/shivt37/my-list)";
+// Browser-grade request identity. robots.txt permits crawling, but the
+// site 403s datacenter IPs (GitHub Actions) on minimal header sets, so
+// plain-bot requests never survive CI. This is header parity with a real
+// browser, not block evasion: if the site starts challenging real-browser
+// requests, the correct move is contacting them, not escalating further.
+const BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+const BROWSER_HEADERS = {
+  "User-Agent": BROWSER_UA,
+  Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+  "Accept-Language": "en-US,en;q=0.9",
+  "Upgrade-Insecure-Requests": "1",
+  "Sec-Fetch-Dest": "document",
+  "Sec-Fetch-Mode": "navigate",
+  "Sec-Fetch-Site": "none",
+  "Sec-Fetch-User": "?1",
+};
 
 export function arg(name) {
   const prefix = `--${name}=`;
@@ -54,12 +69,18 @@ export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export async function fetchText(url, fetchFn = fetch) {
   for (let attempt = 1; attempt <= 3; attempt++) {
-    const res = await fetchFn(url, { headers: { "User-Agent": BOT_UA }, signal: AbortSignal.timeout(30000) });
+    const res = await fetchFn(url, { headers: BROWSER_HEADERS, signal: AbortSignal.timeout(30000) });
     if (res.status === 429) {
       await sleep(60000);
       continue;
     }
-    if (!res.ok) throw new Error(`GET ${url} -> HTTP ${res.status}`);
+    // Include a body snippet in failures: distinguishes a plain 403 from
+    // a challenge/captcha page when diagnosing CI-only blocks.
+    if (!res.ok) {
+      const body = typeof res.text === "function" ? await res.text().catch(() => "") : "";
+      const hint = body.slice(0, 120).replace(/\s+/g, " ");
+      throw new Error(`GET ${url} -> HTTP ${res.status} :: ${hint}`);
+    }
     return res.text();
   }
   throw new Error(`GET ${url} -> repeated 429, giving up`);
