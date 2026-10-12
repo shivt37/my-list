@@ -7,6 +7,11 @@
  * data/tvstats_<id>.json (served via GitHub Pages), and POSTs run records
  * to the worker's /runs endpoint.
  *
+ * Page fetching mirrors scripts/scrape.mjs exactly: one headless-Chromium
+ * browser per run (puppeteer-extra + stealth), warm-up visit, fresh page
+ * per URL, challenge-title + 403 checks that fail LOUD. No fallback
+ * mechanism - a block is a failed run, never a silent workaround.
+ *
  * Identity cache: data/ts_cache.json maps slug -> { kind, imdb, tmdb }.
  * A title's identity never changes, so each slug resolves once ever;
  * steady-state runs only fetch new slugs. Committed by the workflow
@@ -28,6 +33,10 @@
 import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+
+puppeteer.use(StealthPlugin());
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, "..");
@@ -36,22 +45,78 @@ export const CACHE_FILE = join(DATA_DIR, "ts_cache.json");
 
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
 const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
-// Browser-grade request identity. robots.txt permits crawling, but the
-// site 403s datacenter IPs (GitHub Actions) on minimal header sets, so
-// plain-bot requests never survive CI. This is header parity with a real
-// browser, not block evasion: if the site starts challenging real-browser
-// requests, the correct move is contacting them, not escalating further.
-const BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
-const BROWSER_HEADERS = {
-  "User-Agent": BROWSER_UA,
-  Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-  "Accept-Language": "en-US,en;q=0.9",
-  "Upgrade-Insecure-Requests": "1",
-  "Sec-Fetch-Dest": "document",
-  "Sec-Fetch-Mode": "navigate",
-  "Sec-Fetch-Site": "none",
-  "Sec-Fetch-User": "?1",
-};
+
+// ── page fetching (mirrors scripts/scrape.mjs) ──
+// One browser per run, warm-up visit, fresh page per URL, challenge and
+// 403 checks that fail LOUD. No fallback layer: a block is a failed run.
+
+const REALISTIC_USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+
+let warmedUpBrowser = null;
+
+// Mimics a real visitor: homepage → chart, once per run. Jumping straight
+// to a chart URL with no browsing history is what trips bot detection.
+async function warmUpSession(browser) {
+  // Warm-up is per browser object (cookies/history die with it) - a fresh
+  // launch after a close must warm up again.
+  if (warmedUpBrowser === browser) return;
+  const page = await browser.newPage();
+  try {
+    await page.setUserAgent(REALISTIC_USER_AGENT);
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => false });
+    });
+    console.log("[warmUp] Visiting homepage...");
+    await page.goto("https://televisionstats.com/", { waitUntil: "networkidle2", timeout: 60000 });
+    await sleep(3000 + Math.random() * 2000);
+    console.log("[warmUp] Visiting chart...");
+    await page.goto("https://televisionstats.com/topmovies", { waitUntil: "networkidle2", timeout: 60000, referer: "https://televisionstats.com/" });
+    await sleep(2000 + Math.random() * 2000);
+    warmedUpBrowser = browser;
+    console.log("[warmUp] Done.");
+  } finally {
+    await page.close();
+  }
+}
+
+export async function fetchPageBrowser(browser, url) {
+  await warmUpSession(browser);
+  const page = await browser.newPage();
+  try {
+    await page.setUserAgent(REALISTIC_USER_AGENT);
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => false });
+    });
+
+    const response = await page.goto(url, {
+      waitUntil: "networkidle2",
+      timeout: 120000,
+      referer: "https://televisionstats.com/",
+    });
+
+    const title = await page.title();
+    if (/just a moment|attention required|checking your browser/i.test(title)) {
+      throw new Error(`Blocked by Cloudflare challenge (page title: "${title}")`);
+    }
+    if (response?.status() === 403) {
+      throw new Error(`Blocked by televisionstats.com (HTTP 403, page title: "${title}")`);
+    }
+
+    try {
+      await page.waitForSelector("#__NEXT_DATA__", { timeout: 20000 });
+    } catch {
+      throw new Error(`data blob not found within 20s at ${url} - page may be blocked or slow`);
+    }
+    return page.content();
+  } finally {
+    await page.close();
+  }
+}
 
 export function arg(name) {
   const prefix = `--${name}=`;
@@ -64,84 +129,6 @@ const actionArg = arg("action") || "generate";
 const deleteIdsArg = arg("delete_ids");
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-// ── fetch helpers ──
-
-export async function fetchText(url, fetchFn = fetch) {
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const res = await fetchFn(url, { headers: BROWSER_HEADERS, signal: AbortSignal.timeout(30000) });
-    if (res.status === 429) {
-      await sleep(60000);
-      continue;
-    }
-    // Include a body snippet in failures: distinguishes a plain 403 from
-    // a challenge/captcha page when diagnosing CI-only blocks.
-    if (!res.ok) {
-      const body = typeof res.text === "function" ? await res.text().catch(() => "") : "";
-      const hint = body.slice(0, 120).replace(/\s+/g, " ");
-      throw new Error(`GET ${url} -> HTTP ${res.status} :: ${hint}`);
-    }
-    return res.text();
-  }
-  throw new Error(`GET ${url} -> repeated 429, giving up`);
-}
-
-// ── headless-Chrome fallback (Cloudflare "Just a moment" challenge) ──
-// The site 403-challenges datacenter IPs (CI runners) while serving homes
-// fine. Headers can't pass that - only a real browser engine with JS can.
-// One browser per run, reused for every page; puppeteer(-extra/stealth)
-// load lazily so unit tests and API-only paths never need the dependency.
-// If the challenge ever turns interactive (CAPTCHA), waitForFunction times
-// out and the run fails LOUD - that is the stop-and-contact-them signal,
-// never something to engineer around.
-let _browser = null;
-async function chromeBrowser() {
-  if (!_browser) {
-    const { default: puppeteer } = await import("puppeteer-extra");
-    const { default: StealthPlugin } = await import("puppeteer-extra-plugin-stealth");
-    puppeteer.use(StealthPlugin());
-    _browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-    });
-  }
-  return _browser;
-}
-
-export async function closeBrowser() {
-  if (_browser) {
-    try { await _browser.close(); } catch { /* already dead */ }
-    _browser = null;
-  }
-}
-
-export async function chromeFetchText(url, browserFn = chromeBrowser) {
-  const browser = await browserFn();
-  const page = await browser.newPage();
-  try {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
-    // The challenge page has no data blob - only return once the real
-    // page (challenge auto-resolved) carries it.
-    await page.waitForFunction(() => !!document.getElementById("__NEXT_DATA__"), { timeout: 90000 });
-    return await page.content();
-  } finally {
-    await page.close().catch(() => {});
-  }
-}
-
-export function isChallengeError(e) {
-  return /HTTP 403|Just a moment/i.test(String((e && e.message) || e));
-}
-
-// Node-first (fast where unblocked), Chrome only on challenge blocks.
-export async function fetchTextSmart(url, fetchFn = fetch, chromeFn = chromeFetchText) {
-  try {
-    return await fetchText(url, fetchFn);
-  } catch (e) {
-    if (!isChallengeError(e)) throw e;
-    return chromeFn(url);
-  }
-}
 
 export async function tmdbGet(path, params = {}, fetchFn = fetch) {
   if (!TMDB_TOKEN) throw new Error("TMDB_READ_ACCESS_TOKEN is not set - cannot resolve show IDs.");
@@ -227,8 +214,9 @@ export function detailUrl(kind, slug) {
 
 // Movies: imdb_id comes from TS's own detail record - exact by
 // construction. Verified by format + chart/detail title agreement.
-export async function resolveMovie(row, fetchTextFn = fetchText, chromeFn = chromeFetchText) {
-  const pp = pageProps(await fetchTextSmart(detailUrl("movie", row.slug), fetchTextFn, chromeFn));
+// getHtml(url) returns page HTML (browser-backed in prod, stub in tests).
+export async function resolveMovie(row, getHtml) {
+  const pp = pageProps(await getHtml(detailUrl("movie", row.slug)));
   const mv = pp.movie || {};
   const imdb = mv.imdb_id || null;
   if (!imdb || !/^tt\d{7,8}$/.test(imdb)) throw new Error(`no imdb_id for movie slug ${row.slug}`);
@@ -239,8 +227,8 @@ export async function resolveMovie(row, fetchTextFn = fetchText, chromeFn = chro
 // Shows: TS carries no IDs, so one TMDB tv-search (year-filtered) plus
 // one external_ids call, accepted ONLY on exact first_air_date + title
 // agreement. imdb missing on the TMDB record -> tmdb:<id> fallback id.
-export async function resolveShow(row, fetchTextFn = fetchText, tmdbGetFn = tmdbGet, chromeFn = chromeFetchText) {
-  const pp = pageProps(await fetchTextSmart(detailUrl("series", row.slug), fetchTextFn, chromeFn));
+export async function resolveShow(row, getHtml, tmdbGetFn = tmdbGet) {
+  const pp = pageProps(await getHtml(detailUrl("series", row.slug)));
   const sh = pp.show || {};
   const title = sh.name || row.title;
   const firstAir = sh.first_air_date || row.date;
@@ -351,13 +339,12 @@ export async function main({
   action = actionArg,
   deleteIds = deleteIdsArg,
   fetchCfg = fetchConfig,
-  fetchTextFn = fetchText,
-  chromeFn = chromeFetchText,
   tmdbGetFn = tmdbGet,
   write = writeCatalog,
   recordRuns = postRuns,
   loadCacheFn = loadCache,
   saveCacheFn = saveCache,
+  launchBrowser = null,
 } = {}) {
   const SANE_ID = /^tvstats_[a-z0-9]{8}$/;
   if (action === "delete") {
@@ -385,13 +372,32 @@ export async function main({
     targets = lists.filter((l) => l.enabled);
   }
   const cache = loadCacheFn();
+  const browser = launchBrowser ? await launchBrowser() : await puppeteer.launch({
+    headless: true,
+    protocolTimeout: 120000,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-blink-features=AutomationControlled",
+      "--disable-features=IsolateOrigins,site-per-process",
+      "--window-size=1920,1080",
+    ],
+  });
+  const getHtml = (url) => fetchPageBrowser(browser, url);
   const runs = [];
   const results = [];
+  let consecutiveFailures = 0;
+  try {
   for (const t of targets) {
+    if (consecutiveFailures >= 3) {
+      console.error(`Stopping - ${consecutiveFailures} consecutive failed lists (likely blocked); aborting remaining batch.`);
+      break;
+    }
     const startedAt = Date.now();
     const run = { catalog_id: t.id, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
     try {
-      const rows = chartRows(t.kind, await fetchTextSmart(t.url, fetchTextFn, chromeFn)).slice(0, t.maxItems || 100);
+      const rows = chartRows(t.kind, await getHtml(t.url)).slice(0, t.maxItems || 100);
       if (rows.length === 0) throw new Error(`chart ${t.url} returned no rows - refusing to overwrite`);
       const items = await pmap(rows, async (row) => {
         const key = `${t.kind === "movie" ? "m" : "s"}:${row.slug}`;
@@ -400,9 +406,9 @@ export async function main({
         if (hit && (hit.imdb || hit.tmdb)) {
           resolved = hit;
         } else if (t.kind === "movie") {
-          resolved = await resolveMovie(row, fetchTextFn, chromeFn);
+          resolved = await resolveMovie(row, getHtml);
         } else {
-          resolved = await resolveShow(row, fetchTextFn, tmdbGetFn, chromeFn);
+          resolved = await resolveShow(row, getHtml, tmdbGetFn);
         }
         cache[key] = { kind: t.kind, imdb: resolved.imdb || null, tmdb: resolved.tmdb || null, title: resolved.title, date: resolved.date || row.date || null };
         return rowToItem(t.kind, resolved, row);
@@ -415,6 +421,7 @@ export async function main({
       run.movies_found = items.length;
       results.push({ catalog: run.catalog_id, moviesFound: items.length });
       console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items`);
+      consecutiveFailures = 0;
     } catch (e) {
       run.finished_at = Date.now();
       run.pages_scraped = 0;
@@ -422,12 +429,17 @@ export async function main({
       run.error_message = e.message;
       results.push({ catalog: run.catalog_id, error: e.message });
       console.error(`[${run.catalog_id}] failed: ${e.message}`);
+      consecutiveFailures++;
     }
-    await sleep(500);
+    // S8 (mirrored from scrape.mjs): breathe between lists - back-to-back
+    // chart + detail bursts are what trips bot detection.
+    await sleep(2500 + Math.random() * 2500);
+  }
+  } finally {
+    await browser.close().catch(() => {});
   }
 
   await recordRuns(runs);
-  await closeBrowser(); // no-op unless a challenge forced a launch
 
   console.log("\nSummary:", JSON.stringify(results, null, 2));
   const failed = results.filter((r) => r.error);
