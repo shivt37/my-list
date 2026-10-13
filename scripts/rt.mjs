@@ -172,7 +172,7 @@ export function parseBrowsePage(html) {
       fulldate: (m.dateCreated && /^\d{4}-\d{2}-\d{2}/.test(m.dateCreated)) ? m.dateCreated.slice(0, 10) : null,
       tomato: (m.aggregateRating && String(m.aggregateRating.ratingValue)) || cri[i] || null,
       audience: aud[i] === "--" ? null : (aud[i] || null),
-      poster: m.image || null,
+      poster: unwrapPoster(m.image),
     };
   });
   const pi = html.match(/<script type="application\/json" id="pageInfo">(.+?)<\/script>/);
@@ -195,11 +195,21 @@ export function parseCnapi(text) {
       fulldate: null,
       tomato: (it.criticsScore && it.criticsScore.scorePercent) || null,
       audience: (it.audienceScore && it.audienceScore.scorePercent) || null,
-      poster: it.posterUri || null,
+      poster: unwrapPoster(it.posterUri),
     };
   });
   const info = j.pageInfo || {};
   return { rows, endCursor: info.endCursor || null, hasNext: info.hasNextPage === true };
+}
+
+// cnapi posterUris wrap the stable asset URL in a resize-proxy signature
+// (<sig>/164x246/v2/<inner>) that breaks Stremio's image pipeline - keep
+// the inner direct URL, identical to the JSON-LD image form (verified:
+// inner returns full-size 200, wrapper is a fragile 13KB thumbnail).
+export function unwrapPoster(url) {
+  const u = String(url || "");
+  const i = u.indexOf("/v2/http");
+  return i === -1 ? (u || null) : u.slice(i + 4);
 }
 
 // RT detail pages carry the TRUE film/premiere date (dateCreated) - the
