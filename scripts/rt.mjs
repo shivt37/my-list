@@ -297,8 +297,12 @@ export async function tmdbVerdict(row, type, ctx) {
   for (const y of [...new Set(years)]) {
     tried.add(y);
     const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
-    const hit = exactIn(s && s.results).find((r) => agreeListing(r, y));
-    if (hit) return await idOfTmdbHit(ctx, type, hit, false);
+    const hits = exactIn(s && s.results).filter((r) => agreeListing(r, y));
+    // Single year-anchored hit: decisive. Several same-year exacts (same
+    // slug suffix shared by two films): break to detail + crew below -
+    // first-match would be an arbitrary popularity pick.
+    if (hits.length === 1) return await idOfTmdbHit(ctx, type, hits[0], false);
+    if (hits.length > 1) break;
   }
   // Listing-year failed (catalog/listing drift: RT charts print streaming
   // years, not film years). The RT detail page carries the TRUE
@@ -316,8 +320,9 @@ export async function tmdbVerdict(row, type, ctx) {
       tried.add(y);
       console.log(`  [detail-search] ${row.slug}: listing year failed, trying film year ${y}`);
       const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
-      const hit = exactIn(s && s.results).find((r) => agreeDetail(r, y));
-      if (hit) return await idOfTmdbHit(ctx, type, hit, false);
+      const hits = exactIn(s && s.results).filter((r) => agreeDetail(r, y));
+      if (hits.length === 1) return await idOfTmdbHit(ctx, type, hits[0], false);
+      if (hits.length > 1) break;
     }
   }
   const s = await ctx.tmdbGet(endpoint, { query: row.title, include_adult: false, language: "en-US", page: 1 });
@@ -326,29 +331,61 @@ export async function tmdbVerdict(row, type, ctx) {
   // needs corroboration, never wins solo.
   if (exact.length === 1) return await idOfTmdbHit(ctx, type, exact[0], true);
   if (exact.length > 1) {
-    // Genuine collision (remakes): the film year decides, not
-    // popularity. Reuses the detail year fetched above when present -
-    // one extra fetch, ambiguous rows only.
-    let dy = detailYear;
-    if (!dy) {
-      try {
-        dy = detailYearFromHtml(await ctx.getDetailHtml(row.slug));
-      } catch (e) {
-        console.warn(`  [detail-year] ${row.slug}: detail fetch failed (${e.message})`);
-        dy = null;
-      }
+    // Genuine collision: year rung, then crew rung, never popularity
+    // alone. One detail fetch serves year + crew (ambiguous rows only).
+    let dHtml = null;
+    try {
+      dHtml = await ctx.getDetailHtml(row.slug);
+    } catch (e) {
+      console.warn(`  [detail] ${row.slug}: detail fetch failed (${e.message})`);
     }
+    const dy = dHtml ? detailYearFromHtml(dHtml) : null;
+    let pool = exact;
     if (dy) {
       const byYear = exact.filter((r) => String(dateOf(r) || "").startsWith(String(dy)));
       if (byYear.length > 0) {
+        pool = byYear;
+        if (pool.length === 1) {
           console.log(`  [detail-year] ${row.slug}: ${dy} picks from ${exact.length}`);
-          const top = byYear.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-          return await idOfTmdbHit(ctx, type, top, false);
+          return await idOfTmdbHit(ctx, type, pool[0], false);
         }
+      }
     }
+    // Crew rung: RT card people vs each remaining candidate's TMDB
+    // crew (created_by + Directors/Producers). Exactly-one agreement
+    // wins strong; zero/several fall through to popularity (weak).
+    const crewWin = await crewTiebreak(row, type, ctx, pool, dHtml);
+    if (crewWin) return await idOfTmdbHit(ctx, type, crewWin.hit, false);
     console.log(`  [ambiguous-pop] ${row.slug}: ${exact.length} exact, taking most popular`);
     const top = exact.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
     return await idOfTmdbHit(ctx, type, top, true);
+  }
+  return null;
+}
+
+// Crew tiebreak over same-name candidates: RT detail crew card people
+// vs each candidate's TMDB crew set. Returns { hit, name } on exactly-one
+// agreement, else null. Never throws (fetch failures abstain).
+export async function crewTiebreak(row, type, ctx, exact, detailHtml) {
+  let dHtml = detailHtml || null;
+  if (!dHtml) {
+    try {
+      dHtml = await ctx.getDetailHtml(row.slug);
+    } catch {
+      return null;
+    }
+  }
+  const rtNames = rtCrewNames(rtCrewFromHtml(dHtml));
+  if (rtNames.length === 0) return null;
+  const matched = [];
+  for (const r of exact) {
+    const crew = await tmdbCrewFor(type, r.id, ctx);
+    const shared = crew.filter((n) => rtNames.includes(n));
+    if (shared.length > 0) matched.push({ hit: r, name: shared[0] });
+  }
+  if (matched.length === 1) {
+    console.log(`  [crew-match] ${row.slug}: ${matched[0].name} picks TMDB ${matched[0].hit.id} from ${exact.length}`);
+    return matched[0];
   }
   return null;
 }
@@ -402,8 +439,74 @@ export async function cinemetaVerdict(row, type, fetchJson) {
   return { id: `imdb:${hit.id}`, weak: true, date: dm ? dm[0] : null };
 }
 
+// RT detail crew card: generic label -> names parse over the Series/Movie
+// Info section ({Creator, Director, Executive Producer, Producer}).
+// Pages differ (Monster has Creator, Matlock only EPs, some have
+// Director) so every present label is collected - never one hardcoded
+// field. Multiline-aware: section HTML spans lines ([\s\S], never dot).
+// Merges the JSON-LD director form above. Returns { label: [names] }.
+export function rtCrewFromHtml(html) {
+  const h = String(html || "");
+  const out = {};
+  const add = (label, name) => {
+    const n = String(name || "").trim();
+    if (!n) return;
+    out[label] = out[label] || [];
+    if (!out[label].includes(n)) out[label].push(n);
+  };
+  const jd = directorFromHtml(h);
+  if (jd) add("Director", jd);
+  const sec = /<dt class="key">\s*<rt-text[^>]*>([^<]+)<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/g;
+  let m;
+  while ((m = sec.exec(h)) !== null) {
+    const label = m[1].trim();
+    if (label !== "Creator" && label !== "Director" && label !== "Executive Producer" && label !== "Producer") continue;
+    const nm = /data-qa="item-value">([^<]+)</g;
+    let n;
+    while ((n = nm.exec(m[2])) !== null) add(label, n[1]);
+  }
+  return out;
+}
+
+// Flat normalized name set from an rtCrewFromHtml card.
+export function rtCrewNames(crew) {
+  const all = [];
+  for (const k of Object.keys(crew || {})) for (const n of crew[k]) all.push(normRtTitle(n));
+  return [...new Set(all.filter(Boolean))];
+}
+
+// TMDB crew set for one numeric id: movies -> credits Directors +
+// Producers; series -> details created_by + credits crew
+// Directors/Producers. Null when unresolvable - never throws.
+export async function tmdbCrewFor(type, numericId, ctx) {
+  try {
+    const names = [];
+    if (type === "series") {
+      const det = await ctx.tmdbGet(`/tv/${numericId}`);
+      for (const p of (det && det.created_by) || []) if (p && p.name) names.push(p.name);
+    }
+    const credPath = type === "movie" ? `/movie/${numericId}/credits` : `/tv/${numericId}/credits`;
+    const c = await ctx.tmdbGet(credPath);
+    for (const p of ((c && c.crew) || []).filter((p) => p && (p.job === "Director" || p.job === "Producer" || p.job === "Executive Producer"))) {
+      if (p.name) names.push(p.name);
+    }
+    return [...new Set(names.map(normRtTitle).filter(Boolean))];
+  } catch {
+    return [];
+  }
+}
+
+// Crew agreement: >=1 shared normalized full name between RT's card and
+// a TMDB crew set. Full-name exact keeps false positives ~nil (same
+// title + same year + same person twice is practically nonexistent).
+export function crewAgrees(rtNames, tmdbNames) {
+  const tm = new Set(tmdbNames || []);
+  return (rtNames || []).some((n) => tm.has(n));
+}
+
 // RT detail director (JSON-LD Person array or plain string form).
-// Null when the page carries none (some series rows).
+// Null when the page carries none (most series rows - use rtCrewFromHtml
+// for the full card instead).
 export function directorFromHtml(html) {
   const h = String(html || "");
   let m = /"director":\[\{"@type":"Person","name":"([^"]+)"/.exec(h);
@@ -412,53 +515,55 @@ export function directorFromHtml(html) {
   return m ? m[1] : null;
 }
 
-// Director of a verdict's candidate: TMDB numeric via /credits, imdb ids
-// via Cinemeta meta detail. Null when unresolvable - never throws.
-async function directorOf(id, type, ctx) {
+// Crew set of a verdict's candidate: TMDB numeric via created_by +
+// crew, imdb ids via Cinemeta meta director + writer. Empty when
+// unresolvable - never throws.
+async function crewOf(id, type, ctx) {
   try {
     if (id.startsWith("tmdb:")) {
       const n = id.slice(5);
-      if (!/^[0-9]+$/.test(n)) return null;
-      const path = type === "movie" ? `/movie/${n}/credits` : `/tv/${n}/credits`;
-      const c = await ctx.tmdbGet(path);
-      const d = ((c && c.crew) || []).find((p) => p.job === "Director");
-      return (d && d.name) || null;
+      if (!/^[0-9]+$/.test(n)) return [];
+      return await tmdbCrewFor(type, n, ctx);
     }
     const kind = type === "movie" ? "movie" : "series";
     const clean = id.startsWith("imdb:") ? id.slice(5) : id;
     const meta = await ctx.fetchJson(`https://v3-cinemeta.strem.io/meta/${kind}/${clean}.json`);
-    const dirs = meta && meta.meta && meta.meta.director;
-    if (Array.isArray(dirs)) return dirs[0] || null;
-    return dirs || null;
+    const out = [];
+    const push = (v) => {
+      if (Array.isArray(v)) v.forEach((x) => out.push(x));
+      else if (v) out.push(v);
+    };
+    push(meta && meta.meta && meta.meta.director);
+    push(meta && meta.meta && meta.meta.writer);
+    return [...new Set(out.map(normRtTitle).filter(Boolean))];
   } catch {
-    return null;
+    return [];
   }
 }
 
-// Total-split arbiter, first chair: the verdict whose candidate's director
-// matches RT's own director wins. Exactly-one match required - zero or
-// several matches abstain (caller falls back to the IMDb arbiter).
-// Rare rows only (never seen in 200 tested): bounded extra lookups.
+// Total-split arbiter, first chair: the verdict whose candidate shares
+// crew with RT's own card wins (movies: Director; series: full crew
+// card Creator/Director/EPs vs created_by + crew). Exactly-one match
+// required - zero or several matches abstain (caller falls back to the
+// IMDb arbiter). Rare rows only: bounded extra lookups.
 export async function directorArbiter(row, type, ctx, ids) {
   const distinct = [...new Set(ids.filter(Boolean))];
   // Lone verdicts keep their existing path (accept/holdout) - the
   // director chair only convenes on genuine splits.
   if (distinct.length < 2) return null;
-  let rtDir = null;
+  let rtNames = [];
   try {
-    rtDir = directorFromHtml(await ctx.getDetailHtml(row.slug));
+    rtNames = rtCrewNames(rtCrewFromHtml(await ctx.getDetailHtml(row.slug)));
   } catch {
     return null;
   }
-  if (!rtDir) return null;
-  const want = normRtTitle(rtDir);
+  if (rtNames.length === 0) return null;
   const matched = [];
   for (const id of distinct) {
-    const dir = await directorOf(id, type, ctx);
-    if (dir && normRtTitle(dir) === want) matched.push(id);
+    if (crewAgrees(rtNames, await crewOf(id, type, ctx))) matched.push(id);
   }
   if (matched.length === 1) {
-    console.log(`  [director-arbiter] ${row.slug}: ${rtDir} picks ${matched[0]} from ${distinct.length}`);
+    console.log(`  [director-arbiter] ${row.slug}: crew picks ${matched[0]} from ${distinct.length}`);
     return matched[0];
   }
   return null;
