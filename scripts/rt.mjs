@@ -571,12 +571,146 @@ export async function directorArbiter(row, type, ctx, ids) {
   return null;
 }
 
+// Top-billed cast from RT detail JSON-LD (first 8, normalized). The
+// cast list is long-tail; only the head carries signal (leads rarely
+// recur across remakes, extras do).
+export function rtCastFromHtml(html, n = 8) {
+  const h = String(html || "");
+  const m = /<script type="application\/ld\+json">([\s\S]+?)<\/script>/g;
+  let out = [];
+  let b;
+  while ((b = m.exec(h)) !== null) {
+    try {
+      const j = JSON.parse(b[1]);
+      const actors = j && j.actor;
+      if (Array.isArray(actors)) {
+        for (const a of actors.slice(0, n)) {
+          const nm = a && a.name ? normRtTitle(a.name) : "";
+          if (nm) out.push(nm);
+        }
+      }
+    } catch {
+      // ignore unparsable blobs, keep scanning
+    }
+  }
+  return [...new Set(out)];
+}
+
+// Winner verification: the decided ID's TMDB year + crew must not
+// contradict RT's own page (which once carried a wrong date with right
+// content). Fail-OPEN everywhere: missing data or failed fetches pass -
+// only a proven contradiction vetoes. Bounded: ~3 TMDB calls per row.
+export async function verifyWinner(row, type, ctx, won) {
+  let html = null;
+  try {
+    html = await ctx.getDetailHtml(row.slug);
+  } catch {
+    return true;
+  }
+  const rtCrew = rtCrewNames(rtCrewFromHtml(html));
+  if (rtCrew.length === 0) return true;
+  // Resolve winner to its TMDB record (direct numeric, or /find by imdb).
+  let num = null;
+  if (won.startsWith("tmdb:")) {
+    num = won.slice(5);
+  } else {
+    try {
+      const f = await ctx.tmdbGet(`/find/${won.slice(5)}`, { external_source: "imdb_id" });
+      const hits = type === "movie" ? (f.movie_results || []) : (f.tv_results || []);
+      if (hits.length > 0) num = String(hits[0].id);
+    } catch {
+      return true;
+    }
+  }
+  if (!num || !/^[0-9]+$/.test(num)) return true;
+  const tmCrew = await tmdbCrewFor(type, num, ctx);
+  if (tmCrew.length === 0) return true;
+  if (crewAgrees(rtCrew, tmCrew)) return true;
+  console.log(`  [verify-veto] ${row.slug}: ${won} crew contradicts RT page - re-scoring`);
+  return false;
+}
+// Full-evidence rescore after a verification veto: every same-name TMDB
+// candidate scored on RT detail year + director/crew + top-5 cast
+// overlap. Returns { id, date } for the best non-vetoed candidate, else
+// null (the veto stands - holdout). Bounded: rare path only.
+export async function evidenceRescore(row, type, ctx, vetoedId) {
+  let html = null;
+  try {
+    html = await ctx.getDetailHtml(row.slug);
+  } catch {
+    return null;
+  }
+  const dy = detailYearFromHtml(html);
+  const dyNum = dy || null;
+  const rtDirRaw = directorFromHtml(html);
+  const rtDir = rtDirRaw ? normRtTitle(rtDirRaw) : "";
+  const rtCrew = rtCrewNames(rtCrewFromHtml(html));
+  const rtCast = rtCastFromHtml(html);
+  const endpoint = type === "movie" ? "/search/movie" : "/search/tv";
+  const nameOf = (r) => (type === "movie" ? r.title : r.name);
+  const origOf = (r) => (type === "movie" ? r.original_title : r.original_name);
+  const dateOf = (r) => (type === "movie" ? r.release_date : r.first_air_date);
+  const nt = normRtTitle(row.title);
+  let results = [];
+  try {
+    const s = await ctx.tmdbGet(endpoint, { query: row.title, include_adult: false, language: "en-US", page: 1 });
+    results = (s && s.results) || [];
+  } catch {
+    return null;
+  }
+  const exact = results.filter((r) => normRtTitle(nameOf(r)) === nt || (origOf(r) && normRtTitle(origOf(r)) === nt));
+  let best = null;
+  for (const r of exact) {
+    let ext = null;
+    try {
+      const extPath = type === "movie" ? `/movie/${r.id}/external_ids` : `/tv/${r.id}/external_ids`;
+      ext = await ctx.tmdbGet(extPath);
+    } catch {
+      continue;
+    }
+    if (!ext || !ext.imdb_id) continue;
+    const id = `imdb:${ext.imdb_id}`;
+    if (id === vetoedId) continue; // vetoed stays vetoed
+    let ys = 0;
+    const ryM = /^([0-9]{4})/.exec(dateOf(r) || "");
+    if (dyNum && ryM) {
+      const d = Math.abs(+ryM[1] - dyNum);
+      if (d === 0) ys = 4;
+      else if (d <= 1) ys = 2;
+    }
+    let ds = 0;
+    const crew = await tmdbCrewFor(type, r.id, ctx);
+    if (rtDirRaw && crew.includes(normRtTitle(rtDirRaw))) ds = 6;
+    else if (crew.some((n) => rtCrew.includes(n))) ds = 6;
+    let cs = 0;
+    if (type === "movie") {
+      try {
+        const cred = await ctx.tmdbGet(`/movie/${r.id}/credits`);
+        const cast5 = ((cred && cred.cast) || []).slice(0, 5).map((p) => normRtTitle(p && p.name));
+        for (const c of cast5) if (c && rtCast.includes(c)) cs++;
+      } catch {
+        // cast unavailable - year + director decide
+      }
+      if (cs > 3) cs = 3;
+    }
+    const total = ys + ds + cs;
+    if (!best || total > best.total) best = { id, date: dateOf(r) || null, total };
+  }
+  if (best) {
+    console.log(`  [rescore] ${row.slug}: ${best.id} wins evidence (${best.total}) after veto`);
+    return best;
+  }
+  return null;
+}
+
 // Full per-row resolution. Returns { id, date } (never throws - callers
 // hold out on null). Acceptance: any strong backing, or >=2 weak
 // backers agreeing, or a tmdb-only fallback, or a lone Cinemeta exact
 // (proven gap-filler); popularity picks (TMDB-pop, suggest-pool) need a
-// friend. Then director, IMDb arbiter, holdout. Date is the WINNER's
-// date (TMDB full date preferred) - never RT's listing date.
+// friend. Accepted winners pass verification (crew cross-check, vetoes
+// RT-contradictions into a full evidence rescore). Then director,
+// IMDb arbiter, holdout. Date is the WINNER's date (TMDB full date
+// preferred) - never RT's listing date.
 export async function resolveRow(row, type, ctx) {
   const tw = await tmdbVerdict(row, type, ctx).catch((e) => {
     console.warn(`  [tmdb] ${row.slug}: ${e.message}`);
@@ -604,7 +738,14 @@ export async function resolveRow(row, type, ctx) {
     if (strongBacking || agreedWeak || isFallback || isCine) {
       const score = backers.reduce((a, v) => a + (v.weak ? 1 : 10), 0);
       console.log(`  [vote] ${row.slug}: ${won} (score ${score})`);
-      return { id: won, date: winnerDate(won) };
+      // Winner verification: vetoes RT-contradictions into a full
+      // evidence rescore (Frankenstein pages: right content, wrong date).
+      const verified = await verifyWinner(row, type, ctx, won).catch(() => true);
+      if (verified) return { id: won, date: winnerDate(won) };
+      const rescored = await evidenceRescore(row, type, ctx, won).catch(() => null);
+      if (rescored) return { id: rescored.id, date: rescored.date };
+      console.log(`  [holdout] ${row.slug}: vetoed ${won}, rescore failed`);
+      return null;
     }
     console.log(`  [weak-lone] ${row.slug}: popularity pick ${won} uncorroborated - holding out`);
     return null;
