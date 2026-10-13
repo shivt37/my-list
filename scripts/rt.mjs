@@ -252,9 +252,11 @@ function imdbSuggestSlug(title) {
   return String(title || "").toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_]/g, "");
 }
 
-// One TMDB verdict: "imdb:tt.." | "tmdb:<id>" | null. Exact-norm only;
-// year gate (chart year, +/-1, slug suffix); no-year exact with detail
-// tiebreak for collisions.
+// One TMDB verdict: { id, weak }. id is "imdb:tt.." | "tmdb:<id>" |
+// null. weak is true ONLY for the popularity-fallback pick (no year
+// anchor) - such a verdict can never win alone (see resolveRow).
+// Exact-norm only; year gate (chart year, +/-1, slug suffix); no-year
+// exact with detail tiebreak for collisions.
 export async function tmdbVerdict(row, type, ctx) {
   const nt = normRtTitle(row.title);
   const years = [];
@@ -274,11 +276,11 @@ export async function tmdbVerdict(row, type, ctx) {
       const ry = (/^([0-9]{4})/.exec(dateOf(r) || "") || [])[1];
       return !ry || Math.abs(+ry - row.year) <= 1;
     });
-    if (hit) return idOfTmdbHit(ctx, type, hit);
+    if (hit) return { id: await idOfTmdbHit(ctx, type, hit), weak: false };
   }
   const s = await ctx.tmdbGet(endpoint, { query: row.title, include_adult: false, language: "en-US", page: 1 });
   const exact = exactIn(s && s.results);
-  if (exact.length === 1) return idOfTmdbHit(ctx, type, exact[0]);
+  if (exact.length === 1) return { id: await idOfTmdbHit(ctx, type, exact[0]), weak: false };
   if (exact.length > 1) {
     // Genuine collision (remakes): the RT detail date decides, not
     // popularity. One extra fetch, ambiguous rows only.
@@ -289,7 +291,7 @@ export async function tmdbVerdict(row, type, ctx) {
         if (byYear.length > 0) {
           console.log(`  [detail-year] ${row.slug}: ${dy} picks from ${exact.length}`);
           const top = byYear.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-          return idOfTmdbHit(ctx, type, top);
+          return { id: await idOfTmdbHit(ctx, type, top), weak: false };
         }
       }
     } catch (e) {
@@ -297,7 +299,7 @@ export async function tmdbVerdict(row, type, ctx) {
     }
     console.log(`  [ambiguous-pop] ${row.slug}: ${exact.length} exact, taking most popular`);
     const top = exact.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-    return idOfTmdbHit(ctx, type, top);
+    return { id: await idOfTmdbHit(ctx, type, top), weak: true };
   }
   return null;
 }
@@ -338,9 +340,12 @@ export async function cinemetaVerdict(row, type, fetchJson) {
 }
 
 // Full per-row resolution. Returns "imdb:tt.." | "tmdb:<id>" (never
-// throws - callers hold out on null).
+// throws - callers hold out on null). Rules: 2-of-3 majority wins; a
+// weak (popularity-fallback) TMDB verdict needs one corroboration and
+// can never win alone; a total split falls back to IMDb's exact match
+// (canonical namespace, deepest title variants); else holdout.
 export async function resolveRow(row, type, ctx) {
-  const tmdb = await tmdbVerdict(row, type, ctx).catch((e) => {
+  const tw = await tmdbVerdict(row, type, ctx).catch((e) => {
     console.warn(`  [tmdb] ${row.slug}: ${e.message}`);
     return null;
   });
@@ -348,10 +353,22 @@ export async function resolveRow(row, type, ctx) {
     suggestVerdict(row, type, ctx.fetchJson).catch(() => null),
     cinemetaVerdict(row, type, ctx.fetchJson).catch(() => null),
   ]);
-  const won = voteIds([tmdb, sug, cin]);
-  if (won) console.log(`  [vote] ${row.slug}: tmdb=${tmdb} sug=${sug} cine=${cin} -> ${won}`);
-  else console.log(`  [holdout] ${row.slug}: tmdb=${tmdb} sug=${sug} cine=${cin}`);
-  return won;
+  const cands = [tw && tw.id, sug, cin];
+  const won = voteIds(cands);
+  if (won) {
+    if (tw && won === tw.id && tw.weak && cands.filter((v) => v === won).length < 2) {
+      console.log(`  [weak-lone] ${row.slug}: popularity pick ${won} uncorroborated - holding out`);
+      return null;
+    }
+    console.log(`  [vote] ${row.slug}: tmdb=${tw && tw.id} sug=${sug} cine=${cin} -> ${won}`);
+    return won;
+  }
+  if (sug) {
+    console.log(`  [imdb-arbiter] ${row.slug}: total split, IMDb exact ${sug} wins`);
+    return sug;
+  }
+  console.log(`  [holdout] ${row.slug}: tmdb=${tw && tw.id} sug=${sug} cine=${cin}`);
+  return null;
 }
 
 // ── cache ──
