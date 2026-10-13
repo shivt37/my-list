@@ -236,26 +236,26 @@ export function cnapiUrl(vanity, filters, after) {
   return after ? `${base}?after=${encodeURIComponent(after)}` : base;
 }
 
-// ── resolution: 2-of-3 majority vote ──
+// ── resolution: strength-weighted vote ──
 
-// candidates: ["imdb:tt..", "tmdb:123", null...] from the three sources.
-// Majority (>=2) wins; a lone unique candidate is accepted (incl. tmdb-only
-// fallback); splits hold out - never guess.
-export function voteIds(cands) {
-  const votes = new Map();
+// candidates: [{ id, weak }...] from the three sources. Strong evidence
+// counts 10, weak 1; highest total wins; ties return null (caller:
+// director, arbiter, holdout).
+export function scoreVote(cands) {
+  const totals = new Map();
   for (const c of cands) {
-    if (!c) continue;
-    votes.set(c, (votes.get(c) || 0) + 1);
+    if (!c || !c.id) continue;
+    totals.set(c.id, (totals.get(c.id) || 0) + (c.weak ? 1 : 10));
   }
-  if (votes.size === 0) return null;
+  if (totals.size === 0) return null;
   let best = null;
-  let bestN = 0;
-  for (const [id, n] of votes) {
-    if (n > bestN) { best = id; bestN = n; }
+  let bestScore = -1;
+  let tied = false;
+  for (const [id, s] of totals) {
+    if (s > bestScore) { best = id; bestScore = s; tied = false; }
+    else if (s === bestScore) { tied = true; }
   }
-  if (bestN >= 2) return best;
-  if (votes.size === 1) return best;
-  return null;
+  return tied ? null : best;
 }
 
 function imdbSuggestSlug(title) {
@@ -263,10 +263,10 @@ function imdbSuggestSlug(title) {
 }
 
 // One TMDB verdict: { id, weak }. id is "imdb:tt.." | "tmdb:<id>" |
-// null. weak is true ONLY for the popularity-fallback pick (no year
-// anchor) - such a verdict can never win alone (see resolveRow).
-// Exact-norm only; year gate (chart year, +/-1, slug suffix); no-year
-// exact with detail tiebreak for collisions.
+// null. weak marks verdicts without a year anchor (popularity picks,
+// dateless accepts, no-year singles, unlinked tmdb-only fallbacks) -
+// such verdicts can never win alone (see resolveRow). Exact-norm only;
+// listing gate EXACT, detail gate +/-1, no-year with detail tiebreak.
 export async function tmdbVerdict(row, type, ctx) {
   const nt = normRtTitle(row.title);
   const years = [];
@@ -279,20 +279,25 @@ export async function tmdbVerdict(row, type, ctx) {
   const origOf = (r) => (type === "movie" ? r.original_title : r.original_name);
   const dateOf = (r) => (type === "movie" ? r.release_date : r.first_air_date);
   const exactIn = (results) => (results || []).filter((r) => normRtTitle(nameOf(r)) === nt || (origOf(r) && normRtTitle(origOf(r)) === nt));
-  const agreeYear = (r, y) => {
+  // Listing loop demands EXACT year equality: TMDB's year filter matches
+  // ANY release (re-releases included), so ±1 here admits different films
+  // wearing the same name (Carrie 2013 surfacing for a 2015 listing).
+  // Genuine drift is covered by the detail loop below, which owns ±1.
+  const agreeListing = (r, y) => {
     if (y === sy) return true;
     const ry = (/^([0-9]{4})/.exec(dateOf(r) || "") || [])[1];
-    // Candidate must sit within a year of the SEARCHED year (listing year
-    // in the first loop, film year in the detail loop) - never the raw
-    // chart year, which is a listing date for catalog rows.
-    return !ry || Math.abs(+ry - y) <= 1;
+    return !!ry && +ry === y;
+  };
+  const agreeDetail = (r, y) => {
+    const ry = (/^([0-9]{4})/.exec(dateOf(r) || "") || [])[1];
+    return !!ry && Math.abs(+ry - y) <= 1;
   };
   const tried = new Set();
   for (const y of [...new Set(years)]) {
     tried.add(y);
     const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
-    const hit = exactIn(s && s.results).find((r) => agreeYear(r, y));
-    if (hit) return { id: await idOfTmdbHit(ctx, type, hit), weak: false };
+    const hit = exactIn(s && s.results).find((r) => agreeListing(r, y));
+    if (hit) return await idOfTmdbHit(ctx, type, hit, false);
   }
   // Listing-year failed (catalog/listing drift: RT charts print streaming
   // years, not film years). The RT detail page carries the TRUE
@@ -310,13 +315,15 @@ export async function tmdbVerdict(row, type, ctx) {
       tried.add(y);
       console.log(`  [detail-search] ${row.slug}: listing year failed, trying film year ${y}`);
       const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
-      const hit = exactIn(s && s.results).find((r) => agreeYear(r, y));
-      if (hit) return { id: await idOfTmdbHit(ctx, type, hit), weak: false };
+      const hit = exactIn(s && s.results).find((r) => agreeDetail(r, y));
+      if (hit) return await idOfTmdbHit(ctx, type, hit, false);
     }
   }
   const s = await ctx.tmdbGet(endpoint, { query: row.title, include_adult: false, language: "en-US", page: 1 });
   const exact = exactIn(s && s.results);
-  if (exact.length === 1) return { id: await idOfTmdbHit(ctx, type, exact[0]), weak: false };
+  // Single exact with no usable year: accepted but WEAK (unverifiable) -
+  // needs corroboration, never wins solo.
+  if (exact.length === 1) return await idOfTmdbHit(ctx, type, exact[0], true);
   if (exact.length > 1) {
     // Genuine collision (remakes): the film year decides, not
     // popularity. Reuses the detail year fetched above when present -
@@ -333,26 +340,30 @@ export async function tmdbVerdict(row, type, ctx) {
     if (dy) {
       const byYear = exact.filter((r) => String(dateOf(r) || "").startsWith(String(dy)));
       if (byYear.length > 0) {
-        console.log(`  [detail-year] ${row.slug}: ${dy} picks from ${exact.length}`);
-        const top = byYear.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-        return { id: await idOfTmdbHit(ctx, type, top), weak: false };
-      }
+          console.log(`  [detail-year] ${row.slug}: ${dy} picks from ${exact.length}`);
+          const top = byYear.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
+          return await idOfTmdbHit(ctx, type, top, false);
+        }
     }
     console.log(`  [ambiguous-pop] ${row.slug}: ${exact.length} exact, taking most popular`);
     const top = exact.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-    return { id: await idOfTmdbHit(ctx, type, top), weak: true };
+    return await idOfTmdbHit(ctx, type, top, true);
   }
   return null;
 }
 
-async function idOfTmdbHit(ctx, type, hit) {
+async function idOfTmdbHit(ctx, type, hit, weak) {
   const extPath = type === "movie" ? `/movie/${hit.id}/external_ids` : `/tv/${hit.id}/external_ids`;
   const ext = await ctx.tmdbGet(extPath);
-  if (ext && ext.imdb_id) return `imdb:${ext.imdb_id}`;
-  return `tmdb:${hit.id}`;
+  // Unlinked tmdb-only ids are ALWAYS weak (no external corroboration
+  // possible by construction) - but still accepted lone (day-0 titles).
+  if (ext && ext.imdb_id) return { id: `imdb:${ext.imdb_id}`, weak };
+  return { id: `tmdb:${hit.id}`, weak: true };
 }
 
-// One IMDb-suggest verdict: exact-norm + year gate, lowest rank wins.
+// One IMDb-suggest verdict: { id, weak }. Exact-norm + year gate,
+// lowest rank wins. Pool fallback (no year match) is WEAK - the
+// Disciple/Social-Network misfires proved popularity alone misleads.
 export async function suggestVerdict(row, type, fetchJson) {
   const nt = normRtTitle(row.title);
   const url = `https://v3.sg.media-imdb.com/suggestion/x/${imdbSuggestSlug(row.title)}.json`;
@@ -366,18 +377,22 @@ export async function suggestVerdict(row, type, fetchJson) {
   const sy = slugYearOf(row.slug);
   if (sy && !years.includes(sy)) years.push(sy);
   const yOk = pool.filter((c) => c.y && years.includes(+c.y));
-  const pick = (yOk.length > 0 ? yOk : pool).sort((a, b) => (a.rank || 1e9) - (b.rank || 1e9))[0];
-  return pick && pick.id && pick.id.startsWith("tt") ? `imdb:${pick.id}` : null;
+  const strong = yOk.length > 0;
+  const pick = (strong ? yOk : pool).sort((a, b) => (a.rank || 1e9) - (b.rank || 1e9))[0];
+  if (!pick || !pick.id || !pick.id.startsWith("tt")) return null;
+  return { id: `imdb:${pick.id}`, weak: !strong };
 }
 
-// One Cinemeta verdict: exact-norm on catalog search names.
+// One Cinemeta verdict: { id, weak }. Exact-norm on catalog search names.
+// Ungated by year (search metas carry no reliable year) - always WEAK,
+// corroboration only, never decisive alone.
 export async function cinemetaVerdict(row, type, fetchJson) {
   const nt = normRtTitle(row.title);
   const kind = type === "movie" ? "movie" : "series";
   const url = `https://v3-cinemeta.strem.io/catalog/${kind}/imdb/search=${encodeURIComponent(row.title)}.json`;
   const d = await fetchJson(url);
   const hit = ((d && d.metas) || []).find((m) => normRtTitle(m.name) === nt);
-  return hit && hit.id ? `imdb:${hit.id}` : null;
+  return hit && hit.id ? { id: `imdb:${hit.id}`, weak: true } : null;
 }
 
 // RT detail director (JSON-LD Person array or plain string form).
@@ -443,11 +458,10 @@ export async function directorArbiter(row, type, ctx, ids) {
 }
 
 // Full per-row resolution. Returns "imdb:tt.." | "tmdb:<id>" (never
-// throws - callers hold out on null). Rules: 2-of-3 majority wins; a
-// weak (popularity-fallback) TMDB verdict needs one corroboration and
-// can never win alone; a total split goes to the director match first,
-// then IMDb's exact match (canonical namespace, deepest title variants);
-// else holdout.
+// throws - callers hold out on null). Acceptance: any strong backing,
+// or >=2 weak backers agreeing, or a tmdb-only fallback, or a lone
+// Cinemeta exact (proven gap-filler); popularity picks (TMDB-pop,
+// suggest-pool) need a friend. Then director, IMDb arbiter, holdout.
 export async function resolveRow(row, type, ctx) {
   const tw = await tmdbVerdict(row, type, ctx).catch((e) => {
     console.warn(`  [tmdb] ${row.slug}: ${e.message}`);
@@ -457,25 +471,31 @@ export async function resolveRow(row, type, ctx) {
     suggestVerdict(row, type, ctx.fetchJson).catch(() => null),
     cinemetaVerdict(row, type, ctx.fetchJson).catch(() => null),
   ]);
-  const cands = [tw && tw.id, sug, cin];
-  const won = voteIds(cands);
+  const cands = [tw, sug, cin].filter(Boolean);
+  const won = scoreVote(cands);
   if (won) {
-    if (tw && won === tw.id && tw.weak && cands.filter((v) => v === won).length < 2) {
-      console.log(`  [weak-lone] ${row.slug}: popularity pick ${won} uncorroborated - holding out`);
-      return null;
+    const backers = cands.filter((v) => v.id === won);
+    const strongBacking = backers.some((v) => !v.weak);
+    const agreedWeak = backers.length >= 2;
+    const isFallback = won.startsWith("tmdb:");
+    const isCine = cin && won === cin.id;
+    if (strongBacking || agreedWeak || isFallback || isCine) {
+      const score = backers.reduce((a, v) => a + (v.weak ? 1 : 10), 0);
+      console.log(`  [vote] ${row.slug}: ${won} (score ${score})`);
+      return won;
     }
-    console.log(`  [vote] ${row.slug}: tmdb=${tw && tw.id} sug=${sug} cine=${cin} -> ${won}`);
-    return won;
+    console.log(`  [weak-lone] ${row.slug}: popularity pick ${won} uncorroborated - holding out`);
+    return null;
   }
-  // No majority: director match decides first (rare rows only), then
+  // No winner: director match decides first (rare rows only), then
   // the IMDb exact arbiter, else holdout.
-  const dirWin = await directorArbiter(row, type, ctx, [tw && tw.id, sug, cin]);
+  const dirWin = await directorArbiter(row, type, ctx, cands.map((v) => v.id));
   if (dirWin) return dirWin;
   if (sug) {
-    console.log(`  [imdb-arbiter] ${row.slug}: total split, IMDb exact ${sug} wins`);
-    return sug;
+    console.log(`  [imdb-arbiter] ${row.slug}: total split, IMDb exact ${sug.id} wins`);
+    return sug.id;
   }
-  console.log(`  [holdout] ${row.slug}: tmdb=${tw && tw.id} sug=${sug} cine=${cin}`);
+  console.log(`  [holdout] ${row.slug}: tmdb=${tw && tw.id} sug=${sug && sug.id} cine=${cin && cin.id}`);
   return null;
 }
 
