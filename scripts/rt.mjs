@@ -648,18 +648,40 @@ export async function main({
   if (failed.length && isMain) process.exit(1);
 }
 
-// Paginate a chart to maxItems by following pageInfo cursors (cursors
-// chain, so pages fetch sequentially - at ~18KB each this is fast).
-// Exported for tests (fetch stubbed).
+// Paginate a chart to maxItems unique rows by following pageInfo cursors
+// (cursors chain, so pages fetch sequentially - at ~18KB each this is
+// fast). Guards: repeated slugs are skipped (dedupe), an empty page or a
+// repeated cursor stops the loop (a stuck "more pages" flag must never
+// spin to the workflow timeout). Exported for tests (fetch stubbed).
 export async function paginateChart(t, getHtml, first) {
   const { vanity, filters } = splitBrowseUrl(t.url);
-  const rows = [...first.rows];
+  const rows = [];
+  const seen = new Set();
+  const pushUnique = (r) => {
+    if (seen.has(r.slug)) {
+      console.log(`  [dedupe] ${r.slug}: repeated, skipping`);
+      return;
+    }
+    seen.add(r.slug);
+    rows.push(r);
+  };
+  for (const r of first.rows) pushUnique(r);
+  const seenCursors = new Set();
   let cursor = first.endCursor;
   let hasNext = first.hasNext;
   const want = t.maxItems || 100;
   while (rows.length < want && hasNext && cursor) {
+    if (seenCursors.has(cursor)) {
+      console.warn(`  [paginate] cursor ${cursor} repeated - stopping`);
+      break;
+    }
+    seenCursors.add(cursor);
     const page = parseCnapi(await getHtml(cnapiUrl(vanity, filters, cursor)));
-    rows.push(...page.rows);
+    if (page.rows.length === 0) {
+      console.warn(`  [paginate] empty page at cursor ${cursor} - stopping`);
+      break;
+    }
+    for (const r of page.rows) pushUnique(r);
     cursor = page.endCursor;
     hasNext = page.hasNext;
   }
