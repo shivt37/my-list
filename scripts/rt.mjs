@@ -356,8 +356,10 @@ export async function tmdbVerdict(row, type, ctx) {
     // wins strong; zero/several fall through to popularity (weak).
     const crewWin = await crewTiebreak(row, type, ctx, pool, dHtml);
     if (crewWin) return await idOfTmdbHit(ctx, type, crewWin.hit, false);
-    console.log(`  [ambiguous-pop] ${row.slug}: ${exact.length} exact, taking most popular`);
-    const top = exact.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
+    // Popularity over the YEAR-NARROWED pool (not the full exact list -
+    // picking outside the matching year would defeat the narrowing above).
+    console.log(`  [ambiguous-pop] ${row.slug}: ${pool.length} in-year, taking most popular`);
+    const top = pool.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
     return await idOfTmdbHit(ctx, type, top, true);
   }
   return null;
