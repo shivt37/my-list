@@ -326,6 +326,23 @@ export async function main({
         let resolved;
         if (hit && (hit.imdb || hit.tmdb)) {
           resolved = hit;
+          // Auto-upgrade: tmdb-only fallback entries get one external_ids
+          // re-check per run. Numeric-id lookup is exact (no search), so no
+          // re-verification is needed. A fresh imdb_id upgrades the entry
+          // in place (persisted by saveCacheFn below); anything else keeps
+          // the working fallback and never fails the list.
+          if (!hit.imdb && hit.tmdb) {
+            try {
+              const extPath = hit.kind === "movie" ? `/movie/${hit.tmdb}/external_ids` : `/tv/${hit.tmdb}/external_ids`;
+              const ext = await tmdbGetFn(extPath);
+              if (ext && ext.imdb_id) {
+                hit.imdb = ext.imdb_id;
+                console.log(`  [upgrade] ${row.slug}: tmdb:${hit.tmdb} -> ${ext.imdb_id}`);
+              }
+            } catch (e) {
+              console.warn(`  [upgrade] ${row.slug}: re-check failed (${e.message}) - keeping fallback`);
+            }
+          }
         } else if (t.kind === "movie") {
           resolved = await resolveMovie(row, getHtml);
         } else {

@@ -98,10 +98,12 @@ export async function buildManifest(env) {
     }));
   // TVStats chart lists: one list = one catalog (kind baked into the id
   // at creation, same shape as scraper lists). Single-shot arrival
-  // listings, not paginated - no skip extra, like simkl.
+  // listings, but the skip extra is advertised like the other big
+  // catalogs - handleCatalog slices (skip, skip+100) generically, so
+  // scrolled clients paginate instead of re-fetching row zero.
   const tvstatsCatalogs = cfg.tvstats.lists
     .filter((l) => l.enabled)
-    .map((l) => ({ name: l.name, id: l.id, type: l.kind, extra: [] }));
+    .map((l) => ({ name: l.name, id: l.id, type: l.kind, extra: [{ name: "skip", isRequired: false }] }));
   const catalogs = [
     ...tvstatsCatalogs,
     ...enabled.map((l) => ({
