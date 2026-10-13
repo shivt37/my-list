@@ -351,43 +351,45 @@ export async function tmdbVerdict(row, type, ctx) {
         }
       }
     }
-    // Crew rung: RT card people vs each remaining candidate's TMDB
-    // crew (created_by + Directors/Producers). Exactly-one agreement
-    // wins strong; zero/several fall through to popularity (weak).
-    const crewWin = await crewTiebreak(row, type, ctx, pool, dHtml);
-    if (crewWin) return await idOfTmdbHit(ctx, type, crewWin.hit, false);
+    // Evidence rung: score every remaining candidate on RT detail year
+    // + director/crew + top-5 cast. Unique max wins strong; ties fall
+    // through to popularity (weak). One detail fetch served year + crew.
+    const rtEv = {
+      year: dy,
+      dirs: [],
+      creators: [],
+      prods: [],
+      cast: dHtml ? rtCastFromHtml(dHtml) : [],
+    };
+    if (dHtml) {
+      const card = rtCrewFromHtml(dHtml);
+      const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
+      rtEv.dirs = normSet(card["Director"]);
+      rtEv.creators = normSet(card["Creator"]);
+      rtEv.prods = normSet([...(card["Executive Producer"] || []), ...(card["Producer"] || [])]);
+    }
+    let evBest = null;
+    let evBestScore = -1;
+    let evTied = false;
+    for (const r of pool) {
+      const candEv = await tmdbEvidenceFor(type, r.id, ctx);
+      if (!candEv.date) {
+        const dd = (type === "movie" ? r.release_date : r.first_air_date) || null;
+        if (dd) candEv.date = dd;
+      }
+      const sc = evidenceScore({ ...rtEv, year: rtEv.year }, candEv);
+      if (sc.total > evBestScore) { evBest = r; evBestScore = sc.total; evTied = false; }
+      else if (sc.total === evBestScore) { evTied = true; }
+    }
+    if (evBest && !evTied) {
+      console.log(`  [evidence] ${row.slug}: TMDB ${evBest.id} wins (${evBestScore}) from ${pool.length}`);
+      return await idOfTmdbHit(ctx, type, evBest, false);
+    }
     // Popularity over the YEAR-NARROWED pool (not the full exact list -
     // picking outside the matching year would defeat the narrowing above).
     console.log(`  [ambiguous-pop] ${row.slug}: ${pool.length} in-year, taking most popular`);
     const top = pool.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
     return await idOfTmdbHit(ctx, type, top, true);
-  }
-  return null;
-}
-
-// Crew tiebreak over same-name candidates: RT detail crew card people
-// vs each candidate's TMDB crew set. Returns { hit, name } on exactly-one
-// agreement, else null. Never throws (fetch failures abstain).
-export async function crewTiebreak(row, type, ctx, exact, detailHtml) {
-  let dHtml = detailHtml || null;
-  if (!dHtml) {
-    try {
-      dHtml = await ctx.getDetailHtml(row.slug);
-    } catch {
-      return null;
-    }
-  }
-  const rtNames = rtCrewNames(rtCrewFromHtml(dHtml));
-  if (rtNames.length === 0) return null;
-  const matched = [];
-  for (const r of exact) {
-    const crew = await tmdbCrewFor(type, r.id, ctx);
-    const shared = crew.filter((n) => rtNames.includes(n));
-    if (shared.length > 0) matched.push({ hit: r, name: shared[0] });
-  }
-  if (matched.length === 1) {
-    console.log(`  [crew-match] ${row.slug}: ${matched[0].name} picks TMDB ${matched[0].hit.id} from ${exact.length}`);
-    return matched[0];
   }
   return null;
 }
@@ -506,6 +508,82 @@ export function crewAgrees(rtNames, tmdbNames) {
   return (rtNames || []).some((n) => tm.has(n));
 }
 
+// ── unified evidence scoring ──
+
+// RT-side evidence from a detail page: true year + role-split crew +
+// top-billed cast. Missing pieces stay empty (abstain downstream).
+export function rtEvidenceFromHtml(html) {
+  const h = String(html || "");
+  const dy = detailYearFromHtml(h);
+  const card = rtCrewFromHtml(h);
+  const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
+  return {
+    year: dy || null,
+    dirs: normSet(card["Director"]),
+    creators: normSet(card["Creator"]),
+    prods: normSet([...(card["Executive Producer"] || []), ...(card["Producer"] || [])].map(normRtTitle)),
+    cast: rtCastFromHtml(h),
+  };
+}
+
+// TMDB-side evidence for one numeric id: date + role-split crew + top-5
+// cast. Empty sets on any failure (abstain downstream, never throws).
+export async function tmdbEvidenceFor(type, numericId, ctx) {
+  const out = { date: null, dirs: [], creators: [], prods: [], cast: [] };
+  try {
+    const det = await ctx.tmdbGet(type === "movie" ? `/movie/${numericId}` : `/tv/${numericId}`);
+    if (type === "movie") out.date = det.release_date || null;
+    else out.date = det.first_air_date || null;
+    if (type === "series") {
+      for (const p of ((det && det.created_by) || [])) if (p && p.name) out.creators.push(normRtTitle(p.name));
+    }
+    const cred = await ctx.tmdbGet(type === "movie" ? `/movie/${numericId}/credits` : `/tv/${numericId}/credits`);
+    for (const p of ((cred && cred.crew) || [])) {
+      if (!p || !p.name) continue;
+      const n = normRtTitle(p.name);
+      if (p.job === "Director") out.dirs.push(n);
+      else if (p.job === "Producer" || p.job === "Executive Producer") out.prods.push(n);
+    }
+    for (const p of (((cred && cred.cast) || []).slice(0, 5))) {
+      const n = normRtTitle(p && p.name);
+      if (n) out.cast.push(n);
+    }
+  } catch {
+    // partial evidence stands - whatever resolved stays usable
+  }
+  return out;
+}
+
+// Score one candidate against RT evidence. Weights (live-tested 20/20):
+// year exact 4 / +-1 2; Director/Creator-role match 6 (decisive);
+// producer-level overlap 2 (corroboration only - franchise producers
+// recur across installments, e.g. RT-EP Carpenter vs 2018-EP Carpenter,
+// so EP overlap must never outrank a role match); cast overlap cap 3.
+export function evidenceScore(rtEv, candEv) {
+  let y = 0;
+  const ryM = /^([0-9]{4})/.exec(String((candEv && candEv.date) || ""));
+  if (rtEv && rtEv.year && ryM) {
+    const d = Math.abs(+ryM[1] - rtEv.year);
+    if (d === 0) y = 4;
+    else if (d <= 1) y = 2;
+  }
+  const normSetOf = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
+  const rtDC = normSetOf([...((rtEv && rtEv.dirs) || []), ...((rtEv && rtEv.creators) || [])]);
+  const tmDC = normSetOf([...((candEv && candEv.dirs) || []), ...((candEv && candEv.creators) || [])]);
+  const rtP = normSetOf((rtEv && rtEv.prods) || []);
+  const tmP = normSetOf([...((candEv && candEv.dirs) || []), ...((candEv && candEv.creators) || []), ...((candEv && candEv.prods) || [])]);
+  let d = 0;
+  if (rtDC.length > 0 && tmDC.length > 0 && rtDC.some((n) => tmDC.includes(n))) d = 6;
+  let p = 0;
+  if (rtP.length > 0 && tmP.length > 0 && rtP.some((n) => tmP.includes(n))) p = 2;
+  let c = 0;
+  for (const n of ((candEv && candEv.cast) || [])) {
+    if (n && ((rtEv && rtEv.cast) || []).includes(n)) c++;
+  }
+  if (c > 3) c = 3;
+  return { total: y + d + p + c, parts: { y, d, p, c } };
+}
+
 // RT detail director (JSON-LD Person array or plain string form).
 // Null when the page carries none (most series rows - use rtCrewFromHtml
 // for the full card instead).
@@ -517,56 +595,78 @@ export function directorFromHtml(html) {
   return m ? m[1] : null;
 }
 
-// Crew set of a verdict's candidate: TMDB numeric via created_by +
-// crew, imdb ids via Cinemeta meta director + writer. Empty when
-// unresolvable - never throws.
-async function crewOf(id, type, ctx) {
+// Cinemeta evidence for one imdb id: director (+writer as creators on
+// series only - series writers ARE the creators, verified 5/5; movie
+// writers are excluded, director alone decides). Empty on failure.
+async function cineEvidenceFor(type, ctx, ttId) {
+  const out = { date: null, dirs: [], creators: [], prods: [], cast: [] };
   try {
-    if (id.startsWith("tmdb:")) {
-      const n = id.slice(5);
-      if (!/^[0-9]+$/.test(n)) return [];
-      return await tmdbCrewFor(type, n, ctx);
-    }
+    const clean = ttId.startsWith("imdb:") ? ttId.slice(5) : ttId;
     const kind = type === "movie" ? "movie" : "series";
-    const clean = id.startsWith("imdb:") ? id.slice(5) : id;
     const meta = await ctx.fetchJson(`https://v3-cinemeta.strem.io/meta/${kind}/${clean}.json`);
-    const out = [];
-    const push = (v) => {
-      if (Array.isArray(v)) v.forEach((x) => out.push(x));
-      else if (v) out.push(v);
+    const m = meta && meta.meta;
+    if (!m) return out;
+    const normSet = (v) => {
+      const arr = Array.isArray(v) ? v : (v ? [v] : []);
+      return [...new Set(arr.map(normRtTitle).filter(Boolean))];
     };
-    push(meta && meta.meta && meta.meta.director);
-    push(meta && meta.meta && meta.meta.writer);
-    return [...new Set(out.map(normRtTitle).filter(Boolean))];
+    out.dirs = normSet(m.director);
+    if (type === "series") out.creators = normSet(m.writer);
+    const rel = String(m.released || m.year || m.releaseInfo || "");
+    const dm = rel.match(/([0-9]{4})(?:-([0-9]{2})-([0-9]{2}))?/);
+    out.date = dm ? dm[0] : null;
   } catch {
-    return [];
+    // miss - empty evidence abstains downstream
   }
+  return out;
 }
 
-// Total-split arbiter, first chair: the verdict whose candidate shares
-// crew with RT's own card wins (movies: Director; series: full crew
-// card Creator/Director/EPs vs created_by + crew). Exactly-one match
-// required - zero or several matches abstain (caller falls back to the
-// IMDb arbiter). Rare rows only: bounded extra lookups.
+// Total-split arbiter, first chair: every distinct id scored on full
+// evidence (year + director/creator + cast) against RT's own card.
+// Unique max wins; ties abstain (caller falls back to the IMDb arbiter).
+// Rare rows only: bounded extra lookups.
 export async function directorArbiter(row, type, ctx, ids) {
   const distinct = [...new Set(ids.filter(Boolean))];
   // Lone verdicts keep their existing path (accept/holdout) - the
   // director chair only convenes on genuine splits.
   if (distinct.length < 2) return null;
-  let rtNames = [];
+  let dHtml = null;
   try {
-    rtNames = rtCrewNames(rtCrewFromHtml(await ctx.getDetailHtml(row.slug)));
+    dHtml = await ctx.getDetailHtml(row.slug);
   } catch {
     return null;
   }
-  if (rtNames.length === 0) return null;
-  const matched = [];
+  const card = rtCrewFromHtml(dHtml);
+  const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
+  const rtEv = {
+    year: detailYearFromHtml(dHtml),
+    dirs: normSet(card["Director"]),
+    creators: normSet(card["Creator"]),
+    prods: normSet([...(card["Executive Producer"] || []), ...(card["Producer"] || [])]),
+    cast: rtCastFromHtml(dHtml),
+  };
+  if (!rtEv.year && rtEv.dirs.length === 0 && rtEv.creators.length === 0 && rtEv.cast.length === 0) return null;
+  const scored = [];
   for (const id of distinct) {
-    if (crewAgrees(rtNames, await crewOf(id, type, ctx))) matched.push(id);
+    let candEv;
+    if (id.startsWith("tmdb:")) {
+      const n = id.slice(5);
+      candEv = /^[0-9]+$/.test(n) ? await tmdbEvidenceFor(type, n, ctx) : { date: null, dirs: [], creators: [], prods: [], cast: [] };
+    } else {
+      candEv = await cineEvidenceFor(type, ctx, id);
+    }
+    scored.push({ id, ...evidenceScore(rtEv, candEv) });
   }
-  if (matched.length === 1) {
-    console.log(`  [director-arbiter] ${row.slug}: crew picks ${matched[0]} from ${distinct.length}`);
-    return matched[0];
+  let best = null;
+  let bestScore = -1;
+  let tied = false;
+  for (const s of scored) {
+    if (s.total > bestScore) { best = s; bestScore = s.total; tied = false; }
+    else if (s.total === bestScore) { tied = true; }
+  }
+  if (best && !tied && bestScore > 0) {
+    console.log(`  [evidence-arbiter] ${row.slug}: ${best.id} wins evidence (${bestScore}) from ${distinct.length}`);
+    return best.id;
   }
   return null;
 }
