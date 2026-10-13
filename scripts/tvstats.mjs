@@ -48,9 +48,39 @@ const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 
 export async function fetchProxyHtml(url, base = process.env.TS_FETCH_BASE) {
   if (!base) throw new Error("TS_FETCH_BASE is not set - point it at the worker origin.");
-  const res = await fetch(`${String(base).replace(/\/+$/, "")}/ts-fetch?url=${encodeURIComponent(url)}`);
-  if (!res.ok) throw new Error(`proxy fetch ${res.status} for ${url}`);
-  return res.text();
+  const endpoint = `${String(base).replace(/\/+$/, "")}/ts-fetch?url=${encodeURIComponent(url)}`;
+  // Retry transient upstream blips (502/503/429/504): one hiccup across
+  // ~200 fetches must not fail a run. Anything else fails loud.
+  const RETRYABLE = new Set([429, 502, 503, 504]);
+  let lastError = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(endpoint);
+      if (!res.ok) throw new Error(`proxy fetch ${res.status} for ${url}`);
+      return res.text();
+    } catch (e) {
+      lastError = e;
+      // Fail fast on client errors (4xx except 429/408: a 404 bad slug or
+      // 403 block will never heal on retry). Everything else - 5xx,
+      // connection resets, timeouts - gets two more attempts.
+      const m = /proxy fetch (\d+)/.exec(String((e && e.message) || e));
+      const fatal = m && +m[1] < 500 && +m[1] !== 429 && +m[1] !== 408;
+      if (fatal || attempt === 3) throw e;
+      console.warn(`  [retry] ${url} attempt ${attempt}: ${e.message}`);
+      await sleep(2000 * attempt);
+    }
+  }
+  throw lastError;
+}
+
+// Whole-day distance between two YYYY-MM-DD dates (null when unparsable).
+export function dateDiffDays(a, b) {
+  const pa = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(a || ""));
+  const pb = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(b || ""));
+  if (!pa || !pb) return null;
+  const da = Date.UTC(+pa[1], +pa[2] - 1, +pa[3]);
+  const db = Date.UTC(+pb[1], +pb[2] - 1, +pb[3]);
+  return Math.abs(Math.round((da - db) / 86400000));
 }
 
 export function arg(name) {
@@ -160,8 +190,9 @@ export async function resolveMovie(row, getHtml) {
 }
 
 // Shows: TS carries no IDs, so one TMDB tv-search (year-filtered) plus
-// one external_ids call, accepted ONLY on exact first_air_date + title
-// agreement. imdb missing on the TMDB record -> tmdb:<id> fallback id.
+// one external_ids call, accepted ONLY on title agreement + first_air_date
+// within +/-1 day (premiere-day drift). imdb missing on the TMDB record ->
+// tmdb:<id> fallback id.
 export async function resolveShow(row, getHtml, tmdbGetFn = tmdbGet) {
   const pp = pageProps(await getHtml(detailUrl("series", row.slug)));
   const sh = pp.show || {};
@@ -170,9 +201,14 @@ export async function resolveShow(row, getHtml, tmdbGetFn = tmdbGet) {
   const year = (firstAir || "").split("-")[0];
   if (!year) throw new Error(`no first_air_date for show slug ${row.slug}`);
   const search = await tmdbGetFn("/search/tv", { query: title, first_air_date_year: year });
-  const hit = ((search && search.results) || []).find(
-    (r) => titlesMatch(r.name, title) && r.first_air_date === firstAir
-  );
+  // Title must agree exactly; the date gets a +/-1 day window (US premiere
+  // vs UTC-midnight drift between the two databases). Anything further
+  // apart is a different title wearing the same name.
+  const hit = ((search && search.results) || []).find((r) => {
+    if (!titlesMatch(r.name, title)) return false;
+    const drift = dateDiffDays(r.first_air_date, firstAir);
+    return drift !== null && drift <= 1;
+  });
   if (!hit) throw new Error(`no exact TMDB match for show slug ${row.slug}`);
   const ext = await tmdbGetFn(`/tv/${hit.id}/external_ids`);
   return { imdb: ext.imdb_id || null, tmdb: ext.imdb_id ? null : String(hit.id), title, date: firstAir };
@@ -318,39 +354,61 @@ export async function main({
     const startedAt = Date.now();
     const run = { catalog_id: t.id, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
     try {
+      console.log(`[chart] ${t.url}`);
       const rows = chartRows(t.kind, await getHtml(t.url)).slice(0, t.maxItems || 100);
       if (rows.length === 0) throw new Error(`chart ${t.url} returned no rows - refusing to overwrite`);
-      const items = await pmap(rows, async (row) => {
-        const key = `${t.kind === "movie" ? "m" : "s"}:${row.slug}`;
-        const hit = cache[key];
-        let resolved;
-        if (hit && (hit.imdb || hit.tmdb)) {
-          resolved = hit;
-          // Auto-upgrade: tmdb-only fallback entries get one external_ids
-          // re-check per run. Numeric-id lookup is exact (no search), so no
-          // re-verification is needed. A fresh imdb_id upgrades the entry
-          // in place (persisted by saveCacheFn below); anything else keeps
-          // the working fallback and never fails the list.
-          if (!hit.imdb && hit.tmdb) {
-            try {
-              const extPath = hit.kind === "movie" ? `/movie/${hit.tmdb}/external_ids` : `/tv/${hit.tmdb}/external_ids`;
-              const ext = await tmdbGetFn(extPath);
-              if (ext && ext.imdb_id) {
-                hit.imdb = ext.imdb_id;
-                console.log(`  [upgrade] ${row.slug}: tmdb:${hit.tmdb} -> ${ext.imdb_id}`);
+      console.log(`[chart] ${rows.length} rows, resolving IDs...`);
+      // Per-item hold-out: one unresolvable slug skips with a logged
+      // reason instead of killing the whole list. The list aborts only
+      // when failures exceed 10% (systemic block, not single-title gaps).
+      const heldOut = [];
+      let done = 0;
+      const items = (
+        await pmap(rows, async (row) => {
+          try {
+            const key = `${t.kind === "movie" ? "m" : "s"}:${row.slug}`;
+            const hit = cache[key];
+            let resolved;
+            if (hit && (hit.imdb || hit.tmdb)) {
+              resolved = hit;
+              // Auto-upgrade: tmdb-only fallback entries get one external_ids
+              // re-check per run. Numeric-id lookup is exact (no search), so no
+              // re-verification is needed. A fresh imdb_id upgrades the entry
+              // in place (persisted by saveCacheFn below); anything else keeps
+              // the working fallback and never fails the list.
+              if (!hit.imdb && hit.tmdb) {
+                try {
+                  const extPath = hit.kind === "movie" ? `/movie/${hit.tmdb}/external_ids` : `/tv/${hit.tmdb}/external_ids`;
+                  const ext = await tmdbGetFn(extPath);
+                  if (ext && ext.imdb_id) {
+                    hit.imdb = ext.imdb_id;
+                    console.log(`  [upgrade] ${row.slug}: tmdb:${hit.tmdb} -> ${ext.imdb_id}`);
+                  }
+                } catch (e) {
+                  console.warn(`  [upgrade] ${row.slug}: re-check failed (${e.message}) - keeping fallback`);
+                }
               }
-            } catch (e) {
-              console.warn(`  [upgrade] ${row.slug}: re-check failed (${e.message}) - keeping fallback`);
+            } else if (t.kind === "movie") {
+              resolved = await resolveMovie(row, getHtml);
+            } else {
+              resolved = await resolveShow(row, getHtml, tmdbGetFn);
             }
+            cache[key] = { kind: t.kind, imdb: resolved.imdb || null, tmdb: resolved.tmdb || null, title: resolved.title, date: resolved.date || row.date || null };
+            return rowToItem(t.kind, resolved, row);
+          } catch (e) {
+            heldOut.push(`${row.slug} (${e.message})`);
+            return null;
+          } finally {
+            done++;
+            if (done % 25 === 0 || done === rows.length) console.log(`  [progress] ${done}/${rows.length} rows`);
           }
-        } else if (t.kind === "movie") {
-          resolved = await resolveMovie(row, getHtml);
-        } else {
-          resolved = await resolveShow(row, getHtml, tmdbGetFn);
-        }
-        cache[key] = { kind: t.kind, imdb: resolved.imdb || null, tmdb: resolved.tmdb || null, title: resolved.title, date: resolved.date || row.date || null };
-        return rowToItem(t.kind, resolved, row);
-      });
+        })
+      ).filter(Boolean);
+      if (items.length === 0) throw new Error(`all ${rows.length} rows unresolvable - refusing to overwrite with empty`);
+      if (heldOut.length / rows.length > 0.1) {
+        throw new Error(`${heldOut.length}/${rows.length} rows unresolvable (>10%) - refusing partial overwrite: ${heldOut.slice(0, 3).join("; ")}`);
+      }
+      for (const h of heldOut) console.warn(`  [held-out] ${h}`);
       saveCacheFn(cache);
       write(t, items);
       run.status = "success";
