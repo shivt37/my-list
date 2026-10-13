@@ -1856,6 +1856,10 @@ function tvstatsKindForUrl(rawUrl) {
   try {
     const u = new URL(String(rawUrl || ''));
     if (u.hostname !== 'televisionstats.com' && u.hostname !== 'www.televisionstats.com') return null;
+    // Mirrors the server gate (src/config.js): plain http can never
+    // succeed through /ts-fetch, so reject it at add-time with the
+    // accepted-families error instead of saving a permanently red list.
+    if (u.protocol !== 'https:') return null;
     path = u.pathname.replace(/[/]+$/, '') || '/';
   } catch (e) { return null; }
   // NOTE: no backslash-slash escapes here - this code lives inside a template literal,
@@ -1905,6 +1909,12 @@ async function confirmCreateTvstats() {
   const url = document.getElementById('createTsUrlInput').value.trim();
   if (!name) { setStatus('List needs a name.', 'error'); return; }
   if (!url) { setStatus('Paste a televisionstats.com chart URL.', 'error'); return; }
+  // Hard ceiling mirrors the server's MAX_TVSTATS_LISTS (src/config.js) -
+  // the server silently slices past 30, so block here with a message.
+  if (state.tvstats.lists.length >= 30) {
+    setStatus('TVStats list cap reached (30). Remove one before adding another.', 'error');
+    return;
+  }
   const kind = tvstatsKindForUrl(url);
   if (!kind) {
     setStatus('URL must be a Television Stats attention chart (/top*, /topmovies*, /n/*, /g/*, /mg/*, /torrent, /reddit, /twitter, /wiki).', 'error');

@@ -168,6 +168,9 @@ export function tvstatsKindForUrl(rawUrl) {
   try {
     const u = new URL(String(rawUrl || ""));
     if (u.hostname !== "televisionstats.com" && u.hostname !== "www.televisionstats.com") return null;
+    // Plain http can never succeed - /ts-fetch serves https only - so
+    // reject it here instead of saving a permanently red list.
+    if (u.protocol !== "https:") return null;
     path = u.pathname.replace(/\/+$/, "") || "/";
   } catch {
     return null;
