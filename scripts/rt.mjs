@@ -269,33 +269,64 @@ export async function tmdbVerdict(row, type, ctx) {
   const origOf = (r) => (type === "movie" ? r.original_title : r.original_name);
   const dateOf = (r) => (type === "movie" ? r.release_date : r.first_air_date);
   const exactIn = (results) => (results || []).filter((r) => normRtTitle(nameOf(r)) === nt || (origOf(r) && normRtTitle(origOf(r)) === nt));
+  const agreeYear = (r, y) => {
+    if (y === sy) return true;
+    const ry = (/^([0-9]{4})/.exec(dateOf(r) || "") || [])[1];
+    // Candidate must sit within a year of the SEARCHED year (listing year
+    // in the first loop, film year in the detail loop) - never the raw
+    // chart year, which is a listing date for catalog rows.
+    return !ry || Math.abs(+ry - y) <= 1;
+  };
+  const tried = new Set();
   for (const y of [...new Set(years)]) {
+    tried.add(y);
     const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
-    const hit = exactIn(s && s.results).find((r) => {
-      if (y === sy) return true;
-      const ry = (/^([0-9]{4})/.exec(dateOf(r) || "") || [])[1];
-      return !ry || Math.abs(+ry - row.year) <= 1;
-    });
+    const hit = exactIn(s && s.results).find((r) => agreeYear(r, y));
     if (hit) return { id: await idOfTmdbHit(ctx, type, hit), weak: false };
+  }
+  // Listing-year failed (catalog/listing drift: RT charts print streaming
+  // years, not film years). The RT detail page carries the TRUE
+  // film/premiere year - search with it before going year-blind. Bounded:
+  // one extra fetch, drift rows only.
+  let detailYear = null;
+  try {
+    detailYear = detailYearFromHtml(await ctx.getDetailHtml(row.slug));
+  } catch {
+    detailYear = null; // fall through to no-year below
+  }
+  if (detailYear) {
+    for (const y of [detailYear, detailYear - 1, detailYear + 1]) {
+      if (!y || tried.has(y)) continue;
+      tried.add(y);
+      console.log(`  [detail-search] ${row.slug}: listing year failed, trying film year ${y}`);
+      const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
+      const hit = exactIn(s && s.results).find((r) => agreeYear(r, y));
+      if (hit) return { id: await idOfTmdbHit(ctx, type, hit), weak: false };
+    }
   }
   const s = await ctx.tmdbGet(endpoint, { query: row.title, include_adult: false, language: "en-US", page: 1 });
   const exact = exactIn(s && s.results);
   if (exact.length === 1) return { id: await idOfTmdbHit(ctx, type, exact[0]), weak: false };
   if (exact.length > 1) {
-    // Genuine collision (remakes): the RT detail date decides, not
-    // popularity. One extra fetch, ambiguous rows only.
-    try {
-      const dy = detailYearFromHtml(await ctx.getDetailHtml(row.slug));
-      if (dy) {
-        const byYear = exact.filter((r) => String(dateOf(r) || "").startsWith(String(dy)));
-        if (byYear.length > 0) {
-          console.log(`  [detail-year] ${row.slug}: ${dy} picks from ${exact.length}`);
-          const top = byYear.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-          return { id: await idOfTmdbHit(ctx, type, top), weak: false };
-        }
+    // Genuine collision (remakes): the film year decides, not
+    // popularity. Reuses the detail year fetched above when present -
+    // one extra fetch, ambiguous rows only.
+    let dy = detailYear;
+    if (!dy) {
+      try {
+        dy = detailYearFromHtml(await ctx.getDetailHtml(row.slug));
+      } catch (e) {
+        console.warn(`  [detail-year] ${row.slug}: detail fetch failed (${e.message})`);
+        dy = null;
       }
-    } catch (e) {
-      console.warn(`  [detail-year] ${row.slug}: detail fetch failed (${e.message})`);
+    }
+    if (dy) {
+      const byYear = exact.filter((r) => String(dateOf(r) || "").startsWith(String(dy)));
+      if (byYear.length > 0) {
+        console.log(`  [detail-year] ${row.slug}: ${dy} picks from ${exact.length}`);
+        const top = byYear.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
+        return { id: await idOfTmdbHit(ctx, type, top), weak: false };
+      }
     }
     console.log(`  [ambiguous-pop] ${row.slug}: ${exact.length} exact, taking most popular`);
     const top = exact.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
@@ -492,6 +523,60 @@ export async function pmap(items, fn, concurrency = 5) {
   return out;
 }
 
+// Per-row resolve: cache hit (with tmdb-only auto-upgrade) or full
+// 3-source vote. Returns the item or null (held out). Bare tt ids out
+// (Stremio form, like every other module); the internal "imdb:" prefix
+// is stripped here, one place. Exported for tests.
+export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, heldOut) {
+  const key = row.slug;
+  const hit = cache[key];
+  let id;
+  let title = row.title;
+  let date = row.fulldate || (row.year ? String(row.year) : null);
+  if (hit && (hit.imdb || hit.tmdb)) {
+    id = hit.imdb || (hit.tmdb ? `tmdb:${hit.tmdb}` : null);
+    if (id && id.startsWith("imdb:")) id = id.slice(5);
+    title = hit.title || title;
+    date = hit.date || date;
+    // Auto-upgrade: tmdb-only fallback entries get one exact
+    // external_ids re-check per run. Anything else keeps the
+    // working fallback and never fails the list.
+    if (!hit.imdb && hit.tmdb) {
+      try {
+        const extPath = hit.type === "movie" ? `/movie/${hit.tmdb}/external_ids` : `/tv/${hit.tmdb}/external_ids`;
+        console.log(`  [recheck] ${row.slug}: tmdb:${hit.tmdb} - checking for imdb...`);
+        const ext = await tmdbGetFn(extPath);
+        if (ext && ext.imdb_id) {
+          hit.imdb = ext.imdb_id;
+          id = ext.imdb_id;
+          console.log(`  [upgrade] ${row.slug}: tmdb:${hit.tmdb} -> ${ext.imdb_id}`);
+        } else {
+          console.log(`  [recheck] ${row.slug}: still missing, keeping fallback`);
+        }
+      } catch (e) {
+        console.warn(`  [upgrade] ${row.slug}: re-check failed (${e.message}) - keeping fallback`);
+      }
+    }
+  } else {
+    id = await resolveRow(row, t.type, ctx);
+    if (id && id.startsWith("imdb:")) id = id.slice(5);
+    if (id) cache[key] = { type: t.type, imdb: id.startsWith("tmdb:") ? null : id, tmdb: id.startsWith("tmdb:") ? id.slice(5) : null, title: row.title, date };
+  }
+  if (!id) {
+    heldOut.push(`${row.slug} (no majority)`);
+    return null;
+  }
+  // Same film under two slugs (remake + original sharing a chart,
+  // alternate slugs): one meta per id, second occurrence held out.
+  if (writtenIds.has(id)) {
+    heldOut.push(`${row.slug} (duplicate of id ${id})`);
+    console.log(`  [dedupe-id] ${row.slug}: ${id} already written - holding out`);
+    return null;
+  }
+  writtenIds.add(id);
+  return rowToItem(t.type, id, row, title, date);
+}
+
 export async function main({
   idsArg: rawIds = idsArg,
   action = actionArg,
@@ -562,47 +647,12 @@ export async function main({
       // reason instead of killing the whole list. The list aborts only
       // when failures exceed 10% (systemic block, not single-title gaps).
       const heldOut = [];
+      const writtenIds = new Set();
       let done = 0;
       const items = (
         await pmap(rows, async (row) => {
           try {
-            const key = row.slug;
-            const hit = cache[key];
-            let id;
-            let title = row.title;
-            let date = row.fulldate || (row.year ? String(row.year) : null);
-            if (hit && (hit.imdb || hit.tmdb)) {
-              id = hit.imdb ? `imdb:${hit.imdb}` : `tmdb:${hit.tmdb}`;
-              title = hit.title || title;
-              date = hit.date || date;
-              // Auto-upgrade: tmdb-only fallback entries get one exact
-              // external_ids re-check per run. Anything else keeps the
-              // working fallback and never fails the list.
-              if (!hit.imdb && hit.tmdb) {
-                try {
-                  const extPath = hit.type === "movie" ? `/movie/${hit.tmdb}/external_ids` : `/tv/${hit.tmdb}/external_ids`;
-                  console.log(`  [recheck] ${row.slug}: tmdb:${hit.tmdb} - checking for imdb...`);
-                  const ext = await tmdbGetFn(extPath);
-                  if (ext && ext.imdb_id) {
-                    hit.imdb = ext.imdb_id;
-                    id = `imdb:${ext.imdb_id}`;
-                    console.log(`  [upgrade] ${row.slug}: tmdb:${hit.tmdb} -> ${ext.imdb_id}`);
-                  } else {
-                    console.log(`  [recheck] ${row.slug}: still missing, keeping fallback`);
-                  }
-                } catch (e) {
-                  console.warn(`  [upgrade] ${row.slug}: re-check failed (${e.message}) - keeping fallback`);
-                }
-              }
-            } else {
-              id = await resolveRow(row, t.type, ctx);
-              if (id) cache[key] = { type: t.type, imdb: id.startsWith("imdb:") ? id.slice(5) : null, tmdb: id.startsWith("tmdb:") ? id.slice(5) : null, title: row.title, date };
-            }
-            if (!id) {
-              heldOut.push(`${row.slug} (no majority)`);
-              return null;
-            }
-            return rowToItem(t.type, id, row, title, date);
+            return await resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, heldOut);
           } catch (e) {
             heldOut.push(`${row.slug} (${e.message})`);
             return null;
