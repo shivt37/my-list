@@ -596,38 +596,59 @@ export function rtCastFromHtml(html, n = 8) {
   return [...new Set(out)];
 }
 
-// Winner verification: the decided ID's TMDB year + crew must not
-// contradict RT's own page (which once carried a wrong date with right
-// content). Fail-OPEN everywhere: missing data or failed fetches pass -
-// only a proven contradiction vetoes. Bounded: ~3 TMDB calls per row.
-export async function verifyWinner(row, type, ctx, won) {
-  let html = null;
+// One retry around verify-path fetches: a single transient blip must
+// not silently downgrade a check to "couldn't verify". Returns
+// { v, failed } - failed only after both attempts.
+async function tryTwice(fn, row, label) {
   try {
-    html = await ctx.getDetailHtml(row.slug);
-  } catch {
-    return true;
+    return { v: await fn(), failed: false };
+  } catch (e) {
+    console.log(`  [verify-retry] ${row.slug} ${label}: ${String((e && e.message) || e).slice(0, 120)}`);
+    await sleep(3000);
+    try {
+      return { v: await fn(), failed: false };
+    } catch (e2) {
+      return { v: null, failed: true };
+    }
   }
-  const rtCrew = rtCrewNames(rtCrewFromHtml(html));
-  if (rtCrew.length === 0) return true;
+}
+
+// Winner verification: the decided ID's TMDB crew must not contradict
+// RT's own page (which once carried a wrong date with right content).
+// Returns { ok, reason }: reason is crew-match (verified), no-rt-crew /
+// no-tmdb-crew (nothing to compare - pass), or fetch-failed (could not
+// check - caller decides by backing strength). Only a proven
+// contradiction vetoes (ok:false). Bounded: ~3 TMDB calls per row.
+export async function verifyWinner(row, type, ctx, won) {
+  const d = await tryTwice(() => ctx.getDetailHtml(row.slug), row, "detail");
+  if (d.failed || !d.v) return { ok: true, reason: "fetch-failed" };
+  const rtCrew = rtCrewNames(rtCrewFromHtml(d.v));
+  if (rtCrew.length === 0) {
+    console.log(`  [verify-skip] ${row.slug}: no RT crew to compare`);
+    return { ok: true, reason: "no-rt-crew" };
+  }
   // Resolve winner to its TMDB record (direct numeric, or /find by imdb).
   let num = null;
   if (won.startsWith("tmdb:")) {
     num = won.slice(5);
   } else {
-    try {
-      const f = await ctx.tmdbGet(`/find/${won.slice(5)}`, { external_source: "imdb_id" });
-      const hits = type === "movie" ? (f.movie_results || []) : (f.tv_results || []);
-      if (hits.length > 0) num = String(hits[0].id);
-    } catch {
-      return true;
-    }
+    const f = await tryTwice(() => ctx.tmdbGet(`/find/${won.slice(5)}`, { external_source: "imdb_id" }), row, "find");
+    if (f.failed || !f.v) return { ok: true, reason: "fetch-failed" };
+    const hits = type === "movie" ? (f.v.movie_results || []) : (f.v.tv_results || []);
+    if (hits.length > 0) num = String(hits[0].id);
   }
-  if (!num || !/^[0-9]+$/.test(num)) return true;
+  if (!num || !/^[0-9]+$/.test(num)) return { ok: true, reason: "fetch-failed" };
   const tmCrew = await tmdbCrewFor(type, num, ctx);
-  if (tmCrew.length === 0) return true;
-  if (crewAgrees(rtCrew, tmCrew)) return true;
+  if (tmCrew.length === 0) {
+    console.log(`  [verify-skip] ${row.slug}: no TMDB crew to compare`);
+    return { ok: true, reason: "no-tmdb-crew" };
+  }
+  if (crewAgrees(rtCrew, tmCrew)) {
+    console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
+    return { ok: true, reason: "crew-match" };
+  }
   console.log(`  [verify-veto] ${row.slug}: ${won} crew contradicts RT page - re-scoring`);
-  return false;
+  return { ok: false, reason: "contradiction" };
 }
 // Full-evidence rescore after a verification veto: every same-name TMDB
 // candidate scored on RT detail year + director/crew + top-5 cast
@@ -740,8 +761,17 @@ export async function resolveRow(row, type, ctx) {
       console.log(`  [vote] ${row.slug}: ${won} (score ${score})`);
       // Winner verification: vetoes RT-contradictions into a full
       // evidence rescore (Frankenstein pages: right content, wrong date).
-      const verified = await verifyWinner(row, type, ctx, won).catch(() => true);
-      if (verified) return { id: won, date: winnerDate(won) };
+      // An UNVERIFIABLE win (fetch failed mid-check) ships on strong
+      // backing, fallback, or 2+ backers - a single thin backer holds
+      // out instead of shipping blind.
+      const verified = await verifyWinner(row, type, ctx, won).catch(() => ({ ok: true, reason: "fetch-failed" }));
+      if (verified.ok) {
+        if (verified.reason !== "fetch-failed" || strongBacking || isFallback || backers.length >= 2) {
+          return { id: won, date: winnerDate(won) };
+        }
+        console.log(`  [holdout] ${row.slug}: ${won} unverifiable and thinly backed`);
+        return null;
+      }
       const rescored = await evidenceRescore(row, type, ctx, won).catch(() => null);
       if (rescored) return { id: rescored.id, date: rescored.date };
       console.log(`  [holdout] ${row.slug}: vetoed ${won}, rescore failed`);
@@ -751,11 +781,17 @@ export async function resolveRow(row, type, ctx) {
     return null;
   }
   // No winner: director match decides first (rare rows only), then
-  // the IMDb exact arbiter, else holdout.
+  // the IMDb exact arbiter (itself verified - all voted results get
+  // checked), else holdout.
   const dirWin = await directorArbiter(row, type, ctx, cands.map((v) => v.id));
   if (dirWin) return { id: dirWin, date: winnerDate(dirWin) };
   if (sug) {
     console.log(`  [imdb-arbiter] ${row.slug}: total split, IMDb exact ${sug.id} wins`);
+    const verified = await verifyWinner(row, type, ctx, sug.id).catch(() => ({ ok: true, reason: "fetch-failed" }));
+    if (!verified.ok) {
+      console.log(`  [holdout] ${row.slug}: arbiter pick ${sug.id} contradicts RT page`);
+      return null;
+    }
     return { id: sug.id, date: sug.date || null };
   }
   console.log(`  [holdout] ${row.slug}: tmdb=${tw && tw.id} sug=${sug && sug.id} cine=${cin && cin.id}`);
