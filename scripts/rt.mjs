@@ -262,8 +262,9 @@ function imdbSuggestSlug(title) {
   return String(title || "").toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_]/g, "");
 }
 
-// One TMDB verdict: { id, weak }. id is "imdb:tt.." | "tmdb:<id>" |
-// null. weak marks verdicts without a year anchor (popularity picks,
+// One TMDB verdict: { id, weak, date }. id is "imdb:tt.." | "tmdb:<id>" |
+// null, date the candidate's release/first-air date (full YYYY-MM-DD).
+// weak marks verdicts without a year anchor (popularity picks,
 // dateless accepts, no-year singles, unlinked tmdb-only fallbacks) -
 // such verdicts can never win alone (see resolveRow). Exact-norm only;
 // listing gate EXACT, detail gate +/-1, no-year with detail tiebreak.
@@ -357,8 +358,11 @@ async function idOfTmdbHit(ctx, type, hit, weak) {
   const ext = await ctx.tmdbGet(extPath);
   // Unlinked tmdb-only ids are ALWAYS weak (no external corroboration
   // possible by construction) - but still accepted lone (day-0 titles).
-  if (ext && ext.imdb_id) return { id: `imdb:${ext.imdb_id}`, weak };
-  return { id: `tmdb:${hit.id}`, weak: true };
+  // The candidate's own release/first-air date rides along - the winner's
+  // date wins over RT's listing date (see resolveRow).
+  const date = (type === "movie" ? hit.release_date : hit.first_air_date) || null;
+  if (ext && ext.imdb_id) return { id: `imdb:${ext.imdb_id}`, weak, date };
+  return { id: `tmdb:${hit.id}`, weak: true, date };
 }
 
 // One IMDb-suggest verdict: { id, weak }. Exact-norm + year gate,
@@ -380,7 +384,7 @@ export async function suggestVerdict(row, type, fetchJson) {
   const strong = yOk.length > 0;
   const pick = (strong ? yOk : pool).sort((a, b) => (a.rank || 1e9) - (b.rank || 1e9))[0];
   if (!pick || !pick.id || !pick.id.startsWith("tt")) return null;
-  return { id: `imdb:${pick.id}`, weak: !strong };
+  return { id: `imdb:${pick.id}`, weak: !strong, date: pick.y ? String(pick.y) : null };
 }
 
 // One Cinemeta verdict: { id, weak }. Exact-norm on catalog search names.
@@ -392,7 +396,10 @@ export async function cinemetaVerdict(row, type, fetchJson) {
   const url = `https://v3-cinemeta.strem.io/catalog/${kind}/imdb/search=${encodeURIComponent(row.title)}.json`;
   const d = await fetchJson(url);
   const hit = ((d && d.metas) || []).find((m) => normRtTitle(m.name) === nt);
-  return hit && hit.id ? { id: `imdb:${hit.id}`, weak: true } : null;
+  if (!hit || !hit.id) return null;
+  const rel = String(hit.releaseInfo || hit.year || "");
+  const dm = rel.match(/([0-9]{4})(?:-([0-9]{2})-([0-9]{2}))?/);
+  return { id: `imdb:${hit.id}`, weak: true, date: dm ? dm[0] : null };
 }
 
 // RT detail director (JSON-LD Person array or plain string form).
@@ -457,11 +464,12 @@ export async function directorArbiter(row, type, ctx, ids) {
   return null;
 }
 
-// Full per-row resolution. Returns "imdb:tt.." | "tmdb:<id>" (never
-// throws - callers hold out on null). Acceptance: any strong backing,
-// or >=2 weak backers agreeing, or a tmdb-only fallback, or a lone
-// Cinemeta exact (proven gap-filler); popularity picks (TMDB-pop,
-// suggest-pool) need a friend. Then director, IMDb arbiter, holdout.
+// Full per-row resolution. Returns { id, date } (never throws - callers
+// hold out on null). Acceptance: any strong backing, or >=2 weak
+// backers agreeing, or a tmdb-only fallback, or a lone Cinemeta exact
+// (proven gap-filler); popularity picks (TMDB-pop, suggest-pool) need a
+// friend. Then director, IMDb arbiter, holdout. Date is the WINNER's
+// date (TMDB full date preferred) - never RT's listing date.
 export async function resolveRow(row, type, ctx) {
   const tw = await tmdbVerdict(row, type, ctx).catch((e) => {
     console.warn(`  [tmdb] ${row.slug}: ${e.message}`);
@@ -473,6 +481,13 @@ export async function resolveRow(row, type, ctx) {
   ]);
   const cands = [tw, sug, cin].filter(Boolean);
   const won = scoreVote(cands);
+  // Winner's date: fullest available among backers (TMDB full date >
+  // year-only), falling back to the row further below in resolveOne.
+  const winnerDate = (id) => {
+    const backers = cands.filter((v) => v.id === id);
+    backers.sort((a, b) => String(b.date || "").length - String(a.date || "").length);
+    return (backers[0] && backers[0].date) || null;
+  };
   if (won) {
     const backers = cands.filter((v) => v.id === won);
     const strongBacking = backers.some((v) => !v.weak);
@@ -482,7 +497,7 @@ export async function resolveRow(row, type, ctx) {
     if (strongBacking || agreedWeak || isFallback || isCine) {
       const score = backers.reduce((a, v) => a + (v.weak ? 1 : 10), 0);
       console.log(`  [vote] ${row.slug}: ${won} (score ${score})`);
-      return won;
+      return { id: won, date: winnerDate(won) };
     }
     console.log(`  [weak-lone] ${row.slug}: popularity pick ${won} uncorroborated - holding out`);
     return null;
@@ -490,10 +505,10 @@ export async function resolveRow(row, type, ctx) {
   // No winner: director match decides first (rare rows only), then
   // the IMDb exact arbiter, else holdout.
   const dirWin = await directorArbiter(row, type, ctx, cands.map((v) => v.id));
-  if (dirWin) return dirWin;
+  if (dirWin) return { id: dirWin, date: winnerDate(dirWin) };
   if (sug) {
     console.log(`  [imdb-arbiter] ${row.slug}: total split, IMDb exact ${sug.id} wins`);
-    return sug.id;
+    return { id: sug.id, date: sug.date || null };
   }
   console.log(`  [holdout] ${row.slug}: tmdb=${tw && tw.id} sug=${sug && sug.id} cine=${cin && cin.id}`);
   return null;
@@ -655,9 +670,20 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
       }
     }
   } else {
-    id = await resolveRow(row, t.type, ctx);
+    const resolved = await resolveRow(row, t.type, ctx);
+    // Resolve verdicts carry the internal "imdb:" prefix - data
+    // files (and Stremio) use the bare tt form like every other
+    // module, so strip here, one place, both paths.
+    id = resolved && resolved.id;
+    // Winner's date wins over RT's listing date. Movies show the year
+    // only, series the full date (owner decision).
+    if (resolved && resolved.date) date = resolved.date;
     if (id && id.startsWith("imdb:")) id = id.slice(5);
-    if (id) cache[key] = { type: t.type, imdb: id.startsWith("tmdb:") ? null : id, tmdb: id.startsWith("tmdb:") ? id.slice(5) : null, title: row.title, date };
+    if (id) {
+      const shown = t.type === "movie" ? String(date || "").slice(0, 4) || null : date;
+      cache[key] = { type: t.type, imdb: id.startsWith("tmdb:") ? null : id, tmdb: id.startsWith("tmdb:") ? id.slice(5) : null, title: row.title, date: shown };
+      date = shown;
+    }
   }
   if (!id) {
     heldOut.push(`${row.slug} (no majority)`);
