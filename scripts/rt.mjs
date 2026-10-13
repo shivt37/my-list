@@ -380,11 +380,74 @@ export async function cinemetaVerdict(row, type, fetchJson) {
   return hit && hit.id ? `imdb:${hit.id}` : null;
 }
 
+// RT detail director (JSON-LD Person array or plain string form).
+// Null when the page carries none (some series rows).
+export function directorFromHtml(html) {
+  const h = String(html || "");
+  let m = /"director":\[\{"@type":"Person","name":"([^"]+)"/.exec(h);
+  if (m) return m[1];
+  m = /"director":"([^"]+)"/.exec(h);
+  return m ? m[1] : null;
+}
+
+// Director of a verdict's candidate: TMDB numeric via /credits, imdb ids
+// via Cinemeta meta detail. Null when unresolvable - never throws.
+async function directorOf(id, type, ctx) {
+  try {
+    if (id.startsWith("tmdb:")) {
+      const n = id.slice(5);
+      if (!/^[0-9]+$/.test(n)) return null;
+      const path = type === "movie" ? `/movie/${n}/credits` : `/tv/${n}/credits`;
+      const c = await ctx.tmdbGet(path);
+      const d = ((c && c.crew) || []).find((p) => p.job === "Director");
+      return (d && d.name) || null;
+    }
+    const kind = type === "movie" ? "movie" : "series";
+    const clean = id.startsWith("imdb:") ? id.slice(5) : id;
+    const meta = await ctx.fetchJson(`https://v3-cinemeta.strem.io/meta/${kind}/${clean}.json`);
+    const dirs = meta && meta.meta && meta.meta.director;
+    if (Array.isArray(dirs)) return dirs[0] || null;
+    return dirs || null;
+  } catch {
+    return null;
+  }
+}
+
+// Total-split arbiter, first chair: the verdict whose candidate's director
+// matches RT's own director wins. Exactly-one match required - zero or
+// several matches abstain (caller falls back to the IMDb arbiter).
+// Rare rows only (never seen in 200 tested): bounded extra lookups.
+export async function directorArbiter(row, type, ctx, ids) {
+  const distinct = [...new Set(ids.filter(Boolean))];
+  // Lone verdicts keep their existing path (accept/holdout) - the
+  // director chair only convenes on genuine splits.
+  if (distinct.length < 2) return null;
+  let rtDir = null;
+  try {
+    rtDir = directorFromHtml(await ctx.getDetailHtml(row.slug));
+  } catch {
+    return null;
+  }
+  if (!rtDir) return null;
+  const want = normRtTitle(rtDir);
+  const matched = [];
+  for (const id of distinct) {
+    const dir = await directorOf(id, type, ctx);
+    if (dir && normRtTitle(dir) === want) matched.push(id);
+  }
+  if (matched.length === 1) {
+    console.log(`  [director-arbiter] ${row.slug}: ${rtDir} picks ${matched[0]} from ${distinct.length}`);
+    return matched[0];
+  }
+  return null;
+}
+
 // Full per-row resolution. Returns "imdb:tt.." | "tmdb:<id>" (never
 // throws - callers hold out on null). Rules: 2-of-3 majority wins; a
 // weak (popularity-fallback) TMDB verdict needs one corroboration and
-// can never win alone; a total split falls back to IMDb's exact match
-// (canonical namespace, deepest title variants); else holdout.
+// can never win alone; a total split goes to the director match first,
+// then IMDb's exact match (canonical namespace, deepest title variants);
+// else holdout.
 export async function resolveRow(row, type, ctx) {
   const tw = await tmdbVerdict(row, type, ctx).catch((e) => {
     console.warn(`  [tmdb] ${row.slug}: ${e.message}`);
@@ -404,6 +467,10 @@ export async function resolveRow(row, type, ctx) {
     console.log(`  [vote] ${row.slug}: tmdb=${tw && tw.id} sug=${sug} cine=${cin} -> ${won}`);
     return won;
   }
+  // No majority: director match decides first (rare rows only), then
+  // the IMDb exact arbiter, else holdout.
+  const dirWin = await directorArbiter(row, type, ctx, [tw && tw.id, sug, cin]);
+  if (dirWin) return dirWin;
   if (sug) {
     console.log(`  [imdb-arbiter] ${row.slug}: total split, IMDb exact ${sug} wins`);
     return sug;
