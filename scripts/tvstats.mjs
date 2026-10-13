@@ -274,18 +274,27 @@ export function writeCatalog(list, items) {
 async function postRuns(runs, fetchFn = fetch) {
   if (!WORKER_ORIGIN || runs.length === 0) return;
   for (let i = 0; i < runs.length; i += 50) {
-    try {
-      const res = await fetchFn(`${WORKER_ORIGIN}/runs`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ runs: runs.slice(i, i + 50) }),
-      });
-      if (!res.ok) {
-        console.warn(`  [runs] POST failed: HTTP ${res.status}`);
-        process.exitCode = 1;
+    const chunk = runs.slice(i, i + 50);
+    let posted = false;
+    // History recording gets the same retry manners as page fetches: a
+    // single blip must not red the job after both lists succeeded.
+    // Still exits 1 when truly down - a silent history gap is worse.
+    for (let attempt = 1; attempt <= 3 && !posted; attempt++) {
+      try {
+        const res = await fetchFn(`${WORKER_ORIGIN}/runs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ runs: chunk }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        posted = true;
+      } catch (e) {
+        console.warn(`  [runs] POST attempt ${attempt} failed: ${e.message}`);
+        if (attempt < 3) await sleep(5000 * attempt);
       }
-    } catch (e) {
-      console.warn(`  [runs] POST failed: ${e.message}`);
+    }
+    if (!posted) {
+      console.warn(`  [runs] POST failed after 3 attempts - history for ${chunk.length} runs not recorded`);
       process.exitCode = 1;
     }
   }

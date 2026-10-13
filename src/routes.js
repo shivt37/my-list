@@ -649,7 +649,10 @@ export async function handleTsFetch(env, request) {
       },
       signal: AbortSignal.timeout(60000),
     });
-    if (!res.ok) return json({ error: `Upstream ${res.status} for ${u.pathname}.` }, 502);
+    // Pass the upstream status through verbatim (not flattened to 502):
+    // the workflow's retry logic keys on it (429/5xx retry, 4xx fail
+    // fast), and the log names the real cause instead of masking it.
+    if (!res.ok) return json({ error: `Upstream ${res.status} for ${u.pathname}.` }, res.status);
     return new Response(await res.text(), { headers: { "content-type": "text/html; charset=utf-8" } });
   } catch (e) {
     return json({ error: "Upstream fetch failed: " + String((e && e.message) || e).slice(0, 200) }, 502);
