@@ -103,13 +103,13 @@ export async function buildManifest(env) {
     .filter((l) => l.enabled)
     .map((l) => ({ name: l.name, id: l.id, type: l.kind, extra: [] }));
   const catalogs = [
+    ...tvstatsCatalogs,
     ...enabled.map((l) => ({
       name: l.name,
       id: l.id,
       type: l.type,
       extra: [{ name: "skip", isRequired: false }],
     })),
-    ...tvstatsCatalogs,
     ...officialCatalogs,
     ...simklCatalogs,
     ...tmdbCatalogs,

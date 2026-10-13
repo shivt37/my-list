@@ -58,7 +58,7 @@ export function randomScraperId(seedUrl) {
 }
 
 export function emptyConfig() {
-  return { scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] }, tvstats: { lists: [] } };
+  return { tvstats: { lists: [] }, scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
 }
 
 // F3: configVersion = content hash of the config blob. Every save stamps
@@ -391,7 +391,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, tvstats: { lists: migrateTvstats(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
+  return { tvstats: { lists: migrateTvstats(raw) }, scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
 }
 
 // TMDB Discover list entry. Ids are pinned at creation (client + server

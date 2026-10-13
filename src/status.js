@@ -11,7 +11,7 @@
 import { handleStatus, html } from "./routes.js";
 import { loadConfig } from "./config.js";
 
-const MODULES = ["scraper", "tvstats", "official", "simkl", "tmdb"];
+const MODULES = ["tvstats", "scraper", "official", "simkl", "tmdb"];
 
 // Mirrors ACCENT_COLORS in configure.js (that file is one template literal -
 // not importable). Keep in sync if the configure palette ever changes.
@@ -225,7 +225,7 @@ function renderModule(m, runs, now, active, err = null) {
 
 export async function statusPageResponse(env, request) {
   const wanted = new URL(request.url).searchParams.get("page");
-  const active = MODULES.includes(wanted) ? wanted : "scraper";
+  const active = MODULES.includes(wanted) ? wanted : MODULES[0];
   const now = Date.now();
   // F28: one shared config load (was four); parallel module fetches (was
   // sequential); per-module try/catch so one broken module can't 500 the

@@ -922,13 +922,13 @@ export function buildConfigurePage(origin, config, opts = {}) {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div class="menu-popup" id="menuPopup">
-        <button type="button" class="menu-item active" data-module="scraper" onclick="activateModule('scraper')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          MDBList Scraper
-        </button>
-        <button type="button" class="menu-item" data-module="tvstats" onclick="activateModule('tvstats')">
+        <button type="button" class="menu-item active" data-module="tvstats" onclick="activateModule('tvstats')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="1"/><rect x="12" y="8" width="3" height="10" rx="1"/><rect x="17" y="5" width="3" height="13" rx="1"/></svg>
           TS Scraper
+        </button>
+        <button type="button" class="menu-item" data-module="scraper" onclick="activateModule('scraper')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          MDBList Scraper
         </button>
         <button type="button" class="menu-item" data-module="official" onclick="activateModule('official')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1386,7 +1386,7 @@ function humanizeError(msg) {
 
 // ─── Menu ───
 function toggleMenu() { document.getElementById('menuPopup').classList.toggle('visible'); }
-let activeModule = 'scraper';
+let activeModule = 'tvstats';
 const MODULE_KEY = 'mylist_active_module';
 function activateModule(m) {
   document.getElementById('menuPopup').classList.remove('visible');
@@ -3383,9 +3383,9 @@ backdropCancels(document.getElementById('deleteConfirmDlg'), closeDeleteConfirm)
 backdropCancels(document.getElementById('officialPickDlg'), closeOfficialPicker);
 
 initSwatches();
-let savedModule = 'scraper';
-try { savedModule = localStorage.getItem(MODULE_KEY) || 'scraper'; } catch (e) {}
-if (savedModule !== 'scraper') activateModule(savedModule); else renderScraper();
+let savedModule = 'tvstats';
+try { savedModule = localStorage.getItem(MODULE_KEY) || 'tvstats'; } catch (e) {}
+if (savedModule !== 'tvstats') activateModule(savedModule); else renderTvstats();
 refreshDirtyUI();
 </script>
 </body>
