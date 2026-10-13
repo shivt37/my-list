@@ -637,7 +637,9 @@ export async function handleTsFetch(env, request) {
   } catch {
     return json({ error: "Missing or invalid url." }, 400);
   }
-  if ((u.hostname !== "televisionstats.com" && u.hostname !== "www.televisionstats.com") || u.protocol !== "https:") {
+  // TEMP-PROBE (revert after test): rottentomatoes.com added to test
+  // whether worker egress passes RT's protection. NOT for production.
+  if ((u.hostname !== "televisionstats.com" && u.hostname !== "www.televisionstats.com" && u.hostname !== "www.rottentomatoes.com") || u.protocol !== "https:") {
     return json({ error: "Only https://televisionstats.com URLs accepted." }, 400);
   }
   try {
