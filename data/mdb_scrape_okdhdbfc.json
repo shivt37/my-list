@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1791806497373,
+  "scraped_at": 1791849692175,
   "items": [
     {
       "slug": "3vegn-avatar-seven-havens",
@@ -22,6 +22,16 @@
       "score": 7,
       "poster_path": "vgLqqhMUbljp585qPp1EFCyJtcz.jpg",
       "description": "When a mysterious sea creature terrorizes a small Newfoundland town, a hard-bitten fisherman and his family fight to protect their close-knit community.",
+      "first_air_date": "2026-10-08"
+    },
+    {
+      "slug": "439i1-cupertino",
+      "imdb_id": "tt33270224",
+      "title": "Cupertino",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "70AhJpOqU2oKyQF2paJA764CSje.jpg",
+      "description": "A scrappy lawyer takes on a powerful tech giant in a high-stakes legal battle, navigating the cutthroat world of Silicon Valley while fighting for justice and the little guy's rights.",
       "first_air_date": "2026-10-08"
     },
     {
@@ -343,6 +353,16 @@
       "poster_path": "yotuQ5vEjtLdT3YeYVpmsg8UD6k.jpg",
       "description": "A detective duo for the ages, Tommy and Tuppence fall in love, fall out of it, and tumble back in, all while solving some thrilling and entertaining mysteries along the way.",
       "first_air_date": "2026-09-15"
+    },
+    {
+      "slug": "459wr-forever-home",
+      "imdb_id": "tt39319550",
+      "title": "Forever Home",
+      "year": 2026,
+      "score": null,
+      "poster_path": "xWzyUs5Jh6BkUStQznWQTLMwaiq.jpg",
+      "description": "Carol Crottie grows suspicious when her husband Robert, suffering from dementia, refuses to leave their home. She begins to question what really happened to his first wife Joan, who vanished with his brother two decades earlier.",
+      "first_air_date": "2026-09-14"
     },
     {
       "slug": "3dx0s-the-revolutionaries",
@@ -1119,7 +1139,7 @@
       "imdb_id": "tt32603995",
       "title": "Adventure Time: Side Quests",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "9CzcOB5J2ld2mIRMzHIwYGYx1Cn.jpg",
       "description": "Young hero Finn and his magical dog best friend Jake embark on adventures across the fantastical land of Ooo — partying with cloud people and punching evil in the butt along the way.",
       "first_air_date": "2026-06-29"
@@ -1423,26 +1443,6 @@
       "poster_path": "hpucDFIvWwcn6sXk8EOEX0dbY0C.jpg",
       "description": "Follow five work-obsessed twenty-somethings striving for professional success and, if they have time, personal happiness in Manhattan's most glamorous neighborhood, Murray Hill.",
       "first_air_date": "2026-06-02"
-    },
-    {
-      "slug": "44pev-the-fortune",
-      "imdb_id": "tt38783037",
-      "title": "The Fortune",
-      "year": 2026,
-      "score": null,
-      "poster_path": "et1W2kn43yEniVSQY0IEB4eB1UX.jpg",
-      "description": "Amanda Blakefield's life is a happy one, with her husband Jimmy and their son Luke. But when Amanda is left an enormous inheritance by a man she has neither met nor heard of before, her life starts to fall apart. Amanda becomes embroiled in the world of the Worralls, where Martin Worrall is head of a family bound in past secrets. As Amanda is drawn further and further into past events and relationships, all of their lives are turned upside down.",
-      "first_air_date": "2026-06-02"
-    },
-    {
-      "slug": "3x2eh-doctor-on-the-edge",
-      "imdb_id": "tt39184653",
-      "title": "Doctor on the Edge",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "zwEYhe03vN1rbjF8Bsf9Dng0W8e.jpg",
-      "description": "In South Korea, military service is mandatory for all men. But a select few—like privileged medical students—can serve as public health doctors instead. This is the story of those privileged few. Do Ji-ui, a plastic surgeon, is assigned to Pyeondong-do, an isolated island no one wants to go to. From the very first day, ominous signs begin to appear. Can he survive a full year on this hellish island and make it out alive—or will the island break him before he can hold the line?",
-      "first_air_date": "2026-06-01"
     }
   ]
 }

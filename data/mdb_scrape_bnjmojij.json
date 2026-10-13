@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1791806450627,
+  "scraped_at": 1791849650029,
   "items": [
+    {
+      "slug": "3hlbi-practical-magic-2",
+      "imdb_id": "tt32588798",
+      "title": "Practical Magic 2",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg",
+      "description": "The Owens sisters must confront the dark curse that threatens to unravel their family once and for all.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
+      "slug": "3o3yl-runner",
+      "imdb_id": "tt31349844",
+      "title": "Runner",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "yBKMAIj7clP42UkFejhGDBBoTpb.jpg",
+      "description": "A former soldier is thrown into a brutal race against time when a critical medical delivery makes him and his unlikely partner the targets of a ruthless cartel. As the mission spirals into a deadly manhunt, every detour, delay, and bullet pushes them closer to failure. With betrayal closing in from every side, they must survive the chase and deliver their cargo to save the life of a little girl.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
+      "slug": "41jt9-buddy",
+      "imdb_id": "tt37281055",
+      "title": "Buddy",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "1BdZbNvl1SfrrX8J9X5tQzN6Ivu.jpg",
+      "description": "A magical, singing orange unicorn holds his cast hostage in a surreal TV-show dimension, as he becomes more and more demented.",
+      "digital_release_date": "2026-10-13"
+    },
     {
       "slug": "3yxca-keu-bole-biplobi-keu-bole-dakat",
       "imdb_id": "tt37707854",
@@ -85,6 +115,16 @@
       "digital_release_date": "2026-10-06"
     },
     {
+      "slug": "4203g-how-to-divorce-during-the-war",
+      "imdb_id": "tt29009930",
+      "title": "How to Divorce During the War",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "naG3eXp5wsq7us6hnNKdaUgwOgk.jpg",
+      "description": "On the eve of Russia's invasion of Ukraine, a high-flying executive tells her husband she wants a divorce, forcing the couple to navigate their bitter separation amid an escalating mid-life crisis and an unfolding regional refugee emergency.",
+      "digital_release_date": "2026-10-06"
+    },
+    {
       "slug": "44n2v-fall-2-deadpoint",
       "imdb_id": "tt31192372",
       "title": "Fall 2: Deadpoint",
@@ -99,7 +139,7 @@
       "imdb_id": "tt36429458",
       "title": "Doing Life",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "5nZVjsCk5tWyyhLGt5U2TxsR85w.jpg",
       "description": "A single mother and an incarcerated man forge an unlikely bond through heartfelt letters, unlocking a door to redemption, hope and love against all odds.",
       "digital_release_date": "2026-10-02"
@@ -1403,46 +1443,6 @@
       "poster_path": "ltuAheARdaUHbaS8lX1ZPrNOXe5.jpg",
       "description": "After her mother's sudden death, Ruth returns to her hometown and reunites with her father, whose odd behavior makes her question what really happened.",
       "digital_release_date": "2026-07-24"
-    },
-    {
-      "slug": "3g6q8-a-mosquito-in-the-ear",
-      "imdb_id": "tt32331644",
-      "title": "A Mosquito in the Ear",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "kiU9L3YUi8IWmsZw8V1YHiwYtqE.jpg",
-      "description": "After struggling with fertility issues, an American couple decides to pursue international adoption. They are matched with a 4-year-old girl named Sarvari and travel to an orphanage in Goa, India, to bring her home.",
-      "digital_release_date": "2026-07-23"
-    },
-    {
-      "slug": "3mx6b-the-dink",
-      "imdb_id": "tt33499146",
-      "title": "The Dink",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "8dq7vaUkXPqwqKxBFW4qJNBWeop.jpg",
-      "description": "Desperate to save a struggling country club and earn his father's respect, a washed-up tennis pro is compelled to break a sacred vow and do the unthinkable: play pickleball.",
-      "digital_release_date": "2026-07-23"
-    },
-    {
-      "slug": "44bz0-the-debt-collector",
-      "imdb_id": "tt39749953",
-      "title": "The Debt Collector",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "vwqX6FGzUfzbmb6iO0HJv1uT9KZ.jpg",
-      "description": "Tormented by past mistakes and a terminal diagnosis, an ex-debt collector returns to the underworld to protect the victims of a violent organization.",
-      "digital_release_date": "2026-07-23"
-    },
-    {
-      "slug": "3zi7p-elize-shadows-of-a-woman",
-      "imdb_id": "tt37042085",
-      "title": "Elize: Shadows of a Woman",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "l3wevYWTpiZSUEM5B0Q8c21ALAD.jpg",
-      "description": "In this retelling of a real case, a former escort discovers her wealthy husband's infidelity and struggles to cope as betrayal poisons their marriage.",
-      "digital_release_date": "2026-07-22"
     }
   ]
 }

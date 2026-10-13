@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1791806467323,
+  "scraped_at": 1791849664364,
   "items": [
+    {
+      "slug": "42wxc-the-incomer",
+      "imdb_id": "tt36980182",
+      "title": "The Incomer",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "QSHsgR6ZTAbnDkHjRhaxkL3caj.jpg",
+      "description": "On an Orkney isle, two siblings survive by hunting seabirds, retelling the stories of their ancestors, and defending the isle from dreaded \"incomers\". Their world is upended with the arrival of an awkward council worker who has come to uproot them from their homeland.",
+      "digital_release_date": null
+    },
     {
       "slug": "45flp-clown-panic",
       "imdb_id": "tt46659729",
@@ -1030,7 +1040,7 @@
       "title": "Lockbox",
       "year": 2026,
       "score": 4,
-      "poster_path": "6feyDUp0QyOqukf2Hf9yXGLurD9.jpg",
+      "poster_path": "eRLuOfJyVJBN6htK6pGoVDUxkPa.jpg",
       "description": "A woman puts her life on the line to protect her troubled and enigmatic cousin, who has been targeted and hunted by a powerful supernatural force.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "mhatkIu25HQ4orQTunuFNQZzrFl.jpg",
       "description": "In a futuristic world where humans and mermaids coexist, the life of mild-mannered office worker Stephan is upended when he is suddenly proposed to by Chao — a princess from the mermaid kingdom. With no time to make sense of what's happening, Stephan soon finds himself living with the unpredictable, wholehearted Chao, and her sincere love begins to break down his emotional barriers.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3l315-glenrothan",
-      "imdb_id": "tt16112292",
-      "title": "Glenrothan",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "7I797gF8aGuTRSVeM3lu84PZouk.jpg",
-      "description": "After thirty-five years abroad, Donal returns to his native Scotland to make amends with his estranged brother Sandy.",
       "digital_release_date": null
     }
   ]
