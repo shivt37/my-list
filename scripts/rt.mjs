@@ -956,9 +956,21 @@ export async function paginateChart(t, getHtml, first) {
       break;
     }
     seenCursors.add(cursor);
-    const page = parseCnapi(await getHtml(cnapiUrl(vanity, filters, cursor)));
+    let page = parseCnapi(await getHtml(cnapiUrl(vanity, filters, cursor)));
+    if (page.rows.length === 0 && page.hasNext) {
+      // Empty yet claims more: transient blip, not list end. One polite
+      // retry; a genuine end stays empty and stops below.
+      console.warn(`  [paginate] empty page at cursor ${cursor} (hasNext:true) - retrying once...`);
+      await sleep(10000);
+      try {
+        page = parseCnapi(await getHtml(cnapiUrl(vanity, filters, cursor)));
+      } catch (e) {
+        console.warn(`  [paginate] retry failed (${e.message}) - stopping`);
+        break;
+      }
+    }
     if (page.rows.length === 0) {
-      console.warn(`  [paginate] empty page at cursor ${cursor} - stopping`);
+      console.warn(`  [paginate] empty page at cursor ${cursor} (hasNext:${page.hasNext}) - stopping`);
       break;
     }
     for (const r of page.rows) pushUnique(r);
