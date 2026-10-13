@@ -3,7 +3,7 @@
 // "HH:MM" strings; IST display lives in the UI layer (IST has no DST, so
 // the mapping never shifts).
 
-export const SCHEDULE_MODULES = ["scrape", "official", "simkl", "tmdb", "tvstats"];
+export const SCHEDULE_MODULES = ["scrape", "official", "simkl", "tmdb", "tvstats", "rt"];
 
 // Defaults mirror the pre-DO behavior: everything twice daily except tmdb
 // (owner decision, F14) and tvstats (same once-daily cadence as tmdb -
@@ -15,6 +15,7 @@ const DEFAULT_TIMES = {
   simkl: ["00:00", "12:00"],
   tmdb: ["00:00"],
   tvstats: ["00:00"],
+  rt: ["00:00"],
 };
 
 const TIME_RE = /^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/;

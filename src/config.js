@@ -7,6 +7,10 @@
 // id = tvstats_<8 alnum chars derived from the chart URL>, permanent.
 // Only televisionstats.com Attention-chart families accepted (see
 // TVSTATS_MOVIE_RES / TVSTATS_SHOW_RES); kind auto-detects from the URL.
+// RT module: each list = { id, name, url, type, maxItems, enabled }.
+// id = rt_<8 alnum chars derived from the chart URL>, permanent.
+// Any rottentomatoes.com/browse/... URL accepted; type is operator-chosen
+// (movie or series), never derived from the URL.
 
 import { createHash } from "node:crypto";
 import { normalizeSchedules } from "./schedule.js";
@@ -17,6 +21,7 @@ const RUNS_OFFICIAL_KEY = "runs:official";
 const RUNS_SIMKL_KEY = "runs:simkl";
 const RUNS_TMDB_KEY = "runs:tmdb";
 const RUNS_TVSTATS_KEY = "runs:tvstats";
+const RUNS_RT_KEY = "runs:rt";
 const RUNS_MAX = 30;
 const HEALED_KEY = "healed";
 const RANDOM_ID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -26,6 +31,7 @@ export function runsKeyFor(catalogId) {
   if (catalogId.startsWith("simkl_")) return RUNS_SIMKL_KEY;
   if (catalogId.startsWith("tmdb_")) return RUNS_TMDB_KEY;
   if (catalogId.startsWith("tvstats_")) return RUNS_TVSTATS_KEY;
+  if (catalogId.startsWith("rt_")) return RUNS_RT_KEY;
   return RUNS_SCRAPER_KEY;
 }
 
@@ -33,6 +39,7 @@ export const OFFICIAL_RUNS_KEY = RUNS_OFFICIAL_KEY;
 export const SIMKL_RUNS_KEY = RUNS_SIMKL_KEY;
 export const TMDB_RUNS_KEY = RUNS_TMDB_KEY;
 export const TVSTATS_RUNS_KEY = RUNS_TVSTATS_KEY;
+export const RT_RUNS_KEY = RUNS_RT_KEY;
 
 // Single source of truth for the TMDB catalog-id string. The manifest,
 // catalog lookup, refresh routing, and status naming all build this same
@@ -58,7 +65,7 @@ export function randomScraperId(seedUrl) {
 }
 
 export function emptyConfig() {
-  return { tvstats: { lists: [] }, scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
+  return { tvstats: { lists: [] }, rt: { lists: [] }, scraper: { lists: [] }, official: { lists: [] }, simkl: { lists: [] }, tmdb: { lists: [] } };
 }
 
 // F3: configVersion = content hash of the config blob. Every save stamps
@@ -240,6 +247,81 @@ export function tvstatsContentHash(list) {
     .slice(0, 16);
 }
 
+// Rotten Tomatoes lists. Any /browse/... URL is accepted (charts, sorts,
+// genre/certified filters) - type is operator-chosen, never derived.
+// Plain http can never succeed, so reject it here instead of saving a
+// permanently red list.
+export function rtUrlOk(rawUrl) {
+  try {
+    const u = new URL(String(rawUrl || ""));
+    if (u.hostname !== "rottentomatoes.com" && u.hostname !== "www.rottentomatoes.com") return false;
+    if (u.protocol !== "https:") return false;
+    return u.pathname === "/browse" || u.pathname.startsWith("/browse/");
+  } catch {
+    return false;
+  }
+}
+
+// Seeded IDs derive from the chart URL (first 8 of sha256, alnum), so the
+// ID the config shows is the ID the scraper writes under - same contract
+// as tvstatsIdFor. The UI generates ids client-side by the same scheme.
+export function rtIdFor(chartUrl) {
+  const seed = chartUrl || Math.random().toString(36).slice(2);
+  const hex = createHash("sha256").update(seed).digest("hex").slice(0, 8);
+  let out = "";
+  for (let i = 0; i < 8; i++) {
+    out += RANDOM_ID_CHARS[parseInt(hex[i], 16) % RANDOM_ID_CHARS.length];
+  }
+  return "rt_" + out;
+}
+
+// Out-of-the-box pair on fresh installs. Operators paste more browse URLs
+// and delete freely - same openness as the scraper module.
+export function rtDefaults() {
+  return [
+    { url: "https://www.rottentomatoes.com/browse/movies_at_home/sort:popular", name: "RT Movies At Home", type: "movie", maxItems: 100, enabled: true },
+    { url: "https://www.rottentomatoes.com/browse/tv_series_browse/sort:popular", name: "RT Popular Series", type: "series", maxItems: 100, enabled: true },
+  ].map((s) => ({ id: rtIdFor(s.url), name: s.name, url: s.url, type: s.type, maxItems: s.maxItems, enabled: s.enabled }));
+}
+
+// Hard ceiling per config save - each active list costs chart + detail
+// fetches per cron run; resolved IDs are cached by slug downstream.
+export const MAX_RT_LISTS = 30;
+const SANE_RT_ID = /^rt_[a-z0-9]{8}$/;
+
+// Unknown-shaped entries are dropped rather than healed - a bad id, a
+// non-browse URL, or a bad type can't reach data/ paths.
+export function normalizeRtList(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const url = String(raw.url || "").slice(0, 2000);
+  if (!rtUrlOk(url)) return null;
+  const type = raw.type === "series" ? "series" : raw.type === "movie" ? "movie" : null;
+  if (!type) return null;
+  return {
+    id: typeof raw.id === "string" && SANE_RT_ID.test(raw.id) ? raw.id : rtIdFor(url),
+    name: String(raw.name || "").trim().slice(0, 200) || "Untitled",
+    url,
+    type,
+    maxItems: Number.isFinite(raw.maxItems) ? Math.min(200, Math.max(1, Math.floor(raw.maxItems))) : 100,
+    enabled: raw.enabled !== false,
+  };
+}
+
+export function migrateRt(raw) {
+  const rawLists = Array.isArray(raw?.rt?.lists) ? raw.rt.lists : [];
+  return rawLists.map(normalizeRtList).filter(Boolean).slice(0, MAX_RT_LISTS);
+}
+
+// Fields that affect the scraped data file: url, maxItems, enabled, type.
+// Name only affects the manifest (built live from config), so renaming a
+// list must not re-scrape - same contract as tvstatsContentHash.
+export function rtContentHash(list) {
+  return createHash("sha256")
+    .update([list.url, list.maxItems, list.enabled ? 1 : 0, list.type].join(" "))
+    .digest("hex")
+    .slice(0, 16);
+}
+
 // Seed defaults for fresh installs. The slug set is OPEN - operators add
 // more via the /configure picker (sourced live from MDBList's
 // /lists/official catalog) and delete freely. These three stay as the
@@ -394,7 +476,7 @@ export function migrateConfig(raw) {
     maxPages: Number.isFinite(l.maxPages) ? Math.min(50, Math.max(1, Math.floor(l.maxPages))) : 3,
     enabled: l.enabled !== false,
   }));
-  return { tvstats: { lists: migrateTvstats(raw) }, scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
+  return { tvstats: { lists: migrateTvstats(raw) }, rt: { lists: migrateRt(raw) }, scraper: { lists: migrated }, official: { lists: migrateOfficial(raw) }, simkl: { lists: migrateSimkl(raw), timezone: normalizeTz(raw?.simkl?.timezone) }, tmdb: { lists: migrateTmdb(raw) }, schedules: normalizeSchedules(raw && raw.schedules) };
 }
 
 // TMDB Discover list entry. Ids are pinned at creation (client + server
@@ -589,6 +671,14 @@ export async function loadConfig(kv) {
   const tvstatsKeyAbsent = !(raw && typeof raw === "object" && Array.isArray(raw.tvstats?.lists));
   if (tvstatsKeyAbsent) {
     cfg.tvstats = { lists: tvstatsDefaults() };
+  }
+
+  // Same seed-once contract as tvstats: out-of-the-box RT pair only when
+  // the key is missing entirely (fresh install) - an explicit empty
+  // array means the operator deleted all.
+  const rtKeyAbsent = !(raw && typeof raw === "object" && Array.isArray(raw.rt?.lists));
+  if (rtKeyAbsent) {
+    cfg.rt = { lists: rtDefaults() };
   }
 
   // One-shot healing: if any persisted list matches a seed entry by URL

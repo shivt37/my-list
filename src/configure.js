@@ -926,6 +926,10 @@ export function buildConfigurePage(origin, config, opts = {}) {
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="1"/><rect x="12" y="8" width="3" height="10" rx="1"/><rect x="17" y="5" width="3" height="13" rx="1"/></svg>
           TS Scraper
         </button>
+        <button type="button" class="menu-item" data-module="rt" onclick="activateModule('rt')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          RT Scraper
+        </button>
         <button type="button" class="menu-item" data-module="scraper" onclick="activateModule('scraper')">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           MDBList Scraper
@@ -1090,8 +1094,8 @@ function toggleAccentPopup() { document.getElementById('accentPopup').classList.
 // state.schedules, so the normal dirty-gated Save persists them; the
 // server re-arms the Clock on save. Storage is UTC HH:MM - every time
 // shown with its IST twin (UTC +5:30).
-var SCHED_KEY = { scraper: 'scrape', tvstats: 'tvstats', official: 'official', simkl: 'simkl', tmdb: 'tmdb' };
-var SCHED_NAMES = { scraper: 'MDBList Scraper', tvstats: 'Television Stats', official: 'MDBList Official', simkl: 'Simkl', tmdb: 'TMDB Discover' };
+  var SCHED_KEY = { scraper: 'scrape', tvstats: 'tvstats', rt: 'rt', official: 'official', simkl: 'simkl', tmdb: 'tmdb' };
+  var SCHED_NAMES = { scraper: 'MDBList Scraper', tvstats: 'Television Stats', rt: 'RT Scraper', official: 'MDBList Official', simkl: 'Simkl', tmdb: 'TMDB Discover' };
 
 function schedEntry() {
   if (!state.schedules || typeof state.schedules !== 'object') state.schedules = defaultSchedules();
@@ -1393,7 +1397,7 @@ function activateModule(m) {
   // F17: an unknown module (e.g. a tainted localStorage value from an old
   // session) is a silent no-op - silence beats a wrong "coming soon"
   // message for a state that can't occur through the UI.
-  if (m !== 'scraper' && m !== 'tvstats' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { return; }
+  if (m !== 'scraper' && m !== 'tvstats' && m !== 'rt' && m !== 'official' && m !== 'simkl' && m !== 'tmdb') { return; }
   // UI-F1: cancel any open rename BEFORE the module flips. saveName() reads
   // the *current* module's lists at save time; committing during a tab
   // switch would land the typed text on the new tab's same-index list
@@ -1407,8 +1411,8 @@ function activateModule(m) {
   activeModule = m;
   try { localStorage.setItem(MODULE_KEY, m); } catch (e) {}
   document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.module === m));
-  if (m === 'scraper') renderScraper();
-  else if (m === 'tvstats') renderTvstats();
+  if (m === 'scraper') renderScraper();  else if (m === 'tvstats') renderTvstats();
+  else if (m === 'rt') renderRt();
   else if (m === 'official') renderOfficial();
   else if (m === 'tmdb') renderTmdb();
   else renderSimkl();
@@ -1537,6 +1541,7 @@ function moduleLists() {
     : activeModule === 'official' ? state.official.lists
     : activeModule === 'tmdb' ? state.tmdb.lists
     : activeModule === 'tvstats' ? state.tvstats.lists
+    : activeModule === 'rt' ? state.rt.lists
     : state.scraper.lists;
 }
 // A45: a disabled list no longer fades via opacity (that failed contrast).
@@ -1607,7 +1612,7 @@ function saveName(i) {
   rerenderActive();
 }
 function cancelName(i) { listNameEditIndex = -1; rerenderActive(); }
-function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else if (activeModule === 'official') renderOfficial(); else if (activeModule === 'tmdb') renderTmdb(); else if (activeModule === 'tvstats') renderTvstats(); else renderScraper(); }
+function rerenderActive() { if (activeModule === 'simkl') renderSimkl(); else if (activeModule === 'official') renderOfficial(); else if (activeModule === 'tmdb') renderTmdb(); else if (activeModule === 'tvstats') renderTvstats(); else if (activeModule === 'rt') renderRt(); else renderScraper(); }
 
 // Clicking anywhere outside the open rename input commits it. Native blur
 // only fires when focus moves to another focusable element, so a click on
@@ -1673,6 +1678,193 @@ async function confirmCreateList() {
   setStatus('List added. Press Save to keep it.', 'ok');
 }
 
+// ─── RT module tab ───
+// Same card layout as the scraper tab: enable toggle, rename, id chip,
+// chart URL, operator-chosen type select (Movie/Series - never derived),
+// Items input (1-200, default 100) instead of Pages, per-list refresh +
+// delete.
+function renderRt() {
+  const host = document.getElementById('tabHost');
+  const lists = state.rt.lists;
+  const cards = lists.map((l, i) => {
+    return '<div class="list-card' + (l.enabled ? '' : ' disabled') + '" id="rtcard-' + i + '">' +
+      '<div class="card-head">' +
+        '<label class="toggle"><input type="checkbox" ' + (l.enabled ? 'checked' : '') + ' onchange="toggleRt(' + i + ')"><span class="toggle-slider"></span></label>' +
+        nameEditBlock(i, l) +
+        '<span class="id-chip">' + escapeAttr(l.id) + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<input class="url-input" value="' + escapeAttr(l.url) + '" onchange="updateRt(' + i + ', \\\'url\\\', this.value)" placeholder="https://www.rottentomatoes.com/browse/movies_at_home/sort:popular" spellcheck="false">' +
+        '<select onchange="updateRt(' + i + ', \\\'type\\\', this.value)">' +
+          '<option value="movie"' + (l.type === 'movie' ? ' selected' : '') + '>Movie</option>' +
+          '<option value="series"' + (l.type === 'series' ? ' selected' : '') + '>Series</option>' +
+        '</select>' +
+        '<label class="pages-field">Items' +
+          '<input class="max-pages" type="number" min="1" max="200" value="' + l.maxItems + '" onchange="updateRt(' + i + ', \\\'maxItems\\\', this.value)">' +
+        '</label>' +
+        '<span class="body-actions">' +
+          '<button class="btn-icon card-refresh" onclick="askSingleRefresh(' + i + ')" title="Refresh this list" aria-label="Refresh this list">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>' +
+          '</button>' +
+          '<button class="danger" onclick="askDelete(' + i + ')">Delete</button>' +
+        '</span>' +
+      '</div>' +
+      '<div class="card-error" id="rtcardError-' + i + '"></div>' +
+    '</div>';
+  }).join('');
+
+  const emptyHint = lists.length ? '' : '<div class="empty">No RT lists yet - add your first below.</div>';
+  const trigger = lists.length
+    ? '<button class="btn-create-list" id="createRtListBtn" onclick="showCreateRtRow()">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+      'Add List</button>'
+    : '';
+  const createOpen = lists.length ? ' style="display:none"' : ' style="display:flex"';
+  const createSlot =
+    '<div class="create-slot">' + trigger +
+      '<div class="create-form" id="createRtListRow"' + createOpen + '>' +
+        '<label class="field"><span class="field-label">Name</span><input class="name-input" id="createRtNameInput" placeholder="Name - e.g. RT Popular Movies" spellcheck="false"></label>' +
+        '<label class="field"><span class="field-label">Chart URL</span><input class="url-input" id="createRtUrlInput" placeholder="https://www.rottentomatoes.com/browse/movies_at_home/sort:popular" spellcheck="false"></label>' +
+        '<select id="createRtTypeSelect"><option value="movie">Movie</option><option value="series">Series</option></select>' +
+        '<label class="pages-field">Items<input class="max-pages" id="createRtItemsInput" type="number" min="1" max="200" value="100"></label>' +
+        '<span class="body-actions"><button onclick="confirmCreateRt()">Add</button><button type="button" class="secondary" onclick="hideCreateRtRow()">Cancel</button></span>' +
+      '</div>' +
+    '</div>';
+
+  document.getElementById('headerTitle').textContent = 'RT Scraper';
+  const toolbar = '<div class="scraper-toolbar"><button class="secondary" onclick="openStatus()">Status</button></div>';
+
+  host.innerHTML = toolbar + cards + emptyHint + createSlot;
+  applyDisabledState();
+  if (listNameEditIndex >= 0 && listNameEditIndex < lists.length) {
+    const el = document.getElementById('nameInput-' + listNameEditIndex);
+    if (el) { el.focus(); el.select(); }
+  }
+}
+
+function updateRt(i, key, value) {
+  const l = state.rt.lists[i];
+  if (!l) return;
+  if (key === 'maxItems') {
+    const n = parseInt(value, 10);
+    l.maxItems = Number.isFinite(n) ? Math.min(200, Math.max(1, n)) : 100;
+    // UI-F12 (mirrored from updateList): write the clamped value straight
+    // back so the field never displays a rejected number.
+    const f = document.querySelector('#rtcard-' + i + ' .max-pages');
+    if (f) f.value = l.maxItems;
+  } else if (key === 'url') {
+    // S4 (mirrored from updateList): same chart URL into two lists =
+    // duplicate catalog id. Block, snap the field back.
+    if (state.rt.lists.some((other, j) => j !== i && other.url === value)) {
+      setStatus('That chart URL is already added.', 'error');
+      const f = document.querySelector('#rtcard-' + i + ' .url-input');
+      if (f) f.value = l.url;
+      return;
+    }
+    if (!rtUrlOk(value)) {
+      setStatus('URL must be a rottentomatoes.com browse chart (https://www.rottentomatoes.com/browse/…).', 'error');
+      const f = document.querySelector('#rtcard-' + i + ' .url-input');
+      if (f) f.value = l.url;
+      return;
+    }
+    l.url = value;
+    renderRt();
+  } else {
+    l[key] = value;
+  }
+}
+
+function toggleRt(i) {
+  const l = state.rt.lists[i];
+  if (!l) return;
+  l.enabled = !l.enabled;
+  // UI-F10 (mirrored from toggleList): toggling off closes its open rename.
+  if (!l.enabled && listNameEditIndex === i) listNameEditIndex = -1;
+  renderRt();
+}
+
+// Client mirror of the server's rtUrlOk (src/config.js) - the server
+// re-validates on save, so this only drives add-time errors. Type is
+// operator-chosen (owner decision), so unlike tvstats there is no kind to
+// derive here - any /browse/... URL passes.
+function rtUrlOk(rawUrl) {
+  try {
+    const u = new URL(String(rawUrl || ''));
+    if (u.hostname !== 'rottentomatoes.com' && u.hostname !== 'www.rottentomatoes.com') return false;
+    if (u.protocol !== 'https:') return false;
+    return u.pathname === '/browse' || u.pathname.indexOf('/browse/') === 0;
+  } catch (e) { return null; }
+}
+
+// IDs derive from the chart URL - must match the server's rtIdFor()
+// (sha256 → first 8 hex nibbles mapped to alphabet).
+async function rtIdFor(chartUrl) {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  if (!chartUrl) return 'rt_' + Math.random().toString(36).slice(2, 10);
+  try {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(chartUrl));
+    const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    let out = '';
+    for (let i = 0; i < 8; i++) {
+      out += chars[parseInt(hex[i], 16) % chars.length];
+    }
+    return 'rt_' + out;
+  } catch (e) {
+    // S10 (mirrored from randomId): insecure contexts hide crypto.subtle.
+    return 'rt_' + Math.random().toString(36).slice(2, 10).padEnd(8, '0');
+  }
+}
+
+function showCreateRtRow() {
+  const btn = document.getElementById('createRtListBtn');
+  const row = document.getElementById('createRtListRow');
+  if (!btn || !row) return;
+  btn.style.display = 'none';
+  row.style.display = 'flex';
+  document.getElementById('createRtNameInput').focus();
+}
+function hideCreateRtRow() {
+  const btn = document.getElementById('createRtListBtn');
+  const row = document.getElementById('createRtListRow');
+  if (!btn || !row) return;
+  btn.style.display = '';
+  row.style.display = 'none';
+}
+async function confirmCreateRt() {
+  const name = document.getElementById('createRtNameInput').value.trim();
+  const url = document.getElementById('createRtUrlInput').value.trim();
+  const type = document.getElementById('createRtTypeSelect').value;
+  if (!name) { setStatus('List needs a name.', 'error'); return; }
+  if (!url) { setStatus('Paste a rottentomatoes.com browse chart URL.', 'error'); return; }
+  // Hard ceiling mirrors the server's MAX_RT_LISTS (src/config.js) -
+  // the server silently slices past 30, so block here with a message.
+  if (state.rt.lists.length >= 30) {
+    setStatus('RT list cap reached (30). Remove one before adding another.', 'error');
+    return;
+  }
+  if (!rtUrlOk(url)) {
+    setStatus('URL must be a rottentomatoes.com browse chart (https://www.rottentomatoes.com/browse/…).', 'error');
+    return;
+  }
+  if (state.rt.lists.some(l => l.name.toLowerCase() === name.toLowerCase())) {
+    setStatus('A list with that name already exists.', 'error');
+    return;
+  }
+  // S4 (mirrored from confirmCreateList): same URL twice = duplicate id.
+  if (state.rt.lists.some(l => l.url === url)) {
+    setStatus('That chart URL is already added.', 'error');
+    return;
+  }
+  const id = await rtIdFor(url);
+  const itemsInput = document.getElementById('createRtItemsInput');
+  const n = itemsInput ? parseInt(itemsInput.value, 10) : NaN;
+  const maxItems = Number.isFinite(n) ? Math.min(200, Math.max(1, n)) : 100;
+  state.rt.lists.push({ id, name, url, type, maxItems, enabled: true });
+  hideCreateRtRow();
+  renderRt();
+  setStatus('List added. Press Save to keep it.', 'ok');
+}
+
 function askDelete(i) {
   // F13: moduleLists() covers ALL four modules (simkl included) - the old
   // hand-rolled chain fell through to scraper on the simkl tab, so a
@@ -1683,7 +1875,7 @@ function askDelete(i) {
   document.getElementById('deleteConfirmTitle').textContent = "Delete '" + l.name + "'?";
   document.getElementById('deleteConfirmBody').textContent = activeModule === 'official'
     ? 'Removes this list from your addon and deletes its data files. You can re-add it later from the Add Official List picker.'
-    : activeModule === 'tvstats'
+    : activeModule === 'tvstats' || activeModule === 'rt'
       ? 'Removes this chart and its saved item count. You can re-add the chart URL later.'
       : 'Removes this list and its saved filters, tiers, and pages settings. You can re-add the URL later but tuning is lost.';
   document.getElementById('deleteConfirmDlg').showModal();
@@ -2049,11 +2241,11 @@ function addOfficial(idx) {
 // native dialog that names the list and states the timing.
 function askSingleRefresh(i) {
   const m = activeModule;
-  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : m === 'tvstats' ? state.tvstats.lists[i] : state.scraper.lists[i];
+  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : m === 'tvstats' ? state.tvstats.lists[i] : m === 'rt' ? state.rt.lists[i] : state.scraper.lists[i];
   if (!list) return;
   pendingRefreshIndex = i;
   document.getElementById('refreshOneTitle').textContent = "Refresh '" + list.name + "'?";
-  const timing = m === 'simkl' || m === 'tmdb' ? 'a few seconds' : m === 'official' || m === 'tvstats' ? 'about a minute' : '1-3 minutes';
+  const timing = m === 'simkl' || m === 'tmdb' ? 'a few seconds' : m === 'official' || m === 'tvstats' || m === 'rt' ? 'about a minute' : '1-3 minutes';
   document.getElementById('refreshOneBody').textContent = 'Queues a GitHub Actions rebuild of just this list now. Typically takes ' + timing + '; progress shows on the Status page.';
   document.getElementById('refreshOneDlg').showModal();
 }
@@ -2061,20 +2253,21 @@ function closeRefreshOneConfirm() { document.getElementById('refreshOneDlg').clo
 
 async function performSingleRefresh(i) {
   const m = activeModule;
-  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : m === 'tvstats' ? state.tvstats.lists[i] : state.scraper.lists[i];
+  const list = m === 'official' ? state.official.lists[i] : m === 'simkl' ? state.simkl.lists[i] : m === 'tmdb' ? state.tmdb.lists[i] : m === 'tvstats' ? state.tvstats.lists[i] : m === 'rt' ? state.rt.lists[i] : state.scraper.lists[i];
   if (!list) return;
-  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : m === 'tmdb' ? '#tcard-' + i : m === 'tvstats' ? '#tscard-' + i : '#card-' + i) + ' .card-refresh';
+  const cardSel = (m === 'official' ? '#ocard-' + i : m === 'simkl' ? '#socard-' + i : m === 'tmdb' ? '#tcard-' + i : m === 'tvstats' ? '#tscard-' + i : m === 'rt' ? '#rtcard-' + i : '#card-' + i) + ' .card-refresh';
   const btn = document.querySelector(cardSel);
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
   try {
     // Page-scoped: official tab sends page=official + the slug, simkl tab
     // sends page=simkl + the kind, tmdb tab sends page=tmdb + catalog id,
-    // tvstats tab sends page=tvstats + the list id, scraper tab sends the
+    // tvstats/rt tabs send page + the list id, scraper tab sends the
     // list id (defaults to the scraper page).
     const body = m === 'official' ? { page: 'official', id: list.slug }
       : m === 'simkl' ? { page: 'simkl', id: list.slug }
       : m === 'tmdb' ? { page: 'tmdb', id: 'tmdb_discover_' + list.mediaType + '_' + list.discoverListId }
       : m === 'tvstats' ? { page: 'tvstats', id: list.id }
+      : m === 'rt' ? { page: 'rt', id: list.id }
       : { id: list.id };
     const res = await fetch(ORIGIN + '/trigger-refresh', {
       method: 'POST',
@@ -2083,7 +2276,7 @@ async function performSingleRefresh(i) {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : m === 'tmdb' ? 'TMDB list.' : m === 'tvstats' ? 'Television Stats list.' : 'list.';
+    const tail = m === 'official' ? 'official list (movies + shows).' : m === 'simkl' ? 'simkl list.' : m === 'tmdb' ? 'TMDB list.' : m === 'tvstats' ? 'Television Stats list.' : m === 'rt' ? 'RT list.' : 'list.';
     setStatus("'" + list.name + "' is rebuilding - regenerating just that " + tail, 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + humanizeError(e.message), 'error');
@@ -3243,6 +3436,10 @@ async function saveAll() {
     setStatus('Every Television Stats list needs a chart URL.', 'error');
     return;
   }
+  if (state.rt.lists.some(l => !l.url.trim())) {
+    setStatus('Every RT list needs a chart URL.', 'error');
+    return;
+  }
   if (state.tmdb.lists.some(l => !l.discoverListId)) {
     setStatus('TMDB list is missing an id - delete and re-add it.', 'error');
     return;
@@ -3280,6 +3477,9 @@ async function saveAll() {
     const tvstatsLine = []
       .concat(data.tvstatsDispatched || [], (data.tvstatsRemoved || []).map((n) => n + ' (removed)'));
     if (tvstatsLine.length) regen.push('Regenerating Television Stats: ' + tvstatsLine.join(', '));
+    const rtLine = []
+      .concat(data.rtDispatched || [], (data.rtRemoved || []).map((n) => n + ' (removed)'));
+    if (rtLine.length) regen.push('Regenerating RT: ' + rtLine.join(', '));
     const tmdbLine = []
       .concat(data.tmdbChanged || [], (data.tmdbRemoved || []).map((n) => n + ' (removed)'));
     if (tmdbLine.length) regen.push('Regenerating TMDB: ' + tmdbLine.join(', '));
@@ -3290,7 +3490,8 @@ async function saveAll() {
     const turnedOff = []
       .concat((data.officialChanged || []).filter((n) => !(data.officialDispatched || []).includes(n)))
       .concat((data.simklChanged || []).filter((n) => !(data.simklDispatched || []).includes(n)))
-      .concat((data.tvstatsChanged || []).filter((n) => !(data.tvstatsDispatched || []).includes(n)));
+      .concat((data.tvstatsChanged || []).filter((n) => !(data.tvstatsDispatched || []).includes(n)))
+      .concat((data.rtChanged || []).filter((n) => !(data.rtDispatched || []).includes(n)));
 
     let msg;
     const offNote = turnedOff.length ? ' ' + turnedOff.join(', ') + ' turned off - no rebuild needed.' : '';
@@ -3313,11 +3514,11 @@ async function saveAll() {
 // focus-return to the invoker natively - the QW4/QW5 stopgaps are deleted.
 function openRefreshConfirm() {
   const m = activeModule;
-  const enabledCount = (m === 'official' ? state.official.lists : m === 'simkl' ? state.simkl.lists : m === 'tmdb' ? state.tmdb.lists : m === 'tvstats' ? state.tvstats.lists : state.scraper.lists)
+  const enabledCount = (m === 'official' ? state.official.lists : m === 'simkl' ? state.simkl.lists : m === 'tmdb' ? state.tmdb.lists : m === 'tvstats' ? state.tvstats.lists : m === 'rt' ? state.rt.lists : state.scraper.lists)
     .filter((l) => l.enabled).length;
   document.getElementById('refreshAllTitle').textContent = 'Refresh all lists?';
   const timing = m === 'simkl' ? 'a few seconds each'
-    : m === 'official' || m === 'tvstats' ? 'about a minute each'
+    : m === 'official' || m === 'tvstats' || m === 'rt' ? 'about a minute each'
     : '1-3 minutes each';
   // UI-F14: compose via a scope word with explicit single spacing - the old
   // inline ternary produced "enabled  lists" on the scraper tab (empty
@@ -3354,7 +3555,9 @@ async function confirmRefresh() {
         ? 'Refresh dispatched - GitHub Actions is regenerating all enabled SIMKL lists.'
         : activeModule === 'tvstats'
           ? 'Refresh dispatched - GitHub Actions is regenerating all enabled Television Stats lists.'
-          : 'Refresh dispatched - GitHub Actions is regenerating all enabled lists.';
+          : activeModule === 'rt'
+            ? 'Refresh dispatched - GitHub Actions is regenerating all enabled RT lists.'
+            : 'Refresh dispatched - GitHub Actions is regenerating all enabled lists.';
     setStatus(msg, 'ok');
   } catch (e) {
     setStatus('Refresh failed: ' + humanizeError(e.message), 'error');
@@ -3364,7 +3567,7 @@ async function confirmRefresh() {
 }
 
 function openStatus() {
-  const p = activeModule === 'official' ? 'official' : activeModule === 'simkl' ? 'simkl' : activeModule === 'tmdb' ? 'tmdb' : activeModule === 'tvstats' ? 'tvstats' : 'scraper';
+  const p = activeModule === 'official' ? 'official' : activeModule === 'simkl' ? 'simkl' : activeModule === 'tmdb' ? 'tmdb' : activeModule === 'tvstats' ? 'tvstats' : activeModule === 'rt' ? 'rt' : 'scraper';
   window.open(ORIGIN + '/status?page=' + p, '_blank');
 }
 

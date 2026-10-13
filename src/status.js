@@ -11,7 +11,7 @@
 import { handleStatus, html } from "./routes.js";
 import { loadConfig } from "./config.js";
 
-const MODULES = ["tvstats", "scraper", "official", "simkl", "tmdb"];
+const MODULES = ["tvstats", "rt", "scraper", "official", "simkl", "tmdb"];
 
 // Mirrors ACCENT_COLORS in configure.js (that file is one template literal -
 // not importable). Keep in sync if the configure palette ever changes.
@@ -248,7 +248,7 @@ export async function statusPageResponse(env, request) {
   }
 
   const tabs = MODULES.map(
-    (m) => '<button class="tab' + (m === active ? " active" : "") + '" role="tab" aria-selected="' + (m === active) + '" data-mod="' + m + '" onclick="switchTab(this)">' + (m === "scraper" ? "Scraper" : m === "tvstats" ? "TS" : m === "official" ? "Official" : m === "simkl" ? "Simkl" : "TMDB") + "</button>"
+    (m) => '<button class="tab' + (m === active ? " active" : "") + '" role="tab" aria-selected="' + (m === active) + '" data-mod="' + m + '" onclick="switchTab(this)">' + (m === "scraper" ? "Scraper" : m === "tvstats" ? "TS" : m === "rt" ? "RT" : m === "official" ? "Official" : m === "simkl" ? "Simkl" : "TMDB") + "</button>"
   ).join("");
 
   const sections = MODULES.map((m) => renderModule(m, runsByModule[m], now, active, errByModule[m])).join("");
@@ -513,7 +513,7 @@ function switchTab(btn) {
   });
   btn.classList.add('active');
   btn.setAttribute('aria-selected', 'true');
-  ['scraper', 'tvstats', 'official', 'simkl', 'tmdb'].forEach(function (m) {
+  ['scraper', 'tvstats', 'rt', 'official', 'simkl', 'tmdb'].forEach(function (m) {
     var sec = document.getElementById('mod-' + m);
     if (sec) sec.hidden = m !== btn.dataset.mod;
   });

@@ -1,0 +1,132 @@
+name: Refresh Rotten Tomatoes
+
+on:
+  # No `schedule:` block - the Clock DO (src/clock.js) dispatches this
+  # workflow with blank inputs (= all enabled) at 00:00 UTC. To change
+  # times, use the schedule editor on the /configure page.
+  workflow_dispatch:
+    inputs:
+      origin:
+        description: "Where the run was triggered from (cron clock sends cron; default manual)"
+        required: false
+        default: "manual"
+      ids:
+        description: "RT list ids to refresh (comma-separated rt_*, blank = all enabled)"
+        required: false
+        default: ""
+      action:
+        description: "generate | delete"
+        required: false
+        default: "generate"
+      delete_ids:
+        description: "Catalog ids to delete when action=delete (comma-separated)"
+        required: false
+        default: ""
+      config_version:
+        description: "configVersion the save expects (12-hex; worker stamps it; blank = skip wait)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  rt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      # Shared with the other workflows - all write data/ and POST run
+      # records, so they serialize (same group/comments as tvstats.yml).
+      group: my-list-scrape
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # No dependency install, no browser: rt.mjs imports node
+      # builtins only - all RT page fetches go through the worker's
+      # /ts-fetch proxy (RT_FETCH_BASE below); IMDb-suggest, Cinemeta
+      # and TMDB are server-built APIs fetched direct.
+
+      - name: Sanitize workflow inputs
+        id: sanitize
+        run: |
+          # ids are rt_<8 alnum>; action is generate|delete.
+          SANITIZED_IDS=$(printf '%s' "${{ github.event.inputs.ids }}" | tr -cd 'a-z0-9,_-')
+          SANITIZED_ACTION=$(printf '%s' "${{ github.event.inputs.action }}" | tr -cd 'a-z_')
+          SANITIZED_DELETE=$(printf '%s' "${{ github.event.inputs.delete_ids }}" | tr -cd 'a-z0-9,_-')
+          SANITIZED_VERSION=$(printf '%s' "${{ github.event.inputs.config_version }}" | tr -cd 'a-f0-9')
+          SANITIZED_ORIGIN=$(printf '%s' "${{ github.event.inputs.origin }}" | tr -cd 'a-z')
+          [ -z "$SANITIZED_ORIGIN" ] && SANITIZED_ORIGIN="manual"
+          [ -z "$SANITIZED_ACTION" ] && SANITIZED_ACTION="generate"
+          echo "ids=$SANITIZED_IDS" >> "$GITHUB_OUTPUT"
+          echo "action=$SANITIZED_ACTION" >> "$GITHUB_OUTPUT"
+          echo "delete_ids=$SANITIZED_DELETE" >> "$GITHUB_OUTPUT"
+          echo "config_version=$SANITIZED_VERSION" >> "$GITHUB_OUTPUT"
+          echo "origin=$SANITIZED_ORIGIN" >> "$GITHUB_OUTPUT"
+
+      # F3: rt reads lists + slug cache from /export-config and
+      # data/rt_cache.json - wait (bounded) until the config version this
+      # save dispatched for is visible, else a stale KV read applies the
+      # OLD settings to the run.
+      - name: Wait for KV consistency
+        if: ${{ steps.sanitize.outputs.config_version != '' }}
+        env:
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          INPUT_VERSION: ${{ steps.sanitize.outputs.config_version }}
+        run: |
+          for attempt in 1 2 3 4 5; do
+            VERSION=$(curl -sf "${WORKER_ORIGIN}/export-config" | grep -o '"configVersion": *"[^"]*"' | grep -o '[a-f0-9]\{12\}' || echo "")
+            if [ "$VERSION" = "$INPUT_VERSION" ]; then
+              echo "Config ready (attempt $attempt)"
+              exit 0
+            fi
+            echo "Config version $INPUT_VERSION not visible yet (saw '${VERSION:-none}') - waiting 20s..."
+            if [ "$attempt" -lt 5 ]; then
+              sleep 20
+            fi
+          done
+          echo "ERROR: config still stale after 5 attempts - aborting instead of applying old settings."
+          exit 1
+
+      - name: Run Rotten Tomatoes fetcher
+        working-directory: scripts
+        env:
+          TMDB_READ_ACCESS_TOKEN: ${{ secrets.TMDB_READ_ACCESS_TOKEN }}
+          WORKER_ORIGIN: ${{ secrets.WORKER_ORIGIN }}
+          RT_FETCH_BASE: ${{ secrets.WORKER_ORIGIN }}
+          INPUT_IDS: ${{ steps.sanitize.outputs.ids }}
+          INPUT_ACTION: ${{ steps.sanitize.outputs.action }}
+          INPUT_DELETE_IDS: ${{ steps.sanitize.outputs.delete_ids }}
+          INPUT_ORIGIN: ${{ steps.sanitize.outputs.origin }}
+        run: |
+          ARGS=()
+          [ -n "${INPUT_IDS}" ] && ARGS+=("--ids=${INPUT_IDS}")
+          [ -n "${INPUT_ACTION}" ] && ARGS+=("--action=${INPUT_ACTION}")
+          if [ "${INPUT_ACTION}" = "delete" ]; then
+            [ -n "${INPUT_DELETE_IDS}" ] && ARGS+=("--delete_ids=${INPUT_DELETE_IDS}")
+          fi
+          node rt.mjs "${ARGS[@]}"
+
+      - name: Commit data changes
+        if: always()
+        run: |
+          git config user.name "my-list-bot"
+          git config user.email "my-list-bot@users.noreply.github.com"
+          git add -f 'data/*.json'
+          if git diff --cached --quiet; then
+            echo "No data changes - skipping commit."
+          else
+            git commit -m "chore(data): refresh rotten tomatoes [skip ci]"
+            # Rebase onto whatever landed (other bots' data commits,
+            # deploys, manual pushes) - a bare push races and loses this
+            # run's data. -X theirs: on a content conflict the
+            # just-regenerated data wins - these files are throwaway
+            # artifacts, never hand-edited.
+            git pull --rebase -X theirs
+            git push
+          fi
