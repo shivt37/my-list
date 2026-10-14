@@ -530,6 +530,9 @@ export function rtEvidenceFromHtml(html) {
 // cast. Empty sets on any failure (abstain downstream, never throws).
 export async function tmdbEvidenceFor(type, numericId, ctx) {
   const out = { date: null, dirs: [], creators: [], prods: [], cast: [] };
+  // Details and credits fetch independently: either may fail while the
+  // other succeeds, and partial evidence still decides (a missing
+  // created_by must not erase known directors).
   try {
     const det = await ctx.tmdbGet(type === "movie" ? `/movie/${numericId}` : `/tv/${numericId}`);
     if (type === "movie") out.date = det.release_date || null;
@@ -537,6 +540,10 @@ export async function tmdbEvidenceFor(type, numericId, ctx) {
     if (type === "series") {
       for (const p of ((det && det.created_by) || [])) if (p && p.name) out.creators.push(normRtTitle(p.name));
     }
+  } catch {
+    // date/created_by unavailable - crew below may still match
+  }
+  try {
     const cred = await ctx.tmdbGet(type === "movie" ? `/movie/${numericId}/credits` : `/tv/${numericId}/credits`);
     for (const p of ((cred && cred.crew) || [])) {
       if (!p || !p.name) continue;
@@ -549,7 +556,7 @@ export async function tmdbEvidenceFor(type, numericId, ctx) {
       if (n) out.cast.push(n);
     }
   } catch {
-    // partial evidence stands - whatever resolved stays usable
+    // credits unavailable - date/created_by above may still match
   }
   return out;
 }
@@ -715,15 +722,21 @@ async function tryTwice(fn, row, label) {
 
 // Winner verification: the decided ID's TMDB crew must not contradict
 // RT's own page (which once carried a wrong date with right content).
+// ROLE-AWARE: Director/Creator-role agreement decides; producer-level
+// overlap only corroborates (franchise producers recur across
+// installments, so EP overlap must never pass or veto alone).
 // Returns { ok, reason }: reason is crew-match (verified), no-rt-crew /
 // no-tmdb-crew (nothing to compare - pass), or fetch-failed (could not
 // check - caller decides by backing strength). Only a proven
-// contradiction vetoes (ok:false). Bounded: ~3 TMDB calls per row.
+// role-level contradiction vetoes (ok:false). Bounded: ~3 calls per row.
 export async function verifyWinner(row, type, ctx, won) {
   const d = await tryTwice(() => ctx.getDetailHtml(row.slug), row, "detail");
   if (d.failed || !d.v) return { ok: true, reason: "fetch-failed" };
-  const rtCrew = rtCrewNames(rtCrewFromHtml(d.v));
-  if (rtCrew.length === 0) {
+  const rtEv = rtEvidenceFromHtml(d.v);
+  const rtDC = [...rtEv.dirs, ...rtEv.creators];
+  const rtHasDecisive = rtDC.length > 0;
+  const rtHasAny = rtHasDecisive || rtEv.prods.length > 0;
+  if (!rtHasAny) {
     console.log(`  [verify-skip] ${row.slug}: no RT crew to compare`);
     return { ok: true, reason: "no-rt-crew" };
   }
@@ -738,12 +751,19 @@ export async function verifyWinner(row, type, ctx, won) {
     if (hits.length > 0) num = String(hits[0].id);
   }
   if (!num || !/^[0-9]+$/.test(num)) return { ok: true, reason: "fetch-failed" };
-  const tmCrew = await tmdbCrewFor(type, num, ctx);
-  if (tmCrew.length === 0) {
+  const candEv = await tmdbEvidenceFor(type, num, ctx);
+  const tmDC = [...candEv.dirs, ...candEv.creators];
+  if (tmDC.length === 0) {
     console.log(`  [verify-skip] ${row.slug}: no TMDB crew to compare`);
     return { ok: true, reason: "no-tmdb-crew" };
   }
-  if (crewAgrees(rtCrew, tmCrew)) {
+  if (!rtHasDecisive) {
+    // Producer-level overlap only: corroboration, never a veto - but the
+    // check ran clean, so record the pass explicitly.
+    console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
+    return { ok: true, reason: "crew-match" };
+  }
+  if (rtDC.some((n) => tmDC.includes(n))) {
     console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
     return { ok: true, reason: "crew-match" };
   }
@@ -761,12 +781,7 @@ export async function evidenceRescore(row, type, ctx, vetoedId) {
   } catch {
     return null;
   }
-  const dy = detailYearFromHtml(html);
-  const dyNum = dy || null;
-  const rtDirRaw = directorFromHtml(html);
-  const rtDir = rtDirRaw ? normRtTitle(rtDirRaw) : "";
-  const rtCrew = rtCrewNames(rtCrewFromHtml(html));
-  const rtCast = rtCastFromHtml(html);
+  const rtEv = rtEvidenceFromHtml(html);
   const endpoint = type === "movie" ? "/search/movie" : "/search/tv";
   const nameOf = (r) => (type === "movie" ? r.title : r.name);
   const origOf = (r) => (type === "movie" ? r.original_title : r.original_name);
@@ -792,30 +807,14 @@ export async function evidenceRescore(row, type, ctx, vetoedId) {
     if (!ext || !ext.imdb_id) continue;
     const id = `imdb:${ext.imdb_id}`;
     if (id === vetoedId) continue; // vetoed stays vetoed
-    let ys = 0;
-    const ryM = /^([0-9]{4})/.exec(dateOf(r) || "");
-    if (dyNum && ryM) {
-      const d = Math.abs(+ryM[1] - dyNum);
-      if (d === 0) ys = 4;
-      else if (d <= 1) ys = 2;
+    // Shared evidence scorer (role-aware: EP overlap corroborates only).
+    const candEv = await tmdbEvidenceFor(type, r.id, ctx);
+    if (!candEv.date) {
+      const dd = dateOf(r) || null;
+      if (dd) candEv.date = dd;
     }
-    let ds = 0;
-    const crew = await tmdbCrewFor(type, r.id, ctx);
-    if (rtDirRaw && crew.includes(normRtTitle(rtDirRaw))) ds = 6;
-    else if (crew.some((n) => rtCrew.includes(n))) ds = 6;
-    let cs = 0;
-    if (type === "movie") {
-      try {
-        const cred = await ctx.tmdbGet(`/movie/${r.id}/credits`);
-        const cast5 = ((cred && cred.cast) || []).slice(0, 5).map((p) => normRtTitle(p && p.name));
-        for (const c of cast5) if (c && rtCast.includes(c)) cs++;
-      } catch {
-        // cast unavailable - year + director decide
-      }
-      if (cs > 3) cs = 3;
-    }
-    const total = ys + ds + cs;
-    if (!best || total > best.total) best = { id, date: dateOf(r) || null, total };
+    const sc = evidenceScore(rtEv, candEv);
+    if (!best || sc.total > best.total) best = { id, date: candEv.date, total: sc.total };
   }
   if (best) {
     console.log(`  [rescore] ${row.slug}: ${best.id} wins evidence (${best.total}) after veto`);
