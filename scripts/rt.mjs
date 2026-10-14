@@ -125,7 +125,11 @@ export async function tmdbGet(path, params = {}, fetchFn = fetch) {
 
 // Exact-match normalization (shared by all three sources): lowercase,
 // diacritics folded, & -> and, roman numerals folded (II vs 2),
-// punctuation/whitespace collapsed. No fuzzy/contains - exact only.
+// punctuation/whitespace collapsed. Dashes (hyphen + unicode variants)
+// fold to SPACE, other punctuation deletes: sources disagree as
+// "18-Year-Old" vs "18 Year Old" (common), while possessives agree as
+// "marvels" both sides (so apostrophes must keep deleting, and V/H/S
+// keeps collapsing to "vhs"). No fuzzy/contains - exact only.
 export function normRtTitle(s) {
   let x = String(s || "").toLowerCase().trim();
   x = x.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
@@ -134,7 +138,7 @@ export function normRtTitle(s) {
   // Single V/VI deliberately NOT folded: "V" is also a letter (V/H/S),
   // and folding it manufactures collisions; II-IV have no such dual use.
   x = x.replace(/\bii\b/g, "2").replace(/\biii\b/g, "3").replace(/\biv\b/g, "4");
-  x = x.replace(/[^a-z0-9 ]/g, "");
+  x = x.replace(/[‐‑‒–—―−-]/g, " ").replace(/[^a-z0-9 ]/g, "");
   return x.replace(/\s+/g, " ").trim();
 }
 
@@ -143,6 +147,24 @@ export function normRtTitle(s) {
 export function slugYearOf(slug) {
   const m = /_([0-9]{4})$/.exec(String(slug || ""));
   return m ? +m[1] : null;
+}
+
+// Title variants for recall (ADDITIVE - exact always tried first):
+// de-articled ("The House..." vs "House..."), de-possessive
+// ("Marvel's Daredevil" vs "Daredevil"), article-stripped throughout
+// ("Wuthering Heights: THE House..." vs "...House..."). Shared by the
+// corroboration ladder AND the suggest/Cinemeta verdicts; verdicts keep
+// their year/kind gates, so variants add recall without adding risk.
+export function titleKeys(t) {
+  const full = normRtTitle(t);
+  const keys = [full];
+  const noArt = full.replace(/^(the|a|an) /g, "");
+  if (noArt && noArt !== full) keys.push(noArt);
+  const noPoss = full.replace(/^\w+s /, "");
+  if (noPoss && noPoss !== full && noPoss !== noArt) keys.push(noPoss);
+  const noArts = full.split(" ").filter((w) => !["the", "a", "an"].includes(w)).join(" ");
+  if (noArts && !keys.includes(noArts)) keys.push(noArts);
+  return [...new Set(keys.filter(Boolean))];
 }
 
 // ── parsing ──
@@ -296,7 +318,15 @@ export async function suggestCandidates(row, type, fetchJson) {
   const qt = imdbSuggestSlug(row.title);
   if (qt && !queries.includes(qt)) queries.push(qt);
   if (slugPart && !queries.includes(slugPart)) queries.push(slugPart);
-  const nt = normRtTitle(row.title.replace(/\s*\(\d{4}[^)]*\)\s*$/, ""));
+  const stripped = row.title.replace(/\s*\(\d{4}[^)]*\)\s*$/, "");
+  const keys = titleKeys(stripped);
+  // De-possessive/de-articled file queries ("ricky gervais alley cats"
+  // lives under alley_cats.json): slug forms of every key, tried after
+  // the slug-derived queries above - additive, 404-safe.
+  for (const k of keys) {
+    const qs = k.replace(/ /g, "_");
+    if (qs && !queries.includes(qs)) queries.push(qs);
+  }
   const wantQid = type === "movie" ? ["movie", "tvMovie", "video"] : ["tvSeries", "tvMiniSeries"];
   for (const q of [...new Set(queries)].filter(Boolean)) {
     const urls = [
@@ -310,7 +340,10 @@ export async function suggestCandidates(row, type, fetchJson) {
       } catch {
         continue; // 404 variant - try next form
       }
-      const exact = ((d && d.d) || []).filter((c) => c && c.id && /^tt/.test(c.id) && normRtTitle(c.l) === nt);
+      // Candidates may match any title key ("Daredevil" for a "Marvel's
+      // Daredevil" row): the verdict's year gate + kind filter + verify
+      // still decide, so variants add recall without adding risk.
+      const exact = ((d && d.d) || []).filter((c) => c && c.id && /^tt/.test(c.id) && keys.includes(normRtTitle(c.l)));
       if (exact.length === 0) continue;
       const typed = exact.filter((c) => wantQid.includes(c.qid));
       return { cands: typed.length > 0 ? typed : exact, all: exact, query: q };
@@ -492,11 +525,13 @@ export async function suggestVerdict(row, type, fetchJson) {
 // Ungated by year (search metas carry no reliable year) - always WEAK,
 // corroboration only, never decisive alone.
 export async function cinemetaVerdict(row, type, fetchJson) {
-  const nt = normRtTitle(row.title);
+  const keys = titleKeys(row.title);
   const kind = type === "movie" ? "movie" : "series";
   const url = `https://v3-cinemeta.strem.io/catalog/${kind}/imdb/search=${encodeURIComponent(row.title)}.json`;
   const d = await fetchJson(url);
-  const hit = ((d && d.metas) || []).find((m) => normRtTitle(m.name) === nt);
+  // Any title key may match ("The Golden Ticket" for a "Wonka's the
+  // Golden Ticket" row): the verdict stays weak/corroboration-only.
+  const hit = ((d && d.metas) || []).find((m) => keys.includes(normRtTitle(m.name)));
   if (!hit || !hit.id) return null;
   const rel = String(hit.releaseInfo || hit.year || "");
   const dm = rel.match(/([0-9]{4})(?:-([0-9]{2})-([0-9]{2}))?/);
@@ -691,10 +726,13 @@ export function evidenceScore(rtEv, candEv) {
   // never agree ("John Smith" vs "Anna Smith").
   if (rtDC.length > 0 && tmDC.length > 0 && rtDC.some((a) => tmDC.some((b) => namesAgree(a, b)))) d = 6;
   let p = 0;
-  if (rtP.length > 0 && tmP.length > 0 && rtP.some((n) => tmP.includes(n))) p = 2;
+  // Tolerant like crewHit (matthew/matt murray class): producer overlap is
+  // corroboration-only (+2, never decisive alone), so alias breadth here
+  // cannot flip an id by itself.
+  if (rtP.length > 0 && tmP.length > 0 && rtP.some((a) => tmP.some((b) => namesAgree(a, b)))) p = 2;
   let c = 0;
   for (const n of ((candEv && candEv.cast) || [])) {
-    if (n && ((rtEv && rtEv.cast) || []).includes(n)) c++;
+    if (n && ((rtEv && rtEv.cast) || []).some((m) => namesAgree(m, n))) c++;
   }
   if (c > 3) c = 3;
   return { total: y + d + p + c, parts: { y, d, p, c } };
@@ -907,6 +945,16 @@ export async function verifyWinner(row, type, ctx, won) {
     if (rtEv.creators.some((a) => tmC.some((b) => namesAgree(a, b)))) {
       console.log(`  [verify-ok] ${row.slug}: ${won} creator matches RT page`);
       return { ok: true, reason: "crew-match" };
+    }
+    // Source-author class (One Piece: manga author Oda EPs the 2023
+    // adaptation while showrunners Owens/Maeda differ) - a creator
+    // sitting as EP on the candidate corroborates the pick instead of
+    // contradicting it, so abstain rather than veto. Series-only: movie
+    // EPs recur across installments (Halloween rule), where producer
+    // overlap must never rescue a pick.
+    if (rtEv.creators.some((a) => candEv.prods.some((b) => namesAgree(a, b)))) {
+      console.log(`  [verify-abstain] ${row.slug}: RT creator EPs ${won} - needs corroboration, not a veto`);
+      return { ok: true, reason: "creator-as-ep" };
     }
     console.log(`  [verify-veto] ${row.slug}: ${won} creator contradicts RT page - re-scoring`);
     return { ok: false, reason: "contradiction" };
@@ -1173,22 +1221,8 @@ export async function corroborateRow(row, type, ctx, cands) {
     ds.sort((a, b) => String(b).length - String(a).length);
     return ds[0] || null;
   };
-  // Title variants for recall (ADDITIVE - exact always tried first):
-  // de-articled ("The House..." vs "House..."), de-possessive
-  // ("Marvel's Daredevil" vs "Daredevil"), article-stripped throughout
-  // ("Wuthering Heights: THE House..." vs "...House..."). Used for
-  // base/season matching only - verdict pools stay exact-norm (safe).
-  const titleKeys = (t) => {
-    const full = normRtTitle(t);
-    const keys = [full];
-    const noArt = full.replace(/^(the|a|an) /g, "");
-    if (noArt && noArt !== full) keys.push(noArt);
-    const noPoss = full.replace(/^\w+s /, "");
-    if (noPoss && noPoss !== full && noPoss !== noArt) keys.push(noPoss);
-    const noArts = full.split(" ").filter((w) => !["the", "a", "an"].includes(w)).join(" ");
-    if (noArts && !keys.includes(noArts)) keys.push(noArts);
-    return [...new Set(keys.filter(Boolean))];
-  };
+  // Title variants for recall (module-level titleKeys): de-articled,
+  // de-possessive, article-stripped throughout.
   const artStrip = (s) => String(s || "").split(" ").filter((w) => !["the", "a", "an"].includes(w)).join(" ");
   const rowKeys = titleKeys(String(row.title || "").replace(/\s*\(\d{4}[^)]*\)\s*$/, ""));
   const scored = evs.map(({ id, candEv, entry }) => {
@@ -1206,14 +1240,17 @@ export async function corroborateRow(row, type, ctx, cands) {
       canC.length > 0 && rtEv.dirs.some((a) => canC.some((b) => namesAgree(a, b)));
     const contradicted = decC.length > 0 && canC.length > 0 && !decC.some((a) => canC.some((b) => namesAgree(a, b)));
     const yGate = yearOkFor(candEv);
-    const castHit = (candEv.cast || []).filter((c) => rtCast.includes(c)).length;
+    // Tolerant person equality throughout (vicky/victoria luengo class):
+    // same blessed namesAgree as decisive crewHit - exact title + year
+    // gate already constrain the pool, and these points corroborate only.
+    const castHit = (candEv.cast || []).filter((c) => rtCast.some((r) => namesAgree(r, c))).length;
     const stars = normRtTitle(entry ? entry.s || "" : "").split(" ").filter((w) => w.length > 2);
     const starHit = rtCast.filter((c) => stars.some((s) => c.includes(s))).length;
     const starCrewHit = decisive.length > 0 && rtCast.length > 0 &&
       stars.some((s) => decisive.some((d) => d.includes(s) || s.includes(d)));
     const rtEP = rtEv.prods;
     const candEP = [...candEv.creators, ...candEv.dirs, ...candEv.prods];
-    const epHit = rtEP.length > 0 && candEP.length > 0 && rtEP.some((n) => candEP.includes(n));
+    const epHit = rtEP.length > 0 && candEP.length > 0 && rtEP.some((a) => candEP.some((b) => namesAgree(a, b)));
     // Series-director agreement (episode-level): corroboration only.
     const sdirHit = type === "series" && rtEv.dirs.length > 0 && candEv.dirs.length > 0 &&
       rtEv.dirs.some((a) => candEv.dirs.some((b) => namesAgree(a, b)));
