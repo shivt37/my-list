@@ -219,6 +219,21 @@ export function detailYearFromHtml(html) {
   return m ? +m[1] : null;
 }
 
+// Movie Info release rows ("Release Date (Theaters)", "(Streaming)",
+// "Release Date") - premiere years that beat dateCreated when it holds
+// a RERELEASE date (Halloween: dateCreated 2018-09-27, Theaters row
+// Oct 25 1978). Returns unique years in page order.
+export function detailReleaseYears(html) {
+  const out = [];
+  const re = /Release Date[^<]*<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/g;
+  let m;
+  while ((m = re.exec(String(html || ""))) !== null) {
+    const y = /((?:19|20)\d{2})/.exec(m[1].replace(/<[^>]+>/g, " "));
+    if (y && !out.includes(+y[1])) out.push(+y[1]);
+  }
+  return out;
+}
+
 export function detailUrlFor(slug) {
   return `https://www.rottentomatoes.com/${String(slug || "").replace(/^\//, "")}`;
 }
@@ -259,7 +274,49 @@ export function scoreVote(cands) {
 }
 
 function imdbSuggestSlug(title) {
-  return String(title || "").toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_]/g, "");
+  // Chart/detail titles sometimes carry a year suffix ("Hope (2026)") -
+  // the suggestion files are keyed by bare title ("hope.json"), so a
+  // suffixed query 404s. Strip it before slugging.
+  const clean = String(title || "").replace(/\s*\(\d{4}[^)]*\)\s*$/, "").trim() || String(title || "");
+  return clean.toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_]/g, "");
+}
+
+// Raw suggestion candidates for a row across query variants (shared by
+// the verdict + corroboration so both see the same pool). Variants:
+// clean-title slug, slug minus trailing _YYYY (RT slugs like
+// the_furious_2025 resolve under the_furious.json), each tried flat then
+// first-letter path. Returns { cands, query } - exact-norm + kind
+// filtered like the verdict, plus the unfiltered exact list as `all`.
+// Never throws (miss = empty lists).
+export async function suggestCandidates(row, type, fetchJson) {
+  const queries = [];
+  const slugPart = String(row.slug || "").split("/")[1] || "";
+  const noYear = slugPart.replace(/_\d{4}$/, "");
+  if (noYear) queries.push(noYear);
+  const qt = imdbSuggestSlug(row.title);
+  if (qt && !queries.includes(qt)) queries.push(qt);
+  if (slugPart && !queries.includes(slugPart)) queries.push(slugPart);
+  const nt = normRtTitle(row.title.replace(/\s*\(\d{4}[^)]*\)\s*$/, ""));
+  const wantQid = type === "movie" ? ["movie", "tvMovie", "video"] : ["tvSeries", "tvMiniSeries"];
+  for (const q of [...new Set(queries)].filter(Boolean)) {
+    const urls = [
+      `https://v3.sg.media-imdb.com/suggestion/x/${q}.json`,
+      `https://v3.sg.media-imdb.com/suggestion/${q[0]}/${q}.json`,
+    ];
+    for (const u of urls) {
+      let d = null;
+      try {
+        d = await fetchJson(u);
+      } catch {
+        continue; // 404 variant - try next form
+      }
+      const exact = ((d && d.d) || []).filter((c) => c && c.id && /^tt/.test(c.id) && normRtTitle(c.l) === nt);
+      if (exact.length === 0) continue;
+      const typed = exact.filter((c) => wantQid.includes(c.qid));
+      return { cands: typed.length > 0 ? typed : exact, all: exact, query: q };
+    }
+  }
+  return { cands: [], all: [], query: null };
 }
 
 // One TMDB verdict: { id, weak, date }. id is "imdb:tt.." | "tmdb:<id>" |
@@ -306,23 +363,31 @@ export async function tmdbVerdict(row, type, ctx) {
   }
   // Listing-year failed (catalog/listing drift: RT charts print streaming
   // years, not film years). The RT detail page carries the TRUE
-  // film/premiere year - search with it before going year-blind. Bounded:
-  // one extra fetch, drift rows only.
+  // film/premiere year - search with it before going year-blind.
+  // Bounded: Movie-Info years then dateCreated (±1 each), drift rows only.
   let detailYear = null;
+  let detailHtml = null;
   try {
-    detailYear = detailYearFromHtml(await ctx.getDetailHtml(row.slug));
+    detailHtml = await ctx.getDetailHtml(row.slug);
+    detailYear = detailYearFromHtml(detailHtml);
   } catch {
     detailYear = null; // fall through to no-year below
   }
-  if (detailYear) {
-    for (const y of [detailYear, detailYear - 1, detailYear + 1]) {
-      if (!y || tried.has(y)) continue;
-      tried.add(y);
-      console.log(`  [detail-search] ${row.slug}: listing year failed, trying film year ${y}`);
-      const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
-      const hits = exactIn(s && s.results).filter((r) => agreeDetail(r, y));
-      if (hits.length === 1) return await idOfTmdbHit(ctx, type, hits[0], false);
-      if (hits.length > 1) break;
+  // Movie Info release rows beat a rerelease-dated dateCreated
+  // (Halloween: dateCreated 2018, Theaters row 1978) - try them first.
+  const infoYears = detailHtml ? detailReleaseYears(detailHtml) : [];
+  const filmYears = [...new Set([...infoYears, ...(detailYear ? [detailYear] : [])])];
+  if (filmYears.length > 0) {
+    for (const base of filmYears) {
+      for (const y of [base, base - 1, base + 1]) {
+        if (!y || tried.has(y)) continue;
+        tried.add(y);
+        console.log(`  [detail-search] ${row.slug}: listing year failed, trying film year ${y}`);
+        const s = await ctx.tmdbGet(endpoint, { query: row.title, [yearParam]: y, include_adult: false, language: "en-US", page: 1 });
+        const hits = exactIn(s && s.results).filter((r) => agreeDetail(r, y));
+        if (hits.length === 1) return await idOfTmdbHit(ctx, type, hits[0], false);
+        if (hits.length > 1) break;
+      }
     }
   }
   const s = await ctx.tmdbGet(endpoint, { query: row.title, include_adult: false, language: "en-US", page: 1 });
@@ -409,15 +474,10 @@ async function idOfTmdbHit(ctx, type, hit, weak) {
 // One IMDb-suggest verdict: { id, weak }. Exact-norm + year gate,
 // lowest rank wins. Pool fallback (no year match) is WEAK - the
 // Disciple/Social-Network misfires proved popularity alone misleads.
+// Shape unchanged (tests + callers rely on { id, weak, date }).
 export async function suggestVerdict(row, type, fetchJson) {
-  const nt = normRtTitle(row.title);
-  const url = `https://v3.sg.media-imdb.com/suggestion/x/${imdbSuggestSlug(row.title)}.json`;
-  const d = await fetchJson(url);
-  const cands = ((d && d.d) || []).filter((c) => normRtTitle(c.l) === nt);
-  if (cands.length === 0) return null;
-  const wantQid = type === "movie" ? ["movie", "tvMovie", "video"] : ["tvSeries", "tvMiniSeries"];
-  const typed = cands.filter((c) => wantQid.includes(c.qid));
-  const pool = typed.length > 0 ? typed : cands;
+  const { cands: pool } = await suggestCandidates(row, type, fetchJson);
+  if (pool.length === 0) return null;
   const years = row.year ? [row.year, row.year - 1, row.year + 1] : [];
   const sy = slugYearOf(row.slug);
   if (sy && !years.includes(sy)) years.push(sy);
@@ -500,18 +560,43 @@ export async function tmdbCrewFor(type, numericId, ctx) {
   }
 }
 
-// Person-name agreement for decisive roles: exact normalized match, or
-// same last name + same first initial (stage names and nicknames:
-// "Oz Perkins" vs "Osgood Perkins", "Bob Smith" vs "Robert Smith").
+// Person-name agreement for decisive roles, tolerant in four measured
+// ways (each proven on live rows, each bounded against false positives):
+// exact normalized match; same last name + same first initial (stage
+// names: "Oz Perkins" vs "Osgood Perkins"); token order-swap
+// ("Tanigaki Kenji" vs "Kenji Tanigaki", East-Asian name order);
+// spacing variants ("McCarthy" vs "Mc Carthy", Cinemeta typo class);
+// surname extension ("Raamla Mohamed" vs "Raamla Mohamed Hunter",
+// married names - shorter token sequence contained in order + same
+// first token, max 2 extra tokens).
 // Single-token names must match exactly (no initials to compare).
-// Distinct first names never agree ("John Smith" vs "Anna Smith").
+// Distinct first names never agree ("John Smith" vs "Anna Smith");
+// different-initial nicknames ("Bob" vs "Robert Smith") stay out of scope.
 export function namesAgree(a, b) {
   if (!a || !b) return false;
   if (a === b) return true;
   const pa = String(a).split(" ").filter(Boolean);
   const pb = String(b).split(" ").filter(Boolean);
   if (pa.length < 2 || pb.length < 2) return false;
-  return pa[pa.length - 1] === pb[pb.length - 1] && pa[0][0] === pb[0][0];
+  if (pa[pa.length - 1] === pb[pb.length - 1] && pa[0][0] === pb[0][0]) return true;
+  // Order-swap: same token multiset, e.g. family-name-first credits.
+  if (pa.length === pb.length && pa.length <= 4) {
+    const sa = [...pa].sort().join(" ");
+    const sb = [...pb].sort().join(" ");
+    if (sa === sb) return true;
+  }
+  // Spacing variants: one side splits a token ("Mc Carthy").
+  if (String(a).replace(/ /g, "") === String(b).replace(/ /g, "")) return true;
+  // Surname extension: shorter contained in order, same first token.
+  if (pa[0] === pb[0]) {
+    const [sh, lo] = pa.length <= pb.length ? [pa, pb] : [pb, pa];
+    if (lo.length - sh.length <= 2) {
+      let j = 0;
+      for (const t of lo) if (t === sh[j]) j++;
+      if (j === sh.length) return true;
+    }
+  }
+  return false;
 }
 
 // Crew agreement: >=1 shared normalized full name between RT's card and
@@ -588,6 +673,13 @@ export function evidenceScore(rtEv, candEv) {
     if (d === 0) y = 4;
     else if (d <= 1) y = 2;
   }
+  // Series ranges ("2018–2026", open "2018–"): an RT year covered by the
+  // run counts as a year hit (partial 2 - the start year is unknown for
+  // open ranges, so never the full 4).
+  if (y < 2 && rtEv && rtEv.year && candEv && candEv.yearStart) {
+    const end = candEv.yearEnd == null ? Infinity : candEv.yearEnd;
+    if (rtEv.year >= candEv.yearStart - 1 && rtEv.year <= end + 1) y = Math.max(y, 2);
+  }
   const normSetOf = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
   const rtDC = normSetOf([...((rtEv && rtEv.dirs) || []), ...((rtEv && rtEv.creators) || [])]);
   const tmDC = normSetOf([...((candEv && candEv.dirs) || []), ...((candEv && candEv.creators) || [])]);
@@ -622,8 +714,10 @@ export function directorFromHtml(html) {
 // Cinemeta evidence for one imdb id: director (+writer as creators on
 // series only - series writers ARE the creators, verified 5/5; movie
 // writers are excluded, director alone decides). Empty on failure.
-async function cineEvidenceFor(type, ctx, ttId) {
-  const out = { date: null, dirs: [], creators: [], prods: [], cast: [] };
+// yearStart/yearEnd parse series ranges ("2018–2026", open "2018–") so
+// anthology/multi-season rows match any covered year, not just the start.
+export async function cineEvidenceFor(type, ctx, ttId) {
+  const out = { date: null, yearStart: null, yearEnd: null, dirs: [], creators: [], prods: [], cast: [] };
   try {
     const clean = ttId.startsWith("imdb:") ? ttId.slice(5) : ttId;
     const kind = type === "movie" ? "movie" : "series";
@@ -636,9 +730,23 @@ async function cineEvidenceFor(type, ctx, ttId) {
     };
     out.dirs = normSet(m.director);
     if (type === "series") out.creators = normSet(m.writer);
+    out.cast = [...new Set((Array.isArray(m.cast) ? m.cast : []).map((n) => normRtTitle(n)).filter(Boolean))].slice(0, 8);
     const rel = String(m.released || m.year || m.releaseInfo || "");
     const dm = rel.match(/([0-9]{4})(?:-([0-9]{2})-([0-9]{2}))?/);
     out.date = dm ? dm[0] : null;
+    // Range dash is en/em dash only: an ASCII hyphen here means an ISO
+    // full date ("1978-10-08T00:00:00.000Z"), which must fall through to
+    // the single-year parse below - not become an open-ended range (that
+    // misparse granted every later RT year a free year credit via the
+    // null/Infinity end in evidenceScore and yearOkFor).
+    const rm = /((?:19|20)\d{2})\s*[–—]\s*((?:19|20)\d{2})?/.exec(rel);
+    if (rm) {
+      out.yearStart = +rm[1];
+      out.yearEnd = rm[2] ? +rm[2] : null;
+    } else if (dm) {
+      out.yearStart = +dm[1];
+      out.yearEnd = +dm[1];
+    }
   } catch {
     // miss - empty evidence abstains downstream
   }
@@ -757,6 +865,14 @@ export async function verifyWinner(row, type, ctx, won) {
     console.log(`  [verify-skip] ${row.slug}: no RT crew to compare`);
     return { ok: true, reason: "no-rt-crew" };
   }
+  if (type === "series" && rtEv.creators.length === 0 && rtEv.dirs.length > 0) {
+    // Director-only series card: RT names episode/pilot directors while
+    // candidate crews carry series creators - disjointness here is not
+    // proof of contradiction (proven: 12 correct tt's in the 100-series
+    // test). Abstain to the IMDb chair / corroboration, never veto.
+    console.log(`  [verify-abstain] ${row.slug}: Director-only series card - needs IMDb chair`);
+    return { ok: true, reason: "series-director-abstain" };
+  }
   // Resolve winner to its TMDB record (direct numeric, or /find by imdb).
   let num = null;
   if (won.startsWith("tmdb:")) {
@@ -769,6 +885,32 @@ export async function verifyWinner(row, type, ctx, won) {
   }
   if (!num || !/^[0-9]+$/.test(num)) return { ok: true, reason: "fetch-failed" };
   const candEv = await tmdbEvidenceFor(type, num, ctx);
+  if (type === "series") {
+    // Series creators are the decisive role; episode/pilot directors on
+    // either side never prove or disprove identity (AHS class: RT
+    // episode-director vs candidate series-creators, tt proven correct).
+    // Veto only on creator-vs-creator disjointness with both sides
+    // present; anything else abstains to corroboration/the IMDb chair.
+    const tmC = candEv.creators;
+    if (tmC.length === 0) {
+      console.log(`  [verify-skip] ${row.slug}: no TMDB creator to compare`);
+      return { ok: true, reason: "no-tmdb-creator" };
+    }
+    if (rtEv.creators.length === 0) {
+      // EP-only card (catalog-series shape): RT makes no creator claim -
+      // an empty set is absence of a claim, not contradiction (proven: 19
+      // false-vetoed winners in the 100-series test, every one correct).
+      // Winner stands; never diverted to rescore.
+      console.log(`  [verify-ok] ${row.slug}: ${won} no RT creator claim to contradict`);
+      return { ok: true, reason: "no-rt-creator" };
+    }
+    if (rtEv.creators.some((a) => tmC.some((b) => namesAgree(a, b)))) {
+      console.log(`  [verify-ok] ${row.slug}: ${won} creator matches RT page`);
+      return { ok: true, reason: "crew-match" };
+    }
+    console.log(`  [verify-veto] ${row.slug}: ${won} creator contradicts RT page - re-scoring`);
+    return { ok: false, reason: "contradiction" };
+  }
   const tmDC = [...candEv.dirs, ...candEv.creators];
   if (tmDC.length === 0) {
     console.log(`  [verify-skip] ${row.slug}: no TMDB crew to compare`);
@@ -777,7 +919,7 @@ export async function verifyWinner(row, type, ctx, won) {
   if (!rtHasDecisive) {
     // Producer-level overlap only: corroboration, never a veto - but the
     // check ran clean, so record the pass explicitly.
-    console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
+    console.log(`  [verify-ok] ${row.slug}: ${won} producer-only RT card - no decisive crew to contradict`);
     return { ok: true, reason: "crew-match" };
   }
   if (rtDC.some((a) => tmDC.some((b) => namesAgree(a, b)))) {
@@ -791,7 +933,10 @@ export async function verifyWinner(row, type, ctx, won) {
 // candidate scored on RT detail year + director/crew + top-5 cast
 // overlap. Returns { id, date } for the best non-vetoed candidate, else
 // null (the veto stands - holdout). Bounded: rare path only.
-export async function evidenceRescore(row, type, ctx, vetoedId) {
+// extraIds (rival suggest/Cinemeta ids from the vote) are scored on
+// Cinemeta evidence too - the vetoed pick's rivals may live outside
+// TMDB's exact list (Halloween 1978 won this way).
+export async function evidenceRescore(row, type, ctx, vetoedId, extraIds = []) {
   let html = null;
   try {
     html = await ctx.getDetailHtml(row.slug);
@@ -812,7 +957,11 @@ export async function evidenceRescore(row, type, ctx, vetoedId) {
     return null;
   }
   const exact = results.filter((r) => normRtTitle(nameOf(r)) === nt || (origOf(r) && normRtTitle(origOf(r)) === nt));
+  // Floor + tie-break (mirrors directorArbiter): a zero-evidence rival
+  // must never ship (proven: 6 ancient same-name rivals won with total 0
+  // in the 100-series test); ties hold out with the veto standing.
   let best = null;
+  let tied = false;
   for (const r of exact) {
     let ext = null;
     try {
@@ -831,23 +980,410 @@ export async function evidenceRescore(row, type, ctx, vetoedId) {
       if (dd) candEv.date = dd;
     }
     const sc = evidenceScore(rtEv, candEv);
-    if (!best || sc.total > best.total) best = { id, date: candEv.date, total: sc.total };
+    if (sc.total > 0) {
+      if (!best || sc.total > best.total) { best = { id, date: candEv.date, total: sc.total }; tied = false; }
+      else if (sc.total === best.total) { tied = true; }
+    }
   }
-  if (best) {
+  if (best && !tied) {
     console.log(`  [rescore] ${row.slug}: ${best.id} wins evidence (${best.total}) after veto`);
     return best;
   }
+  // Rival ids from the other verdicts (suggest pool, Cinemeta) may not
+  // appear in TMDB's exact list - score them on Cinemeta evidence.
+  // Strict: positive total AND a year hit AND a unique max. A crew-only
+  // match with no year agreement never flips an id here (One Piece
+  // class: shared creator across adaptations must not override the
+  // year-anchored pick) - that needs the veto-gated corroboration path.
+  // Cast overlap substitutes for the year hit (Halloween class: the
+  // rerelease-dated page shares a lead with the 1978 original).
+  let xBest = null;
+  let xTied = false;
+  for (const xid of [...new Set((extraIds || []).filter(Boolean))].slice(0, 5)) {
+    if (xid === vetoedId || xid.startsWith("tmdb:")) continue;
+    let candEv = null;
+    try {
+      candEv = await cineEvidenceFor(type, ctx, xid);
+    } catch {
+      continue;
+    }
+    if (!candEv || (candEv.dirs.length === 0 && candEv.creators.length === 0 && !candEv.date)) continue;
+    const sc = evidenceScore(rtEv, candEv);
+    if (sc.total > 0 && (sc.parts.y > 0 || sc.parts.c > 0)) {
+      if (!xBest || sc.total > xBest.total) { xBest = { id: xid, date: candEv.date, total: sc.total }; xTied = false; }
+      else if (sc.total === xBest.total) { xTied = true; }
+    }
+  }
+  if (xBest && !xTied) {
+    console.log(`  [rescore] ${row.slug}: ${xBest.id} wins evidence (${xBest.total}) after veto`);
+    return xBest;
+  }
   return null;
+}
+
+// Parse an IMDb title page (headless-capable fetch) for series/movie
+// credits: Creator(s) bullets, "Created by" / "Directed by" meta text,
+// top Stars. Returns { creators, directors, stars } (normalized).
+// Missing blocks stay empty (doc/anime pages often lack Creator).
+export function parseImdbCredits(html) {
+  const h = String(html || "");
+  const unesc = (s) => String(s || "").replace(/&#(\d+);/g, (_, c) => String.fromCharCode(+c)).replace(/&amp;/g, "&").trim();
+  const out = { creators: [], directors: [], stars: [] };
+  // Robust pass: any "- Creator"/"- Creators"/"- Director" bullet
+  // list followed by "  - [Name]" link lines.
+  const bul = /^-\s*(Creators?|Director)\s*$/gm;
+  let b;
+  while ((b = bul.exec(h)) !== null) {
+    const rest = h.slice(b.index);
+    const lines = rest.split("\n").slice(1, 12);
+    for (const ln of lines) {
+      if (ln.trim() === "") continue; // headless markdown pads blank lines
+      const lm = /^\s*-\s*\[([^\]]+)\]/.exec(ln);
+      if (!lm) break;
+      const v = normRtTitle(unesc(lm[1]));
+      if (!v) continue;
+      const key = /Director/.test(b[1]) ? "directors" : "creators";
+      if (!out[key].includes(v)) out[key].push(v);
+    }
+  }
+  const meta = (re) => {
+    const m = re.exec(h);
+    return m ? m[1].split(/,\s*/).map((n) => normRtTitle(unesc(n))).filter(Boolean) : [];
+  };
+  for (const n of meta(/Created by ([^.|\n<]+)/)) if (!out.creators.includes(n)) out.creators.push(n);
+  for (const n of meta(/Directed by ([^.|\n<]+)/)) if (!out.directors.includes(n)) out.directors.push(n);
+  // Stars fallback: top-cast links when no Stars section parsed.
+  if (out.stars.length === 0) {
+    const sm = /Top Cast\d+\**([\s\S]{0,2000})/.exec(h);
+    if (sm) {
+      const nm = /\[([^\]]+)\]\(https:\/\/www\.imdb\.com\/name\//g;
+      let n;
+      while ((n = nm.exec(sm[1])) !== null) {
+        const v = normRtTitle(unesc(n[1]));
+        if (v && !out.stars.includes(v)) out.stars.push(v);
+        if (out.stars.length >= 5) break;
+      }
+    }
+  }
+  return out;
+}
+
+// Rung-2 IMDb chair (flagged rows only): IMDb Creator/Director credits
+// cross-checked against Cinemeta writers/directors. Runs ONLY when
+// ctx.imdbFetch is provided (headless-capable fetch - Firecrawl/JS
+// render). CI (node builtins) has none -> null (fall through, behavior
+// unchanged). Returns { id, tier: "imdb" } on a UNIQUE confirmation,
+// else null. Never vetoes: a missing block abstains (documentary/anime
+// pages often lack Creator), and an RT episode-director legitimately
+// differs from series creators.
+export async function imdbChair(row, type, ctx, ids) {
+  if (typeof ctx.imdbFetch !== "function") {
+    console.log(`  [imdb-chair-skip] ${row.slug}: no headless fetch in this runner`);
+    return null;
+  }
+  const distinct = [...new Set((ids || []).filter((id) => id && id.startsWith("imdb:")))];
+  if (distinct.length === 0) return null;
+  const confirmed = [];
+  for (const id of distinct.slice(0, 6)) {
+    const tt = id.slice(5);
+    let html = null;
+    try {
+      html = await ctx.imdbFetch(`https://www.imdb.com/title/${tt}/`);
+    } catch {
+      continue;
+    }
+    if (!html) continue;
+    const imdb = parseImdbCredits(html);
+    const imdbCrew = type === "movie" ? imdb.directors : [...imdb.creators, ...imdb.directors];
+    if (imdbCrew.length === 0) continue; // abstain, never veto
+    let cine = null;
+    try {
+      cine = await cineEvidenceFor(type, ctx, id);
+    } catch {
+      continue;
+    }
+    const cineCrew = type === "movie" ? cine.dirs : [...cine.creators, ...cine.dirs];
+    if (cineCrew.length > 0 && imdbCrew.some((a) => cineCrew.some((b) => namesAgree(a, b)))) {
+      console.log(`  [imdb-chair] ${row.slug}: ${id} confirmed (IMDb ∩ Cinemeta crew)`);
+      confirmed.push(id);
+    }
+  }
+  if (confirmed.length === 1) return { id: confirmed[0], tier: "imdb" };
+  return null;
+}
+
+// Tiered corroboration for thin/split rows (runs where the vote cannot
+// decide alone). One RT detail fetch serves all candidates; per-id
+// evidence via TMDB (tmdb:) / Cinemeta (imdb:). Returns
+// { id, date, tier } or null. Tiers: crew (decisive person + year),
+// cast (≥3 shared leads + year), cross (≥2 corroborations + year),
+// identity (exact title + year + 2 shared cast + top-1000 rank, no
+// crew anywhere), season (same-series season entry: title-base +
+// covering range + rank). A proven crew contradiction on EITHER side
+// blocks every tier below it (franchise EPs recur - corroboration must
+// never override proof). Bounded: distinct ids only.
+export async function corroborateRow(row, type, ctx, cands) {
+  const ids = [...new Set((cands || []).map((v) => v && v.id).filter(Boolean))];
+  let pool = [];
+  try {
+    const s = await suggestCandidates(row, type, ctx.fetchJson);
+    pool = s.cands || [];
+  } catch {
+    pool = [];
+  }
+  const byId = new Map(pool.map((c) => [`imdb:${c.id}`, c]));
+  let html = null;
+  try {
+    html = await ctx.getDetailHtml(row.slug);
+  } catch {
+    return null;
+  }
+  if (!html) return null;
+  const rtEv = rtEvidenceFromHtml(html);
+  const infoYears = detailReleaseYears(html);
+  const years = [...new Set([rtEv.year, row.year, slugYearOf(row.slug), ...infoYears].filter(Boolean))];
+  const decisive = type === "movie" ? rtEv.dirs : [...rtEv.creators, ...rtEv.dirs];
+  const rtCast = rtEv.cast;
+  const yearOkFor = (cine) => {
+    const cy = cine.yearStart ?? null;
+    if (cy && years.some((y) => Math.abs(cy - y) <= 1)) return true;
+    if (cine.yearStart && years.some((y) => y >= cine.yearStart - 1 && (cine.yearEnd == null || y <= cine.yearEnd + 1))) return true;
+    return false;
+  };
+  const evs = [];
+  for (const id of ids) {
+    let candEv = null;
+    try {
+      if (id.startsWith("tmdb:")) {
+        const n = id.slice(5);
+        candEv = /^[0-9]+$/.test(n) ? await tmdbEvidenceFor(type, n, ctx) : null;
+      } else {
+        candEv = await cineEvidenceFor(type, ctx, id);
+      }
+    } catch {
+      candEv = null;
+    }
+    if (candEv) evs.push({ id, candEv, entry: byId.get(id) || null });
+  }
+  // NOTE: no early return on empty evs - the season-entry block below
+  // discovers its own candidate.
+  const dateOf = (id, candEv) => {
+    const v = (cands || []).find((x) => x && x.id === id);
+    const ds = [candEv.date, v && v.date].filter(Boolean);
+    ds.sort((a, b) => String(b).length - String(a).length);
+    return ds[0] || null;
+  };
+  // Title variants for recall (ADDITIVE - exact always tried first):
+  // de-articled ("The House..." vs "House..."), de-possessive
+  // ("Marvel's Daredevil" vs "Daredevil"), article-stripped throughout
+  // ("Wuthering Heights: THE House..." vs "...House..."). Used for
+  // base/season matching only - verdict pools stay exact-norm (safe).
+  const titleKeys = (t) => {
+    const full = normRtTitle(t);
+    const keys = [full];
+    const noArt = full.replace(/^(the|a|an) /g, "");
+    if (noArt && noArt !== full) keys.push(noArt);
+    const noPoss = full.replace(/^\w+s /, "");
+    if (noPoss && noPoss !== full && noPoss !== noArt) keys.push(noPoss);
+    const noArts = full.split(" ").filter((w) => !["the", "a", "an"].includes(w)).join(" ");
+    if (noArts && !keys.includes(noArts)) keys.push(noArts);
+    return [...new Set(keys.filter(Boolean))];
+  };
+  const artStrip = (s) => String(s || "").split(" ").filter((w) => !["the", "a", "an"].includes(w)).join(" ");
+  const rowKeys = titleKeys(String(row.title || "").replace(/\s*\(\d{4}[^)]*\)\s*$/, ""));
+  const scored = evs.map(({ id, candEv, entry }) => {
+    // Kind-aware decisive roles: movies -> directors (film directors are
+    // decisive); series -> creators (episode/pilot directors on either
+    // side prove nothing - AHS class). Series directors only corroborate.
+    const decC = type === "movie" ? rtEv.dirs : rtEv.creators;
+    const canC = type === "movie" ? candEv.dirs : candEv.creators;
+    const crewHit = decC.length > 0 && canC.length > 0 && decC.some((a) => canC.some((b) => namesAgree(a, b)));
+    // Director-only series card vs candidate creators: the same person
+    // often directs + creates (Crook class: RT Director == writer).
+    // Counts as a T1 hit, never as a contradiction (contradicted stays
+    // creators-only above).
+    const dirOnlyHit = !crewHit && type === "series" && rtEv.creators.length === 0 && rtEv.dirs.length > 0 &&
+      canC.length > 0 && rtEv.dirs.some((a) => canC.some((b) => namesAgree(a, b)));
+    const contradicted = decC.length > 0 && canC.length > 0 && !decC.some((a) => canC.some((b) => namesAgree(a, b)));
+    const yGate = yearOkFor(candEv);
+    const castHit = (candEv.cast || []).filter((c) => rtCast.includes(c)).length;
+    const stars = normRtTitle(entry ? entry.s || "" : "").split(" ").filter((w) => w.length > 2);
+    const starHit = rtCast.filter((c) => stars.some((s) => c.includes(s))).length;
+    const starCrewHit = decisive.length > 0 && rtCast.length > 0 &&
+      stars.some((s) => decisive.some((d) => d.includes(s) || s.includes(d)));
+    const rtEP = rtEv.prods;
+    const candEP = [...candEv.creators, ...candEv.dirs, ...candEv.prods];
+    const epHit = rtEP.length > 0 && candEP.length > 0 && rtEP.some((n) => candEP.includes(n));
+    // Series-director agreement (episode-level): corroboration only.
+    const sdirHit = type === "series" && rtEv.dirs.length > 0 && candEv.dirs.length > 0 &&
+      rtEv.dirs.some((a) => candEv.dirs.some((b) => namesAgree(a, b)));
+    let corrobor = 0;
+    const why = [];
+    if (epHit) { corrobor++; why.push("ep"); }
+    if (castHit >= 2) { corrobor++; why.push(`cast${castHit}`); }
+    if (starHit >= 1 && castHit >= 1) { corrobor++; why.push("stars"); }
+    if (starCrewHit) { corrobor++; why.push("starcrew"); }
+    if (sdirHit) { corrobor++; why.push("sdir"); }
+    if ((entry && (entry.rank ?? 1e9) <= 150)) { corrobor++; why.push("rank"); }
+    // Ghost hygiene: zero-evidence candidates (no crew/cast/date) can
+    // neither win nor tie-break (tt4537986 class) - except via the
+    // season-entry block below, which re-derives everything.
+    const ghost = canC.length === 0 && (candEv.dirs || []).length === 0 &&
+      (candEv.cast || []).length === 0 && !candEv.date;
+    return { id, candEv, entry, crewHit, dirOnlyHit, contradicted, yGate, castHit, corrobor, why, ghost };
+  });
+  // Season entry (same-series separately-listed season, e.g. Terror S3):
+  // slug/title base + covering range (open-ended ok) + top-1500 rank,
+  // no better-claimed rival. Checked only for contradicted-or-thin ids.
+  const slugBase = normRtTitle(String(row.slug.split("/")[1] || "").replace(/_\d{4}$/, "").replace(/_/g, " "));
+  const titleBase = normRtTitle(String(row.title || "").replace(/\s*\(\d{4}[^)]*\)\s*$/, "").split(":")[0]);
+  const baseKeys = [...new Set([slugBase, titleBase, ...rowKeys].filter(Boolean))];
+  // Season-shaped rows only (suffixed slug + title longer than the base):
+  // same-title remake rows must never take the season path.
+  const seasonShaped = /_\d{4}$/.test(String(row.slug.split("/")[1] || "")) &&
+    normRtTitle(row.title).length > slugBase.length + 3;
+  for (const s of scored) {
+    if ((s.crewHit || s.dirOnlyHit) && s.yGate) continue; // T1 handles below
+    const candNorm = normRtTitle((s.entry && s.entry.l) || "");
+    const baseHit = (candNorm && (baseKeys.includes(candNorm) || baseKeys.includes(artStrip(candNorm)))) || false;
+    const rankOk = (s.entry && (s.entry.rank ?? 1e9) <= 1500) || false;
+    // Season-shaped rows only: same-title remake rows must never take
+    // the season path (a crew contradiction there is proof, not a level
+    // mismatch) - the independent block below enforces the same gate.
+    if (baseHit && s.yGate && rankOk && seasonShaped) {
+      s.season = true;
+    }
+  }
+  const tierOf = (s) => {
+    if (s.ghost) return null;
+    if ((s.crewHit || s.dirOnlyHit) && s.yGate) return "crew";
+    if (!s.contradicted && s.castHit >= 3 && s.yGate) return "cast";
+    if (!s.contradicted && s.corrobor >= 2 && s.yGate) return "cross";
+    // No-year crew+title: exact title + crew match + no years on either
+    // side + single candidate + sane rank. Same exact title and same
+    // director with no conflicting year anywhere is one work.
+    if (!s.contradicted && (s.crewHit || s.dirOnlyHit) && years.length === 0 && evs.length === 1 && s.entry && (s.entry.rank ?? 1e9) <= 2000) return "noyear";
+    if (!s.contradicted && s.castHit === 2 && s.yGate && s.entry && (s.entry.rank ?? 1e9) <= 1000) return "identity";
+    if (s.season && s.yGate) return "season";
+    return null;
+  };
+  const ranked = scored.map((s) => ({ ...s, tier: tierOf(s) })).filter((s) => s.tier);
+  // Contradicted ids can only win via season-entry with a base match;
+  // otherwise the veto stands (caller holds out / seeks the IMDb chair).
+  const viable = ranked.filter((s) => !s.contradicted || s.tier === "season");
+  if (viable.length === 0) {
+    // Season entry (same-series separately-listed season, e.g. Terror S3
+    // under its own slug): runs ONLY on season-shaped rows (suffixed slug
+    // + title longer than the base, i.e. a subtitled season entry).
+    // Same-title remake rows (Halloween) are never season-shaped, so a
+    // crew contradiction there can never be laundered through this path.
+    const slugBaseU = String(row.slug.split("/")[1] || "").replace(/_\d{4}$/, "");
+    if (seasonShaped && slugBase) {
+      try {
+        const sj = await ctx.fetchJson(`https://v3.sg.media-imdb.com/suggestion/x/${slugBaseU}.json`);
+        const wantQid = type === "movie" ? ["movie", "tvMovie", "video"] : ["tvSeries", "tvMiniSeries"];
+        const hits = ((sj && sj.d) || [])
+          .filter((c) => c && /^tt/.test(c.id) && normRtTitle(c.l) === slugBase && wantQid.includes(c.qid))
+          .sort((a, b) => (a.rank || 1e9) - (b.rank || 1e9))
+          .slice(0, 3);
+        for (const h of hits) {
+          if ((h.rank ?? 1e9) > 1500) continue;
+          const ce = await cineEvidenceFor(type, ctx, `imdb:${h.id}`);
+          if (yearOkFor(ce)) {
+            console.log(`  [corroborate] ${row.slug}: imdb:${h.id} via season (title-base + range)`);
+            return { id: `imdb:${h.id}`, date: ce.date, tier: "season" };
+          }
+        }
+      } catch {
+        // suggestion miss - stays unresolved below
+      }
+    }
+    // Variant titles ("Marvel's Daredevil" vs "Daredevil", article
+    // insertions): rowKeys files, key match + evidence (crew, or EP +
+    // cast, or >=3 cast) + year + sane rank. Evidence is mandatory here -
+    // unlike season entries, nothing about the row shape excuses its absence.
+    const keys = [...new Set([slugBase, ...rowKeys])].filter(Boolean);
+    const triedFiles = new Set([slugBaseU]);
+    for (const key of rowKeys.slice(0, 3)) {
+      const q = key.replace(/ /g, "_");
+      if (!q || triedFiles.has(q)) continue;
+      triedFiles.add(q);
+      let vd = null;
+      try {
+        vd = await ctx.fetchJson(`https://v3.sg.media-imdb.com/suggestion/x/${q}.json`);
+      } catch {
+        continue;
+      }
+      const wantQid = type === "movie" ? ["movie", "tvMovie", "video"] : ["tvSeries", "tvMiniSeries"];
+      const hits = ((vd && vd.d) || [])
+        .filter((c) => c && /^tt/.test(c.id) && (keys.includes(normRtTitle(c.l)) || keys.includes(artStrip(normRtTitle(c.l)))) && wantQid.includes(c.qid))
+        .sort((a, b) => (a.rank || 1e9) - (b.rank || 1e9))
+        .slice(0, 3);
+      for (const h of hits) {
+        if ((h.rank ?? 1e9) > 1500) continue;
+        let ce = null;
+        try {
+          ce = await cineEvidenceFor(type, ctx, `imdb:${h.id}`);
+        } catch {
+          continue;
+        }
+        if (!yearOkFor(ce)) continue;
+        const crew = type === "movie" ? ce.dirs : ce.creators;
+        const crewHit = decisive.length > 0 && crew.length > 0 && decisive.some((a) => crew.some((b) => namesAgree(a, b)));
+        const castN = (ce.cast || []).filter((c) => rtCast.includes(c)).length;
+        const epHit = rtEv.prods.length > 0 && [...ce.creators, ...ce.dirs, ...ce.prods].length > 0 &&
+          rtEv.prods.some((n) => [...ce.creators, ...ce.dirs, ...ce.prods].includes(n));
+        if (crewHit || (epHit && castN >= 1) || castN >= 3) {
+          console.log(`  [corroborate] ${row.slug}: imdb:${h.id} via variant (title-key + evidence)`);
+          return { id: `imdb:${h.id}`, date: ce.date, tier: "variant" };
+        }
+      }
+    }
+    // Drift tier (listing-vs-film year gaps, e.g. chart 2020 vs film
+    // 2009): exact-pool candidate + crew match + >=3 shared cast + the
+    // ONLY crew-claimant in the pool. Same exact title, same director,
+    // same leads with no conflicting claimant is one work - the year
+    // records just disagree. No rank gate (obscure films rank badly).
+    const driftCands = pool.filter((c) => c && /^tt/.test(c.id)).slice(0, 4);
+    if (driftCands.length > 0) {
+      const driftEv = [];
+      for (const pc of driftCands) {
+        let ce = null;
+        try {
+          ce = await cineEvidenceFor(type, ctx, `imdb:${pc.id}`);
+        } catch {
+          continue;
+        }
+        const crew = type === "movie" ? ce.dirs : ce.creators;
+        const hit = decisive.length > 0 && crew.length > 0 && decisive.some((a) => crew.some((b) => namesAgree(a, b)));
+        const castN = (ce.cast || []).filter((c) => rtCast.includes(c)).length;
+        driftEv.push({ id: `imdb:${pc.id}`, hit, castN });
+      }
+      const claimants = driftEv.filter((d) => d.hit);
+      if (claimants.length === 1 && claimants[0].castN >= 3) {
+        console.log(`  [corroborate] ${row.slug}: ${claimants[0].id} via drift (crew+cast${claimants[0].castN}, year records disagree)`);
+        return { id: claimants[0].id, date: null, tier: "drift" };
+      }
+    }
+    return null;
+  }
+  const order = { crew: 0, cast: 1, cross: 2, noyear: 3, identity: 4, season: 5, variant: 5, drift: 3 };
+  viable.sort((a, b) => order[a.tier] - order[b.tier]);
+  const win = viable[0];
+  console.log(`  [corroborate] ${row.slug}: ${win.id} via ${win.tier} (${win.why.join("+") || "base"})`);
+  return { id: win.id, date: dateOf(win.id, win.candEv), tier: win.tier };
 }
 
 // Full per-row resolution. Returns { id, date } (never throws - callers
 // hold out on null). Acceptance: any strong backing, or >=2 weak
 // backers agreeing, or a tmdb-only fallback, or a lone Cinemeta exact
 // (proven gap-filler); popularity picks (TMDB-pop, suggest-pool) need a
-// friend. Accepted winners pass verification (crew cross-check, vetoes
-// RT-contradictions into a full evidence rescore). Then director,
-// IMDb arbiter, holdout. Date is the WINNER's date (TMDB full date
-// preferred) - never RT's listing date.
+// friend. Thin/split rows climb the corroboration ladder (crew / cast /
+// cross-evidence / identity / season-entry tiers) before the director
+// arbiter. Accepted winners pass verification (crew cross-check, vetoes
+// RT-contradictions into a full evidence rescore, then the IMDb chair).
+// Then director, IMDb arbiter, holdout. Date is the WINNER's date (TMDB
+// full date preferred) - never RT's listing date.
 export async function resolveRow(row, type, ctx) {
   const tw = await tmdbVerdict(row, type, ctx).catch((e) => {
     console.warn(`  [tmdb] ${row.slug}: ${e.message}`);
@@ -888,17 +1424,31 @@ export async function resolveRow(row, type, ctx) {
         console.log(`  [holdout] ${row.slug}: ${won} unverifiable and thinly backed`);
         return null;
       }
-      const rescored = await evidenceRescore(row, type, ctx, won).catch(() => null);
+      const rescored = await evidenceRescore(row, type, ctx, won, cands.map((v) => v.id)).catch(() => null);
       if (rescored) return { id: rescored.id, date: rescored.date };
+      const chaired = await imdbChair(row, type, ctx, cands.map((v) => v.id)).catch(() => null);
+      if (chaired) return { id: chaired.id, date: winnerDate(chaired.id) };
       console.log(`  [holdout] ${row.slug}: vetoed ${won}, rescore failed`);
       return null;
+    }
+    // Thin single-verdict win: corroboration ladder before holding out
+    // (cast-anchor / cross-evidence / season-entry close proven rows).
+    const co = await corroborateRow(row, type, ctx, cands).catch(() => null);
+    if (co) {
+      console.log(`  [vote-corroborated] ${row.slug}: ${co.id} via ${co.tier}`);
+      return { id: co.id, date: co.date };
     }
     console.log(`  [weak-lone] ${row.slug}: popularity pick ${won} uncorroborated - holding out`);
     return null;
   }
-  // No winner: director match decides first (rare rows only), then
-  // the IMDb exact arbiter (itself verified - all voted results get
-  // checked), else holdout.
+  // No winner: corroboration ladder first (thin singles, splits, season
+  // entries), then director match (rare rows only), then the IMDb exact
+  // arbiter (itself verified - all voted results get checked), else holdout.
+  const coNone = await corroborateRow(row, type, ctx, cands).catch(() => null);
+  if (coNone) {
+    console.log(`  [vote-corroborated] ${row.slug}: ${coNone.id} via ${coNone.tier}`);
+    return { id: coNone.id, date: coNone.date };
+  }
   const dirWin = await directorArbiter(row, type, ctx, cands.map((v) => v.id));
   if (dirWin) return { id: dirWin, date: winnerDate(dirWin) };
   if (sug) {
