@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1791936073494,
+  "scraped_at": 1791979265191,
   "items": [
+    {
+      "slug": "3ocda-love-of-your-life",
+      "imdb_id": "tt34384900",
+      "title": "Love of Your Life",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "dL3Tcv4FU2K85bgnGRBgLjFSrLr.jpg",
+      "description": "After a chance encounter sparks a sweeping romance, Maya's future is suddenly upended, sending her on an unexpected journey to love and live again.",
+      "digital_release_date": null
+    },
     {
       "slug": "3x9a8-last-chance-motel",
       "imdb_id": "tt35180305",
@@ -60,8 +70,8 @@
       "title": "The Incomer",
       "year": 2026,
       "score": 7,
-      "poster_path": "QSHsgR6ZTAbnDkHjRhaxkL3caj.jpg",
-      "description": "On an Orkney isle, two siblings survive by hunting seabirds, retelling the stories of their ancestors, and defending the isle from dreaded \"incomers\". Their world is upended with the arrival of an awkward council worker who has come to uproot them from their homeland.",
+      "poster_path": "iccroKK1eUTdCnLfmp7I3YXwAKF.jpg",
+      "description": "On an Orkney isle, siblings Isla and Sandy survive by hunting seabirds, retelling the stories of their ancestors, and defending the isle from dreaded \"Incomers\". Their world is upended with the arrival of an awkward council worker who has come to uproot them from their homeland.",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "lWdpUOhnJ8uWWO1G1vbyUsCliov.jpg",
       "description": "A talented violinist's prestigious new role as a music tutor for an enigmatic, elite family spirals into a psychological battle for her safety and sanity.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3prs1-little-brother",
-      "imdb_id": "tt34888871",
-      "title": "Little Brother",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "hIJpXb7Xaje2mebN9ylsS7blQzP.jpg",
-      "description": "A tightly wound realtor's picture-perfect life gets an extreme makeover when his lovably chaotic \"little brother\" suddenly reappears.",
       "digital_release_date": null
     }
   ]
