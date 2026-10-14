@@ -500,6 +500,20 @@ export async function tmdbCrewFor(type, numericId, ctx) {
   }
 }
 
+// Person-name agreement for decisive roles: exact normalized match, or
+// same last name + same first initial (stage names and nicknames:
+// "Oz Perkins" vs "Osgood Perkins", "Bob Smith" vs "Robert Smith").
+// Single-token names must match exactly (no initials to compare).
+// Distinct first names never agree ("John Smith" vs "Anna Smith").
+export function namesAgree(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const pa = String(a).split(" ").filter(Boolean);
+  const pb = String(b).split(" ").filter(Boolean);
+  if (pa.length < 2 || pb.length < 2) return false;
+  return pa[pa.length - 1] === pb[pb.length - 1] && pa[0][0] === pb[0][0];
+}
+
 // Crew agreement: >=1 shared normalized full name between RT's card and
 // a TMDB crew set. Full-name exact keeps false positives ~nil (same
 // title + same year + same person twice is practically nonexistent).
@@ -580,7 +594,10 @@ export function evidenceScore(rtEv, candEv) {
   const rtP = normSetOf((rtEv && rtEv.prods) || []);
   const tmP = normSetOf([...((candEv && candEv.dirs) || []), ...((candEv && candEv.creators) || []), ...((candEv && candEv.prods) || [])]);
   let d = 0;
-  if (rtDC.length > 0 && tmDC.length > 0 && rtDC.some((n) => tmDC.includes(n))) d = 6;
+  // Alias-aware: stage names and nicknames ("Oz Perkins" vs "Osgood
+  // Perkins") agree by last name + first initial; distinct first names
+  // never agree ("John Smith" vs "Anna Smith").
+  if (rtDC.length > 0 && tmDC.length > 0 && rtDC.some((a) => tmDC.some((b) => namesAgree(a, b)))) d = 6;
   let p = 0;
   if (rtP.length > 0 && tmP.length > 0 && rtP.some((n) => tmP.includes(n))) p = 2;
   let c = 0;
@@ -763,7 +780,7 @@ export async function verifyWinner(row, type, ctx, won) {
     console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
     return { ok: true, reason: "crew-match" };
   }
-  if (rtDC.some((n) => tmDC.includes(n))) {
+  if (rtDC.some((a) => tmDC.some((b) => namesAgree(a, b)))) {
     console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
     return { ok: true, reason: "crew-match" };
   }
