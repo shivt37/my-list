@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1791979249089,
+  "scraped_at": 1792022523700,
   "items": [
+    {
+      "slug": "40fmc-all-that-we-never-were",
+      "imdb_id": "tt37284855",
+      "title": "All That We Never Were",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "zqxIT48mWFsC4NSjGEHAcp1pjEo.jpg",
+      "description": "19-year-old Leah navigates a coming-of-age journey in the wake of a tragic car accident that claims her parents. Relocated to a coastal town under the care of her brother’s best friend Axel, Leah grapples with grief, haunting nightmares and a fractured sense of self.",
+      "digital_release_date": "2026-10-15"
+    },
     {
       "slug": "2zrc8-last-days",
       "imdb_id": "tt27977862",
@@ -390,7 +400,7 @@
       "title": "The Fix",
       "year": 2026,
       "score": 5,
-      "poster_path": "yopXjun3ICFfJci2ukcEzceZjUs.jpg",
+      "poster_path": "jlP8XDjZN89GrpM3je5Uf8Grqx8.jpg",
       "description": "Disillusioned by the end of the war in Afghanistan, a group of disgraced, war-torn ex-CIA operatives set out to Tehran to take down a life-changing score.",
       "digital_release_date": "2026-09-18"
     },
@@ -462,16 +472,6 @@
       "score": 7,
       "poster_path": "3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg",
       "description": "Deep within the backwoods of rural Oklahoma, charismatic and musically gifted Amziah King herds a bluegrass-playing band of misfits while overseeing the premier honey-making operation in town. When Amziah’s estranged foster daughter unexpectedly returns, Amziah leaps at the possibility to renew connection and create a family business. But the honey game is ruthless, and Amziah’s rivals threaten to destroy everything he has built.",
-      "digital_release_date": "2026-09-15"
-    },
-    {
-      "slug": "3jo0c-the-last-kiss",
-      "imdb_id": "tt33253206",
-      "title": "The Last Kiss",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "cLZ7iFZc25vluSIKt3XtdSTait4.jpg",
-      "description": "Laurel always imagined her first kiss would be a fairy tale. Instead, that fantasy turns frightening when she's cursed with an ability to see the death of anyone she kisses. After a vision reveals her crush is doomed to die in a strange murder spree targeting her closest friends, she races to unmask the killer before the mystery becomes a massacre.",
       "digital_release_date": "2026-09-15"
     },
     {
@@ -1432,16 +1432,6 @@
       "score": 4,
       "poster_path": "kiU9L3YUi8IWmsZw8V1YHiwYtqE.jpg",
       "description": "After struggling with fertility issues, an American couple decides to pursue international adoption. They are matched with a 4-year-old girl named Sarvari and travel to an orphanage in Goa, India, to bring her home.",
-      "digital_release_date": "2026-07-23"
-    },
-    {
-      "slug": "3mx6b-the-dink",
-      "imdb_id": "tt33499146",
-      "title": "The Dink",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "8dq7vaUkXPqwqKxBFW4qJNBWeop.jpg",
-      "description": "Desperate to save a struggling country club and earn his father's respect, a washed-up tennis pro is compelled to break a sacred vow and do the unthinkable: play pickleball.",
       "digital_release_date": "2026-07-23"
     }
   ]
