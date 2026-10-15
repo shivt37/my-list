@@ -894,7 +894,10 @@ async function tryTwice(fn, row, label) {
 // role-level contradiction vetoes (ok:false). Bounded: ~3 calls per row.
 export async function verifyWinner(row, type, ctx, won) {
   const d = await tryTwice(() => ctx.getDetailHtml(row.slug), row, "detail");
-  if (d.failed || !d.v) return { ok: true, reason: "fetch-failed" };
+  if (d.failed || !d.v) {
+    console.log(`  [verify-skip] ${row.slug}: detail fetch failed - unverifiable win`);
+    return { ok: true, reason: "fetch-failed" };
+  }
   const rtEv = rtEvidenceFromHtml(d.v);
   const rtDC = [...rtEv.dirs, ...rtEv.creators];
   const rtHasDecisive = rtDC.length > 0;
@@ -917,11 +920,17 @@ export async function verifyWinner(row, type, ctx, won) {
     num = won.slice(5);
   } else {
     const f = await tryTwice(() => ctx.tmdbGet(`/find/${won.slice(5)}`, { external_source: "imdb_id" }), row, "find");
-    if (f.failed || !f.v) return { ok: true, reason: "fetch-failed" };
+    if (f.failed || !f.v) {
+      console.log(`  [verify-skip] ${row.slug}: TMDB find failed - unverifiable win`);
+      return { ok: true, reason: "fetch-failed" };
+    }
     const hits = type === "movie" ? (f.v.movie_results || []) : (f.v.tv_results || []);
     if (hits.length > 0) num = String(hits[0].id);
   }
-  if (!num || !/^[0-9]+$/.test(num)) return { ok: true, reason: "fetch-failed" };
+  if (!num || !/^[0-9]+$/.test(num)) {
+    console.log(`  [verify-skip] ${row.slug}: winner has no TMDB record - unverifiable win`);
+    return { ok: true, reason: "fetch-failed" };
+  }
   const candEv = await tmdbEvidenceFor(type, num, ctx);
   if (type === "series") {
     // Series creators are the decisive role; episode/pilot directors on
