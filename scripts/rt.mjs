@@ -539,11 +539,16 @@ export async function cinemetaVerdict(row, type, fetchJson) {
 }
 
 // RT detail crew card: generic label -> names parse over the Series/Movie
-// Info section ({Creator, Director, Executive Producer, Producer}).
-// Pages differ (Monster has Creator, Matlock only EPs, some have
-// Director) so every present label is collected - never one hardcoded
-// field. Multiline-aware: section HTML spans lines ([\s\S], never dot).
-// Merges the JSON-LD director form above. Returns { label: [names] }.
+// Info section ({Creator, Director, Executive Producer, Producer,
+// Screenwriter}). Pages differ (Monster has Creator, Matlock only EPs,
+// Terror: Devil in Silver only Screenwriter, some have Director) so every
+// present label is collected - never one hardcoded field. Multiline-aware:
+// section HTML spans lines ([\s\S], never dot).
+// Merges the JSON-LD director form above. "Screenwriter" folds into
+// Creator: series writers ARE the creators (proven 5/5 on Cinemeta; the
+// terror row's LaValle sits under this label), and for movies the merge
+// is veto-safe (agreement is existential - extra names can only add
+// matches, never manufacture a contradiction). Returns { label: [names] }.
 export function rtCrewFromHtml(html) {
   const h = String(html || "");
   const out = {};
@@ -559,10 +564,10 @@ export function rtCrewFromHtml(html) {
   let m;
   while ((m = sec.exec(h)) !== null) {
     const label = m[1].trim();
-    if (label !== "Creator" && label !== "Director" && label !== "Executive Producer" && label !== "Producer") continue;
+    if (label !== "Creator" && label !== "Director" && label !== "Executive Producer" && label !== "Producer" && label !== "Screenwriter") continue;
     const nm = /data-qa="item-value">([^<]+)</g;
     let n;
-    while ((n = nm.exec(m[2])) !== null) add(label, n[1]);
+    while ((n = nm.exec(m[2])) !== null) add(label === "Screenwriter" ? "Creator" : label, n[1]);
   }
   return out;
 }
@@ -1125,21 +1130,135 @@ export function parseImdbCredits(html) {
   return out;
 }
 
-// Rung-2 IMDb chair (flagged rows only): IMDb Creator/Director credits
-// cross-checked against Cinemeta writers/directors. Runs ONLY when
-// ctx.imdbFetch is provided (headless-capable fetch - Firecrawl/JS
-// render). CI (node builtins) has none -> null (fall through, behavior
-// unchanged). Returns { id, tier: "imdb" } on a UNIQUE confirmation,
-// else null. Never vetoes: a missing block abstains (documentary/anime
-// pages often lack Creator), and an RT episode-director legitimately
-// differs from series creators.
-export async function imdbChair(row, type, ctx, ids) {
-  if (typeof ctx.imdbFetch !== "function") {
-    console.log(`  [imdb-chair-skip] ${row.slug}: no headless fetch in this runner`);
-    return null;
+// ── IMDb GraphQL (keyless) ──
+//
+// Plain IMDb title pages sit behind an AWS WAF JS challenge (HTTP 202),
+// but api.graphql.imdb.com answers keyless POSTs with titleText,
+// titleType and principalCredits (Writer/Director/Actor groups) - the
+// exact crew + kind signals the chair needs, at ~1KB and ~0.6s each.
+// (Proven live 2026-10-15: writers for Monster/AHS/Ted Lasso, director
+// for Shawshank, kinds tvEpisode for tt31186255 / tvSeries for
+// tt2708480.) Public/non-commercial use only per the response
+// disclaimer; flagged-rows-only, <=5-wide, no retry storms.
+// Every function here is abstain-on-failure: null means "unknown", and
+// callers must pass unknown through, never block or veto on it.
+const IMDB_GQL_URLS = ["https://api.graphql.imdb.com/", "https://graphql.imdb.com/"];
+const IMDB_GQL_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+  Accept: "application/json",
+  "Content-Type": "application/json",
+  Origin: "https://www.imdb.com",
+  Referer: "https://www.imdb.com/",
+};
+const imdbGqlQuery = (tt) => `{ title(id: "${tt}") { id titleText { text } titleType { id text } principalCredits { credits { name { nameText { text } } category { text } } } } }`;
+
+// Adapter: GraphQL title -> { title, kind, writers, directors } with the
+// repo's normalization (Writer ~= series creators, Director ~= film
+// directors - same mapping the ladder already uses for Cinemeta).
+// Null on missing/empty/error payloads (abstain downstream).
+export function parseImdbGqlCredits(data) {
+  const t = data && data.data && data.data.title;
+  if (!t) return null;
+  const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
+  const writers = [];
+  const directors = [];
+  for (const g of (t.principalCredits || [])) {
+    for (const c of (g.credits || [])) {
+      const nm = c && c.name && c.name.nameText && c.name.nameText.text;
+      if (!nm) continue;
+      const cat = String((c.category && c.category.text) || "").toLowerCase();
+      if (cat === "writer" || cat === "writers" || cat === "creator" || cat === "creators") writers.push(nm);
+      else if (cat === "director" || cat === "directors") directors.push(nm);
+    }
   }
+  const kind = (t.titleType && t.titleType.id) || null;
+  return { title: (t.titleText && t.titleText.text) || null, kind, writers: normSet(writers), directors: normSet(directors) };
+}
+
+// Keyless fetch of one tt's GraphQL credits+kind. fetchFn is explicit
+// (never defaulted: unit tests must stay offline). memo is an optional
+// per-run object cache (ctx-owned). Null on any failure (abstain).
+export async function imdbGqlCredits(ttId, fetchFn, memo = null) {
+  const clean = String(ttId || "");
+  if (!/^tt[0-9]+$/.test(clean)) return null;
+  if (memo && Object.hasOwn(memo, clean)) return memo[clean];
+  if (typeof fetchFn !== "function") return null;
+  const body = JSON.stringify({ query: imdbGqlQuery(clean) });
+  let out = null;
+  for (const url of IMDB_GQL_URLS) {
+    try {
+      const res = await fetchFn(url, { method: "POST", headers: IMDB_GQL_HEADERS, body, signal: AbortSignal.timeout(30000) });
+      if (!res.ok) continue;
+      const j = await res.json();
+      if (j && j.errors) break; // validation/schema drift - fallback shares the schema
+      out = parseImdbGqlCredits(j);
+      break;
+    } catch {
+      continue; // try fallback host, else abstain below
+    }
+  }
+  if (memo) memo[clean] = out;
+  return out;
+}
+
+// Kind compatibility: an episode id must never ship for a series row
+// (terror class: TMDB mislinks series records to episode imdb_ids) and
+// a series/film id must never ship for a movie row. Unknown kind
+// passes (abstain - never block on missing data).
+export function kindOkFor(type, kind) {
+  const k = String(kind || "").toLowerCase().replace(/[^a-z]/g, "");
+  if (!k) return true;
+  if (type === "series") return k === "tvseries" || k === "tvminiseries";
+  return k === "movie" || k === "tvmovie" || k === "video" || k === "documentary";
+}
+
+// Rung-2 IMDb chair (flagged rows only): IMDb Creator/Director credits
+// cross-checked against Cinemeta writers/directors. Two fetch paths:
+// keyless GraphQL (ctx.gqlFetch - works in CI, proven live) first, then
+// the legacy headless-HTML path (ctx.imdbFetch - Firecrawl/JS render).
+// CI (node builtins) has neither -> null (fall through, behavior
+// unchanged) unless main wires gqlFetch. Returns { id, tier: "imdb" }
+// on a UNIQUE confirmation, else null. Never vetoes: a missing block
+// abstains (documentary/anime pages often lack Creator), and an RT
+// episode-director legitimately differs from series creators.
+export async function imdbChair(row, type, ctx, ids) {
   const distinct = [...new Set((ids || []).filter((id) => id && id.startsWith("imdb:")))];
   if (distinct.length === 0) return null;
+  // Keyless GraphQL path: unique crew confirmation wins, else abstain.
+  if (typeof ctx.gqlFetch === "function") {
+    const memo = ctx._gqlMemo || (ctx._gqlMemo = {});
+    const confirmed = [];
+    for (const id of distinct.slice(0, 6)) {
+      let g = null;
+      try {
+        g = await ctx.gqlFetch(id.slice(5), memo);
+      } catch {
+        continue;
+      }
+      if (!g || (g.writers.length === 0 && g.directors.length === 0)) continue; // abstain, never veto
+      const imdbCrew = type === "movie" ? g.directors : [...g.writers, ...g.directors];
+      if (imdbCrew.length === 0) continue;
+      let cine = null;
+      try {
+        cine = await cineEvidenceFor(type, ctx, id);
+      } catch {
+        continue;
+      }
+      const cineCrew = type === "movie" ? cine.dirs : [...cine.creators, ...cine.dirs];
+      if (cineCrew.length > 0 && imdbCrew.some((a) => cineCrew.some((b) => namesAgree(a, b)))) {
+        console.log(`  [imdb-chair] ${row.slug}: ${id} confirmed (IMDb GraphQL ∩ Cinemeta crew)`);
+        confirmed.push(id);
+      }
+    }
+    if (confirmed.length === 1) return { id: confirmed[0], tier: "imdb" };
+    if (confirmed.length > 1) return null; // ambiguous - abstain
+    // Zero confirmations: fall through to the HTML path below (which may
+    // still abstain) rather than returning early.
+  }
+  if (typeof ctx.imdbFetch !== "function") {
+    console.log(`  [imdb-chair-skip] ${row.slug}: no IMDb fetch in this runner`);
+    return null;
+  }
   const confirmed = [];
   for (const id of distinct.slice(0, 6)) {
     const tt = id.slice(5);
@@ -1685,6 +1804,68 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
     heldOut.push(`${row.slug} (no majority)`);
     return null;
   }
+  // Kind gate (terror class): TMDB sometimes mislinks a series record to
+  // an EPISODE imdb_id, and no crew comparison can catch it (the episode
+  // shares the season's writer). A proven-wrong kind never ships:
+  // episodes for series rows, series/films for movie rows. Unknown or
+  // unreachable kind passes through (abstain - never block on missing
+  // data). tmdb: fallbacks are TMDB-typed already. No cache write on
+  // block, so a later corrected run re-resolves the row.
+  if (/^tt[0-9]+$/.test(id || "")) {
+    let kind = null;
+    if (typeof ctx.gqlFetch === "function") {
+      try {
+        const g = await ctx.gqlFetch(id, ctx._gqlMemo || (ctx._gqlMemo = {}));
+        kind = g && g.kind;
+      } catch {
+        kind = null;
+      }
+    }
+    if (kind) console.log(`  [kind-ok] ${row.slug}: imdb:${id} is IMDb ${kind}`);
+    if (kind && !kindOkFor(t.type, kind)) {
+      // Terror fallback: the kind-blocked winner came from a TMDB record
+      // whose external_ids mislinks to an episode. Re-derive the numeric
+      // via /find (exact imdb_id lookup, type-branched like verifyWinner)
+      // and ship the series-typed tmdb: record itself when it is
+      // title-anchored (exact titleKeys match - year alone is spoofable
+      // by a same-year mislink) and year-anchored (±1, listing/slug
+      // convention, no extra detail fetch). Bounded: ≤2 TMDB calls, this
+      // path only. Every failure falls through to the holdout below.
+      try {
+        const f = await tmdbGetFn(`/find/${id}`, { external_source: "imdb_id" });
+        const hits = t.type === "movie" ? (f && f.movie_results) || [] : (f && f.tv_results) || [];
+        const num = hits.length > 0 ? String(hits[0].id) : null;
+        if (num && /^[0-9]+$/.test(num)) {
+          const det = await tmdbGetFn(t.type === "movie" ? `/movie/${num}` : `/tv/${num}`);
+          const d = t.type === "movie" ? det && det.release_date : det && det.first_air_date;
+          const y = (/^([0-9]{4})/.exec(d || "") || [])[1];
+          const years = [row.year, slugYearOf(row.slug)].filter(Boolean);
+          const names = [det && det.name, det && det.title, det && det.original_name, det && det.original_title]
+            .map((n) => normRtTitle(n)).filter(Boolean);
+          const titleOk = names.some((n) => titleKeys(row.title).includes(n));
+          if (y && years.some((yy) => Math.abs(+y - +yy) <= 1) && titleOk) {
+            const fb = `tmdb:${num}`;
+            if (writtenIds.has(fb)) {
+              heldOut.push(`${row.slug} (duplicate of id ${fb})`);
+              console.log(`  [dedupe-id] ${row.slug}: ${fb} already written - holding out`);
+              return null;
+            }
+            writtenIds.add(fb);
+            const shown = t.type === "movie" ? String(d).slice(0, 4) : d;
+            cache[key] = { type: t.type, imdb: null, tmdb: num, title: row.title, date: shown };
+            console.log(`  [kind-fallback] ${row.slug}: imdb:${id} is ${kind}, shipping series-typed ${fb} (${d})`);
+            return rowToItem(t.type, fb, row, title, shown);
+          }
+          console.log(`  [kind-fallback-skip] ${row.slug}: tmdb:${num} date ${d || "(none)"} not anchored`);
+        }
+      } catch (e) {
+        console.warn(`  [kind-fallback] ${row.slug}: TMDB lookup failed (${e.message}) - holding out`);
+      }
+      console.log(`  [kind-block] ${row.slug}: imdb:${id} is IMDb ${kind}, not a ${t.type} - holding out`);
+      heldOut.push(`${row.slug} (kind mismatch: ${kind})`);
+      return null;
+    }
+  }
   // Same film under two slugs (remake + original sharing a chart,
   // alternate slugs): one meta per id, second occurrence held out.
   if (writtenIds.has(id)) {
@@ -1743,6 +1924,10 @@ export async function main({
     tmdbGet: tmdbGetFn,
     fetchJson,
     getDetailHtml: (slug) => getHtml(detailUrlFor(slug)),
+    // Keyless IMDb GraphQL (titleType + principalCredits) for the kind
+    // gate and the chair. Plain global fetch - proven live from CI-class
+    // runners; any failure abstains inside imdbGqlCredits (fail-closed).
+    gqlFetch: (tt, memo) => imdbGqlCredits(tt, fetch, memo),
   };
   const runs = [];
   const results = [];
