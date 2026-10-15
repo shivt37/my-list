@@ -888,6 +888,46 @@ async function tryTwice(fn, row, label) {
   }
 }
 
+// IMDb-vs-RT agreement (pure): does anyone on RT's own card tolerantly
+// match IMDb's writers (series) or directors (movies)? Series checks both
+// creators AND directors against writers (Crook class: the director IS
+// the creator). Returns the agreeing pair or null. Confirm-only: callers
+// log agreement; disagreement never vetoes (GraphQL principalCredits is
+// often cast-only, so a miss proves nothing).
+export function gqlRtAgreement(rtEv, type, g) {
+  if (!g) return null;
+  if (type === "series") {
+    const creators = rtEv.creators || [];
+    for (const c of [...creators, ...((rtEv && rtEv.dirs) || [])]) {
+      for (const w of (g.writers || [])) {
+        if (namesAgree(c, w)) return { rt: c, imdb: w, role: creators.includes(c) ? "creator" : "director-creator" };
+      }
+    }
+    return null;
+  }
+  for (const d of ((rtEv && rtEv.dirs) || [])) {
+    for (const m of (g.directors || [])) {
+      if (namesAgree(d, m)) return { rt: d, imdb: m, role: "director" };
+    }
+  }
+  return null;
+}
+
+// Best-effort confirm note for verify abstains: fetches the winner's
+// IMDb credits (memoized per run - the kind gate reuses it, so this is
+// usually free) and logs RT∩IMDb agreement. Return values untouched:
+// agreement is logged, anything else stays silent, failures swallowed.
+async function logGqlRtConfirm(row, type, ctx, won, rtEv) {
+  try {
+    if (typeof ctx.gqlFetch !== "function" || !/^imdb:tt[0-9]+$/.test(won || "")) return;
+    const g = await ctx.gqlFetch(won.slice(5), ctx._gqlMemo || (ctx._gqlMemo = {}));
+    const m = gqlRtAgreement(rtEv, type, g);
+    if (m) console.log(`  [verify-gql-confirm] ${row.slug}: RT ${m.rt} == IMDb ${m.imdb} (${m.role})`);
+  } catch {
+    // confirm is best-effort only - never affects the verdict
+  }
+}
+
 // Winner verification: the decided ID's TMDB crew must not contradict
 // RT's own page (which once carried a wrong date with right content).
 // ROLE-AWARE: Director/Creator-role agreement decides; producer-level
@@ -916,7 +956,8 @@ export async function verifyWinner(row, type, ctx, won) {
     // candidate crews carry series creators - disjointness here is not
     // proof of contradiction (proven: 12 correct tt's in the 100-series
     // test). Abstain to the IMDb chair / corroboration, never veto.
-    console.log(`  [verify-abstain] ${row.slug}: Director-only series card - needs IMDb chair`);
+    console.log(`  [verify-abstain] ${row.slug}: Director-only series card - abstaining (ships on vote backing, kind-gated at ship)`);
+    await logGqlRtConfirm(row, type, ctx, won, rtEv);
     return { ok: true, reason: "series-director-abstain" };
   }
   // Resolve winner to its TMDB record (direct numeric, or /find by imdb).
@@ -946,6 +987,7 @@ export async function verifyWinner(row, type, ctx, won) {
     const tmC = candEv.creators;
     if (tmC.length === 0) {
       console.log(`  [verify-skip] ${row.slug}: no TMDB creator to compare`);
+      await logGqlRtConfirm(row, type, ctx, won, rtEv);
       return { ok: true, reason: "no-tmdb-creator" };
     }
     if (rtEv.creators.length === 0) {
@@ -954,6 +996,7 @@ export async function verifyWinner(row, type, ctx, won) {
       // false-vetoed winners in the 100-series test, every one correct).
       // Winner stands; never diverted to rescore.
       console.log(`  [verify-ok] ${row.slug}: ${won} no RT creator claim to contradict`);
+      await logGqlRtConfirm(row, type, ctx, won, rtEv);
       return { ok: true, reason: "no-rt-creator" };
     }
     if (rtEv.creators.some((a) => tmC.some((b) => namesAgree(a, b)))) {
@@ -968,6 +1011,7 @@ export async function verifyWinner(row, type, ctx, won) {
     // overlap must never rescue a pick.
     if (rtEv.creators.some((a) => candEv.prods.some((b) => namesAgree(a, b)))) {
       console.log(`  [verify-abstain] ${row.slug}: RT creator EPs ${won} - needs corroboration, not a veto`);
+      await logGqlRtConfirm(row, type, ctx, won, rtEv);
       return { ok: true, reason: "creator-as-ep" };
     }
     console.log(`  [verify-veto] ${row.slug}: ${won} creator contradicts RT page - re-scoring`);
@@ -982,6 +1026,7 @@ export async function verifyWinner(row, type, ctx, won) {
     // Producer-level overlap only: corroboration, never a veto - but the
     // check ran clean, so record the pass explicitly.
     console.log(`  [verify-ok] ${row.slug}: ${won} producer-only RT card - no decisive crew to contradict`);
+    await logGqlRtConfirm(row, type, ctx, won, rtEv);
     return { ok: true, reason: "crew-match" };
   }
   if (rtDC.some((a) => tmDC.some((b) => namesAgree(a, b)))) {
@@ -1256,7 +1301,7 @@ export async function imdbChair(row, type, ctx, ids) {
     // still abstain) rather than returning early.
   }
   if (typeof ctx.imdbFetch !== "function") {
-    console.log(`  [imdb-chair-skip] ${row.slug}: no IMDb fetch in this runner`);
+    console.log(`  [imdb-chair-skip] ${row.slug}: no IMDb fetch available (GraphQL + headless both absent)`);
     return null;
   }
   const confirmed = [];
