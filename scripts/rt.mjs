@@ -244,10 +244,18 @@ export function detailYearFromHtml(html) {
 // Movie Info release rows ("Release Date (Theaters)", "(Streaming)",
 // "Release Date") - premiere years that beat dateCreated when it holds
 // a RERELEASE date (Halloween: dateCreated 2018-09-27, Theaters row
-// Oct 25 1978). Returns unique years in page order.
+// Oct 25 1978). "Rerelease Date" rows are DELIBERATELY excluded (the
+// regex needs a capital-R "Release Date"): rereleases date the listing,
+// premieres date the film. Returns unique years in page order.
 export function detailReleaseYears(html) {
   const out = [];
-  const re = /Release Date[^<]*<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/g;
+  // Anchored to the label start (after the <rt-text> open tag): a bare
+  // "Release Date" substring also matches hyphenated "Re-Release Date",
+  // whose year would pollute premiere years with a relisting year.
+  // "Rerelease Date" (no hyphen) misses by case accident; the anchor
+  // removes the accident-dependency. Premiere labels all match the
+  // anchored form (census-verified); strictly narrowing, zero recall cost.
+  const re = /<rt-text[^>]*>\s*Release Date[^<]*<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/g;
   let m;
   while ((m = re.exec(String(html || ""))) !== null) {
     const y = /((?:19|20)\d{2})/.exec(m[1].replace(/<[^>]+>/g, " "));
@@ -460,7 +468,7 @@ export async function tmdbVerdict(row, type, ctx) {
       cast: dHtml ? rtCastFromHtml(dHtml) : [],
     };
     if (dHtml) {
-      const card = rtCrewFromHtml(dHtml);
+      const card = rtCrewFromHtml(dHtml, row.slug);
       const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
       rtEv.dirs = normSet(card["Director"]);
       rtEv.creators = normSet(card["Creator"]);
@@ -549,11 +557,11 @@ export async function cinemetaVerdict(row, type, fetchJson) {
 // terror row's LaValle sits under this label), and for movies the merge
 // is veto-safe (agreement is existential - extra names can only add
 // matches, never manufacture a contradiction). Returns { label: [names] }.
-export function rtCrewFromHtml(html) {
+export function rtCrewFromHtml(html, slug = null) {
   const h = String(html || "");
   const out = {};
   const add = (label, name) => {
-    const n = String(name || "").trim();
+    const n = decodeHtmlEntities(String(name || "").trim());
     if (!n) return;
     out[label] = out[label] || [];
     if (!out[label].includes(n)) out[label].push(n);
@@ -564,7 +572,17 @@ export function rtCrewFromHtml(html) {
   let m;
   while ((m = sec.exec(h)) !== null) {
     const label = m[1].trim();
-    if (label !== "Creator" && label !== "Director" && label !== "Executive Producer" && label !== "Producer" && label !== "Screenwriter") continue;
+    if (label !== "Creator" && label !== "Director" && label !== "Executive Producer" && label !== "Producer" && label !== "Screenwriter") {
+      // Unknown-label tripwire (log-only, still skipped): person-ish
+      // labels we never fold today (Showrunner, Co-Creator, Writer...)
+      // become visible in run logs instead of silently dropped. No fold:
+      // folding generic Writer risks false crewHits; a real synonym needs
+      // its own live row + test before joining the allowlist above.
+      if (/creator|showrunner|writer|teleplay|story\s*by|director|producer/i.test(label)) {
+        console.warn(`  [crew-label] ${slug || "?"}: unmapped person-label "${label}" - ignoring`);
+      }
+      continue;
+    }
     const nm = /data-qa="item-value">([^<]+)</g;
     let n;
     while ((n = nm.exec(m[2])) !== null) add(label === "Screenwriter" ? "Creator" : label, n[1]);
@@ -651,10 +669,10 @@ export function crewAgrees(rtNames, tmdbNames) {
 
 // RT-side evidence from a detail page: true year + role-split crew +
 // top-billed cast. Missing pieces stay empty (abstain downstream).
-export function rtEvidenceFromHtml(html) {
+export function rtEvidenceFromHtml(html, slug = null) {
   const h = String(html || "");
   const dy = detailYearFromHtml(h);
-  const card = rtCrewFromHtml(h);
+  const card = rtCrewFromHtml(h, slug);
   const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
   return {
     year: dy || null,
@@ -689,6 +707,11 @@ export async function tmdbEvidenceFor(type, numericId, ctx) {
       const n = normRtTitle(p.name);
       if (p.job === "Director") out.dirs.push(n);
       else if (p.job === "Producer" || p.job === "Executive Producer") out.prods.push(n);
+      // Series-only: staff Writers join creators (reluctant class: TMDB
+      // created_by can name an episode director while the actual writers
+      // carry the show). Movies untouched. Staff/Story/Assistant jobs
+      // stay excluded (room-noise, not authorship).
+      else if (type === "series" && p.job === "Writer") out.creators.push(n);
     }
     for (const p of (((cred && cred.cast) || []).slice(0, 5))) {
       const n = normRtTitle(p && p.name);
@@ -743,15 +766,27 @@ export function evidenceScore(rtEv, candEv) {
   return { total: y + d + p + c, parts: { y, d, p, c } };
 }
 
+// HTML-entity decode for RT page text. Card labels carry entities
+// ("Rachel O&#39;Connor") that must decode BEFORE normRtTitle, which
+// would otherwise fold the & into " and " ("rachel o and 39connor" vs
+// TMDB "rachel oconnor" - proven live). Single-pass: no double-decode.
+export function decodeHtmlEntities(s) {
+  return String(s || "").replace(/&#([0-9]+);|&#x([0-9a-fA-F]+);|&(amp|lt|gt|quot|apos|nbsp);/g, (m, dec, hex, named) => {
+    if (dec) return String.fromCharCode(parseInt(dec, 10));
+    if (hex) return String.fromCharCode(parseInt(hex, 16));
+    return { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " }[named] || m;
+  });
+}
+
 // RT detail director (JSON-LD Person array or plain string form).
 // Null when the page carries none (most series rows - use rtCrewFromHtml
 // for the full card instead).
 export function directorFromHtml(html) {
   const h = String(html || "");
   let m = /"director":\[\{"@type":"Person","name":"([^"]+)"/.exec(h);
-  if (m) return m[1];
+  if (m) return decodeHtmlEntities(m[1]);
   m = /"director":"([^"]+)"/.exec(h);
-  return m ? m[1] : null;
+  return m ? decodeHtmlEntities(m[1]) : null;
 }
 
 // Cinemeta evidence for one imdb id: director (+writer as creators on
@@ -811,7 +846,7 @@ export async function directorArbiter(row, type, ctx, ids) {
   } catch {
     return null;
   }
-  const card = rtCrewFromHtml(dHtml);
+  const card = rtCrewFromHtml(dHtml, row.slug);
   const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
   const rtEv = {
     year: detailYearFromHtml(dHtml),
@@ -860,7 +895,7 @@ export function rtCastFromHtml(html, n = 8) {
       const actors = j && j.actor;
       if (Array.isArray(actors)) {
         for (const a of actors.slice(0, n)) {
-          const nm = a && a.name ? normRtTitle(a.name) : "";
+          const nm = a && a.name ? normRtTitle(decodeHtmlEntities(a.name)) : "";
           if (nm) out.push(nm);
         }
       }
@@ -943,7 +978,7 @@ export async function verifyWinner(row, type, ctx, won) {
     console.log(`  [verify-skip] ${row.slug}: detail fetch failed - unverifiable win`);
     return { ok: true, reason: "fetch-failed" };
   }
-  const rtEv = rtEvidenceFromHtml(d.v);
+  const rtEv = rtEvidenceFromHtml(d.v, row.slug);
   const rtDC = [...rtEv.dirs, ...rtEv.creators];
   const rtHasDecisive = rtDC.length > 0;
   const rtHasAny = rtHasDecisive || rtEv.prods.length > 0;
@@ -1050,7 +1085,7 @@ export async function evidenceRescore(row, type, ctx, vetoedId, extraIds = []) {
   } catch {
     return null;
   }
-  const rtEv = rtEvidenceFromHtml(html);
+  const rtEv = rtEvidenceFromHtml(html, row.slug);
   const endpoint = type === "movie" ? "/search/movie" : "/search/tv";
   const nameOf = (r) => (type === "movie" ? r.title : r.name);
   const origOf = (r) => (type === "movie" ? r.original_title : r.original_name);
@@ -1360,7 +1395,7 @@ export async function corroborateRow(row, type, ctx, cands) {
     return null;
   }
   if (!html) return null;
-  const rtEv = rtEvidenceFromHtml(html);
+  const rtEv = rtEvidenceFromHtml(html, row.slug);
   const infoYears = detailReleaseYears(html);
   const years = [...new Set([rtEv.year, row.year, slugYearOf(row.slug), ...infoYears].filter(Boolean))];
   const decisive = type === "movie" ? rtEv.dirs : [...rtEv.creators, ...rtEv.dirs];
@@ -1888,7 +1923,48 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
           const names = [det && det.name, det && det.title, det && det.original_name, det && det.original_title]
             .map((n) => normRtTitle(n)).filter(Boolean);
           const titleOk = names.some((n) => titleKeys(row.title).includes(n));
+          // Contradiction-block (trespasses class): title+year alone must
+          // not ship over proven creator disjointness. Block iff RT
+          // creators and the record's created_by are BOTH present and
+          // pairwise disjoint, with no author-EP cover (One-Piece class:
+          // RT creator EP-ing the record corroborates instead). Either
+          // side empty abstains (ship as below); any error abstains.
+          // Rare path only: 1 memoized RT fetch + at most 1 credits call.
+          let contra = false;
           if (y && years.some((yy) => Math.abs(+y - +yy) <= 1) && titleOk) {
+            try {
+              const dmem = ctx._detailMemo || (ctx._detailMemo = {});
+              if (dmem[row.slug] === undefined) {
+                if (typeof ctx.getDetailHtml === "function") {
+                  try {
+                    dmem[row.slug] = await ctx.getDetailHtml(row.slug);
+                  } catch {
+                    dmem[row.slug] = null;
+                  }
+                } else {
+                  dmem[row.slug] = null;
+                }
+              }
+              const rtC = dmem[row.slug] ? rtEvidenceFromHtml(dmem[row.slug], row.slug).creators : [];
+              const tmC = ((det && det.created_by) || []).map((p) => normRtTitle(p && p.name)).filter(Boolean);
+              if (rtC.length > 0 && tmC.length > 0 && !rtC.some((a) => tmC.some((b) => namesAgree(a, b)))) {
+                let cover = false;
+                try {
+                  const cred = await tmdbGetFn(t.type === "movie" ? `/movie/${num}/credits` : `/tv/${num}/credits`);
+                  const eps = ((cred && cred.crew) || [])
+                    .filter((p) => p && (p.job === "Producer" || p.job === "Executive Producer"))
+                    .map((p) => normRtTitle(p.name));
+                  cover = rtC.some((a) => eps.some((b) => namesAgree(a, b)));
+                } catch {
+                  cover = false;
+                }
+                if (!cover) contra = true;
+              }
+            } catch {
+              contra = false;
+            }
+          }
+          if (y && years.some((yy) => Math.abs(+y - +yy) <= 1) && titleOk && !contra) {
             const fb = `tmdb:${num}`;
             if (writtenIds.has(fb)) {
               heldOut.push(`${row.slug} (duplicate of id ${fb})`);
@@ -1901,7 +1977,7 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
             console.log(`  [kind-fallback] ${row.slug}: imdb:${id} is ${kind}, shipping series-typed ${fb} (${d})`);
             return rowToItem(t.type, fb, row, title, shown);
           }
-          console.log(`  [kind-fallback-skip] ${row.slug}: tmdb:${num} date ${d || "(none)"} not anchored`);
+          console.log(`  [kind-fallback-skip] ${row.slug}: tmdb:${num} ${contra ? "creators contradict RT page" : `date ${d || "(none)"} not anchored`}`);
         }
       } catch (e) {
         console.warn(`  [kind-fallback] ${row.slug}: TMDB lookup failed (${e.message}) - holding out`);
