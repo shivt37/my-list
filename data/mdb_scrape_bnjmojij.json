@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie(Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792065645307,
+  "scraped_at": 1792108857539,
   "items": [
     {
       "slug": "40fmc-all-that-we-never-were",
@@ -302,6 +302,26 @@
       "score": 7,
       "poster_path": "vfZxVHextAGC70zrNhS8lsROqP1.jpg",
       "description": "Olive Smith, a biology PhD candidate, and Dr. Adam Carlsen, a hotshot professor and well-known tyrant, enter into a fake relationship, seeing each of their carefully calculated theories on love get thrown into chaos.",
+      "digital_release_date": "2026-09-23"
+    },
+    {
+      "slug": "3lhpv-the-kidnapping-of-arabella",
+      "imdb_id": "tt33292601",
+      "title": "The Kidnapping of Arabella",
+      "year": 2025,
+      "score": 6,
+      "poster_path": "tVi9mZDqT53Rdpy48WEqi3OuYdN.jpg",
+      "description": "Holly spends days at her dead-end job fantasizing about holes in the space-time continuum and wondering where her life went wrong. When she meets Arabella, an eight-year-old rebel hoping to run away from her self-absorbed author father, Holly becomes convinced their meeting is a cosmic sign, and that Arabella is her past self sent back for a second chance. Embarking on an unconventional road trip, these two lost souls might be exactly what the other needs.",
+      "digital_release_date": "2026-09-23"
+    },
+    {
+      "slug": "3ytqm-the-florist",
+      "imdb_id": "tt33214716",
+      "title": "The Florist",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "4tnRvIiWMzVA2Tw9c7INLo4sfo0.jpg",
+      "description": "A quiet horticulturalist harboring a secret life as a lethal assassin finds his true identity jeopardized when he forms an unlikely friendship with a witnesses to police corruption.",
       "digital_release_date": "2026-09-23"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "9Bu1PW2R1XayqRqnl0aDOgMcrdS.jpg",
       "description": "To save his career, a 40-year-old ad exec joins a crew of twentysomethings for a wild Miami bachelor party after they mistakenly add him to a group chat.",
       "digital_release_date": "2026-07-24"
-    },
-    {
-      "slug": "44pdm-the-truthers",
-      "imdb_id": "tt41111628",
-      "title": "The Truthers",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "ltuAheARdaUHbaS8lX1ZPrNOXe5.jpg",
-      "description": "After her mother's sudden death, Ruth returns to her hometown and reunites with her father, whose odd behavior makes her question what really happened.",
-      "digital_release_date": "2026-07-24"
-    },
-    {
-      "slug": "3g6q8-a-mosquito-in-the-ear",
-      "imdb_id": "tt32331644",
-      "title": "A Mosquito in the Ear",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "kiU9L3YUi8IWmsZw8V1YHiwYtqE.jpg",
-      "description": "After struggling with fertility issues, an American couple decides to pursue international adoption. They are matched with a 4-year-old girl named Sarvari and travel to an orphanage in Goa, India, to bring her home.",
-      "digital_release_date": "2026-07-23"
     }
   ]
 }
