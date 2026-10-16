@@ -1080,15 +1080,24 @@ export function gqlRtAgreement(rtEv, type, g) {
   return null;
 }
 
-// Best-effort confirm note for verify abstains: fetches the winner's
-// IMDb credits (memoized per run - the kind gate reuses it, so this is
-// usually free) and logs RT∩IMDb agreement. Return values untouched:
-// agreement is logged, anything else stays silent, failures swallowed.
+// IMDb-vs-RT agreement fetch (never throws): the winner's GraphQL
+// writers/directors against RT's own card via gqlRtAgreement. Pair or
+// null (missing fetch, bad id, empty credits, disjoint crew all mean
+// null - disagreement never vetoes, callers decide). Memoized per run.
+async function gqlConfirmAgreement(row, ctx, won, rtEv, type) {
+  try {
+    if (typeof ctx.gqlFetch !== "function" || !/^imdb:tt[0-9]+$/.test(won || "")) return null;
+    const g = await ctx.gqlFetch(won.slice(5), ctx._gqlMemo || (ctx._gqlMemo = {}));
+    return gqlRtAgreement(rtEv, type, g);
+  } catch {
+    return null;
+  }
+}
+
+// Best-effort confirm note for verify abstains (log-only wrapper).
 async function logGqlRtConfirm(row, type, ctx, won, rtEv) {
   try {
-    if (typeof ctx.gqlFetch !== "function" || !/^imdb:tt[0-9]+$/.test(won || "")) return;
-    const g = await ctx.gqlFetch(won.slice(5), ctx._gqlMemo || (ctx._gqlMemo = {}));
-    const m = gqlRtAgreement(rtEv, type, g);
+    const m = await gqlConfirmAgreement(row, ctx, won, rtEv, type);
     if (m) console.log(`  [verify-gql-confirm] ${row.slug}: RT ${m.rt} == IMDb ${m.imdb} (${m.role})`);
   } catch {
     // confirm is best-effort only - never affects the verdict
@@ -1154,7 +1163,15 @@ export async function verifyWinner(row, type, ctx, won) {
     const tmC = candEv.creators;
     if (tmC.length === 0) {
       console.log(`  [verify-skip] ${row.slug}: no TMDB creator to compare`);
-      await logGqlRtConfirm(row, type, ctx, won, rtEv);
+      // TMDB-crew gap: consult IMDb writers vs RT's card as a real
+      // confirm signal. Agreement upgrades the reason (stronger evidence
+      // logged); anything else abstains exactly as before - GQL credits
+      // are often cast-only, so a miss proves nothing and never vetoes.
+      const m = await gqlConfirmAgreement(row, ctx, won, rtEv, type);
+      if (m) {
+        console.log(`  [verify-gql-confirm] ${row.slug}: RT ${m.rt} == IMDb ${m.imdb} (${m.role})`);
+        return { ok: true, reason: "gql-crew-confirm" };
+      }
       return { ok: true, reason: "no-tmdb-creator" };
     }
     if (rtEv.creators.length === 0) {
@@ -1193,6 +1210,13 @@ export async function verifyWinner(row, type, ctx, won) {
   const tmDC = [...candEv.dirs, ...candEv.creators];
   if (tmDC.length === 0) {
     console.log(`  [verify-skip] ${row.slug}: no TMDB crew to compare`);
+    // Same TMDB-crew-gap confirm as series (movie: RT dirs vs IMDb
+    // directors). Agreement upgrades; miss abstains as before.
+    const m = await gqlConfirmAgreement(row, ctx, won, rtEv, type);
+    if (m) {
+      console.log(`  [verify-gql-confirm] ${row.slug}: RT ${m.rt} == IMDb ${m.imdb} (${m.role})`);
+      return { ok: true, reason: "gql-crew-confirm" };
+    }
     return { ok: true, reason: "no-tmdb-crew" };
   }
   if (!rtHasDecisive) {
