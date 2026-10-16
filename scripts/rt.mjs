@@ -2273,6 +2273,26 @@ export async function main({
 // fast). Guards: repeated slugs are skipped (dedupe), an empty page or a
 // repeated cursor stops the loop (a stuck "more pages" flag must never
 // spin to the workflow timeout). Exported for tests (fetch stubbed).
+// Scoped 404 retry for cnapi follow-up pages only: RT occasionally 404s
+// a valid mid-chart cursor (transient upstream blip, proven live - the
+// same URL 200s minutes later with identical bytes). 404 stays fatal
+// everywhere else (fetchProxyHtml never retries it): a persistently
+// missing page still fails the run instead of silently shipping short.
+async function fetchCnapiPage(getHtml, url) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      return parseCnapi(await getHtml(url));
+    } catch (e) {
+      lastError = e;
+      if (!/proxy fetch 404/.test(String((e && e.message) || e)) || attempt === 3) throw e;
+      console.warn(`  [paginate] 404 blip at cursor page, retrying (${attempt}/3)...`);
+      await sleep(5000 * attempt);
+    }
+  }
+  throw lastError;
+}
+
 export async function paginateChart(t, getHtml, first) {
   const { vanity, filters } = splitBrowseUrl(t.url);
   const rows = [];
@@ -2296,7 +2316,7 @@ export async function paginateChart(t, getHtml, first) {
       break;
     }
     seenCursors.add(cursor);
-    let page = parseCnapi(await getHtml(cnapiUrl(vanity, filters, cursor)));
+    let page = await fetchCnapiPage(getHtml, cnapiUrl(vanity, filters, cursor));
     if (page.rows.length === 0 && page.hasNext) {
       // Empty yet claims more: transient blip, not list end. One polite
       // retry; a genuine end stays empty and stops below.
