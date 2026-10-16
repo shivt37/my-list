@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1792065701963,
+  "scraped_at": 1792108927569,
   "items": [
     {
       "imdb_id": "tt15047880",
@@ -97,7 +97,7 @@
       "type": "movie",
       "title": "Halloween",
       "year": 1978,
-      "release_date": "1978-10-24",
+      "release_date": "1978-10-25",
       "poster": "https://image.tmdb.org/t/p/w200/wijlZ3HaYMvlDTPqJoTCWKFkCPU.jpg"
     },
     {
@@ -1061,6 +1061,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg"
     },
     {
+      "imdb_id": "tt0099052",
+      "type": "movie",
+      "title": "Arachnophobia",
+      "year": 1990,
+      "release_date": "1990-07-20",
+      "poster": "https://image.tmdb.org/t/p/w200/lHjpwv1Yv2RcGcTQb4Lc1cKw1y9.jpg"
+    },
+    {
       "imdb_id": "tt32141377",
       "type": "movie",
       "title": "28 Years Later: The Bone Temple",
@@ -1187,14 +1195,6 @@
       "year": 2015,
       "release_date": "2015-02-04",
       "poster": "https://image.tmdb.org/t/p/w200/iwnQ1JH1wdWrGYkgWySptJ5284A.jpg"
-    },
-    {
-      "imdb_id": "tt0106308",
-      "type": "movie",
-      "title": "Army of Darkness",
-      "year": 1992,
-      "release_date": "1992-10-31",
-      "poster": "https://image.tmdb.org/t/p/w200/xsgTuAtR2zSH8Umg3jWZcZjlDpe.jpg"
     }
   ]
 }

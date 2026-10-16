@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792065702902,
+  "scraped_at": 1792108928365,
   "items": [
     {
       "imdb_id": "tt11540908",
@@ -717,6 +717,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/bcrp2ovxirKH81XSMYQZ7eEunzX.jpg"
     },
     {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "release_date": "2022-05-05",
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg"
+    },
+    {
       "imdb_id": "tt30796986",
       "type": "series",
       "title": "NCIS: Origins",
@@ -1013,6 +1021,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/6XnA02VRG4dhBpTZWGZuXQdYGDW.jpg"
     },
     {
+      "imdb_id": "tt10574558",
+      "type": "series",
+      "title": "Midnight Mass",
+      "year": 2021,
+      "release_date": "2021-09-24",
+      "poster": "https://image.tmdb.org/t/p/w200/iYoMZYVD775MtBYJfv6OGY1FsnL.jpg"
+    },
+    {
       "imdb_id": "tt27497393",
       "type": "series",
       "title": "Stuart Fails to Save the Universe",
@@ -1093,6 +1109,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/7JXZdWifaa6wL0XLRi0GJOlOA8y.jpg"
     },
     {
+      "imdb_id": "tt36743307",
+      "type": "series",
+      "title": "Inside the Circle",
+      "year": 2026,
+      "release_date": "2026-10-07",
+      "poster": "https://image.tmdb.org/t/p/w200/3JpnP8fYVb9B9FuvdGT4ZkRRYZJ.jpg"
+    },
+    {
       "imdb_id": "tt0773262",
       "type": "series",
       "title": "Dexter",
@@ -1139,14 +1163,6 @@
       "year": 2025,
       "release_date": "2025-10-08",
       "poster": "https://image.tmdb.org/t/p/w200/uziPOqxQotCE9g0wBgDvHCOvRhP.jpg"
-    },
-    {
-      "imdb_id": "tt22202452",
-      "type": "series",
-      "title": "Pluribus",
-      "year": 2025,
-      "release_date": "2025-11-06",
-      "poster": "https://image.tmdb.org/t/p/w200/z7Nga7Q9IGFWs5OEduY2gGFxnX3.jpg"
     }
   ]
 }
