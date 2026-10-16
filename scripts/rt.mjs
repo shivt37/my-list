@@ -377,7 +377,12 @@ export async function tmdbVerdict(row, type, ctx) {
   const nameOf = (r) => (type === "movie" ? r.title : r.name);
   const origOf = (r) => (type === "movie" ? r.original_title : r.original_name);
   const dateOf = (r) => (type === "movie" ? r.release_date : r.first_air_date);
-  const exactIn = (results) => (results || []).filter((r) => normRtTitle(nameOf(r)) === nt || (origOf(r) && normRtTitle(origOf(r)) === nt));
+  // Strip a trailing " (YYYY...)" suffix BEFORE normalization (TMDB
+  // result names like "Monster (2022)" must match bare "monster";
+  // post-norm the parens are already gone, so stripping must come
+  // first). Row titles strip the same class (titleKeys callers).
+  const bare = (s) => normRtTitle(String(s || "").replace(/\s*\(\d{4}[^)]*\)\s*$/, ""));
+  const exactIn = (results) => (results || []).filter((r) => bare(nameOf(r)) === nt || (origOf(r) && bare(origOf(r)) === nt));
   // Listing loop demands EXACT year equality: TMDB's year filter matches
   // ANY release (re-releases included), so ±1 here admits different films
   // wearing the same name (Carrie 2013 surfacing for a 2015 listing).
@@ -457,11 +462,14 @@ export async function tmdbVerdict(row, type, ctx) {
         }
       }
     }
-    // Evidence rung: score every remaining candidate on RT detail year
-    // + director/crew + top-5 cast. Unique max wins strong; ties fall
-    // through to popularity (weak). One detail fetch served year + crew.
+    // Evidence rung: TMDB-only pass first (today's behavior, zero new
+    // calls) - unique max > 0 ships strong. Escalation (tie / dateless /
+    // unlinked-weak only): per-rival TMDB + Cinemeta + GQL evidence with
+    // REQUIRED kind + year gates; tie -> HOLDOUT (null), never
+    // popularity. One detail fetch served year + crew.
     const rtEv = {
       year: dy,
+      filmYears,
       dirs: [],
       creators: [],
       prods: [],
@@ -474,28 +482,63 @@ export async function tmdbVerdict(row, type, ctx) {
       rtEv.creators = normSet(card["Creator"]);
       rtEv.prods = normSet([...(card["Executive Producer"] || []), ...(card["Producer"] || [])]);
     }
-    let evBest = null;
-    let evBestScore = -1;
-    let evTied = false;
+    const tm = [];
     for (const r of pool) {
       const candEv = await tmdbEvidenceFor(type, r.id, ctx);
       if (!candEv.date) {
         const dd = (type === "movie" ? r.release_date : r.first_air_date) || null;
         if (dd) candEv.date = dd;
       }
-      const sc = evidenceScore({ ...rtEv, year: rtEv.year }, candEv);
-      if (sc.total > evBestScore) { evBest = r; evBestScore = sc.total; evTied = false; }
-      else if (sc.total === evBestScore) { evTied = true; }
+      tm.push({ r, ev: candEv, ...evidenceScore({ ...rtEv, year: rtEv.year }, candEv) });
     }
-    if (evBest && !evTied) {
-      console.log(`  [evidence] ${row.slug}: TMDB ${evBest.id} wins (${evBestScore}) from ${pool.length}`);
-      return await idOfTmdbHit(ctx, type, evBest, false);
+    const tmBest = uniqueMax(tm);
+    if (tmBest && tmBest.total > 0) {
+      console.log(`  [evidence] ${row.slug}: TMDB ${tmBest.r.id} wins (${tmBest.total}) from ${pool.length}`);
+      return await idOfTmdbHit(ctx, type, tmBest.r, false);
     }
-    // Popularity over the YEAR-NARROWED pool (not the full exact list -
-    // picking outside the matching year would defeat the narrowing above).
-    console.log(`  [ambiguous-pop] ${row.slug}: ${pool.length} in-year, taking most popular`);
-    const top = pool.sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
-    return await idOfTmdbHit(ctx, type, top, true);
+    // Combined escalation: every pooled rival (R<=6) scored on TMDB +
+    // Cinemeta + GQL with kind + film-year gates. Bounded: ext_ids per
+    // rival + GQL/Cine per tt-linked rival only (memoized); rare path.
+    // Vetoed ids stay excluded downstream (this rung runs pre-vote;
+    // verify/rescore still apply). Tie or all-gated-out -> HOLDOUT.
+    const scored = [];
+    for (const e of tm.slice(0, 6)) {
+      let tt = null;
+      try {
+        const ext = await ctx.tmdbGet(type === "movie" ? `/movie/${e.r.id}/external_ids` : `/tv/${e.r.id}/external_ids`);
+        if (ext && ext.imdb_id) tt = String(ext.imdb_id);
+      } catch {
+        tt = null;
+      }
+      let gEv = null;
+      let cEv = null;
+      if (tt && typeof ctx.gqlFetch === "function") {
+        try {
+          gEv = await ctx.gqlFetch(tt, ctx._gqlMemo || (ctx._gqlMemo = {}));
+        } catch {
+          gEv = null;
+        }
+      }
+      if (tt) {
+        try {
+          cEv = await cineEvidenceFor(type, ctx, `imdb:${tt}`);
+        } catch {
+          cEv = null;
+        }
+      }
+      const gate = kindGate(type, gEv) && yearGate(rtEv, e.ev, cEv, dateOf(e.r));
+      const sC = cEv ? evidenceScore(rtEv, cEv) : { total: 0, parts: { y: 0, d: 0, p: 0, c: 0 } };
+      const gConf = gqlConfirm(type, rtEv, gEv);
+      const total = gate ? e.total + sC.total + gConf : -1;
+      scored.push({ r: e.r, tt, total, parts: { tmdb: e.total, cine: sC.total, gql: gConf } });
+    }
+    const best = uniqueMax(scored.filter((s) => s.total >= 0));
+    if (best && best.total > 0) {
+      console.log(`  [evidence-combined] ${row.slug}: TMDB ${best.r.id} wins (${best.total} tmdb=${best.parts.tmdb} cine=${best.parts.cine} gql=${best.parts.gql}) from ${pool.length}`);
+      return await idOfTmdbHit(ctx, type, best.r, false);
+    }
+    console.log(`  [ambiguous-holdout] ${row.slug}: ${pool.length} rivals tie at combined evidence - holding out`);
+    return null;
   }
   return null;
 }
@@ -657,6 +700,41 @@ export function namesAgree(a, b) {
   return false;
 }
 
+// Transliteration second-chance (oo<->u ONLY): romanization variants of
+// the same name ("Nam Dae-jung" vs "Nam Dae-joong", same ㅜ vowel).
+// eo<->o, eu, ou mappings are EXCLUDED (Seong/Song are different
+// families - proven false-equate). VETO POINTS ONLY: confirms stay
+// strict; a translit lift additionally needs exact-year + 3 shared
+// leads + existing vote backing (see translitLift).
+export function translitKey(s) {
+  return String(s || "").replace(/oo/g, "u");
+}
+export function namesAgreeTranslit(a, b) {
+  return namesAgree(translitKey(a), translitKey(b));
+}
+// The single shared veto predicate: both sides present + pairwise
+// disjoint under tolerant (incl. translit) agreement. Used at
+// corroborate contradicted + fallback block (bare); verify branches
+// use the gated translitLift instead (vote-backed winners only).
+export function vetoDisjoint(A, B) {
+  const a = (A || []).filter(Boolean);
+  const b = (B || []).filter(Boolean);
+  return a.length > 0 && b.length > 0 && !a.some((x) => b.some((y) => namesAgreeTranslit(x, y)));
+}
+// Gated translit lift for veto points: a strict miss rescued by oo<->u
+// still needs exact-year (not ±1) + 3 strict shared leads. Vote backing
+// holds by construction (verify only sees voted winners).
+export function translitLift(rtDec, tmDec, rtEv, candEv) {
+  const a = (rtDec || []).filter(Boolean);
+  const b = (tmDec || []).filter(Boolean);
+  if (a.length === 0 || b.length === 0) return false;
+  if (!a.some((x) => b.some((y) => !namesAgree(x, y) && namesAgreeTranslit(x, y)))) return false;
+  const yM = /^([0-9]{4})/.exec(String((candEv && candEv.date) || ""));
+  if (!rtEv || !rtEv.year || !yM || +yM[1] !== rtEv.year) return false;
+  const shared = ((candEv.cast || []).filter((c) => (rtEv.cast || []).includes(c))).length;
+  return shared >= 3;
+}
+
 // Crew agreement: >=1 shared normalized full name between RT's card and
 // a TMDB crew set. Full-name exact keeps false positives ~nil (same
 // title + same year + same person twice is practically nonexistent).
@@ -764,6 +842,56 @@ export function evidenceScore(rtEv, candEv) {
   }
   if (c > 3) c = 3;
   return { total: y + d + p + c, parts: { y, d, p, c } };
+}
+
+// Unique max over scored entries ({ total }): ties and empties yield
+// null (holdout), never a pick. Shared by the TMDB-only pass and the
+// combined escalation (and mirrors directorArbiter/rescore semantics).
+function uniqueMax(arr) {
+  let b = null;
+  let tied = false;
+  for (const s of arr) {
+    if (!b || s.total > b.total) { b = s; tied = false; }
+    else if (s.total === b.total) { tied = true; }
+  }
+  return tied ? null : b;
+}
+
+// GQL confirm for the combined rung: GQL writers vs RT decisive crew
+// (movies: dirs; series: creators) with namesAgree - parity with the
+// evidenceScore decisive-role weight (d=6) for the same role predicate.
+// Empty either side abstains (0, never vetoes); disjoint contradicts
+// (-6) but stays inside the gated sum (never a solo veto).
+function gqlConfirm(type, rtEv, g) {
+  if (!g || ((g.writers || []).length === 0 && (g.directors || []).length === 0)) return 0;
+  // Defensive: inputs arrive normalized from parseImdbGqlCredits, but
+  // norm is idempotent so normalize again rather than trust callers.
+  const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
+  const gw = normSet(g.writers);
+  const gd = normSet(g.directors);
+  const dec = type === "movie" ? rtEv.dirs : rtEv.creators;
+  const cand = type === "movie" ? [...gw, ...gd] : gw;
+  if (dec.length === 0 || cand.length === 0) return 0;
+  return dec.some((a) => cand.some((b) => namesAgree(a, b))) ? 6 : -6;
+}
+
+// Kind gate for the combined rung: unknown kind passes (abstain-safe).
+function kindGate(type, g) {
+  return !g || !g.kind || kindOkFor(type, g.kind);
+}
+
+// Year gate for the combined rung: any candidate-side date (TMDB detail,
+// Cinemeta detail/range-start, search hit) within ±1 of an RT film year
+// (detail Movie-Info rows + dateCreated - NOT the listing year, per the
+// Halloween rule). No RT year claim -> no gate (abstain-safe).
+function yearGate(rtEv, tEv, cEv, searchDate) {
+  const yrs = [...(rtEv.filmYears || []), rtEv.year].filter(Boolean);
+  const cands = [tEv && tEv.date, cEv && cEv.date, cEv && cEv.yearStart && String(cEv.yearStart), searchDate].filter(Boolean);
+  if (yrs.length === 0) return true;
+  return cands.some((d) => {
+    const m = /^([0-9]{4})/.exec(String(d));
+    return m && yrs.some((y) => Math.abs(+m[1] - y) <= 1);
+  });
 }
 
 // HTML-entity decode for RT page text. Card labels carry entities
@@ -930,18 +1058,22 @@ async function tryTwice(fn, row, label) {
 // log agreement; disagreement never vetoes (GraphQL principalCredits is
 // often cast-only, so a miss proves nothing).
 export function gqlRtAgreement(rtEv, type, g) {
-  if (!g) return null;
+  if (!g || !rtEv) return null;
+  // Defensive: norm is idempotent; never trust caller normalization.
+  const normSet = (arr) => [...new Set((arr || []).map(normRtTitle).filter(Boolean))];
   if (type === "series") {
-    const creators = rtEv.creators || [];
-    for (const c of [...creators, ...((rtEv && rtEv.dirs) || [])]) {
-      for (const w of (g.writers || [])) {
+    const creators = normSet(rtEv.creators);
+    const gw = normSet(g.writers);
+    for (const c of [...creators, ...normSet(rtEv.dirs)]) {
+      for (const w of gw) {
         if (namesAgree(c, w)) return { rt: c, imdb: w, role: creators.includes(c) ? "creator" : "director-creator" };
       }
     }
     return null;
   }
-  for (const d of ((rtEv && rtEv.dirs) || [])) {
-    for (const m of (g.directors || [])) {
+  const dirs = normSet(rtEv.dirs);
+  for (const d of dirs) {
+    for (const m of normSet(g.directors)) {
       if (namesAgree(d, m)) return { rt: d, imdb: m, role: "director" };
     }
   }
@@ -1043,11 +1175,17 @@ export async function verifyWinner(row, type, ctx, won) {
     // sitting as EP on the candidate corroborates the pick instead of
     // contradicting it, so abstain rather than veto. Series-only: movie
     // EPs recur across installments (Halloween rule), where producer
-    // overlap must never rescue a pick.
-    if (rtEv.creators.some((a) => candEv.prods.some((b) => namesAgree(a, b)))) {
+    // overlap must never rescue a pick. Translit-aware like the lift.
+    if (rtEv.creators.some((a) => candEv.prods.some((b) => namesAgreeTranslit(a, b)))) {
       console.log(`  [verify-abstain] ${row.slug}: RT creator EPs ${won} - needs corroboration, not a veto`);
       await logGqlRtConfirm(row, type, ctx, won, rtEv);
       return { ok: true, reason: "creator-as-ep" };
+    }
+    // Transliteration second-chance (kim class): strict miss rescued by
+    // oo<->u still needs exact-year + 3 shared leads (translitLift).
+    if (translitLift(rtEv.creators, tmC, rtEv, candEv)) {
+      console.log(`  [verify-ok] ${row.slug}: ${won} translit crew matches RT page`);
+      return { ok: true, reason: "translit-match" };
     }
     console.log(`  [verify-veto] ${row.slug}: ${won} creator contradicts RT page - re-scoring`);
     return { ok: false, reason: "contradiction" };
@@ -1067,6 +1205,12 @@ export async function verifyWinner(row, type, ctx, won) {
   if (rtDC.some((a) => tmDC.some((b) => namesAgree(a, b)))) {
     console.log(`  [verify-ok] ${row.slug}: ${won} crew matches RT page`);
     return { ok: true, reason: "crew-match" };
+  }
+  // Transliteration second-chance, same gates as series (exact-year +
+  // 3 shared leads + vote backing by construction).
+  if (translitLift(rtDC, tmDC, rtEv, candEv)) {
+    console.log(`  [verify-ok] ${row.slug}: ${won} translit crew matches RT page`);
+    return { ok: true, reason: "translit-match" };
   }
   console.log(`  [verify-veto] ${row.slug}: ${won} crew contradicts RT page - re-scoring`);
   return { ok: false, reason: "contradiction" };
@@ -1098,7 +1242,8 @@ export async function evidenceRescore(row, type, ctx, vetoedId, extraIds = []) {
   } catch {
     return null;
   }
-  const exact = results.filter((r) => normRtTitle(nameOf(r)) === nt || (origOf(r) && normRtTitle(origOf(r)) === nt));
+  const bare = (s) => normRtTitle(String(s || "").replace(/\s*\(\d{4}[^)]*\)\s*$/, ""));
+  const exact = results.filter((r) => bare(nameOf(r)) === nt || (origOf(r) && bare(origOf(r)) === nt));
   // Floor + tie-break (mirrors directorArbiter): a zero-evidence rival
   // must never ship (proven: 6 ancient same-name rivals won with total 0
   // in the 100-series test); ties hold out with the veto standing.
@@ -1446,7 +1591,7 @@ export async function corroborateRow(row, type, ctx, cands) {
     // creators-only above).
     const dirOnlyHit = !crewHit && type === "series" && rtEv.creators.length === 0 && rtEv.dirs.length > 0 &&
       canC.length > 0 && rtEv.dirs.some((a) => canC.some((b) => namesAgree(a, b)));
-    const contradicted = decC.length > 0 && canC.length > 0 && !decC.some((a) => canC.some((b) => namesAgree(a, b)));
+    const contradicted = vetoDisjoint(decC, canC);
     const yGate = yearOkFor(candEv);
     // Tolerant person equality throughout (vicky/victoria luengo class):
     // same blessed namesAgree as decisive crewHit - exact title + year
@@ -1947,14 +2092,14 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
               }
               const rtC = dmem[row.slug] ? rtEvidenceFromHtml(dmem[row.slug], row.slug).creators : [];
               const tmC = ((det && det.created_by) || []).map((p) => normRtTitle(p && p.name)).filter(Boolean);
-              if (rtC.length > 0 && tmC.length > 0 && !rtC.some((a) => tmC.some((b) => namesAgree(a, b)))) {
+              if (vetoDisjoint(rtC, tmC)) {
                 let cover = false;
                 try {
                   const cred = await tmdbGetFn(t.type === "movie" ? `/movie/${num}/credits` : `/tv/${num}/credits`);
                   const eps = ((cred && cred.crew) || [])
                     .filter((p) => p && (p.job === "Producer" || p.job === "Executive Producer"))
                     .map((p) => normRtTitle(p.name));
-                  cover = rtC.some((a) => eps.some((b) => namesAgree(a, b)));
+                  cover = rtC.some((a) => eps.some((b) => namesAgreeTranslit(a, b)));
                 } catch {
                   cover = false;
                 }
