@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1792157643464,
+  "scraped_at": 1792195293907,
   "items": [
+    {
+      "slug": "2yjel-crystal-lake",
+      "imdb_id": "tt23148340",
+      "title": "Crystal Lake",
+      "year": 2026,
+      "score": null,
+      "poster_path": "3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg",
+      "description": "Single mother Pam Voorhees has been unable to shake her grief after her young, sickly son Jason tragically drowned in the town lake almost a year before. When two strangers arrive at Pam's door digging into her past, a disturbing chain of events is set into motion, leaving the townspeople of Crystal Lake wondering: just who is Pam Voorhees?",
+      "first_air_date": "2026-10-15"
+    },
     {
       "slug": "2ydxb-visionquest",
       "imdb_id": "tt23112594",
@@ -332,6 +342,16 @@
       "score": 4,
       "poster_path": "Njr0Rlb4CobAfrGE8NVffYDGqx.jpg",
       "description": "Berlin — a city-state on the brink. While a privileged few live beneath a climate-controlled dome, those outside struggle to survive in a world ravaged by heat, corruption, and crime. After years apart, sisters Bea and Phoebe are reunited and uncover a dark secret: Vampires are determined to seize political power — and blood has become the city's new currency.",
+      "first_air_date": "2026-09-16"
+    },
+    {
+      "slug": "455eu-route-187",
+      "imdb_id": "tt32132697",
+      "title": "Route 187",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "yfP9A3IaKE00U1ap1y7wAoZRzeC.jpg",
+      "description": "Citizens combat urban violence until a bus driver and student's murders by thugs spark outrage, leading authorities to hunt the culprits captured on video.",
       "first_air_date": "2026-09-16"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "xjkR648bH8FzQVKG9RvQtNCVVDa.jpg",
       "description": "A Greek holiday with friends to relax and reconnect. But when Zoe acts on her desires, heaven quickly turns into hell. Witty, painfully relatable drama starring Jessica Raine.",
       "first_air_date": "2026-05-23"
-    },
-    {
-      "slug": "3t3s7-ravalear-not-for-sale",
-      "imdb_id": "tt35509002",
-      "title": "Ravalear: Not for Sale",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "4kHnq56sxfhNJbFGd0kNJGcIQVu.jpg",
-      "description": "In Barcelona’s Raval neighbourhood, the family-run restaurant “Can Mosques” faces eviction after an investment fund buys the building. The family’s fight to survive escalates, pushing them to cross any and all boundaries.",
-      "first_air_date": "2026-05-22"
-    },
-    {
-      "slug": "3ymq0-mating-season",
-      "imdb_id": "tt14690136",
-      "title": "Mating Season",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "5Pn7R2TtLka8OjsgtxAq4H2apjJ.jpg",
-      "description": "A cast of bears, raccoons, deer, foxes and a host of other horny, lovable forest critters navigate love, sexual relationships and the universal need to hook up and find a partner.",
-      "first_air_date": "2026-05-22"
     }
   ]
 }

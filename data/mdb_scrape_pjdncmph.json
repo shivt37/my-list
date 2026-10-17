@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1792157326682,
+  "scraped_at": 1792195263684,
   "items": [
+    {
+      "slug": "3qzad-devour",
+      "imdb_id": "tt14541160",
+      "title": "Devour",
+      "year": 2026,
+      "score": null,
+      "poster_path": "duzeXiCKKU9bJUcObIf9zNMZIrC.jpg",
+      "description": "Stranded after a disastrous gig, an all-girl heavy metal band finds a woman in danger in a town ruled by a warlock, and crawling with cannibals, vampires, and a deadly werewolf, forcing them to fight for survival.",
+      "digital_release_date": null
+    },
     {
       "slug": "3pfbe-hallowarrior",
       "imdb_id": "tt29703555",
@@ -169,7 +179,7 @@
       "imdb_id": "tt46659729",
       "title": "Clown Panic",
       "year": 2026,
-      "score": null,
+      "score": 1,
       "poster_path": "pZ15WSO7UzzJ297SLBMvxHNQDC1.jpg",
       "description": "Revisits the bizarre nationwide hysteria of 2016, which began with reports of creepy clowns hiding near woods in South Carolina and quickly spiraled into widespread panic, school lockdowns, and police interventions across the United States. This in-depth documentary features interviews with eyewitnesses, law enforcement officials, cultural commentators, and professional clowns whose livelihoods were impacted by the craze.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 1,
       "poster_path": "qtom3MULMUp4vFA3rEkTwEIfWVe.jpg",
       "description": "In communist Czechoslovakia in 1980, 15-year-old Mara dreams of leaving her village to study in the city and become a pilot. But her father, a widowed Ruthenian farmer, insists she stay and work the land. When her village faces destruction due to a new dam, their generational conflict intensifies, revealing the struggle between tradition, identity, and the desire for freedom in a context of historical change.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "40hdq-tom-and-jerry-forbidden-compass",
-      "imdb_id": "tt37185884",
-      "title": "Tom and Jerry: Forbidden Compass",
-      "year": 2025,
-      "score": 3,
-      "poster_path": "5qttWFjsO62k88civZaDMHiBTvy.jpg",
-      "description": "During a chase inside a museum, Tom and Jerry find an ancient magical compass and end up being transported through time. Lost in a distant era, they will need to work together to find a way back home.",
       "digital_release_date": null
     }
   ]

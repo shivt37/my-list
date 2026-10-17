@@ -1,8 +1,8 @@
 {
   "catalog_id": "mdb_scrape_bnjmojij",
-  "name": "Latest Movie(Digital Releases)",
+  "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792157141324,
+  "scraped_at": 1792195247685,
   "items": [
     {
       "slug": "40fmc-all-that-we-never-were",
@@ -42,6 +42,16 @@
       "score": 7,
       "poster_path": "yBKMAIj7clP42UkFejhGDBBoTpb.jpg",
       "description": "A former soldier is thrown into a brutal race against time when a critical medical delivery makes him and his unlikely partner the targets of a ruthless cartel. As the mission spirals into a deadly manhunt, every detour, delay, and bullet pushes them closer to failure. With betrayal closing in from every side, they must survive the chase and deliver their cargo to save the life of a little girl.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
+      "slug": "3qzad-devour",
+      "imdb_id": "tt14541160",
+      "title": "Devour",
+      "year": 2026,
+      "score": null,
+      "poster_path": "duzeXiCKKU9bJUcObIf9zNMZIrC.jpg",
+      "description": "Stranded after a disastrous gig, an all-girl heavy metal band finds a woman in danger in a town ruled by a warlock, and crawling with cannibals, vampires, and a deadly werewolf, forcing them to fight for survival.",
       "digital_release_date": "2026-10-13"
     },
     {
@@ -93,6 +103,16 @@
       "poster_path": "iISM36voS1E8gX9BM0DVK0kgi3E.jpg",
       "description": "When the son of an L.A. mayoral candidate is kidnapped, he and his wife have a few hours to come up with the ransom payment. With most of their money spent on his political campaign, they have to get their hands dirty and expose a side of their lives they never intended to see the light of day.",
       "digital_release_date": "2026-10-08"
+    },
+    {
+      "slug": "3ocda-love-of-your-life",
+      "imdb_id": "tt34384900",
+      "title": "Love of Your Life",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "gOaRyRpilYPEsVLEPHOH9eHNw5E.jpg",
+      "description": "After a chance encounter sparks a sweeping romance, Maya's future is suddenly upended, sending her on an unexpected journey to love and live again.",
+      "digital_release_date": "2026-10-07"
     },
     {
       "slug": "32uh4-spider-man-brand-new-day",
@@ -202,16 +222,6 @@
       "score": 4,
       "poster_path": "rOYf8JDUsCI4EoHeS2p399Q9wyi.jpg",
       "description": "A trio of siblings faces turmoil when their parents reveal they've won the lottery but refuse to share a cent, unraveling buried secrets, unspoken tensions, and deep-seated jealousy that shake the family to its core.",
-      "digital_release_date": "2026-09-30"
-    },
-    {
-      "slug": "42r70-onze-jongens-3",
-      "imdb_id": "tt38124940",
-      "title": "Onze Jongens 3",
-      "year": 2025,
-      "score": 1,
-      "poster_path": "zynz5ly1YiQhtcFH8TXknxkVJaA.jpg",
-      "description": "A worker from the company 'Onze Jongens', which has gone back to normal handyman work, sees an opportunity to get out of debt.",
       "digital_release_date": "2026-09-30"
     },
     {
@@ -685,16 +695,6 @@
       "digital_release_date": "2026-09-07"
     },
     {
-      "slug": "2xzrr-the-disappearance-of-josef-mengele",
-      "imdb_id": "tt22852560",
-      "title": "The Disappearance of Josef Mengele",
-      "year": 2025,
-      "score": 5,
-      "poster_path": "eFS1Aj5VjK6p7aVuqTcJIv4HSyU.jpg",
-      "description": "In the aftermath of the Second World War, Josef Mengele, the Nazi doctor at Auschwitz, escapes to South America to rebuild his life in hiding. Through the eyes of his son who finds him again, Mengele is confronted with a past he can no longer ignore. From Buenos Aires to Paraguay via Brazil, the man who became known as “The Angel of Death” will organize his methodical disappearance to avoid any form of trial.",
-      "digital_release_date": "2026-09-04"
-    },
-    {
       "slug": "3hni0-dhamaal-4",
       "imdb_id": "tt27548557",
       "title": "Dhamaal 4",
@@ -940,7 +940,7 @@
       "title": "Pinocchio: Unstrung",
       "year": 2026,
       "score": 6,
-      "poster_path": "eUJXk3bTvLBi5Zcb0BCedZU7lVL.jpg",
+      "poster_path": "hJNdizFlxOW89edX3Rzr6OliSFI.jpg",
       "description": "Influenced by a sinister Cricket and created by Geppetto, Pinocchio launches a violent crusade to carve himself into a real boy like his brother James, one piece at a time.",
       "digital_release_date": "2026-08-25"
     },
