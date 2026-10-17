@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792152685464,
+  "scraped_at": 1792195331223,
   "items": [
     {
       "imdb_id": "tt11540908",
@@ -869,14 +869,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/peNC0eyc3TQJa6x4TdKcBPNP4t0.jpg"
     },
     {
-      "imdb_id": "tt21376524",
-      "type": "series",
-      "title": "Animal Control",
-      "year": 2023,
-      "release_date": "2023-02-16",
-      "poster": "https://image.tmdb.org/t/p/w200/h2dXm0CXMkycA9LrZbXMUD8SuTL.jpg"
-    },
-    {
       "imdb_id": "tt2297757",
       "type": "series",
       "title": "Nathan for You",
@@ -891,14 +883,6 @@
       "year": 2008,
       "release_date": "2008-09-23",
       "poster": "https://image.tmdb.org/t/p/w200/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg"
-    },
-    {
-      "imdb_id": "tt35826715",
-      "type": "series",
-      "title": "Boston Blue",
-      "year": 2025,
-      "release_date": "2025-10-17",
-      "poster": "https://image.tmdb.org/t/p/w200/81IhL3ckAgJ9J8vHazlUA5BNs8G.jpg"
     },
     {
       "imdb_id": "tt37022512",
@@ -933,20 +917,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/8yBQYa6AdvMY5H9CiAv0HkvF3UE.jpg"
     },
     {
-      "imdb_id": "tt31719701",
-      "type": "series",
-      "title": "Drink: A Look Inside the Glass",
-      "year": 2024,
-      "release_date": "2024-03-15",
-      "poster": "https://image.tmdb.org/t/p/w200/ro93qabEjEcfnhgOzWS7Iv87Idd.jpg"
-    },
-    {
       "imdb_id": "tt2802850",
       "type": "series",
       "title": "Fargo",
       "year": 2014,
       "release_date": "2014-04-15",
       "poster": "https://image.tmdb.org/t/p/w200/a3VW6khsyUVKrG0GBCWFG3NzWPX.jpg"
+    },
+    {
+      "imdb_id": "tt31719701",
+      "type": "series",
+      "title": "Drink: A Look Inside the Glass",
+      "year": 2024,
+      "release_date": "2024-03-15",
+      "poster": "https://image.tmdb.org/t/p/w200/ro93qabEjEcfnhgOzWS7Iv87Idd.jpg"
     },
     {
       "imdb_id": "tt14466018",
@@ -963,6 +947,14 @@
       "year": 2021,
       "release_date": "2021-05-13",
       "poster": "https://image.tmdb.org/t/p/w200/ca5XiEFgyGsI38QT3wEKa1QVGX.jpg"
+    },
+    {
+      "imdb_id": "tt21376524",
+      "type": "series",
+      "title": "Animal Control",
+      "year": 2023,
+      "release_date": "2023-02-16",
+      "poster": "https://image.tmdb.org/t/p/w200/h2dXm0CXMkycA9LrZbXMUD8SuTL.jpg"
     },
     {
       "imdb_id": "tt27444205",
