@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792238454164,
+  "scraped_at": 1792281649024,
   "items": [
+    {
+      "slug": "3via9-cocorico-2",
+      "imdb_id": "tt36933402",
+      "title": "Cocorico 2",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "3eZwrYd90t5kHLHfS0zxPWH1tWl.jpg",
+      "description": "DNA tests before Alice and François's wedding reveal their fathers - an aristocrat and car dealer - aren't as French as they thought.",
+      "digital_release_date": "2026-10-18"
+    },
     {
       "slug": "40fmc-all-that-we-never-were",
       "imdb_id": "tt37284855",
@@ -1433,16 +1443,6 @@
       "poster_path": "ltuAheARdaUHbaS8lX1ZPrNOXe5.jpg",
       "description": "After her mother's sudden death, Ruth returns to her hometown and reunites with her father, whose odd behavior makes her question what really happened.",
       "digital_release_date": "2026-07-24"
-    },
-    {
-      "slug": "3g6q8-a-mosquito-in-the-ear",
-      "imdb_id": "tt32331644",
-      "title": "A Mosquito in the Ear",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "kiU9L3YUi8IWmsZw8V1YHiwYtqE.jpg",
-      "description": "After struggling with fertility issues, an American couple decides to pursue international adoption. They are matched with a 4-year-old girl named Sarvari and travel to an orphanage in Goa, India, to bring her home.",
-      "digital_release_date": "2026-07-23"
     }
   ]
 }
