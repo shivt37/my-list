@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1792324906208,
+  "scraped_at": 1792368096369,
   "items": [
     {
       "slug": "2yjel-crystal-lake",
@@ -25,6 +25,16 @@
       "first_air_date": "2026-10-13"
     },
     {
+      "slug": "3tu4m-the-trap",
+      "imdb_id": "tt36470958",
+      "title": "The Trap",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "dkLTaC44QqnCAgzCf180TxMmmG5.jpg",
+      "description": "Follow famous author Lisa Konrad, who has not left her house for a decade after witnessing the murder of her sister. One night she sees who she believes was the murdered on television, and decides to use herself as bait to catch them.",
+      "first_air_date": "2026-10-13"
+    },
+    {
       "slug": "45cch-tyson",
       "imdb_id": "tt35051210",
       "title": "TYSON",
@@ -33,6 +43,16 @@
       "poster_path": "mdtpJEWW1j5Ns7bIcbw1UeIdvhp.jpg",
       "description": "Explore the explosive life of Mike Tyson — one of the most feared and fascinating figures in sports history.",
       "first_air_date": "2026-10-13"
+    },
+    {
+      "slug": "43p1a-dustfall",
+      "imdb_id": "tt38990181",
+      "title": "Dustfall",
+      "year": 2026,
+      "score": null,
+      "poster_path": "a7LdXshL4vuCA3LWB2gNNckBIpO.jpg",
+      "description": "Seasoned detective Tig returns to her hometown of North Gap after years in the city, and uncovers a string of drink-spiking assaults, the case is turned on its head when a primary suspect is found murdered.",
+      "first_air_date": "2026-10-11"
     },
     {
       "slug": "3vegn-avatar-seven-havens",
@@ -169,7 +189,7 @@
       "imdb_id": "tt36984433",
       "title": "S.W.A.T. Exiles",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "pPiEujhVa2MBSowmvnNWqEzxH0x.jpg",
       "description": "After a high-profile mission goes sideways, Daniel 'Hondo' Harrelson is pulled out of forced retirement to lead a last-chance experimental SWAT unit made up of untested, unpredictable young recruits. Hondo must bridge a generational divide, navigate clashing personalities, and turn a squad of outsiders into a team capable of protecting the city and saving the program that made him who he is.",
       "first_air_date": "2026-09-25"
@@ -219,7 +239,7 @@
       "imdb_id": "tt39369819",
       "title": "Habeas Corpus",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "cojcROwZe8681XzroVIOE9VK4zV.jpg",
       "description": "A renowned law professor and a team of students attempt to prove the innocence of a convicted man, but the brightest student is secretly connected to his past.",
       "first_air_date": "2026-09-23"
@@ -590,7 +610,7 @@
       "title": "Lanterns",
       "year": 2026,
       "score": 7,
-      "poster_path": "gpC7h43xPMEV3goYMQShfJbTtLq.jpg",
+      "poster_path": "rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
       "description": "Two intergalactic cops, new recruit John Stewart and Lantern legend Hal Jordan, are drawn into a dark, Earth-based mystery as they investigate a murder in the American heartland.",
       "first_air_date": "2026-08-16"
     },
@@ -1422,26 +1442,6 @@
       "score": 7,
       "poster_path": "MPN0glmZV3JnZfmXtKF32SRhDD.jpg",
       "description": "Explores WWII from Germany's invasion of Poland through the atomic age, examining pivotal battles, wartime leaders like Churchill and Roosevelt, and the human cost of total war.",
-      "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "44naq-camatarii",
-      "imdb_id": "tt42667822",
-      "title": "Camatarii",
-      "year": 2026,
-      "score": null,
-      "poster_path": "m2N08g1l1nniOQX993EEKuv2R9N.jpg",
-      "description": "One of the most feared clans in Romania tells its inside story for the first time. This is not just the history of a clan. It is the story of a transition, of a Romania that paid dearly for the price of freedom.",
-      "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "44ni4-the-many-lives-of-benjaman-kyle",
-      "imdb_id": "tt41978418",
-      "title": "The Many Lives of Benjaman Kyle",
-      "year": 2026,
-      "score": null,
-      "poster_path": "oVYZZpAz7CC4DJF8b0xJKkY5WaE.jpg",
-      "description": "The producers set out to help amnesiac Benjaman Kyle but uncover mob ties, twisted lies, and a sinister plan. He claims memory loss, but as the story unfolds, he turns on them. They soon learn he may be a hitman and a possible murderer.",
       "first_air_date": "2026-05-25"
     }
   ]
