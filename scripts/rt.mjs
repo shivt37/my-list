@@ -30,7 +30,7 @@
  *   node rt.mjs --action=delete --delete_ids=rt_ab12cd34
  */
 
-import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync, renameSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 
@@ -40,7 +40,6 @@ export const DATA_DIR = join(ROOT, "data");
 export const CACHE_FILE = join(DATA_DIR, "rt_cache.json");
 
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
-const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
 
 // ── page fetching: worker proxy for RT HTML, direct for APIs ──
 
@@ -103,14 +102,26 @@ async function tmdbPace() {
 }
 
 export async function tmdbGet(path, params = {}, fetchFn = fetch) {
-  if (!TMDB_TOKEN) throw new Error("TMDB_READ_ACCESS_TOKEN is not set - cannot resolve IDs.");
+  const token = process.env.TMDB_READ_ACCESS_TOKEN; // lazy: tests can set it per-call
+  if (!token) throw new Error("TMDB_READ_ACCESS_TOKEN is not set - cannot resolve IDs.");
   const url = `https://api.themoviedb.org/3${path}?${new URLSearchParams(params)}`;
   for (let attempt = 1; attempt <= 3; attempt++) {
     await tmdbPace();
-    const res = await fetchFn(url, {
-      headers: { Authorization: `Bearer ${TMDB_TOKEN}`, Accept: "application/json" },
-      signal: AbortSignal.timeout(30000),
-    });
+    let res;
+    try {
+      res = await fetchFn(url, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+        signal: AbortSignal.timeout(30000),
+      });
+    } catch (e) {
+      // P2a network-class retry (ECONNRESET lottery): connection blips get
+      // two more tries. HTTP status semantics below stay unchanged (4xx
+      // still fails fast; 429 keeps its own backoff path).
+      if (attempt === 3) throw e;
+      console.warn(`  [tmdb] ${path}: ${e.message} - retrying`);
+      await sleep(2000 * attempt);
+      continue;
+    }
     if (res.status === 429) {
       await sleep(60000);
       continue;
@@ -268,6 +279,74 @@ export function detailUrlFor(slug) {
   return `https://www.rottentomatoes.com/${String(slug || "").replace(/^\//, "")}`;
 }
 
+// C4: success-only per-run detail memo factory (a throw is never cached,
+// so tryTwice retry semantics keep working). Exported for tests.
+export function makeDetailMemo(getHtml) {
+  const memo = {};
+  return async (slug) => {
+    if (memo[slug] === undefined) memo[slug] = await getHtml(detailUrlFor(slug));
+    return memo[slug];
+  };
+}
+
+// "Oct 25, 1978, Wide" / "Dec 19, 1980" -> "1978-10-25". Single-pass,
+// month names only (US listing format on RT cards).
+const MONTH_NUM = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+function parseDayText(txt) {
+  const m = /([A-Z][a-z]{2})[a-z]*\.?\s+(\d{1,2}),\s*((?:19|20)\d{2})/.exec(String(txt || ""));
+  if (!m) return null;
+  const mo = MONTH_NUM[m[1].toLowerCase()];
+  if (!mo) return null;
+  return `${m[3]}-${String(mo).padStart(2, "0")}-${String(+m[2]).padStart(2, "0")}`;
+}
+
+// M1 dayConfirm parser: the premiere DAY from the anchored Release Date
+// rows (movies: (Theaters) then (Streaming); series: plain Release Date).
+// Re-Release/Rerelease rows are excluded by the label anchor, same rule
+// as detailReleaseYears. Null when no parseable day exists (abstain).
+export function detailDayFromHtml(html) {
+  const h = String(html || "");
+  const re = /<rt-text[^>]*>\s*Release Date([^<]*)<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/g;
+  const found = [];
+  let m;
+  while ((m = re.exec(h)) !== null) found.push({ label: m[1], txt: m[2].replace(/<[^>]+>/g, " ") });
+  // Theaters (or plain) before Streaming.
+  found.sort((a, b) => (a.label.includes("Streaming") ? 1 : 0) - (b.label.includes("Streaming") ? 1 : 0));
+  for (const f of found) {
+    const d = parseDayText(f.txt);
+    if (d) return d;
+  }
+  return null;
+}
+
+// Relisting days from Rerelease/Re-Release rows (rerelease guard for M5
+// day-split and the M2 runtime rail): a relisting date must never be
+// treated as the premiere day.
+export function detailRereleaseDays(html) {
+  const h = String(html || "");
+  const re = /<rt-text[^>]*>\s*(?:Re-?[Rr]elease Date)([^<]*)<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/g;
+  const out = [];
+  let m;
+  while ((m = re.exec(h)) !== null) {
+    const d = parseDayText(m[2].replace(/<[^>]+>/g, " "));
+    if (d && !out.includes(d)) out.push(d);
+  }
+  return out;
+}
+
+// M2 runtime parser: minutes from the Movie Info "Runtime" row
+// ("1h 49m" / "109 minutes"). Null when absent (abstain).
+export function rtRuntimeFromHtml(html) {
+  const m = /<rt-text[^>]*>\s*Runtime\s*<\/rt-text>\s*<\/dt>\s*<dd[^>]*>([\s\S]*?)<\/dd>/.exec(String(html || ""));
+  if (!m) return null;
+  const txt = m[1].replace(/<[^>]+>/g, " ");
+  const h = /(\d+)\s*h/i.exec(txt);
+  const min = /(\d+)\s*m/i.exec(txt);
+  if (h || min) return (h ? +h[1] * 60 : 0) + (min ? +min[1] : 0);
+  const num = /(\d+)/.exec(txt);
+  return num ? +num[1] : null;
+}
+
 // Split a browse URL into cnapi vanity + pathFilters
 // (/browse/movies_at_home/sort:popular -> ["movies_at_home", "sort:popular"]).
 export function splitBrowseUrl(rawUrl) {
@@ -422,7 +501,7 @@ export async function tmdbVerdict(row, type, ctx) {
   // Movie Info release rows beat a rerelease-dated dateCreated
   // (Halloween: dateCreated 2018, Theaters row 1978) - try them first.
   const infoYears = detailHtml ? detailReleaseYears(detailHtml) : [];
-  const filmYears = [...new Set([...infoYears, ...(detailYear ? [detailYear] : [])])];
+  const filmYears = [...new Set([...infoYears, ...(detailYear ? [detailYear] : [])])].slice(0, 3); // P2b cap: corpus max is 2, purely defensive
   if (filmYears.length > 0) {
     for (const base of filmYears) {
       for (const y of [base, base - 1, base + 1]) {
@@ -496,6 +575,27 @@ export async function tmdbVerdict(row, type, ctx) {
       console.log(`  [evidence] ${row.slug}: TMDB ${tmBest.r.id} wins (${tmBest.total}) from ${pool.length}`);
       return await idOfTmdbHit(ctx, type, tmBest.r, false);
     }
+    // M5 day-split (rung only): among pooled rivals that already passed
+    // title+year gates, RT's exact premiere DAY may single out one rival
+    // when crew evidence ties. Unique match wins (still runs the full
+    // downstream verify + kind gate); 0 or >=2 matches fall through to
+    // the combined rung / holdout as before. Rerelease guard: a relisting
+    // day invalidates rtDay and any rival dated on the relisting day.
+    const relDays = dHtml ? detailRereleaseDays(dHtml) : [];
+    const rtDay = dHtml ? detailDayFromHtml(dHtml) : null;
+    if (rtDay && !relDays.includes(rtDay)) {
+      const win = type === "series" ? 1 : 3;
+      const dayMatches = tm.filter((e) => {
+        const day = e.ev && e.ev.date && /^\d{4}-\d{2}-\d{2}/.test(e.ev.date) ? String(e.ev.date).slice(0, 10) : null;
+        if (!day || relDays.includes(day)) return false;
+        const dd = dateDiffDays(rtDay, day);
+        return dd !== null && dd <= win;
+      });
+      if (dayMatches.length === 1) {
+        console.log(`  [day-split] ${row.slug}: ${dayMatches[0].r.id} unique day match (${dayMatches[0].ev.date})`);
+        return await idOfTmdbHit(ctx, type, dayMatches[0].r, false);
+      }
+    }
     // Combined escalation: every pooled rival (R<=6) scored on TMDB +
     // Cinemeta + GQL with kind + film-year gates. Bounded: ext_ids per
     // rival + GQL/Cine per tt-linked rival only (memoized); rare path.
@@ -558,9 +658,16 @@ async function idOfTmdbHit(ctx, type, hit, weak) {
 // One IMDb-suggest verdict: { id, weak }. Exact-norm + year gate,
 // lowest rank wins. Pool fallback (no year match) is WEAK - the
 // Disciple/Social-Network misfires proved popularity alone misleads.
-// Shape unchanged (tests + callers rely on { id, weak, date }).
-export async function suggestVerdict(row, type, fetchJson) {
-  const { cands: pool } = await suggestCandidates(row, type, fetchJson);
+// Shape unchanged (tests + callers rely on { id, weak, date }); the
+// optional ctx arg only populates ctx._qidByTt (M4 kind backstop: the
+// suggest pool's own type field, free - already fetched).
+export async function suggestVerdict(row, type, fetchJson, ctx = null) {
+  const { cands: pool, all } = await suggestCandidates(row, type, fetchJson);
+  if (ctx && ctx._qidByTt) {
+    for (const c of [...(pool || []), ...(all || [])]) {
+      if (c && c.id && c.qid && !ctx._qidByTt.has(c.id)) ctx._qidByTt.set(c.id, c.qid);
+    }
+  }
   if (pool.length === 0) return null;
   const years = row.year ? [row.year, row.year - 1, row.year + 1] : [];
   const sy = slugYearOf(row.slug);
@@ -764,14 +871,18 @@ export function rtEvidenceFromHtml(html, slug = null) {
 // TMDB-side evidence for one numeric id: date + role-split crew + top-5
 // cast. Empty sets on any failure (abstain downstream, never throws).
 export async function tmdbEvidenceFor(type, numericId, ctx) {
-  const out = { date: null, dirs: [], creators: [], prods: [], cast: [] };
+  const out = { date: null, runtime: null, dirs: [], creators: [], prods: [], cast: [] };
   // Details and credits fetch independently: either may fail while the
   // other succeeds, and partial evidence still decides (a missing
   // created_by must not erase known directors).
   try {
     const det = await ctx.tmdbGet(type === "movie" ? `/movie/${numericId}` : `/tv/${numericId}`);
-    if (type === "movie") out.date = det.release_date || null;
-    else out.date = det.first_air_date || null;
+    if (type === "movie") {
+      out.date = det.release_date || null;
+      out.runtime = det.runtime || null; // M2 rail source (movies only)
+    } else {
+      out.date = det.first_air_date || null;
+    }
     if (type === "series") {
       for (const p of ((det && det.created_by) || [])) if (p && p.name) out.creators.push(normRtTitle(p.name));
     }
@@ -1104,6 +1215,60 @@ async function logGqlRtConfirm(row, type, ctx, won, rtEv) {
   }
 }
 
+// M1/M7/M3(ii) confirm-only points (log-only telemetry; never gates,
+// never vetoes, abstain on missing data). Kept out of scoring paths by
+// adjudication: they upgrade the audit trail only.
+function logVerifyPoints(row, type, html, rtEv, candEv) {
+  try {
+    const candDay = candEv && candEv.date && /^\d{4}-\d{2}-\d{2}/.test(candEv.date) ? String(candEv.date).slice(0, 10) : null;
+    const rtDay = html ? detailDayFromHtml(html) : null; // M1 dayConfirm
+    if (rtDay && candDay) {
+      const dd = dateDiffDays(rtDay, candDay);
+      if (dd !== null && dd <= (type === "series" ? 1 : 3)) {
+        console.log(`  [verify-day] ${row.slug}: RT day ${rtDay} matches candidate ${candDay} (d=${dd})`);
+      }
+    }
+    if (type === "movie" && candEv && candEv.runtime) {
+      const rtMin = html ? rtRuntimeFromHtml(html) : null; // M7 triangulation
+      if (rtMin && Math.abs(rtMin - candEv.runtime) <= 5) {
+        console.log(`  [verify-runtime] ${row.slug}: runtime triangulates (${rtMin} vs ${candEv.runtime} min)`);
+      }
+    }
+    const lead = rtEv && rtEv.cast && rtEv.cast[0];
+    if (lead && candEv && (candEv.cast || []).slice(0, 3).some((c) => namesAgree(lead, c))) {
+      const shared = (candEv.cast || []).filter((c) => (rtEv.cast || []).some((r) => namesAgree(r, c))).length;
+      if (shared >= 2) console.log(`  [verify-anchor] ${row.slug}: lead "${lead}" in candidate top-3 (shared ${shared})`); // M3(ii)
+    }
+  } catch {
+    // telemetry only - a parser blip must never affect the verdict
+  }
+}
+
+// M2 runtime rail (movies only): a candidate whose runtime is wildly
+// different from RT's own Runtime row is provably a different work
+// (video/short sharing a film's name - the class kind cannot split).
+// Threshold: |delta| >= 45 min AND ratio >= 1.5 (0 false alarms in 238
+// correct pairs, worst honest noise 16 min). Missing either side or a
+// relisting-day page abstains. Used only at movie-branch abstain/veto
+// positions - never against a crew match.
+function runtimeRailHit(row, html, type, rtEv, candEv) {
+  if (type !== "movie" || !html || !candEv) return false;
+  const rtMin = rtRuntimeFromHtml(html);
+  const candMin = candEv.runtime;
+  if (!rtMin || !candMin) return false;
+  const diff = Math.abs(rtMin - candMin);
+  const ratio = Math.max(rtMin, candMin) / Math.max(1, Math.min(rtMin, candMin));
+  if (!(diff >= 45 && ratio >= 1.5)) return false;
+  // Rerelease guard: when the page carries a relisting label and the
+  // candidate's year differs from the page's year, the listing itself is
+  // ambiguous - abstain rather than veto.
+  const relDays = detailRereleaseDays(html);
+  const candDay = candEv.date && /^\d{4}-\d{2}-\d{2}/.test(candEv.date) ? String(candEv.date).slice(0, 10) : null;
+  if (relDays.length > 0 && candDay && rtEv.year && candDay.slice(0, 4) !== String(rtEv.year)) return false;
+  console.log(`  [runtime-rail] ${row.slug}: runtime mismatch ${rtMin}m vs ${candMin}m (d=${diff})`);
+  return true;
+}
+
 // Winner verification: the decided ID's TMDB crew must not contradict
 // RT's own page (which once carried a wrong date with right content).
 // ROLE-AWARE: Director/Creator-role agreement decides; producer-level
@@ -1154,6 +1319,7 @@ export async function verifyWinner(row, type, ctx, won) {
     return { ok: true, reason: "fetch-failed" };
   }
   const candEv = await tmdbEvidenceFor(type, num, ctx);
+  logVerifyPoints(row, type, d.v, rtEv, candEv); // M1/M7/M3(ii): log-only confirm points
   if (type === "series") {
     // Series creators are the decisive role; episode/pilot directors on
     // either side never prove or disprove identity (AHS class: RT
@@ -1210,6 +1376,7 @@ export async function verifyWinner(row, type, ctx, won) {
   const tmDC = [...candEv.dirs, ...candEv.creators];
   if (tmDC.length === 0) {
     console.log(`  [verify-skip] ${row.slug}: no TMDB crew to compare`);
+    if (runtimeRailHit(row, d.v, type, rtEv, candEv)) return { ok: false, reason: "runtime-mismatch" }; // M2
     // Same TMDB-crew-gap confirm as series (movie: RT dirs vs IMDb
     // directors). Agreement upgrades; miss abstains as before.
     const m = await gqlConfirmAgreement(row, ctx, won, rtEv, type);
@@ -1223,6 +1390,7 @@ export async function verifyWinner(row, type, ctx, won) {
     // Producer-level overlap only: corroboration, never a veto - but the
     // check ran clean, so record the pass explicitly.
     console.log(`  [verify-ok] ${row.slug}: ${won} producer-only RT card - no decisive crew to contradict`);
+    if (runtimeRailHit(row, d.v, type, rtEv, candEv)) return { ok: false, reason: "runtime-mismatch" }; // M2
     await logGqlRtConfirm(row, type, ctx, won, rtEv);
     return { ok: true, reason: "crew-match" };
   }
@@ -1236,6 +1404,7 @@ export async function verifyWinner(row, type, ctx, won) {
     console.log(`  [verify-ok] ${row.slug}: ${won} translit crew matches RT page`);
     return { ok: true, reason: "translit-match" };
   }
+  if (runtimeRailHit(row, d.v, type, rtEv, candEv)) return { ok: false, reason: "runtime-mismatch" }; // M2 (contradiction fallthrough)
   console.log(`  [verify-veto] ${row.slug}: ${won} crew contradicts RT page - re-scoring`);
   return { ok: false, reason: "contradiction" };
 }
@@ -1473,6 +1642,13 @@ export function kindOkFor(type, kind) {
 export async function imdbChair(row, type, ctx, ids) {
   const distinct = [...new Set((ids || []).filter((id) => id && id.startsWith("imdb:")))];
   if (distinct.length === 0) return null;
+  // C3: the chair is the last ship path that didn't re-check RT's own
+  // card - a unique IMDb∩Cinemeta confirmation must ALSO agree with RT
+  // (gqlRtAgreement) before it can ship. Load once, memoized via the
+  // shared detail memo (cost ~0). Fetch failure -> null -> chair
+  // abstains -> row holds out (never a veto of anything else).
+  const rtHtml = typeof ctx.getDetailHtml === "function" ? await ctx.getDetailHtml(row.slug).catch(() => null) : null;
+  const rtEvChair = rtHtml ? rtEvidenceFromHtml(rtHtml, row.slug) : null;
   // Keyless GraphQL path: unique crew confirmation wins, else abstain.
   if (typeof ctx.gqlFetch === "function") {
     const memo = ctx._gqlMemo || (ctx._gqlMemo = {});
@@ -1494,8 +1670,9 @@ export async function imdbChair(row, type, ctx, ids) {
         continue;
       }
       const cineCrew = type === "movie" ? cine.dirs : [...cine.creators, ...cine.dirs];
-      if (cineCrew.length > 0 && imdbCrew.some((a) => cineCrew.some((b) => namesAgree(a, b)))) {
-        console.log(`  [imdb-chair] ${row.slug}: ${id} confirmed (IMDb GraphQL ∩ Cinemeta crew)`);
+      const rtAgree = rtEvChair && gqlRtAgreement(rtEvChair, type, g);
+      if (cineCrew.length > 0 && imdbCrew.some((a) => cineCrew.some((b) => namesAgree(a, b))) && rtAgree) {
+        console.log(`  [imdb-chair] ${row.slug}: ${id} confirmed (IMDb GraphQL ∩ Cinemeta ∩ RT crew)`);
         confirmed.push(id);
       }
     }
@@ -1528,8 +1705,9 @@ export async function imdbChair(row, type, ctx, ids) {
       continue;
     }
     const cineCrew = type === "movie" ? cine.dirs : [...cine.creators, ...cine.dirs];
-    if (cineCrew.length > 0 && imdbCrew.some((a) => cineCrew.some((b) => namesAgree(a, b)))) {
-      console.log(`  [imdb-chair] ${row.slug}: ${id} confirmed (IMDb ∩ Cinemeta crew)`);
+    const rtAgree = rtEvChair && gqlRtAgreement(rtEvChair, type, { writers: imdb.creators, directors: imdb.directors });
+    if (cineCrew.length > 0 && imdbCrew.some((a) => cineCrew.some((b) => namesAgree(a, b))) && rtAgree) {
+      console.log(`  [imdb-chair] ${row.slug}: ${id} confirmed (IMDb ∩ Cinemeta ∩ RT crew)`);
       confirmed.push(id);
     }
   }
@@ -1804,7 +1982,7 @@ export async function resolveRow(row, type, ctx) {
     return null;
   });
   const [sug, cin] = await Promise.all([
-    suggestVerdict(row, type, ctx.fetchJson).catch(() => null),
+    suggestVerdict(row, type, ctx.fetchJson, ctx).catch(() => null),
     cinemetaVerdict(row, type, ctx.fetchJson).catch(() => null),
   ]);
   const cands = [tw, sug, cin].filter(Boolean);
@@ -1891,12 +2069,22 @@ export function loadCache(read = null) {
   }
 }
 
+// P3 atomic write helper: tmp + rename. A kill mid-write leaves either
+// the old file or nothing - never a torn JSON that the workflow's
+// `if: always()` commit could publish (rename(2) is atomic on Linux CI;
+// Node's rename maps to MOVEFILE_REPLACE_EXISTING on Windows dev boxes).
+export function writeAtomic(file, body) {
+  const tmp = `${file}.tmp`;
+  writeFileSync(tmp, body);
+  renameSync(tmp, file);
+}
+
 export function saveCache(cache, write = null) {
   const body = JSON.stringify(cache, null, 2) + "\n";
   if (write) write(body);
   else {
     mkdirSync(DATA_DIR, { recursive: true });
-    writeFileSync(CACHE_FILE, body);
+    writeAtomic(CACHE_FILE, body);
   }
 }
 
@@ -1937,7 +2125,7 @@ export function writeCatalog(list, items) {
     scraped_at: Date.now(),
     items,
   };
-  writeFileSync(file, JSON.stringify(out, null, 2) + "\n");
+  writeAtomic(file, JSON.stringify(out, null, 2) + "\n");
   return file;
 }
 
@@ -2062,15 +2250,31 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
   // block, so a later corrected run re-resolves the row.
   if (/^tt[0-9]+$/.test(id || "")) {
     let kind = null;
-    if (typeof ctx.gqlFetch === "function") {
-      try {
-        const g = await ctx.gqlFetch(id, ctx._gqlMemo || (ctx._gqlMemo = {}));
-        kind = g && g.kind;
-      } catch {
-        kind = null;
+    if (hit && hit.imdb === id && hit.kind && kindOkFor(t.type, hit.kind)) {
+      // C5: a previously proven kind is reused (store-on-pass only), so
+      // warm rows skip the per-run IMDb query. A stored kind that does
+      // not pass for this row's type falls through to a fresh check
+      // (fetch/blocks identically - defense in depth vs stale pairing).
+      kind = hit.kind;
+      console.log(`  [kind-cached] ${row.slug}: imdb:${id} is IMDb ${kind}`);
+    } else {
+      if (typeof ctx.gqlFetch === "function") {
+        try {
+          const g = await ctx.gqlFetch(id, ctx._gqlMemo || (ctx._gqlMemo = {}));
+          kind = g && g.kind;
+        } catch {
+          kind = null;
+        }
       }
+      // M4 backstop: the suggest pool's own type field (free - already
+      // fetched) when the primary kind is unavailable.
+      if (kind === null && ctx._qidByTt && ctx._qidByTt.has(id)) kind = ctx._qidByTt.get(id);
+      // C5 store-on-pass only: blocked kinds are NOT stored, so they
+      // re-check identically next run (the miss-path cache write above
+      // precedes this gate - the shape must not rely on "no write").
+      if (kind && kindOkFor(t.type, kind) && cache[key] && cache[key].imdb === id) cache[key].kind = kind;
     }
-    if (kind) console.log(`  [kind-ok] ${row.slug}: imdb:${id} is IMDb ${kind}`);
+    if (kind && kindOkFor(t.type, kind)) console.log(`  [kind-ok] ${row.slug}: imdb:${id} is IMDb ${kind}`);
     if (kind && !kindOkFor(t.type, kind)) {
       // Terror fallback: the kind-blocked winner came from a TMDB record
       // whose external_ids mislinks to an episode. Re-derive the numeric
@@ -2102,19 +2306,22 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
           let contra = false;
           if (y && years.some((yy) => Math.abs(+y - +yy) <= 1) && titleOk) {
             try {
-              const dmem = ctx._detailMemo || (ctx._detailMemo = {});
-              if (dmem[row.slug] === undefined) {
+              // C4: shared success-only detail memo owns RT HTML; this
+              // wrapper keeps null-tolerance local (a fetch failure here
+              // must not poison the shared memo).
+              const cmem = ctx._contraMemo || (ctx._contraMemo = {});
+              if (cmem[row.slug] === undefined) {
                 if (typeof ctx.getDetailHtml === "function") {
                   try {
-                    dmem[row.slug] = await ctx.getDetailHtml(row.slug);
+                    cmem[row.slug] = await ctx.getDetailHtml(row.slug);
                   } catch {
-                    dmem[row.slug] = null;
+                    cmem[row.slug] = null;
                   }
                 } else {
-                  dmem[row.slug] = null;
+                  cmem[row.slug] = null;
                 }
               }
-              const rtC = dmem[row.slug] ? rtEvidenceFromHtml(dmem[row.slug], row.slug).creators : [];
+              const rtC = cmem[row.slug] ? rtEvidenceFromHtml(cmem[row.slug], row.slug).creators : [];
               const tmC = ((det && det.created_by) || []).map((p) => normRtTitle(p && p.name)).filter(Boolean);
               if (vetoDisjoint(rtC, tmC)) {
                 let cover = false;
@@ -2144,6 +2351,24 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
             const shown = t.type === "movie" ? String(d).slice(0, 4) : d;
             cache[key] = { type: t.type, imdb: null, tmdb: num, title: row.title, date: shown };
             console.log(`  [kind-fallback] ${row.slug}: imdb:${id} is ${kind}, shipping series-typed ${fb} (${d})`);
+            // M9 fallbackBinding (log-only): the outside world (Cinemeta)
+            // should point at the same numeric - a mismatch means the
+            // fallback derivations disagree and deserves a look. Never
+            // blocks; fetched on this rare path only, failure swallowed.
+            try {
+              if (typeof ctx.fetchJson === "function") {
+                const kindPath = t.type === "movie" ? "movie" : "series";
+                const meta = await ctx.fetchJson(`https://v3-cinemeta.strem.io/meta/${kindPath}/${id}.json`);
+                const mb = meta && meta.meta && meta.meta.moviedb_id ? String(meta.meta.moviedb_id) : null;
+                if (mb) {
+                  console.log(mb === String(num)
+                    ? `  [fallback-bind] ${row.slug}: tmdb:${num} matches Cinemeta moviedb_id`
+                    : `  [fallback-bind] ${row.slug}: MOVIEDB MISMATCH tmdb:${num} vs cinemeta ${mb}`);
+                }
+              }
+            } catch {
+              // telemetry only
+            }
             return rowToItem(t.type, fb, row, title, shown);
           }
           console.log(`  [kind-fallback-skip] ${row.slug}: tmdb:${num} ${contra ? "creators contradict RT page" : `date ${d || "(none)"} not anchored`}`);
@@ -2213,7 +2438,8 @@ export async function main({
   const ctx = {
     tmdbGet: tmdbGetFn,
     fetchJson,
-    getDetailHtml: (slug) => getHtml(detailUrlFor(slug)),
+    _qidByTt: new Map(), // M4: suggest-pool qid per bare tt (kind backstop)
+    getDetailHtml: makeDetailMemo(getHtml), // C4: success-only per-run memo
     // Keyless IMDb GraphQL (titleType + principalCredits) for the kind
     // gate and the chair. Plain global fetch - proven live from CI-class
     // runners; any failure abstains inside imdbGqlCredits (fail-closed).
@@ -2297,27 +2523,34 @@ export async function main({
 // fast). Guards: repeated slugs are skipped (dedupe), an empty page or a
 // repeated cursor stops the loop (a stuck "more pages" flag must never
 // spin to the workflow timeout). Exported for tests (fetch stubbed).
-// Scoped 404 retry for cnapi follow-up pages only: RT occasionally 404s
-// a valid mid-chart cursor (transient upstream blip, proven live - the
-// same URL 200s minutes later with identical bytes). 404 stays fatal
-// everywhere else (fetchProxyHtml never retries it): a persistently
-// missing page still fails the run instead of silently shipping short.
-async function fetchCnapiPage(getHtml, url) {
+// Scoped resilience for cnapi follow-up pages only (items 11-12). RT
+// transiently rejects valid mid-chart cursors with 403 OR 404 shapes
+// (proven live 2026-10-16/18: the same URL 200s minutes later; windows
+// >=19s observed - the old 3-attempt 5s+10s ladder lost). Ladder: 6
+// attempts over [3,6,12,20,30]s +/-20% jitter. fetchProxyHtml and its
+// RETRYABLE semantics stay untouched; a persistent rejection after the
+// ladder still fails the list loudly (old catalog stays online). Delays
+// are injectable for unit tests.
+async function fetchCnapiPage(getHtml, url, opts = {}) {
+  const delays = opts.cnapiRetryDelaysMs || [3000, 6000, 12000, 20000, 30000];
+  const jitter = opts.cnapiRetryJitter ?? 0.2;
   let lastError = null;
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 0; attempt <= delays.length; attempt++) {
     try {
       return parseCnapi(await getHtml(url));
     } catch (e) {
       lastError = e;
-      if (!/proxy fetch 404/.test(String((e && e.message) || e)) || attempt === 3) throw e;
-      console.warn(`  [paginate] 404 blip at cursor page, retrying (${attempt}/3)...`);
-      await sleep(5000 * attempt);
+      const m = /proxy fetch (403|404|408|429|5\d\d)/.exec(String((e && e.message) || ""));
+      if (!m || attempt === delays.length) throw e;
+      const wait = Math.round(delays[attempt] * (1 + (Math.random() * 2 - 1) * jitter));
+      console.warn(`  [paginate] upstream ${m[1]} on cursor page, retrying (${attempt + 1}/${delays.length})...`);
+      await sleep(wait);
     }
   }
   throw lastError;
 }
 
-export async function paginateChart(t, getHtml, first) {
+export async function paginateChart(t, getHtml, first, opts = {}) {
   const { vanity, filters } = splitBrowseUrl(t.url);
   const rows = [];
   const seen = new Set();
@@ -2340,22 +2573,20 @@ export async function paginateChart(t, getHtml, first) {
       break;
     }
     seenCursors.add(cursor);
-    let page = await fetchCnapiPage(getHtml, cnapiUrl(vanity, filters, cursor));
-    if (page.rows.length === 0 && page.hasNext) {
-      // Empty yet claims more: transient blip, not list end. One polite
-      // retry; a genuine end stays empty and stops below.
-      console.warn(`  [paginate] empty page at cursor ${cursor} (hasNext:true) - retrying once...`);
-      await sleep(10000);
-      try {
-        page = parseCnapi(await getHtml(cnapiUrl(vanity, filters, cursor)));
-      } catch (e) {
-        console.warn(`  [paginate] retry failed (${e.message}) - stopping`);
+    let page = await fetchCnapiPage(getHtml, cnapiUrl(vanity, filters, cursor), opts);
+    if (page.rows.length === 0) {
+      // Item 12: an empty page can be a glitch - observed live returning
+      // 30 full rows on re-check, sometimes even claiming hasNext:false.
+      // Double-check once (ANY hasNext flag); only a second empty page
+      // ends the list. A re-check whose fetch ladder is exhausted
+      // rethrows -> the list fails loudly instead of shipping short.
+      console.warn(`  [paginate] empty page at cursor ${cursor} (hasNext:${page.hasNext}) - double-checking...`);
+      await sleep(opts.emptyRetryDelayMs ?? 10000);
+      page = await fetchCnapiPage(getHtml, cnapiUrl(vanity, filters, cursor), opts);
+      if (page.rows.length === 0) {
+        console.warn(`  [paginate] still empty at cursor ${cursor} - treating as end of chart`);
         break;
       }
-    }
-    if (page.rows.length === 0) {
-      console.warn(`  [paginate] empty page at cursor ${cursor} (hasNext:${page.hasNext}) - stopping`);
-      break;
     }
     for (const r of page.rows) pushUnique(r);
     cursor = page.endCursor;
