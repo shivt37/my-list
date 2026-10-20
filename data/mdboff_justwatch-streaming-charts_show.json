@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792411312575,
+  "scraped_at": 1792454525379,
   "items": [
     {
       "imdb_id": "tt11540908",
@@ -709,14 +709,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/x1jq0atcQg6UkaZpco0kFL6QHuM.jpg"
     },
     {
-      "imdb_id": "tt8000638",
-      "type": "series",
-      "title": "Sorry for Your Loss",
-      "year": 2018,
-      "release_date": "2018-09-18",
-      "poster": "https://image.tmdb.org/t/p/w200/eUtM5shJF0CZn3MhEMmdSxyHJ0W.jpg"
-    },
-    {
       "imdb_id": "tt32499579",
       "type": "series",
       "title": "Haunted Hotel",
@@ -821,12 +813,28 @@
       "poster": "https://image.tmdb.org/t/p/w200/mqwUwexSSiBGC9qGgu38tKczFn.jpg"
     },
     {
+      "imdb_id": "tt39395275",
+      "type": "series",
+      "title": "Dragon Ball Super: Beerus",
+      "year": 2026,
+      "release_date": "2026-10-11",
+      "poster": "https://image.tmdb.org/t/p/w200/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg"
+    },
+    {
       "imdb_id": "tt2805096",
       "type": "series",
       "title": "Chicago P.D.",
       "year": 2014,
       "release_date": "2014-01-08",
       "poster": "https://image.tmdb.org/t/p/w200/w7R4ooo2IbOfBKOoMDwaiMGsNQf.jpg"
+    },
+    {
+      "imdb_id": "tt8000638",
+      "type": "series",
+      "title": "Sorry for Your Loss",
+      "year": 2018,
+      "release_date": "2018-09-18",
+      "poster": "https://image.tmdb.org/t/p/w200/eUtM5shJF0CZn3MhEMmdSxyHJ0W.jpg"
     },
     {
       "imdb_id": "tt34866681",
@@ -923,14 +931,6 @@
       "year": 2006,
       "release_date": "2006-10-11",
       "poster": "https://image.tmdb.org/t/p/w200/eYYQWACx7ttUzRwTNYuo6zveqpE.jpg"
-    },
-    {
-      "imdb_id": "tt31719701",
-      "type": "series",
-      "title": "Drink: A Look Inside the Glass",
-      "year": 2024,
-      "release_date": "2024-03-15",
-      "poster": "https://image.tmdb.org/t/p/w200/ro93qabEjEcfnhgOzWS7Iv87Idd.jpg"
     },
     {
       "imdb_id": "tt35826715",
@@ -1163,6 +1163,14 @@
       "year": 1989,
       "release_date": "1989-12-17",
       "poster": "https://image.tmdb.org/t/p/w200/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg"
+    },
+    {
+      "imdb_id": "tt0200276",
+      "type": "series",
+      "title": "The West Wing",
+      "year": 1999,
+      "release_date": "1999-09-22",
+      "poster": "https://image.tmdb.org/t/p/w200/yz1qWFZ8kjgQjqB9NX5kWMetX4w.jpg"
     }
   ]
 }
