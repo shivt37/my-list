@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792411251776,
+  "scraped_at": 1792454452518,
   "items": [
+    {
+      "slug": "3obzt-by-any-means",
+      "imdb_id": "tt34379051",
+      "title": "By Any Means",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "f4hdIed8vh10O8TkQ1CkHS8MQ3G.jpg",
+      "description": "In 1960s Mississippi, a young Black FBI agent is forced to partner with a notorious mafia hitman to investigate a wave of brutal civil rights murders.",
+      "digital_release_date": "2026-10-20"
+    },
     {
       "slug": "3via9-cocorico-2",
       "imdb_id": "tt36933402",
@@ -102,6 +112,16 @@
       "score": null,
       "poster_path": "duzeXiCKKU9bJUcObIf9zNMZIrC.jpg",
       "description": "Stranded after a disastrous gig, an all-girl heavy metal band finds a woman in danger in a town ruled by a warlock, and crawling with cannibals, vampires, and a deadly werewolf, forcing them to fight for survival.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
+      "slug": "3zqng-the-sun-never-sets",
+      "imdb_id": "tt37818327",
+      "title": "The Sun Never Sets",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "hpzzGHyVN4nE0GzqoAu12ko6ER3.jpg",
+      "description": "While on an unexpected break from her older, divorced boyfriend, a woman runs into her ex-partner, plunging her into a volatile love triangle that threatens to undo her life.",
       "digital_release_date": "2026-10-13"
     },
     {
@@ -295,6 +315,16 @@
       "digital_release_date": "2026-09-29"
     },
     {
+      "slug": "45dwq-bombay-stories",
+      "imdb_id": "tt42481138",
+      "title": "BOMBAY STORIES",
+      "year": 2026,
+      "score": 1,
+      "poster_path": "7SeNqtIi5lpVzs9GAcErgXqkmkU.jpg",
+      "description": "Adapted from the short stories of Pakistani writer Saadat Hasan Manto, the film interweaves the lives of three sex workers and their pimps.",
+      "digital_release_date": "2026-09-28"
+    },
+    {
       "slug": "3gjjt-the-deputy",
       "imdb_id": "tt29494959",
       "title": "The Deputy",
@@ -310,7 +340,7 @@
       "title": "Awarapan 2",
       "year": 2026,
       "score": 4,
-      "poster_path": "lD3J6zTbWkVtPYuSUuuBwpuKMCO.jpg",
+      "poster_path": "8V35iNRx9zVH5OHO0lH6IlfGfZY.jpg",
       "description": "Once a feared gangster, Shivam lives hidden away from his past, with no faith left in God or himself. But when fate pulls him into Bangkok's cartel war and forces him back into the darkness he swore never to return to, Shivam must choose what he is willing to live for, when there is nothing left to lose.",
       "digital_release_date": "2026-09-25"
     },
@@ -1413,36 +1443,6 @@
       "poster_path": "gnAsZvBygplNpp8PtjoTEYv3VPB.jpg",
       "description": "Two teenage boys must escape a violent entity that takes the form of the person they desire most:  each other.",
       "digital_release_date": "2026-07-28"
-    },
-    {
-      "slug": "3vi46-horst-schlammer-sucht-das-gluck",
-      "imdb_id": "tt36415552",
-      "title": "Horst Schlämmer sucht das Glück",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "lEg0bWvMTZ7s86ZoUp31ppXX3tG.jpg",
-      "description": "Horst Schlämmer is back—and he's fed up. People all over Germany are in a bad mood. So he leaves Grevenbroich and sets off in search of happiness. It must be somewhere!",
-      "digital_release_date": "2026-07-27"
-    },
-    {
-      "slug": "2wnkv-avatar-aang-the-last-airbender",
-      "imdb_id": "tt18259538",
-      "title": "Avatar Aang: The Last Airbender",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg",
-      "description": "Avatar Aang, the world's last Airbender, learns of an ancient power that could save his culture from extinction. With the help of his friends, he embarks on a global quest to find it before it falls into the wrong hands and threatens to upend the peace they sacrificed everything to achieve.",
-      "digital_release_date": "2026-07-25"
-    },
-    {
-      "slug": "20c1p-newborn",
-      "imdb_id": "tt12308018",
-      "title": "Newborn",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "g3fTSiQ19uIpYDHVAHLHvgLwzPD.jpg",
-      "description": "After serving seven years in solitary confinement, Chris Newborn seeks to rebuild his life and reconnect with his family only to find that freedom has become a terrifying psychological battleground.",
-      "digital_release_date": "2026-07-24"
     }
   ]
 }

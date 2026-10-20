@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1792411266773,
+  "scraped_at": 1792454469179,
   "items": [
+    {
+      "slug": "3obzt-by-any-means",
+      "imdb_id": "tt34379051",
+      "title": "By Any Means",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "f4hdIed8vh10O8TkQ1CkHS8MQ3G.jpg",
+      "description": "In 1960s Mississippi, a young Black FBI agent is forced to partner with a notorious mafia hitman to investigate a wave of brutal civil rights murders.",
+      "digital_release_date": null
+    },
     {
       "slug": "37u2u-bad-apples",
       "imdb_id": "tt29714073",
@@ -119,7 +129,7 @@
       "imdb_id": "tt29630464",
       "title": "Don't Move",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "uh0ZSdM8iOQgHwnUlhhanP8Dkl6.jpg",
       "description": "A church group's annual retreat turns deadly when they wander into the wrong part of the Ozark wilderness, and something starts picking them off one by one.  Suspicion falls on Ricky, the troublemaker of the group. But the real threat is far worse.  Deep in the forest, wrapped in a labyrinth of webs, the group is pursued by a terrifying prehistoric arachnid that hunts by vibration. When every step could be their last, they only have one choice: Don't Move.  It's up to Megan to hold what's left of the group together and get them out alive.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "uwMKWjcNID0D9jjplsjkQS2OrB4.jpg",
       "description": "The evil Empire has fallen, and Imperial warlords remain scattered throughout the galaxy. As the fledgling New Republic works to protect everything the Rebellion fought for, they have enlisted the help of legendary Mandalorian bounty hunter Din Djarin and his young apprentice Grogu.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3jps9-descendants-wicked-wonderland",
-      "imdb_id": "tt34477910",
-      "title": "Descendants: Wicked Wonderland",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "xdhLAADGSse8KCrsDLBuM5b68Cg.jpg",
-      "description": "Now that the Queen of Hearts is nice and Cinderella is safe, things seem perfect for Red and Chloe… But little do they know that changing the past created a new villain — Maddox Hatter. When Maddox captures the Queen of Hearts, Red and Chloe must work alongside Red’s new sister Pink, Luisa Madrigal’s son Luis, and Maddox’s son Max to save her and Wonderland.",
       "digital_release_date": null
     }
   ]

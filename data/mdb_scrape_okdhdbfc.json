@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1792411299192,
+  "scraped_at": 1792454500061,
   "items": [
     {
       "slug": "2yjel-crystal-lake",
@@ -42,6 +42,16 @@
       "score": null,
       "poster_path": "a7LdXshL4vuCA3LWB2gNNckBIpO.jpg",
       "description": "Seasoned detective Tig returns to her hometown of North Gap after years in the city, and uncovers a string of drink-spiking assaults, the case is turned on its head when a primary suspect is found murdered.",
+      "first_air_date": "2026-10-11"
+    },
+    {
+      "slug": "456o9-treasure-island",
+      "imdb_id": "tt40385667",
+      "title": "Treasure Island",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "xZQ5ABJF1iLjGq9xR4MthpgQEFF.jpg",
+      "description": "Young Jim Hawkins and his mother Bess come into possession of a legendary pirate’s treasure map and are drawn into a deadly voyage across the Atlantic, where Jim is forced to navigate mutiny, violence and betrayal, leaving him forever changed.",
       "first_air_date": "2026-10-11"
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "MPN0glmZV3JnZfmXtKF32SRhDD.jpg",
       "description": "Explores WWII from Germany's invasion of Poland through the atomic age, examining pivotal battles, wartime leaders like Churchill and Roosevelt, and the human cost of total war.",
-      "first_air_date": "2026-05-25"
-    },
-    {
-      "slug": "44naq-camatarii",
-      "imdb_id": "tt42667822",
-      "title": "Camatarii",
-      "year": 2026,
-      "score": null,
-      "poster_path": "m2N08g1l1nniOQX993EEKuv2R9N.jpg",
-      "description": "One of the most feared clans in Romania tells its inside story for the first time. This is not just the history of a clan. It is the story of a transition, of a Romania that paid dearly for the price of freedom.",
       "first_air_date": "2026-05-25"
     }
   ]
