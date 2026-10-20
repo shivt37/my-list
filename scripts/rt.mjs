@@ -2273,8 +2273,12 @@ export async function resolveOne(row, t, cache, ctx, tmdbGetFn, writtenIds, held
       // re-check identically next run (the miss-path cache write above
       // precedes this gate - the shape must not rely on "no write").
       if (kind && kindOkFor(t.type, kind) && cache[key] && cache[key].imdb === id) cache[key].kind = kind;
+      // R11: [kind-ok] prints only for a kind that PASSES the gate.
+      // The cached path above already printed its own line, so this
+      // stays in the fresh branch - no row ever prints the same kind
+      // sentence twice.
+      if (kind && kindOkFor(t.type, kind)) console.log(`  [kind-ok] ${row.slug}: imdb:${id} is IMDb ${kind}`);
     }
-    if (kind && kindOkFor(t.type, kind)) console.log(`  [kind-ok] ${row.slug}: imdb:${id} is IMDb ${kind}`);
     if (kind && !kindOkFor(t.type, kind)) {
       // Terror fallback: the kind-blocked winner came from a TMDB record
       // whose external_ids mislinks to an episode. Re-derive the numeric
