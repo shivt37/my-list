@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792454452518,
+  "scraped_at": 1792497649640,
   "items": [
     {
       "slug": "3obzt-by-any-means",
@@ -12,6 +12,16 @@
       "score": 6,
       "poster_path": "f4hdIed8vh10O8TkQ1CkHS8MQ3G.jpg",
       "description": "In 1960s Mississippi, a young Black FBI agent is forced to partner with a notorious mafia hitman to investigate a wave of brutal civil rights murders.",
+      "digital_release_date": "2026-10-20"
+    },
+    {
+      "slug": "3v0eb-the-weight",
+      "imdb_id": "tt10794054",
+      "title": "The Weight",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
+      "description": "When Samuel is torn from his daughter and sent to a brutal prison, Warden Clancy offers him a high-stakes proposition: smuggle gold out of a remote mine with a dangerous crew of prisoners and he’ll win his freedom.",
       "digital_release_date": "2026-10-20"
     },
     {
@@ -809,7 +819,7 @@
       "imdb_id": "tt35485652",
       "title": "Solomamma",
       "year": 2025,
-      "score": 1,
+      "score": 2,
       "poster_path": "l57DviQNrx9p23vGwDmpAkUZKIo.jpg",
       "description": "Edith is a curiosity-driven journalist and single mother. Solo parenting proves to be complicated, but when the identity of the man who donated the sperm that got her pregnant surfaces, she seeks him out under the false pretext of interviewing him about his company.",
       "digital_release_date": "2026-09-02"
@@ -1432,16 +1442,6 @@
       "score": 5,
       "poster_path": "uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg",
       "description": "When an unexpected and ruthless adversary strikes too close to home, Kara Zor-El, aka Supergirl, reluctantly joins forces with an unlikely companion on an epic, interstellar journey of vengeance and justice.",
-      "digital_release_date": "2026-07-28"
-    },
-    {
-      "slug": "436il-leviticus",
-      "imdb_id": "tt39143902",
-      "title": "Leviticus",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "gnAsZvBygplNpp8PtjoTEYv3VPB.jpg",
-      "description": "Two teenage boys must escape a violent entity that takes the form of the person they desire most:  each other.",
       "digital_release_date": "2026-07-28"
     }
   ]
