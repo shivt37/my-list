@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792497714156,
+  "scraped_at": 1792540821176,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -251,6 +251,14 @@
       "year": 2005,
       "release_date": "2005-08-04",
       "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg"
+    },
+    {
+      "imdb_id": "tt21952924",
+      "type": "series",
+      "title": "Phony",
+      "year": 2026,
+      "release_date": "2026-10-20",
+      "poster": "https://image.tmdb.org/t/p/w200/iCyQc8cSSHkxUHbkvzbC77owALt.jpg"
     },
     {
       "imdb_id": "tt33539520",
@@ -730,7 +738,7 @@
       "title": "The Ark",
       "year": 2023,
       "release_date": "2023-02-01",
-      "poster": "https://image.tmdb.org/t/p/w200/rec774m02XNLSjU9qm5z6UUfMRl.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/6pGiYwbSAscG6YyNzxTR6FNtLnO.jpg"
     },
     {
       "imdb_id": "tt0407362",
@@ -1171,14 +1179,6 @@
       "year": 2012,
       "release_date": "2012-06-26",
       "poster": "https://image.tmdb.org/t/p/w200/pBAp7VfKVQKQIiLRJHZSMGtyXAB.jpg"
-    },
-    {
-      "imdb_id": "tt16098700",
-      "type": "series",
-      "title": "Fire Country",
-      "year": 2022,
-      "release_date": "2022-10-07",
-      "poster": "https://image.tmdb.org/t/p/w200/6XnA02VRG4dhBpTZWGZuXQdYGDW.jpg"
     }
   ]
 }
