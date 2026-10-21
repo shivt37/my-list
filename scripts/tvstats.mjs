@@ -2,26 +2,36 @@
 /**
  * my-list Television Stats - runs on GitHub Actions, fetches
  * televisionstats.com Attention charts for the operator's enabled lists,
- * resolves per-title IMDb IDs (movies: TS detail page; shows: TS detail
- * dates + TMDB search gated on exact first_air_date), writes
- * data/tvstats_<id>.json (served via GitHub Pages), and POSTs run records
- * to the worker's /runs endpoint.
+ * resolves per-title IMDb IDs through the ladder in tvstats-ladder.mjs,
+ * writes data/tvstats_<id>.json (served via GitHub Pages), and POSTs run
+ * records to the worker's /runs endpoint.
  *
  * Page fetching goes through the worker's /ts-fetch proxy (TS_FETCH_BASE):
  * the worker's Cloudflare egress is unchallenged where datacenter IPs are
  * not, so no browser machinery is needed anywhere in this script.
  *
- * Identity cache: data/ts_cache.json maps slug -> { kind, imdb, tmdb }.
- * A title's identity never changes, so each slug resolves once ever;
- * steady-state runs only fetch new slugs. Committed by the workflow
- * alongside the data files (data/*.json).
+ * Identity cache: data/ts_cache.json maps slug -> v2 entry
+ * {kind, imdb, tmdb, title, date, poster, rung, confidence, v:2}. A v1 entry
+ * (no `v` key) is migrated on read and treated as MEDIUM. A title's identity
+ * never changes, so each slug resolves once ever; steady-state runs only
+ * fetch new slugs - a cache hit costs ZERO http calls.
+ *
+ * Publication: only HIGH and MEDIUM confidence rows are published
+ * (TVSTATS_PUBLISH_MIN=high|medium, default medium). LOW and NONE are held
+ * out, counted against the 10% hold-out threshold, and never cached - a
+ * wrong id in the cache would be served forever.
  *
  * Unlike official.mjs, an EMPTY chart is a failure (these charts always
  * carry rows) and never overwrites the previous file.
  *
  * Required env (GitHub repo secrets / workflow env):
- *   TMDB_READ_ACCESS_TOKEN - TMDB API bearer (show resolution only)
+ *   TMDB_READ_ACCESS_TOKEN - TMDB API bearer
  *   WORKER_ORIGIN           - worker base URL (run records + config)
+ *   TS_FETCH_BASE           - worker base URL (the /ts-fetch page proxy)
+ *
+ * Optional env:
+ *   TVSTATS_PUBLISH_MIN=high|medium   fail closed (default medium)
+ *   TVSTATS_AUDIT=tv|juicewatch|off   the optional second source (default off)
  *
  * Usage:
  *   node tvstats.mjs                        # refresh all enabled lists
@@ -29,9 +39,41 @@
  *   node tvstats.mjs --action=delete --delete_ids=tvstats_ab12cd34
  */
 
-import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync, readFileSync, existsSync, renameSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
+
+import {
+  CONF,
+  CONF_RANK,
+  TITLE_GATE,
+  TT_RE,
+  MOVIE_TYPES,
+  SHOW_TYPES,
+  auditRow,
+  buildOfflineIndex,
+  cacheKey,
+  canonImdbType,
+  confRank,
+  detailUrl,
+  imdbGqlTitles,
+  imdbSuggest,
+  kindOk,
+  loadJustWatchSnapshot,
+  makePacer,
+  migrateCacheEntry,
+  normTitle,
+  normTitleKeepArticle,
+  pageProps,
+  posterKey,
+  probeHost,
+  resolveRow,
+  resolveMovie as ladderResolveMovie,
+  resolveShow as ladderResolveShow,
+  titleScore,
+  titleTokens,
+  yearOf,
+} from "./tvstats-ladder.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, "..");
@@ -39,23 +81,33 @@ export const DATA_DIR = join(ROOT, "data");
 export const CACHE_FILE = join(DATA_DIR, "ts_cache.json");
 
 const WORKER_ORIGIN = process.env.WORKER_ORIGIN;
-const TMDB_TOKEN = process.env.TMDB_READ_ACCESS_TOKEN;
+
+// The publish threshold and the optional audit are operator knobs.
+export const PUBLISH_MIN = String(process.env.TVSTATS_PUBLISH_MIN || "medium").toLowerCase() === "high"
+  ? "high"
+  : "medium";
+export const AUDIT_MODE = ["tv", "juicewatch", "off"].includes(String(process.env.TVSTATS_AUDIT || "").toLowerCase())
+  ? String(process.env.TVSTATS_AUDIT || "off").toLowerCase()
+  : "off";
 
 // ── page fetching: worker proxy only ──
 // All chart/detail HTML flows through GET <TS_FETCH_BASE>/ts-fetch?url=.
 // The worker's Cloudflare egress is unchallenged where datacenter IPs are
 // not, so no browser machinery is needed anywhere in this script.
 
-export async function fetchProxyHtml(url, base = process.env.TS_FETCH_BASE) {
+export async function fetchProxyHtml(url, base = process.env.TS_FETCH_BASE, ctx = null) {
   if (!base) throw new Error("TS_FETCH_BASE is not set - point it at the worker origin.");
   const endpoint = `${String(base).replace(/\/+$/, "")}/ts-fetch?url=${encodeURIComponent(url)}`;
   // Retry transient upstream blips (502/503/429/504): one hiccup across
   // ~200 fetches must not fail a run. Anything else fails loud.
-  const RETRYABLE = new Set([429, 502, 503, 504]);
+  // Bounded: 3 attempts, a 25 s wall-clock cap, a backoff capped at 2 s.
+  const deadline = Date.now() + 25000;
   let lastError = null;
   for (let attempt = 1; attempt <= 3; attempt++) {
+    if (Date.now() > deadline) throw lastError || new Error(`proxy fetch timed out for ${url}`);
     try {
-      const res = await fetch(endpoint);
+      if (ctx && ctx.counts) ctx.counts.attempted++;
+      const res = await fetch(endpoint, { signal: AbortSignal.timeout(20000) });
       if (!res.ok) throw new Error(`proxy fetch ${res.status} for ${url}`);
       return res.text();
     } catch (e) {
@@ -67,7 +119,7 @@ export async function fetchProxyHtml(url, base = process.env.TS_FETCH_BASE) {
       const fatal = m && +m[1] < 500 && +m[1] !== 429 && +m[1] !== 408;
       if (fatal || attempt === 3) throw e;
       console.warn(`  [retry] ${url} attempt ${attempt}: ${e.message}`);
-      await sleep(2000 * attempt);
+      await sleep(Math.min(2000, 2000 * attempt));
     }
   }
   throw lastError;
@@ -95,35 +147,82 @@ const deleteIdsArg = arg("delete_ids");
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export async function tmdbGet(path, params = {}, fetchFn = fetch) {
-  if (!TMDB_TOKEN) throw new Error("TMDB_READ_ACCESS_TOKEN is not set - cannot resolve show IDs.");
+// ── atomic write ──
+// A temp file + renameSync: a crashed run never leaves a half-written file.
+function writeAtomic(file, data) {
+  const tmp = `${file}.tmp-${process.pid}-${Date.now()}`;
+  try {
+    writeFileSync(tmp, data);
+    renameSync(tmp, file);
+  } catch (e) {
+    try {
+      if (existsSync(tmp)) rmSync(tmp, { force: true });
+    } catch {}
+    throw e;
+  }
+}
+
+// ── TMDB ──
+// The pacer: 3 requests/second = 30 requests per 10 s, the same rate the
+// sibling pipeline (rt.mjs) uses. TMDB publishes 40/10 s.
+//
+// A RESERVATION pacer, not the old read-then-set one. The old pacer read
+// `lastTmdbAt`, slept, and only THEN wrote it: with N concurrent workers
+// all N read the same timestamp, all N slept the same gap and all N fired
+// together (measured: ~14 req/s against TMDB's published 4 req/s). Here the
+// slot is RESERVED before the wait, so N concurrent callers get N different
+// slots (D2).
+export const TMDB_MIN_GAP_MS = 340;
+export const tmdbPace = makePacer(TMDB_MIN_GAP_MS);
+
+export async function tmdbGet(path, params = {}, fetchFn = fetch, ctx = null) {
+  const token = process.env.TMDB_READ_ACCESS_TOKEN; // lazy: tests can set it per call
+  if (!token) throw new Error("TMDB_READ_ACCESS_TOKEN is not set - cannot resolve IDs.");
   const url = `https://api.themoviedb.org/3${path}?${new URLSearchParams(params)}`;
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const res = await fetchFn(url, {
-      headers: { Authorization: `Bearer ${TMDB_TOKEN}`, Accept: "application/json" },
-      signal: AbortSignal.timeout(30000),
-    });
+  // Bounded: 4 attempts, a 25 s wall-clock cap, a backoff capped at 2 s and
+  // exponential on 429 (never a 60 s sleep per row).
+  const deadline = Date.now() + 25000;
+  let last = "unknown";
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    if (Date.now() > deadline) throw new Error(`TMDB ${path} -> wall-clock cap (${last})`);
+    await tmdbPace();
+    let res;
+    try {
+      if (ctx && ctx.counts) ctx.counts.attempted++;
+      res = await fetchFn(url, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+        signal: AbortSignal.timeout(20000),
+      });
+    } catch (e) {
+      last = String((e && e.message) || e).slice(0, 140);
+      if (attempt === 4 || Date.now() > deadline) throw new Error(`TMDB ${path} -> ${last}`);
+      await sleep(Math.min(2000, 500 * attempt));
+      continue;
+    }
     if (res.status === 429) {
-      await sleep(60000);
+      last = "HTTP 429";
+      if (attempt === 4) throw new Error(`TMDB ${path} -> repeated 429`);
+      await sleep(Math.min(2000, 500 * Math.pow(2, attempt - 1)));
       continue;
     }
     if (!res.ok) throw new Error(`TMDB ${path} -> HTTP ${res.status}`);
     return res.json();
   }
-  throw new Error(`TMDB ${path} -> repeated 429, giving up`);
+  throw new Error(`TMDB ${path} -> ${last}`);
 }
 
 // ── parsing ──
 
-export function pageProps(html) {
-  const m = html.match(/__NEXT_DATA__" type="application\/json">(.*?)<\/script>/s);
-  if (!m) throw new Error("page has no __NEXT_DATA__ blob");
-  return JSON.parse(m[1]).props.pageProps;
-}
+export { pageProps, normTitle, normTitleKeepArticle, titleScore, titleTokens, kindOk, canonImdbType, confRank, posterKey, yearOf, detailUrl, buildOfflineIndex, cacheKey, migrateCacheEntry, loadJustWatchSnapshot, probeHost, imdbSuggest, imdbGqlTitles, TT_RE, MOVIE_TYPES, SHOW_TYPES, CONF, CONF_RANK, TITLE_GATE };
 
-// Chart rows in rank order: { slug, title, poster, date } + raw score.
-// Movies and shows share the envelope ({movies|shows: [{movie|show, value}]})
-// with differently-named inner fields - normalized here.
+/**
+ * Chart rows in rank order: { slug, title, poster, date }.
+ * Movies and shows share the envelope ({movies|shows: [{movie|show, value}]})
+ * with differently-named inner fields - normalized here.
+ *
+ * A SHOW chart row carries `last_air_date`, NOT `first_air_date`: the show
+ * premiere year comes from the show DETAIL page (the ladder reads it there).
+ */
 export function chartRows(kind, html) {
   const pp = pageProps(html);
   const rows = kind === "movie" ? pp.movies || [] : pp.shows || [];
@@ -139,24 +238,31 @@ export function chartRows(kind, html) {
   });
 }
 
-export function normTitle(s) {
-  return String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-
+/** The title gate: exact after the shared normalisation. */
 export function titlesMatch(a, b) {
-  const x = normTitle(a);
-  const y = normTitle(b);
-  return (x === y) || (x.length > 4 && y.includes(x)) || (y.length > 4 && x.includes(y));
+  return titleScore(a, b) >= TITLE_GATE;
 }
 
-// ── cache ──
+// ── cache (schema v2) ──
 
+/**
+ * Load the identity cache. A v1 entry (no `v` key) is migrated to the v2
+ * schema on read and treated as MEDIUM - it is published under the default
+ * threshold but it is never promoted to the fingerprint tier.
+ * A corrupt cache heals to {} and never crashes a run.
+ */
 export function loadCache(read = null) {
   try {
     const raw = read ? read() : existsSync(CACHE_FILE) ? readFileSync(CACHE_FILE, "utf8") : null;
     if (!raw) return {};
     const d = JSON.parse(raw);
-    return d && typeof d === "object" ? d : {};
+    if (!d || typeof d !== "object") return {};
+    const out = {};
+    for (const [k, v] of Object.entries(d)) {
+      const m = migrateCacheEntry(v);
+      if (m) out[k] = m;
+    }
+    return out;
   } catch {
     return {}; // corrupt cache re-resolves naturally, never crashes a run
   }
@@ -167,62 +273,54 @@ export function saveCache(cache, write = null) {
   if (write) write(body);
   else {
     mkdirSync(DATA_DIR, { recursive: true });
-    writeFileSync(CACHE_FILE, body);
+    writeAtomic(CACHE_FILE, body);
   }
 }
 
-// ── resolution (the smart-TMDB rule: movies never touch TMDB) ──
+// ── resolution (the ladder) ──
 
-export function detailUrl(kind, slug) {
-  return kind === "movie" ? `https://televisionstats.com/m/${slug}` : `https://televisionstats.com/s/${slug}`;
+/**
+ * Movies: the ladder. TS no longer ships `imdb_id` on its movie pages, so
+ * the id comes from the poster fingerprint / TMDB / IMDb suggestion legs.
+ * The name and the argument shape are unchanged.
+ */
+export async function resolveMovie(row, getHtml, tmdbGetFn = null, ctx = null) {
+  return ladderResolveMovie(row, getHtml, tmdbGetFn, ctx);
 }
 
-// Movies: imdb_id comes from TS's own detail record - exact by
-// construction. Verified by format + chart/detail title agreement.
-// getHtml(url) returns page HTML (proxy-backed in prod, stub in tests).
-export async function resolveMovie(row, getHtml) {
-  const pp = pageProps(await getHtml(detailUrl("movie", row.slug)));
-  const mv = pp.movie || {};
-  const imdb = mv.imdb_id || null;
-  if (!imdb || !/^tt\d{7,8}$/.test(imdb)) throw new Error(`no imdb_id for movie slug ${row.slug}`);
-  if (!titlesMatch(mv.title, row.title)) throw new Error(`title mismatch for movie slug ${row.slug}`);
-  return { imdb, tmdb: null, title: mv.title || row.title, date: mv.release_date || row.date };
+/**
+ * Shows: the ladder. The show detail page carries first_air_date (the chart
+ * row does not), so the year leg has a real input.
+ */
+export async function resolveShow(row, getHtml, tmdbGetFn = null, ctx = null) {
+  return ladderResolveShow(row, getHtml, tmdbGetFn, ctx);
 }
 
-// Shows: TS carries no IDs, so one TMDB tv-search (year-filtered) plus
-// one external_ids call, accepted ONLY on title agreement + first_air_date
-// within +/-1 day (premiere-day drift). imdb missing on the TMDB record ->
-// tmdb:<id> fallback id.
-export async function resolveShow(row, getHtml, tmdbGetFn = tmdbGet) {
-  const pp = pageProps(await getHtml(detailUrl("series", row.slug)));
-  const sh = pp.show || {};
-  const title = sh.name || row.title;
-  const firstAir = sh.first_air_date || row.date;
-  const year = (firstAir || "").split("-")[0];
-  if (!year) throw new Error(`no first_air_date for show slug ${row.slug}`);
-  const search = await tmdbGetFn("/search/tv", { query: title, first_air_date_year: year });
-  // Title must agree exactly; the date gets a +/-1 day window (US premiere
-  // vs UTC-midnight drift between the two databases). Anything further
-  // apart is a different title wearing the same name.
-  const hit = ((search && search.results) || []).find((r) => {
-    if (!titlesMatch(r.name, title)) return false;
-    const drift = dateDiffDays(r.first_air_date, firstAir);
-    return drift !== null && drift <= 1;
-  });
-  if (!hit) throw new Error(`no exact TMDB match for show slug ${row.slug}`);
-  const ext = await tmdbGetFn(`/tv/${hit.id}/external_ids`);
-  return { imdb: ext.imdb_id || null, tmdb: ext.imdb_id ? null : String(hit.id), title, date: firstAir };
-}
-
+/**
+ * The published item. The name and the releaseInfo come from the TV Stats
+ * row (the chart row, refined by the TS detail page) - never from the
+ * candidate (V5). The id is the IMDb id, or `tmdb:<id>` when TMDB has no
+ * IMDb id for the record.
+ *
+ * D6: a LOW (or NONE) row must never mint an id. The exported resolve
+ * functions no longer hand back a LOW id, but this is the last line of
+ * defence: a bad call fails loudly instead of publishing a guess.
+ */
 export function rowToItem(kind, resolved, row) {
+  const conf = String((resolved && resolved.confidence) || "").toUpperCase();
+  if (conf === "LOW" || conf === "NONE") {
+    throw new Error(
+      `refusing to mint an id from a ${conf} row (${row.slug}): ${(resolved && resolved.reason) || "no confidence"}`
+    );
+  }
   const id = resolved.imdb || (resolved.tmdb ? `tmdb:${resolved.tmdb}` : null);
   if (!id) throw new Error(`unresolvable slug ${row.slug}`);
   return {
     id,
     type: kind === "movie" ? "movie" : "series",
-    name: resolved.title || row.title,
+    name: row.title || resolved.title,
     poster: row.poster ? `https://image.tmdb.org/t/p/w500${row.poster}` : "https://simkl.in/poster_no_pic_c.png",
-    releaseInfo: resolved.date || row.date || undefined,
+    releaseInfo: row.date || resolved.date || undefined,
   };
 }
 
@@ -246,7 +344,7 @@ export async function pmap(items, fn, concurrency = 5) {
 export async function fetchConfig(fetchFn = fetch) {
   if (!WORKER_ORIGIN) return null;
   try {
-    const res = await fetchFn(`${WORKER_ORIGIN}/export-config`, { signal: AbortSignal.timeout(15000) });
+    const res = await fetchFn(`${WORKER_ORIGIN}/export-config`, { signal: AbortSignal.timeout(20000) });
     if (!res.ok) return null;
     const cfg = await res.json();
     return Array.isArray(cfg?.tvstats?.lists) ? cfg.tvstats.lists.filter((l) => l && l.id && l.url) : null;
@@ -267,11 +365,11 @@ export function writeCatalog(list, items) {
     scraped_at: Date.now(),
     items,
   };
-  writeFileSync(file, JSON.stringify(out, null, 2) + "\n");
+  writeAtomic(file, JSON.stringify(out, null, 2) + "\n");
   return file;
 }
 
-async function postRuns(runs, fetchFn = fetch) {
+export async function postRuns(runs, fetchFn = fetch) {
   if (!WORKER_ORIGIN || runs.length === 0) return;
   for (let i = 0; i < runs.length; i += 50) {
     const chunk = runs.slice(i, i + 50);
@@ -285,6 +383,7 @@ async function postRuns(runs, fetchFn = fetch) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ runs: chunk }),
+          signal: AbortSignal.timeout(20000),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         posted = true;
@@ -324,6 +423,13 @@ export async function main({
   recordRuns = postRuns,
   loadCacheFn = loadCache,
   saveCacheFn = saveCache,
+  publishMin = PUBLISH_MIN,
+  audit = AUDIT_MODE,
+  doProbes = true,
+  useSuggestion: useSuggestionProp = null,
+  useGql: useGqlProp = null,
+  imdbGqlTitlesFn: gqlTitlesFnProp = null,
+  buildIndex = buildOfflineIndex,
 } = {}) {
   const SANE_ID = /^tvstats_[a-z0-9]{8}$/;
   if (action === "delete") {
@@ -350,8 +456,50 @@ export async function main({
   } else {
     targets = lists.filter((l) => l.enabled);
   }
-  const cache = loadCacheFn();
-  const getHtml = (url) => fetchProxyHtml(url);
+
+  const cacheMap = new Map(Object.entries(loadCacheFn() || {}));
+  const runCounts = { logical: 0, attempted: 0 };
+
+  // ── the egress probes ──
+  // ONE cheap call to each optional host. A dead optional host must never
+  // fail the run: its rung is disabled for the run and logged.
+  const probeCtx = { counts: { logical: 0, attempted: 0 } };
+  let useSuggestion = useSuggestionProp !== null;
+  let useGql = useGqlProp !== null;
+  let auditMode = audit;
+  if (doProbes) {
+    if (useSuggestionProp === null) {
+      useSuggestion = await probeHost("https://v3.sg.media-imdb.com/suggestion/x/probe.json", probeCtx);
+      if (!useSuggestion) console.warn("[probe] the IMDb suggestion API is unreachable - the suggestion rung is off for this run");
+    }
+    if (useGqlProp === null) {
+      useGql = await probeHost("https://api.graphql.imdb.com/", probeCtx, {
+        method: "POST",
+        body: JSON.stringify({ query: "{__typename}" }),
+        headers: { "Content-Type": "application/json", Origin: "https://www.imdb.com", Referer: "https://www.imdb.com/" },
+      });
+      if (!useGql) console.warn("[probe] the IMDb GraphQL is unreachable - the suggestion rung uses the suggestion labels only");
+    }
+    if (auditMode === "tv") {
+      const ok = await probeHost("https://api.tvmaze.com/shows/1", probeCtx);
+      if (!ok) {
+        console.warn("[probe] TVmaze is unreachable - the audit is off for this run");
+        auditMode = "off";
+      }
+    }
+  }
+  runCounts.logical += probeCtx.counts.logical;
+  runCounts.attempted += probeCtx.counts.attempted;
+
+  // ── the offline join index ──
+  // The index only holds TMDB records (a numeric id + a poster_path), so it
+  // is never the audit's source (V1) and never the legacy cache (V2). The
+  // JustWatch snapshot is excluded by name as well, for belt and braces.
+  const index = buildIndex(DATA_DIR, {
+    excludePrefixes: auditMode === "juicewatch" ? ["mdboff_justwatch"] : [],
+  });
+  console.log(`[index] the offline join holds ${index.size} poster keys`);
+
   const runs = [];
   const results = [];
   let consecutiveFailures = 0;
@@ -364,71 +512,99 @@ export async function main({
     const run = { catalog_id: t.id, started_at: startedAt, status: "failed", triggered_by: process.env.INPUT_ORIGIN === "cron" ? "scheduled" : (process.env.GITHUB_EVENT_NAME === "schedule" ? "scheduled" : "manual") };
     try {
       console.log(`[chart] ${t.url}`);
-      const rows = chartRows(t.kind, await getHtml(t.url)).slice(0, t.maxItems || 100);
+      const listCtx = { counts: { logical: 0, attempted: 0 } };
+      const rows = chartRows(t.kind, await fetchProxyHtml(t.url, undefined, listCtx)).slice(0, t.maxItems || 100);
       if (rows.length === 0) throw new Error(`chart ${t.url} returned no rows - refusing to overwrite`);
       console.log(`[chart] ${rows.length} rows, resolving IDs...`);
       // Per-item hold-out: one unresolvable slug skips with a logged
       // reason instead of killing the whole list. The list aborts only
       // when failures exceed 10% (systemic block, not single-title gaps).
       const heldOut = [];
-      let done = 0;
+      const rowCtxs = new Array(rows.length);
+      const listKind = t.kind === "movie" ? "movie" : "show";
       const items = (
-        await pmap(rows, async (row) => {
+        await pmap(rows, async (row, i) => {
+          const rowCtx = {
+            counts: { logical: 0, attempted: 0 },
+            cache: cacheMap,
+            index,
+            publishMin,
+            useSuggestion,
+            useGql,
+            imdbGqlTitlesFn: gqlTitlesFnProp,
+            audit: auditMode,
+            dataDir: DATA_DIR,
+            getHtml: (url) => fetchProxyHtml(url, undefined, rowCtx),
+            tmdbGetFn: (path, params) => tmdbGetFn(path, params, fetch, rowCtx),
+          };
+          rowCtxs[i] = rowCtx;
           try {
-            const key = `${t.kind === "movie" ? "m" : "s"}:${row.slug}`;
-            const hit = cache[key];
-            let resolved;
-            if (hit && (hit.imdb || hit.tmdb)) {
-              resolved = hit;
-              // Auto-upgrade: tmdb-only fallback entries get one external_ids
-              // re-check per run. Numeric-id lookup is exact (no search), so no
-              // re-verification is needed. A fresh imdb_id upgrades the entry
-              // in place (persisted by saveCacheFn below); anything else keeps
-              // the working fallback and never fails the list.
-          if (!hit.imdb && hit.tmdb) {
-            try {
-              const extPath = hit.kind === "movie" ? `/movie/${hit.tmdb}/external_ids` : `/tv/${hit.tmdb}/external_ids`;
-              console.log(`  [recheck] ${row.slug}: tmdb:${hit.tmdb} - checking for imdb...`);
-              const ext = await tmdbGetFn(extPath);
-              if (ext && ext.imdb_id) {
-                hit.imdb = ext.imdb_id;
-                console.log(`  [upgrade] ${row.slug}: tmdb:${hit.tmdb} -> ${ext.imdb_id}`);
-              } else {
-                console.log(`  [recheck] ${row.slug}: still missing, keeping fallback`);
+            const resolved = await resolveRow({ ...row, kind: listKind }, rowCtx);
+            // V7: the optional audit can BLOCK. A disagreement holds the row
+            // out instead of publishing it.
+            if (auditMode !== "off" && resolved.imdb && resolved.confidence !== CONF.NONE) {
+              const a = await auditRow(resolved, rowCtx);
+              if (a.verdict === "disagree") {
+                heldOut.push(`${row.slug} (the ${a.source} audit disagrees: ${a.detail})`);
+                return null;
               }
-            } catch (e) {
-              console.warn(`  [upgrade] ${row.slug}: re-check failed (${e.message}) - keeping fallback`);
             }
-          }
-            } else if (t.kind === "movie") {
-              resolved = await resolveMovie(row, getHtml);
-            } else {
-              resolved = await resolveShow(row, getHtml, tmdbGetFn);
+            if (confRank(resolved.confidence) < confRank(publishMin)) {
+              heldOut.push(`${row.slug} (${resolved.confidence}: ${resolved.reason})`);
+              return null;
             }
-            cache[key] = { kind: t.kind, imdb: resolved.imdb || null, tmdb: resolved.tmdb || null, title: resolved.title, date: resolved.date || row.date || null };
+            // Only a publishable row is cached: a wrong id in the cache
+            // would be served forever (D1).
+            cacheMap.set(cacheKey(listKind, row.slug), {
+              kind: t.kind,
+              imdb: resolved.imdb || null,
+              tmdb: resolved.tmdb || null,
+              title: resolved.title || null,
+              date: resolved.date || null,
+              poster: resolved.poster || null,
+              rung: resolved.rung,
+              confidence: resolved.confidence,
+              v: 2,
+            });
             return rowToItem(t.kind, resolved, row);
           } catch (e) {
             heldOut.push(`${row.slug} (${e.message})`);
             return null;
-          } finally {
-            done++;
-            if (done % 25 === 0 || done === rows.length) console.log(`  [progress] ${done}/${rows.length} rows`);
           }
         })
       ).filter(Boolean);
+      const listCounts = { logical: listCtx.counts.logical, attempted: listCtx.counts.attempted };
+      for (const c of rowCtxs) {
+        if (!c) continue;
+        listCounts.logical += c.counts.logical;
+        listCounts.attempted += c.counts.attempted;
+      }
+      runCounts.logical += listCounts.logical;
+      runCounts.attempted += listCounts.attempted;
+      for (let i = 0; i < rows.length; i++) {
+        const c = rowCtxs[i];
+        if (!c) continue;
+        console.log(`  [row] ${rows[i].slug}: ${c.counts.logical} logical / ${c.counts.attempted} attempted requests`);
+      }
       if (items.length === 0) throw new Error(`all ${rows.length} rows unresolvable - refusing to overwrite with empty`);
+      // The cache is written BEFORE the hold-out check: a row that resolved
+      // must not be re-resolved on the next run just because its LIST
+      // aborted. The DATA file is still only written when the list passes.
+      saveCacheFn(Object.fromEntries(cacheMap));
       if (heldOut.length / rows.length > 0.1) {
-        throw new Error(`${heldOut.length}/${rows.length} rows unresolvable (>10%) - refusing partial overwrite: ${heldOut.slice(0, 3).join("; ")}`);
+        throw new Error(`${heldOut.length}/${rows.length} rows held out (>10%) - refusing partial overwrite: ${heldOut.slice(0, 3).join("; ")}`);
       }
       for (const h of heldOut) console.warn(`  [held-out] ${h}`);
-      saveCacheFn(cache);
       write(t, items);
       run.status = "success";
       run.finished_at = Date.now();
       run.pages_scraped = 1;
       run.movies_found = items.length;
-      results.push({ catalog: run.catalog_id, moviesFound: items.length });
-      console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items`);
+      run.held_out = heldOut.length;
+      run.requests_logical = listCounts.logical;
+      run.requests_attempted = listCounts.attempted;
+      results.push({ catalog: run.catalog_id, moviesFound: items.length, heldOut: heldOut.length, requests: listCounts });
+      console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items, ${heldOut.length} held out, ${listCounts.logical} logical / ${listCounts.attempted} attempted requests`);
       consecutiveFailures = 0;
     } catch (e) {
       run.finished_at = Date.now();
@@ -448,6 +624,7 @@ export async function main({
   await recordRuns(runs);
 
   console.log("\nSummary:", JSON.stringify(results, null, 2));
+  console.log(`requests: ${runCounts.logical} logical / ${runCounts.attempted} attempted (the logical count is never above the attempt count)`);
   const failed = results.filter((r) => r.error);
   if (failed.length && isMain) process.exit(1);
 }
