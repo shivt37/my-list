@@ -2,7 +2,7 @@
   "catalog_id": "tvstats_omgaobif",
   "name": "Today's Top Shows (Television Stats)",
   "type": "series",
-  "scraped_at": 1792655854456,
+  "scraped_at": 1792659231873,
   "items": [
     {
       "id": "tt23148340",
@@ -122,6 +122,13 @@
       "name": "The Rehearsal",
       "poster": "https://image.tmdb.org/t/p/w500/mIevNYxovnH4sR22qkUmAgS5vdv.jpg",
       "releaseInfo": "2022-07-15"
+    },
+    {
+      "id": "tmdb:299939",
+      "type": "series",
+      "name": "Monster: The Lizzie Borden Story",
+      "poster": "https://image.tmdb.org/t/p/w500/57XScX1aYtKi1LvHYFQLPUxVhTG.jpg",
+      "releaseInfo": "2026-09-17"
     },
     {
       "id": "tt13210838",
