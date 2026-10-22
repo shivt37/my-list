@@ -531,11 +531,6 @@ export async function main({
       const listCtx = { counts: { logical: 0, attempted: 0 } };
       const rows = chartRows(t.kind, await fetchProxyHtml(t.url, undefined, listCtx)).slice(0, t.maxItems || 100);
       if (rows.length === 0) throw new Error(`chart ${t.url} returned no rows - refusing to overwrite`);
-      // How much the offline join can do for THIS chart. The index size on
-      // its own is a near-constant; what matters is how many of these rows
-      // it can already answer without a search call.
-      const indexHits = rows.filter((r) => posterKey(r.poster) && index.has(posterKey(r.poster))).length;
-      console.log(`[index] the offline join can serve ${indexHits} of these ${rows.length} rows`);
       console.log(`[chart] ${rows.length} rows, resolving IDs...`);
       // Per-item hold-out: one unresolvable slug skips with a logged
       // reason instead of killing the whole list. The list aborts only

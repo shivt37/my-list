@@ -148,11 +148,7 @@ than one TMDB id is treated as ambiguous and is not used.
 **How much it actually saves is small.** The daily charts are mostly titles the operator's
 discover lists do not contain, so the index serves **~8 of the top 100 movie rows and ~3 of
 the top 100 show rows** (measured 2026-10-20). It is a free lookup on the rows that happen
-to overlap, not a way to skip the search. The run log says so per chart:
-
-```
-[index] the offline join can serve 8 of these 100 rows
-```
+to overlap, not a way to skip the search.
 
 ## Reading the log
 
@@ -160,7 +156,6 @@ The run log answers "what happened, and what did it cost" in a few lines — the
 shape as the RT pipeline's log.
 
 ```
-[index] the offline join can serve 8 of these 100 rows
 [chart] https://televisionstats.com/topmovies
 [chart] 100 rows, resolving IDs...
 [progress] 25/100 rows
@@ -176,7 +171,6 @@ shape as the RT pipeline's log.
 | tag | when |
 |---|---|
 | `[chart]` | the chart being fetched, and how many rows it has |
-| `[index]` | how many of this chart's rows the offline join can already answer |
 | `[progress]` | every 25 rows — a heartbeat, so a long run never looks frozen |
 | `[id]` | a row that resolved but is worth a note: a non-primary fingerprint, a premiere drift, a TMDB fallback, or an unconfirmed IMDb kind |
 | `[holdout]` | a row that was **not** published, with the reason |
