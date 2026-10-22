@@ -94,6 +94,15 @@ export const AUDIT_MODE = ["tv", "juicewatch", "off"].includes(String(process.en
   ? String(process.env.TVSTATS_AUDIT || "off").toLowerCase()
   : "off";
 
+// The run log. By default only the rows that need a note are printed (the
+// clean rows are silent); TVSTATS_LOG=full prints one line per resolved row.
+// A row that cost far more than usual is flagged - those are the rows where
+// several same-name candidates had to be checked.
+export const LOG_FULL = String(process.env.TVSTATS_LOG || "").toLowerCase() === "full";
+export const SLOW_ROW = Math.max(1, Number(process.env.TVSTATS_SLOW_ROWS || 12));
+// Read at call time, so TVSTATS_LOG can be flipped without re-importing.
+export const isFullLog = () => String(process.env.TVSTATS_LOG || "").toLowerCase() === "full";
+
 // ── page fetching: worker proxy only ──
 // All chart/detail HTML flows through GET <TS_FETCH_BASE>/ts-fetch?url=.
 // The worker's Cloudflare egress is unchallenged where datacenter IPs are
@@ -529,9 +538,14 @@ export async function main({
       // when failures exceed 10% (systemic block, not single-title gaps).
       const heldOut = [];
       const rowCtxs = new Array(rows.length);
+      const rowOut = new Array(rows.length);
       const listKind = t.kind === "movie" ? "movie" : "show";
+      let done = 0;
       const items = (
         await pmap(rows, async (row, i) => {
+          // A heartbeat, so a long run never looks frozen (rt.mjs does the
+          // same every 25 rows).
+          if (++done % 25 === 0) console.log(`[progress] ${done}/${rows.length} rows`);
           const rowCtx = {
             counts: { logical: 0, attempted: 0 },
             cache: cacheMap,
@@ -548,17 +562,20 @@ export async function main({
           rowCtxs[i] = rowCtx;
           try {
             const resolved = await resolveRow({ ...row, kind: listKind }, rowCtx);
+            rowOut[i] = { resolved };
             // V7: the optional audit can BLOCK. A disagreement holds the row
             // out instead of publishing it.
             if (auditMode !== "off" && resolved.imdb && resolved.confidence !== CONF.NONE) {
               const a = await auditRow(resolved, rowCtx);
               if (a.verdict === "disagree") {
                 heldOut.push(`${row.slug} (the ${a.source} audit disagrees: ${a.detail})`);
+                rowOut[i] = { resolved, held: true };
                 return null;
               }
             }
             if (confRank(resolved.confidence) < confRank(publishMin)) {
               heldOut.push(`${row.slug} (${resolved.confidence}: ${resolved.reason})`);
+              rowOut[i] = { resolved, held: true };
               // A row that is unresolvable for a structural reason (no
               // candidate, ambiguous, no IMDb id) is remembered as a MISS so
               // it stops costing requests on every run. A transient failure
@@ -589,9 +606,12 @@ export async function main({
               confidence: resolved.confidence,
               v: CACHE_VERSION,
             });
-            return rowToItem(t.kind, resolved, row);
+            const item = rowToItem(t.kind, resolved, row);
+            rowOut[i] = { resolved, item };
+            return item;
           } catch (e) {
             heldOut.push(`${row.slug} (${e.message})`);
+            rowOut[i] = { error: e.message };
             return null;
           }
         })
@@ -604,10 +624,30 @@ export async function main({
       }
       runCounts.logical += listCounts.logical;
       runCounts.attempted += listCounts.attempted;
+      // ---- the run log: what happened, in chart order. A row's request
+      // cost belongs in the summary, not on 200 lines that all say the same
+      // thing; the per-row line carries the id and what it took.
       for (let i = 0; i < rows.length; i++) {
+        const o = rowOut[i];
         const c = rowCtxs[i];
-        if (!c) continue;
-        console.log(`  [row] ${rows[i].slug}: ${c.counts.logical} logical / ${c.counts.attempted} attempted requests`);
+        if (!o) continue;
+        if (o.error) {
+          console.log(`[holdout] ${rows[i].slug}: ${o.error}`);
+          continue;
+        }
+        const r = o.resolved || {};
+        if (o.held || !o.item) {
+          console.log(`[holdout] ${rows[i].slug}: ${r.holdNote || (r.reason || "not published").slice(0, 120)}`);
+          continue;
+        }
+        if (isFullLog() || r.note) {
+          const year = String(r.date || o.item.releaseInfo || "").slice(0, 4);
+          console.log(`[id] ${rows[i].slug}: ${o.item.id}${year ? ` (${year})` : ""}${r.note ? ` - ${r.note}` : ""}`);
+        }
+        const cost = c ? c.counts.logical : 0;
+        if (cost > SLOW_ROW) {
+          console.log(`[slow] ${rows[i].slug}: ${cost} requests - several candidates had to be checked`);
+        }
       }
       if (items.length === 0) throw new Error(`all ${rows.length} rows unresolvable - refusing to overwrite with empty`);
       // The cache is written BEFORE the hold-out check: a row that resolved
@@ -617,7 +657,6 @@ export async function main({
       if (heldOut.length / rows.length > 0.1) {
         throw new Error(`${heldOut.length}/${rows.length} rows held out (>10%) - refusing partial overwrite: ${heldOut.slice(0, 3).join("; ")}`);
       }
-      for (const h of heldOut) console.warn(`  [held-out] ${h}`);
       write(t, items);
       run.status = "success";
       run.finished_at = Date.now();
@@ -626,8 +665,9 @@ export async function main({
       run.held_out = heldOut.length;
       run.requests_logical = listCounts.logical;
       run.requests_attempted = listCounts.attempted;
-      results.push({ catalog: run.catalog_id, moviesFound: items.length, heldOut: heldOut.length, requests: listCounts });
-      console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items, ${heldOut.length} held out, ${listCounts.logical} logical / ${listCounts.attempted} attempted requests`);
+      const fallbacks = items.filter((i) => String(i.id).startsWith("tmdb:")).length;
+      results.push({ catalog: run.catalog_id, moviesFound: items.length, heldOut: heldOut.length, rows: rows.length, fallbacks, requests: listCounts });
+      console.log(`[${run.catalog_id}] ${run.status} - ${items.length} items, ${heldOut.length} held out, ${listCounts.logical} requests (${(listCounts.logical / Math.max(1, rows.length)).toFixed(1)}/row)`);
       consecutiveFailures = 0;
     } catch (e) {
       run.finished_at = Date.now();
@@ -646,8 +686,12 @@ export async function main({
 
   await recordRuns(runs);
 
+  const totalItems = results.reduce((a, r) => a + (r.moviesFound || 0), 0);
+  const totalHeld = results.reduce((a, r) => a + (r.heldOut || 0), 0);
+  const totalRows = results.reduce((a, r) => a + (r.rows || 0), 0);
+  const totalFallbacks = results.reduce((a, r) => a + (r.fallbacks || 0), 0);
+  console.log(`[summary] ${totalItems} items, ${totalHeld} held out, ${runCounts.logical} requests (${(runCounts.logical / Math.max(1, totalRows)).toFixed(1)}/row), ${totalFallbacks} tmdb: fallback`);
   console.log("\nSummary:", JSON.stringify(results, null, 2));
-  console.log(`requests: ${runCounts.logical} logical / ${runCounts.attempted} attempted (the logical count is never above the attempt count)`);
   const failed = results.filter((r) => r.error);
   if (failed.length && isMain) process.exit(1);
 }

@@ -142,6 +142,44 @@ Those give a poster-hash → TMDB-id index built at startup, so ~50% of rows res
 are excluded, and a file without a numeric TMDB id contributes nothing. A hash that maps to
 more than one TMDB id is treated as ambiguous and is not used.
 
+## Reading the log
+
+The run log answers "what happened, and what did it cost" in a few lines — the same
+shape as the RT pipeline's log.
+
+```
+[index] the offline join holds 167 poster keys
+[chart] https://televisionstats.com/topmovies
+[chart] 100 rows, resolving IDs...
+[progress] 25/100 rows
+[slow] sacrifice: 21 requests - several candidates had to be checked
+[id] matchbox: tt28498219 (2026) - matched by the synopsis
+[id] monster-the-lizzie-borden-story: tmdb:299939 (2026) - this title has no IMDb id
+[holdout] bleach-thousand-year-blood-war: a film in the shows chart
+[progress] 100/100 rows
+[tvstats_ffbhahjg] success - 100 items, 0 held out, 761 requests (7.6/row)
+[summary] 199 items, 1 held out, 1264 requests (6.3/row), 1 tmdb: fallback
+```
+
+| tag | when |
+|---|---|
+| `[chart]` | the chart being fetched, and how many rows it has |
+| `[progress]` | every 25 rows — a heartbeat, so a long run never looks frozen |
+| `[id]` | a row that resolved but is worth a note: a non-primary fingerprint, a premiere drift, a TMDB fallback, or an unconfirmed IMDb kind |
+| `[holdout]` | a row that was **not** published, with the reason |
+| `[slow]` | a row that cost more than 12 requests (several same-name candidates had to be checked) |
+| `[recheck]` / `[upgrade]` | a cached `tmdb:` entry re-checked, and upgraded if an IMDb id appeared |
+| `[probe]` | a host was unreachable, so that rung was switched off for the run |
+| `[tvstats_<id>]` | one line per list: items, held out, requests, requests per row |
+| `[summary]` | the run totals |
+
+**By default only the rows that need a note are printed** — the clean rows are silent, so
+a 200-row run is ~15 lines instead of 200. `TVSTATS_LOG=full` prints one `[id]` line per
+resolved row. `TVSTATS_SLOW_ROWS=<n>` moves the `[slow]` threshold (default 12).
+
+The per-row request count is **not** printed any more: the cost belongs in the summary,
+and a line that says only "this row cost 5 requests" tells you nothing about the id.
+
 ## Cache
 
 `data/ts_cache.json` → `{kind, imdb, tmdb, title, date, poster, stableId, rung, confidence, v:2}`.

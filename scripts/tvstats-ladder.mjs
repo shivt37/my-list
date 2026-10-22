@@ -1106,6 +1106,20 @@ async function recheckTmdbEntry(hit, wantTv, ctx, slug) {
 }
 
 /**
+ * The short, human phrase the run log shows for a resolved row: why this row
+ * needed a note. null = a clean row (primary fingerprint + year + confirmed
+ * kind) that needs no explanation.
+ */
+function noteFor(win, out) {
+  const notes = [];
+  if (win.posterMatchKind === "poster-set") notes.push("the poster was stale, matched by the poster set");
+  else if (win.posterMatchKind === "overview") notes.push("matched by the synopsis");
+  if (win.yearDrift) notes.push("a +/-1 premiere drift");
+  if (!out.imdbKindKnown) notes.push("the IMDb kind is unconfirmed");
+  return notes.length ? notes.join("; ") : null;
+}
+
+/**
  * Resolve one row.
  *
  * The returned `title`/`date`/`poster` are always the TS facts (the chart row
@@ -1150,6 +1164,11 @@ export async function resolveRow(row, ctxIn) {
     // The backdrop agrees with the chosen work (corroboration only - a
     // backdrop is shared across a franchise, so it never identifies a work).
     backdropAgrees: false,
+    // A short, human phrase for the run log: why this row needed a note.
+    // null = a clean row (primary fingerprint + year + confirmed kind).
+    note: null,
+    // A short, human phrase for a row that was NOT published.
+    holdNote: null,
     // A held-out row may be remembered as a MISS for a bounded TTL, so a
     // permanently unresolvable title stops costing requests every run.
     negativeCacheable: false,
@@ -1221,6 +1240,7 @@ export async function resolveRow(row, ctxIn) {
     out.confidence = CONF.NONE;
     out.negativeCacheable = true;
     out.kindHint = "movie";
+    out.holdNote = "a film in the shows chart";
     out.reason = `TV Stats marks this row as a FILM ("(MOVIE)") and this list is a show list - the row is HELD OUT`;
     return out;
   }
@@ -1305,6 +1325,7 @@ export async function resolveRow(row, ctxIn) {
   if (searchFailed) {
     out.rung = "held-out";
     out.confidence = CONF.NONE;
+    out.holdNote = "the TMDB search failed";
     out.reason = `the TMDB search failed (${searchFailed}) - the row is HELD OUT and will be retried, not answered from a weaker source`;
     return out;
   }
@@ -1445,6 +1466,7 @@ export async function resolveRow(row, ctxIn) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
       out.negativeCacheable = true;
+      out.holdNote = "the poster matches more than one title";
       out.reason = `ambiguous: TV Stats' poster ${tsPosterKey} (or its overview) matches ${owners.length} different works (${owners
         .map((o) => o.cs[0].title)
         .join(" | ")}) - the row is HELD OUT`;
@@ -1487,6 +1509,7 @@ export async function resolveRow(row, ctxIn) {
     if (survivors.length > 1 && evidenceEqual(survivors[0], survivors[1])) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
+      out.holdNote = "two titles are indistinguishable";
       out.reason = `ambiguous: "${survivors[0].title}" and "${survivors[1].title}" are indistinguishable on every piece of evidence (poster, runtime, year, title score, suggestion rank) - the row is HELD OUT`;
       return out;
     }
@@ -1498,6 +1521,7 @@ export async function resolveRow(row, ctxIn) {
     if (!survivors.length) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
+      out.holdNote = "the only candidate is a different kind of title";
       out.reason = `every surviving candidate was rejected by the IMDb kind gate (${gated.rejections[0] || "no detail"}) - the row is HELD OUT`;
       return out;
     }
@@ -1520,6 +1544,7 @@ export async function resolveRow(row, ctxIn) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
       out.imdb = null;
+      out.holdNote = "the IMDb id lookup failed";
       out.reason = `the TMDB external_ids lookup failed (${win.imdbIdError}) - the row is HELD OUT`;
       return out;
     }
@@ -1527,6 +1552,7 @@ export async function resolveRow(row, ctxIn) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
       out.negativeCacheable = true;
+      out.holdNote = "no id for this title";
       out.reason = `the winning candidate has no usable id (${win.rejected || "no id"})`;
       return out;
     }
@@ -1540,6 +1566,9 @@ export async function resolveRow(row, ctxIn) {
       // checked the record's media type against the list kind.
       out.rung = "fingerprint-tmdb";
       out.confidence = CONF.HIGH;
+      out.note = ["this title has no IMDb id", win.yearDrift ? "a +/-1 premiere drift" : null]
+        .filter(Boolean)
+        .join("; ");
       out.reason = `title ${win.titleScore.toFixed(2)} + the year + the ${
         wantTv ? "show" : "movie"
       } kind whitelist` +
@@ -1560,6 +1589,7 @@ export async function resolveRow(row, ctxIn) {
     //   MEDIUM everything else (incl. an unknown IMDb kind - D1)
     out.confidence =
       out.fingerprint && out.yearPresent && out.imdbKindKnown ? CONF.HIGH : CONF.MEDIUM;
+    out.note = noteFor(win, out);
     out.reason =
       `title ${win.titleScore.toFixed(2)} + ${win.yearDrift ? "a +/-1 premiere drift" : "the year"} + the ${
         wantTv ? "show" : "movie"
@@ -1600,6 +1630,7 @@ export async function resolveRow(row, ctxIn) {
     out.candidateTitle = p.title;
     out.candidateDate = p.date;
     out.candidateKind = p.kind;
+    out.holdNote = "only a partial title match";
     out.reason = `a partial title match (score ${p.titleScore.toFixed(2)} < ${TITLE_GATE}) - LOW confidence, never published`;
     return out;
   }
@@ -1612,6 +1643,7 @@ export async function resolveRow(row, ctxIn) {
     : cands.length
       ? cands[0].rejected || "no candidate matched the title"
       : "no candidate at all";
+  out.holdNote = "no candidate for this title";
   out.reason = `no candidate survived the gates (${why}) - the row is HELD OUT`;
   return out;
 }
