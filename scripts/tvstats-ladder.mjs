@@ -250,6 +250,37 @@ export function posterKey(p) {
   return seg ? seg.toLowerCase() : null;
 }
 
+/**
+ * The poster SET of a TMDB entry: every poster file name TMDB holds for it.
+ *
+ * WHY: TV Stats copies ONE poster path at ingest time. TMDB may later promote
+ * a different upload, so the fingerprint goes stale - but the old file is
+ * normally still in that title's own poster set. "TV Stats' poster is in the
+ * set" is a weaker but still exact identity test, and it recovers the rows a
+ * stale fingerprint would otherwise drop.
+ *
+ * ONE call per TMDB id, memoised on the ctx.
+ */
+export async function tmdbPosterSet(ctx, tmdbKind, tmdbId) {
+  const memo = ctx._posterSets || (ctx._posterSets = new Map());
+  const key = `${tmdbKind}:${tmdbId}`;
+  if (memo.has(key)) return memo.get(key);
+  const out = new Set();
+  memo.set(key, out);
+  try {
+    countLogical(ctx);
+    const res = await ctx.tmdbGetFn(`/${tmdbKind}/${tmdbId}/images`);
+    syncCounts(ctx);
+    for (const p of res?.posters || []) {
+      const k = posterKey(p.file_path);
+      if (k) out.add(k);
+    }
+  } catch {
+    /* the poster set is optional evidence - a failure just means no match */
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------- kind gate
 
 // IMDb's labels -> the canonical vocabulary. "TV Series" folds to "tvseries".
@@ -591,6 +622,13 @@ export function makeCtx(partial = {}) {
       publishMin: "medium",
       useSuggestion: true,
       useGql: true,
+      // The poster-SET fingerprint (the widened fingerprint). On by default:
+      // it is the rung that recovers a row whose TV Stats poster is stale.
+      posterSet: true,
+      // How long a remembered MISS holds a row out. 7 days.
+      negativeTtlMs: 7 * 86400000,
+      // The cache key function (TV Stats' stable per-title id by default).
+      cacheKeyFn: null,
       // The IMDb facts loader. Overridable so a caller (or a test) can supply
       // its own; the default is the real keyless GraphQL client.
       imdbGqlTitlesFn: null,
@@ -607,6 +645,39 @@ export function makeCtx(partial = {}) {
 export const cacheKey = (kind, slug) => (kind === "movie" ? "m:" : "s:") + slug;
 
 /**
+ * The cache key for a row.
+ *
+ * TV Stats' chart rows carry a STABLE per-title id (present on 200/200 rows of
+ * both kinds - the movie DETAIL page has no id, so it must be taken from the
+ * chart row). That id is the work's identity: a slug can be reused for a
+ * different work, a stable id cannot. Rows without one fall back to the slug.
+ */
+export const rowCacheKey = (kind, row) => {
+  const id = row && row.stableId;
+  if (id) return `i:${id}`;
+  return cacheKey(kind, (row && row.slug) || "");
+};
+
+/**
+ * Is a cached entry still the row it is being served for?
+ *
+ * An entry keyed by the stable id is the work by construction. A slug-keyed
+ * entry (or a legacy v1 entry) must still agree with the row on its title and
+ * poster - a stale entry must never republish an old id under a new title.
+ */
+export function cacheHitValid(hit, row) {
+  if (!hit) return false;
+  if (hit.stableId && row && row.stableId && hit.stableId === row.stableId) return true;
+  const ht = normTitle(hit.title || "");
+  const rt = normTitle((row && row.title) || "");
+  if (ht && rt && ht !== rt) return false;
+  const hp = posterKey(hit.poster);
+  const rp = posterKey(row && row.poster);
+  if (hp && rp && hp !== rp) return false;
+  return true;
+}
+
+/**
  * Migrate a v1 cache entry (no `v` key) to the v2 schema. A v1 entry is
  * trusted as MEDIUM, never HIGH: the v1 show path matched titles fuzzily
  * with no kind gate, so it is published (MEDIUM >= the default threshold) but
@@ -615,6 +686,18 @@ export const cacheKey = (kind, slug) => (kind === "movie" ? "m:" : "s:") + slug;
 export function migrateCacheEntry(entry) {
   if (!entry || typeof entry !== "object") return null;
   if (entry.v === CACHE_VERSION) return entry;
+  // A remembered MISS (a row proven unresolvable) carries no id - it must
+  // survive the migration or the row would be re-resolved every run.
+  if (entry.miss) {
+    return {
+      kind: entry.kind || null,
+      miss: true,
+      at: entry.at || 0,
+      reason: entry.reason || null,
+      stableId: entry.stableId || null,
+      v: CACHE_VERSION,
+    };
+  }
   const imdb = entry.imdb || null;
   const tmdb = entry.tmdb ? String(entry.tmdb) : null;
   if (!imdb && !tmdb) return null;
@@ -625,6 +708,7 @@ export function migrateCacheEntry(entry) {
     title: entry.title || null,
     date: entry.date || null,
     poster: entry.poster || null,
+    stableId: entry.stableId || null,
     rung: "cache-v1",
     confidence: CONF.MEDIUM,
     v: CACHE_VERSION,
@@ -698,18 +782,26 @@ async function tmdbSearch(ctx, tmdbKind, title, year) {
  * Bounded: 4 attempts, a backoff capped at 2000 ms.
  */
 async function tmdbExternal(ctx, tmdbKind, id) {
+  // Memoised: the set-fingerprint rung and the kind gate both need the same
+  // external_ids, and a run must not pay for it twice.
+  const memo = ctx._extMemo || (ctx._extMemo = new Map());
+  const memoKey = `${tmdbKind}:${id}`;
+  if (memo.has(memoKey)) return memo.get(memoKey);
+  let out = null;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     countLogical(ctx);
     const res = await ctx.tmdbGetFn(`/${tmdbKind}/${id}/external_ids`);
     syncCounts(ctx);
     if (res && typeof res === "object" && Object.keys(res).length) {
-      return res.imdb_id || null;
+      out = res.imdb_id || null;
+      break;
     }
     // an EMPTY body: transient - retry (bounded, with backoff)
     if (attempt === MAX_ATTEMPTS) break;
     await sleep(Math.min(BACKOFF_CAP_MS, 500 * attempt));
   }
-  return null;
+  memo.set(memoKey, out);
+  return out;
 }
 
 async function tmdbFind(ctx, imdbId) {
@@ -987,7 +1079,8 @@ export async function resolveRow(row, ctxIn) {
   const ctx = makeCtx(ctxIn);
   const kind = row.kind === "movie" ? "movie" : "show";
   const wantTv = kind === "show";
-  const key = cacheKey(kind, row.slug);
+  const key = ctx.cacheKeyFn ? ctx.cacheKeyFn(kind, row) : rowCacheKey(kind, row);
+  const legacyKey = cacheKey(kind, row.slug);
   const tsTitle = String(row.title || "").trim();
   const out = {
     key,
@@ -1013,13 +1106,44 @@ export async function resolveRow(row, ctxIn) {
     // D6: the partial candidate of a LOW row (never an id).
     candidate: null,
     fingerprint: false,
+    // "primary" = the poster matched the title's CURRENT TMDB poster;
+    // "set" = the poster is one of the title's other TMDB posters (TV Stats
+    // holds a stale copy). Both are exact identity evidence.
+    posterMatchKind: null,
+    // A held-out row may be remembered as a MISS for a bounded TTL, so a
+    // permanently unresolvable title stops costing requests every run.
+    negativeCacheable: false,
     yearPresent: !!yearOf(row.date),
     kindHint: null,
     wikipediaSlug: null,
   };
 
   // ---- RUNG 0: the cache. 0 HTTP calls.
-  const hit = ctx.cache.get(key);
+  // The key is the row's STABLE id when it has one, else the slug. The legacy
+  // slug key is also tried, so the existing cache is not orphaned.
+  let hit = ctx.cache.get(key) || null;
+  if (!hit && legacyKey !== key) hit = ctx.cache.get(legacyKey) || null;
+  if (hit && hit.miss) {
+    // A remembered MISS: the row was proven unresolvable recently. Holding it
+    // out for a bounded TTL costs 0 HTTP calls; a title that becomes
+    // resolvable later is picked up when the TTL expires.
+    const ttl = ctx.negativeTtlMs ?? 7 * 86400000;
+    const age = Date.now() - (hit.at || 0);
+    if (age < ttl) {
+      out.rung = "negative-cache";
+      out.confidence = CONF.NONE;
+      out.reason = `a negative cache entry (${hit.reason || "no candidate"}) still holds this row out - 0 HTTP calls`;
+      return out;
+    }
+  }
+  if (hit && (hit.imdb || hit.tmdb)) {
+    if (!cacheHitValid(hit, row)) {
+      // A stale entry: the row now points at a different title. Re-resolve
+      // instead of publishing the old id under the new name.
+      out.reason = `the cached entry (${hit.imdb || hit.tmdb}) no longer matches this row - re-resolving`;
+      hit = null;
+    }
+  }
   if (hit && (hit.imdb || hit.tmdb)) {
     // D3: a cached entry that has a TMDB id but no IMDb id gets ONE
     // /external_ids re-check per run. If an imdb_id has appeared since, the
@@ -1042,6 +1166,23 @@ export async function resolveRow(row, ctxIn) {
       return out;
     }
     out.reason = `the cached confidence ${c} is below the publish threshold ${ctx.publishMin} - re-resolving`;
+  }
+
+  // TV Stats marks a FILM that appears in a show chart with a "(MOVIE)"
+  // suffix. The marker is a KIND HINT, not noise:
+  //   - it is NOT stripped from the title, so the title gate can never
+  //     accidentally pass on the IMDb label alone, and
+  //   - a show row carrying it is HELD OUT, because a film has no place
+  //     in a show catalogue (and the show kind whitelist would reject it
+  //     anyway - this just says so plainly).
+  const movieMarker = /\s*\(MOVIE\)\s*$/i.test(tsTitle);
+  if (movieMarker && wantTv) {
+    out.rung = "held-out";
+    out.confidence = CONF.NONE;
+    out.negativeCacheable = true;
+    out.kindHint = "movie";
+    out.reason = `TV Stats marks this row as a FILM ("(MOVIE)") and this list is a show list - the row is HELD OUT`;
+    return out;
   }
 
   // ---- the TS facts. A SHOW row needs the detail page for first_air_date
@@ -1133,6 +1274,7 @@ export async function resolveRow(row, ctxIn) {
   for (const c of cands) {
     c.titleScore = titleScore(c.title, facts.title);
     c.posterMatch = !!(tsPosterKey && posterKey(c.poster) === tsPosterKey);
+    if (c.posterMatch) c.posterMatchKind = "primary";
     if (!kindOk(c.kind, wantTv)) {
       c.rejected = `the kind "${c.kind}" is not in the ${
         wantTv ? "tvSeries|tvMiniSeries|podcastSeries" : "movie|tvMovie|video|documentary"
@@ -1187,6 +1329,56 @@ export async function resolveRow(row, ctxIn) {
         : `the year ${cy} != TS ${tsYear}`;
   }
   let survivors = gated.filter((c) => c.yearOk);
+
+  // ---- RUNG 2c: the poster-SET fingerprint.
+  // Only for rows where the STRICT fingerprint found nothing: TV Stats copies
+  // ONE poster path at ingest time and TMDB may promote a different upload
+  // later, so the fingerprint goes stale - but the old file is normally still
+  // in that title's own poster set. "TV Stats' poster is in the set" is a
+  // weaker but still exact identity test, and it recovers the rows a stale
+  // fingerprint would otherwise drop.
+  //
+  // The guard counts DISTINCT WORKS, not candidate records: the candidate
+  // list can hold two records for the same work, and counting records makes
+  // every relaxed row look ambiguous (measured: 0 of 4 recovered).
+  if (ctx.posterSet !== false && !survivors.some((c) => c.posterMatch) && tsPosterKey) {
+    const byWork = new Map();
+    for (const c of survivors) {
+      if (!c.tmdbId) continue;
+      let imdbId = c.imdbId || null;
+      if (!imdbId) {
+        try {
+          imdbId = await tmdbExternal(ctx, c.tmdbKind, c.tmdbId);
+        } catch (e) {
+          c.imdbIdError = String((e && e.message) || e).slice(0, 140);
+          imdbId = null;
+        }
+        c.imdbIdResolved = imdbId || c.imdbIdResolved || null;
+      }
+      const workKey = imdbId ? `imdb:${imdbId}` : `tmdb:${c.tmdbId}`;
+      if (!byWork.has(workKey)) byWork.set(workKey, { tmdbId: c.tmdbId, tmdbKind: c.tmdbKind, cs: [] });
+      byWork.get(workKey).cs.push(c);
+    }
+    const owners = [];
+    for (const w of byWork.values()) {
+      const set = await tmdbPosterSet(ctx, w.tmdbKind, w.tmdbId);
+      if (set.has(tsPosterKey)) owners.push(w);
+    }
+    if (owners.length === 1) {
+      for (const c of owners[0].cs) {
+        c.posterMatch = true;
+        c.posterMatchKind = "set";
+      }
+    } else if (owners.length > 1) {
+      out.rung = "held-out";
+      out.confidence = CONF.NONE;
+      out.negativeCacheable = true;
+      out.reason = `ambiguous: TV Stats' poster ${tsPosterKey} belongs to ${owners.length} different works (${owners
+        .map((o) => o.cs[0].title)
+        .join(" | ")}) - the row is HELD OUT`;
+      return out;
+    }
+  }
 
   // The runtime tiebreak (movies only) needs the TMDB runtime - the search
   // result does not carry it. Bounded: only when the ranking is otherwise
@@ -1260,11 +1452,24 @@ export async function resolveRow(row, ctxIn) {
     if (!out.imdb && !out.tmdb) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
+      out.negativeCacheable = true;
       out.reason = `the winning candidate has no usable id (${win.rejected || "no id"})`;
       return out;
     }
+    if (!out.imdb && out.tmdb) {
+      // A `tmdb:` id is a DEAD LINK in every stock client (verified: Cinemeta
+      // returns 404 for `tmdb:299939` and 200 for the `tt` id of the same
+      // title). Shipping one puts a row in the catalogue that the user cannot
+      // open, so it is not publishable at any threshold.
+      out.rung = "held-out";
+      out.confidence = CONF.NONE;
+      out.negativeCacheable = true;
+      out.reason = `the title has no IMDb id (TMDB ${out.tmdb} carries none) and a tmdb: id is unresolvable for stock clients - the row is HELD OUT`;
+      return out;
+    }
     // The confidence comes from the EVIDENCE, not from the rung:
-    //   HIGH   the poster fingerprint + the year leg + a CONFIRMED IMDb kind
+    //   HIGH   a poster fingerprint (the current poster OR one of the title's
+    //          other posters) + the year leg + a CONFIRMED IMDb kind
     //   MEDIUM everything else (incl. an unknown IMDb kind - D1)
     out.confidence =
       out.fingerprint && out.yearPresent && out.imdbKindKnown ? CONF.HIGH : CONF.MEDIUM;
@@ -1272,7 +1477,11 @@ export async function resolveRow(row, ctxIn) {
       `title ${win.titleScore.toFixed(2)} + ${win.yearDrift ? "a +/-1 premiere drift" : "the year"} + the ${
         wantTv ? "show" : "movie"
       } kind whitelist` +
-      (out.fingerprint ? " + a poster fingerprint" : " (no poster fingerprint)") +
+      (out.fingerprint
+        ? win.posterMatchKind === "set"
+          ? " + a poster-set fingerprint (TV Stats holds an older TMDB poster of the same title)"
+          : " + a poster fingerprint"
+        : " (no poster fingerprint)") +
       (out.imdbKindKnown ? ` + the IMDb kind "${out.imdbKind}"` : " + an UNCONFIRMED IMDb kind (MEDIUM at most)");
     return out;
   }

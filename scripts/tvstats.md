@@ -33,12 +33,13 @@ movies were silently dropped while the run still reported "success". Shows never
 | 1 | TV Stats detail page (worker `/ts-fetch` proxy) | 1 |
 | 2 | TMDB `/search/{movie,tv}` (+ a year-filtered variant) | 1–2 |
 | 2b | IMDb suggestion API → TMDB `/find/<tt>` | 0–2 |
+| 2c | **poster-SET fingerprint** — TV Stats' poster is one of the title's TMDB posters | 0–1 |
 | 3 | **hard gates** | 0 |
 | 3b | **ambiguity gate** | 0 |
 | 4 | ranking | 0 |
-| 4b | **IMDb kind gate on the id about to ship** | 0–1 |
-| 5 | the id: TMDB `/external_ids` | 0–1 |
-| HOLD | nothing survived → held out | — |
+| 4b | **IMDb kind gate on the shipped id** | 0–1 |
+| 5 | the id (TMDB `/external_ids`) | 0–1 |
+| HOLD | nothing survived → confidence NONE, held out | — |
 
 ### The fingerprint (why it is exact)
 
@@ -50,6 +51,21 @@ Proven live: TV Stats `/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg` == TMDB movie 27205 (In
 `og:image`; same for War Machine, The Diplomat, The Reluctant Vampire.
 The Diplomat is the proof of value: title + year + kind leaves **3** candidates, the
 poster hash picks **1**.
+
+### The poster SET (rung 2c) — the stale-poster recovery
+
+TV Stats copies **one** poster path at ingest time. When TMDB later promotes a different
+upload, the fingerprint goes stale — the old file is still a live TMDB asset and is still
+in that title's own poster set, so the strict match fails. That happened to **4 of 199
+rows (2.0 %)**.
+
+Rung 2c therefore accepts a candidate when TV Stats' poster is **anywhere in that
+candidate's TMDB poster set** (`GET /3/{movie|tv}/{id}/images`). The guard counts
+**distinct works, not candidate records** — the candidate list can hold two records for
+the same work, and counting records makes every relaxed row look ambiguous (measured:
+0 of 4 recovered; counting works recovers 4 of 4). Two or more owners ⇒ the row is
+**held out**, never decided by popularity. The set check runs **after** the title/year/kind
+gates, so it can only ever *raise* a row that already passed every correctness gate.
 
 ### The hard gates (a candidate failing any of them is discarded, never partially scored)
 
@@ -72,15 +88,17 @@ poster hash picks **1**.
 
 ### The id, and the confidence
 
-The id is the IMDb id from the candidate's `/external_ids`; if there is none but there is a
-TMDB id, it is `tmdb:<id>` (the deployed consumer accepts it — `src/routes.js:218`).
+The id is the IMDb id from the candidate's `/external_ids`. If the title has **no** IMDb id
+anywhere, the row is **held out**: a `tmdb:<id>` is a dead link in every stock client
+(verified: Cinemeta returns 404 for `tmdb:299939` and 200 for the `tt` id of the same
+title), so shipping one puts an unopenable row in the catalogue.
 
 Confidence comes from the **evidence**, never from the rung:
 
 | | meaning | published |
 |---|---|---|
-| **HIGH** | poster fingerprint + every gate green + the IMDb kind confirmed | yes |
-| **MEDIUM** | every gate green but no fingerprint, or the IMDb kind unconfirmed | yes (`TVSTATS_PUBLISH_MIN=medium`) |
+| **HIGH** | a poster fingerprint (the current poster **or** one of the title's other posters) + the year leg + a **confirmed** IMDb kind | yes |
+| **MEDIUM** | every gate green but no fingerprint, or the IMDb kind unconfirmed | no, at `high` |
 | **LOW** | partial title match | **never** |
 | **NONE** | held out | never |
 
@@ -106,9 +124,23 @@ more than one TMDB id is treated as ambiguous and is not used.
 
 ## Cache
 
-`data/ts_cache.json` → `{kind, imdb, tmdb, title, date, poster, rung, confidence, v:2}`,
-keyed `m:<slug>` / `s:<slug>`. A v1 entry (no `v`) migrates on read and is treated as
-MEDIUM. **A cache hit costs 0 HTTP calls** — steady-state runs only fetch new slugs.
+`data/ts_cache.json` → `{kind, imdb, tmdb, title, date, poster, stableId, rung, confidence, v:2}`.
+A v1 entry (no `v`) migrates on read and is treated as MEDIUM.
+
+**The key is TV Stats' own stable per-title id** (`i:<id>`, present on 200/200 chart rows of
+both kinds; the movie *detail* page has no id, so it comes from the chart row). A slug can
+be reused for a different work — a stable id cannot. A row with no stable id falls back to
+the slug key.
+
+**Every hit is re-validated against the row** (title + poster must still match). A stale
+entry falls through to the online path instead of publishing an old id under a new title.
+
+**A remembered miss** (`{miss: true, at}`) holds an unresolvable row out for 7 days at
+**0 HTTP calls** — before this, the held-out rows were re-resolved on every run, forever
+(50 calls/run).
+
+**A cache hit costs 0 HTTP calls** — a warm run of both charts makes **0 requests**
+(measured).
 
 ## Run behaviour
 
@@ -138,8 +170,26 @@ CLI: `node tvstats.mjs`, `--ids=tvstats_ab12cd34`, `--action=delete --delete_ids
 
 ## Cost
 
-~4–6 requests per **new** row; ~0 for a cached row. A cold run of the two default lists
-(2 × 100 rows) measured 1016 logical calls in 98 s. The job timeout is 45 minutes.
+Measured on the live 200-row corpus (100 movies + 100 shows, 2026-10-22):
+
+| | result |
+|---|---|
+| published | **198 / 200** |
+| held out | **2** (both deliberately — see below) |
+| wrong ids | **0** (every id re-checked against IMDb `titleType` + title + year) |
+| cold run | 1250 requests, 6.25/row, 433 s |
+| warm run | **0 requests**, 0.0 s |
+
+The 2 rows that stay out on purpose:
+
+- **`monster-the-lizzie-borden-story`** — the title has no IMDb id on IMDb, TMDB *or*
+  Wikipedia, and the only alternative (`tmdb:299939`) 404s in every stock client.
+- **`bleach-thousand-year-blood-war`** — a FILM in the shows chart. TV Stats' own metadata
+  contradicts itself (the `(MOVIE)` marker says film, the date and the Wikipedia slug say
+  the 2022 series), and relaxing the title gate to "fix" it publishes the 2022 **series**
+  for a film row. The `(MOVIE)` marker is read as a kind hint, never stripped.
+
+The job timeout is 45 minutes against a ~7-minute cold run.
 
 ## Known limits
 
@@ -147,7 +197,13 @@ CLI: `node tvstats.mjs`, `--ids=tvstats_ab12cd34`, `--action=delete --delete_ids
   so under `TVSTATS_PUBLISH_MIN=high` nothing publishes and the list aborts (fail closed,
   a day of stale data). It warns and keeps going rather than failing fast.
 - The ladder depends on TV Stats continuing to copy TMDB poster paths. If that stops, the
-  fingerprint rung goes empty and the fallbacks carry the load.
-- Wikipedia/Wikidata are **not** used in production (not reachable from CI through the
-  sanctioned egress, and not needed for the fingerprint path).
+  fingerprint rung goes empty and the fallbacks carry the load. The poster-SET rung makes
+  that failure much softer: a stale poster is still found, and a *missing* poster is the
+  only case that costs the row.
+- Wikipedia/Wikidata are **not** used in production. They agree with the resolver
+  (98/98 measured) but recover nothing the poster-SET does not, and their rate limiting
+  is a User-Agent policy, not a rate limit.
 - The chart pages carry 200 rows but a list is capped by `maxItems` (default 100).
+- A row whose IMDb kind cannot be confirmed is never published, and a title with no IMDb
+  id at all is never published — the catalogue is shorter than the chart by design, and
+  the run log says how many rows were held out and why.

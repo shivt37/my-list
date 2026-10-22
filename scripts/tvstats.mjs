@@ -53,6 +53,7 @@ import {
   auditRow,
   buildOfflineIndex,
   cacheKey,
+  cacheHitValid,
   canonImdbType,
   confRank,
   detailUrl,
@@ -70,8 +71,10 @@ import {
   resolveRow,
   resolveMovie as ladderResolveMovie,
   resolveShow as ladderResolveShow,
+  rowCacheKey,
   titleScore,
   titleTokens,
+  tmdbPosterSet,
   yearOf,
 } from "./tvstats-ladder.mjs";
 
@@ -213,7 +216,7 @@ export async function tmdbGet(path, params = {}, fetchFn = fetch, ctx = null) {
 
 // ── parsing ──
 
-export { pageProps, normTitle, normTitleKeepArticle, titleScore, titleTokens, kindOk, canonImdbType, confRank, posterKey, yearOf, detailUrl, buildOfflineIndex, cacheKey, migrateCacheEntry, loadJustWatchSnapshot, probeHost, imdbSuggest, imdbGqlTitles, TT_RE, MOVIE_TYPES, SHOW_TYPES, CONF, CONF_RANK, TITLE_GATE };
+export { pageProps, normTitle, normTitleKeepArticle, titleScore, titleTokens, kindOk, canonImdbType, confRank, posterKey, yearOf, detailUrl, buildOfflineIndex, cacheKey, cacheHitValid, rowCacheKey, migrateCacheEntry, loadJustWatchSnapshot, probeHost, imdbSuggest, imdbGqlTitles, tmdbPosterSet, TT_RE, MOVIE_TYPES, SHOW_TYPES, CONF, CONF_RANK, TITLE_GATE };
 
 /**
  * Chart rows in rank order: { slug, title, poster, date }.
@@ -231,6 +234,10 @@ export function chartRows(kind, html) {
     if (!it || !it.slug) throw new Error("chart row without slug");
     return {
       slug: it.slug,
+      // TV Stats' STABLE per-title id (present on 200/200 chart rows of both
+      // kinds). The identity cache is keyed on it: a slug can be reused for a
+      // different work, a stable id cannot.
+      stableId: it.id || null,
       title: (kind === "movie" ? it.title : it.name) || "",
       poster: kind === "movie" ? it.poster_path || null : it.poster_image || it.poster_path || null,
       date: (kind === "movie" ? it.release_date : it.first_air_date) || null,
@@ -551,17 +558,32 @@ export async function main({
             }
             if (confRank(resolved.confidence) < confRank(publishMin)) {
               heldOut.push(`${row.slug} (${resolved.confidence}: ${resolved.reason})`);
+              // A row that is unresolvable for a structural reason (no
+              // candidate, ambiguous, no IMDb id) is remembered as a MISS so
+              // it stops costing requests on every run. A transient failure
+              // is NOT remembered - it must be retried.
+              if (resolved.negativeCacheable) {
+                cacheMap.set(rowCacheKey(listKind, row), {
+                  kind: t.kind,
+                  miss: true,
+                  at: Date.now(),
+                  reason: resolved.reason,
+                  stableId: row.stableId || null,
+                  v: 2,
+                });
+              }
               return null;
             }
             // Only a publishable row is cached: a wrong id in the cache
             // would be served forever (D1).
-            cacheMap.set(cacheKey(listKind, row.slug), {
+            cacheMap.set(rowCacheKey(listKind, row), {
               kind: t.kind,
               imdb: resolved.imdb || null,
               tmdb: resolved.tmdb || null,
               title: resolved.title || null,
               date: resolved.date || null,
               poster: resolved.poster || null,
+              stableId: row.stableId || null,
               rung: resolved.rung,
               confidence: resolved.confidence,
               v: 2,
