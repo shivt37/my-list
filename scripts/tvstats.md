@@ -27,7 +27,7 @@ movies were silently dropped while the run still reported "success". Shows never
 
 | rung | what | cost |
 |---|---|---|
-| 0 | cache hit (`data/ts_cache.json`, v2) | **0 HTTP** |
+| 0 | cache hit (`data/ts_cache.json`, v3) | **0 HTTP** |
 | 0a | `tmdb:` → `tt` re-check on a cached fallback | 0–1 |
 | 0b | **offline join** — the repo's own TMDB records, poster hash → TMDB id | 0–1 |
 | 1 | TV Stats detail page (worker `/ts-fetch` proxy) | 1 |
@@ -117,7 +117,7 @@ Confidence comes from the **evidence**, never from the rung:
 
 | | meaning | published |
 |---|---|---|
-| **HIGH** | a poster fingerprint (the current poster **or** one of the title's other posters, **or** an exact overview match) + the year leg + a confirmed kind | yes |
+| **HIGH** | a poster fingerprint (the current poster **or** one of the title's other posters, **or** an exact overview match) + the year leg + a confirmed kind — or a `tmdb:` id, whose own record type is the kind | yes |
 | **MEDIUM** | every gate green but no fingerprint, or the IMDb kind unconfirmed | no, at `high` |
 | **LOW** | partial title match | **never** |
 | **NONE** | held out | never |
@@ -127,8 +127,10 @@ cache is re-resolved through the real path before anything is published.
 
 ### What is published
 
-Only publishable rows are cached and published. A wrong id in the cache would be served
-forever, so LOW/NONE rows are never cached. The item shape is
+Only publishable rows are cached **with an id** and published. A wrong id in the cache
+would be served forever, so LOW/NONE rows never get an id cached — a NONE row is
+remembered as a *miss* instead (see the cache section below), which holds it out rather
+than resolving it. The item shape is
 `{id, type, name, poster, releaseInfo}` and the catalog is
 `{catalog_id, name, type, scraped_at, items}` — unchanged, because `src/routes.js:190`
 `rowToMetaTvstats` reads exactly those fields. `name` and `releaseInfo` always come from
@@ -168,6 +170,10 @@ shape as the RT pipeline's log.
 [summary] 199 items, 1 held out, 1264 requests (6.3/row), 1 tmdb: fallback
 ```
 
+(The numbers above are from a **cold** run — the first run after the cache is invalidated.
+Once the cache is warm the same run prints `0 requests` for the lists it can answer from
+the cache.)
+
 | tag | when |
 |---|---|
 | `[chart]` | the chart being fetched, and how many rows it has |
@@ -189,8 +195,8 @@ and a line that says only "this row cost 5 requests" tells you nothing about the
 
 ## Cache
 
-`data/ts_cache.json` → `{kind, imdb, tmdb, title, date, poster, stableId, rung, confidence, v:2}`.
-A v1 entry (no `v`) migrates on read and is treated as MEDIUM.
+`data/ts_cache.json` → `{kind, imdb, tmdb, title, date, poster, stableId, rung, confidence, v:3}`.
+An older entry (no `v`) migrates on read and is treated as MEDIUM.
 
 **The key is TV Stats' own stable per-title id** (`i:<id>`, present on 200/200 chart rows of
 both kinds; the movie *detail* page has no id, so it comes from the chart row). A slug can
@@ -200,9 +206,24 @@ the slug key.
 **Every hit is re-validated against the row** (title + poster must still match). A stale
 entry falls through to the online path instead of publishing an old id under a new title.
 
-**A remembered miss** (`{miss: true, at}`) holds an unresolvable row out for 7 days at
-**0 HTTP calls** — before this, the held-out rows were re-resolved on every run, forever
-(50 calls/run).
+**A remembered miss** (`{miss: true, at, holdNote}`) holds an unresolvable row out for
+**7 days** at **0 HTTP calls** — before this, the held-out rows were re-resolved on every
+run, forever (50 calls/run). After 7 days the row is resolved again; if it still fails, a
+fresh miss is written and the 7 days start over.
+
+Only **three** failures are remembered, and all three are structural — the title cannot be
+resolved as it stands:
+
+| remembered | why |
+|---|---|
+| a film in a shows chart (the `(MOVIE)` marker) | a film has no place in a show catalogue |
+| the poster matches more than one title | ambiguous — the row must not be decided by a guess |
+| no usable id for this title (no IMDb id *and* no TMDB id) | there is nothing to publish |
+
+Everything else is retried on the next run, because it is transient or may fix itself: a
+failed TMDB search, a failed `external_ids` lookup, a LOW partial-title match, and "no
+candidate survived the gates". A miss written under an older cache version is dropped, so a
+policy change re-evaluates the rows it had held out.
 
 **A cache hit costs 0 HTTP calls** — a warm run of both charts makes **0 requests**
 (measured).
@@ -215,9 +236,9 @@ entry falls through to the online path instead of publishing an old id under a n
 - **A failed TMDB search is a failure, not an empty result.** The row is held out and
   retried next run, rather than being answered from the weaker IMDb-suggestion rung
   (which can return a *different* id). The log says which failure it was.
-- The cache is written even when the list aborts (only publishable rows are cached) so a
-  resolved row is not re-resolved next run; the data file is still only written when the
-  list passes.
+- The cache is written even when the list aborts (publishable rows with their ids, and
+  remembered misses) so a resolved row is not re-resolved next run; the data file is still
+  only written when the list passes.
 - Writes are atomic (temp file + `renameSync`).
 - Requests are paced to **3/s** with a reservation pacer (correct under concurrency),
   429 backs off exponentially, and every retry is bounded.
@@ -233,6 +254,8 @@ entry falls through to the online path instead of publishing an old id under a n
 | `TS_FETCH_BASE` | = `WORKER_ORIGIN` | the `/ts-fetch` page proxy — the only sanctioned TV Stats egress |
 | `TVSTATS_PUBLISH_MIN` | `medium` | `high` = fail closed (the workflow sets `high`) |
 | `TVSTATS_AUDIT` | `off` | `tv` (TVmaze) or `juicewatch` — a second source that can **block** a row |
+| `TVSTATS_LOG` | — | `full` prints one `[id]` line per resolved row instead of only the notable ones |
+| `TVSTATS_SLOW_ROWS` | `12` | a row costing more than this is flagged `[slow]` |
 
 CLI: `node tvstats.mjs`, `--ids=tvstats_ab12cd34`, `--action=delete --delete_ids=…`.
 
