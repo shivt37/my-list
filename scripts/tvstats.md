@@ -136,11 +136,23 @@ the **TV Stats row**, never from the candidate.
 
 ## The offline join (rung 0b)
 
-`data/*.json` holds real TMDB records (numeric `id` + a poster) for the discover lists.
-Those give a poster-hash → TMDB-id index built at startup, so ~50% of rows resolve with
-**no search call**. Only genuine TMDB records are used: `ts_cache.json` and `rt_cache.json`
-are excluded, and a file without a numeric TMDB id contributes nothing. A hash that maps to
-more than one TMDB id is treated as ambiguous and is not used.
+`data/*.json` holds real TMDB records (numeric `id` + a `poster_path`) for the operator's
+TMDB discover lists — 6 files, ~170 records. Those give a poster-hash → TMDB-id index
+built at startup, so those rows resolve with **no search call**.
+
+Only genuine TMDB records are used: `ts_cache.json` and `rt_cache.json` are excluded, a
+file whose ids are strings (`tt…`, the TV Stats and RT catalogues) or absent (the
+JustWatch and most-watched-week snapshots) contributes nothing, and a hash that maps to more
+than one TMDB id is treated as ambiguous and is not used.
+
+**How much it actually saves is small.** The daily charts are mostly titles the operator's
+discover lists do not contain, so the index serves **~8 of the top 100 movie rows and ~3 of
+the top 100 show rows** (measured 2026-10-20). It is a free lookup on the rows that happen
+to overlap, not a way to skip the search. The run log says so per chart:
+
+```
+[index] the offline join can serve 8 of these 100 rows
+```
 
 ## Reading the log
 
@@ -148,7 +160,7 @@ The run log answers "what happened, and what did it cost" in a few lines — the
 shape as the RT pipeline's log.
 
 ```
-[index] the offline join holds 167 poster keys
+[index] the offline join can serve 8 of these 100 rows
 [chart] https://televisionstats.com/topmovies
 [chart] 100 rows, resolving IDs...
 [progress] 25/100 rows
@@ -164,6 +176,7 @@ shape as the RT pipeline's log.
 | tag | when |
 |---|---|
 | `[chart]` | the chart being fetched, and how many rows it has |
+| `[index]` | how many of this chart's rows the offline join can already answer |
 | `[progress]` | every 25 rows — a heartbeat, so a long run never looks frozen |
 | `[id]` | a row that resolved but is worth a note: a non-primary fingerprint, a premiere drift, a TMDB fallback, or an unconfirmed IMDb kind |
 | `[holdout]` | a row that was **not** published, with the reason |
