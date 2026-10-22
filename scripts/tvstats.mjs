@@ -586,6 +586,7 @@ export async function main({
                   miss: true,
                   at: Date.now(),
                   reason: resolved.reason,
+                  holdNote: resolved.holdNote || null,
                   stableId: row.stableId || null,
                   v: CACHE_VERSION,
                 });

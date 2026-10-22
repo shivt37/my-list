@@ -1191,6 +1191,7 @@ export async function resolveRow(row, ctxIn) {
     if (age < ttl) {
       out.rung = "negative-cache";
       out.confidence = CONF.NONE;
+      out.holdNote = hit.holdNote || "still held out from the last run";
       out.reason = `a negative cache entry (${hit.reason || "no candidate"}) still holds this row out - 0 HTTP calls`;
       return out;
     }
