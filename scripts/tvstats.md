@@ -105,16 +105,19 @@ gate.
 
 ### The id, and the confidence
 
-The id is the IMDb id from the candidate's `/external_ids`. If the title has **no** IMDb id
-anywhere, the row is **held out**: a `tmdb:<id>` is a dead link in every stock client
-(verified: Cinemeta returns 404 for `tmdb:299939` and 200 for the `tt` id of the same
-title), so shipping one puts an unopenable row in the catalogue.
+The id is the **IMDb id** from the candidate's `/external_ids`. If the title has no IMDb id
+anywhere, the **TMDB id is the fallback** (`tmdb:<id>`) — exactly what the RT pipeline
+does. A TMDB id carries its own record type (a tv id *is* a series record), so the kind
+gate that protects the IMDb path — where TMDB can point a *series* record at an *episode's*
+IMDb id — does not apply to it: there is no episode-level ambiguity in a TMDB id, and the
+hard gate has already checked the record's media type against the list kind. A row with
+neither an IMDb id nor a TMDB id is held out.
 
 Confidence comes from the **evidence**, never from the rung:
 
 | | meaning | published |
 |---|---|---|
-| **HIGH** | a poster fingerprint (the current poster **or** one of the title's other posters) + the year leg + a **confirmed** IMDb kind | yes |
+| **HIGH** | a poster fingerprint (the current poster **or** one of the title's other posters, **or** an exact overview match) + the year leg + a confirmed kind | yes |
 | **MEDIUM** | every gate green but no fingerprint, or the IMDb kind unconfirmed | no, at `high` |
 | **LOW** | partial title match | **never** |
 | **NONE** | held out | never |
@@ -194,20 +197,22 @@ Measured on the live 200-row corpus (100 movies + 100 shows, 2026-10-22):
 
 | | result |
 |---|---|
-| published | **198 / 200** |
-| held out | **2** (both deliberately — see below) |
+| published | **199 / 200** |
+| held out | **1** (deliberately — see below) |
 | wrong ids | **0** (every id re-checked against IMDb `titleType` + title + year) |
 | cold run | 1257 requests, 6.29/row, 440 s |
 | warm run | **0 requests**, 0.0 s |
 
-The 2 rows that stay out on purpose:
+The 1 row that stays out on purpose:
 
-- **`monster-the-lizzie-borden-story`** — the title has no IMDb id on IMDb, TMDB *or*
-  Wikipedia, and the only alternative (`tmdb:299939`) 404s in every stock client.
 - **`bleach-thousand-year-blood-war`** — a FILM in the shows chart. TV Stats' own metadata
   contradicts itself (the `(MOVIE)` marker says film, the date and the Wikipedia slug say
   the 2022 series), and relaxing the title gate to "fix" it publishes the 2022 **series**
   for a film row. The `(MOVIE)` marker is read as a kind hint, never stripped.
+
+A title with no IMDb id is published with its TMDB id as the fallback — e.g.
+`monster-the-lizzie-borden-story` → `tmdb:299939` (TMDB: "Monster: The Lizzie Borden
+Story", tv, 2026 — the same title, kind and year as the chart row).
 
 The job timeout is 45 minutes against a ~7-minute cold run.
 

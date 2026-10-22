@@ -1533,14 +1533,27 @@ export async function resolveRow(row, ctxIn) {
       return out;
     }
     if (!out.imdb && out.tmdb) {
-      // A `tmdb:` id is a DEAD LINK in every stock client (verified: Cinemeta
-      // returns 404 for `tmdb:299939` and 200 for the `tt` id of the same
-      // title). Shipping one puts a row in the catalogue that the user cannot
-      // open, so it is not publishable at any threshold.
-      out.rung = "held-out";
-      out.confidence = CONF.NONE;
-      out.negativeCacheable = true;
-      out.reason = `the title has no IMDb id (TMDB ${out.tmdb} carries none) and a tmdb: id is unresolvable for stock clients - the row is HELD OUT`;
+      // No IMDb id exists for this title, so the TMDB id is the fallback -
+      // exactly what the RT pipeline does. A TMDB id carries its own record
+      // type (a tv id IS a series record), so the kind gate that protects
+      // the IMDb path - where TMDB can point a SERIES record at an
+      // EPISODE's imdb id - does not apply to it: there is no
+      // episode/file-level ambiguity in a TMDB id. The hard gate already
+      // checked the record's media type against the list kind.
+      out.rung = "fingerprint-tmdb";
+      out.confidence = CONF.HIGH;
+      out.reason = `title ${win.titleScore.toFixed(2)} + the year + the ${
+        wantTv ? "show" : "movie"
+      } kind whitelist` +
+        (out.fingerprint
+          ? win.posterMatchKind === "poster-set"
+            ? " + a poster-set fingerprint (TV Stats holds an older TMDB poster of the same title)"
+            : win.posterMatchKind === "overview"
+              ? " + an overview fingerprint (TV Stats' synopsis is TMDB's own text for this title)"
+              : " + a poster fingerprint"
+          : " (no poster fingerprint)") +
+        (out.backdropAgrees ? " + the backdrop agrees" : "") +
+        ` + this title has NO IMDb id, so the TMDB id tmdb:${out.tmdb} is the fallback`;
       return out;
     }
     // The confidence comes from the EVIDENCE, not from the rung:
