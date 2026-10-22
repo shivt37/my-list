@@ -67,7 +67,11 @@ export function confRank(c) {
 export const MOVIE_TYPES = new Set(["movie", "tvmovie", "video", "documentary"]);
 export const SHOW_TYPES = new Set(["tvseries", "tvminiseries", "podcastseries"]);
 export const TT_RE = /^tt\d{7,9}$/;
-export const CACHE_VERSION = 2;
+// The cache schema version. Bumped to 3 when a `tmdb:`-only row became
+// publishable again: a remembered MISS written under the old policy is
+// dropped, so the row is re-evaluated instead of staying held out for
+// the whole TTL.
+export const CACHE_VERSION = 3;
 
 const REQ_TIMEOUT_MS = 20000;
 const MAX_ATTEMPTS = 4;
@@ -723,18 +727,12 @@ export function cacheHitValid(hit, row) {
 export function migrateCacheEntry(entry) {
   if (!entry || typeof entry !== "object") return null;
   if (entry.v === CACHE_VERSION) return entry;
-  // A remembered MISS (a row proven unresolvable) carries no id - it must
-  // survive the migration or the row would be re-resolved every run.
-  if (entry.miss) {
-    return {
-      kind: entry.kind || null,
-      miss: true,
-      at: entry.at || 0,
-      reason: entry.reason || null,
-      stableId: entry.stableId || null,
-      v: CACHE_VERSION,
-    };
-  }
+  // A remembered MISS that reaches here was written under an OLDER policy:
+  // the reason it was remembered may no longer hold (a title with no IMDb id
+  // used to be unpublishable; it now falls back to its TMDB id). Drop it so
+  // the row is re-evaluated instead of staying held out for the whole TTL.
+  // A miss written under the CURRENT policy returned at the top.
+  if (entry.miss) return null;
   const imdb = entry.imdb || null;
   const tmdb = entry.tmdb ? String(entry.tmdb) : null;
   if (!imdb && !tmdb) return null;

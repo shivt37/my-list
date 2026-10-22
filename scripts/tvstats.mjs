@@ -55,6 +55,7 @@ import {
   cacheKey,
   cacheHitValid,
   canonImdbType,
+  CACHE_VERSION,
   confRank,
   detailUrl,
   imdbGqlTitles,
@@ -569,7 +570,7 @@ export async function main({
                   at: Date.now(),
                   reason: resolved.reason,
                   stableId: row.stableId || null,
-                  v: 2,
+                  v: CACHE_VERSION,
                 });
               }
               return null;
@@ -586,7 +587,7 @@ export async function main({
               stableId: row.stableId || null,
               rung: resolved.rung,
               confidence: resolved.confidence,
-              v: 2,
+              v: CACHE_VERSION,
             });
             return rowToItem(t.kind, resolved, row);
           } catch (e) {
