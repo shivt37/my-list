@@ -33,7 +33,7 @@ movies were silently dropped while the run still reported "success". Shows never
 | 1 | TV Stats detail page (worker `/ts-fetch` proxy) | 1 |
 | 2 | TMDB `/search/{movie,tv}` (+ a year-filtered variant) | 1–2 |
 | 2b | IMDb suggestion API → TMDB `/find/<tt>` | 0–2 |
-| 2c | **poster-SET fingerprint** — TV Stats' poster is one of the title's TMDB posters | 0–1 |
+| 2c | **the widened fingerprint** — poster SET, or the overview | 0–1 |
 | 3 | **hard gates** | 0 |
 | 3b | **ambiguity gate** | 0 |
 | 4 | ranking | 0 |
@@ -52,20 +52,37 @@ Proven live: TV Stats `/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg` == TMDB movie 27205 (In
 The Diplomat is the proof of value: title + year + kind leaves **3** candidates, the
 poster hash picks **1**.
 
-### The poster SET (rung 2c) — the stale-poster recovery
+### The widened fingerprint (rung 2c) — the stale-poster recovery
 
 TV Stats copies **one** poster path at ingest time. When TMDB later promotes a different
 upload, the fingerprint goes stale — the old file is still a live TMDB asset and is still
 in that title's own poster set, so the strict match fails. That happened to **4 of 199
 rows (2.0 %)**.
 
-Rung 2c therefore accepts a candidate when TV Stats' poster is **anywhere in that
-candidate's TMDB poster set** (`GET /3/{movie|tv}/{id}/images`). The guard counts
-**distinct works, not candidate records** — the candidate list can hold two records for
-the same work, and counting records makes every relaxed row look ambiguous (measured:
-0 of 4 recovered; counting works recovers 4 of 4). Two or more owners ⇒ the row is
-**held out**, never decided by popularity. The set check runs **after** the title/year/kind
-gates, so it can only ever *raise* a row that already passed every correctness gate.
+TV Stats also copies TMDB's **own synopsis text** (`overview` for movies, `description`
+for shows) verbatim. So a row can be identified by matching any of these against the
+candidate's TMDB record:
+
+| key | grades | notes |
+|---|---|---|
+| the poster, current | primary | what the strict check already does |
+| the poster, in the title's poster set | strong | recovers a stale poster |
+| the **overview** | strong | TMDB's own text, byte-identical — independent of the poster |
+| the **backdrop** (shows only) | **corroboration only** | backdrops are shared across a franchise, so it never identifies a work and never rejects one |
+
+The guard counts **distinct works, not candidate records** — the candidate list can hold
+two records for the same work, and counting records makes every relaxed row look ambiguous
+(measured: 0 of 4 recovered; counting works recovers 4 of 4). Two or more owners ⇒ the row
+is **held out**, never decided by popularity.
+
+The set check runs **after** the title/year/kind gates, so it can only ever *raise* a row
+that already passed every correctness gate. It can never promote a wrong work, because the
+ambiguity check sits on top of it.
+
+**These keys may only ever RAISE a row, never REJECT one.** `runtime` collides across
+68 % of TMDB movies and a strict `(budget, revenue)` equality rejects every movie (TV
+Stats serialises `revenue` as a string, TMDB returns a number), so neither is used as a
+gate.
 
 ### The hard gates (a candidate failing any of them is discarded, never partially scored)
 
@@ -147,6 +164,9 @@ entry falls through to the online path instead of publishing an old id under a n
 - Empty chart ⇒ failure; the previous data file is kept.
 - A row that cannot be proven is held out. **More than 10% held out ⇒ the list is refused**
   and the previous data file is kept.
+- **A failed TMDB search is a failure, not an empty result.** The row is held out and
+  retried next run, rather than being answered from the weaker IMDb-suggestion rung
+  (which can return a *different* id). The log says which failure it was.
 - The cache is written even when the list aborts (only publishable rows are cached) so a
   resolved row is not re-resolved next run; the data file is still only written when the
   list passes.
@@ -177,7 +197,7 @@ Measured on the live 200-row corpus (100 movies + 100 shows, 2026-10-22):
 | published | **198 / 200** |
 | held out | **2** (both deliberately — see below) |
 | wrong ids | **0** (every id re-checked against IMDb `titleType` + title + year) |
-| cold run | 1250 requests, 6.25/row, 433 s |
+| cold run | 1257 requests, 6.29/row, 440 s |
 | warm run | **0 requests**, 0.0 s |
 
 The 2 rows that stay out on purpose:

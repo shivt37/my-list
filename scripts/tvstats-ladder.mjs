@@ -255,7 +255,7 @@ export function posterKey(p) {
  *
  * WHY: TV Stats copies ONE poster path at ingest time. TMDB may later promote
  * a different upload, so the fingerprint goes stale - but the old file is
- * normally still in that title's own poster set. "TV Stats' poster is in the
+ * normally still in the title's own poster set. "TV Stats' poster is in the
  * set" is a weaker but still exact identity test, and it recovers the rows a
  * stale fingerprint would otherwise drop.
  *
@@ -265,7 +265,7 @@ export async function tmdbPosterSet(ctx, tmdbKind, tmdbId) {
   const memo = ctx._posterSets || (ctx._posterSets = new Map());
   const key = `${tmdbKind}:${tmdbId}`;
   if (memo.has(key)) return memo.get(key);
-  const out = new Set();
+  const out = { posters: new Set(), backdrops: new Set() };
   memo.set(key, out);
   try {
     countLogical(ctx);
@@ -273,10 +273,41 @@ export async function tmdbPosterSet(ctx, tmdbKind, tmdbId) {
     syncCounts(ctx);
     for (const p of res?.posters || []) {
       const k = posterKey(p.file_path);
-      if (k) out.add(k);
+      if (k) out.posters.add(k);
+    }
+    for (const b of res?.backdrops || []) {
+      const k = posterKey(b.file_path);
+      if (k) out.backdrops.add(k);
     }
   } catch {
     /* the poster set is optional evidence - a failure just means no match */
+  }
+  return out;
+}
+
+/**
+ * The full TMDB record for one id: its CURRENT poster, backdrop and overview.
+ *
+ * The overview is TMDB's own text and TV Stats copies it verbatim, so an
+ * exact match is identity evidence that is independent of the poster.
+ *
+ * ONE call per TMDB id, memoised on the ctx.
+ */
+export async function tmdbRecord(ctx, tmdbKind, tmdbId) {
+  const memo = ctx._records || (ctx._records = new Map());
+  const key = `${tmdbKind}:${tmdbId}`;
+  if (memo.has(key)) return memo.get(key);
+  const out = { poster: null, backdrop: null, overview: null };
+  memo.set(key, out);
+  try {
+    countLogical(ctx);
+    const res = await ctx.tmdbGetFn(`/${tmdbKind}/${tmdbId}`);
+    syncCounts(ctx);
+    out.poster = posterKey(res?.poster_path);
+    out.backdrop = posterKey(res?.backdrop_path);
+    out.overview = typeof res?.overview === "string" && res.overview.trim() ? res.overview : null;
+  } catch {
+    /* the record is optional evidence - a failure just means no match */
   }
   return out;
 }
@@ -460,6 +491,12 @@ export function detailFacts(kind, pp) {
     kindHint: it.type ?? null,
     genres: it.genres ?? null,
     imdbId: it.imdb_id ?? null,
+    // TV Stats copies TMDB's own text and assets. The overview (movies) /
+    // description (shows) is TMDB's synopsis verbatim, so an exact match is
+    // identity evidence that does not depend on the poster. The backdrop
+    // exists for shows only (movies carry none).
+    overview: (kind === "movie" ? it.overview : it.description) ?? null,
+    backdrop: kind === "movie" ? it.backdrop_path ?? null : it.backdrop_image ?? null,
   };
 }
 
@@ -724,6 +761,8 @@ function mergeFacts(facts, detail) {
     date: detail.date || facts.date,
     poster: detail.poster || facts.poster,
     runtime: detail.runtime ?? facts.runtime,
+    overview: detail.overview ?? facts.overview,
+    backdrop: detail.backdrop ?? facts.backdrop,
     wikipediaSlug: detail.wikipediaSlug ?? null,
     kindHint: detail.kindHint ?? null,
     genres: detail.genres ?? null,
@@ -1110,6 +1149,9 @@ export async function resolveRow(row, ctxIn) {
     // "set" = the poster is one of the title's other TMDB posters (TV Stats
     // holds a stale copy). Both are exact identity evidence.
     posterMatchKind: null,
+    // The backdrop agrees with the chosen work (corroboration only - a
+    // backdrop is shared across a franchise, so it never identifies a work).
+    backdropAgrees: false,
     // A held-out row may be remembered as a MISS for a bounded TTL, so a
     // permanently unresolvable title stops costing requests every run.
     negativeCacheable: false,
@@ -1188,7 +1230,7 @@ export async function resolveRow(row, ctxIn) {
   // ---- the TS facts. A SHOW row needs the detail page for first_air_date
   // before ANY year gate can run: the show chart carries last_air_date only
   // (V4). A movie chart row already carries its release date.
-  let facts = { title: tsTitle, date: row.date || null, poster: row.poster || null, runtime: null };
+  let facts = { title: tsTitle, date: row.date || null, poster: row.poster || null, runtime: null, overview: null, backdrop: null };
   let detail = null;
   if (wantTv) {
     try {
@@ -1248,13 +1290,25 @@ export async function resolveRow(row, ctxIn) {
     seen.add(k);
     cands.push(c);
   };
+  let searchFailed = null;
   try {
     for (const c of await tmdbSearch(ctx, tmdbKind, facts.title, null)) add(c);
     if (tsYear) {
       for (const c of await tmdbSearch(ctx, tmdbKind, facts.title, tsYear)) add(c);
     }
   } catch (e) {
-    out.reason = `the TMDB search failed (${String((e && e.message) || e).slice(0, 120)})`;
+    // A failed TMDB search is NOT an empty result. Continuing would let the
+    // weaker IMDb-suggestion rung answer with a DIFFERENT id and a different
+    // confidence, and the log would say "no candidate" instead of "TMDB is
+    // down". Hold the row out (transient - it is never negatively cached) so
+    // the next run retries it.
+    searchFailed = String((e && e.message) || e).slice(0, 140);
+  }
+  if (searchFailed) {
+    out.rung = "held-out";
+    out.confidence = CONF.NONE;
+    out.reason = `the TMDB search failed (${searchFailed}) - the row is HELD OUT and will be retried, not answered from a weaker source`;
+    return out;
   }
 
   // The IMDb suggestion leg runs only when nothing has a poster fingerprint
@@ -1330,17 +1384,24 @@ export async function resolveRow(row, ctxIn) {
   }
   let survivors = gated.filter((c) => c.yearOk);
 
-  // ---- RUNG 2c: the poster-SET fingerprint.
-  // Only for rows where the STRICT fingerprint found nothing: TV Stats copies
-  // ONE poster path at ingest time and TMDB may promote a different upload
-  // later, so the fingerprint goes stale - but the old file is normally still
-  // in that title's own poster set. "TV Stats' poster is in the set" is a
-  // weaker but still exact identity test, and it recovers the rows a stale
-  // fingerprint would otherwise drop.
+  // ---- RUNG 2c: the widened fingerprint.
+  // Only for rows where the STRICT fingerprint found nothing. TV Stats copies
+  // TMDB's own values, so a row can be identified by matching ANY of them
+  // against the candidate's TMDB record:
+  //   poster    TS poster == the record's CURRENT poster          (primary)
+  //             TS poster IN the record's poster set               (set: the
+  //             poster may be an old upload TMDB has since replaced)
+  //   overview  TS overview == the record's overview               (TMDB's own
+  //             synopsis text, copied verbatim - identity evidence that
+  //             does not depend on the poster at all)
+  //
+  // The BACKDROP is CORROBORATION ONLY, never an owner key: backdrops are
+  // shared across a franchise, so two different works can own the same one.
   //
   // The guard counts DISTINCT WORKS, not candidate records: the candidate
   // list can hold two records for the same work, and counting records makes
-  // every relaxed row look ambiguous (measured: 0 of 4 recovered).
+  // every relaxed row look ambiguous (measured: 0 of 4 recovered; counting
+  // works recovers 4 of 4).
   if (ctx.posterSet !== false && !survivors.some((c) => c.posterMatch) && tsPosterKey) {
     const byWork = new Map();
     for (const c of survivors) {
@@ -1359,21 +1420,34 @@ export async function resolveRow(row, ctxIn) {
       if (!byWork.has(workKey)) byWork.set(workKey, { tmdbId: c.tmdbId, tmdbKind: c.tmdbKind, cs: [] });
       byWork.get(workKey).cs.push(c);
     }
+    const tsOverview =
+      typeof facts.overview === "string" && facts.overview.trim() ? facts.overview : null;
+    const tsBackdrop = posterKey(facts.backdrop);
     const owners = [];
     for (const w of byWork.values()) {
-      const set = await tmdbPosterSet(ctx, w.tmdbKind, w.tmdbId);
-      if (set.has(tsPosterKey)) owners.push(w);
+      const rec = await tmdbRecord(ctx, w.tmdbKind, w.tmdbId);
+      let how = null;
+      if (tsOverview && rec.overview && tsOverview === rec.overview) how = "overview";
+      if (!how) {
+        const set = await tmdbPosterSet(ctx, w.tmdbKind, w.tmdbId);
+        if (set.posters.has(tsPosterKey)) how = "poster-set";
+      }
+      if (!how) continue;
+      w.how = how;
+      w.backdropAgrees = !!(tsBackdrop && rec.backdrop && tsBackdrop === rec.backdrop);
+      owners.push(w);
     }
     if (owners.length === 1) {
       for (const c of owners[0].cs) {
         c.posterMatch = true;
-        c.posterMatchKind = "set";
+        c.posterMatchKind = owners[0].how;
+        c.backdropAgrees = owners[0].backdropAgrees;
       }
     } else if (owners.length > 1) {
       out.rung = "held-out";
       out.confidence = CONF.NONE;
       out.negativeCacheable = true;
-      out.reason = `ambiguous: TV Stats' poster ${tsPosterKey} belongs to ${owners.length} different works (${owners
+      out.reason = `ambiguous: TV Stats' poster ${tsPosterKey} (or its overview) matches ${owners.length} different works (${owners
         .map((o) => o.cs[0].title)
         .join(" | ")}) - the row is HELD OUT`;
       return out;
@@ -1432,6 +1506,8 @@ export async function resolveRow(row, ctxIn) {
     const win = survivors[0];
     out.rung = win.posterMatch ? "fingerprint" : win.source;
     out.fingerprint = !!win.posterMatch;
+    out.posterMatchKind = win.posterMatchKind || null;
+    out.backdropAgrees = !!win.backdropAgrees;
     out.candidateTitle = win.title;
     out.candidateDate = win.date;
     out.candidateKind = win.kind;
@@ -1478,10 +1554,13 @@ export async function resolveRow(row, ctxIn) {
         wantTv ? "show" : "movie"
       } kind whitelist` +
       (out.fingerprint
-        ? win.posterMatchKind === "set"
+        ? win.posterMatchKind === "poster-set"
           ? " + a poster-set fingerprint (TV Stats holds an older TMDB poster of the same title)"
-          : " + a poster fingerprint"
+          : win.posterMatchKind === "overview"
+            ? " + an overview fingerprint (TV Stats' synopsis is TMDB's own text for this title)"
+            : " + a poster fingerprint"
         : " (no poster fingerprint)") +
+      (out.backdropAgrees ? " + the backdrop agrees" : "") +
       (out.imdbKindKnown ? ` + the IMDb kind "${out.imdbKind}"` : " + an UNCONFIRMED IMDb kind (MEDIUM at most)");
     return out;
   }
