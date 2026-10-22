@@ -2,7 +2,7 @@
   "catalog_id": "tvstats_omgaobif",
   "name": "Today's Top Shows (Television Stats)",
   "type": "series",
-  "scraped_at": 1792627405465,
+  "scraped_at": 1792646634309,
   "items": [
     {
       "id": "tt23148340",
@@ -94,6 +94,13 @@
       "name": "Dancing with the Stars",
       "poster": "https://image.tmdb.org/t/p/w500/iisHVZ6we56PE4BcV1csB46SbiG.jpg",
       "releaseInfo": "2005-06-01"
+    },
+    {
+      "id": "tt26545992",
+      "type": "series",
+      "name": "Lanterns",
+      "poster": "https://image.tmdb.org/t/p/w500/gpC7h43xPMEV3goYMQShfJbTtLq.jpg",
+      "releaseInfo": "2026-08-16"
     },
     {
       "id": "tt10166622",
@@ -500,6 +507,13 @@
       "name": "The Rainmaker",
       "poster": "https://image.tmdb.org/t/p/w500/q8l0lj20amBFi0SBs8NI9yJpaHq.jpg",
       "releaseInfo": "2025-08-15"
+    },
+    {
+      "id": "tt10574558",
+      "type": "series",
+      "name": "Midnight Mass",
+      "poster": "https://image.tmdb.org/t/p/w500/3eVSQJdiBin6A7F7nsg62eJFf0Y.jpg",
+      "releaseInfo": "2021-09-24"
     },
     {
       "id": "tt22202452",
