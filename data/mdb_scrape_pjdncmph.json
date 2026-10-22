@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1792584068837,
+  "scraped_at": 1792627267168,
   "items": [
+    {
+      "slug": "44b7h-capturing-bigfoot",
+      "imdb_id": "tt31457111",
+      "title": "Capturing Bigfoot",
+      "year": 2026,
+      "score": null,
+      "poster_path": "5je8ali4g3RUYDnxk706KoPflGi.jpg",
+      "description": "On October 20, 1967, Roger Patterson captured 60 seconds of film showing a creature walking through the Northern California woods—footage that became the most analyzed and debated in history. Fifty-seven years later, a reel of 16mm film discovered in a safe changes everything, revealing the untold story behind the world's greatest mystery, told for the first time by Patterson's own son and the people who were there.",
+      "digital_release_date": null
+    },
     {
       "slug": "34iph-heil-jupiter",
       "imdb_id": "tt31418420",
@@ -317,9 +327,9 @@
     {
       "slug": "450qs-v-h-s-mixtape",
       "imdb_id": "tt43739386",
-      "title": "V/H/S/Mixtape",
+      "title": "V/H/S/MIXTAPE",
       "year": 2026,
-      "score": 4,
+      "score": 3,
       "poster_path": "uS8yoiA6NfsuYeOTbVfpem8Ib9.jpg",
       "description": "V/H/S/MIXTAPE cranks the volume on horror with a blood-soaked collection of cursed music videos, terrifying performances, and found footage. Press play. Pray it stops.",
       "digital_release_date": null
@@ -539,7 +549,7 @@
       "imdb_id": "tt29494959",
       "title": "The Deputy",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "qL654LNOfBu49e12jnnQIv6mny.jpg",
       "description": "A young sheriff's deputy finds himself in the crosshairs of dangerous criminals when the dead body he is assigned to keep an eye on disappears from a crime scene.",
       "digital_release_date": null
@@ -849,7 +859,7 @@
       "imdb_id": "tt27419466",
       "title": "Moana",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg",
       "description": "Teenage Moana answers the Ocean's call and, for the first time, voyages beyond the reef of her island of Motunui with infamous demigod Maui on an unforgettable journey to restore prosperity to her people.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "oRuyGUHdoaQxWP3SDfafGkStxTC.jpg",
       "description": "After being separated for 15 years, the Sword of Power leads Prince Adam back to Eternia, where he discovers his home shattered under the fiendish rule of Skeletor. To save his family and his world, Adam must join forces with his closest allies, Teela and Duncan/Man-At-Arms, and embrace his true destiny as He-Man — the most powerful man in the universe.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3fve1-the-death-of-robin-hood",
-      "imdb_id": "tt32273171",
-      "title": "The Death of Robin Hood",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "13MmRwmG5NmaMfU8qNrtgGXisiD.jpg",
-      "description": "Grappling with his past after a life of crime and murder, Robin Hood finds himself gravely injured after a battle he thought would be his last. In the hands of a mysterious woman, he is offered a chance at salvation.",
       "digital_release_date": null
     }
   ]
