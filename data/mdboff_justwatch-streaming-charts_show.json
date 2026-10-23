@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792670521738,
+  "scraped_at": 1792713730221,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -482,7 +482,7 @@
       "title": "9-1-1",
       "year": 2018,
       "release_date": "2018-01-03",
-      "poster": "https://image.tmdb.org/t/p/w200/6njUqsd3By2mJsdZm1P0moPLzs3.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/u6HuWWohheyzAj5PUn4rBd0eH92.jpg"
     },
     {
       "imdb_id": "tt26591110",
@@ -925,14 +925,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/cUpIceeJJoRqUHSCzh6jRSmlpkA.jpg"
     },
     {
-      "imdb_id": "tt8000638",
-      "type": "series",
-      "title": "Sorry for Your Loss",
-      "year": 2018,
-      "release_date": "2018-09-18",
-      "poster": "https://image.tmdb.org/t/p/w200/eUtM5shJF0CZn3MhEMmdSxyHJ0W.jpg"
-    },
-    {
       "imdb_id": "tt0758745",
       "type": "series",
       "title": "Friday Night Lights",
@@ -1115,6 +1107,14 @@
       "year": 2018,
       "release_date": "2018-10-12",
       "poster": "https://image.tmdb.org/t/p/w200/nWPZb800NCGiDPNGsKCfY0w44Z2.jpg"
+    },
+    {
+      "imdb_id": "tt8000638",
+      "type": "series",
+      "title": "Sorry for Your Loss",
+      "year": 2018,
+      "release_date": "2018-09-18",
+      "poster": "https://image.tmdb.org/t/p/w200/eUtM5shJF0CZn3MhEMmdSxyHJ0W.jpg"
     },
     {
       "imdb_id": "tt2802850",
