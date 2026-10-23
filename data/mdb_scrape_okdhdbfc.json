@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1792670503728,
+  "scraped_at": 1792713698292,
   "items": [
     {
       "slug": "2yjel-crystal-lake",
@@ -135,6 +135,16 @@
       "first_air_date": "2026-10-04"
     },
     {
+      "slug": "3zbpc-the-reluctant-vampire",
+      "imdb_id": "tt37350966",
+      "title": "The Reluctant Vampire",
+      "year": 2026,
+      "score": null,
+      "poster_path": "8nAWtAkMOtmAyq0ZaqEI3Ia7w8M.jpg",
+      "description": "A young vampire finds out he is not in fact a vampire at all, and has to live a double life.",
+      "first_air_date": "2026-10-04"
+    },
+    {
       "slug": "3v7tm-kill-jackie",
       "imdb_id": "tt35726020",
       "title": "Kill Jackie",
@@ -209,7 +219,7 @@
       "imdb_id": "tt36984433",
       "title": "S.W.A.T. Exiles",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "pPiEujhVa2MBSowmvnNWqEzxH0x.jpg",
       "description": "After a high-profile mission goes sideways, Daniel 'Hondo' Harrelson is pulled out of forced retirement to lead a last-chance experimental SWAT unit made up of untested, unpredictable young recruits. Hondo must bridge a generational divide, navigate clashing personalities, and turn a squad of outsiders into a team capable of protecting the city and saving the program that made him who he is.",
       "first_air_date": "2026-09-25"
@@ -452,6 +462,16 @@
       "score": 3,
       "poster_path": "5fLyYAxXWP4BxZCBN79NV1eiT4d.jpg",
       "description": "The Revolutionaries narrates the inspiring tale of brave young Indian freedom fighters who fought for ending British Raj with their unwavering spirit and ideology.",
+      "first_air_date": "2026-09-11"
+    },
+    {
+      "slug": "454gv-pls-love",
+      "imdb_id": "tt43603919",
+      "title": "Pls Love",
+      "year": 2026,
+      "score": null,
+      "poster_path": "4wCj3cqVJUi2lmNVe05YaPj5ys8.jpg",
+      "description": "Cold and seemingly-perfect business heiress Peem reunites with Parn, a woman she once shared a fleeting seaside romance with–now working as a hostess at a luxury club in Bangkok. Determined to keep her close, Peem hires her as a personal assistant, forcing them to confront unresolved feelings, pride, and painful misunderstandings. As secrets and class differences threaten to pull them apart, both women must decide if they are brave enough to trust and love each other without judgement.",
       "first_air_date": "2026-09-11"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "7guFs3oa3vgVl9BvgqtvdqIgZiz.jpg",
       "description": "Make That Movie follows a hotshot director, played by stand-up comedian and actor Sam Campbell, scouring the country for everyday people who have an idea for a feature film. Sam and his team then race against the clock as they attempt to transform the idea into a film in just three days.",
       "first_air_date": "2026-05-28"
-    },
-    {
-      "slug": "44nvz-the-empire",
-      "imdb_id": "tt42669045",
-      "title": "The Empire",
-      "year": 2026,
-      "score": null,
-      "poster_path": "h2PPKwJbrTgYHQJoY9fT0qr4MJr.jpg",
-      "description": "The series was inspired by the adult film industry of the 1990s and its well-known stars. It focuses not on the behind-the-scenes drama, but on people’s lives and the decisions they make. The new series from the creators of *The King* tells a story inspired by real events and wild fantasies.",
-      "first_air_date": "2026-05-28"
-    },
-    {
-      "slug": "44ikg-my-2-cents",
-      "imdb_id": "tt38821531",
-      "title": "My 2 Cents",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "ezu9oAG68yRoFRsx5qzb1yt5MMJ.jpg",
-      "description": "When his friend Wild Boar lands himself in hot water with organized crime, Zero and the gang unite to save him while barely coping with their own lives.",
-      "first_air_date": "2026-05-27"
     }
   ]
 }
