@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792756915967,
+  "scraped_at": 1792800116878,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -1117,14 +1117,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/3C3c40DH8M6qdECHLlxk8o5nrC0.jpg"
     },
     {
-      "imdb_id": "tt8000638",
-      "type": "series",
-      "title": "Sorry for Your Loss",
-      "year": 2018,
-      "release_date": "2018-09-18",
-      "poster": "https://image.tmdb.org/t/p/w200/eUtM5shJF0CZn3MhEMmdSxyHJ0W.jpg"
-    },
-    {
       "imdb_id": "tt0306414",
       "type": "series",
       "title": "The Wire",
@@ -1187,6 +1179,14 @@
       "year": 2005,
       "release_date": "2005-09-22",
       "poster": "https://image.tmdb.org/t/p/w200/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg"
+    },
+    {
+      "imdb_id": "tt0408381",
+      "type": "series",
+      "title": "Doc Martin",
+      "year": 2004,
+      "release_date": "2004-09-02",
+      "poster": "https://image.tmdb.org/t/p/w200/zmd4ZpdXWnjKVrenqvYyYstOkwK.jpg"
     }
   ]
 }
