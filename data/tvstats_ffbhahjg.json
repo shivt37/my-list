@@ -2,28 +2,21 @@
   "catalog_id": "tvstats_ffbhahjg",
   "name": "Today's Top Movies (Television Stats)",
   "type": "movie",
-  "scraped_at": 1792713755606,
+  "scraped_at": 1792800166729,
   "items": [
+    {
+      "id": "tt34890576",
+      "type": "movie",
+      "name": "Clayface",
+      "poster": "https://image.tmdb.org/t/p/w500/9l1NuFjel2j89hiuiJbsxfblqjy.jpg",
+      "releaseInfo": "2026-10-19"
+    },
     {
       "id": "tt45368240",
       "type": "movie",
       "name": "You Can See Everything",
       "poster": "https://image.tmdb.org/t/p/w500/Ap8QwmKfSjYbWC4XIP8w9pdn72O.jpg",
       "releaseInfo": "2026-10-16"
-    },
-    {
-      "id": "tt34890576",
-      "type": "movie",
-      "name": "Clayface",
-      "poster": "https://image.tmdb.org/t/p/w500/5jCpQnWPikggmQZoDp1eAi6BI6w.jpg",
-      "releaseInfo": "2026-10-19"
-    },
-    {
-      "id": "tt27419420",
-      "type": "movie",
-      "name": "Street Fighter",
-      "poster": "https://image.tmdb.org/t/p/w500/ccxdepKqORLwccbzvO4eAGkN0IC.jpg",
-      "releaseInfo": "2026-10-13"
     },
     {
       "id": "tt0295701",
@@ -33,11 +26,18 @@
       "releaseInfo": "2002-08-09"
     },
     {
-      "id": "tt0147800",
+      "id": "tt27419420",
       "type": "movie",
-      "name": "10 Things I Hate About You",
-      "poster": "https://image.tmdb.org/t/p/w500/ujERk3aKABXU3NDXOAxEQYTHe9A.jpg",
-      "releaseInfo": "1999-03-30"
+      "name": "Street Fighter",
+      "poster": "https://image.tmdb.org/t/p/w500/ccxdepKqORLwccbzvO4eAGkN0IC.jpg",
+      "releaseInfo": "2026-10-13"
+    },
+    {
+      "id": "tt2056785",
+      "type": "movie",
+      "name": "Wildwood",
+      "poster": "https://image.tmdb.org/t/p/w500/snFM00mpNAfUzUtkdEW0uDEvXA0.jpg",
+      "releaseInfo": "2026-10-19"
     },
     {
       "id": "tt37281055",
@@ -45,6 +45,13 @@
       "name": "Buddy",
       "poster": "https://image.tmdb.org/t/p/w500/1BdZbNvl1SfrrX8J9X5tQzN6Ivu.jpg",
       "releaseInfo": "2026-08-27"
+    },
+    {
+      "id": "tt29611136",
+      "type": "movie",
+      "name": "Wicker",
+      "poster": "https://image.tmdb.org/t/p/w500/6FcBZOKvyrLCKGCyBG0ySCR4okt.jpg",
+      "releaseInfo": "2026-10-21"
     },
     {
       "id": "tt37287335",
@@ -61,27 +68,6 @@
       "releaseInfo": "2026-07-29"
     },
     {
-      "id": "tt29714073",
-      "type": "movie",
-      "name": "Bad Apples",
-      "poster": "https://image.tmdb.org/t/p/w500/pcPLnxCThCIo9JFQIMFX4kAE5Yz.jpg",
-      "releaseInfo": "2026-09-10"
-    },
-    {
-      "id": "tt28535715",
-      "type": "movie",
-      "name": "Whalefall",
-      "poster": "https://image.tmdb.org/t/p/w500/vjTYUTgh9nO88i6HZ4YPRhiFL05.jpg",
-      "releaseInfo": "2026-10-14"
-    },
-    {
-      "id": "tt2056785",
-      "type": "movie",
-      "name": "Wildwood",
-      "poster": "https://image.tmdb.org/t/p/w500/snFM00mpNAfUzUtkdEW0uDEvXA0.jpg",
-      "releaseInfo": "2026-10-19"
-    },
-    {
       "id": "tt34384900",
       "type": "movie",
       "name": "Love of Your Life",
@@ -96,11 +82,18 @@
       "releaseInfo": "2026-05-27"
     },
     {
-      "id": "tt29611136",
+      "id": "tt28535715",
       "type": "movie",
-      "name": "Wicker",
-      "poster": "https://image.tmdb.org/t/p/w500/6FcBZOKvyrLCKGCyBG0ySCR4okt.jpg",
-      "releaseInfo": "2026-10-21"
+      "name": "Whalefall",
+      "poster": "https://image.tmdb.org/t/p/w500/vjTYUTgh9nO88i6HZ4YPRhiFL05.jpg",
+      "releaseInfo": "2026-10-14"
+    },
+    {
+      "id": "tt29714073",
+      "type": "movie",
+      "name": "Bad Apples",
+      "poster": "https://image.tmdb.org/t/p/w500/pcPLnxCThCIo9JFQIMFX4kAE5Yz.jpg",
+      "releaseInfo": "2026-09-10"
     },
     {
       "id": "tt31049299",
@@ -110,25 +103,18 @@
       "releaseInfo": "2026-10-09"
     },
     {
-      "id": "tt6262770",
-      "type": "movie",
-      "name": "Tenzing",
-      "poster": "https://image.tmdb.org/t/p/w500/eI0QW02PYqhnmIvLRdn9vrfVVP7.jpg",
-      "releaseInfo": "2026-10-09"
-    },
-    {
-      "id": "tt31450459",
-      "type": "movie",
-      "name": "Digger",
-      "poster": "https://image.tmdb.org/t/p/w500/1ATXKrIPJyKNwnJ6lcG088Sa6zi.jpg",
-      "releaseInfo": "2026-09-28"
-    },
-    {
       "id": "tt15047880",
       "type": "movie",
       "name": "Disclosure Day",
       "poster": "https://image.tmdb.org/t/p/w500/AnJ8IQJI23hNpYXVNaythu061Ru.jpg",
       "releaseInfo": "2026-06-10"
+    },
+    {
+      "id": "tt6262770",
+      "type": "movie",
+      "name": "Tenzing",
+      "poster": "https://image.tmdb.org/t/p/w500/eI0QW02PYqhnmIvLRdn9vrfVVP7.jpg",
+      "releaseInfo": "2026-10-09"
     },
     {
       "id": "tt35538033",
@@ -138,24 +124,24 @@
       "releaseInfo": "2026-09-16"
     },
     {
-      "id": "tt12042730",
+      "id": "tt31450459",
       "type": "movie",
-      "name": "Project Hail Mary",
-      "poster": "https://image.tmdb.org/t/p/w500/iOb2fjXLbpJgyQXe46n1WtGCnaa.jpg",
-      "releaseInfo": "2026-03-15"
+      "name": "Digger",
+      "poster": "https://image.tmdb.org/t/p/w500/1ATXKrIPJyKNwnJ6lcG088Sa6zi.jpg",
+      "releaseInfo": "2026-09-28"
     },
     {
-      "id": "tt27369017",
+      "id": "tt0147800",
       "type": "movie",
-      "name": "Hope",
-      "poster": "https://image.tmdb.org/t/p/w500/6VY1ZKgpsc8CfGsQcCGiYEgHdH0.jpg",
-      "releaseInfo": "2026-07-15"
+      "name": "10 Things I Hate About You",
+      "poster": "https://image.tmdb.org/t/p/w500/ujERk3aKABXU3NDXOAxEQYTHe9A.jpg",
+      "releaseInfo": "1999-03-30"
     },
     {
       "id": "tt34379051",
       "type": "movie",
       "name": "By Any Means",
-      "poster": "https://image.tmdb.org/t/p/w500/hxTjCfEmZJFAPW8h5S3tDQNaBi8.jpg",
+      "poster": "https://image.tmdb.org/t/p/w500/85CvGoeXAcSSWy6So2DRD8ItJAN.jpg",
       "releaseInfo": "2026-09-02"
     },
     {
@@ -166,18 +152,11 @@
       "releaseInfo": "2026-07-15"
     },
     {
-      "id": "tt27419466",
+      "id": "tt12042730",
       "type": "movie",
-      "name": "Moana",
-      "poster": "https://image.tmdb.org/t/p/w500/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg",
-      "releaseInfo": "2026-07-08"
-    },
-    {
-      "id": "tt0080761",
-      "type": "movie",
-      "name": "Friday the 13th",
-      "poster": "https://image.tmdb.org/t/p/w500/uGGpnWHOmWTARVN9wbC1nPxNgps.jpg",
-      "releaseInfo": "1980-05-09"
+      "name": "Project Hail Mary",
+      "poster": "https://image.tmdb.org/t/p/w500/iOb2fjXLbpJgyQXe46n1WtGCnaa.jpg",
+      "releaseInfo": "2026-03-15"
     },
     {
       "id": "tt32273171",
@@ -187,25 +166,25 @@
       "releaseInfo": "2026-06-18"
     },
     {
-      "id": "tt4154796",
+      "id": "tt0329774",
       "type": "movie",
-      "name": "Avengers: Endgame",
-      "poster": "https://image.tmdb.org/t/p/w500/bR8ISy1O9XQxqiy0fQFw2BX72RQ.jpg",
-      "releaseInfo": "2019-04-24"
+      "name": "xXx: State of the Union",
+      "poster": "https://image.tmdb.org/t/p/w500/nL9J0N3HJSdZTKRsd5xcE6IzL5s.jpg",
+      "releaseInfo": "2005-04-27"
     },
     {
-      "id": "tt31170389",
+      "id": "tt27369017",
       "type": "movie",
-      "name": "Evil Dead Burn",
-      "poster": "https://image.tmdb.org/t/p/w500/uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
-      "releaseInfo": "2026-07-07"
+      "name": "Hope",
+      "poster": "https://image.tmdb.org/t/p/w500/6VY1ZKgpsc8CfGsQcCGiYEgHdH0.jpg",
+      "releaseInfo": "2026-07-15"
     },
     {
-      "id": "tt34206385",
+      "id": "tt0080761",
       "type": "movie",
-      "name": "Primetime",
-      "poster": "https://image.tmdb.org/t/p/w500/lmrulvLbmaejTix1YaMxo1oGhH1.jpg",
-      "releaseInfo": "2026-09-23"
+      "name": "Friday the 13th",
+      "poster": "https://image.tmdb.org/t/p/w500/uGGpnWHOmWTARVN9wbC1nPxNgps.jpg",
+      "releaseInfo": "1980-05-09"
     },
     {
       "id": "tt14173636",
@@ -215,25 +194,11 @@
       "releaseInfo": "2026-06-25"
     },
     {
-      "id": "tt32588798",
+      "id": "tt27419466",
       "type": "movie",
-      "name": "Practical Magic 2",
-      "poster": "https://image.tmdb.org/t/p/w500/ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg",
-      "releaseInfo": "2026-09-09"
-    },
-    {
-      "id": "tt13609648",
-      "type": "movie",
-      "name": "Sense and Sensibility",
-      "poster": "https://image.tmdb.org/t/p/w500/czsyPHosFNbh4PPqXfqWu1aBXnA.jpg",
-      "releaseInfo": "2026-09-23"
-    },
-    {
-      "id": "tt0329774",
-      "type": "movie",
-      "name": "xXx: State of the Union",
-      "poster": "https://image.tmdb.org/t/p/w500/nL9J0N3HJSdZTKRsd5xcE6IzL5s.jpg",
-      "releaseInfo": "2005-04-27"
+      "name": "Moana",
+      "poster": "https://image.tmdb.org/t/p/w500/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg",
+      "releaseInfo": "2026-07-08"
     },
     {
       "id": "tt21357150",
@@ -243,18 +208,18 @@
       "releaseInfo": "2026-12-16"
     },
     {
-      "id": "tt29355505",
+      "id": "tt0078748",
       "type": "movie",
-      "name": "Toy Story 5",
-      "poster": "https://image.tmdb.org/t/p/w500/sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
-      "releaseInfo": "2026-06-17"
+      "name": "Alien",
+      "poster": "https://image.tmdb.org/t/p/w500/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg",
+      "releaseInfo": "1979-05-25"
     },
     {
-      "id": "tt27543632",
+      "id": "tt43655467",
       "type": "movie",
-      "name": "The Housemaid",
-      "poster": "https://image.tmdb.org/t/p/w500/cWsBscZzwu5brg9YjNkGewRUvJX.jpg",
-      "releaseInfo": "2025-12-18"
+      "name": "Ali G: Who Iz I?",
+      "poster": "https://image.tmdb.org/t/p/w500/uTyVxPeWX8Ai30IQoyDDQONNcq.jpg",
+      "releaseInfo": "2026-10-22"
     },
     {
       "id": "tt26581740",
@@ -264,11 +229,32 @@
       "releaseInfo": "2025-08-04"
     },
     {
-      "id": "tt22526100",
+      "id": "tt31170389",
       "type": "movie",
-      "name": "The Love Hypothesis",
-      "poster": "https://image.tmdb.org/t/p/w500/vfZxVHextAGC70zrNhS8lsROqP1.jpg",
-      "releaseInfo": "2026-09-23"
+      "name": "Evil Dead Burn",
+      "poster": "https://image.tmdb.org/t/p/w500/uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg",
+      "releaseInfo": "2026-07-07"
+    },
+    {
+      "id": "tt32588798",
+      "type": "movie",
+      "name": "Practical Magic 2",
+      "poster": "https://image.tmdb.org/t/p/w500/ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg",
+      "releaseInfo": "2026-09-09"
+    },
+    {
+      "id": "tt10794054",
+      "type": "movie",
+      "name": "The Weight",
+      "poster": "https://image.tmdb.org/t/p/w500/8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
+      "releaseInfo": "2026-09-16"
+    },
+    {
+      "id": "tt4154796",
+      "type": "movie",
+      "name": "Avengers: Endgame",
+      "poster": "https://image.tmdb.org/t/p/w500/bR8ISy1O9XQxqiy0fQFw2BX72RQ.jpg",
+      "releaseInfo": "2019-04-24"
     },
     {
       "id": "tt27165187",
@@ -276,6 +262,97 @@
       "name": "The End of Oak Street",
       "poster": "https://image.tmdb.org/t/p/w500/hkPxuAMEqIqo1HCtIi4sqx0GRuP.jpg",
       "releaseInfo": "2026-08-12"
+    },
+    {
+      "id": "tt27543632",
+      "type": "movie",
+      "name": "The Housemaid",
+      "poster": "https://image.tmdb.org/t/p/w500/cWsBscZzwu5brg9YjNkGewRUvJX.jpg",
+      "releaseInfo": "2025-12-18"
+    },
+    {
+      "id": "tt29355505",
+      "type": "movie",
+      "name": "Toy Story 5",
+      "poster": "https://image.tmdb.org/t/p/w500/sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
+      "releaseInfo": "2026-06-17"
+    },
+    {
+      "id": "tt14371256",
+      "type": "movie",
+      "name": "Klara and the Sun",
+      "poster": "https://image.tmdb.org/t/p/w500/xqovj2p6HRsgHxN81qYAYF4StgM.jpg",
+      "releaseInfo": "2026-10-21"
+    },
+    {
+      "id": "tt0327597",
+      "type": "movie",
+      "name": "Coraline",
+      "poster": "https://image.tmdb.org/t/p/w500/4jeFXQYytChdZYE9JYO7Un87IlW.jpg",
+      "releaseInfo": "2009-02-05"
+    },
+    {
+      "id": "tt34206385",
+      "type": "movie",
+      "name": "Primetime",
+      "poster": "https://image.tmdb.org/t/p/w500/lmrulvLbmaejTix1YaMxo1oGhH1.jpg",
+      "releaseInfo": "2026-09-23"
+    },
+    {
+      "id": "tt22526100",
+      "type": "movie",
+      "name": "The Love Hypothesis",
+      "poster": "https://image.tmdb.org/t/p/w500/vfZxVHextAGC70zrNhS8lsROqP1.jpg",
+      "releaseInfo": "2026-09-23"
+    },
+    {
+      "id": "tt33071426",
+      "type": "movie",
+      "name": "The Drama",
+      "poster": "https://image.tmdb.org/t/p/w500/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg",
+      "releaseInfo": "2026-04-01"
+    },
+    {
+      "id": "tt28498219",
+      "type": "movie",
+      "name": "Matchbox the Movie",
+      "poster": "https://image.tmdb.org/t/p/w500/aHhHRz6nOpwkqJs5ASeRGAdK2dt.jpg",
+      "releaseInfo": "2026-10-05"
+    },
+    {
+      "id": "tt0092099",
+      "type": "movie",
+      "name": "Top Gun",
+      "poster": "https://image.tmdb.org/t/p/w500/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg",
+      "releaseInfo": "1986-05-16"
+    },
+    {
+      "id": "tt13609648",
+      "type": "movie",
+      "name": "Sense and Sensibility",
+      "poster": "https://image.tmdb.org/t/p/w500/czsyPHosFNbh4PPqXfqWu1aBXnA.jpg",
+      "releaseInfo": "2026-09-23"
+    },
+    {
+      "id": "tt0343818",
+      "type": "movie",
+      "name": "I, Robot",
+      "poster": "https://image.tmdb.org/t/p/w500/efwv6F2lGaghjPpBRSINHtoEiZB.jpg",
+      "releaseInfo": "2004-07-15"
+    },
+    {
+      "id": "tt7784604",
+      "type": "movie",
+      "name": "Hereditary",
+      "poster": "https://image.tmdb.org/t/p/w500/4GFPuL14eXi66V96xBWY73Y9PfR.jpg",
+      "releaseInfo": "2018-06-07"
+    },
+    {
+      "id": "tt35298123",
+      "type": "movie",
+      "name": "Teenage Sex and Death at Camp Miasma",
+      "poster": "https://image.tmdb.org/t/p/w500/jcGvB76v8p1sqYXXkBetWASV0uM.jpg",
+      "releaseInfo": "2026-08-06"
     },
     {
       "id": "tt32261958",
@@ -292,67 +369,11 @@
       "releaseInfo": "2026-08-19"
     },
     {
-      "id": "tt28498219",
-      "type": "movie",
-      "name": "Matchbox the Movie",
-      "poster": "https://image.tmdb.org/t/p/w500/lFKA4GMz36dImEy3DQPdPF7G4V9.jpg",
-      "releaseInfo": "2026-10-05"
-    },
-    {
-      "id": "tt35298123",
-      "type": "movie",
-      "name": "Teenage Sex and Death at Camp Miasma",
-      "poster": "https://image.tmdb.org/t/p/w500/6Q6Zo6GNXMLP600OJSh6MhW21um.jpg",
-      "releaseInfo": "2026-08-06"
-    },
-    {
-      "id": "tt1756855",
-      "type": "movie",
-      "name": "Coyote vs. Acme",
-      "poster": "https://image.tmdb.org/t/p/w500/kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
-      "releaseInfo": "2026-08-20"
-    },
-    {
-      "id": "tt33071426",
-      "type": "movie",
-      "name": "The Drama",
-      "poster": "https://image.tmdb.org/t/p/w500/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg",
-      "releaseInfo": "2026-04-01"
-    },
-    {
-      "id": "tt36586020",
-      "type": "movie",
-      "name": "Other Mommy",
-      "poster": "https://image.tmdb.org/t/p/w500/fGRNCssTRrhYZxNzykGGCoMsAVq.jpg",
-      "releaseInfo": "2026-10-07"
-    },
-    {
       "id": "tt28014327",
       "type": "movie",
       "name": "Mayday",
       "poster": "https://image.tmdb.org/t/p/w500/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
       "releaseInfo": "2026-09-03"
-    },
-    {
-      "id": "tt0343818",
-      "type": "movie",
-      "name": "I, Robot",
-      "poster": "https://image.tmdb.org/t/p/w500/efwv6F2lGaghjPpBRSINHtoEiZB.jpg",
-      "releaseInfo": "2004-07-15"
-    },
-    {
-      "id": "tt32268992",
-      "type": "movie",
-      "name": "Sacrifice",
-      "poster": "https://image.tmdb.org/t/p/w500/SGH7mlgfDyGgRCi2At62Ljg3zV.jpg",
-      "releaseInfo": "2026-04-09"
-    },
-    {
-      "id": "tt0327597",
-      "type": "movie",
-      "name": "Coraline",
-      "poster": "https://image.tmdb.org/t/p/w500/4jeFXQYytChdZYE9JYO7Un87IlW.jpg",
-      "releaseInfo": "2009-02-05"
     },
     {
       "id": "tt1160419",
@@ -362,18 +383,18 @@
       "releaseInfo": "2021-09-15"
     },
     {
-      "id": "tt7784604",
+      "id": "tt1756855",
       "type": "movie",
-      "name": "Hereditary",
-      "poster": "https://image.tmdb.org/t/p/w500/4GFPuL14eXi66V96xBWY73Y9PfR.jpg",
-      "releaseInfo": "2018-06-07"
+      "name": "Coyote vs. Acme",
+      "poster": "https://image.tmdb.org/t/p/w500/kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
+      "releaseInfo": "2026-08-20"
     },
     {
-      "id": "tt35672862",
+      "id": "tt36586020",
       "type": "movie",
-      "name": "Hokum",
-      "poster": "https://image.tmdb.org/t/p/w500/x6rHcQFiYcczLQPrmxXPAicm54E.jpg",
-      "releaseInfo": "2026-04-29"
+      "name": "Other Mommy",
+      "poster": "https://image.tmdb.org/t/p/w500/fGRNCssTRrhYZxNzykGGCoMsAVq.jpg",
+      "releaseInfo": "2026-10-07"
     },
     {
       "id": "tt11561116",
@@ -383,25 +404,11 @@
       "releaseInfo": "2026-08-27"
     },
     {
-      "id": "tt10794054",
-      "type": "movie",
-      "name": "The Weight",
-      "poster": "https://image.tmdb.org/t/p/w500/8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
-      "releaseInfo": "2026-09-16"
-    },
-    {
       "id": "tt31349844",
       "type": "movie",
       "name": "Runner",
       "poster": "https://image.tmdb.org/t/p/w500/yBKMAIj7clP42UkFejhGDBBoTpb.jpg",
       "releaseInfo": "2026-09-07"
-    },
-    {
-      "id": "tt43655467",
-      "type": "movie",
-      "name": "Ali G: Who Iz I?",
-      "poster": "https://image.tmdb.org/t/p/w500/uTyVxPeWX8Ai30IQoyDDQONNcq.jpg",
-      "releaseInfo": "2026-10-22"
     },
     {
       "id": "tt33296751",
@@ -411,39 +418,18 @@
       "releaseInfo": "2026-05-21"
     },
     {
-      "id": "tt0482571",
+      "id": "tt32547691",
       "type": "movie",
-      "name": "The Prestige",
-      "poster": "https://image.tmdb.org/t/p/w500/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg",
-      "releaseInfo": "2006-10-19"
+      "name": "Pressure",
+      "poster": "https://image.tmdb.org/t/p/w500/gFjEggtrejCN79r6SXRjM269OtG.jpg",
+      "releaseInfo": "2026-05-28"
     },
     {
-      "id": "tt36983905",
+      "id": "tt31193180",
       "type": "movie",
-      "name": "The Uprising",
-      "poster": "https://image.tmdb.org/t/p/w500/7TUl15TOsIvndKlgMWTtLgtEzZP.jpg",
-      "releaseInfo": "2026-09-10"
-    },
-    {
-      "id": "tt33095251",
-      "type": "movie",
-      "name": "Tony",
-      "poster": "https://image.tmdb.org/t/p/w500/uwZF5guNR5EnXkjIVTk4UPTVGiS.jpg",
-      "releaseInfo": "2026-08-07"
-    },
-    {
-      "id": "tt37853455",
-      "type": "movie",
-      "name": "One Night Only",
-      "poster": "https://image.tmdb.org/t/p/w500/f1v8IcYcQggeq1N0unoMJMrzTd9.jpg",
-      "releaseInfo": "2026-08-06"
-    },
-    {
-      "id": "tt8814476",
-      "type": "movie",
-      "name": "Supergirl",
-      "poster": "https://image.tmdb.org/t/p/w500/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg",
-      "releaseInfo": "2026-06-24"
+      "name": "Sinners",
+      "poster": "https://image.tmdb.org/t/p/w500/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg",
+      "releaseInfo": "2025-04-16"
     },
     {
       "id": "tt31192372",
@@ -453,67 +439,25 @@
       "releaseInfo": "2026-09-01"
     },
     {
-      "id": "tt33612209",
+      "id": "tt35672862",
       "type": "movie",
-      "name": "The Devil Wears Prada 2",
-      "poster": "https://image.tmdb.org/t/p/w500/xTI42pmsP5EDnvsNJPEDubwWBQO.jpg",
+      "name": "Hokum",
+      "poster": "https://image.tmdb.org/t/p/w500/x6rHcQFiYcczLQPrmxXPAicm54E.jpg",
       "releaseInfo": "2026-04-29"
     },
     {
-      "id": "tt37510326",
+      "id": "tt37853455",
       "type": "movie",
-      "name": "The Social Reckoning",
-      "poster": "https://image.tmdb.org/t/p/w500/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg",
-      "releaseInfo": "2026-10-07"
+      "name": "One Night Only",
+      "poster": "https://image.tmdb.org/t/p/w500/f1v8IcYcQggeq1N0unoMJMrzTd9.jpg",
+      "releaseInfo": "2026-08-06"
     },
     {
-      "id": "tt27681354",
+      "id": "tt36983905",
       "type": "movie",
-      "name": "In the Grey",
-      "poster": "https://image.tmdb.org/t/p/w500/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg",
-      "releaseInfo": "2026-05-13"
-    },
-    {
-      "id": "tt32547691",
-      "type": "movie",
-      "name": "Pressure",
-      "poster": "https://image.tmdb.org/t/p/w500/gFjEggtrejCN79r6SXRjM269OtG.jpg",
-      "releaseInfo": "2026-05-28"
-    },
-    {
-      "id": "tt0111161",
-      "type": "movie",
-      "name": "The Shawshank Redemption",
-      "poster": "https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
-      "releaseInfo": "1994-09-23"
-    },
-    {
-      "id": "tt12300742",
-      "type": "movie",
-      "name": "Bugonia",
-      "poster": "https://image.tmdb.org/t/p/w500/rSdOua3wKMEaFWDcKAYWRjXQWOt.jpg",
-      "releaseInfo": "2025-10-23"
-    },
-    {
-      "id": "tt11378946",
-      "type": "movie",
-      "name": "Michael",
-      "poster": "https://image.tmdb.org/t/p/w500/dueFqKLvjftnELZaGYwY7xinfaI.jpg",
-      "releaseInfo": "2026-04-22"
-    },
-    {
-      "id": "tt9601292",
-      "type": "movie",
-      "name": "The Fix",
-      "poster": "https://image.tmdb.org/t/p/w500/jlP8XDjZN89GrpM3je5Uf8Grqx8.jpg",
+      "name": "The Uprising",
+      "poster": "https://image.tmdb.org/t/p/w500/7TUl15TOsIvndKlgMWTtLgtEzZP.jpg",
       "releaseInfo": "2026-09-10"
-    },
-    {
-      "id": "tt0468569",
-      "type": "movie",
-      "name": "The Dark Knight",
-      "poster": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-      "releaseInfo": "2008-07-16"
     },
     {
       "id": "tt32890033",
@@ -523,25 +467,81 @@
       "releaseInfo": "2026-06-24"
     },
     {
-      "id": "tt44766123",
+      "id": "tt0111161",
       "type": "movie",
-      "name": "NAZA",
-      "poster": "https://image.tmdb.org/t/p/w500/b4Gyj8VRoJAeU13jfKPuOTMr5GL.jpg",
-      "releaseInfo": "2026-09-25"
+      "name": "The Shawshank Redemption",
+      "poster": "https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
+      "releaseInfo": "1994-09-23"
     },
     {
-      "id": "tt36583977",
+      "id": "tt33095251",
       "type": "movie",
-      "name": "Forgotten Island",
-      "poster": "https://image.tmdb.org/t/p/w500/myd1K3gefdNAWFsGNRDdMeiK9Qg.jpg",
+      "name": "Tony",
+      "poster": "https://image.tmdb.org/t/p/w500/uwZF5guNR5EnXkjIVTk4UPTVGiS.jpg",
+      "releaseInfo": "2026-08-07"
+    },
+    {
+      "id": "tt0107120",
+      "type": "movie",
+      "name": "Hocus Pocus",
+      "poster": "https://image.tmdb.org/t/p/w500/by4D4Q9NlUjFSEUA1yrxq6ksXmk.jpg",
+      "releaseInfo": "1993-07-16"
+    },
+    {
+      "id": "tt8814476",
+      "type": "movie",
+      "name": "Supergirl",
+      "poster": "https://image.tmdb.org/t/p/w500/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg",
+      "releaseInfo": "2026-06-24"
+    },
+    {
+      "id": "tt9601292",
+      "type": "movie",
+      "name": "The Fix",
+      "poster": "https://image.tmdb.org/t/p/w500/jlP8XDjZN89GrpM3je5Uf8Grqx8.jpg",
       "releaseInfo": "2026-09-10"
     },
     {
-      "id": "tt31193180",
+      "id": "tt27681354",
       "type": "movie",
-      "name": "Sinners",
-      "poster": "https://image.tmdb.org/t/p/w500/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg",
-      "releaseInfo": "2025-04-16"
+      "name": "In the Grey",
+      "poster": "https://image.tmdb.org/t/p/w500/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg",
+      "releaseInfo": "2026-05-13"
+    },
+    {
+      "id": "tt11378946",
+      "type": "movie",
+      "name": "Michael",
+      "poster": "https://image.tmdb.org/t/p/w500/dueFqKLvjftnELZaGYwY7xinfaI.jpg",
+      "releaseInfo": "2026-04-22"
+    },
+    {
+      "id": "tt0117381",
+      "type": "movie",
+      "name": "Primal Fear",
+      "poster": "https://image.tmdb.org/t/p/w500/qJf2TzE8nRTFbFMPJNW6c8mI0KU.jpg",
+      "releaseInfo": "1996-04-03"
+    },
+    {
+      "id": "tt32268992",
+      "type": "movie",
+      "name": "Sacrifice",
+      "poster": "https://image.tmdb.org/t/p/w500/SGH7mlgfDyGgRCi2At62Ljg3zV.jpg",
+      "releaseInfo": "2026-04-09"
+    },
+    {
+      "id": "tt37510326",
+      "type": "movie",
+      "name": "The Social Reckoning",
+      "poster": "https://image.tmdb.org/t/p/w500/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg",
+      "releaseInfo": "2026-10-07"
+    },
+    {
+      "id": "tt33612209",
+      "type": "movie",
+      "name": "The Devil Wears Prada 2",
+      "poster": "https://image.tmdb.org/t/p/w500/xTI42pmsP5EDnvsNJPEDubwWBQO.jpg",
+      "releaseInfo": "2026-04-29"
     },
     {
       "id": "tt8367814",
@@ -558,81 +558,11 @@
       "releaseInfo": "2026-06-03"
     },
     {
-      "id": "tt0816692",
+      "id": "tt0133093",
       "type": "movie",
-      "name": "Interstellar",
-      "poster": "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
-      "releaseInfo": "2014-11-04"
-    },
-    {
-      "id": "tt14371256",
-      "type": "movie",
-      "name": "Klara and the Sun",
-      "poster": "https://image.tmdb.org/t/p/w500/xqovj2p6HRsgHxN81qYAYF4StgM.jpg",
-      "releaseInfo": "2026-10-21"
-    },
-    {
-      "id": "tt30144839",
-      "type": "movie",
-      "name": "One Battle After Another",
-      "poster": "https://image.tmdb.org/t/p/w500/lbBWwxBht4JFP5PsuJ5onpMqugW.jpg",
-      "releaseInfo": "2025-09-23"
-    },
-    {
-      "id": "tt0107120",
-      "type": "movie",
-      "name": "Hocus Pocus",
-      "poster": "https://image.tmdb.org/t/p/w500/by4D4Q9NlUjFSEUA1yrxq6ksXmk.jpg",
-      "releaseInfo": "1993-07-16"
-    },
-    {
-      "id": "tt32332915",
-      "type": "movie",
-      "name": "I Want Your Sex",
-      "poster": "https://image.tmdb.org/t/p/w500/pR7SIX3AwqdoD96OI44oLG98e7g.jpg",
-      "releaseInfo": "2026-07-29"
-    },
-    {
-      "id": "tt0102926",
-      "type": "movie",
-      "name": "The Silence of the Lambs",
-      "poster": "https://image.tmdb.org/t/p/w500/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg",
-      "releaseInfo": "1991-02-14"
-    },
-    {
-      "id": "tt30825738",
-      "type": "movie",
-      "name": "The Mandalorian and Grogu",
-      "poster": "https://image.tmdb.org/t/p/w500/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg",
-      "releaseInfo": "2026-05-20"
-    },
-    {
-      "id": "tt15398776",
-      "type": "movie",
-      "name": "Oppenheimer",
-      "poster": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-      "releaseInfo": "2023-07-19"
-    },
-    {
-      "id": "tt0407887",
-      "type": "movie",
-      "name": "The Departed",
-      "poster": "https://image.tmdb.org/t/p/w500/nT97ifVT2J1yMQmeq20Qblg61T.jpg",
-      "releaseInfo": "2006-10-04"
-    },
-    {
-      "id": "tt7526136",
-      "type": "movie",
-      "name": "Heart of the Beast",
-      "poster": "https://image.tmdb.org/t/p/w500/1ApfSA8JTqeha3GTFEY8syV4auq.jpg",
-      "releaseInfo": "2026-09-19"
-    },
-    {
-      "id": "tt15239678",
-      "type": "movie",
-      "name": "Dune: Part Two",
-      "poster": "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg",
-      "releaseInfo": "2024-02-27"
+      "name": "The Matrix",
+      "poster": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
+      "releaseInfo": "1999-03-31"
     },
     {
       "id": "tt4154756",
@@ -642,6 +572,41 @@
       "releaseInfo": "2018-04-25"
     },
     {
+      "id": "tt30144839",
+      "type": "movie",
+      "name": "One Battle After Another",
+      "poster": "https://image.tmdb.org/t/p/w500/lbBWwxBht4JFP5PsuJ5onpMqugW.jpg",
+      "releaseInfo": "2025-09-23"
+    },
+    {
+      "id": "tt32332915",
+      "type": "movie",
+      "name": "I Want Your Sex",
+      "poster": "https://image.tmdb.org/t/p/w500/pR7SIX3AwqdoD96OI44oLG98e7g.jpg",
+      "releaseInfo": "2026-07-29"
+    },
+    {
+      "id": "tt0105265",
+      "type": "movie",
+      "name": "A River Runs Through It",
+      "poster": "https://image.tmdb.org/t/p/w500/aVP45oS2cBL4WtZ1kB7r8uarruB.jpg",
+      "releaseInfo": "1992-10-09"
+    },
+    {
+      "id": "tt15239678",
+      "type": "movie",
+      "name": "Dune: Part Two",
+      "poster": "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg",
+      "releaseInfo": "2024-02-27"
+    },
+    {
+      "id": "tt0816692",
+      "type": "movie",
+      "name": "Interstellar",
+      "poster": "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
+      "releaseInfo": "2014-11-04"
+    },
+    {
       "id": "tt32268691",
       "type": "movie",
       "name": "Onslaught",
@@ -649,11 +614,18 @@
       "releaseInfo": "2026-09-02"
     },
     {
-      "id": "tt28650488",
+      "id": "tt0407887",
       "type": "movie",
-      "name": "The Super Mario Galaxy Movie",
-      "poster": "https://image.tmdb.org/t/p/w500/eJGWx219ZcEMVQJhAgMiqo8tYY.jpg",
-      "releaseInfo": "2026-04-01"
+      "name": "The Departed",
+      "poster": "https://image.tmdb.org/t/p/w500/nT97ifVT2J1yMQmeq20Qblg61T.jpg",
+      "releaseInfo": "2006-10-04"
+    },
+    {
+      "id": "tt0066026",
+      "type": "movie",
+      "name": "M*A*S*H",
+      "poster": "https://image.tmdb.org/t/p/w500/on8Q9LhtHYNhmITjUMpgOUkIG8o.jpg",
+      "releaseInfo": "1970-02-18"
     },
     {
       "id": "tt0068646",
@@ -663,46 +635,74 @@
       "releaseInfo": "1972-03-14"
     },
     {
-      "id": "tt0993846",
+      "id": "tt14966898",
       "type": "movie",
-      "name": "The Wolf of Wall Street",
-      "poster": "https://image.tmdb.org/t/p/w500/kW9LmvYHAaS9iA0tHmZVq8hQYoq.jpg",
-      "releaseInfo": "2013-12-25"
+      "name": "Late Night with the Devil",
+      "poster": "https://image.tmdb.org/t/p/w500/mu8LRWT9GHkfiyHm7kgxT6YNvMW.jpg",
+      "releaseInfo": "2024-03-19"
     },
     {
-      "id": "tt0133093",
+      "id": "tt30825738",
       "type": "movie",
-      "name": "The Matrix",
-      "poster": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
-      "releaseInfo": "1999-03-31"
+      "name": "The Mandalorian and Grogu",
+      "poster": "https://image.tmdb.org/t/p/w500/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg",
+      "releaseInfo": "2026-05-20"
     },
     {
-      "id": "tt7131622",
+      "id": "tt44766123",
       "type": "movie",
-      "name": "Once Upon a Time... in Hollywood",
-      "poster": "https://image.tmdb.org/t/p/w500/8j58iEBw9pOXFD2L0nt0ZXeHviB.jpg",
-      "releaseInfo": "2019-07-24"
+      "name": "NAZA",
+      "poster": "https://image.tmdb.org/t/p/w500/b4Gyj8VRoJAeU13jfKPuOTMr5GL.jpg",
+      "releaseInfo": "2026-09-25"
     },
     {
-      "id": "tt31378509",
+      "id": "tt0098384",
       "type": "movie",
-      "name": "Dune: Part Three",
-      "poster": "https://image.tmdb.org/t/p/w500/xKCdkfKmEqS0mKpWgHTeWuISHS3.jpg",
-      "releaseInfo": "2026-12-15"
+      "name": "Steel Magnolias",
+      "poster": "https://image.tmdb.org/t/p/w500/7ExUSN9s9gX9bhVM17zDLEizano.jpg",
+      "releaseInfo": "1989-11-15"
     },
     {
-      "id": "tt10872600",
+      "id": "tt0427340",
       "type": "movie",
-      "name": "Spider-Man: No Way Home",
-      "poster": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-      "releaseInfo": "2021-12-15"
+      "name": "Masters of the Universe",
+      "poster": "https://image.tmdb.org/t/p/w500/oRuyGUHdoaQxWP3SDfafGkStxTC.jpg",
+      "releaseInfo": "2026-06-03"
     },
     {
-      "id": "tt32565993",
+      "id": "tt0482571",
       "type": "movie",
-      "name": "The Sheep Detectives",
-      "poster": "https://image.tmdb.org/t/p/w500/iKy5460GdsoknM8ppmGlJbKxAKa.jpg",
-      "releaseInfo": "2026-04-30"
+      "name": "The Prestige",
+      "poster": "https://image.tmdb.org/t/p/w500/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg",
+      "releaseInfo": "2006-10-19"
+    },
+    {
+      "id": "tt0075148",
+      "type": "movie",
+      "name": "Rocky",
+      "poster": "https://image.tmdb.org/t/p/w500/raayaQ9WTUGolsYHPWc2bGonu58.jpg",
+      "releaseInfo": "1976-12-03"
+    },
+    {
+      "id": "tt36583977",
+      "type": "movie",
+      "name": "Forgotten Island",
+      "poster": "https://image.tmdb.org/t/p/w500/myd1K3gefdNAWFsGNRDdMeiK9Qg.jpg",
+      "releaseInfo": "2026-09-10"
+    },
+    {
+      "id": "tt34385135",
+      "type": "movie",
+      "name": "Colony",
+      "poster": "https://image.tmdb.org/t/p/w500/smxNv18w3zyrMrBC1G0EAuomnTQ.jpg",
+      "releaseInfo": "2026-05-21"
+    },
+    {
+      "id": "tt35048826",
+      "type": "movie",
+      "name": "Broke",
+      "poster": "https://image.tmdb.org/t/p/w500/ooCDeGxZ5to9CRKxkBEAIWtoRA4.jpg",
+      "releaseInfo": "2025-06-10"
     }
   ]
 }
