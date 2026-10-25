@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792843251023,
+  "scraped_at": 1792886450948,
   "items": [
     {
       "slug": "3yuxj-shaun-the-sheep-the-beast-of-mossy-bottom",
@@ -65,6 +65,16 @@
       "digital_release_date": "2026-10-20"
     },
     {
+      "slug": "43z6o-the-musical",
+      "imdb_id": "tt37775809",
+      "title": "The Musical",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "paoRPVNta4eYyPO1vsdHTK8dUYa.jpg",
+      "description": "Doug, a frustrated playwright and middle school theater teacher, learns his ex is dating his nemesis, the school principal. To get revenge and cost him a Blue Ribbon Award, Doug secretly stages the most inappropriate play imaginable.",
+      "digital_release_date": "2026-10-20"
+    },
+    {
       "slug": "3via9-cocorico-2",
       "imdb_id": "tt36933402",
       "title": "Cocorico 2",
@@ -73,6 +83,16 @@
       "poster_path": "3eZwrYd90t5kHLHfS0zxPWH1tWl.jpg",
       "description": "DNA tests before Alice and François's wedding reveal their fathers - an aristocrat and car dealer - aren't as French as they thought.",
       "digital_release_date": "2026-10-18"
+    },
+    {
+      "slug": "3x28b-clean-hands",
+      "imdb_id": "tt36271247",
+      "title": "Clean Hands",
+      "year": 2026,
+      "score": null,
+      "poster_path": "szIEtkFLOMsPX6AVQSfzalNEEDd.jpg",
+      "description": "Based on a true story, a veteran narcotics officer turned recovery advocate and his daughter, who struggles with addiction, confront the American drug crisis from opposing sides of the law while navigating their complicated family bond.",
+      "digital_release_date": "2026-10-16"
     },
     {
       "slug": "3zgbb-therapy-done-right",
@@ -123,16 +143,6 @@
       "poster_path": "5YNjTi5AhbSM4hDOynJcgFfvKRn.jpg",
       "description": "When a storm traps old university pals at a luxury lodge, their civilized birthday bash spirals into a cyclone of betrayals, grudges and unfiltered chaos.",
       "digital_release_date": "2026-10-15"
-    },
-    {
-      "slug": "2zrc8-last-days",
-      "imdb_id": "tt27977862",
-      "title": "Last Days",
-      "year": 2025,
-      "score": 5,
-      "poster_path": "4m52P8ra8v01nkZHcHYMTwPCf8n.jpg",
-      "description": "Determined to fulfill his life’s mission, 26-year-old John Allen Chau embarks on a dangerous adventure across the globe to convert the uncontacted tribe of North Sentinel Island to Christianity, while a detective from the Andaman Islands races to stop him before he does harm to himself or the tribe.",
-      "digital_release_date": "2026-10-14"
     },
     {
       "slug": "45is0-biohazard",
@@ -1433,16 +1443,6 @@
       "poster_path": "e0WaDBrrBAMcq2stAXCR7rXEsiw.jpg",
       "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
       "digital_release_date": "2026-08-01"
-    },
-    {
-      "slug": "3l35w-soulm8te",
-      "imdb_id": "tt32654916",
-      "title": "Soulm8te",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "nIkAHDzo9kbG3kDmDckqywo6CE9.jpg",
-      "description": "After a ruthless tech giant acquires a small robotics company, a grieving engineer is tasked with testing their new AI companion. But when he attempts to reprogram her to be a truly sentient soulmate, she develops needs of her own—unleashing a relentless spree of precision-engineered mayhem.",
-      "digital_release_date": "2026-07-31"
     }
   ]
 }

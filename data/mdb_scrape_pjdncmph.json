@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1792843264625,
+  "scraped_at": 1792886465479,
   "items": [
+    {
+      "slug": "45cet-the-awakening",
+      "imdb_id": "tt39120306",
+      "title": "The Awakening",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7pUGiRg9Gq1JqmmNSJLLSonOKum.jpg",
+      "description": "An elite military unit on a mission in the South American jungle encounters a deadly supernatural force revealing an ancient presence that continues to claim anyone who dares enter its domain.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3o1qd-crawlers",
+      "imdb_id": "tt32329539",
+      "title": "Crawlers",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "lNXeEpg4yLSRwXwOeR5lbPgwbqL.jpg",
+      "description": "Tenants at Paradiso Palms apartments fight a deadly spider invasion while the cunning building manager might be their only hope for survival.",
+      "digital_release_date": null
+    },
     {
       "slug": "3pdur-the-3-killer-pigs",
       "imdb_id": "tt21950128",
@@ -119,7 +139,7 @@
       "imdb_id": "tt37775809",
       "title": "The Musical",
       "year": 2026,
-      "score": 6,
+      "score": 5,
       "poster_path": "paoRPVNta4eYyPO1vsdHTK8dUYa.jpg",
       "description": "Doug, a frustrated playwright and middle school theater teacher, learns his ex is dating his nemesis, the school principal. To get revenge and cost him a Blue Ribbon Award, Doug secretly stages the most inappropriate play imaginable.",
       "digital_release_date": null
@@ -1422,26 +1442,6 @@
       "score": null,
       "poster_path": "ornHNCuXiz5kxWPD4uoZLqrE6cd.jpg",
       "description": "A small-town woman in need of medical care in West Texas is forced to break the law.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44fw7-silent-rebellion",
-      "imdb_id": "tt34973241",
-      "title": "Silent Rebellion",
-      "year": 2026,
-      "score": 2,
-      "poster_path": "hPc6n20PAmF5zbdujKV2kGvnCrI.jpg",
-      "description": "15-year-old Emma, pregnant after a rape, defies her repressive rural Protestant community to carve a path of self-determination, transforming trauma into a catalyst for emancipation while confronting the moral hypocrisy of the village and the spectre of World War II around her.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "316k2-kraken",
-      "imdb_id": "tt19838566",
-      "title": "Kraken",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "u8x0jvVCEpRyN8q5ORyJZzBZ2Ho.jpg",
-      "description": "A marine biologist is doing research on a fish farm when she encounters several strange occurrences. Along with the brutal deaths of two teenagers, all signs point to the deep fjord; can there be more to the depths than the eye can see?",
       "digital_release_date": null
     }
   ]
