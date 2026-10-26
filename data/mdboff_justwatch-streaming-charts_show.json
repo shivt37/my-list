@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1792929703718,
+  "scraped_at": 1792972934118,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -562,7 +562,7 @@
       "title": "The Simpsons",
       "year": 1989,
       "release_date": "1989-12-17",
-      "poster": "https://image.tmdb.org/t/p/w200/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/k5UALlcA0EnviaCUn2wMjOWYiOO.jpg"
     },
     {
       "imdb_id": "tt0903747",
@@ -611,6 +611,14 @@
       "year": 2005,
       "release_date": "2005-09-13",
       "poster": "https://image.tmdb.org/t/p/w200/8iixmfGx5EIFPdpNvB2JvI3VIqX.jpg"
+    },
+    {
+      "imdb_id": "tt0111987",
+      "type": "series",
+      "title": "Goosebumps",
+      "year": 1995,
+      "release_date": "1995-10-27",
+      "poster": "https://image.tmdb.org/t/p/w200/km7uuxaU4mzp49Hpt5hxnLx7p6F.jpg"
     },
     {
       "imdb_id": "tt21376524",
