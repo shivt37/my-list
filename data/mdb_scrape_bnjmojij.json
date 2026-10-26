@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1792929645934,
+  "scraped_at": 1792972849317,
   "items": [
+    {
+      "slug": "3gfdb-the-cycle",
+      "imdb_id": "tt32358390",
+      "title": "The Cycle",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "n5gSNf55KWfDc9hqP4H1KCCSutE.jpg",
+      "description": "A daughter unravels her father's dark past after his body, missing for 36 years, is found at a horrific crime scene.",
+      "digital_release_date": "2026-10-23"
+    },
     {
       "slug": "3yuxj-shaun-the-sheep-the-beast-of-mossy-bottom",
       "imdb_id": "tt36841161",
@@ -109,7 +119,7 @@
       "imdb_id": "tt38672588",
       "title": "Masterplan",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "5xmXVd7nCK3tAo34XkO58SxUCip.jpg",
       "description": "When a legendary thief sets his sights on the Mona Lisa, he recruits two young strangers to help him before revealing they are long-lost siblings… and oh yes, by the way, he is their father. Thrown into a chaotic reunion they never asked for, this new family must learn to work together — and try not to kill each other — if they want any chance at pulling off the heist of the century.",
       "digital_release_date": "2026-10-16"
@@ -209,7 +219,7 @@
       "imdb_id": "tt49058294",
       "title": "Remain Calm",
       "year": 2026,
-      "score": 3,
+      "score": 7,
       "poster_path": "mwS8LsBd7FWp0XomfzVpynrGhHR.jpg",
       "description": "The story follows the two gas station clerks whose routine night shift turns into a fight for survival. A government agent warns them about Mr. Frett, a terrifying creature that tracks and hunts people who show any signs of anxiety, stress, or panic. To stay alive, the characters must force themselves into a state of aggressive positivity and calm.",
       "digital_release_date": "2026-10-12"
@@ -429,7 +439,7 @@
       "imdb_id": "tt29494959",
       "title": "The Deputy",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "qL654LNOfBu49e12jnnQIv6mny.jpg",
       "description": "A young sheriff's deputy finds himself in the crosshairs of dangerous criminals when the dead body he is assigned to keep an eye on disappears from a crime scene.",
       "digital_release_date": "2026-09-25"
@@ -1433,16 +1443,6 @@
       "poster_path": "glYJbEs9MBPAGAj2EL0jFPlmEAT.jpg",
       "description": "Gudo is a Soul Keeper, a spirit who guides human souls into their next life. When he befriends a young girl named Yuri, he discovers that her untimely death has left her cursed with unresolved rage and regret. As Yuri’s soul teeters on the edge of annihilation, Gudo embarks on a dangerous journey to stop her from unleashing horrible destruction on both the human world and the spirit realm.",
       "digital_release_date": "2026-08-03"
-    },
-    {
-      "slug": "3z10h-just-play-dead",
-      "imdb_id": "tt36948232",
-      "title": "Just Play Dead",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "e0WaDBrrBAMcq2stAXCR7rXEsiw.jpg",
-      "description": "A criminal mastermind plans to fake his death for insurance money while framing his wife's lover. His wife plots to kill him for real and take it all. Both race to outmanoeuvre each other in a deadly battle of wits.",
-      "digital_release_date": "2026-08-01"
     }
   ]
 }

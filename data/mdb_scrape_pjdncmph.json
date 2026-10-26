@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1792929661164,
+  "scraped_at": 1792972863787,
   "items": [
+    {
+      "slug": "2vw5a-kill-code",
+      "imdb_id": "tt18212138",
+      "title": "Kill Code",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "bXvSKLCillha6wxY0yxoRCM2WQl.jpg",
+      "description": "North America has been divided into four main quadrants. A power-hungry corporation has taken over the conventional prison system and made criminals the new law enforcers.  The owner of that corporation, nanoscientist Eion Prescott, created a nano-virus called Onyx. Which is distributed through deadly watches to criminals. First, infecting them. Then, forcing them into eliminating each other for freedom. Who can topple the corporation's entire system from within?",
+      "digital_release_date": null
+    },
     {
       "slug": "45cet-the-awakening",
       "imdb_id": "tt39120306",
@@ -97,7 +107,7 @@
     {
       "slug": "3t3nq-la-bola-negra",
       "imdb_id": "tt35511966",
-      "title": "La bola negra",
+      "title": "La Bola Negra",
       "year": 2026,
       "score": 8,
       "poster_path": "jT5SR5qc9KvVg7HUEmjMWEUYMce.jpg",
@@ -259,7 +269,7 @@
       "imdb_id": "tt38672588",
       "title": "Masterplan",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "5xmXVd7nCK3tAo34XkO58SxUCip.jpg",
       "description": "When a legendary thief sets his sights on the Mona Lisa, he recruits two young strangers to help him before revealing they are long-lost siblings… and oh yes, by the way, he is their father. Thrown into a chaotic reunion they never asked for, this new family must learn to work together — and try not to kill each other — if they want any chance at pulling off the heist of the century.",
       "digital_release_date": null
@@ -659,7 +669,7 @@
       "imdb_id": "tt29494959",
       "title": "The Deputy",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "qL654LNOfBu49e12jnnQIv6mny.jpg",
       "description": "A young sheriff's deputy finds himself in the crosshairs of dangerous criminals when the dead body he is assigned to keep an eye on disappears from a crime scene.",
       "digital_release_date": null
@@ -1019,7 +1029,7 @@
       "imdb_id": "tt36980377",
       "title": "Zip Wire",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "cO7J0XSVKPlAjUCMWC7DVBn1Py2.jpg",
       "description": "When her ground-breaking pharmaceutical discovery is stolen and partner murdered, researcher Amy must face her fear of heights to escape nefarious attackers, with the only path to salvation being a treacherous aerial runway. To outsmart the mysterious hostiles, she has to summon every ounce of courage to protect the world-changing scientific discovery — and herself — before it's too late.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 2,
       "poster_path": "3Tq6JTx5NNc4GSHYK2DmkhulmDG.jpg",
       "description": "An investigative documentary exploring long-standing and newly detailed allegations of sexual misconduct, grooming, and criminal sexual conduct against Oscar-winning actor and Thirty Seconds to Mars frontman Jared Leto.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3x5lf-due-west",
-      "imdb_id": "tt32361599",
-      "title": "Due West",
-      "year": 2026,
-      "score": null,
-      "poster_path": "ornHNCuXiz5kxWPD4uoZLqrE6cd.jpg",
-      "description": "A small-town woman in need of medical care in West Texas is forced to break the law.",
       "digital_release_date": null
     }
   ]
