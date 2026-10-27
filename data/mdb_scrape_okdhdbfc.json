@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793016099193,
+  "scraped_at": 1793059298339,
   "items": [
     {
       "slug": "44mor-yaga",
@@ -13,6 +13,16 @@
       "poster_path": "kp8xgZ8SrikHQrPn2lC3hb50KD5.jpg",
       "description": "While a private investigator probes the disappearance of the young heir to a powerful fishery, he finds himself at odds with an apprehensive local detective, a charismatic university professor with a taste for younger men, and a labyrinth of enigmatic suspects, secret lives, and ancient magic.",
       "first_air_date": "2026-10-23"
+    },
+    {
+      "slug": "3nzuf-phony",
+      "imdb_id": "tt21952924",
+      "title": "Phony",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "iCyQc8cSSHkxUHbkvzbC77owALt.jpg",
+      "description": "After waking up from a freak car accident, Sonny discovers that his mother has been replaced by an impostor.",
+      "first_air_date": "2026-10-20"
     },
     {
       "slug": "2yjel-crystal-lake",
@@ -309,7 +319,7 @@
       "imdb_id": "tt35949226",
       "title": "Youth",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "bk1zbzbu0xaYQuIANv4Pe8HHyAY.jpg",
       "description": "A 50-year-old divorcee searches for sex and love whilst juggling caring for her ailing parents and parenting her should-be grown up son.",
       "first_air_date": "2026-09-21"
@@ -929,7 +939,7 @@
       "imdb_id": "tt37788031",
       "title": "Ann Droid",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "rgg7vCZ9HIdT4vYGxOvg84L7ngF.jpg",
       "description": "It’s Sue’s worst nightmare - an overly attentive, socially inept, second-hand robot carer. But maybe this droid has its uses...",
       "first_air_date": "2026-07-17"
@@ -1433,16 +1443,6 @@
       "poster_path": "u6PBGDVs0CZJsq8IpWI5C4u0eyl.jpg",
       "description": "In 1970, the Brazilian national team took the field with big dreams and an even bigger challenge: to become the first three-time world champions.",
       "first_air_date": "2026-05-29"
-    },
-    {
-      "slug": "3f06p-star-city",
-      "imdb_id": "tt32140872",
-      "title": "Star City",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "b8VtW6IEIyEWYdnJHx8bG8RdAak.jpg",
-      "description": "Step into a thrilling chapter inspired by For All Mankind. Same alt-history universe. Different perspective: the Soviet Union's. Go behind the Iron Curtain with the cosmonauts, engineers, and intelligence officers who risked it all in the race for the Moon.",
-      "first_air_date": "2026-05-28"
     }
   ]
 }
