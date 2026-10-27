@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1793016114704,
+  "scraped_at": 1793059322114,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -1165,6 +1165,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg"
     },
     {
+      "imdb_id": "tt0445883",
+      "type": "series",
+      "title": "Koffee with Karan",
+      "year": 2004,
+      "release_date": "2004-11-19",
+      "poster": "https://image.tmdb.org/t/p/w200/xyaDqO917xzA0iQwtdMPHC5oJVV.jpg"
+    },
+    {
       "imdb_id": "tt7472896",
       "type": "series",
       "title": "Mr Inbetween",
@@ -1179,14 +1187,6 @@
       "year": 2015,
       "release_date": "2015-01-13",
       "poster": "https://image.tmdb.org/t/p/w200/iRfSzrPS5VYWQv7KVSEg2BZZL6C.jpg"
-    },
-    {
-      "imdb_id": "tt18332852",
-      "type": "series",
-      "title": "Outlander: Blood of My Blood",
-      "year": 2025,
-      "release_date": "2025-08-08",
-      "poster": "https://image.tmdb.org/t/p/w200/1pGBdq4ssO2p5H2WFMlADH6pwZ6.jpg"
     }
   ]
 }
