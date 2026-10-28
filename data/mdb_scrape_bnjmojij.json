@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793102450118,
+  "scraped_at": 1793145653080,
   "items": [
+    {
+      "slug": "44vij-ali-g-who-iz-i",
+      "imdb_id": "tt43655467",
+      "title": "Ali G: Who Iz I?",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "uTyVxPeWX8Ai30IQoyDDQONNcq.jpg",
+      "description": "After twenty years spent \"chillin', tokin' and bonin'\", Ali G is shocked to discover that his long-term girlfriend, Julie, is 8 months pregnant. Faced with an extra mouth to feed, he gets off his batty and heads to America to reclaim his former glory… but soon encounters adversaries who will ultimately threaten his and his child's very existence.",
+      "digital_release_date": "2026-10-28"
+    },
     {
       "slug": "3fsqj-verity",
       "imdb_id": "tt32261958",
@@ -69,7 +79,7 @@
       "imdb_id": "tt36841161",
       "title": "Shaun the Sheep: The Beast of Mossy Bottom",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "mMOptSPBVGUA9GHgnpsC35GzZ7e.jpg",
       "description": "On Halloween Eve at Mossy Bottom Farm, excitement turns to dismay when the clumsy Farmer ruins the pumpkin patch. Shaun tries fixing it with science experiments, but things go awry when a wild beast appears in the woods.",
       "digital_release_date": "2026-10-23"
@@ -209,7 +219,7 @@
       "imdb_id": "tt49166238",
       "title": "Biohazard",
       "year": 2026,
-      "score": 4,
+      "score": 3,
       "poster_path": "3FqLdOQdX4VBk3dB663CCA8CAMS.jpg",
       "description": "Ethan Winters, while searching for his missing wife, finds himself trapped by the Baker family - a deadly, unstoppable force driven to violence under the influence of a mysterious infection...",
       "digital_release_date": "2026-10-14"
@@ -1432,16 +1442,6 @@
       "score": 4,
       "poster_path": "Anukm4NH6MM025vUQ9ykpWQXnFn.jpg",
       "description": "Set against Indias 1990 economic crisis, Governor follows Raman, a reluctant bureaucrat unexpectedly appointed as the Governor of the RBI when the nation stands on the brink of bankruptcy. As inflation rises, fuel runs low, and panic spreads, Raman must navigate political pressure and a collapsing system to prevent the country from falling apart.",
-      "digital_release_date": "2026-08-07"
-    },
-    {
-      "slug": "44k66-the-ribbon-hero",
-      "imdb_id": "tt42186253",
-      "title": "THE RIBBON HERO",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "nUCkV0iODxbULZQ5vRN1sDjPrpk.jpg",
-      "description": "When the monstrous Nergal devastates her kingdom, Princess Sapphire reawakens as the Ribbon Hero and fights to save her new home from the same dark fate.",
       "digital_release_date": "2026-08-07"
     }
   ]

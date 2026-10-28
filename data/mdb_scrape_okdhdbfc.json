@@ -2,14 +2,14 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793102496322,
+  "scraped_at": 1793145701415,
   "items": [
     {
       "slug": "44mor-yaga",
       "imdb_id": "tt39980704",
       "title": "YAGA",
       "year": 2026,
-      "score": null,
+      "score": 5,
       "poster_path": "kp8xgZ8SrikHQrPn2lC3hb50KD5.jpg",
       "description": "While a private investigator probes the disappearance of the young heir to a powerful fishery, he finds himself at odds with an apprehensive local detective, a charismatic university professor with a taste for younger men, and a labyrinth of enigmatic suspects, secret lives, and ancient magic.",
       "first_air_date": "2026-10-23"
@@ -549,7 +549,7 @@
       "imdb_id": "tt35617054",
       "title": "Marble Hall Murders",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "3WfgRJBIaOTsiu2bQO23xWb08ro.jpg",
       "description": "Returning to England, Susan Ryeland is reluctantly drawn into a new Atticus Pünd mystery, this time written by a new, young writer. 'Pünd’s Last Case\" is a story set in 1955, in an exotic villa in Corfu – but the identity of a real killer is hidden in the text, and once again Susan is going to find herself in grave danger.",
       "first_air_date": "2026-09-06"
@@ -652,6 +652,16 @@
       "score": 6,
       "poster_path": "wSdrhB8NuTYuSsqbfiQA7izOYhw.jpg",
       "description": "Following the brutal murder of two police officers, a tenacious detective reluctantly joins forces with his estranged ex-cop father to catch the killer.",
+      "first_air_date": "2026-08-20"
+    },
+    {
+      "slug": "4466c-s-x",
+      "imdb_id": "tt39365311",
+      "title": "S&X",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "iyBgwNr5I7CW1Mf7ulPgdz3Y5Ax.jpg",
+      "description": "At his clinic, sex therapist Ichito Shimotori treats diverse and intimate sexual issues with sincerity. Yet, he secretly hides a struggle of his own.",
       "first_air_date": "2026-08-20"
     },
     {
@@ -1023,6 +1033,16 @@
       "poster_path": "mcrx2gcVd5mVVOQrdEWXayFbvVB.jpg",
       "description": "A serial killer stalks the Scottish wilderness. When a young man’s body is discovered, DI Monica Kennedy must catch the murderer before a small community is torn apart.",
       "first_air_date": "2026-07-12"
+    },
+    {
+      "slug": "44sn4-until-the-t-shirt-dries",
+      "imdb_id": "tt43639297",
+      "title": "Until the T-Shirt Dries",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "xVZvNASRqY91hD09g1cXHpErhGX.jpg",
+      "description": "A sudden summer accident shatters the peaceful lives of two couples, dragging a happily married editor into a web of grief, human selfishness, and her husband's hidden secrets.",
+      "first_air_date": "2026-07-10"
     },
     {
       "slug": "3fmic-the-man-will-burn",
@@ -1423,26 +1443,6 @@
       "poster_path": "616HQHGVqEh0ZbQIRdyjIBQfqhU.jpg",
       "description": "A grieving debt collector enters the entertainment world for revenge, only to fall into a dangerous attraction with a powerful executive.",
       "first_air_date": "2026-05-30"
-    },
-    {
-      "slug": "3pe35-a-dog-and-a-plane",
-      "imdb_id": "tt34929415",
-      "title": "A Dog and a Plane",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "d7VEPr11cZc5mUTHyYJXfbblbeJ.jpg",
-      "description": "After a chaotic luggage mix-up, a broke paramedic and an ambitious flight attendant grow closer while exposing a cheating boyfriend’s secrets.",
-      "first_air_date": "2026-05-29"
-    },
-    {
-      "slug": "3zl0z-brazil-70-the-third-star",
-      "imdb_id": "tt37041010",
-      "title": "Brazil '70: The Third Star",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "u6PBGDVs0CZJsq8IpWI5C4u0eyl.jpg",
-      "description": "In 1970, the Brazilian national team took the field with big dreams and an even bigger challenge: to become the first three-time world champions.",
-      "first_air_date": "2026-05-29"
     }
   ]
 }
