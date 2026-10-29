@@ -2,7 +2,7 @@
   "catalog_id": "tmdb_discover_movie_edidioci",
   "name": "X-Men Universe",
   "type": "movie",
-  "scraped_at": 1793145743066,
+  "scraped_at": 1793232157645,
   "sourceHash": "9ee6210439cac85d",
   "items": [
     {
@@ -20,16 +20,16 @@
         28,
         878
       ],
-      "popularity": 0.9729,
+      "popularity": 0.9066,
       "release_date": "2000-07-13",
       "softcore": false,
       "video": false,
       "vote_average": 7.024,
-      "vote_count": 12671
+      "vote_count": 12672
     },
     {
       "adult": false,
-      "backdrop_path": "/7TYITrR804tLITNur3b8VLCK6tw.jpg",
+      "backdrop_path": "/s8ftvFvafWWEhApISamHx32bx6h.jpg",
       "id": 36658,
       "title": "X2",
       "original_title": "X2",
@@ -42,12 +42,12 @@
         28,
         878
       ],
-      "popularity": 0.8535,
+      "popularity": 0.7772,
       "release_date": "2003-04-27",
       "softcore": false,
       "video": false,
       "vote_average": 7.048,
-      "vote_count": 11301
+      "vote_count": 11303
     },
     {
       "adult": false,
@@ -64,12 +64,12 @@
         28,
         878
       ],
-      "popularity": 0.8287,
+      "popularity": 0.7772,
       "release_date": "2006-05-24",
       "softcore": false,
       "video": false,
-      "vote_average": 6.428,
-      "vote_count": 10775
+      "vote_average": 6.4,
+      "vote_count": 10777
     },
     {
       "adult": false,
@@ -86,7 +86,7 @@
         28,
         878
       ],
-      "popularity": 1.6605,
+      "popularity": 1.4998,
       "release_date": "2009-04-28",
       "softcore": false,
       "video": false,
@@ -108,11 +108,11 @@
         878,
         12
       ],
-      "popularity": 1.1444,
+      "popularity": 0.9931,
       "release_date": "2011-06-01",
       "softcore": false,
       "video": false,
-      "vote_average": 7.308,
+      "vote_average": 7.3,
       "vote_count": 13996
     },
     {
@@ -130,7 +130,7 @@
         878,
         12
       ],
-      "popularity": 3.7604,
+      "popularity": 3.8585,
       "release_date": "2013-07-24",
       "softcore": false,
       "video": false,
@@ -152,12 +152,12 @@
         12,
         878
       ],
-      "popularity": 20.7441,
+      "popularity": 18.7267,
       "release_date": "2014-05-15",
       "softcore": false,
       "video": false,
       "vote_average": 7.539,
-      "vote_count": 16833
+      "vote_count": 16834
     },
     {
       "adult": false,
@@ -174,12 +174,12 @@
         12,
         35
       ],
-      "popularity": 31.539,
+      "popularity": 31.2064,
       "release_date": "2016-02-09",
       "softcore": false,
       "video": false,
       "vote_average": 7.626,
-      "vote_count": 33537
+      "vote_count": 33541
     },
     {
       "adult": false,
@@ -196,7 +196,7 @@
         14,
         28
       ],
-      "popularity": 16.8263,
+      "popularity": 16.7538,
       "release_date": "2016-05-18",
       "softcore": false,
       "video": false,
@@ -218,12 +218,12 @@
         18,
         878
       ],
-      "popularity": 23.3429,
+      "popularity": 22.0437,
       "release_date": "2017-02-28",
       "softcore": false,
       "video": false,
       "vote_average": 7.822,
-      "vote_count": 21014
+      "vote_count": 21015
     },
     {
       "adult": false,
@@ -240,12 +240,12 @@
         35,
         12
       ],
-      "popularity": 27.748,
+      "popularity": 28.7378,
       "release_date": "2018-05-15",
       "softcore": false,
       "video": false,
       "vote_average": 7.488,
-      "vote_count": 19856
+      "vote_count": 19861
     },
     {
       "adult": false,
@@ -262,7 +262,7 @@
         28,
         12
       ],
-      "popularity": 14.6955,
+      "popularity": 13.9755,
       "release_date": "2019-06-05",
       "softcore": false,
       "video": false,
@@ -284,12 +284,12 @@
         35,
         878
       ],
-      "popularity": 57.3851,
+      "popularity": 58.84,
       "release_date": "2024-07-24",
       "softcore": false,
       "video": false,
       "vote_average": 7.589,
-      "vote_count": 9728
+      "vote_count": 9736
     }
   ]
 }
