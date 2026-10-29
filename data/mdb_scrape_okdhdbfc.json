@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793188897706,
+  "scraped_at": 1793232097002,
   "items": [
+    {
+      "slug": "44wnq-minimum-wage",
+      "imdb_id": "tt42220724",
+      "title": "Minimum Wage",
+      "year": 2026,
+      "score": null,
+      "poster_path": "iTVhDUbzUFUJ18jrcYM4rw7qGk.jpg",
+      "description": "Teens struggle to run a local pizzeria while juggling school, a manic boss and minimum wage in this series based on the hit social media shorts.",
+      "first_air_date": "2026-10-26"
+    },
     {
       "slug": "44mor-yaga",
       "imdb_id": "tt39980704",
@@ -23,6 +33,16 @@
       "poster_path": "iCyQc8cSSHkxUHbkvzbC77owALt.jpg",
       "description": "After waking up from a freak car accident, Sonny discovers that his mother has been replaced by an impostor.",
       "first_air_date": "2026-10-20"
+    },
+    {
+      "slug": "423ko-friends-sex-and-games",
+      "imdb_id": "tt37180305",
+      "title": "Friends Sex and Games",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "zijeb3WqqTIYJm3mmp1sb0uNGUj.jpg",
+      "description": "A group of friends starts a daring game. Everyone throws their keys into a bowl—whoever picks one spends the night with the owner of that key.",
+      "first_air_date": "2026-10-16"
     },
     {
       "slug": "2yjel-crystal-lake",
@@ -1423,26 +1443,6 @@
       "poster_path": "61xHU81jszBYRsxJAMjKiSd5jgb.jpg",
       "description": "An ordinary Manchester suburb becomes a minefield of lies and violence when Leo gives neighbour Clive his spare key.",
       "first_air_date": "2026-05-31"
-    },
-    {
-      "slug": "3pe2y-ticket-to-heaven",
-      "imdb_id": "tt34930106",
-      "title": "Ticket to Heaven",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "2pPxVn4nK5KnJEx39xUHkYpmqXC.jpg",
-      "description": "A grieving student pursuing priesthood faces a crisis of faith when he falls for a troubled new classmate in a world ruled by strict dogma.",
-      "first_air_date": "2026-05-30"
-    },
-    {
-      "slug": "44htq-payback",
-      "imdb_id": "tt39380468",
-      "title": "Payback",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "616HQHGVqEh0ZbQIRdyjIBQfqhU.jpg",
-      "description": "A grieving debt collector enters the entertainment world for revenge, only to fall into a dangerous attraction with a powerful executive.",
-      "first_air_date": "2026-05-30"
     }
   ]
 }

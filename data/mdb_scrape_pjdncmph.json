@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1793188869655,
+  "scraped_at": 1793232067641,
   "items": [
+    {
+      "slug": "44fyh-the-lost-ones",
+      "imdb_id": "tt37028623",
+      "title": "The Lost Ones",
+      "year": null,
+      "score": null,
+      "poster_path": "8uqkxvr1YXjzxhJDR2Kv51MZkEq.jpg",
+      "description": "When a perfect family relocates to rural America, their isolated idyll quickly becomes threatened by a disturbingly volatile neighbor.",
+      "digital_release_date": null
+    },
     {
       "slug": "44vij-ali-g-who-iz-i",
       "imdb_id": "tt43655467",
@@ -279,7 +289,7 @@
       "imdb_id": "tt31457111",
       "title": "Capturing Bigfoot",
       "year": 2026,
-      "score": 1,
+      "score": 3,
       "poster_path": "ygCUaVT8l4RYHckO5XE0hqmEaC4.jpg",
       "description": "On October 20, 1967, Roger Patterson captured 60 seconds of film showing a creature walking through the Northern California woods—footage that became the most analyzed and debated in history. Fifty-seven years later, a reel of 16mm film discovered in a safe changes everything, revealing the untold story behind the world's greatest mystery, told for the first time by Patterson's own son and the people who were there.",
       "digital_release_date": null
@@ -459,7 +469,7 @@
       "imdb_id": "tt34470118",
       "title": "Rise of the Footsoldier: Retribution",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "qJ4UV7YnAweTjosfSzDG80j1nd0.jpg",
       "description": "Tate battles ruthless mercenaries throughout Ibiza as he avenges his friend's death.  Get ready for the biggest and most action packed film in the successful independent crime saga.",
       "digital_release_date": null
@@ -1119,7 +1129,7 @@
       "imdb_id": "tt29543015",
       "title": "Portal to Hell",
       "year": 2025,
-      "score": 4,
+      "score": 5,
       "poster_path": "xuXCPJZjmP2FuGG3U16sI1TYEdR.jpg",
       "description": "After a debt-collector finds a portal to hell in a washing machine at his local laundromat, he’s propositioned into feeding it sinners to save his neighbor’s soul, maybe even at the expense of his own.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 4,
       "poster_path": "jFN9LcCG4a02wRWm2qfJ6nLY8BO.jpg",
       "description": "Gary and Ell (a married man with an inferiority complex, and a grieving young widow) meet on a blind date only to wind up stealing a killer's car along with a dead body and $40,000.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3lgk2-the-birthday-party",
-      "imdb_id": "tt33269988",
-      "title": "The Birthday Party",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "sXN4IvB4hM2AYYx9BhdzhokrjvH.jpg",
-      "description": "The late 1970s, somewhere in the Mediterranean: Marcos Timoleon, a tycoon, is throwing a lavish, extravagant birthday party for Sofia on his exclusive private island. The party is a perfect excuse for various people in his life to approach him with their own agendas.",
       "digital_release_date": null
     }
   ]
