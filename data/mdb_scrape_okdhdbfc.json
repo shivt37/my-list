@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793232097002,
+  "scraped_at": 1793275295132,
   "items": [
     {
       "slug": "44wnq-minimum-wage",
@@ -25,11 +25,21 @@
       "first_air_date": "2026-10-23"
     },
     {
+      "slug": "45jiy-matargashti",
+      "imdb_id": "tt49702110",
+      "title": "Matargashti",
+      "year": 2026,
+      "score": null,
+      "poster_path": "893gkwRt9MgC9V77gtY2jYp1emp.jpg",
+      "description": "Dhara's plan to explore her sexuality puts her at odds with her horrified father, who becomes determined to sabotage her love life.",
+      "first_air_date": "2026-10-21"
+    },
+    {
       "slug": "3nzuf-phony",
       "imdb_id": "tt21952924",
       "title": "Phony",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "iCyQc8cSSHkxUHbkvzbC77owALt.jpg",
       "description": "After waking up from a freak car accident, Sonny discovers that his mother has been replaced by an impostor.",
       "first_air_date": "2026-10-20"
@@ -70,7 +80,7 @@
       "title": "VisionQuest",
       "year": 2026,
       "score": 8,
-      "poster_path": "xK27l5uwaVyZSlENWnmLlWwDQNS.jpg",
+      "poster_path": "WGyAyBPncfuu8MZhLY9RtfZPM0.jpg",
       "description": "With a bounty on his head, Vision must confront his nature and resist Ultron's influence to survive.",
       "first_air_date": "2026-10-13"
     },
@@ -1309,7 +1319,7 @@
       "imdb_id": "tt35728748",
       "title": "Alice and Steve",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "gPou8wNiTz1uleLKllclrqanXXf.jpg",
       "description": "Alice is devastated when her best friend Steve starts dating her 26-year-old daughter Izzy. She's going to lose her best friend and her daughter in one fell swoop. Alice tries everything she can to end the relationship. Unfortunately for her, Steve's more than ready for the attack, and what begins as a perfect friendship, devolves into an all-out feud.",
       "first_air_date": "2026-06-08"
@@ -1433,16 +1443,6 @@
       "poster_path": "46o93NKRzaQDPbAUXBOYxuVIL9q.jpg",
       "description": "Learn how Hoyt Richards was drawn into the spiritual group Eternal Values by its enigmatic leader Frederick von Mierers.",
       "first_air_date": "2026-06-01"
-    },
-    {
-      "slug": "3wwob-tip-toe",
-      "imdb_id": "tt35768911",
-      "title": "Tip Toe",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "61xHU81jszBYRsxJAMjKiSd5jgb.jpg",
-      "description": "An ordinary Manchester suburb becomes a minefield of lies and violence when Leo gives neighbour Clive his spare key.",
-      "first_air_date": "2026-05-31"
     }
   ]
 }
