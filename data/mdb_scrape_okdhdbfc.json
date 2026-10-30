@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793275295132,
+  "scraped_at": 1793318498165,
   "items": [
+    {
+      "slug": "459ll-the-one-about-matthew-perry",
+      "imdb_id": "tt44941753",
+      "title": "The One About Matthew Perry",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "zDSjGvywwyWUqnMIpYYwFDyA7Az.jpg",
+      "description": "Told through intimate testimonies from close family and friends, this documentary event reveals the real Matthew Perry—generous, funny, vulnerable, larger than life—and the battles he fought to become the man behind the icon. A raw record of a life lived in full, and the honesty that became his greatest legacy.",
+      "first_air_date": "2026-10-27"
+    },
     {
       "slug": "44wnq-minimum-wage",
       "imdb_id": "tt42220724",
@@ -112,6 +122,16 @@
       "score": 3,
       "poster_path": "xZQ5ABJF1iLjGq9xR4MthpgQEFF.jpg",
       "description": "Young Jim Hawkins and his mother Bess come into possession of a legendary pirate’s treasure map and are drawn into a deadly voyage across the Atlantic, where Jim is forced to navigate mutiny, violence and betrayal, leaving him forever changed.",
+      "first_air_date": "2026-10-11"
+    },
+    {
+      "slug": "45cxk-the-party",
+      "imdb_id": "tt39123226",
+      "title": "The Party",
+      "year": 2026,
+      "score": null,
+      "poster_path": "kzriDfCB8p34TMVq55MgVJk4iFA.jpg",
+      "description": "The Party follows Martin Gilmour, a journalist shaped by his lifelong friendship with the wealthy and charismatic politician Ben Fitzmaurice. Having met at an elite boarding school, Martin and Ben have an unbreakable bond. Three decades on, Martin is invited to Ben’s lavish birthday party at the Fitzmaurice’s country pile, but Martin fears that the publicity of Ben’s bid for Conservative leader will dredge up the secrets of their past with tragic consequences.",
       "first_air_date": "2026-10-11"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "et1W2kn43yEniVSQY0IEB4eB1UX.jpg",
       "description": "Amanda Blakefield's life is a happy one, with her husband Jimmy and their son Luke. But when Amanda is left an enormous inheritance by a man she has neither met nor heard of before, her life starts to fall apart. Amanda becomes embroiled in the world of the Worralls, where Martin Worrall is head of a family bound in past secrets. As Amanda is drawn further and further into past events and relationships, all of their lives are turned upside down.",
       "first_air_date": "2026-06-02"
-    },
-    {
-      "slug": "44jp6-the-trio",
-      "imdb_id": "tt38683169",
-      "title": "The Trio",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "fsDfeHhCmOTeK8e1KAdHsdAINha.jpg",
-      "description": "Middle-aged Hugo encounters his childhood loves' daughter, sending him back to when his younger self begins college. His memories offer a glimpse into a deeply entwined and emotionally complex story of yearning, as a love triangle becomes increasingly complicated. Tracing the emotional journeys of lead characters Hugo, Thora, and August.",
-      "first_air_date": "2026-06-01"
-    },
-    {
-      "slug": "44n4s-bring-me-the-beauties-a-model-cult",
-      "imdb_id": "tt42835175",
-      "title": "Bring Me the Beauties: A Model Cult",
-      "year": 2026,
-      "score": null,
-      "poster_path": "46o93NKRzaQDPbAUXBOYxuVIL9q.jpg",
-      "description": "Learn how Hoyt Richards was drawn into the spiritual group Eternal Values by its enigmatic leader Frederick von Mierers.",
-      "first_air_date": "2026-06-01"
     }
   ]
 }
