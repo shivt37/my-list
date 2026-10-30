@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793318449698,
+  "scraped_at": 1793361649128,
   "items": [
+    {
+      "slug": "3wlqv-mirzapur-the-movie",
+      "imdb_id": "tt34339725",
+      "title": "Mirzapur: The Movie",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "cdDKdCRyq6BYuNblpKUYqRPWvEg.jpg",
+      "description": "The battle for Mirzapur’s throne intensifies as old enemies resurface and a new threat emerges in the form of Babban Babua, a ruthless businessman from Jaisalmer with ambitions of his own. As the Tripathis face enemies from both the past and present, loyalties are tested while Guddu and Bablu Pandit fight to establish themselves in the power struggle for Mirzapur.",
+      "digital_release_date": "2026-10-30"
+    },
     {
       "slug": "35fju-de-gaulle-liberte",
       "imdb_id": "tt35856133",
@@ -50,7 +60,7 @@
       "title": "The Dog Stars",
       "year": 2026,
       "score": 5,
-      "poster_path": "A7i16oDi03qrKep5pBfuTWNUTb.jpg",
+      "poster_path": "5O616X9vmRzQdB68PHzBewPittd.jpg",
       "description": "After the world's population has been ravaged by a pandemic, a man lives a lonesome existence in a Colorado airplane hangar with his dog and a dour gunman he has befriended. When a mysterious transmission comes through on the radio while he’s flying his old Cessna, it sparks a hunt for the provenance of the sound.",
       "digital_release_date": "2026-10-27"
     },
@@ -79,7 +89,7 @@
       "imdb_id": "tt13609648",
       "title": "Sense and Sensibility",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "czsyPHosFNbh4PPqXfqWu1aBXnA.jpg",
       "description": "A charming, witty, and deeply relatable story of love and sisterhood.",
       "digital_release_date": "2026-10-26"
@@ -220,7 +230,7 @@
       "title": "All That We Never Were",
       "year": 2026,
       "score": 5,
-      "poster_path": "zqxIT48mWFsC4NSjGEHAcp1pjEo.jpg",
+      "poster_path": "4liJ6iU1IWdpUzMIpwJDcUpE3hI.jpg",
       "description": "19-year-old Leah navigates a coming-of-age journey in the wake of a tragic car accident that claims her parents. Relocated to a coastal town under the care of her brother’s best friend Axel, Leah grapples with grief, haunting nightmares and a fractured sense of self.",
       "digital_release_date": "2026-10-15"
     },
@@ -1433,16 +1443,6 @@
       "poster_path": "nUCkV0iODxbULZQ5vRN1sDjPrpk.jpg",
       "description": "When the monstrous Nergal devastates her kingdom, Princess Sapphire reawakens as the Ribbon Hero and fights to save her new home from the same dark fate.",
       "digital_release_date": "2026-08-07"
-    },
-    {
-      "slug": "3ftz6-the-last-house",
-      "imdb_id": "tt32268156",
-      "title": "The Last House",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "6JU7E8Vv2M11egkctWVOScxWR75.jpg",
-      "description": "A family suddenly sealed inside their home must work together to survive against dwindling resources and the ominous threat keeping them trapped.",
-      "digital_release_date": "2026-08-06"
     }
   ]
 }
