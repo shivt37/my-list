@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1793318514821,
+  "scraped_at": 1793361713530,
   "items": [
     {
       "imdb_id": "tt14173636",
@@ -21,14 +21,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg"
     },
     {
-      "imdb_id": "tt15047880",
-      "type": "movie",
-      "title": "Disclosure Day",
-      "year": 2026,
-      "release_date": "2026-06-10",
-      "poster": "https://image.tmdb.org/t/p/w200/AnJ8IQJI23hNpYXVNaythu061Ru.jpg"
-    },
-    {
       "imdb_id": "tt26657236",
       "type": "movie",
       "title": "Backrooms",
@@ -37,12 +29,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg"
     },
     {
-      "imdb_id": "tt35672862",
+      "imdb_id": "tt15047880",
       "type": "movie",
-      "title": "Hokum",
+      "title": "Disclosure Day",
       "year": 2026,
-      "release_date": "2026-04-29",
-      "poster": "https://image.tmdb.org/t/p/w200/x6rHcQFiYcczLQPrmxXPAicm54E.jpg"
+      "release_date": "2026-06-10",
+      "poster": "https://image.tmdb.org/t/p/w200/AnJ8IQJI23hNpYXVNaythu061Ru.jpg"
     },
     {
       "imdb_id": "tt32358390",
@@ -53,6 +45,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/n5gSNf55KWfDc9hqP4H1KCCSutE.jpg"
     },
     {
+      "imdb_id": "tt35672862",
+      "type": "movie",
+      "title": "Hokum",
+      "year": 2026,
+      "release_date": "2026-04-29",
+      "poster": "https://image.tmdb.org/t/p/w200/x6rHcQFiYcczLQPrmxXPAicm54E.jpg"
+    },
+    {
       "imdb_id": "tt0077651",
       "type": "movie",
       "title": "Halloween",
@@ -61,28 +61,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/wijlZ3HaYMvlDTPqJoTCWKFkCPU.jpg"
     },
     {
-      "imdb_id": "tt35298123",
-      "type": "movie",
-      "title": "Teenage Sex and Death at Camp Miasma",
-      "year": 2026,
-      "release_date": "2026-08-06",
-      "poster": "https://image.tmdb.org/t/p/w200/jcGvB76v8p1sqYXXkBetWASV0uM.jpg"
-    },
-    {
-      "imdb_id": "tt27419466",
-      "type": "movie",
-      "title": "Moana",
-      "year": 2026,
-      "release_date": "2026-07-08",
-      "poster": "https://image.tmdb.org/t/p/w200/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg"
-    },
-    {
       "imdb_id": "tt0087800",
       "type": "movie",
       "title": "A Nightmare on Elm Street",
       "year": 1984,
       "release_date": "1984-11-09",
       "poster": "https://image.tmdb.org/t/p/w200/wGTpGGRMZmyFCcrY2YoxVTIBlli.jpg"
+    },
+    {
+      "imdb_id": "tt35298123",
+      "type": "movie",
+      "title": "Teenage Sex and Death at Camp Miasma",
+      "year": 2026,
+      "release_date": "2026-08-06",
+      "poster": "https://image.tmdb.org/t/p/w200/jcGvB76v8p1sqYXXkBetWASV0uM.jpg"
     },
     {
       "imdb_id": "tt0080761",
@@ -109,20 +101,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/4jeFXQYytChdZYE9JYO7Un87IlW.jpg"
     },
     {
-      "imdb_id": "tt31349844",
+      "imdb_id": "tt43655467",
       "type": "movie",
-      "title": "Runner",
+      "title": "Ali G: Who Iz I?",
       "year": 2026,
-      "release_date": "2026-09-07",
-      "poster": "https://image.tmdb.org/t/p/w200/vJk2TW1QZAmBiD7oj9ZF9EPTYY1.jpg"
+      "release_date": "2026-10-22",
+      "poster": "https://image.tmdb.org/t/p/w200/uTyVxPeWX8Ai30IQoyDDQONNcq.jpg"
     },
     {
-      "imdb_id": "tt33296751",
+      "imdb_id": "tt27419466",
       "type": "movie",
-      "title": "Tuner",
+      "title": "Moana",
       "year": 2026,
-      "release_date": "2026-05-21",
-      "poster": "https://image.tmdb.org/t/p/w200/5OvA3i9wZs5jHu0DCrfmXlzAM67.jpg"
+      "release_date": "2026-07-08",
+      "poster": "https://image.tmdb.org/t/p/w200/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg"
     },
     {
       "imdb_id": "tt0120791",
@@ -133,36 +125,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/AwmToSgf2IL3aHv0QRVsR5KvChv.jpg"
     },
     {
-      "imdb_id": "tt6262770",
+      "imdb_id": "tt33296751",
       "type": "movie",
-      "title": "Tenzing",
+      "title": "Tuner",
       "year": 2026,
-      "release_date": "2026-10-09",
-      "poster": "https://image.tmdb.org/t/p/w200/eI0QW02PYqhnmIvLRdn9vrfVVP7.jpg"
+      "release_date": "2026-05-21",
+      "poster": "https://image.tmdb.org/t/p/w200/5OvA3i9wZs5jHu0DCrfmXlzAM67.jpg"
     },
     {
-      "imdb_id": "tt32273171",
+      "imdb_id": "tt31349844",
       "type": "movie",
-      "title": "The Death of Robin Hood",
+      "title": "Runner",
       "year": 2026,
-      "release_date": "2026-06-18",
-      "poster": "https://image.tmdb.org/t/p/w200/13MmRwmG5NmaMfU8qNrtgGXisiD.jpg"
-    },
-    {
-      "imdb_id": "tt3235888",
-      "type": "movie",
-      "title": "It Follows",
-      "year": 2015,
-      "release_date": "2015-02-04",
-      "poster": "https://image.tmdb.org/t/p/w200/iwnQ1JH1wdWrGYkgWySptJ5284A.jpg"
-    },
-    {
-      "imdb_id": "tt27543632",
-      "type": "movie",
-      "title": "The Housemaid",
-      "year": 2025,
-      "release_date": "2025-12-18",
-      "poster": "https://image.tmdb.org/t/p/w200/cWsBscZzwu5brg9YjNkGewRUvJX.jpg"
+      "release_date": "2026-09-07",
+      "poster": "https://image.tmdb.org/t/p/w200/vJk2TW1QZAmBiD7oj9ZF9EPTYY1.jpg"
     },
     {
       "imdb_id": "tt0117571",
@@ -173,20 +149,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/lr9ZIrmuwVmZhpZuTCW8D9g0ZJe.jpg"
     },
     {
-      "imdb_id": "tt0084787",
+      "imdb_id": "tt6262770",
       "type": "movie",
-      "title": "The Thing",
-      "year": 1982,
-      "release_date": "1982-06-25",
-      "poster": "https://image.tmdb.org/t/p/w200/tzGY49kseSE9QAKk47uuDGwnSCu.jpg"
-    },
-    {
-      "imdb_id": "tt31049299",
-      "type": "movie",
-      "title": "Animals",
+      "title": "Tenzing",
       "year": 2026,
       "release_date": "2026-10-09",
-      "poster": "https://image.tmdb.org/t/p/w200/iISM36voS1E8gX9BM0DVK0kgi3E.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/eI0QW02PYqhnmIvLRdn9vrfVVP7.jpg"
     },
     {
       "imdb_id": "tt0087332",
@@ -205,44 +173,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/1GuK965FLJxqUw9fd1pmvjbFAlv.jpg"
     },
     {
-      "imdb_id": "tt43655467",
+      "imdb_id": "tt0084787",
       "type": "movie",
-      "title": "Ali G: Who Iz I?",
-      "year": 2026,
-      "release_date": "2026-10-22",
-      "poster": "https://image.tmdb.org/t/p/w200/uTyVxPeWX8Ai30IQoyDDQONNcq.jpg"
+      "title": "The Thing",
+      "year": 1982,
+      "release_date": "1982-06-25",
+      "poster": "https://image.tmdb.org/t/p/w200/tzGY49kseSE9QAKk47uuDGwnSCu.jpg"
     },
     {
-      "imdb_id": "tt0074285",
+      "imdb_id": "tt27543632",
       "type": "movie",
-      "title": "Carrie",
-      "year": 1976,
-      "release_date": "1976-11-03",
-      "poster": "https://image.tmdb.org/t/p/w200/8tT1rqlsTguyfUBMrbHR9cv1rxM.jpg"
-    },
-    {
-      "imdb_id": "tt32268992",
-      "type": "movie",
-      "title": "Sacrifice",
-      "year": 2026,
-      "release_date": "2026-04-09",
-      "poster": "https://image.tmdb.org/t/p/w200/SGH7mlgfDyGgRCi2At62Ljg3zV.jpg"
-    },
-    {
-      "imdb_id": "tt19035928",
-      "type": "movie",
-      "title": "Lucky Strike",
-      "year": 2026,
-      "release_date": "2026-06-26",
-      "poster": "https://image.tmdb.org/t/p/w200/kzRAd7mj39ZY3FGNrDdZjqx56tn.jpg"
-    },
-    {
-      "imdb_id": "tt0073629",
-      "type": "movie",
-      "title": "The Rocky Horror Picture Show",
-      "year": 1975,
-      "release_date": "1975-08-14",
-      "poster": "https://image.tmdb.org/t/p/w200/3pyE6ZqDbuJi7zrNzzQzcKTWdmN.jpg"
+      "title": "The Housemaid",
+      "year": 2025,
+      "release_date": "2025-12-18",
+      "poster": "https://image.tmdb.org/t/p/w200/cWsBscZzwu5brg9YjNkGewRUvJX.jpg"
     },
     {
       "imdb_id": "tt0060550",
@@ -253,20 +197,68 @@
       "poster": "https://image.tmdb.org/t/p/w200/59wp9OWexYsxlSPHYmVLsl5xlFt.jpg"
     },
     {
-      "imdb_id": "tt0093437",
+      "imdb_id": "tt32273171",
       "type": "movie",
-      "title": "The Lost Boys",
-      "year": 1987,
-      "release_date": "1987-07-31",
-      "poster": "https://image.tmdb.org/t/p/w200/nH1lvyQvfbL5GKScTtT6zkIvDEn.jpg"
+      "title": "The Death of Robin Hood",
+      "year": 2026,
+      "release_date": "2026-06-18",
+      "poster": "https://image.tmdb.org/t/p/w200/13MmRwmG5NmaMfU8qNrtgGXisiD.jpg"
     },
     {
-      "imdb_id": "tt0147800",
+      "imdb_id": "tt19035928",
       "type": "movie",
-      "title": "10 Things I Hate About You",
-      "year": 1999,
-      "release_date": "1999-03-30",
-      "poster": "https://image.tmdb.org/t/p/w200/ujERk3aKABXU3NDXOAxEQYTHe9A.jpg"
+      "title": "Lucky Strike",
+      "year": 2026,
+      "release_date": "2026-06-26",
+      "poster": "https://image.tmdb.org/t/p/w200/kzRAd7mj39ZY3FGNrDdZjqx56tn.jpg"
+    },
+    {
+      "imdb_id": "tt4062536",
+      "type": "movie",
+      "title": "Green Room",
+      "year": 2016,
+      "release_date": "2016-04-15",
+      "poster": "https://image.tmdb.org/t/p/w200/evZicaR7nXe4LiD9G6QYTorcJGO.jpg"
+    },
+    {
+      "imdb_id": "tt31049299",
+      "type": "movie",
+      "title": "Animals",
+      "year": 2026,
+      "release_date": "2026-10-09",
+      "poster": "https://image.tmdb.org/t/p/w200/iISM36voS1E8gX9BM0DVK0kgi3E.jpg"
+    },
+    {
+      "imdb_id": "tt0073629",
+      "type": "movie",
+      "title": "The Rocky Horror Picture Show",
+      "year": 1975,
+      "release_date": "1975-08-14",
+      "poster": "https://image.tmdb.org/t/p/w200/3pyE6ZqDbuJi7zrNzzQzcKTWdmN.jpg"
+    },
+    {
+      "imdb_id": "tt3235888",
+      "type": "movie",
+      "title": "It Follows",
+      "year": 2015,
+      "release_date": "2015-02-04",
+      "poster": "https://image.tmdb.org/t/p/w200/iwnQ1JH1wdWrGYkgWySptJ5284A.jpg"
+    },
+    {
+      "imdb_id": "tt0074285",
+      "type": "movie",
+      "title": "Carrie",
+      "year": 1976,
+      "release_date": "1976-11-03",
+      "poster": "https://image.tmdb.org/t/p/w200/8tT1rqlsTguyfUBMrbHR9cv1rxM.jpg"
+    },
+    {
+      "imdb_id": "tt1441395",
+      "type": "movie",
+      "title": "Under the Skin",
+      "year": 2014,
+      "release_date": "2014-03-14",
+      "poster": "https://image.tmdb.org/t/p/w200/55wmcXJIDYITr7JDijJTdvwSaAv.jpg"
     },
     {
       "imdb_id": "tt0081505",
@@ -275,6 +267,22 @@
       "year": 1980,
       "release_date": "1980-05-23",
       "poster": "https://image.tmdb.org/t/p/w200/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg"
+    },
+    {
+      "imdb_id": "tt0093437",
+      "type": "movie",
+      "title": "The Lost Boys",
+      "year": 1987,
+      "release_date": "1987-07-31",
+      "poster": "https://image.tmdb.org/t/p/w200/nH1lvyQvfbL5GKScTtT6zkIvDEn.jpg"
+    },
+    {
+      "imdb_id": "tt0862856",
+      "type": "movie",
+      "title": "Trick 'r Treat",
+      "year": 2007,
+      "release_date": "2007-12-09",
+      "poster": "https://image.tmdb.org/t/p/w200/w0nmol4g7n6MFfhfphV7GzHHYjB.jpg"
     },
     {
       "imdb_id": "tt0072431",
@@ -293,36 +301,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/by4D4Q9NlUjFSEUA1yrxq6ksXmk.jpg"
     },
     {
-      "imdb_id": "tt4062536",
+      "imdb_id": "tt0094721",
       "type": "movie",
-      "title": "Green Room",
-      "year": 2016,
-      "release_date": "2016-04-15",
-      "poster": "https://image.tmdb.org/t/p/w200/evZicaR7nXe4LiD9G6QYTorcJGO.jpg"
-    },
-    {
-      "imdb_id": "tt0862856",
-      "type": "movie",
-      "title": "Trick 'r Treat",
-      "year": 2007,
-      "release_date": "2007-12-09",
-      "poster": "https://image.tmdb.org/t/p/w200/w0nmol4g7n6MFfhfphV7GzHHYjB.jpg"
-    },
-    {
-      "imdb_id": "tt2866360",
-      "type": "movie",
-      "title": "Coherence",
-      "year": 2014,
-      "release_date": "2014-04-06",
-      "poster": "https://image.tmdb.org/t/p/w200/ezUtb9m5DeLwL2gxi4gktzNCvQv.jpg"
-    },
-    {
-      "imdb_id": "tt1441395",
-      "type": "movie",
-      "title": "Under the Skin",
-      "year": 2014,
-      "release_date": "2014-03-14",
-      "poster": "https://image.tmdb.org/t/p/w200/55wmcXJIDYITr7JDijJTdvwSaAv.jpg"
+      "title": "Beetlejuice",
+      "year": 1988,
+      "release_date": "1988-03-30",
+      "poster": "https://image.tmdb.org/t/p/w200/nnl6OWkyPpuMm595hmAxNW3rZFn.jpg"
     },
     {
       "imdb_id": "tt0103874",
@@ -333,12 +317,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/wpRrdm6g8zWtJnzVqME5QwSKkn7.jpg"
     },
     {
-      "imdb_id": "tt0094721",
+      "imdb_id": "tt32890033",
       "type": "movie",
-      "title": "Beetlejuice",
-      "year": 1988,
-      "release_date": "1988-03-30",
-      "poster": "https://image.tmdb.org/t/p/w200/nnl6OWkyPpuMm595hmAxNW3rZFn.jpg"
+      "title": "Minions & Monsters",
+      "year": 2026,
+      "release_date": "2026-06-24",
+      "poster": "https://image.tmdb.org/t/p/w200/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg"
+    },
+    {
+      "imdb_id": "tt32268992",
+      "type": "movie",
+      "title": "Sacrifice",
+      "year": 2026,
+      "release_date": "2026-04-09",
+      "poster": "https://image.tmdb.org/t/p/w200/SGH7mlgfDyGgRCi2At62Ljg3zV.jpg"
     },
     {
       "imdb_id": "tt7784604",
@@ -349,36 +341,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/4GFPuL14eXi66V96xBWY73Y9PfR.jpg"
     },
     {
-      "imdb_id": "tt31170389",
+      "imdb_id": "tt23289160",
       "type": "movie",
-      "title": "Evil Dead Burn",
-      "year": 2026,
-      "release_date": "2026-07-07",
-      "poster": "https://image.tmdb.org/t/p/w200/uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg"
-    },
-    {
-      "imdb_id": "tt27047903",
-      "type": "movie",
-      "title": "Scream 7",
-      "year": 2026,
-      "release_date": "2026-02-25",
-      "poster": "https://image.tmdb.org/t/p/w200/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg"
-    },
-    {
-      "imdb_id": "tt26581740",
-      "type": "movie",
-      "title": "Weapons",
-      "year": 2025,
-      "release_date": "2025-08-04",
-      "poster": "https://image.tmdb.org/t/p/w200/cpf7vsRZ0MYRQcnLWteD5jK9ymT.jpg"
-    },
-    {
-      "imdb_id": "tt0093177",
-      "type": "movie",
-      "title": "Hellraiser",
-      "year": 1987,
-      "release_date": "1987-09-11",
-      "poster": "https://image.tmdb.org/t/p/w200/3Z0oPHyLnk3Vx6ZMC1MiVwIrKhO.jpg"
+      "title": "Godzilla Minus One",
+      "year": 2023,
+      "release_date": "2023-11-03",
+      "poster": "https://image.tmdb.org/t/p/w200/2E2WTX0TJEflAged6kzErwqX1kt.jpg"
     },
     {
       "imdb_id": "tt0385880",
@@ -389,22 +357,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/zCRPr4bkO3ae0U1134vJ39xZnAG.jpg"
     },
     {
-      "imdb_id": "tt23289160",
-      "type": "movie",
-      "title": "Godzilla Minus One",
-      "year": 2023,
-      "release_date": "2023-11-03",
-      "poster": "https://image.tmdb.org/t/p/w200/2E2WTX0TJEflAged6kzErwqX1kt.jpg"
-    },
-    {
-      "imdb_id": "tt29355505",
-      "type": "movie",
-      "title": "Toy Story 5",
-      "year": 2026,
-      "release_date": "2026-06-17",
-      "poster": "https://image.tmdb.org/t/p/w200/sfQtVlIHljToOwYjhe21KPGzZWK.jpg"
-    },
-    {
       "imdb_id": "tt0107688",
       "type": "movie",
       "title": "The Nightmare Before Christmas",
@@ -413,12 +365,44 @@
       "poster": "https://image.tmdb.org/t/p/w200/oQffRNjK8e19rF7xVYEN8ew0j7b.jpg"
     },
     {
-      "imdb_id": "tt17526714",
+      "imdb_id": "tt27047903",
       "type": "movie",
-      "title": "The Substance",
-      "year": 2024,
-      "release_date": "2024-09-18",
-      "poster": "https://image.tmdb.org/t/p/w200/lqoMzCcZYEFK729d6qzt349fB4o.jpg"
+      "title": "Scream 7",
+      "year": 2026,
+      "release_date": "2026-02-25",
+      "poster": "https://image.tmdb.org/t/p/w200/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg"
+    },
+    {
+      "imdb_id": "tt0119081",
+      "type": "movie",
+      "title": "Event Horizon",
+      "year": 1997,
+      "release_date": "1997-08-15",
+      "poster": "https://image.tmdb.org/t/p/w200/qfluaDXv0cIdLwgQWzNB2piHL2q.jpg"
+    },
+    {
+      "imdb_id": "tt31170389",
+      "type": "movie",
+      "title": "Evil Dead Burn",
+      "year": 2026,
+      "release_date": "2026-07-07",
+      "poster": "https://image.tmdb.org/t/p/w200/uRxrNXQWkHoENm3nwVOZDYSCx2F.jpg"
+    },
+    {
+      "imdb_id": "tt2866360",
+      "type": "movie",
+      "title": "Coherence",
+      "year": 2014,
+      "release_date": "2014-04-06",
+      "poster": "https://image.tmdb.org/t/p/w200/ezUtb9m5DeLwL2gxi4gktzNCvQv.jpg"
+    },
+    {
+      "imdb_id": "tt0101272",
+      "type": "movie",
+      "title": "The Addams Family",
+      "year": 1991,
+      "release_date": "1991-11-22",
+      "poster": "https://image.tmdb.org/t/p/w200/qFf8anju5f2epI0my8RdwwIXFIP.jpg"
     },
     {
       "imdb_id": "tt34494076",
@@ -437,68 +421,36 @@
       "poster": "https://image.tmdb.org/t/p/w200/5x0CeVHJI8tcDx8tUUwYHQSNILq.jpg"
     },
     {
-      "imdb_id": "tt0101272",
+      "imdb_id": "tt26581740",
       "type": "movie",
-      "title": "The Addams Family",
-      "year": 1991,
-      "release_date": "1991-11-22",
-      "poster": "https://image.tmdb.org/t/p/w200/qFf8anju5f2epI0my8RdwwIXFIP.jpg"
-    },
-    {
-      "imdb_id": "tt0119081",
-      "type": "movie",
-      "title": "Event Horizon",
-      "year": 1997,
-      "release_date": "1997-08-15",
-      "poster": "https://image.tmdb.org/t/p/w200/qfluaDXv0cIdLwgQWzNB2piHL2q.jpg"
-    },
-    {
-      "imdb_id": "tt11358166",
-      "type": "movie",
-      "title": "Some Kind of Heaven",
-      "year": 2021,
-      "release_date": "2021-02-19",
-      "poster": "https://image.tmdb.org/t/p/w200/r9ZE3Pu93DPYf7UDvXlgHy5MfaP.jpg"
-    },
-    {
-      "imdb_id": "tt31434030",
-      "type": "movie",
-      "title": "Dracula",
+      "title": "Weapons",
       "year": 2025,
-      "release_date": "2025-07-30",
-      "poster": "https://image.tmdb.org/t/p/w200/ykyRfv7JDofLxXLAwtLXaSuaFfM.jpg"
+      "release_date": "2025-08-04",
+      "poster": "https://image.tmdb.org/t/p/w200/cpf7vsRZ0MYRQcnLWteD5jK9ymT.jpg"
     },
     {
-      "imdb_id": "tt32890033",
+      "imdb_id": "tt0093177",
       "type": "movie",
-      "title": "Minions & Monsters",
+      "title": "Hellraiser",
+      "year": 1987,
+      "release_date": "1987-09-11",
+      "poster": "https://image.tmdb.org/t/p/w200/3Z0oPHyLnk3Vx6ZMC1MiVwIrKhO.jpg"
+    },
+    {
+      "imdb_id": "tt17526714",
+      "type": "movie",
+      "title": "The Substance",
+      "year": 2024,
+      "release_date": "2024-09-18",
+      "poster": "https://image.tmdb.org/t/p/w200/lqoMzCcZYEFK729d6qzt349fB4o.jpg"
+    },
+    {
+      "imdb_id": "tt29355505",
+      "type": "movie",
+      "title": "Toy Story 5",
       "year": 2026,
-      "release_date": "2026-06-24",
-      "poster": "https://image.tmdb.org/t/p/w200/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg"
-    },
-    {
-      "imdb_id": "tt0084516",
-      "type": "movie",
-      "title": "Poltergeist",
-      "year": 1982,
-      "release_date": "1982-06-04",
-      "poster": "https://image.tmdb.org/t/p/w200/4eMN3GANH5GG4kXdHkrTZEUuQ9M.jpg"
-    },
-    {
-      "imdb_id": "tt32499466",
-      "type": "movie",
-      "title": "Finding Emily",
-      "year": 2026,
-      "release_date": "2026-05-21",
-      "poster": "https://image.tmdb.org/t/p/w200/bfEQ6C702oPsN4kzIiY7n4JsrxF.jpg"
-    },
-    {
-      "imdb_id": "tt8488126",
-      "type": "movie",
-      "title": "The Inventor: Out for Blood in Silicon Valley",
-      "year": 2019,
-      "release_date": "2019-01-24",
-      "poster": "https://image.tmdb.org/t/p/w200/u21ImPnHHX2SFgkdHIjwlpEwRux.jpg"
+      "release_date": "2026-06-17",
+      "poster": "https://image.tmdb.org/t/p/w200/sfQtVlIHljToOwYjhe21KPGzZWK.jpg"
     },
     {
       "imdb_id": "tt4263482",
@@ -509,28 +461,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/zap5hpFCWSvdWSuPGAQyjUv2wAC.jpg"
     },
     {
-      "imdb_id": "tt34384900",
+      "imdb_id": "tt32499466",
       "type": "movie",
-      "title": "Love of Your Life",
+      "title": "Finding Emily",
       "year": 2026,
-      "release_date": "2026-10-07",
-      "poster": "https://image.tmdb.org/t/p/w200/dL3Tcv4FU2K85bgnGRBgLjFSrLr.jpg"
+      "release_date": "2026-05-21",
+      "poster": "https://image.tmdb.org/t/p/w200/bfEQ6C702oPsN4kzIiY7n4JsrxF.jpg"
     },
     {
-      "imdb_id": "tt1259521",
+      "imdb_id": "tt0084516",
       "type": "movie",
-      "title": "The Cabin in the Woods",
-      "year": 2012,
-      "release_date": "2012-04-12",
-      "poster": "https://image.tmdb.org/t/p/w200/zZZe5wn0udlhMtdlDjN4NB72R6e.jpg"
-    },
-    {
-      "imdb_id": "tt0121164",
-      "type": "movie",
-      "title": "Corpse Bride",
-      "year": 2005,
-      "release_date": "2005-09-12",
-      "poster": "https://image.tmdb.org/t/p/w200/3RAoVTxUk1OzZClscAsynuu670p.jpg"
+      "title": "Poltergeist",
+      "year": 1982,
+      "release_date": "1982-06-04",
+      "poster": "https://image.tmdb.org/t/p/w200/4eMN3GANH5GG4kXdHkrTZEUuQ9M.jpg"
     },
     {
       "imdb_id": "tt1623288",
@@ -541,68 +485,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/9DZPtuYTKYxt6vzHvZ5FLThG4fl.jpg"
     },
     {
-      "imdb_id": "tt0230600",
+      "imdb_id": "tt31434030",
       "type": "movie",
-      "title": "The Others",
-      "year": 2001,
-      "release_date": "2001-08-02",
-      "poster": "https://image.tmdb.org/t/p/w200/p8g1vlTvpM6nr2hMMiZ1fUlKF0D.jpg"
+      "title": "Dracula",
+      "year": 2025,
+      "release_date": "2025-07-30",
+      "poster": "https://image.tmdb.org/t/p/w200/ykyRfv7JDofLxXLAwtLXaSuaFfM.jpg"
     },
     {
-      "imdb_id": "tt0101540",
+      "imdb_id": "tt0121164",
       "type": "movie",
-      "title": "Cape Fear",
-      "year": 1991,
-      "release_date": "1991-11-13",
-      "poster": "https://image.tmdb.org/t/p/w200/meJZAAuVcjic2ipvbOPz5UlE4P9.jpg"
-    },
-    {
-      "imdb_id": "tt19770238",
-      "type": "movie",
-      "title": "Aftersun",
-      "year": 2022,
-      "release_date": "2022-10-21",
-      "poster": "https://image.tmdb.org/t/p/w200/evKz85EKouVbIr51zy5fOtpNRPg.jpg"
-    },
-    {
-      "imdb_id": "tt0837562",
-      "type": "movie",
-      "title": "Hotel Transylvania",
-      "year": 2012,
-      "release_date": "2012-09-20",
-      "poster": "https://image.tmdb.org/t/p/w200/eJGvzGrsfe2sqTUPv5IwLWXjVuR.jpg"
-    },
-    {
-      "imdb_id": "tt11378946",
-      "type": "movie",
-      "title": "Michael",
-      "year": 2026,
-      "release_date": "2026-04-22",
-      "poster": "https://image.tmdb.org/t/p/w200/dueFqKLvjftnELZaGYwY7xinfaI.jpg"
-    },
-    {
-      "imdb_id": "tt30851137",
-      "type": "movie",
-      "title": "The Bride!",
-      "year": 2026,
-      "release_date": "2026-03-04",
-      "poster": "https://image.tmdb.org/t/p/w200/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg"
-    },
-    {
-      "imdb_id": "tt28014327",
-      "type": "movie",
-      "title": "Mayday",
-      "year": 2026,
-      "release_date": "2026-09-03",
-      "poster": "https://image.tmdb.org/t/p/w200/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg"
-    },
-    {
-      "imdb_id": "tt32565993",
-      "type": "movie",
-      "title": "The Sheep Detectives",
-      "year": 2026,
-      "release_date": "2026-04-30",
-      "poster": "https://image.tmdb.org/t/p/w200/iKy5460GdsoknM8ppmGlJbKxAKa.jpg"
+      "title": "Corpse Bride",
+      "year": 2005,
+      "release_date": "2005-09-12",
+      "poster": "https://image.tmdb.org/t/p/w200/3RAoVTxUk1OzZClscAsynuu670p.jpg"
     },
     {
       "imdb_id": "tt0085636",
@@ -613,28 +509,76 @@
       "poster": "https://image.tmdb.org/t/p/w200/WABfdeaThFYXCySGIOvRNv2sSW.jpg"
     },
     {
-      "imdb_id": "tt27681354",
-      "type": "movie",
-      "title": "In the Grey",
-      "year": 2026,
-      "release_date": "2026-05-13",
-      "poster": "https://image.tmdb.org/t/p/w200/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg"
-    },
-    {
-      "imdb_id": "tt33978029",
-      "type": "movie",
-      "title": "Ready or Not: Here I Come",
-      "year": 2026,
-      "release_date": "2026-03-19",
-      "poster": "https://image.tmdb.org/t/p/w200/13ZcJzSGEqVgDSqsS9U5EkQwPkV.jpg"
-    },
-    {
       "imdb_id": "tt10229558",
       "type": "movie",
       "title": "The Dark and the Wicked",
       "year": 2020,
       "release_date": "2020-04-16",
       "poster": "https://image.tmdb.org/t/p/w200/4DB9VFVTp0IQEWFEIf9f3f2z3t5.jpg"
+    },
+    {
+      "imdb_id": "tt11358166",
+      "type": "movie",
+      "title": "Some Kind of Heaven",
+      "year": 2021,
+      "release_date": "2021-02-19",
+      "poster": "https://image.tmdb.org/t/p/w200/r9ZE3Pu93DPYf7UDvXlgHy5MfaP.jpg"
+    },
+    {
+      "imdb_id": "tt0147800",
+      "type": "movie",
+      "title": "10 Things I Hate About You",
+      "year": 1999,
+      "release_date": "1999-03-30",
+      "poster": "https://image.tmdb.org/t/p/w200/ujERk3aKABXU3NDXOAxEQYTHe9A.jpg"
+    },
+    {
+      "imdb_id": "tt8488126",
+      "type": "movie",
+      "title": "The Inventor: Out for Blood in Silicon Valley",
+      "year": 2019,
+      "release_date": "2019-01-24",
+      "poster": "https://image.tmdb.org/t/p/w200/u21ImPnHHX2SFgkdHIjwlpEwRux.jpg"
+    },
+    {
+      "imdb_id": "tt1259521",
+      "type": "movie",
+      "title": "The Cabin in the Woods",
+      "year": 2012,
+      "release_date": "2012-04-12",
+      "poster": "https://image.tmdb.org/t/p/w200/zZZe5wn0udlhMtdlDjN4NB72R6e.jpg"
+    },
+    {
+      "imdb_id": "tt0837562",
+      "type": "movie",
+      "title": "Hotel Transylvania",
+      "year": 2012,
+      "release_date": "2012-09-20",
+      "poster": "https://image.tmdb.org/t/p/w200/eJGvzGrsfe2sqTUPv5IwLWXjVuR.jpg"
+    },
+    {
+      "imdb_id": "tt32565993",
+      "type": "movie",
+      "title": "The Sheep Detectives",
+      "year": 2026,
+      "release_date": "2026-04-30",
+      "poster": "https://image.tmdb.org/t/p/w200/iKy5460GdsoknM8ppmGlJbKxAKa.jpg"
+    },
+    {
+      "imdb_id": "tt30851137",
+      "type": "movie",
+      "title": "The Bride!",
+      "year": 2026,
+      "release_date": "2026-03-04",
+      "poster": "https://image.tmdb.org/t/p/w200/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg"
+    },
+    {
+      "imdb_id": "tt0230600",
+      "type": "movie",
+      "title": "The Others",
+      "year": 2001,
+      "release_date": "2001-08-02",
+      "poster": "https://image.tmdb.org/t/p/w200/p8g1vlTvpM6nr2hMMiZ1fUlKF0D.jpg"
     },
     {
       "imdb_id": "tt0167404",
@@ -645,68 +589,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/vOyfUXNFSnaTk7Vk5AjpsKTUWsu.jpg"
     },
     {
-      "imdb_id": "tt32547691",
+      "imdb_id": "tt19770238",
       "type": "movie",
-      "title": "Pressure",
-      "year": 2026,
-      "release_date": "2026-05-28",
-      "poster": "https://image.tmdb.org/t/p/w200/gFjEggtrejCN79r6SXRjM269OtG.jpg"
-    },
-    {
-      "imdb_id": "tt0816692",
-      "type": "movie",
-      "title": "Interstellar",
-      "year": 2014,
-      "release_date": "2014-11-04",
-      "poster": "https://image.tmdb.org/t/p/w200/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg"
-    },
-    {
-      "imdb_id": "tt0365748",
-      "type": "movie",
-      "title": "Shaun of the Dead",
-      "year": 2004,
-      "release_date": "2004-04-09",
-      "poster": "https://image.tmdb.org/t/p/w200/dgXPhzNJH8HFTBjXPB177yNx6RI.jpg"
-    },
-    {
-      "imdb_id": "tt1922777",
-      "type": "movie",
-      "title": "Sinister",
-      "year": 2012,
-      "release_date": "2012-10-04",
-      "poster": "https://image.tmdb.org/t/p/w200/nzx10sca3arCeYBAomHan4Q6wa1.jpg"
-    },
-    {
-      "imdb_id": "tt0112642",
-      "type": "movie",
-      "title": "Casper",
-      "year": 1995,
-      "release_date": "1995-05-26",
-      "poster": "https://image.tmdb.org/t/p/w200/2ah8fNJFZVU3vcXhU5xfAYi2eym.jpg"
-    },
-    {
-      "imdb_id": "tt39162810",
-      "type": "movie",
-      "title": "Paralyzed by Hope: The Maria Bamford Story",
-      "year": 2026,
-      "release_date": "2026-01-22",
-      "poster": "https://image.tmdb.org/t/p/w200/waH2eiMaEW987JUTWyrj4x4d63k.jpg"
-    },
-    {
-      "imdb_id": "tt35222590",
-      "type": "movie",
-      "title": "Exit 8",
-      "year": 2025,
-      "release_date": "2025-08-03",
-      "poster": "https://image.tmdb.org/t/p/w200/nQXYTvm6AY4WmtcPskroqC7Skh.jpg"
-    },
-    {
-      "imdb_id": "tt15791034",
-      "type": "movie",
-      "title": "Barbarian",
+      "title": "Aftersun",
       "year": 2022,
-      "release_date": "2022-08-29",
-      "poster": "https://image.tmdb.org/t/p/w200/idT5mnqPcJgSkvpDX7pJffBzdVH.jpg"
+      "release_date": "2022-10-21",
+      "poster": "https://image.tmdb.org/t/p/w200/evKz85EKouVbIr51zy5fOtpNRPg.jpg"
     },
     {
       "imdb_id": "tt0072271",
@@ -717,28 +605,108 @@
       "poster": "https://image.tmdb.org/t/p/w200/mpgkRPH1GNkMCgdPk2OMyHzAks7.jpg"
     },
     {
-      "imdb_id": "tt33311069",
+      "imdb_id": "tt0112642",
       "type": "movie",
-      "title": "The Furious",
+      "title": "Casper",
+      "year": 1995,
+      "release_date": "1995-05-26",
+      "poster": "https://image.tmdb.org/t/p/w200/2ah8fNJFZVU3vcXhU5xfAYi2eym.jpg"
+    },
+    {
+      "imdb_id": "tt27681354",
+      "type": "movie",
+      "title": "In the Grey",
       "year": 2026,
-      "release_date": "2026-06-10",
-      "poster": "https://image.tmdb.org/t/p/w200/ivQ1Z3lI1xWvAeGDHBw3CCYZDGJ.jpg"
+      "release_date": "2026-05-13",
+      "poster": "https://image.tmdb.org/t/p/w200/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg"
     },
     {
-      "imdb_id": "tt5606664",
+      "imdb_id": "tt1922777",
       "type": "movie",
-      "title": "Doctor Sleep",
-      "year": 2019,
-      "release_date": "2019-10-30",
-      "poster": "https://image.tmdb.org/t/p/w200/p69QzIBbN06aTYqRRiCOY1emNBh.jpg"
+      "title": "Sinister",
+      "year": 2012,
+      "release_date": "2012-10-04",
+      "poster": "https://image.tmdb.org/t/p/w200/nzx10sca3arCeYBAomHan4Q6wa1.jpg"
     },
     {
-      "imdb_id": "tt0078748",
+      "imdb_id": "tt28014327",
       "type": "movie",
-      "title": "Alien",
-      "year": 1979,
-      "release_date": "1979-05-25",
-      "poster": "https://image.tmdb.org/t/p/w200/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg"
+      "title": "Mayday",
+      "year": 2026,
+      "release_date": "2026-09-03",
+      "poster": "https://image.tmdb.org/t/p/w200/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg"
+    },
+    {
+      "imdb_id": "tt33978029",
+      "type": "movie",
+      "title": "Ready or Not: Here I Come",
+      "year": 2026,
+      "release_date": "2026-03-19",
+      "poster": "https://image.tmdb.org/t/p/w200/13ZcJzSGEqVgDSqsS9U5EkQwPkV.jpg"
+    },
+    {
+      "imdb_id": "tt11378946",
+      "type": "movie",
+      "title": "Michael",
+      "year": 2026,
+      "release_date": "2026-04-22",
+      "poster": "https://image.tmdb.org/t/p/w200/dueFqKLvjftnELZaGYwY7xinfaI.jpg"
+    },
+    {
+      "imdb_id": "tt32547691",
+      "type": "movie",
+      "title": "Pressure",
+      "year": 2026,
+      "release_date": "2026-05-28",
+      "poster": "https://image.tmdb.org/t/p/w200/gFjEggtrejCN79r6SXRjM269OtG.jpg"
+    },
+    {
+      "imdb_id": "tt34384900",
+      "type": "movie",
+      "title": "Love of Your Life",
+      "year": 2026,
+      "release_date": "2026-10-07",
+      "poster": "https://image.tmdb.org/t/p/w200/dL3Tcv4FU2K85bgnGRBgLjFSrLr.jpg"
+    },
+    {
+      "imdb_id": "tt0101540",
+      "type": "movie",
+      "title": "Cape Fear",
+      "year": 1991,
+      "release_date": "1991-11-13",
+      "poster": "https://image.tmdb.org/t/p/w200/meJZAAuVcjic2ipvbOPz5UlE4P9.jpg"
+    },
+    {
+      "imdb_id": "tt35222590",
+      "type": "movie",
+      "title": "Exit 8",
+      "year": 2025,
+      "release_date": "2025-08-03",
+      "poster": "https://image.tmdb.org/t/p/w200/nQXYTvm6AY4WmtcPskroqC7Skh.jpg"
+    },
+    {
+      "imdb_id": "tt33763941",
+      "type": "movie",
+      "title": "Passenger",
+      "year": 2026,
+      "release_date": "2026-05-20",
+      "poster": "https://image.tmdb.org/t/p/w200/2sOEJzhPzjTkZSlPbGxOJ7xgIyS.jpg"
+    },
+    {
+      "imdb_id": "tt31193180",
+      "type": "movie",
+      "title": "Sinners",
+      "year": 2025,
+      "release_date": "2025-04-16",
+      "poster": "https://image.tmdb.org/t/p/w200/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg"
+    },
+    {
+      "imdb_id": "tt0365748",
+      "type": "movie",
+      "title": "Shaun of the Dead",
+      "year": 2004,
+      "release_date": "2004-04-09",
+      "poster": "https://image.tmdb.org/t/p/w200/dgXPhzNJH8HFTBjXPB177yNx6RI.jpg"
     },
     {
       "imdb_id": "tt0102926",
@@ -749,12 +717,84 @@
       "poster": "https://image.tmdb.org/t/p/w200/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg"
     },
     {
-      "imdb_id": "tt30825738",
+      "imdb_id": "tt33311069",
       "type": "movie",
-      "title": "The Mandalorian and Grogu",
+      "title": "The Furious",
       "year": 2026,
-      "release_date": "2026-05-20",
-      "poster": "https://image.tmdb.org/t/p/w200/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg"
+      "release_date": "2026-06-10",
+      "poster": "https://image.tmdb.org/t/p/w200/ivQ1Z3lI1xWvAeGDHBw3CCYZDGJ.jpg"
+    },
+    {
+      "imdb_id": "tt15791034",
+      "type": "movie",
+      "title": "Barbarian",
+      "year": 2022,
+      "release_date": "2022-08-29",
+      "poster": "https://image.tmdb.org/t/p/w200/idT5mnqPcJgSkvpDX7pJffBzdVH.jpg"
+    },
+    {
+      "imdb_id": "tt5606664",
+      "type": "movie",
+      "title": "Doctor Sleep",
+      "year": 2019,
+      "release_date": "2019-10-30",
+      "poster": "https://image.tmdb.org/t/p/w200/p69QzIBbN06aTYqRRiCOY1emNBh.jpg"
+    },
+    {
+      "imdb_id": "tt5040012",
+      "type": "movie",
+      "title": "Nosferatu",
+      "year": 2024,
+      "release_date": "2024-12-25",
+      "poster": "https://image.tmdb.org/t/p/w200/d0B8xDdqBZlzlPEzES8lu5LlNQn.jpg"
+    },
+    {
+      "imdb_id": "tt0245674",
+      "type": "movie",
+      "title": "Thir13en Ghosts",
+      "year": 2001,
+      "release_date": "2001-10-25",
+      "poster": "https://image.tmdb.org/t/p/w200/6yrrddjIjx0ElCRZp5pTZeqrj3k.jpg"
+    },
+    {
+      "imdb_id": "tt0246578",
+      "type": "movie",
+      "title": "Donnie Darko",
+      "year": 2001,
+      "release_date": "2001-01-19",
+      "poster": "https://image.tmdb.org/t/p/w200/j2AtZFsflxiluaNtajMTI0Avm8C.jpg"
+    },
+    {
+      "imdb_id": "tt0390336",
+      "type": "movie",
+      "title": "Overnight",
+      "year": 2003,
+      "release_date": "2003-06-12",
+      "poster": "https://image.tmdb.org/t/p/w200/tw0Ozor3NWNAj2r0CJ5Arz0U8Uv.jpg"
+    },
+    {
+      "imdb_id": "tt0133093",
+      "type": "movie",
+      "title": "The Matrix",
+      "year": 1999,
+      "release_date": "1999-03-31",
+      "poster": "https://image.tmdb.org/t/p/w200/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg"
+    },
+    {
+      "imdb_id": "tt1341338",
+      "type": "movie",
+      "title": "Good Luck, Have Fun, Don't Die",
+      "year": 2026,
+      "release_date": "2026-02-13",
+      "poster": "https://image.tmdb.org/t/p/w200/rWcfOdY7TU6lTdazWj0ebDZnAfO.jpg"
+    },
+    {
+      "imdb_id": "tt0816692",
+      "type": "movie",
+      "title": "Interstellar",
+      "year": 2014,
+      "release_date": "2014-11-04",
+      "poster": "https://image.tmdb.org/t/p/w200/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg"
     },
     {
       "imdb_id": "tt5215952",
@@ -773,28 +813,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/92rGctBMTv4uaSlIBVnhz01kRWL.jpg"
     },
     {
-      "imdb_id": "tt0245674",
+      "imdb_id": "tt8036976",
       "type": "movie",
-      "title": "Thir13en Ghosts",
-      "year": 2001,
-      "release_date": "2001-10-25",
-      "poster": "https://image.tmdb.org/t/p/w200/6yrrddjIjx0ElCRZp5pTZeqrj3k.jpg"
-    },
-    {
-      "imdb_id": "tt8814476",
-      "type": "movie",
-      "title": "Supergirl",
+      "title": "Send Help",
       "year": 2026,
-      "release_date": "2026-06-24",
-      "poster": "https://image.tmdb.org/t/p/w200/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg"
+      "release_date": "2026-01-22",
+      "poster": "https://image.tmdb.org/t/p/w200/zbJWVHOtj3ljBzWgL1P8pxP03Up.jpg"
     },
     {
-      "imdb_id": "tt31193180",
+      "imdb_id": "tt0078748",
       "type": "movie",
-      "title": "Sinners",
-      "year": 2025,
-      "release_date": "2025-04-16",
-      "poster": "https://image.tmdb.org/t/p/w200/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg"
+      "title": "Alien",
+      "year": 1979,
+      "release_date": "1979-05-25",
+      "poster": "https://image.tmdb.org/t/p/w200/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg"
     },
     {
       "imdb_id": "tt8772262",
@@ -805,174 +837,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/7LEI8ulZzO5gy9Ww2NVCrKmHeDZ.jpg"
     },
     {
-      "imdb_id": "tt0482571",
-      "type": "movie",
-      "title": "The Prestige",
-      "year": 2006,
-      "release_date": "2006-10-19",
-      "poster": "https://image.tmdb.org/t/p/w200/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg"
-    },
-    {
-      "imdb_id": "tt33763941",
-      "type": "movie",
-      "title": "Passenger",
-      "year": 2026,
-      "release_date": "2026-05-20",
-      "poster": "https://image.tmdb.org/t/p/w200/2sOEJzhPzjTkZSlPbGxOJ7xgIyS.jpg"
-    },
-    {
-      "imdb_id": "tt0133093",
-      "type": "movie",
-      "title": "The Matrix",
-      "year": 1999,
-      "release_date": "1999-03-31",
-      "poster": "https://image.tmdb.org/t/p/w200/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg"
-    },
-    {
-      "imdb_id": "tt0246578",
-      "type": "movie",
-      "title": "Donnie Darko",
-      "year": 2001,
-      "release_date": "2001-01-19",
-      "poster": "https://image.tmdb.org/t/p/w200/j2AtZFsflxiluaNtajMTI0Avm8C.jpg"
-    },
-    {
-      "imdb_id": "tt0082933",
-      "type": "movie",
-      "title": "Possession",
-      "year": 1981,
-      "release_date": "1981-05-27",
-      "poster": "https://image.tmdb.org/t/p/w200/A9bnRn05riOKWftvQlLKa2gl51n.jpg"
-    },
-    {
-      "imdb_id": "tt4712810",
-      "type": "movie",
-      "title": "Now You See Me: Now You Don't",
-      "year": 2025,
-      "release_date": "2025-11-12",
-      "poster": "https://image.tmdb.org/t/p/w200/oD3Eey4e4Z259XLm3eD3WGcoJAh.jpg"
-    },
-    {
-      "imdb_id": "tt1341338",
-      "type": "movie",
-      "title": "Good Luck, Have Fun, Don't Die",
-      "year": 2026,
-      "release_date": "2026-02-13",
-      "poster": "https://image.tmdb.org/t/p/w200/rWcfOdY7TU6lTdazWj0ebDZnAfO.jpg"
-    },
-    {
-      "imdb_id": "tt34685692",
-      "type": "movie",
-      "title": "Over Your Dead Body",
-      "year": 2026,
-      "release_date": "2026-03-14",
-      "poster": "https://image.tmdb.org/t/p/w200/kZCauMzAt9eMAhLMopCqnFw1Q5k.jpg"
-    },
-    {
-      "imdb_id": "tt8036976",
-      "type": "movie",
-      "title": "Send Help",
-      "year": 2026,
-      "release_date": "2026-01-22",
-      "poster": "https://image.tmdb.org/t/p/w200/zbJWVHOtj3ljBzWgL1P8pxP03Up.jpg"
-    },
-    {
-      "imdb_id": "tt0390336",
-      "type": "movie",
-      "title": "Overnight",
-      "year": 2003,
-      "release_date": "2003-06-12",
-      "poster": "https://image.tmdb.org/t/p/w200/tw0Ozor3NWNAj2r0CJ5Arz0U8Uv.jpg"
-    },
-    {
-      "imdb_id": "tt5040012",
-      "type": "movie",
-      "title": "Nosferatu",
-      "year": 2024,
-      "release_date": "2024-12-25",
-      "poster": "https://image.tmdb.org/t/p/w200/d0B8xDdqBZlzlPEzES8lu5LlNQn.jpg"
-    },
-    {
-      "imdb_id": "tt1465522",
-      "type": "movie",
-      "title": "Tucker and Dale vs. Evil",
-      "year": 2010,
-      "release_date": "2010-01-22",
-      "poster": "https://image.tmdb.org/t/p/w200/8shwLEDzajJGSfLgbpac8x8xn1U.jpg"
-    },
-    {
-      "imdb_id": "tt33071426",
-      "type": "movie",
-      "title": "The Drama",
-      "year": 2026,
-      "release_date": "2026-04-01",
-      "poster": "https://image.tmdb.org/t/p/w200/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg"
-    },
-    {
-      "imdb_id": "tt3986820",
-      "type": "movie",
-      "title": "The Endless",
-      "year": 2017,
-      "release_date": "2017-11-05",
-      "poster": "https://image.tmdb.org/t/p/w200/uVHPBTLb6Sj1Eso9HzyBAOMRheM.jpg"
-    },
-    {
-      "imdb_id": "tt7798634",
-      "type": "movie",
-      "title": "Ready or Not",
-      "year": 2019,
-      "release_date": "2019-08-21",
-      "poster": "https://image.tmdb.org/t/p/w200/oJD9KQFoObZmxAS1je56SIFVNJt.jpg"
-    },
-    {
-      "imdb_id": "tt28498219",
-      "type": "movie",
-      "title": "Matchbox the Movie",
-      "year": 2026,
-      "release_date": "2026-10-05",
-      "poster": "https://image.tmdb.org/t/p/w200/aHhHRz6nOpwkqJs5ASeRGAdK2dt.jpg"
-    },
-    {
-      "imdb_id": "tt10638522",
-      "type": "movie",
-      "title": "Talk to Me",
-      "year": 2023,
-      "release_date": "2023-07-26",
-      "poster": "https://image.tmdb.org/t/p/w200/kdPMUMJzyYAc4roD52qavX0nLIC.jpg"
-    },
-    {
-      "imdb_id": "tt6933238",
-      "type": "movie",
-      "title": "UNABOMBER",
-      "year": 2026,
-      "release_date": "2026-09-25",
-      "poster": "https://image.tmdb.org/t/p/w200/39aMkR8Y5vhCG9dTkjiqRl8AVqp.jpg"
-    },
-    {
-      "imdb_id": "tt0095271",
-      "type": "movie",
-      "title": "Halloween 4: The Return of Michael Myers",
-      "year": 1988,
-      "release_date": "1988-10-21",
-      "poster": "https://image.tmdb.org/t/p/w200/eFSOkXF9n9hsfGv45MDsPixiOyx.jpg"
-    },
-    {
-      "imdb_id": "tt32654916",
-      "type": "movie",
-      "title": "Soulm8te",
-      "year": 2026,
-      "release_date": "2026-07-31",
-      "poster": "https://image.tmdb.org/t/p/w200/nIkAHDzo9kbG3kDmDckqywo6CE9.jpg"
-    },
-    {
-      "imdb_id": "tt1591095",
-      "type": "movie",
-      "title": "Insidious",
-      "year": 2011,
-      "release_date": "2011-03-31",
-      "poster": "https://image.tmdb.org/t/p/w200/tmlDFIUpGRKiuWm9Ixc6CYDk4y0.jpg"
-    },
-    {
       "imdb_id": "tt1392170",
       "type": "movie",
       "title": "The Hunger Games",
@@ -981,12 +845,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/apa5G43Hha7kH7wJG0gkkHT7FA9.jpg"
     },
     {
-      "imdb_id": "tt34381258",
+      "imdb_id": "tt8814476",
       "type": "movie",
-      "title": "Good Boy",
+      "title": "Supergirl",
       "year": 2026,
-      "release_date": "2026-03-05",
-      "poster": "https://image.tmdb.org/t/p/w200/eWb841fMkSNly5gfL9J1N0xzVYI.jpg"
+      "release_date": "2026-06-24",
+      "poster": "https://image.tmdb.org/t/p/w200/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg"
     },
     {
       "imdb_id": "tt0289043",
@@ -997,20 +861,52 @@
       "poster": "https://image.tmdb.org/t/p/w200/sQckQRt17VaWbo39GIu0TMOiszq.jpg"
     },
     {
-      "imdb_id": "tt22526100",
+      "imdb_id": "tt1465522",
       "type": "movie",
-      "title": "The Love Hypothesis",
-      "year": 2026,
-      "release_date": "2026-09-23",
-      "poster": "https://image.tmdb.org/t/p/w200/vfZxVHextAGC70zrNhS8lsROqP1.jpg"
+      "title": "Tucker and Dale vs. Evil",
+      "year": 2010,
+      "release_date": "2010-01-22",
+      "poster": "https://image.tmdb.org/t/p/w200/8shwLEDzajJGSfLgbpac8x8xn1U.jpg"
     },
     {
-      "imdb_id": "tt14966898",
+      "imdb_id": "tt30825738",
       "type": "movie",
-      "title": "Late Night with the Devil",
-      "year": 2024,
-      "release_date": "2024-03-19",
-      "poster": "https://image.tmdb.org/t/p/w200/mu8LRWT9GHkfiyHm7kgxT6YNvMW.jpg"
+      "title": "The Mandalorian and Grogu",
+      "year": 2026,
+      "release_date": "2026-05-20",
+      "poster": "https://image.tmdb.org/t/p/w200/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg"
+    },
+    {
+      "imdb_id": "tt34685692",
+      "type": "movie",
+      "title": "Over Your Dead Body",
+      "year": 2026,
+      "release_date": "2026-03-14",
+      "poster": "https://image.tmdb.org/t/p/w200/kZCauMzAt9eMAhLMopCqnFw1Q5k.jpg"
+    },
+    {
+      "imdb_id": "tt33071426",
+      "type": "movie",
+      "title": "The Drama",
+      "year": 2026,
+      "release_date": "2026-04-01",
+      "poster": "https://image.tmdb.org/t/p/w200/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg"
+    },
+    {
+      "imdb_id": "tt0095271",
+      "type": "movie",
+      "title": "Halloween 4: The Return of Michael Myers",
+      "year": 1988,
+      "release_date": "1988-10-21",
+      "poster": "https://image.tmdb.org/t/p/w200/eFSOkXF9n9hsfGv45MDsPixiOyx.jpg"
+    },
+    {
+      "imdb_id": "tt4712810",
+      "type": "movie",
+      "title": "Now You See Me: Now You Don't",
+      "year": 2025,
+      "release_date": "2025-11-12",
+      "poster": "https://image.tmdb.org/t/p/w200/oD3Eey4e4Z259XLm3eD3WGcoJAh.jpg"
     },
     {
       "imdb_id": "tt0298130",
@@ -1021,68 +917,60 @@
       "poster": "https://image.tmdb.org/t/p/w200/AeRpUynJKDpJveklBJipOYrVxCS.jpg"
     },
     {
-      "imdb_id": "tt1856101",
+      "imdb_id": "tt2049403",
       "type": "movie",
-      "title": "Blade Runner 2049",
-      "year": 2017,
-      "release_date": "2017-10-04",
-      "poster": "https://image.tmdb.org/t/p/w200/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg"
+      "title": "Beetlejuice Beetlejuice",
+      "year": 2024,
+      "release_date": "2024-09-04",
+      "poster": "https://image.tmdb.org/t/p/w200/kKgQzkUCnQmeTPkyIwHly2t6ZFI.jpg"
     },
     {
-      "imdb_id": "tt7131622",
+      "imdb_id": "tt32654916",
       "type": "movie",
-      "title": "Once Upon a Time... in Hollywood",
+      "title": "Soulm8te",
+      "year": 2026,
+      "release_date": "2026-07-31",
+      "poster": "https://image.tmdb.org/t/p/w200/aRfFP8stzodl0bo8ywoNZXdaVwo.jpg"
+    },
+    {
+      "imdb_id": "tt7798634",
+      "type": "movie",
+      "title": "Ready or Not",
       "year": 2019,
-      "release_date": "2019-07-24",
-      "poster": "https://image.tmdb.org/t/p/w200/8j58iEBw9pOXFD2L0nt0ZXeHviB.jpg"
+      "release_date": "2019-08-21",
+      "poster": "https://image.tmdb.org/t/p/w200/oJD9KQFoObZmxAS1je56SIFVNJt.jpg"
     },
     {
-      "imdb_id": "tt0099685",
+      "imdb_id": "tt0082933",
       "type": "movie",
-      "title": "GoodFellas",
-      "year": 1990,
-      "release_date": "1990-09-12",
-      "poster": "https://image.tmdb.org/t/p/w200/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg"
-    },
-    {
-      "imdb_id": "tt22938576",
-      "type": "movie",
-      "title": "The Lost Patient",
-      "year": 2022,
-      "release_date": "2022-11-25",
-      "poster": "https://image.tmdb.org/t/p/w200/tHwGtD4zT0IhKdc2JQNxHAJFGWn.jpg"
-    },
-    {
-      "imdb_id": "tt5700672",
-      "type": "movie",
-      "title": "Train to Busan",
-      "year": 2016,
-      "release_date": "2016-07-20",
-      "poster": "https://image.tmdb.org/t/p/w200/vNVFt6dtcqnI7hqa6LFBUibuFiw.jpg"
-    },
-    {
-      "imdb_id": "tt0082010",
-      "type": "movie",
-      "title": "An American Werewolf in London",
+      "title": "Possession",
       "year": 1981,
-      "release_date": "1981-08-21",
-      "poster": "https://image.tmdb.org/t/p/w200/hVEqUASJmCQaolkKFEySCHZ8uKG.jpg"
+      "release_date": "1981-05-27",
+      "poster": "https://image.tmdb.org/t/p/w200/A9bnRn05riOKWftvQlLKa2gl51n.jpg"
     },
     {
-      "imdb_id": "tt9620292",
+      "imdb_id": "tt1591095",
       "type": "movie",
-      "title": "Promising Young Woman",
-      "year": 2020,
-      "release_date": "2020-12-13",
-      "poster": "https://image.tmdb.org/t/p/w200/2h4EkRxy36zSsBDkijXSUMJFDaz.jpg"
+      "title": "Insidious",
+      "year": 2011,
+      "release_date": "2011-03-31",
+      "poster": "https://image.tmdb.org/t/p/w200/tmlDFIUpGRKiuWm9Ixc6CYDk4y0.jpg"
     },
     {
-      "imdb_id": "tt0094862",
+      "imdb_id": "tt0482571",
       "type": "movie",
-      "title": "Child's Play",
-      "year": 1988,
-      "release_date": "1988-11-09",
-      "poster": "https://image.tmdb.org/t/p/w200/wvpgvcWNkF2HLuTEMIM7K83MvZ.jpg"
+      "title": "The Prestige",
+      "year": 2006,
+      "release_date": "2006-10-19",
+      "poster": "https://image.tmdb.org/t/p/w200/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg"
+    },
+    {
+      "imdb_id": "tt10638522",
+      "type": "movie",
+      "title": "Talk to Me",
+      "year": 2023,
+      "release_date": "2023-07-26",
+      "poster": "https://image.tmdb.org/t/p/w200/kdPMUMJzyYAc4roD52qavX0nLIC.jpg"
     },
     {
       "imdb_id": "tt1502407",
@@ -1093,84 +981,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/f7JAX5EGk4GgsEnus6OxyzwpFp7.jpg"
     },
     {
-      "imdb_id": "tt2049403",
+      "imdb_id": "tt22526100",
       "type": "movie",
-      "title": "Beetlejuice Beetlejuice",
-      "year": 2024,
-      "release_date": "2024-09-04",
-      "poster": "https://image.tmdb.org/t/p/w200/kKgQzkUCnQmeTPkyIwHly2t6ZFI.jpg"
-    },
-    {
-      "imdb_id": "tt26470109",
-      "type": "movie",
-      "title": "Oddity",
-      "year": 2024,
-      "release_date": "2024-07-19",
-      "poster": "https://image.tmdb.org/t/p/w200/3Z9c1tbUhP0QruRjczPHnbx3U2D.jpg"
-    },
-    {
-      "imdb_id": "tt0329101",
-      "type": "movie",
-      "title": "Freddy vs. Jason",
-      "year": 2003,
-      "release_date": "2003-08-15",
-      "poster": "https://image.tmdb.org/t/p/w200/ffoBCQ7y63Tvo48HsJqr1XOiqiV.jpg"
-    },
-    {
-      "imdb_id": "tt32093575",
-      "type": "movie",
-      "title": "Scary Movie",
+      "title": "The Love Hypothesis",
       "year": 2026,
-      "release_date": "2026-06-03",
-      "poster": "https://image.tmdb.org/t/p/w200/znHT8peERZRWG1ME3r0Db0EV8k8.jpg"
-    },
-    {
-      "imdb_id": "tt1285016",
-      "type": "movie",
-      "title": "The Social Network",
-      "year": 2010,
-      "release_date": "2010-10-01",
-      "poster": "https://image.tmdb.org/t/p/w200/n0ybibhJtQ5icDqTp8eRytcIHJx.jpg"
-    },
-    {
-      "imdb_id": "tt0261983",
-      "type": "movie",
-      "title": "Session 9",
-      "year": 2001,
-      "release_date": "2001-08-10",
-      "poster": "https://image.tmdb.org/t/p/w200/A3Au37c3KJX29BDvldzGiYtaU5B.jpg"
-    },
-    {
-      "imdb_id": "tt0448134",
-      "type": "movie",
-      "title": "Sunshine",
-      "year": 2007,
-      "release_date": "2007-04-05",
-      "poster": "https://image.tmdb.org/t/p/w200/oKGGeJ8qvm0UmClz43VJ31fzPP7.jpg"
-    },
-    {
-      "imdb_id": "tt0082495",
-      "type": "movie",
-      "title": "Halloween II",
-      "year": 1981,
-      "release_date": "1981-10-30",
-      "poster": "https://image.tmdb.org/t/p/w200/3nX5HHGgOKaVMxXwMLT9DHO1Ne6.jpg"
-    },
-    {
-      "imdb_id": "tt0241527",
-      "type": "movie",
-      "title": "Harry Potter and the Philosopher's Stone",
-      "year": 2001,
-      "release_date": "2001-11-16",
-      "poster": "https://image.tmdb.org/t/p/w200/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
-    },
-    {
-      "imdb_id": "tt0063522",
-      "type": "movie",
-      "title": "Rosemary's Baby",
-      "year": 1968,
-      "release_date": "1968-06-12",
-      "poster": "https://image.tmdb.org/t/p/w200/kKvQ0pyMnJweWVz2Pwbyeivq5Zk.jpg"
+      "release_date": "2026-09-23",
+      "poster": "https://image.tmdb.org/t/p/w200/vfZxVHextAGC70zrNhS8lsROqP1.jpg"
     },
     {
       "imdb_id": "tt0115963",
@@ -1181,28 +997,204 @@
       "poster": "https://image.tmdb.org/t/p/w200/8bW2RdRkloYtEPhbQZN4wcdmJP4.jpg"
     },
     {
-      "imdb_id": "tt38672588",
+      "imdb_id": "tt34381258",
       "type": "movie",
-      "title": "Masterplan",
+      "title": "Good Boy",
       "year": 2026,
-      "release_date": "2026-10-16",
-      "poster": "https://image.tmdb.org/t/p/w200/5xmXVd7nCK3tAo34XkO58SxUCip.jpg"
+      "release_date": "2026-03-05",
+      "poster": "https://image.tmdb.org/t/p/w200/eWb841fMkSNly5gfL9J1N0xzVYI.jpg"
     },
     {
-      "imdb_id": "tt1130884",
+      "imdb_id": "tt0094862",
       "type": "movie",
-      "title": "Shutter Island",
-      "year": 2010,
-      "release_date": "2010-02-14",
-      "poster": "https://image.tmdb.org/t/p/w200/nrmXQ0zcZUL8jFLrakWc90IR8z9.jpg"
+      "title": "Child's Play",
+      "year": 1988,
+      "release_date": "1988-11-09",
+      "poster": "https://image.tmdb.org/t/p/w200/wvpgvcWNkF2HLuTEMIM7K83MvZ.jpg"
     },
     {
-      "imdb_id": "tt0113409",
+      "imdb_id": "tt0082010",
       "type": "movie",
-      "title": "In the Mouth of Madness",
-      "year": 1995,
-      "release_date": "1995-02-03",
-      "poster": "https://image.tmdb.org/t/p/w200/msh4tEUzbnEqlHcFOUH4O0Zti8r.jpg"
+      "title": "An American Werewolf in London",
+      "year": 1981,
+      "release_date": "1981-08-21",
+      "poster": "https://image.tmdb.org/t/p/w200/hVEqUASJmCQaolkKFEySCHZ8uKG.jpg"
+    },
+    {
+      "imdb_id": "tt7131622",
+      "type": "movie",
+      "title": "Once Upon a Time... in Hollywood",
+      "year": 2019,
+      "release_date": "2019-07-24",
+      "poster": "https://image.tmdb.org/t/p/w200/8j58iEBw9pOXFD2L0nt0ZXeHviB.jpg"
+    },
+    {
+      "imdb_id": "tt32093575",
+      "type": "movie",
+      "title": "Scary Movie",
+      "year": 2026,
+      "release_date": "2026-06-03",
+      "poster": "https://image.tmdb.org/t/p/w200/znHT8peERZRWG1ME3r0Db0EV8k8.jpg"
+    },
+    {
+      "imdb_id": "tt0448134",
+      "type": "movie",
+      "title": "Sunshine",
+      "year": 2007,
+      "release_date": "2007-04-05",
+      "poster": "https://image.tmdb.org/t/p/w200/oKGGeJ8qvm0UmClz43VJ31fzPP7.jpg"
+    },
+    {
+      "imdb_id": "tt0329101",
+      "type": "movie",
+      "title": "Freddy vs. Jason",
+      "year": 2003,
+      "release_date": "2003-08-15",
+      "poster": "https://image.tmdb.org/t/p/w200/ffoBCQ7y63Tvo48HsJqr1XOiqiV.jpg"
+    },
+    {
+      "imdb_id": "tt28498219",
+      "type": "movie",
+      "title": "Matchbox the Movie",
+      "year": 2026,
+      "release_date": "2026-10-05",
+      "poster": "https://image.tmdb.org/t/p/w200/aHhHRz6nOpwkqJs5ASeRGAdK2dt.jpg"
+    },
+    {
+      "imdb_id": "tt14966898",
+      "type": "movie",
+      "title": "Late Night with the Devil",
+      "year": 2024,
+      "release_date": "2024-03-19",
+      "poster": "https://image.tmdb.org/t/p/w200/mu8LRWT9GHkfiyHm7kgxT6YNvMW.jpg"
+    },
+    {
+      "imdb_id": "tt0082495",
+      "type": "movie",
+      "title": "Halloween II",
+      "year": 1981,
+      "release_date": "1981-10-30",
+      "poster": "https://image.tmdb.org/t/p/w200/3nX5HHGgOKaVMxXwMLT9DHO1Ne6.jpg"
+    },
+    {
+      "imdb_id": "tt0063522",
+      "type": "movie",
+      "title": "Rosemary's Baby",
+      "year": 1968,
+      "release_date": "1968-06-12",
+      "poster": "https://image.tmdb.org/t/p/w200/kKvQ0pyMnJweWVz2Pwbyeivq5Zk.jpg"
+    },
+    {
+      "imdb_id": "tt26470109",
+      "type": "movie",
+      "title": "Oddity",
+      "year": 2024,
+      "release_date": "2024-07-19",
+      "poster": "https://image.tmdb.org/t/p/w200/3Z9c1tbUhP0QruRjczPHnbx3U2D.jpg"
+    },
+    {
+      "imdb_id": "tt2543164",
+      "type": "movie",
+      "title": "Arrival",
+      "year": 2016,
+      "release_date": "2016-11-10",
+      "poster": "https://image.tmdb.org/t/p/w200/pEzNVQfdzYDzVK0XqxERIw2x2se.jpg"
+    },
+    {
+      "imdb_id": "tt32141377",
+      "type": "movie",
+      "title": "28 Years Later: The Bone Temple",
+      "year": 2026,
+      "release_date": "2026-01-14",
+      "poster": "https://image.tmdb.org/t/p/w200/kK1BGkG3KAvWB0WMV1DfOx9yTMZ.jpg"
+    },
+    {
+      "imdb_id": "tt5700672",
+      "type": "movie",
+      "title": "Train to Busan",
+      "year": 2016,
+      "release_date": "2016-07-20",
+      "poster": "https://image.tmdb.org/t/p/w200/vNVFt6dtcqnI7hqa6LFBUibuFiw.jpg"
+    },
+    {
+      "imdb_id": "tt1457767",
+      "type": "movie",
+      "title": "The Conjuring",
+      "year": 2013,
+      "release_date": "2013-07-18",
+      "poster": "https://image.tmdb.org/t/p/w200/wVYREutTvI2tmxr6ujrHT704wGF.jpg"
+    },
+    {
+      "imdb_id": "tt9731534",
+      "type": "movie",
+      "title": "The Night House",
+      "year": 2021,
+      "release_date": "2021-07-15",
+      "poster": "https://image.tmdb.org/t/p/w200/rqs2CXpc4d5FzeP1EZCYItAVo81.jpg"
+    },
+    {
+      "imdb_id": "tt4267026",
+      "type": "movie",
+      "title": "Hell House LLC",
+      "year": 2015,
+      "release_date": "2015-10-16",
+      "poster": "https://image.tmdb.org/t/p/w200/xUSCQEbbAy3Lv6r00RfXtdxhRDX.jpg"
+    },
+    {
+      "imdb_id": "tt39162810",
+      "type": "movie",
+      "title": "Paralyzed by Hope: The Maria Bamford Story",
+      "year": 2026,
+      "release_date": "2026-01-22",
+      "poster": "https://image.tmdb.org/t/p/w200/waH2eiMaEW987JUTWyrj4x4d63k.jpg"
+    },
+    {
+      "imdb_id": "tt0261983",
+      "type": "movie",
+      "title": "Session 9",
+      "year": 2001,
+      "release_date": "2001-08-10",
+      "poster": "https://image.tmdb.org/t/p/w200/A3Au37c3KJX29BDvldzGiYtaU5B.jpg"
+    },
+    {
+      "imdb_id": "tt9620292",
+      "type": "movie",
+      "title": "Promising Young Woman",
+      "year": 2020,
+      "release_date": "2020-12-13",
+      "poster": "https://image.tmdb.org/t/p/w200/2h4EkRxy36zSsBDkijXSUMJFDaz.jpg"
+    },
+    {
+      "imdb_id": "tt9572534",
+      "type": "movie",
+      "title": "Golden Arm",
+      "year": 2021,
+      "release_date": "2021-04-30",
+      "poster": "https://image.tmdb.org/t/p/w200/w4vwJK62cWhVFq6SZKHIcdHrh5T.jpg"
+    },
+    {
+      "imdb_id": "tt0054215",
+      "type": "movie",
+      "title": "Psycho",
+      "year": 1960,
+      "release_date": "1960-06-22",
+      "poster": "https://image.tmdb.org/t/p/w200/yz4QVqPx3h1hD1DfqqQkCq3rmxW.jpg"
+    },
+    {
+      "imdb_id": "tt0241527",
+      "type": "movie",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "year": 2001,
+      "release_date": "2001-11-16",
+      "poster": "https://image.tmdb.org/t/p/w200/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+    },
+    {
+      "imdb_id": "tt0435625",
+      "type": "movie",
+      "title": "The Descent",
+      "year": 2005,
+      "release_date": "2005-07-08",
+      "poster": "https://image.tmdb.org/t/p/w200/mxFPI4KYBk5ri9cPteIS8jiDFgj.jpg"
     }
   ]
 }
