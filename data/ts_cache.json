@@ -6003,7 +6003,7 @@
     "date": "2026-09-17",
     "poster": "/mMOptSPBVGUA9GHgnpsC35GzZ7e.jpg",
     "stableId": "cmuby1q510062r6ru3t7rzpw9",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6159,7 +6159,7 @@
     "date": "2026-11-03",
     "poster": "/hSmIJluOJmTWvJs4d7kHRxjc8s8.jpg",
     "stableId": "cmp237hum006nr6m6ybv720sz",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6183,7 +6183,7 @@
     "date": "2026-12-24",
     "poster": "/74fHULlTBMGGLusfFBVAkMAZbce.jpg",
     "stableId": "cmp2370es0065r6m6gllguz9p",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6207,7 +6207,7 @@
     "date": "2026-10-28",
     "poster": "/alsb3UC17kxIcytLWvwkmL0STgU.jpg",
     "stableId": "cmtun6rhs0094r6vz7pqlksv2",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6423,7 +6423,7 @@
     "date": "2025-03-23",
     "poster": "/75BwofwAZbf6GlhP2m6NPpP3bW2.jpg",
     "stableId": "cmvr90096001dr6tk6cz2n0ar",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6435,7 +6435,7 @@
     "date": "2026-11-23",
     "poster": "/aJXgEVa3ZnTtc3gYyNUfNuXP6mF.jpg",
     "stableId": "cmvr96fkf005nr6tku63u4rg9",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6447,7 +6447,7 @@
     "date": "1994-09-19",
     "poster": "/fuS63AoFTkprf8PFeL1f8z68zJr.jpg",
     "stableId": "clgtz7a9h03z4ug1rxkdklat4",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6459,7 +6459,7 @@
     "date": "2026-10-26",
     "poster": "/iTVhDUbzUFUJ18jrcYM4rw7qGk.jpg",
     "stableId": "cmvr93rzx002xr6tk8ritf4ip",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6483,7 +6483,7 @@
     "date": "2018-06-20",
     "poster": "/peNC0eyc3TQJa6x4TdKcBPNP4t0.jpg",
     "stableId": "clgsn3f1i03g6ugt2mxxzc599",
-    "rung": "fingerprint",
+    "rung": "cache",
     "confidence": "HIGH",
     "v": 3
   },
@@ -6495,6 +6495,78 @@
     "date": "2026-03-03",
     "poster": "/iNOXveSqB5tUTmGKxp5flQuQ72f.jpg",
     "stableId": "cmmelqtuf0008r6yq5a73s9bx",
+    "rung": "cache",
+    "confidence": "HIGH",
+    "v": 3
+  },
+  "i:clnvc094w00qaugne8e6a68mz": {
+    "kind": "movie",
+    "imdb": "tt1392170",
+    "tmdb": "70160",
+    "title": "The Hunger Games",
+    "date": "2012-03-12",
+    "poster": "/apa5G43Hha7kH7wJG0gkkHT7FA9.jpg",
+    "stableId": "clnvc094w00qaugne8e6a68mz",
+    "rung": "fingerprint",
+    "confidence": "HIGH",
+    "v": 3
+  },
+  "i:cmq6qlm5e000hr663wxlu0pme": {
+    "kind": "movie",
+    "imdb": "tt26735127",
+    "tmdb": "1260649",
+    "title": "Jumanji: Open World",
+    "date": "2026-12-23",
+    "poster": "/qGFuvcXqQdXS5ZNblDlVTOmK6mq.jpg",
+    "stableId": "cmq6qlm5e000hr663wxlu0pme",
+    "rung": "fingerprint",
+    "confidence": "HIGH",
+    "v": 3
+  },
+  "i:cm7u7w47y004kr6ejquqgumu0": {
+    "kind": "movie",
+    "imdb": "tt27714946",
+    "tmdb": "1124620",
+    "title": "The Monkey",
+    "date": "2025-02-10",
+    "poster": "/aGDekyIb0yfmnuLZciCozRPk2TE.jpg",
+    "stableId": "cm7u7w47y004kr6ejquqgumu0",
+    "rung": "fingerprint",
+    "confidence": "HIGH",
+    "v": 3
+  },
+  "i:clgsmlwrt017yugt247g8hinv": {
+    "kind": "series",
+    "imdb": "tt0149460",
+    "tmdb": "615",
+    "title": "Futurama",
+    "date": "1999-03-28",
+    "poster": "/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg",
+    "stableId": "clgsmlwrt017yugt247g8hinv",
+    "rung": "fingerprint",
+    "confidence": "HIGH",
+    "v": 3
+  },
+  "i:cmuby010m001lr6ru839dwe7k": {
+    "kind": "series",
+    "imdb": "tt36475261",
+    "tmdb": "288672",
+    "title": "Pride and Prejudice",
+    "date": "2026-12-03",
+    "poster": "/48gkikPDZm2IP1zdaboOPpELRwX.jpg",
+    "stableId": "cmuby010m001lr6ru839dwe7k",
+    "rung": "fingerprint",
+    "confidence": "HIGH",
+    "v": 3
+  },
+  "i:cmvr8pk3h000dr6tk5vquy17o": {
+    "kind": "series",
+    "imdb": "tt39469996",
+    "tmdb": "322267",
+    "title": "Newlyweds",
+    "date": "2026-10-23",
+    "poster": "/8yMuMKrSQjkFkRgIpaWGFJl8fJO.jpg",
+    "stableId": "cmvr8pk3h000dr6tk5vquy17o",
     "rung": "fingerprint",
     "confidence": "HIGH",
     "v": 3
