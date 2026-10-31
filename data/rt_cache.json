@@ -2380,5 +2380,37 @@
     "title": "ParaNorman",
     "date": "2012",
     "kind": "movie"
+  },
+  "m/hungry_2026": {
+    "type": "movie",
+    "imdb": "tt34494076",
+    "tmdb": null,
+    "title": "Hungry",
+    "date": "2026",
+    "kind": "movie"
+  },
+  "tv/all_of_us_are_dead": {
+    "type": "series",
+    "imdb": "tt14169960",
+    "tmdb": null,
+    "title": "All of Us Are Dead",
+    "date": "2022-01-28",
+    "kind": "tvSeries"
+  },
+  "m/dune_part_two": {
+    "type": "movie",
+    "imdb": "tt15239678",
+    "tmdb": null,
+    "title": "Dune: Part Two",
+    "date": "2024",
+    "kind": "movie"
+  },
+  "m/the_nightmare_before_christmas": {
+    "type": "movie",
+    "imdb": "tt0107688",
+    "tmdb": null,
+    "title": "Tim Burton's The Nightmare Before Christmas",
+    "date": "1993",
+    "kind": "movie"
   }
 }
