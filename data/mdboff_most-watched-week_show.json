@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_most-watched-week_show",
   "name": "Most Watched Movies & Shows (Past Week)",
   "type": "series",
-  "scraped_at": 1793361712479,
+  "scraped_at": 1793404921389,
   "items": [
     {
       "imdb_id": "tt23112594",
@@ -37,20 +37,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/v3JuB15WybKmxDeT1hWdK3j6eSJ.jpg"
     },
     {
-      "imdb_id": "tt5875444",
-      "type": "series",
-      "title": "Slow Horses",
-      "year": 2022,
-      "release_date": "2022-04-01",
-      "poster": "https://image.tmdb.org/t/p/w200/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg"
-    },
-    {
       "imdb_id": "tt23148340",
       "type": "series",
       "title": "Crystal Lake",
       "year": 2026,
       "release_date": "2026-10-15",
       "poster": "https://image.tmdb.org/t/p/w200/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg"
+    },
+    {
+      "imdb_id": "tt5875444",
+      "type": "series",
+      "title": "Slow Horses",
+      "year": 2022,
+      "release_date": "2022-04-01",
+      "poster": "https://image.tmdb.org/t/p/w200/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg"
     },
     {
       "imdb_id": "tt11540908",
@@ -61,20 +61,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/6mUMquPQBFJGqTACS3Azkwwrx8d.jpg"
     },
     {
-      "imdb_id": "tt16358384",
-      "type": "series",
-      "title": "Tulsa King",
-      "year": 2022,
-      "release_date": "2022-11-13",
-      "poster": "https://image.tmdb.org/t/p/w200/rOYLWCdAifpUtPlTf1WHxyaxeMt.jpg"
-    },
-    {
       "imdb_id": "tt11743610",
       "type": "series",
       "title": "The Terminal List",
       "year": 2022,
       "release_date": "2022-06-30",
       "poster": "https://image.tmdb.org/t/p/w200/xyFAzP7RKK8cARCSalIZ9A9T0jV.jpg"
+    },
+    {
+      "imdb_id": "tt16358384",
+      "type": "series",
+      "title": "Tulsa King",
+      "year": 2022,
+      "release_date": "2022-11-13",
+      "poster": "https://image.tmdb.org/t/p/w200/rOYLWCdAifpUtPlTf1WHxyaxeMt.jpg"
     },
     {
       "imdb_id": "tt19231492",
@@ -109,20 +109,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/h6Z2oogE4mJk2uffdtIlLhb0EHx.jpg"
     },
     {
+      "imdb_id": "tt14218830",
+      "type": "series",
+      "title": "Abbott Elementary",
+      "year": 2021,
+      "release_date": "2021-12-07",
+      "poster": "https://image.tmdb.org/t/p/w200/zk2aNVIHoapdWKOcaYp7PhX9SxD.jpg"
+    },
+    {
       "imdb_id": "tt39395275",
       "type": "series",
       "title": "Dragon Ball Super: Beerus",
       "year": 2026,
       "release_date": "2026-10-11",
       "poster": "https://image.tmdb.org/t/p/w200/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg"
-    },
-    {
-      "imdb_id": "tt10986410",
-      "type": "series",
-      "title": "Ted Lasso",
-      "year": 2020,
-      "release_date": "2020-08-14",
-      "poster": "https://image.tmdb.org/t/p/w200/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg"
     },
     {
       "imdb_id": "tt26933824",
@@ -133,12 +133,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/1RNtqMeSNNBkXqK8WPUMf72vGrt.jpg"
     },
     {
-      "imdb_id": "tt14218830",
+      "imdb_id": "tt10986410",
       "type": "series",
-      "title": "Abbott Elementary",
-      "year": 2021,
-      "release_date": "2021-12-07",
-      "poster": "https://image.tmdb.org/t/p/w200/zk2aNVIHoapdWKOcaYp7PhX9SxD.jpg"
+      "title": "Ted Lasso",
+      "year": 2020,
+      "release_date": "2020-08-14",
+      "poster": "https://image.tmdb.org/t/p/w200/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg"
     },
     {
       "imdb_id": "tt0096697",
@@ -173,20 +173,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/uziPOqxQotCE9g0wBgDvHCOvRhP.jpg"
     },
     {
-      "imdb_id": "tt26743760",
+      "imdb_id": "tt36849871",
       "type": "series",
-      "title": "The Apothecary Diaries",
-      "year": 2023,
-      "release_date": "2023-10-22",
-      "poster": "https://image.tmdb.org/t/p/w200/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg"
-    },
-    {
-      "imdb_id": "tt0413573",
-      "type": "series",
-      "title": "Grey's Anatomy",
-      "year": 2005,
-      "release_date": "2005-03-27",
-      "poster": "https://image.tmdb.org/t/p/w200/gO8Fo47KV1opiutRDdBS5jclTQB.jpg"
+      "title": "Marshals",
+      "year": 2026,
+      "release_date": "2026-03-01",
+      "poster": "https://image.tmdb.org/t/p/w200/zV1MRb6eqx6Uj3NSXquZFfz75pa.jpg"
     },
     {
       "imdb_id": "tt40197357",
@@ -197,20 +189,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg"
     },
     {
-      "imdb_id": "tt36849871",
+      "imdb_id": "tt0413573",
       "type": "series",
-      "title": "Marshals",
-      "year": 2026,
-      "release_date": "2026-03-01",
-      "poster": "https://image.tmdb.org/t/p/w200/zV1MRb6eqx6Uj3NSXquZFfz75pa.jpg"
+      "title": "Grey's Anatomy",
+      "year": 2005,
+      "release_date": "2005-03-27",
+      "poster": "https://image.tmdb.org/t/p/w200/gO8Fo47KV1opiutRDdBS5jclTQB.jpg"
     },
     {
-      "imdb_id": "tt17491088",
+      "imdb_id": "tt26743760",
       "type": "series",
-      "title": "The Diplomat",
+      "title": "The Apothecary Diaries",
       "year": 2023,
-      "release_date": "2023-04-20",
-      "poster": "https://image.tmdb.org/t/p/w200/cUy0ZYme43lop08nOtbQLWL0dX.jpg"
+      "release_date": "2023-10-22",
+      "poster": "https://image.tmdb.org/t/p/w200/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg"
     },
     {
       "imdb_id": "tt1196946",
@@ -219,6 +211,14 @@
       "year": 2008,
       "release_date": "2008-09-23",
       "poster": "https://image.tmdb.org/t/p/w200/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg"
+    },
+    {
+      "imdb_id": "tt17491088",
+      "type": "series",
+      "title": "The Diplomat",
+      "year": 2023,
+      "release_date": "2023-04-20",
+      "poster": "https://image.tmdb.org/t/p/w200/cUy0ZYme43lop08nOtbQLWL0dX.jpg"
     },
     {
       "imdb_id": "tt1442437",
@@ -258,7 +258,7 @@
       "title": "Lanterns",
       "year": 2026,
       "release_date": "2026-08-16",
-      "poster": "https://image.tmdb.org/t/p/w200/gpC7h43xPMEV3goYMQShfJbTtLq.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/rb94rKVIzLyfWufIN7WqLvadBDH.jpg"
     },
     {
       "imdb_id": "tt35934755",
@@ -285,14 +285,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg"
     },
     {
-      "imdb_id": "tt2359704",
-      "type": "series",
-      "title": "JoJo's Bizarre Adventure",
-      "year": 2012,
-      "release_date": "2012-10-06",
-      "poster": "https://image.tmdb.org/t/p/w200/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg"
-    },
-    {
       "imdb_id": "tt11704040",
       "type": "series",
       "title": "Love Is Blind",
@@ -309,20 +301,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg"
     },
     {
+      "imdb_id": "tt2359704",
+      "type": "series",
+      "title": "JoJo's Bizarre Adventure",
+      "year": 2012,
+      "release_date": "2012-10-06",
+      "poster": "https://image.tmdb.org/t/p/w200/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg"
+    },
+    {
       "imdb_id": "tt0108778",
       "type": "series",
       "title": "Friends",
       "year": 1994,
       "release_date": "1994-09-22",
       "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg"
-    },
-    {
-      "imdb_id": "tt4934214",
-      "type": "series",
-      "title": "Taskmaster",
-      "year": 2015,
-      "release_date": "2015-07-28",
-      "poster": "https://image.tmdb.org/t/p/w200/3dD3EdDy3Br06YU6j40ddVH7EVW.jpg"
     },
     {
       "imdb_id": "tt2861424",
@@ -341,12 +333,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg"
     },
     {
-      "imdb_id": "tt0203259",
+      "imdb_id": "tt0182576",
       "type": "series",
-      "title": "Law & Order: Special Victims Unit",
+      "title": "Family Guy",
       "year": 1999,
-      "release_date": "1999-09-20",
-      "poster": "https://image.tmdb.org/t/p/w200/pHNhUwSXuDQ9jPZOCb8SgJaQZsc.jpg"
+      "release_date": "1999-01-31",
+      "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
     },
     {
       "imdb_id": "tt21097264",
@@ -357,12 +349,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/axdUor6gLMTrrB1UF4Qfy0TTSyX.jpg"
     },
     {
-      "imdb_id": "tt0239195",
+      "imdb_id": "tt0944947",
       "type": "series",
-      "title": "Survivor",
-      "year": 2000,
-      "release_date": "2000-05-31",
-      "poster": "https://image.tmdb.org/t/p/w200/Ap0qf8VxF9DW4NXLYvMmpg3WkdF.jpg"
+      "title": "Game of Thrones",
+      "year": 2011,
+      "release_date": "2011-04-17",
+      "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg"
     },
     {
       "imdb_id": "tt3530232",
@@ -373,20 +365,28 @@
       "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
     },
     {
-      "imdb_id": "tt0182576",
+      "imdb_id": "tt0203259",
       "type": "series",
-      "title": "Family Guy",
+      "title": "Law & Order: Special Victims Unit",
       "year": 1999,
-      "release_date": "1999-01-31",
-      "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
+      "release_date": "1999-09-20",
+      "poster": "https://image.tmdb.org/t/p/w200/pHNhUwSXuDQ9jPZOCb8SgJaQZsc.jpg"
     },
     {
-      "imdb_id": "tt0944947",
+      "imdb_id": "tt0239195",
       "type": "series",
-      "title": "Game of Thrones",
-      "year": 2011,
-      "release_date": "2011-04-17",
-      "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg"
+      "title": "Survivor",
+      "year": 2000,
+      "release_date": "2000-05-31",
+      "poster": "https://image.tmdb.org/t/p/w200/Ap0qf8VxF9DW4NXLYvMmpg3WkdF.jpg"
+    },
+    {
+      "imdb_id": "tt4934214",
+      "type": "series",
+      "title": "Taskmaster",
+      "year": 2015,
+      "release_date": "2015-07-28",
+      "poster": "https://image.tmdb.org/t/p/w200/3dD3EdDy3Br06YU6j40ddVH7EVW.jpg"
     },
     {
       "imdb_id": "tt0472954",
@@ -397,12 +397,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg"
     },
     {
-      "imdb_id": "tt0898266",
+      "imdb_id": "tt33043892",
       "type": "series",
-      "title": "The Big Bang Theory",
-      "year": 2007,
-      "release_date": "2007-09-24",
-      "poster": "https://image.tmdb.org/t/p/w200/euKFiO5M125rpngFRBbSW83beeI.jpg"
+      "title": "Dexter: Resurrection",
+      "year": 2025,
+      "release_date": "2025-07-13",
+      "poster": "https://image.tmdb.org/t/p/w200/o2Oyi3boT100bY5kCP4MBiTeetO.jpg"
     }
   ]
 }
