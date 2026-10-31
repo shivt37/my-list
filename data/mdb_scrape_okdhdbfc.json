@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793361700112,
+  "scraped_at": 1793404896516,
   "items": [
     {
       "slug": "459ll-the-one-about-matthew-perry",
@@ -19,17 +19,27 @@
       "imdb_id": "tt42220724",
       "title": "Minimum Wage",
       "year": 2026,
-      "score": null,
+      "score": 4,
       "poster_path": "iTVhDUbzUFUJ18jrcYM4rw7qGk.jpg",
       "description": "Teens struggle to run a local pizzeria while juggling school, a manic boss and minimum wage in this series based on the hit social media shorts.",
       "first_air_date": "2026-10-26"
+    },
+    {
+      "slug": "44kjk-newlyweds",
+      "imdb_id": "tt39469996",
+      "title": "Newlyweds",
+      "year": 2026,
+      "score": null,
+      "poster_path": "9ZAPU2IRSdI9xdVb42z2F1momJc.jpg",
+      "description": "A mature romance about a free-spirited woman and a reserved professor who marry quickly after a brief, passionate courtship.",
+      "first_air_date": "2026-10-23"
     },
     {
       "slug": "44mor-yaga",
       "imdb_id": "tt39980704",
       "title": "YAGA",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "kp8xgZ8SrikHQrPn2lC3hb50KD5.jpg",
       "description": "While a private investigator probes the disappearance of the young heir to a powerful fishery, he finds himself at odds with an apprehensive local detective, a charismatic university professor with a taste for younger men, and a labyrinth of enigmatic suspects, secret lives, and ancient magic.",
       "first_air_date": "2026-10-23"
@@ -719,7 +729,7 @@
       "imdb_id": "tt43661815",
       "title": "Lion",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "mvFQIZo2DG1pyiINL2bDa5QNR4O.jpg",
       "description": "The extraordinary true story of lion cub Kio, on his journey to become a king.",
       "first_air_date": "2026-08-19"
@@ -730,7 +740,7 @@
       "title": "Lanterns",
       "year": 2026,
       "score": 7,
-      "poster_path": "gpC7h43xPMEV3goYMQShfJbTtLq.jpg",
+      "poster_path": "rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
       "description": "Two intergalactic cops, new recruit John Stewart and Lantern legend Hal Jordan, are drawn into a dark, Earth-based mystery as they investigate a murder in the American heartland.",
       "first_air_date": "2026-08-16"
     },
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "hpucDFIvWwcn6sXk8EOEX0dbY0C.jpg",
       "description": "Follow five work-obsessed twenty-somethings striving for professional success and, if they have time, personal happiness in Manhattan's most glamorous neighborhood, Murray Hill.",
-      "first_air_date": "2026-06-02"
-    },
-    {
-      "slug": "44pev-the-fortune",
-      "imdb_id": "tt38783037",
-      "title": "The Fortune",
-      "year": 2026,
-      "score": null,
-      "poster_path": "et1W2kn43yEniVSQY0IEB4eB1UX.jpg",
-      "description": "Amanda Blakefield's life is a happy one, with her husband Jimmy and their son Luke. But when Amanda is left an enormous inheritance by a man she has neither met nor heard of before, her life starts to fall apart. Amanda becomes embroiled in the world of the Worralls, where Martin Worrall is head of a family bound in past secrets. As Amanda is drawn further and further into past events and relationships, all of their lives are turned upside down.",
       "first_air_date": "2026-06-02"
     }
   ]
