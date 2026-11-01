@@ -2,18 +2,8 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793491253463,
+  "scraped_at": 1793534444495,
   "items": [
-    {
-      "slug": "3icw1-hunting-matthew-nichols",
-      "imdb_id": "tt29373684",
-      "title": "Hunting Matthew Nichols",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "d6I1mvnGUaU57kSFeXxNWlQB934.jpg",
-      "description": "Twenty-three years after her brother mysteriously disappeared on Vancouver Island, a documentary filmmaker sets out to solve his missing person's case. When a disturbing piece of evidence is revealed, she comes to believe he might still be alive.",
-      "digital_release_date": "2026-10-31"
-    },
     {
       "slug": "3wlqv-mirzapur-the-movie",
       "imdb_id": "tt34339725",
@@ -239,7 +229,7 @@
       "imdb_id": "tt38672588",
       "title": "Masterplan",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "5xmXVd7nCK3tAo34XkO58SxUCip.jpg",
       "description": "When a legendary thief sets his sights on the Mona Lisa, he recruits two young strangers to help him before revealing they are long-lost siblings… and oh yes, by the way, he is their father. Thrown into a chaotic reunion they never asked for, this new family must learn to work together — and try not to kill each other — if they want any chance at pulling off the heist of the century.",
       "digital_release_date": "2026-10-16"
@@ -310,7 +300,7 @@
       "title": "Devour",
       "year": 2026,
       "score": null,
-      "poster_path": "duzeXiCKKU9bJUcObIf9zNMZIrC.jpg",
+      "poster_path": "uFyMcnWabsIwESf5odkMFvTRydp.jpg",
       "description": "Stranded after a disastrous gig, an all-girl heavy metal band finds a woman in danger in a town ruled by a warlock, and crawling with cannibals, vampires, and a deadly werewolf, forcing them to fight for survival.",
       "digital_release_date": "2026-10-13"
     },
@@ -1442,6 +1432,16 @@
       "score": 8,
       "poster_path": "wHTNsZxvlfRAndc52hGlbdCUXKS.jpg",
       "description": "Haunted by a childhood romance and recollections of love lost during the 1947 Partition of India, 95-year-old Ishar Singh Grewal shares his story with his grandson Nirvair, the past unfolding through memories of migration, longing, and a romance that endures across generations.",
+      "digital_release_date": "2026-08-07"
+    },
+    {
+      "slug": "3ysja-governor",
+      "imdb_id": "tt36822418",
+      "title": "Governor",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "Anukm4NH6MM025vUQ9ykpWQXnFn.jpg",
+      "description": "Set against Indias 1990 economic crisis, Governor follows Raman, a reluctant bureaucrat unexpectedly appointed as the Governor of the RBI when the nation stands on the brink of bankruptcy. As inflation rises, fuel runs low, and panic spreads, Raman must navigate political pressure and a collapsing system to prevent the country from falling apart.",
       "digital_release_date": "2026-08-07"
     }
   ]
