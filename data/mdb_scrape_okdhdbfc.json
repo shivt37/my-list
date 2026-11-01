@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793448107097,
+  "scraped_at": 1793491301000,
   "items": [
     {
       "slug": "459ll-the-one-about-matthew-perry",
@@ -182,6 +182,16 @@
       "score": 5,
       "poster_path": "gMKJJtwOnTkhkbdQabyo7OKTosb.jpg",
       "description": "Charles and Liz are a charming, married 500-year-old vampire couple whose relationship has survived centuries because, as vampires, divorce isn’t exactly an option. Together, they navigate modern society and their daughter dating a human.",
+      "first_air_date": "2026-10-08"
+    },
+    {
+      "slug": "45cn7-gnomes",
+      "imdb_id": "tt8629424",
+      "title": "Gnomes",
+      "year": 2026,
+      "score": null,
+      "poster_path": "3eZCOLYUXAh8fU5ZA2R5zAvctLg.jpg",
+      "description": "Senior Sergeant Arnold Kipps is having the worst day of his life. His ex-partner returns to Nompton to shut down his police station, just as an ancient evil is awakened by the Gnome Queen who unleashes a hellish horde, plunging the town into chaos.",
       "first_air_date": "2026-10-08"
     },
     {
@@ -545,6 +555,16 @@
       "first_air_date": "2026-09-11"
     },
     {
+      "slug": "453rr-ali-baba-aur-40-bhoot",
+      "imdb_id": "tt44101690",
+      "title": "Ali Baba Aur 40 Bhoot",
+      "year": 2026,
+      "score": null,
+      "poster_path": "cYjdacskAhvWdjhxsSdhop1SxON.jpg",
+      "description": "Rooted in logic and science, Alisha is drawn into an experience that defies everything she believes. Will she find answers or uncover a terrifying truth?",
+      "first_air_date": "2026-09-11"
+    },
+    {
       "slug": "454gv-pls-love",
       "imdb_id": "tt43603919",
       "title": "Pls Love",
@@ -819,7 +839,7 @@
       "imdb_id": "tt34883857",
       "title": "Possession",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "qVvUs2KFhT3h36dvcVRtzaicl7n.jpg",
       "description": "Claudia, a bi-racial lawyer, journeys to Jamaica's haunted Connaught plantation to fight an inheritance claim. Uncovering dark historical secrets intertwined with modern injustices intensifies her nightmare.",
       "first_air_date": "2026-08-06"
@@ -1423,26 +1443,6 @@
       "poster_path": "zAWOvPc6gdA9WvssVrxaOkuSHOx.jpg",
       "description": "In a market ruled by smuggling and foreign brands, a determined Indian man Xerxes Desai, with the help of his team, dares to build a world-class watch from scratch. Battling rejection, failure, and global humiliation, they transform Titan into a symbol of national pride and innovation.",
       "first_air_date": "2026-06-03"
-    },
-    {
-      "slug": "44mjx-michael-jackson-the-verdict",
-      "imdb_id": "tt42873612",
-      "title": "Michael Jackson: The Verdict",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "8R40yI5AJ931Hd3P4Yf8pdFgwJ1.jpg",
-      "description": "Told by key players who were inside the courtroom, this comprehensive documentary dissects the trial of Michael Jackson and his complex legacy.",
-      "first_air_date": "2026-06-03"
-    },
-    {
-      "slug": "3vcdb-not-suitable-for-work",
-      "imdb_id": "tt35823838",
-      "title": "Not Suitable for Work",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "hpucDFIvWwcn6sXk8EOEX0dbY0C.jpg",
-      "description": "Follow five work-obsessed twenty-somethings striving for professional success and, if they have time, personal happiness in Manhattan's most glamorous neighborhood, Murray Hill.",
-      "first_air_date": "2026-06-02"
     }
   ]
 }
