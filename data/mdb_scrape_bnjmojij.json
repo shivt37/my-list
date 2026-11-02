@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793534444495,
+  "scraped_at": 1793577650143,
   "items": [
+    {
+      "slug": "44aoa-never-after-dark",
+      "imdb_id": "tt38589433",
+      "title": "Never After Dark",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "jguB76QbAx6yExiOLIPvOaxW95b.jpg",
+      "description": "A traveling psychic who helps lost souls cross over encounters a powerful entity at a remote house. While investigating its origins, she uncovers dark secrets and faces a deadly threat from an unexpected source.",
+      "digital_release_date": "2026-11-02"
+    },
     {
       "slug": "3wlqv-mirzapur-the-movie",
       "imdb_id": "tt34339725",
@@ -399,7 +409,7 @@
       "imdb_id": "tt39384300",
       "title": "Less of a Stranger",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "cXCoJk9AzGzfOSNCRDnLhfhyJHD.jpg",
       "description": "As the leader of Polish rock band Lady Pank, Jan Borysewicz shapes a generation with his music, while a string of family tragedies shapes him.",
       "digital_release_date": "2026-10-07"
@@ -1432,16 +1442,6 @@
       "score": 8,
       "poster_path": "wHTNsZxvlfRAndc52hGlbdCUXKS.jpg",
       "description": "Haunted by a childhood romance and recollections of love lost during the 1947 Partition of India, 95-year-old Ishar Singh Grewal shares his story with his grandson Nirvair, the past unfolding through memories of migration, longing, and a romance that endures across generations.",
-      "digital_release_date": "2026-08-07"
-    },
-    {
-      "slug": "3ysja-governor",
-      "imdb_id": "tt36822418",
-      "title": "Governor",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "Anukm4NH6MM025vUQ9ykpWQXnFn.jpg",
-      "description": "Set against Indias 1990 economic crisis, Governor follows Raman, a reluctant bureaucrat unexpectedly appointed as the Governor of the RBI when the nation stands on the brink of bankruptcy. As inflation rises, fuel runs low, and panic spreads, Raman must navigate political pressure and a collapsing system to prevent the country from falling apart.",
       "digital_release_date": "2026-08-07"
     }
   ]
