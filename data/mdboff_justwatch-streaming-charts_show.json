@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1793534511548,
+  "scraped_at": 1793577721342,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -517,14 +517,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/jD7ZQpDEZzAVReJzkOtmuFoIl2m.jpg"
     },
     {
-      "imdb_id": "tt46269844",
-      "type": "series",
-      "title": "A Course Called Ireland",
-      "year": 2026,
-      "release_date": "2026-10-25",
-      "poster": "https://image.tmdb.org/t/p/w200/fqry4uxJuyFcSR3locllFwxES3K.jpg"
-    },
-    {
       "imdb_id": "tt11379026",
       "type": "series",
       "title": "Ghosts",
@@ -579,6 +571,14 @@
       "year": 2026,
       "release_date": "2026-02-23",
       "poster": "https://image.tmdb.org/t/p/w200/fEXauqIabKrMPQ2lVTHKdrkrR4Z.jpg"
+    },
+    {
+      "imdb_id": "tt46269844",
+      "type": "series",
+      "title": "A Course Called Ireland",
+      "year": 2026,
+      "release_date": "2026-10-25",
+      "poster": "https://image.tmdb.org/t/p/w200/fqry4uxJuyFcSR3locllFwxES3K.jpg"
     },
     {
       "imdb_id": "tt0098936",
@@ -1005,14 +1005,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg"
     },
     {
-      "imdb_id": "tt29011445",
-      "type": "series",
-      "title": "Where's Wanda?",
-      "year": 2024,
-      "release_date": "2024-10-02",
-      "poster": "https://image.tmdb.org/t/p/w200/e31KF5NW91PA5ktaxqGMmx6myea.jpg"
-    },
-    {
       "imdb_id": "tt41814550",
       "type": "series",
       "title": "NCIS: New York",
@@ -1147,6 +1139,14 @@
       "year": 2022,
       "release_date": "2022-05-05",
       "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg"
+    },
+    {
+      "imdb_id": "tt29011445",
+      "type": "series",
+      "title": "Where's Wanda?",
+      "year": 2024,
+      "release_date": "2024-10-02",
+      "poster": "https://image.tmdb.org/t/p/w200/e31KF5NW91PA5ktaxqGMmx6myea.jpg"
     },
     {
       "imdb_id": "tt29666911",
