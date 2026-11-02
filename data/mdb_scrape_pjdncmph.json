@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1793577663963,
+  "scraped_at": 1793620860582,
   "items": [
+    {
+      "slug": "3tb7f-resident-evil",
+      "imdb_id": "tt35538033",
+      "title": "Resident Evil",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg",
+      "description": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
+      "digital_release_date": null
+    },
     {
       "slug": "45ae2-collision-course",
       "imdb_id": "tt38793125",
@@ -260,7 +270,7 @@
       "title": "Shaun the Sheep: The Beast of Mossy Bottom",
       "year": 2026,
       "score": 7,
-      "poster_path": "mMOptSPBVGUA9GHgnpsC35GzZ7e.jpg",
+      "poster_path": "gayX49siwXf8eNs16rtk1fI91Ey.jpg",
       "description": "On Halloween Eve at Mossy Bottom Farm, excitement turns to dismay when the clumsy Farmer ruins the pumpkin patch. Shaun tries fixing it with science experiments, but things go awry when a wild beast appears in the woods.",
       "digital_release_date": null
     },
@@ -619,7 +629,7 @@
       "imdb_id": "tt40902212",
       "title": "R.L. Stine's Pumpkinhead 2",
       "year": 2026,
-      "score": 2,
+      "score": 3,
       "poster_path": "4liM7YBglVRk2UVuKsN7YQDmMpr.jpg",
       "description": "Sam and Becka race to stop a new Pumpkinhead curse from claiming the entire town of Redhaven.",
       "digital_release_date": null
@@ -1031,7 +1041,7 @@
       "year": 2026,
       "score": 5,
       "poster_path": "cLZ7iFZc25vluSIKt3XtdSTait4.jpg",
-      "description": "Laurel always imagined her first kiss would be a fairy tale. Instead, that fantasy turns frightening when she's cursed with an ability to see the death of anyone she kisses. After a vision reveals her crush is doomed to die in a strange murder spree targeting her closest friends, she races to unmask the killer before the mystery becomes a massacre.",
+      "description": "A young woman discovers she can foresee the death of anyone she kisses, and when a vision predicts her crush will die in a murder spree targeting her closest friends, she races to uncover the killer before more lives are lost.",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 4,
       "poster_path": "zaqEfoKcWkVni2eONhJ7DRhMO8Q.jpg",
       "description": "When an oil tycoon and a famous adventurer vanish into the harsh winter of remote northern Alaska, a hand-picked rescue team endeavors to bring them home. What they don’t know is that they are trespassing on The Yeti’s territory, and the elements are the least of their worries.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "401vd-camp-rock-3",
-      "imdb_id": "tt6743524",
-      "title": "Camp Rock 3",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "rS7byWK9cfPfdLeFNlRIaJxH9mN.jpg",
-      "description": "When pop group Connect 3 returns to Camp Rock to search for an opening act for their reunion tour, rising tensions and fierce competition among campers test old friendships and spark unexpected romances.",
       "digital_release_date": null
     }
   ]

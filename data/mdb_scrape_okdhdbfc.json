@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793577694365,
+  "scraped_at": 1793620894757,
   "items": [
+    {
+      "slug": "3zqsx-nocturne",
+      "imdb_id": "tt26598805",
+      "title": "Nocturne",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg",
+      "description": "When a victim of notorious serial killer Jurek Walter unexpectedly turns up alive, detective Jonah Lynn races against time to find the one person still missing, while his protégé Saga Bauer goes undercover to get answers from the killer himself.",
+      "first_air_date": "2026-10-29"
+    },
     {
       "slug": "459ll-the-one-about-matthew-perry",
       "imdb_id": "tt44941753",
@@ -43,16 +53,6 @@
       "poster_path": "kp8xgZ8SrikHQrPn2lC3hb50KD5.jpg",
       "description": "While a private investigator probes the disappearance of the young heir to a powerful fishery, he finds himself at odds with an apprehensive local detective, a charismatic university professor with a taste for younger men, and a labyrinth of enigmatic suspects, secret lives, and ancient magic.",
       "first_air_date": "2026-10-23"
-    },
-    {
-      "slug": "45jiy-matargashti",
-      "imdb_id": "tt49702110",
-      "title": "Matargashti",
-      "year": 2026,
-      "score": null,
-      "poster_path": "893gkwRt9MgC9V77gtY2jYp1emp.jpg",
-      "description": "Dhara's plan to explore her sexuality puts her at odds with her horrified father, who becomes determined to sabotage her love life.",
-      "first_air_date": "2026-10-21"
     },
     {
       "slug": "3nzuf-phony",
@@ -449,7 +449,7 @@
       "imdb_id": "tt37884325",
       "title": "Plastic Beauty",
       "year": 2026,
-      "score": null,
+      "score": 3,
       "poster_path": "u0mCeqVvQW2HEfrRy1we9UklsQd.jpg",
       "description": "When a gifted ER surgeon is thrust into cosmetic medicine, her clash with a celebrity doctor exposes the greed and desire beneath the glamour.",
       "first_air_date": "2026-09-17"
