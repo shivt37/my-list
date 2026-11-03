@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1793620926441,
+  "scraped_at": 1793664142527,
   "items": [
     {
       "imdb_id": "tt23148340",
@@ -613,6 +613,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/lHfmc6d8pOVFrD0eOKPiDbjeucG.jpg"
     },
     {
+      "imdb_id": "tt46269844",
+      "type": "series",
+      "title": "A Course Called Ireland",
+      "year": 2026,
+      "release_date": "2026-10-25",
+      "poster": "https://image.tmdb.org/t/p/w200/fqry4uxJuyFcSR3locllFwxES3K.jpg"
+    },
+    {
       "imdb_id": "tt31938062",
       "type": "series",
       "title": "The Pitt",
@@ -667,14 +675,6 @@
       "year": 2005,
       "release_date": "2005-09-13",
       "poster": "https://image.tmdb.org/t/p/w200/8iixmfGx5EIFPdpNvB2JvI3VIqX.jpg"
-    },
-    {
-      "imdb_id": "tt46269844",
-      "type": "series",
-      "title": "A Course Called Ireland",
-      "year": 2026,
-      "release_date": "2026-10-25",
-      "poster": "https://image.tmdb.org/t/p/w200/fqry4uxJuyFcSR3locllFwxES3K.jpg"
     },
     {
       "imdb_id": "tt0472954",
@@ -1173,20 +1173,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/y8EWrf5Ry1WmYksWT7MOPWexvr5.jpg"
     },
     {
+      "imdb_id": "tt42007258",
+      "type": "series",
+      "title": "The Mob",
+      "year": 2026,
+      "release_date": "2026-10-26",
+      "poster": "https://image.tmdb.org/t/p/w200/p7Z3iK7g3ZEOm60h121fvtDmA3f.jpg"
+    },
+    {
       "imdb_id": "tt37022512",
       "type": "series",
       "title": "The Other Bennet Sister",
       "year": 2026,
       "release_date": "2026-03-15",
       "poster": "https://image.tmdb.org/t/p/w200/esU4D2XSA7hNHC8G2bmMkvX5g5H.jpg"
-    },
-    {
-      "imdb_id": "tt0098904",
-      "type": "series",
-      "title": "Seinfeld",
-      "year": 1989,
-      "release_date": "1989-07-05",
-      "poster": "https://image.tmdb.org/t/p/w200/aCw8ONfyz3AhngVQa1E2Ss4KSUQ.jpg"
     }
   ]
 }
