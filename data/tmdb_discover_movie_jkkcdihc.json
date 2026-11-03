@@ -2,7 +2,7 @@
   "catalog_id": "tmdb_discover_movie_jkkcdihc",
   "name": "DC - Movies",
   "type": "movie",
-  "scraped_at": 1793595618763,
+  "scraped_at": 1793664167913,
   "sourceHash": "675bada87a367b7f",
   "items": [
     {
@@ -49,6 +49,29 @@
     },
     {
       "adult": false,
+      "backdrop_path": "/iZLjr2d9beSwpYFG0pXIVBbcify.jpg",
+      "genre_ids": [
+        9648,
+        53,
+        35,
+        80,
+        27
+      ],
+      "id": 1815132,
+      "title": "Procura-se Vigilante",
+      "original_language": "pt",
+      "original_title": "Procura-se Vigilante",
+      "overview": "",
+      "popularity": 0,
+      "poster_path": "/sUOhT7gTfUTP3jxVYZ4g9LmdazL.jpg",
+      "release_date": "2026-10-28",
+      "softcore": false,
+      "video": false,
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "adult": false,
       "backdrop_path": "/xSDoxv4pHvs4xZjvTb0Iqg1A6ro.jpg",
       "genre_ids": [
         27,
@@ -65,8 +88,8 @@
       "release_date": "2026-10-19",
       "softcore": false,
       "video": false,
-      "vote_average": 7.455,
-      "vote_count": 332
+      "vote_average": 7.43,
+      "vote_count": 348
     },
     {
       "adult": false,
@@ -86,8 +109,8 @@
       "release_date": "2026-06-24",
       "softcore": false,
       "video": false,
-      "vote_average": 6.642,
-      "vote_count": 2685
+      "vote_average": 6.643,
+      "vote_count": 2686
     },
     {
       "adult": false,
@@ -107,8 +130,8 @@
       "release_date": "2025-07-09",
       "softcore": false,
       "video": false,
-      "vote_average": 7.3,
-      "vote_count": 5697
+      "vote_average": 7.323,
+      "vote_count": 5699
     },
     {
       "adult": false,
@@ -151,7 +174,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.482,
-      "vote_count": 3742
+      "vote_count": 3744
     },
     {
       "adult": false,
@@ -171,7 +194,7 @@
       "release_date": "2023-08-16",
       "softcore": false,
       "video": false,
-      "vote_average": 6.6,
+      "vote_average": 6.607,
       "vote_count": 3318
     },
     {
@@ -193,7 +216,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.593,
-      "vote_count": 5372
+      "vote_count": 5374
     },
     {
       "adult": false,
@@ -234,8 +257,8 @@
       "release_date": "2022-10-19",
       "softcore": false,
       "video": false,
-      "vote_average": 6.748,
-      "vote_count": 7365
+      "vote_average": 6.747,
+      "vote_count": 7366
     },
     {
       "adult": false,
@@ -255,8 +278,8 @@
       "release_date": "2022-03-01",
       "softcore": false,
       "video": false,
-      "vote_average": 7.7,
-      "vote_count": 12811
+      "vote_average": 7.676,
+      "vote_count": 12818
     },
     {
       "adult": false,
@@ -277,7 +300,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 7.437,
-      "vote_count": 10047
+      "vote_count": 10048
     },
     {
       "adult": false,
@@ -298,7 +321,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 8.068,
-      "vote_count": 11268
+      "vote_count": 11272
     },
     {
       "adult": false,
@@ -319,7 +342,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.34,
-      "vote_count": 9343
+      "vote_count": 9344
     },
     {
       "adult": false,
@@ -339,7 +362,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.857,
-      "vote_count": 11084
+      "vote_count": 11085
     },
     {
       "adult": false,
@@ -360,8 +383,8 @@
       "release_date": "2019-10-01",
       "softcore": false,
       "video": false,
-      "vote_average": 8.1,
-      "vote_count": 28622
+      "vote_average": 8.114,
+      "vote_count": 28621
     },
     {
       "adult": false,
@@ -382,7 +405,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.966,
-      "vote_count": 10551
+      "vote_count": 10552
     },
     {
       "adult": false,
@@ -403,7 +426,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.861,
-      "vote_count": 15328
+      "vote_count": 15329
     },
     {
       "adult": false,
@@ -424,7 +447,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.063,
-      "vote_count": 14076
+      "vote_count": 14079
     },
     {
       "adult": false,
@@ -445,7 +468,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 7.198,
-      "vote_count": 21342
+      "vote_count": 21343
     },
     {
       "adult": false,
@@ -466,7 +489,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 5.917,
-      "vote_count": 22583
+      "vote_count": 22585
     },
     {
       "adult": false,
@@ -486,8 +509,8 @@
       "release_date": "2016-03-23",
       "softcore": false,
       "video": false,
-      "vote_average": 6.013,
-      "vote_count": 19515
+      "vote_average": 6.014,
+      "vote_count": 19519
     },
     {
       "adult": false,
@@ -508,7 +531,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 6.663,
-      "vote_count": 16771
+      "vote_count": 16772
     },
     {
       "adult": false,
@@ -529,7 +552,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 7.8,
-      "vote_count": 25237
+      "vote_count": 25238
     },
     {
       "adult": false,
@@ -550,7 +573,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 5.204,
-      "vote_count": 7933
+      "vote_count": 7934
     },
     {
       "adult": false,
@@ -571,7 +594,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 4.979,
-      "vote_count": 1597
+      "vote_count": 1598
     },
     {
       "adult": false,
@@ -592,7 +615,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 7.353,
-      "vote_count": 10368
+      "vote_count": 10369
     },
     {
       "adult": false,
@@ -613,7 +636,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 8.539,
-      "vote_count": 37169
+      "vote_count": 37186
     },
     {
       "adult": false,
@@ -634,7 +657,7 @@
       "softcore": false,
       "video": false,
       "vote_average": 7.732,
-      "vote_count": 23456
+      "vote_count": 23457
     }
   ]
 }
