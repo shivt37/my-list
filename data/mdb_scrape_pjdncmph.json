@@ -2,8 +2,58 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1793664068145,
+  "scraped_at": 1793707266237,
   "items": [
+    {
+      "slug": "329li-charlie-harper",
+      "imdb_id": "tt27739255",
+      "title": "Charlie Harper",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "9Nf8Pluoi1JrT6S0qDsDMndFnlz.jpg",
+      "description": "As an ambitious chef and her struggling partner move to a new city to start fresh, the stark divide in their drives tests the limits of their love.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "2xlw7-queen-at-sea",
+      "imdb_id": "tt27541205",
+      "title": "Queen at Sea",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "ueYawr1nldKchzyP8Q9KJpn31SK.jpg",
+      "description": "As advanced dementia erodes an older woman's ability to communicate her inner life, her husband and daughter struggle to act in her best interests, navigating love and the fragile boundaries between care, protection and autonomy.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3vgf2-your-mother-your-mother-your-mother",
+      "imdb_id": "tt35856037",
+      "title": "Your Mother Your Mother Your Mother",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "4KaPZSKnInnArErTTgy9Oy14leR.jpg",
+      "description": "Latif, a devoutly religious hitman, struggles to balance work, faith and fatherhood. When his wife dies, he embarks on a desperate journey across Houston to protect his children, confronting the forces closing in around him – and the beliefs threatening to unravel within.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "4405s-the-history-of-concrete",
+      "imdb_id": "tt39150234",
+      "title": "The History of Concrete",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "2GWR1g1VdUNnNpLh6XfAQ6LVfyd.jpg",
+      "description": "After attending a workshop on how to write and sell a Hallmark movie, filmmaker John Wilson tries to use the same formula to sell a documentary about concrete.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3nyhu-primetime",
+      "imdb_id": "tt34206385",
+      "title": "Primetime",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "lmrulvLbmaejTix1YaMxo1oGhH1.jpg",
+      "description": "In 2006, To Catch a Predator host Chris Hansen sets out to make television history. When a high stakes operation goes fatally wrong, his veneered dream of fame curdles into a nightmare of performative justice.",
+      "digital_release_date": null
+    },
     {
       "slug": "3qqb1-the-isolate-thief",
       "imdb_id": "tt35051162",
@@ -39,7 +89,7 @@
       "imdb_id": "tt35538033",
       "title": "Resident Evil",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg",
       "description": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
       "digital_release_date": null
@@ -62,16 +112,6 @@
       "score": null,
       "poster_path": "vBqVyTpzv5RzHSsQdu8ECxAqSvd.jpg",
       "description": "Legendary \"SCTV\" cast members reunite in this documentary for a funny and heartfelt celebration of how a scrappy Canadian sketch show made comedy history.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3olba-rise-of-the-footsoldier-retribution",
-      "imdb_id": "tt34470118",
-      "title": "Rise of the Footsoldier: Retribution",
-      "year": 2026,
-      "score": 2,
-      "poster_path": "qJ4UV7YnAweTjosfSzDG80j1nd0.jpg",
-      "description": "Tate battles ruthless mercenaries throughout Ibiza as he avenges his friend's death.  Get ready for the biggest and most action packed film in the successful independent crime saga.",
       "digital_release_date": null
     },
     {
@@ -459,7 +499,7 @@
       "imdb_id": "tt14541160",
       "title": "Devour",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "uFyMcnWabsIwESf5odkMFvTRydp.jpg",
       "description": "Stranded after a disastrous gig, an all-girl heavy metal band finds a woman in danger in a town ruled by a warlock, and crawling with cannibals, vampires, and a deadly werewolf, forcing them to fight for survival.",
       "digital_release_date": null
@@ -499,7 +539,7 @@
       "imdb_id": "tt38672588",
       "title": "Masterplan",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "5xmXVd7nCK3tAo34XkO58SxUCip.jpg",
       "description": "When a legendary thief sets his sights on the Mona Lisa, he recruits two young strangers to help him before revealing they are long-lost siblings… and oh yes, by the way, he is their father. Thrown into a chaotic reunion they never asked for, this new family must learn to work together — and try not to kill each other — if they want any chance at pulling off the heist of the century.",
       "digital_release_date": null
@@ -532,6 +572,16 @@
       "score": 5,
       "poster_path": "uh0ZSdM8iOQgHwnUlhhanP8Dkl6.jpg",
       "description": "Follows a prehistoric arachnid that terrifies a stranded group of campers who hike into the wrong woods. Based on the spine-tingling horror novel from the actor best known as \"Murr\" on TV's Impractical Jokers.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3olba-rise-of-the-footsoldier-retribution",
+      "imdb_id": "tt34470118",
+      "title": "Rise of the Footsoldier: Retribution",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "qJ4UV7YnAweTjosfSzDG80j1nd0.jpg",
+      "description": "Tate battles ruthless mercenaries throughout Ibiza as he avenges his friend's death.  Get ready for the biggest and most action packed film in the successful independent crime saga.",
       "digital_release_date": null
     },
     {
@@ -1392,56 +1442,6 @@
       "score": 8,
       "poster_path": "360qdtu2hLnqMu8SVHMywn420w1.jpg",
       "description": "Arkham Asylum has been destroyed, and all its inmates have been unleashed upon Gotham City. As Batman races to round up some of his greatest enemies, he is pushed to his physical and mental limits and into a final confrontation with a new threat: the man called Bane!",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3ylk1-everyone-is-lying-to-you-for-money",
-      "imdb_id": "tt36733913",
-      "title": "Everyone Is Lying to You for Money",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "pkppk6J9ieH4VU9g5ISDY7XFKjK.jpg",
-      "description": "With any and all things crypto being pushed by celebrities, influencers, and politicians alike, actor-turned-author and director Ben McKenzie decides to investigate. Leveraging his celebrity status to gain access to eager prospectors, McKenzie finds himself unraveling the loosely regulated world of cryptocurrency. This skeptical but evenhanded take on the present and future of what we consider money gives a firsthand account of the chaotic financial frontier of our time.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "32ndh-rosebush-pruning",
-      "imdb_id": "tt27844906",
-      "title": "Rosebush Pruning",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "rsHEVjzxU8cxz1sm3vboj99daNv.jpg",
-      "description": "When an American heir living in a luxurious Spanish villa decides to move in with his girlfriend, his departure triggers a family collapse as his brother uncovers the truth behind their mother's tragic death.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3pdsv-ghost-in-the-cell",
-      "imdb_id": "tt9000310",
-      "title": "Ghost in the Cell",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "zxcMdx0w5Zmg8yZuuiS7CJ8vOea.jpg",
-      "description": "In a notorious prison, an invisible force begins killing inmates brutally, compelling enemy gangs and corrupt guards to work together as they try to survive the mounting bloodshed.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3sewg-here-the-whole-time",
-      "imdb_id": "tt40001699",
-      "title": "Here the Whole Time",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
-      "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3y6tz-horsegirls",
-      "imdb_id": "tt13652006",
-      "title": "Horsegirls",
-      "year": 2026,
-      "score": null,
-      "poster_path": "3BmMIETSNNEYjk9Atg7id5Wnly4.jpg",
-      "description": "As her mother battles an uncertain diagnosis, neurodivergent 22-year-old Margarita discovers a source of strength in an unexpected place: the sport of hobbyhorsing.",
       "digital_release_date": null
     }
   ]
