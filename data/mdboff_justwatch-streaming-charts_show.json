@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1793707314684,
+  "scraped_at": 1793750515145,
   "items": [
     {
       "imdb_id": "tt9813792",
@@ -901,14 +901,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/kVXkBIJw4eW9KC8VZvYvoS6Qg0j.jpg"
     },
     {
-      "imdb_id": "tt0074006",
-      "type": "series",
-      "title": "I, Claudius",
-      "year": 1976,
-      "release_date": "1976-09-20",
-      "poster": "https://image.tmdb.org/t/p/w200/oztxNqan7wKvFuCDS55WyUmKNMU.jpg"
-    },
-    {
       "imdb_id": "tt4934214",
       "type": "series",
       "title": "Taskmaster",
@@ -1155,6 +1147,14 @@
       "year": 2017,
       "release_date": "2017-10-13",
       "poster": "https://image.tmdb.org/t/p/w200/hr18RHPMQSA0zbCzAZN2asIOqy5.jpg"
+    },
+    {
+      "imdb_id": "tt0074006",
+      "type": "series",
+      "title": "I, Claudius",
+      "year": 1976,
+      "release_date": "1976-09-20",
+      "poster": "https://image.tmdb.org/t/p/w200/oztxNqan7wKvFuCDS55WyUmKNMU.jpg"
     },
     {
       "imdb_id": "tt18228732",

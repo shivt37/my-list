@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1793707310310,
+  "scraped_at": 1793750509686,
   "items": [
     {
       "imdb_id": "tt37287335",
@@ -725,14 +725,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/wVYREutTvI2tmxr6ujrHT704wGF.jpg"
     },
     {
-      "imdb_id": "tt0106220",
-      "type": "movie",
-      "title": "Addams Family Values",
-      "year": 1993,
-      "release_date": "1993-11-19",
-      "poster": "https://image.tmdb.org/t/p/w200/sdxT2VjVSx9DRicwnuECUdBHeE7.jpg"
-    },
-    {
       "imdb_id": "tt0289043",
       "type": "movie",
       "title": "28 Days Later",
@@ -877,14 +869,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/o4iceiahzncK2yMnG6lnb4JSheq.jpg"
     },
     {
-      "imdb_id": "tt10229558",
-      "type": "movie",
-      "title": "The Dark and the Wicked",
-      "year": 2020,
-      "release_date": "2020-04-16",
-      "poster": "https://image.tmdb.org/t/p/w200/4DB9VFVTp0IQEWFEIf9f3f2z3t5.jpg"
-    },
-    {
       "imdb_id": "tt0091419",
       "type": "movie",
       "title": "Little Shop of Horrors",
@@ -957,6 +941,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
     },
     {
+      "imdb_id": "tt10229558",
+      "type": "movie",
+      "title": "The Dark and the Wicked",
+      "year": 2020,
+      "release_date": "2020-04-16",
+      "poster": "https://image.tmdb.org/t/p/w200/4DB9VFVTp0IQEWFEIf9f3f2z3t5.jpg"
+    },
+    {
       "imdb_id": "tt0245674",
       "type": "movie",
       "title": "Thir13en Ghosts",
@@ -981,12 +973,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/bfEQ6C702oPsN4kzIiY7n4JsrxF.jpg"
     },
     {
-      "imdb_id": "tt0094862",
+      "imdb_id": "tt0106220",
       "type": "movie",
-      "title": "Child's Play",
-      "year": 1988,
-      "release_date": "1988-11-09",
-      "poster": "https://image.tmdb.org/t/p/w200/wvpgvcWNkF2HLuTEMIM7K83MvZ.jpg"
+      "title": "Addams Family Values",
+      "year": 1993,
+      "release_date": "1993-11-19",
+      "poster": "https://image.tmdb.org/t/p/w200/sdxT2VjVSx9DRicwnuECUdBHeE7.jpg"
     },
     {
       "imdb_id": "tt0104070",
@@ -1141,14 +1133,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/kKvQ0pyMnJweWVz2Pwbyeivq5Zk.jpg"
     },
     {
-      "imdb_id": "tt0435625",
-      "type": "movie",
-      "title": "The Descent",
-      "year": 2005,
-      "release_date": "2005-07-08",
-      "poster": "https://image.tmdb.org/t/p/w200/mxFPI4KYBk5ri9cPteIS8jiDFgj.jpg"
-    },
-    {
       "imdb_id": "tt32141377",
       "type": "movie",
       "title": "28 Years Later: The Bone Temple",
@@ -1173,12 +1157,28 @@
       "poster": "https://image.tmdb.org/t/p/w200/yhIsVvcUm7QxzLfT6HW2wLf5ajY.jpg"
     },
     {
-      "imdb_id": "tt0261983",
+      "imdb_id": "tt8814476",
       "type": "movie",
-      "title": "Session 9",
-      "year": 2001,
-      "release_date": "2001-08-10",
-      "poster": "https://image.tmdb.org/t/p/w200/A3Au37c3KJX29BDvldzGiYtaU5B.jpg"
+      "title": "Supergirl",
+      "year": 2026,
+      "release_date": "2026-06-24",
+      "poster": "https://image.tmdb.org/t/p/w200/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg"
+    },
+    {
+      "imdb_id": "tt44825373",
+      "type": "movie",
+      "title": "SCTV: The Greatest Show You've Never Heard Of",
+      "year": 2026,
+      "release_date": "2026-10-30",
+      "poster": "https://image.tmdb.org/t/p/w200/vBqVyTpzv5RzHSsQdu8ECxAqSvd.jpg"
+    },
+    {
+      "imdb_id": "tt0101821",
+      "type": "movie",
+      "title": "Ernest Scared Stupid",
+      "year": 1991,
+      "release_date": "1991-10-11",
+      "poster": "https://image.tmdb.org/t/p/w200/qnMtX8eKFFrJVEPZijFZqzDbckK.jpg"
     }
   ]
 }

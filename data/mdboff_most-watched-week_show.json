@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_most-watched-week_show",
   "name": "Most Watched Movies & Shows (Past Week)",
   "type": "series",
-  "scraped_at": 1793707309394,
+  "scraped_at": 1793750504267,
   "items": [
     {
       "imdb_id": "tt23112594",
@@ -61,14 +61,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/rOYLWCdAifpUtPlTf1WHxyaxeMt.jpg"
     },
     {
-      "imdb_id": "tt23148340",
-      "type": "series",
-      "title": "Crystal Lake",
-      "year": 2026,
-      "release_date": "2026-10-15",
-      "poster": "https://image.tmdb.org/t/p/w200/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg"
-    },
-    {
       "imdb_id": "tt35854736",
       "type": "series",
       "title": "Avatar: Seven Havens",
@@ -77,12 +69,28 @@
       "poster": "https://image.tmdb.org/t/p/w200/u62d0BPqsdv2TUDifcMmoePbHPL.jpg"
     },
     {
+      "imdb_id": "tt23148340",
+      "type": "series",
+      "title": "Crystal Lake",
+      "year": 2026,
+      "release_date": "2026-10-15",
+      "poster": "https://image.tmdb.org/t/p/w200/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg"
+    },
+    {
       "imdb_id": "tt11743610",
       "type": "series",
       "title": "The Terminal List",
       "year": 2022,
       "release_date": "2022-06-30",
       "poster": "https://image.tmdb.org/t/p/w200/xyFAzP7RKK8cARCSalIZ9A9T0jV.jpg"
+    },
+    {
+      "imdb_id": "tt7441658",
+      "type": "series",
+      "title": "Black Clover",
+      "year": 2017,
+      "release_date": "2017-10-03",
+      "poster": "https://image.tmdb.org/t/p/w200/uZUtoVChBGhNj9OfrM2LYpwBm8E.jpg"
     },
     {
       "imdb_id": "tt5875444",
@@ -101,12 +109,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/6mUMquPQBFJGqTACS3Azkwwrx8d.jpg"
     },
     {
-      "imdb_id": "tt7441658",
+      "imdb_id": "tt26598805",
       "type": "series",
-      "title": "Black Clover",
-      "year": 2017,
-      "release_date": "2017-10-03",
-      "poster": "https://image.tmdb.org/t/p/w200/uZUtoVChBGhNj9OfrM2LYpwBm8E.jpg"
+      "title": "Nocturne",
+      "year": 2026,
+      "release_date": "2026-10-29",
+      "poster": "https://image.tmdb.org/t/p/w200/nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg"
     },
     {
       "imdb_id": "tt14218830",
@@ -123,14 +131,6 @@
       "year": 1989,
       "release_date": "1989-12-17",
       "poster": "https://image.tmdb.org/t/p/w200/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg"
-    },
-    {
-      "imdb_id": "tt26598805",
-      "type": "series",
-      "title": "Nocturne",
-      "year": 2026,
-      "release_date": "2026-10-29",
-      "poster": "https://image.tmdb.org/t/p/w200/nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg"
     },
     {
       "imdb_id": "tt2531336",
@@ -181,20 +181,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/1RNtqMeSNNBkXqK8WPUMf72vGrt.jpg"
     },
     {
-      "imdb_id": "tt40197357",
-      "type": "series",
-      "title": "Scrubs",
-      "year": 2026,
-      "release_date": "2026-02-25",
-      "poster": "https://image.tmdb.org/t/p/w200/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg"
-    },
-    {
       "imdb_id": "tt36458668",
       "type": "series",
       "title": "Dead-End Job",
       "year": 2026,
       "release_date": "2026-10-30",
       "poster": "https://image.tmdb.org/t/p/w200/vrDDqk9PAkIs0PQAbW5G0yhPVS3.jpg"
+    },
+    {
+      "imdb_id": "tt40197357",
+      "type": "series",
+      "title": "Scrubs",
+      "year": 2026,
+      "release_date": "2026-02-25",
+      "poster": "https://image.tmdb.org/t/p/w200/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg"
     },
     {
       "imdb_id": "tt31589662",
@@ -211,14 +211,6 @@
       "year": 2005,
       "release_date": "2005-03-27",
       "poster": "https://image.tmdb.org/t/p/w200/gO8Fo47KV1opiutRDdBS5jclTQB.jpg"
-    },
-    {
-      "imdb_id": "tt0434665",
-      "type": "series",
-      "title": "Bleach",
-      "year": 2004,
-      "release_date": "2004-10-05",
-      "poster": "https://image.tmdb.org/t/p/w200/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg"
     },
     {
       "imdb_id": "tt26743760",
@@ -261,6 +253,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/8yBQYa6AdvMY5H9CiAv0HkvF3UE.jpg"
     },
     {
+      "imdb_id": "tt0434665",
+      "type": "series",
+      "title": "Bleach",
+      "year": 2004,
+      "release_date": "2004-10-05",
+      "poster": "https://image.tmdb.org/t/p/w200/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg"
+    },
+    {
       "imdb_id": "tt37972251",
       "type": "series",
       "title": "WAR",
@@ -293,14 +293,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/8XhV6ke8ltRYoG4SYmibF2bGwrC.jpg"
     },
     {
-      "imdb_id": "tt0182576",
-      "type": "series",
-      "title": "Family Guy",
-      "year": 1999,
-      "release_date": "1999-01-31",
-      "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
-    },
-    {
       "imdb_id": "tt43691353",
       "type": "series",
       "title": "Overgeared",
@@ -309,12 +301,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg"
     },
     {
-      "imdb_id": "tt17491088",
+      "imdb_id": "tt0182576",
       "type": "series",
-      "title": "The Diplomat",
-      "year": 2023,
-      "release_date": "2023-04-20",
-      "poster": "https://image.tmdb.org/t/p/w200/cUy0ZYme43lop08nOtbQLWL0dX.jpg"
+      "title": "Family Guy",
+      "year": 1999,
+      "release_date": "1999-01-31",
+      "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
     },
     {
       "imdb_id": "tt0108778",
@@ -333,6 +325,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg"
     },
     {
+      "imdb_id": "tt17491088",
+      "type": "series",
+      "title": "The Diplomat",
+      "year": 2023,
+      "release_date": "2023-04-20",
+      "poster": "https://image.tmdb.org/t/p/w200/cUy0ZYme43lop08nOtbQLWL0dX.jpg"
+    },
+    {
       "imdb_id": "tt2359704",
       "type": "series",
       "title": "JoJo's Bizarre Adventure",
@@ -341,20 +341,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg"
     },
     {
-      "imdb_id": "tt26545992",
-      "type": "series",
-      "title": "Lanterns",
-      "year": 2026,
-      "release_date": "2026-08-16",
-      "poster": "https://image.tmdb.org/t/p/w200/rb94rKVIzLyfWufIN7WqLvadBDH.jpg"
-    },
-    {
       "imdb_id": "tt0239195",
       "type": "series",
       "title": "Survivor",
       "year": 2000,
       "release_date": "2000-05-31",
       "poster": "https://image.tmdb.org/t/p/w200/Ap0qf8VxF9DW4NXLYvMmpg3WkdF.jpg"
+    },
+    {
+      "imdb_id": "tt26545992",
+      "type": "series",
+      "title": "Lanterns",
+      "year": 2026,
+      "release_date": "2026-08-16",
+      "poster": "https://image.tmdb.org/t/p/w200/rb94rKVIzLyfWufIN7WqLvadBDH.jpg"
     },
     {
       "imdb_id": "tt4934214",
@@ -389,20 +389,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/u6HuWWohheyzAj5PUn4rBd0eH92.jpg"
     },
     {
+      "imdb_id": "tt3530232",
+      "type": "series",
+      "title": "Last Week Tonight with John Oliver",
+      "year": 2014,
+      "release_date": "2014-04-27",
+      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
+    },
+    {
       "imdb_id": "tt0944947",
       "type": "series",
       "title": "Game of Thrones",
       "year": 2011,
       "release_date": "2011-04-17",
       "poster": "https://image.tmdb.org/t/p/w200/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg"
-    },
-    {
-      "imdb_id": "tt21952924",
-      "type": "series",
-      "title": "Phony",
-      "year": 2026,
-      "release_date": "2026-10-20",
-      "poster": "https://image.tmdb.org/t/p/w200/iCyQc8cSSHkxUHbkvzbC77owALt.jpg"
     }
   ]
 }
