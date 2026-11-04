@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1793707266237,
+  "scraped_at": 1793750463633,
   "items": [
+    {
+      "slug": "45flg-model-citizen",
+      "imdb_id": "tt13884466",
+      "title": "Model Citizen",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7SE0LBwgqiqZzkm9gKVbBAbcNQL.jpg",
+      "description": "Former police officer Steven Bay is haunted by amnesia and fragments of a life he can no longer remember. When seeking treatment, Steven finds himself trapped in an increasingly unsettling world of constant surveillance, mounting suspicion, and unexplained instincts that suggest someone is controlling far more than his recovery.",
+      "digital_release_date": null
+    },
     {
       "slug": "329li-charlie-harper",
       "imdb_id": "tt27739255",
@@ -89,8 +99,8 @@
       "imdb_id": "tt35538033",
       "title": "Resident Evil",
       "year": 2026,
-      "score": 8,
-      "poster_path": "i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg",
+      "score": 7,
+      "poster_path": "gAgWJhUSQWCgtKR8170nMkYlBda.jpg",
       "description": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
       "digital_release_date": null
     },
@@ -99,7 +109,7 @@
       "imdb_id": "tt38793125",
       "title": "Collision Course",
       "year": 2026,
-      "score": 3,
+      "score": 5,
       "poster_path": "s2eAK0uiODjlNUSIiOBwdp3at2u.jpg",
       "description": "Spain, 2013. After robbing a bank, a getaway crash reveals the hidden side of each thief, exposing betrayals and lies that began long before the heist.",
       "digital_release_date": null
@@ -249,7 +259,7 @@
       "imdb_id": "tt13609648",
       "title": "Sense and Sensibility",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "czsyPHosFNbh4PPqXfqWu1aBXnA.jpg",
       "description": "A charming, witty, and deeply relatable story of love and sisterhood.",
       "digital_release_date": null
@@ -719,7 +729,7 @@
       "imdb_id": "tt43739386",
       "title": "V/H/S/MIXTAPE",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "uS8yoiA6NfsuYeOTbVfpem8Ib9.jpg",
       "description": "V/H/S/MIXTAPE cranks the volume on horror with a blood-soaked collection of cursed music videos, terrifying performances, and found footage. Press play. Pray it stops.",
       "digital_release_date": null
@@ -1329,7 +1339,7 @@
       "imdb_id": "tt34564059",
       "title": "The Runner",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg",
       "description": "Maia Marten, a brilliant London lawyer, has her life shattered by a single call on her morning run: her son has been taken. To get him back, she must keep running, obey every ruthless command, and trust no one-each second a test of how far a mother will go to save her child.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 8,
       "poster_path": "iJNVygzkuOSCOdCPNI1nLSeF7sz.jpg",
       "description": "The tragic love of Orpheus and Eurydice is intertwined with the complex relationship of Hades and Persephone. Eurydice, struggling with poverty, is lured to the industrial underworld of Hadestown by Hades, while Orpheus, a struggling musician, ventures down below to bring her back. (Filmed live at the Lyric Theatre, London, featuring the core five original Broadway cast members.)",
-      "digital_release_date": null
-    },
-    {
-      "slug": "432rh-batman-knightfall-part-1-knightfall",
-      "imdb_id": "tt32333324",
-      "title": "Batman: Knightfall Part 1: Knightfall",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "360qdtu2hLnqMu8SVHMywn420w1.jpg",
-      "description": "Arkham Asylum has been destroyed, and all its inmates have been unleashed upon Gotham City. As Batman races to round up some of his greatest enemies, he is pushed to his physical and mental limits and into a final confrontation with a new threat: the man called Bane!",
       "digital_release_date": null
     }
   ]

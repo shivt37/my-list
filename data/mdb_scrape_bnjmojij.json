@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793707249217,
+  "scraped_at": 1793750450258,
   "items": [
+    {
+      "slug": "3gtq9-the-mongoose",
+      "imdb_id": "tt13611778",
+      "title": "The Mongoose",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "eSS5mvSG84UUuvtbHel5Yu3Wik4.jpg",
+      "description": "A falsely accused war hero with nothing to lose leads police on an epic televised cross-country car chase, helped by members of his former Special Forces Army battalion and closely monitored by a fascinated public rooting for his safe getaway.",
+      "digital_release_date": "2026-11-04"
+    },
     {
       "slug": "3byef-beware-boiuna",
       "imdb_id": "tt10377864",
@@ -29,8 +39,8 @@
       "imdb_id": "tt35538033",
       "title": "Resident Evil",
       "year": 2026,
-      "score": 8,
-      "poster_path": "i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg",
+      "score": 7,
+      "poster_path": "gAgWJhUSQWCgtKR8170nMkYlBda.jpg",
       "description": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
       "digital_release_date": "2026-11-03"
     },
@@ -69,7 +79,7 @@
       "imdb_id": "tt38793125",
       "title": "Collision Course",
       "year": 2026,
-      "score": 3,
+      "score": 5,
       "poster_path": "s2eAK0uiODjlNUSIiOBwdp3at2u.jpg",
       "description": "Spain, 2013. After robbing a bank, a getaway crash reveals the hidden side of each thief, exposing betrayals and lies that began long before the heist.",
       "digital_release_date": "2026-10-30"
@@ -199,7 +209,7 @@
       "imdb_id": "tt13609648",
       "title": "Sense and Sensibility",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "czsyPHosFNbh4PPqXfqWu1aBXnA.jpg",
       "description": "A charming, witty, and deeply relatable story of love and sisterhood.",
       "digital_release_date": "2026-10-26"
@@ -1109,7 +1119,7 @@
       "imdb_id": "tt34564059",
       "title": "The Runner",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg",
       "description": "Maia Marten, a brilliant London lawyer, has her life shattered by a single call on her morning run: her son has been taken. To get him back, she must keep running, obey every ruthless command, and trust no one-each second a test of how far a mother will go to save her child.",
       "digital_release_date": "2026-09-02"
@@ -1433,16 +1443,6 @@
       "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
       "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
       "digital_release_date": "2026-08-18"
-    },
-    {
-      "slug": "3lgk2-the-birthday-party",
-      "imdb_id": "tt33269988",
-      "title": "The Birthday Party",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "sXN4IvB4hM2AYYx9BhdzhokrjvH.jpg",
-      "description": "The late 1970s, somewhere in the Mediterranean: Marcos Timoleon, a tycoon, is throwing a lavish, extravagant birthday party for Sofia on his exclusive private island. The party is a perfect excuse for various people in his life to approach him with their own agendas.",
-      "digital_release_date": "2026-08-14"
     }
   ]
 }
