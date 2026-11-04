@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793750450258,
+  "scraped_at": 1793793652164,
   "items": [
     {
       "slug": "3gtq9-the-mongoose",
@@ -35,6 +35,16 @@
       "digital_release_date": "2026-11-03"
     },
     {
+      "slug": "3qngk-april-x",
+      "imdb_id": "tt30850718",
+      "title": "April X",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "koNUflGEz6Fdy1GCqpvqBOcIaTP.jpg",
+      "description": "When his twin sister April (Lilly Krug) goes missing, Bax (Connor Storrie) searches every corner of their futuristic, post-Soviet cityscape to find her. Ultimately descending into a violent criminal underworld and madness, Bax is forced to confront the cost of identity, love, and survival.",
+      "digital_release_date": "2026-11-03"
+    },
+    {
       "slug": "3tb7f-resident-evil",
       "imdb_id": "tt35538033",
       "title": "Resident Evil",
@@ -42,6 +52,16 @@
       "score": 7,
       "poster_path": "gAgWJhUSQWCgtKR8170nMkYlBda.jpg",
       "description": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
+      "digital_release_date": "2026-11-03"
+    },
+    {
+      "slug": "3vgf2-your-mother-your-mother-your-mother",
+      "imdb_id": "tt35856037",
+      "title": "Your Mother Your Mother Your Mother",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "4KaPZSKnInnArErTTgy9Oy14leR.jpg",
+      "description": "Latif, a devoutly religious hitman, struggles to balance work, faith and fatherhood. When his wife dies, he embarks on a desperate journey across Houston to protect his children, confronting the forces closing in around him – and the beliefs threatening to unravel within.",
       "digital_release_date": "2026-11-03"
     },
     {
@@ -159,7 +179,7 @@
       "imdb_id": "tt36583977",
       "title": "Forgotten Island",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "myd1K3gefdNAWFsGNRDdMeiK9Qg.jpg",
       "description": "While celebrating their last night together, high school graduates and best friends Jo and Raissa stumble upon a mysterious portal that transports them to the fantastical island of Nakali. When they discover that the memories of their entire friendship are the price for returning home, Jo and Raissa must race to find a way to leave the island before they forget each other forever.",
       "digital_release_date": "2026-10-27"
@@ -609,7 +629,7 @@
       "imdb_id": "tt28553375",
       "title": "De Gaulle: Résistance",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "ylXQDz9eAQuC785UQaz5wum2GSe.jpg",
       "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
       "digital_release_date": "2026-10-01"
@@ -919,7 +939,7 @@
       "imdb_id": "tt33095251",
       "title": "Tony",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "uwZF5guNR5EnXkjIVTk4UPTVGiS.jpg",
       "description": "A 19-year-old Anthony Bourdain travels to Provincetown and stumbles into the chaotic world of a restaurant kitchen, setting off a summer that will shape the course of his life.",
       "digital_release_date": "2026-09-15"
@@ -1399,7 +1419,7 @@
       "imdb_id": "tt29719182",
       "title": "Bury the Devil",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "yQ3GeVsebrhOPIBhIdoSslbndEv.jpg",
       "description": "When a hospice nurse finds herself trapped with a dementia patient, she begins to suspect something else is wrong with the woman, something otherworldly, and must fight to survive the night.",
       "digital_release_date": "2026-08-21"
@@ -1423,26 +1443,6 @@
       "poster_path": "lu2sF3dRYGgzhLvoc9yZNSKtlFO.jpg",
       "description": "A talented violinist, Cecilia, confined in an orphanage, meets Vivaldi who becomes her teacher. Under his mentorship and through his music, she gains courage to break free from the life she was destined for and pursue her passion.",
       "digital_release_date": "2026-08-20"
-    },
-    {
-      "slug": "2z2cy-toy-story-5",
-      "imdb_id": "tt29355505",
-      "title": "Toy Story 5",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
-      "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
-      "digital_release_date": "2026-08-18"
-    },
-    {
-      "slug": "3sewg-here-the-whole-time",
-      "imdb_id": "tt40001699",
-      "title": "Here the Whole Time",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
-      "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
-      "digital_release_date": "2026-08-18"
     }
   ]
 }
