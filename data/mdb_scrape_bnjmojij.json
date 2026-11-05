@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793793652164,
+  "scraped_at": 1793836850152,
   "items": [
     {
       "slug": "3gtq9-the-mongoose",
@@ -59,7 +59,7 @@
       "imdb_id": "tt35856037",
       "title": "Your Mother Your Mother Your Mother",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "4KaPZSKnInnArErTTgy9Oy14leR.jpg",
       "description": "Latif, a devoutly religious hitman, struggles to balance work, faith and fatherhood. When his wife dies, he embarks on a desperate journey across Houston to protect his children, confronting the forces closing in around him – and the beliefs threatening to unravel within.",
       "digital_release_date": "2026-11-03"
@@ -71,8 +71,18 @@
       "year": 2026,
       "score": 7,
       "poster_path": "wGfTFVeguXDXYrwPQ8QMFsaSK2M.jpg",
-      "description": "Facing menopause and empty-nest anxiety, friends Julia and Clara decide to travel together to visit their daughters who are on an exchange program abroad.",
+      "description": "When empty nest syndrome hits, two BFFs follow their teen daughters to Portugal and find love, fun and a whole new meaning of friendship along the way.",
       "digital_release_date": "2026-11-02"
+    },
+    {
+      "slug": "45m7h-a-story-of-derry",
+      "imdb_id": "tt50389959",
+      "title": "A Story of Derry",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "4PtzGcegF5Po1NmDAW9IklyvAUh.jpg",
+      "description": "Hundreds of years before Pennywise, three youngsters venture into the Western Wood...where they encounter a terrifying ancient spirit.",
+      "digital_release_date": "2026-10-31"
     },
     {
       "slug": "3wlqv-mirzapur-the-movie",
@@ -249,7 +259,7 @@
       "imdb_id": "tt39631280",
       "title": "Gajab Raat",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "e4N7M52cBbyi24xLga8yI6yt1u1.jpg",
       "description": "A corrupt, troubled cop's night spirals out of control when a reluctant act of mercy toward an injured girl pulls him into a deadly web of crime.",
       "digital_release_date": "2026-10-23"
@@ -369,7 +379,7 @@
       "imdb_id": "tt6262770",
       "title": "Tenzing",
       "year": 2026,
-      "score": 8,
+      "score": 7,
       "poster_path": "eI0QW02PYqhnmIvLRdn9vrfVVP7.jpg",
       "description": "A determined man embarks on a high-stakes quest—and defies seemingly impossible odds—to fulfill his dream of being the first to reach the summit of Mount Everest.",
       "digital_release_date": "2026-10-15"
@@ -449,7 +459,7 @@
       "imdb_id": "tt37281055",
       "title": "Buddy",
       "year": 2026,
-      "score": 7,
+      "score": 6,
       "poster_path": "1BdZbNvl1SfrrX8J9X5tQzN6Ivu.jpg",
       "description": "Inside the colorful world of \"It's Buddy!\", a group of children spend their days singing, dancing, and helping Buddy - bright orange unicorn - spread happiness. But when one child refuses to play along, Buddy is not pleased and cracks begin to appear in this seemingly perfect world.",
       "digital_release_date": "2026-10-13"
@@ -1195,6 +1205,16 @@
       "digital_release_date": "2026-09-01"
     },
     {
+      "slug": "3gkic-sons",
+      "imdb_id": "tt5265480",
+      "title": "& Sons",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "slE4Q17nZe3Bd7PFCrgXXLm6reL.jpg",
+      "description": "A world-renowned but reclusive novelist, believing he is about to die, summons his estranged sons to his home. But instead of seeking forgiveness for their shattered family, he tells them a wild and unbelievable secret that could rewrite their past.",
+      "digital_release_date": "2026-09-01"
+    },
+    {
       "slug": "3mzk8-the-room-below",
       "imdb_id": "tt7265638",
       "title": "The Room Below",
@@ -1423,26 +1443,6 @@
       "poster_path": "yQ3GeVsebrhOPIBhIdoSslbndEv.jpg",
       "description": "When a hospice nurse finds herself trapped with a dementia patient, she begins to suspect something else is wrong with the woman, something otherworldly, and must fight to survive the night.",
       "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "44kh3-the-great-grand-superhero-aliens-ka-aagman",
-      "imdb_id": "tt40769151",
-      "title": "The Great Grand Superhero: Aliens Ka Aagman",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "6CYmHknTN2UGGhqQUZh4tqQ6fEr.jpg",
-      "description": "Follows a grandfather and grandson whose relationship transforms through the child's imagination when they encounter aliens.",
-      "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "3n8v7-primavera",
-      "imdb_id": "tt33586629",
-      "title": "Primavera",
-      "year": 2025,
-      "score": 7,
-      "poster_path": "lu2sF3dRYGgzhLvoc9yZNSKtlFO.jpg",
-      "description": "A talented violinist, Cecilia, confined in an orphanage, meets Vivaldi who becomes her teacher. Under his mentorship and through his music, she gains courage to break free from the life she was destined for and pursue her passion.",
-      "digital_release_date": "2026-08-20"
     }
   ]
 }
