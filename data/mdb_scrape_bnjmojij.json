@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793880051339,
+  "scraped_at": 1793923254971,
   "items": [
+    {
+      "slug": "3ysj8-haiwaan",
+      "imdb_id": "tt32378175",
+      "title": "Haiwaan",
+      "year": 2026,
+      "score": 1,
+      "poster_path": "ykXYDPPvoPhTaBeQ90OibCaCOWX.jpg",
+      "description": "A retired judge faces difficulty keeping his daughter safe from a convict he imprisoned. Later, when he gets murdered, a man with visual impairment who was loyal to him tries to defend his daughter.",
+      "digital_release_date": "2026-11-06"
+    },
+    {
+      "slug": "441sj-the-samurai-and-the-prisoner",
+      "imdb_id": "tt39602215",
+      "title": "The Samurai and the Prisoner",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "1GWVlPM1v6k84LsmDkfDzLlGf0O.jpg",
+      "description": "When Lord Murashige rises up against the tyrannical Oda, he finds himself besieged within the walls of his own castle. Isolated, he is confronted with a series of mysterious crimes that shatter the fragile order of his court, plunging the fortress into fear and suspicion. With Oda's army closing in and a traitor hiding among his ranks, Murashige is forced into an uneasy alliance with Kanbei, a brilliant and dangerous strategist held prisoner in the dungeon, as he must outwit his enemies and uncover the truth before time runs out.",
+      "digital_release_date": "2026-11-06"
+    },
     {
       "slug": "3gtq9-the-mongoose",
       "imdb_id": "tt13611778",
@@ -405,16 +425,6 @@
       "digital_release_date": "2026-10-15"
     },
     {
-      "slug": "45is0-biohazard",
-      "imdb_id": "tt49166238",
-      "title": "Biohazard",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "3FqLdOQdX4VBk3dB663CCA8CAMS.jpg",
-      "description": "Ethan Winters, while searching for his missing wife, finds himself trapped by the Baker family - a deadly, unstoppable force driven to violence under the influence of a mysterious infection...",
-      "digital_release_date": "2026-10-14"
-    },
-    {
       "slug": "3hlbi-practical-magic-2",
       "imdb_id": "tt32588798",
       "title": "Practical Magic 2",
@@ -459,7 +469,7 @@
       "imdb_id": "tt37281055",
       "title": "Buddy",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "1BdZbNvl1SfrrX8J9X5tQzN6Ivu.jpg",
       "description": "Inside the colorful world of \"It's Buddy!\", a group of children spend their days singing, dancing, and helping Buddy - bright orange unicorn - spread happiness. But when one child refuses to play along, Buddy is not pleased and cracks begin to appear in this seemingly perfect world.",
       "digital_release_date": "2026-10-13"
@@ -633,16 +643,6 @@
       "poster_path": "1HW5lVwsuLo6CHW3i9Cm240jLL2.jpg",
       "description": "Assigned to a county-mandated drug court program, Cody Parsons embarks on the tenuous journey toward recovery amid the opioid epidemic in rural Ohio.",
       "digital_release_date": "2026-10-02"
-    },
-    {
-      "slug": "35fjv-de-gaulle-resistance",
-      "imdb_id": "tt28553375",
-      "title": "De Gaulle: Résistance",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "ylXQDz9eAQuC785UQaz5wum2GSe.jpg",
-      "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
-      "digital_release_date": "2026-10-01"
     },
     {
       "slug": "44vis-ohh-my-dog",
@@ -1432,16 +1432,6 @@
       "score": 4,
       "poster_path": "yQ3GeVsebrhOPIBhIdoSslbndEv.jpg",
       "description": "When a hospice nurse finds herself trapped with a dementia patient, she begins to suspect something else is wrong with the woman, something otherworldly, and must fight to survive the night.",
-      "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "44kh3-the-great-grand-superhero-aliens-ka-aagman",
-      "imdb_id": "tt40769151",
-      "title": "The Great Grand Superhero: Aliens Ka Aagman",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "6CYmHknTN2UGGhqQUZh4tqQ6fEr.jpg",
-      "description": "Follows a grandfather and grandson whose relationship transforms through the child's imagination when they encounter aliens.",
       "digital_release_date": "2026-08-21"
     }
   ]

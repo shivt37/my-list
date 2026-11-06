@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1793880068288,
+  "scraped_at": 1793923270304,
   "items": [
+    {
+      "slug": "3dwxu-heart-of-the-beast",
+      "imdb_id": "tt7526136",
+      "title": "Heart of the Beast",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "1ApfSA8JTqeha3GTFEY8syV4auq.jpg",
+      "description": "After a harrowing plane crash, Special Forces officer James Belmont and his combat dog, Odin, find themselves stranded deep in the Alaskan wilderness. Together, they are forced into a brutal fight for survival against the elements.",
+      "digital_release_date": null
+    },
     {
       "slug": "3gtq9-the-mongoose",
       "imdb_id": "tt13611778",
@@ -500,7 +510,7 @@
       "title": "Bad Apples",
       "year": 2026,
       "score": 6,
-      "poster_path": "pcPLnxCThCIo9JFQIMFX4kAE5Yz.jpg",
+      "poster_path": "vGUAC8EOizemwwbWk9JbFrhpVz4.jpg",
       "description": "A struggling primary school teacher is forced to take drastic action because of a foul-mouthed, violent student, and uncovers how her community will turn a blind eye to the most outrageous events to preserve harmony and their sense of safety.",
       "digital_release_date": null
     },
@@ -679,7 +689,7 @@
       "imdb_id": "tt37281055",
       "title": "Buddy",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "1BdZbNvl1SfrrX8J9X5tQzN6Ivu.jpg",
       "description": "Inside the colorful world of \"It's Buddy!\", a group of children spend their days singing, dancing, and helping Buddy - bright orange unicorn - spread happiness. But when one child refuses to play along, Buddy is not pleased and cracks begin to appear in this seemingly perfect world.",
       "digital_release_date": null
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "bg5g4CeHKYLcC0lrNRhbv7mjnD8.jpg",
       "description": "Set in 1986, during a scorching Aussie summer, three best friends' celebration at a beach house turns into a blood-soaked fight for survival when a prank goes horribly wrong.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "41myx-the-last-sunrise",
-      "imdb_id": "tt37654096",
-      "title": "The Last Sunrise",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "3PWJqDfygN0YNNjWsDUOXclCp3h.jpg",
-      "description": "Ry, a college student with a chronic illness, escapes to Mallorca for the summer with her mother, where she unexpectedly falls for a local and begins to embrace living in the moment. But as her condition worsens and long-hidden family secrets come to light, everything she has found before summer's end is threatened.",
       "digital_release_date": null
     }
   ]
