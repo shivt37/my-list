@@ -2,7 +2,7 @@
   "catalog_id": "tmdb_discover_movie_edidioci",
   "name": "X-Men Universe",
   "type": "movie",
-  "scraped_at": 1793837127236,
+  "scraped_at": 1793923367508,
   "sourceHash": "9ee6210439cac85d",
   "items": [
     {
@@ -20,12 +20,12 @@
         28,
         878
       ],
-      "popularity": 0.9821,
+      "popularity": 0.9774,
       "release_date": "2000-07-13",
       "softcore": false,
       "video": false,
       "vote_average": 7.024,
-      "vote_count": 12690
+      "vote_count": 12695
     },
     {
       "adult": false,
@@ -42,12 +42,12 @@
         28,
         878
       ],
-      "popularity": 0.7799,
+      "popularity": 0.7678,
       "release_date": "2003-04-27",
       "softcore": false,
       "video": false,
-      "vote_average": 7.047,
-      "vote_count": 11317
+      "vote_average": 7.048,
+      "vote_count": 11322
     },
     {
       "adult": false,
@@ -64,12 +64,12 @@
         28,
         878
       ],
-      "popularity": 0.7881,
+      "popularity": 0.7511,
       "release_date": "2006-05-24",
       "softcore": false,
       "video": false,
       "vote_average": 6.428,
-      "vote_count": 10789
+      "vote_count": 10793
     },
     {
       "adult": false,
@@ -86,12 +86,12 @@
         28,
         878
       ],
-      "popularity": 1.4089,
+      "popularity": 1.4182,
       "release_date": "2009-04-28",
       "softcore": false,
       "video": false,
       "vote_average": 6.299,
-      "vote_count": 11671
+      "vote_count": 11674
     },
     {
       "adult": false,
@@ -108,12 +108,12 @@
         878,
         12
       ],
-      "popularity": 0.8176,
+      "popularity": 0.7548,
       "release_date": "2011-06-01",
       "softcore": false,
       "video": false,
       "vote_average": 7.308,
-      "vote_count": 14009
+      "vote_count": 14013
     },
     {
       "adult": false,
@@ -130,12 +130,12 @@
         878,
         12
       ],
-      "popularity": 3.5282,
+      "popularity": 3.1523,
       "release_date": "2013-07-24",
       "softcore": false,
       "video": false,
       "vote_average": 6.435,
-      "vote_count": 10682
+      "vote_count": 10684
     },
     {
       "adult": false,
@@ -152,12 +152,12 @@
         12,
         878
       ],
-      "popularity": 17.9864,
+      "popularity": 17.9911,
       "release_date": "2014-05-15",
       "softcore": false,
       "video": false,
       "vote_average": 7.539,
-      "vote_count": 16853
+      "vote_count": 16859
     },
     {
       "adult": false,
@@ -174,12 +174,12 @@
         12,
         35
       ],
-      "popularity": 24.3329,
+      "popularity": 22.7338,
       "release_date": "2016-02-09",
       "softcore": false,
       "video": false,
       "vote_average": 7.626,
-      "vote_count": 33574
+      "vote_count": 33582
     },
     {
       "adult": false,
@@ -196,12 +196,12 @@
         14,
         28
       ],
-      "popularity": 14.4089,
+      "popularity": 14.2906,
       "release_date": "2016-05-18",
       "softcore": false,
       "video": false,
       "vote_average": 6.53,
-      "vote_count": 14260
+      "vote_count": 14265
     },
     {
       "adult": false,
@@ -218,12 +218,12 @@
         18,
         878
       ],
-      "popularity": 21.0584,
+      "popularity": 19.9524,
       "release_date": "2017-02-28",
       "softcore": false,
       "video": false,
       "vote_average": 7.823,
-      "vote_count": 21040
+      "vote_count": 21044
     },
     {
       "adult": false,
@@ -240,12 +240,12 @@
         35,
         12
       ],
-      "popularity": 21.05,
+      "popularity": 19.5904,
       "release_date": "2018-05-15",
       "softcore": false,
       "video": false,
       "vote_average": 7.488,
-      "vote_count": 19890
+      "vote_count": 19895
     },
     {
       "adult": false,
@@ -262,12 +262,12 @@
         28,
         12
       ],
-      "popularity": 11.8236,
+      "popularity": 11.1194,
       "release_date": "2019-06-05",
       "softcore": false,
       "video": false,
       "vote_average": 5.958,
-      "vote_count": 7404
+      "vote_count": 7407
     },
     {
       "adult": false,
@@ -284,12 +284,12 @@
         35,
         878
       ],
-      "popularity": 55.4178,
+      "popularity": 53.7853,
       "release_date": "2024-07-24",
       "softcore": false,
       "video": false,
       "vote_average": 7.587,
-      "vote_count": 9781
+      "vote_count": 9789
     }
   ]
 }
