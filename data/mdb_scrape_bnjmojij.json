@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1793923254971,
+  "scraped_at": 1793966447643,
   "items": [
+    {
+      "slug": "3opj4-the-vvaan",
+      "imdb_id": "tt34498564",
+      "title": "The Vvaan",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "fygsmzrKBGV3O4ky6l26wKF8QBA.jpg",
+      "description": "A rational urban man defies his ancestral forbidden forest and awakens a divine goddess, only to realise that not only do some powers exist beyond logic but he must rise as the village’s only saviour to protect his people from annihilation.",
+      "digital_release_date": "2026-11-06"
+    },
     {
       "slug": "3ysj8-haiwaan",
       "imdb_id": "tt32378175",
@@ -19,7 +29,7 @@
       "imdb_id": "tt39602215",
       "title": "The Samurai and the Prisoner",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "1GWVlPM1v6k84LsmDkfDzLlGf0O.jpg",
       "description": "When Lord Murashige rises up against the tyrannical Oda, he finds himself besieged within the walls of his own castle. Isolated, he is confronted with a series of mysterious crimes that shatter the fragile order of his court, plunging the fortress into fear and suspicion. With Oda's army closing in and a traitor hiding among his ranks, Murashige is forced into an uneasy alliance with Kanbei, a brilliant and dangerous strategist held prisoner in the dungeon, as he must outwit his enemies and uncover the truth before time runs out.",
       "digital_release_date": "2026-11-06"
@@ -340,7 +350,7 @@
       "title": "The Weight",
       "year": 2026,
       "score": 7,
-      "poster_path": "8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
+      "poster_path": "bsrd6ItRwNrg3DGlUDYrEy1S9C1.jpg",
       "description": "When Samuel is torn from his daughter and sent to a brutal prison, Warden Clancy offers him a high-stakes proposition: smuggle gold out of a remote mine with a dangerous crew of prisoners and he’ll win his freedom.",
       "digital_release_date": "2026-10-20"
     },
@@ -369,7 +379,7 @@
       "imdb_id": "tt36271247",
       "title": "Clean Hands",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "szIEtkFLOMsPX6AVQSfzalNEEDd.jpg",
       "description": "Based on a true story, a veteran narcotics officer turned recovery advocate and his daughter, who struggles with addiction, confront the American drug crisis from opposing sides of the law while navigating their complicated family bond.",
       "digital_release_date": "2026-10-16"
@@ -643,6 +653,16 @@
       "poster_path": "1HW5lVwsuLo6CHW3i9Cm240jLL2.jpg",
       "description": "Assigned to a county-mandated drug court program, Cody Parsons embarks on the tenuous journey toward recovery amid the opioid epidemic in rural Ohio.",
       "digital_release_date": "2026-10-02"
+    },
+    {
+      "slug": "35fjv-de-gaulle-resistance",
+      "imdb_id": "tt28553375",
+      "title": "De Gaulle: Résistance",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "ylXQDz9eAQuC785UQaz5wum2GSe.jpg",
+      "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
+      "digital_release_date": "2026-10-01"
     },
     {
       "slug": "44vis-ohh-my-dog",
@@ -1359,7 +1379,7 @@
       "imdb_id": "tt43141030",
       "title": "Yellow Mirror",
       "year": 2026,
-      "score": 5,
+      "score": 6,
       "poster_path": "1zdGvJAuuXC7dA3eV61OtUJNyjQ.jpg",
       "description": "A defective lamp reveals a heartbreaking truth about what Homer believes is reality, and an AI-powered tablet befriends and controls Maggie. The Simpsons struggle to find the light through two dark tales of the curious and bizarre.",
       "digital_release_date": "2026-08-26"
@@ -1422,16 +1442,6 @@
       "score": 6,
       "poster_path": "eg301AEGyYX4gtc0A8DEXQ0VMhK.jpg",
       "description": "After losing her beloved father, Helen finds herself saved by an unlikely friendship with a stubborn hawk named Mabel. Through the bond, Helen rediscovers the beauty of being alive.",
-      "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "3uuzf-bury-the-devil",
-      "imdb_id": "tt29719182",
-      "title": "Bury the Devil",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "yQ3GeVsebrhOPIBhIdoSslbndEv.jpg",
-      "description": "When a hospice nurse finds herself trapped with a dementia patient, she begins to suspect something else is wrong with the woman, something otherworldly, and must fight to survive the night.",
       "digital_release_date": "2026-08-21"
     }
   ]
