@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1793880116076,
+  "scraped_at": 1793923334348,
   "items": [
     {
       "imdb_id": "tt4062536",
@@ -733,20 +733,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/vBqVyTpzv5RzHSsQdu8ECxAqSvd.jpg"
     },
     {
-      "imdb_id": "tt0082495",
-      "type": "movie",
-      "title": "Halloween II",
-      "year": 1981,
-      "release_date": "1981-10-30",
-      "poster": "https://image.tmdb.org/t/p/w200/3nX5HHGgOKaVMxXwMLT9DHO1Ne6.jpg"
-    },
-    {
       "imdb_id": "tt21097228",
       "type": "movie",
       "title": "A Different Man",
       "year": 2024,
       "release_date": "2024-08-24",
       "poster": "https://image.tmdb.org/t/p/w200/lZZKTEvo92u1J5pm7QoEA5yN3du.jpg"
+    },
+    {
+      "imdb_id": "tt0082495",
+      "type": "movie",
+      "title": "Halloween II",
+      "year": 1981,
+      "release_date": "1981-10-30",
+      "poster": "https://image.tmdb.org/t/p/w200/3nX5HHGgOKaVMxXwMLT9DHO1Ne6.jpg"
     },
     {
       "imdb_id": "tt1591095",
