@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1793966495814,
+  "scraped_at": 1794009700102,
   "items": [
     {
       "slug": "3keoi-akka",
@@ -55,6 +55,16 @@
       "first_air_date": "2026-10-26"
     },
     {
+      "slug": "45h8i-adultery",
+      "imdb_id": "tt36119015",
+      "title": "Adultery",
+      "year": 2026,
+      "score": null,
+      "poster_path": "cWo02FdwkVsFhEoZtNUZZa7tahd.jpg",
+      "description": "A chance encounter. An irresistible affair. Two families risk being torn apart when passion crosses a line, unleashing devastating consequences.",
+      "first_air_date": "2026-10-25"
+    },
+    {
       "slug": "44kjk-newlyweds",
       "imdb_id": "tt39469996",
       "title": "Newlyweds",
@@ -99,7 +109,7 @@
       "imdb_id": "tt49702110",
       "title": "Matargashti",
       "year": 2026,
-      "score": null,
+      "score": 1,
       "poster_path": "893gkwRt9MgC9V77gtY2jYp1emp.jpg",
       "description": "Dhara's plan to explore her sexuality puts her at odds with her horrified father, who becomes determined to sabotage her love life.",
       "first_air_date": "2026-10-21"
@@ -489,7 +499,7 @@
       "imdb_id": "tt30051064",
       "title": "American Hostage",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "kVXkBIJw4eW9KC8VZvYvoS6Qg0j.jpg",
       "description": "A psychological thriller anthology series focusing on a different hostage case every season.",
       "first_air_date": "2026-09-20"
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "kllmJ1DdzuRszNNwFFu0M7V55Fg.jpg",
       "description": "A bullied high schooler becomes an overnight sensation after a viral video. But when his newfound fame turns sour, he must learn to fight for himself.",
-      "first_air_date": "2026-06-11"
-    },
-    {
-      "slug": "44ohd-the-evil-lawyer",
-      "imdb_id": "tt39749708",
-      "title": "The Evil Lawyer",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "srwzPdGdkCdDzmhBpNoOGwNrBNf.jpg",
-      "description": "When a young attorney is accused of murdering a police officer's son, he teams up with the \"Evil Lawyer\" to exploit loopholes and prove his innocence.",
       "first_air_date": "2026-06-11"
     }
   ]
