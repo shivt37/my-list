@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1793966511504,
+  "scraped_at": 1794009730484,
   "items": [
     {
       "imdb_id": "tt26598805",
@@ -517,6 +517,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg"
     },
     {
+      "imdb_id": "tt0239195",
+      "type": "series",
+      "title": "Survivor",
+      "year": 2000,
+      "release_date": "2000-05-31",
+      "poster": "https://image.tmdb.org/t/p/w200/Ap0qf8VxF9DW4NXLYvMmpg3WkdF.jpg"
+    },
+    {
       "imdb_id": "tt3530232",
       "type": "series",
       "title": "Last Week Tonight with John Oliver",
@@ -850,7 +858,7 @@
       "title": "Taken: Natalee Holloway",
       "year": 2026,
       "release_date": "2026-11-04",
-      "poster": "https://image.tmdb.org/t/p/w200/lo1CMPtIlvI66w0PHjQ5s4TDSFx.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/rKyjcuSbsDDDcIisa6cx5k5yQNa.jpg"
     },
     {
       "imdb_id": "tt0944947",
@@ -963,6 +971,14 @@
       "year": 2000,
       "release_date": "2000-10-05",
       "poster": "https://image.tmdb.org/t/p/w200/gwtzCwU2wdLLf8oejQu2TINiWfQ.jpg"
+    },
+    {
+      "imdb_id": "tt11198330",
+      "type": "series",
+      "title": "House of the Dragon",
+      "year": 2022,
+      "release_date": "2022-08-21",
+      "poster": "https://image.tmdb.org/t/p/w200/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg"
     },
     {
       "imdb_id": "tt1442437",
