@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794096048388,
+  "scraped_at": 1794139249630,
   "items": [
+    {
+      "slug": "3ngta-the-odyssey",
+      "imdb_id": "tt33764258",
+      "title": "The Odyssey",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "krVa7rKCQb4OBfsr2LTJv4rTz5q.jpg",
+      "description": "Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.",
+      "digital_release_date": "2026-11-07"
+    },
     {
       "slug": "3opj4-the-vvaan",
       "imdb_id": "tt34498564",
@@ -42,6 +52,16 @@
       "score": 5,
       "poster_path": "eSS5mvSG84UUuvtbHel5Yu3Wik4.jpg",
       "description": "A falsely accused war hero with nothing to lose leads police on an epic televised cross-country car chase, helped by members of his former Special Forces Army battalion and closely monitored by a fascinated public rooting for his safe getaway.",
+      "digital_release_date": "2026-11-04"
+    },
+    {
+      "slug": "43dbv-a-dog-s-perfect-christmas",
+      "imdb_id": "tt38515310",
+      "title": "A Dog's Perfect Christmas",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "zvsNAohDHRWcGvbPSD7r3WojpKb.jpg",
+      "description": "When a medical emergency pulls the Goss family apart, determined dog Winstead will do all he can to bring his humans back together before Christmas Eve.",
       "digital_release_date": "2026-11-04"
     },
     {
@@ -555,16 +575,6 @@
       "digital_release_date": "2026-10-07"
     },
     {
-      "slug": "32uh4-spider-man-brand-new-day",
-      "imdb_id": "tt22084616",
-      "title": "Spider-Man: Brand New Day",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg",
-      "description": "Fighting crime full-time as Spider-Man in a world that doesn't remember him—and the pressure of seeing his old friends move on without him—sparks a change in Peter Parker he may not have the power to control. But that transformation might also be the only thing that can stop a shocking new threat to the city and those he loves - a powerful villain no one can even see.",
-      "digital_release_date": "2026-10-06"
-    },
-    {
       "slug": "3ftzd-onslaught",
       "imdb_id": "tt32268691",
       "title": "Onslaught",
@@ -572,16 +582,6 @@
       "score": 5,
       "poster_path": "eAs7G3yFaULpfwfVdGvPo5HmFJS.jpg",
       "description": "When a rogue squad of genetically engineered super soldiers break loose in the desert, a badass Army sniper must unleash hell to protect her young daughter.",
-      "digital_release_date": "2026-10-06"
-    },
-    {
-      "slug": "3gkb3-insidious-out-of-the-further",
-      "imdb_id": "tt32393988",
-      "title": "Insidious: Out of the Further",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "4tTrW9dXCByS5wt2pXVWb58zNjz.jpg",
-      "description": "Gemma, a young mother raising her daughter in the house she grew up in, discovers she can travel into The Further, where she possesses an ability to bring what lives there back to the real world.",
       "digital_release_date": "2026-10-06"
     },
     {
