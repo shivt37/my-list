@@ -2,15 +2,25 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1794052869093,
+  "scraped_at": 1794096064937,
   "items": [
+    {
+      "slug": "43tik-if-i-go-will-they-miss-me",
+      "imdb_id": "tt39151344",
+      "title": "If I Go Will They Miss Me",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "v8Bcs5kC5EtKmFMomBv5BAB5SRi.jpg",
+      "description": "In Watts, California, a 12-year-old boy attempts to connect with his distant father following his incarceration while sensing mysterious visions, from airplanes and Greek gods, that seem to follow him through his everyday world.",
+      "digital_release_date": null
+    },
     {
       "slug": "3ngta-the-odyssey",
       "imdb_id": "tt33764258",
       "title": "The Odyssey",
       "year": 2026,
       "score": 8,
-      "poster_path": "5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
+      "poster_path": "krVa7rKCQb4OBfsr2LTJv4rTz5q.jpg",
       "description": "Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.",
       "digital_release_date": null
     },
@@ -719,8 +729,8 @@
       "imdb_id": "tt34470118",
       "title": "Rise of the Footsoldier: Retribution",
       "year": 2026,
-      "score": 2,
-      "poster_path": "qJ4UV7YnAweTjosfSzDG80j1nd0.jpg",
+      "score": 3,
+      "poster_path": "5Czi3k9zc8BhJFaz6XNDKC4AUtm.jpg",
       "description": "Tate battles ruthless mercenaries throughout Ibiza as he avenges his friend's death.  Get ready for the biggest and most action packed film in the successful independent crime saga.",
       "digital_release_date": null
     },
@@ -1432,16 +1442,6 @@
       "score": 7,
       "poster_path": "hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
       "description": "When a U.S. Navy pilot on a top-secret mission during the Cold War gets trapped behind enemy lines, his only chance at survival is to form an alliance with an eccentric ex-KGB agent.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3z61r-zip-wire",
-      "imdb_id": "tt36980377",
-      "title": "Zip Wire",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "cO7J0XSVKPlAjUCMWC7DVBn1Py2.jpg",
-      "description": "When her ground-breaking pharmaceutical discovery is stolen and partner murdered, researcher Amy must face her fear of heights to escape nefarious attackers, with the only path to salvation being a treacherous aerial runway. To outsmart the mysterious hostiles, she has to summon every ounce of courage to protect the world-changing scientific discovery — and herself — before it's too late.",
       "digital_release_date": null
     }
   ]
