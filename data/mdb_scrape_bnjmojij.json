@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794225648469,
+  "scraped_at": 1794268853445,
   "items": [
+    {
+      "slug": "3q8w0-other-mommy",
+      "imdb_id": "tt36586020",
+      "title": "Other Mommy",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "fGRNCssTRrhYZxNzykGGCoMsAVq.jpg",
+      "description": "Young Bela forms a relationship with a sinister entity in her home that looks uncannily like her own mother, drawing her into a terrifying and increasingly dark world.",
+      "digital_release_date": "2026-11-10"
+    },
     {
       "slug": "3gjk3-virginia-woolf-s-night-day",
       "imdb_id": "tt27802226",
@@ -155,6 +165,16 @@
       "digital_release_date": "2026-10-30"
     },
     {
+      "slug": "45g8x-the-birthday-gift",
+      "imdb_id": "tt38999812",
+      "title": "The Birthday​ Gift​",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "jqGFILLsEDwsLteNDQextojsYFV.jpg",
+      "description": "Single mother Marlene Frischmann organizes a birthday party for her son Theo at her brother's chic country villa, which quickly spirals into family drama, world-view quarrels, and chaos.",
+      "digital_release_date": "2026-10-30"
+    },
+    {
       "slug": "35fju-de-gaulle-liberte",
       "imdb_id": "tt35856133",
       "title": "De Gaulle: Liberté",
@@ -169,7 +189,7 @@
       "imdb_id": "tt43655467",
       "title": "Ali G: Who Iz I?",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "uTyVxPeWX8Ai30IQoyDDQONNcq.jpg",
       "description": "After twenty years spent \"chillin', tokin' and bonin'\", Ali G is shocked to discover that his long-term girlfriend, Julie, is 8 months pregnant. Faced with an extra mouth to feed, he gets off his batty and heads to America to reclaim his former glory… but soon encounters adversaries who will ultimately threaten his and his child's very existence.",
       "digital_release_date": "2026-10-28"
@@ -1422,26 +1442,6 @@
       "score": 4,
       "poster_path": "sXN4IvB4hM2AYYx9BhdzhokrjvH.jpg",
       "description": "The late 1970s, somewhere in the Mediterranean: Marcos Timoleon, a tycoon, is throwing a lavish, extravagant birthday party for Sofia on his exclusive private island. The party is a perfect excuse for various people in his life to approach him with their own agendas.",
-      "digital_release_date": "2026-08-14"
-    },
-    {
-      "slug": "3pc8k-cocktail-2",
-      "imdb_id": "tt35064672",
-      "title": "Cocktail 2",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "oIQmtByV1LtEQSwM4EpdLTyoSlM.jpg",
-      "description": "A vacation in Sicily forces longtime partners Diya and Kunal to question their love and commitment after they reunite with Diya's old friend Ally.",
-      "digital_release_date": "2026-08-14"
-    },
-    {
-      "slug": "43so4-to-the-max",
-      "imdb_id": "tt36454145",
-      "title": "To the Max",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "7KtjwHzp2EB5N63bZtxVb2gImjf.jpg",
-      "description": "A group of friends bonded by their love for extreme sports discovers BASE jumping in wingsuits — but feeling like flying carries the highest risks.",
       "digital_release_date": "2026-08-14"
     }
   ]
