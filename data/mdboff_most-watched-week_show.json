@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_most-watched-week_show",
   "name": "Most Watched Movies & Shows (Past Week)",
   "type": "series",
-  "scraped_at": 1794355310721,
+  "scraped_at": 1794398506588,
   "items": [
     {
       "imdb_id": "tt31510819",
@@ -61,20 +61,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/k7n2EVge7G77eMr3brztRGG1fFU.jpg"
     },
     {
-      "imdb_id": "tt12590266",
-      "type": "series",
-      "title": "Cyberpunk: Edgerunners",
-      "year": 2022,
-      "release_date": "2022-09-13",
-      "poster": "https://image.tmdb.org/t/p/w200/v3JuB15WybKmxDeT1hWdK3j6eSJ.jpg"
-    },
-    {
       "imdb_id": "tt14218830",
       "type": "series",
       "title": "Abbott Elementary",
       "year": 2021,
       "release_date": "2021-12-07",
       "poster": "https://image.tmdb.org/t/p/w200/zk2aNVIHoapdWKOcaYp7PhX9SxD.jpg"
+    },
+    {
+      "imdb_id": "tt12590266",
+      "type": "series",
+      "title": "Cyberpunk: Edgerunners",
+      "year": 2022,
+      "release_date": "2022-09-13",
+      "poster": "https://image.tmdb.org/t/p/w200/v3JuB15WybKmxDeT1hWdK3j6eSJ.jpg"
     },
     {
       "imdb_id": "tt27995113",
@@ -85,20 +85,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/srlsyEfIBz2MNWBndVc3opOaNGS.jpg"
     },
     {
-      "imdb_id": "tt5875444",
-      "type": "series",
-      "title": "Slow Horses",
-      "year": 2022,
-      "release_date": "2022-04-01",
-      "poster": "https://image.tmdb.org/t/p/w200/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg"
-    },
-    {
       "imdb_id": "tt39395275",
       "type": "series",
       "title": "Dragon Ball Super: Beerus",
       "year": 2026,
       "release_date": "2026-10-11",
       "poster": "https://image.tmdb.org/t/p/w200/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg"
+    },
+    {
+      "imdb_id": "tt5875444",
+      "type": "series",
+      "title": "Slow Horses",
+      "year": 2022,
+      "release_date": "2022-04-01",
+      "poster": "https://image.tmdb.org/t/p/w200/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg"
     },
     {
       "imdb_id": "tt36458668",
@@ -117,28 +117,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg"
     },
     {
+      "imdb_id": "tt40197357",
+      "type": "series",
+      "title": "Scrubs",
+      "year": 2026,
+      "release_date": "2026-02-25",
+      "poster": "https://image.tmdb.org/t/p/w200/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg"
+    },
+    {
       "imdb_id": "tt11743610",
       "type": "series",
       "title": "The Terminal List",
       "year": 2022,
       "release_date": "2022-06-30",
       "poster": "https://image.tmdb.org/t/p/w200/xyFAzP7RKK8cARCSalIZ9A9T0jV.jpg"
-    },
-    {
-      "imdb_id": "tt11540908",
-      "type": "series",
-      "title": "Carrie",
-      "year": 2026,
-      "release_date": "2026-10-07",
-      "poster": "https://image.tmdb.org/t/p/w200/6mUMquPQBFJGqTACS3Azkwwrx8d.jpg"
-    },
-    {
-      "imdb_id": "tt23148340",
-      "type": "series",
-      "title": "Crystal Lake",
-      "year": 2026,
-      "release_date": "2026-10-15",
-      "poster": "https://image.tmdb.org/t/p/w200/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg"
     },
     {
       "imdb_id": "tt31710249",
@@ -149,12 +141,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/y8EWrf5Ry1WmYksWT7MOPWexvr5.jpg"
     },
     {
-      "imdb_id": "tt40197357",
+      "imdb_id": "tt11540908",
       "type": "series",
-      "title": "Scrubs",
+      "title": "Carrie",
       "year": 2026,
-      "release_date": "2026-02-25",
-      "poster": "https://image.tmdb.org/t/p/w200/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg"
+      "release_date": "2026-10-07",
+      "poster": "https://image.tmdb.org/t/p/w200/6mUMquPQBFJGqTACS3Azkwwrx8d.jpg"
+    },
+    {
+      "imdb_id": "tt31589662",
+      "type": "series",
+      "title": "Georgie & Mandy's First Marriage",
+      "year": 2024,
+      "release_date": "2024-10-17",
+      "poster": "https://image.tmdb.org/t/p/w200/3z2mYFxUkzanb2eeIcVyfJq0G3q.jpg"
     },
     {
       "imdb_id": "tt10986410",
@@ -165,12 +165,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg"
     },
     {
-      "imdb_id": "tt31589662",
+      "imdb_id": "tt23148340",
       "type": "series",
-      "title": "Georgie & Mandy's First Marriage",
-      "year": 2024,
-      "release_date": "2024-10-17",
-      "poster": "https://image.tmdb.org/t/p/w200/3z2mYFxUkzanb2eeIcVyfJq0G3q.jpg"
+      "title": "Crystal Lake",
+      "year": 2026,
+      "release_date": "2026-10-15",
+      "poster": "https://image.tmdb.org/t/p/w200/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg"
     },
     {
       "imdb_id": "tt1442437",
@@ -205,12 +205,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg"
     },
     {
-      "imdb_id": "tt19231492",
+      "imdb_id": "tt43691353",
       "type": "series",
-      "title": "Dark Matter",
-      "year": 2024,
-      "release_date": "2024-05-07",
-      "poster": "https://image.tmdb.org/t/p/w200/2DPmTlv8F0V1TQBPmlsGOVOhtWk.jpg"
+      "title": "Overgeared",
+      "year": 2026,
+      "release_date": "2026-10-02",
+      "poster": "https://image.tmdb.org/t/p/w200/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg"
     },
     {
       "imdb_id": "tt2531336",
@@ -221,14 +221,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/h6Z2oogE4mJk2uffdtIlLhb0EHx.jpg"
     },
     {
-      "imdb_id": "tt43691353",
-      "type": "series",
-      "title": "Overgeared",
-      "year": 2026,
-      "release_date": "2026-10-02",
-      "poster": "https://image.tmdb.org/t/p/w200/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg"
-    },
-    {
       "imdb_id": "tt11704040",
       "type": "series",
       "title": "Love Is Blind",
@@ -237,20 +229,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/8XhV6ke8ltRYoG4SYmibF2bGwrC.jpg"
     },
     {
+      "imdb_id": "tt19231492",
+      "type": "series",
+      "title": "Dark Matter",
+      "year": 2024,
+      "release_date": "2024-05-07",
+      "poster": "https://image.tmdb.org/t/p/w200/2DPmTlv8F0V1TQBPmlsGOVOhtWk.jpg"
+    },
+    {
       "imdb_id": "tt2359704",
       "type": "series",
       "title": "JoJo's Bizarre Adventure",
       "year": 2012,
       "release_date": "2012-10-06",
       "poster": "https://image.tmdb.org/t/p/w200/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg"
-    },
-    {
-      "imdb_id": "tt35854736",
-      "type": "series",
-      "title": "Avatar: Seven Havens",
-      "year": 2026,
-      "release_date": "2026-10-09",
-      "poster": "https://image.tmdb.org/t/p/w200/u62d0BPqsdv2TUDifcMmoePbHPL.jpg"
     },
     {
       "imdb_id": "tt0386676",
@@ -267,6 +259,14 @@
       "year": 2026,
       "release_date": "2026-10-02",
       "poster": "https://image.tmdb.org/t/p/w200/AtCR5LMuvwepTi1kipKq878Rbuq.jpg"
+    },
+    {
+      "imdb_id": "tt35854736",
+      "type": "series",
+      "title": "Avatar: Seven Havens",
+      "year": 2026,
+      "release_date": "2026-10-09",
+      "poster": "https://image.tmdb.org/t/p/w200/u62d0BPqsdv2TUDifcMmoePbHPL.jpg"
     },
     {
       "imdb_id": "tt26933824",
@@ -333,12 +333,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/3dD3EdDy3Br06YU6j40ddVH7EVW.jpg"
     },
     {
-      "imdb_id": "tt0182576",
+      "imdb_id": "tt3530232",
       "type": "series",
-      "title": "Family Guy",
-      "year": 1999,
-      "release_date": "1999-01-31",
-      "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
+      "title": "Last Week Tonight with John Oliver",
+      "year": 2014,
+      "release_date": "2014-04-27",
+      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
     },
     {
       "imdb_id": "tt7235466",
@@ -349,12 +349,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/u6HuWWohheyzAj5PUn4rBd0eH92.jpg"
     },
     {
-      "imdb_id": "tt3530232",
+      "imdb_id": "tt21952924",
       "type": "series",
-      "title": "Last Week Tonight with John Oliver",
-      "year": 2014,
-      "release_date": "2014-04-27",
-      "poster": "https://image.tmdb.org/t/p/w200/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg"
+      "title": "Phony",
+      "year": 2026,
+      "release_date": "2026-10-20",
+      "poster": "https://image.tmdb.org/t/p/w200/iCyQc8cSSHkxUHbkvzbC77owALt.jpg"
     },
     {
       "imdb_id": "tt0388629",
@@ -365,12 +365,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg"
     },
     {
-      "imdb_id": "tt21952924",
+      "imdb_id": "tt0182576",
       "type": "series",
-      "title": "Phony",
-      "year": 2026,
-      "release_date": "2026-10-20",
-      "poster": "https://image.tmdb.org/t/p/w200/iCyQc8cSSHkxUHbkvzbC77owALt.jpg"
+      "title": "Family Guy",
+      "year": 1999,
+      "release_date": "1999-01-31",
+      "poster": "https://image.tmdb.org/t/p/w200/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg"
     },
     {
       "imdb_id": "tt0944947",
@@ -389,20 +389,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg"
     },
     {
-      "imdb_id": "tt0903747",
+      "imdb_id": "tt33270224",
       "type": "series",
-      "title": "Breaking Bad",
-      "year": 2008,
-      "release_date": "2008-01-20",
-      "poster": "https://image.tmdb.org/t/p/w200/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg"
+      "title": "Cupertino",
+      "year": 2026,
+      "release_date": "2026-10-08",
+      "poster": "https://image.tmdb.org/t/p/w200/70AhJpOqU2oKyQF2paJA764CSje.jpg"
     },
     {
-      "imdb_id": "tt9813792",
+      "imdb_id": "tt0072562",
       "type": "series",
-      "title": "FROM",
-      "year": 2022,
-      "release_date": "2022-02-20",
-      "poster": "https://image.tmdb.org/t/p/w200/pRtJagIxpfODzzb0T0NAvZSzErC.jpg"
+      "title": "Saturday Night Live",
+      "year": 1975,
+      "release_date": "1975-10-11",
+      "poster": "https://image.tmdb.org/t/p/w200/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg"
     }
   ]
 }
