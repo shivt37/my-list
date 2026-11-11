@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1794312093746,
+  "scraped_at": 1794355293340,
   "items": [
     {
       "slug": "435vh-campus-drivers",
@@ -115,6 +115,16 @@
       "first_air_date": "2026-10-23"
     },
     {
+      "slug": "45cce-fading-grandeur",
+      "imdb_id": "tt39387986",
+      "title": "Fading Grandeur",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "4AUgc7JhcLQHNzoa1l0jwxBdK0.jpg",
+      "description": "Desperate to sell his crumbling mansion, a fallen marquis tries to make a quick deal with a charming yet mysterious millionaire who has her own agenda.",
+      "first_air_date": "2026-10-23"
+    },
+    {
       "slug": "45a7p-it-gets-worse",
       "imdb_id": "tt35926686",
       "title": "It Gets Worse",
@@ -209,7 +219,7 @@
       "imdb_id": "tt38990181",
       "title": "Dustfall",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "a7LdXshL4vuCA3LWB2gNNckBIpO.jpg",
       "description": "Seasoned detective Tig returns to her hometown of North Gap after years in the city, and uncovers a string of drink-spiking assaults, the case is turned on its head when a primary suspect is found murdered.",
       "first_air_date": "2026-10-11"
@@ -272,6 +282,16 @@
       "score": 7,
       "poster_path": "70AhJpOqU2oKyQF2paJA764CSje.jpg",
       "description": "A scrappy lawyer takes on a powerful tech giant in a high-stakes legal battle, navigating the cutthroat world of Silicon Valley while fighting for justice and the little guy's rights.",
+      "first_air_date": "2026-10-08"
+    },
+    {
+      "slug": "43qwv-the-castle",
+      "imdb_id": "tt39216741",
+      "title": "The Castle",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "Inj1tjKLEywuVGbxW1GQBCjWT2.jpg",
+      "description": "Gerardo Liesa is a young police inspector who has recently joined the UCRIF (the Central Unit for the Fight against Illegal Immigration Networks and Document Forgery). He and his colleague, Carmen Osés, sense that something is changing in brothels across Spain. Suizo and his associates run several brothels, sexually exploiting sex workers from all over the world. One of these women is Claudia. Aged 18, she has a young son in Colombia and has just arrived in Spain in search of a better future.",
       "first_air_date": "2026-10-08"
     },
     {
@@ -799,7 +819,7 @@
       "imdb_id": "tt39039439",
       "title": "You Maniac",
       "year": 2026,
-      "score": 6,
+      "score": 7,
       "poster_path": "gTvfipRjEdRzbn09CbI7XRj6cmg.jpg",
       "description": "When a carefree playboy meets the one man who refuses to fall for his charm, his competitive ego turns into an obsession he can't resist.",
       "first_air_date": "2026-08-29"
@@ -1423,26 +1443,6 @@
       "poster_path": "xpp6e3uobvlmWrhhXrmhmoXFdb5.jpg",
       "description": "Life. Liberty. The pursuit of happiness. This sweeping historical documentary series traces how the ideals of America's founders gave rise to a nation.",
       "first_air_date": "2026-06-24"
-    },
-    {
-      "slug": "44q4m-the-edge-of-horizon",
-      "imdb_id": "tt40231500",
-      "title": "The Edge of Horizon",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "c6onzDcWmyPmVbVWcbFyCTZcVP0.jpg",
-      "description": "Years after being torn apart by rank and tradition, a prince and his first love reunite as buried feelings bloom once more.",
-      "first_air_date": "2026-06-20"
-    },
-    {
-      "slug": "41lfb-oasis",
-      "imdb_id": "tt38734636",
-      "title": "Oasis",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "vWBtcjETIUd45OoIULEqc6qZxM7.jpg",
-      "description": "Oasis is the most luxurious holiday resort in the country — a paradise reserved for the wealthiest families, featuring private beaches, VIP facilities, and impenetrable security. The perfect place to spend the best summer of your life. But everything falls apart when the police storm the resort to investigate a mysterious disappearance. In such an exclusive place, everyone is a suspect — and no one can leave until the culprit is found.",
-      "first_air_date": "2026-06-19"
     }
   ]
 }

@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794312048678,
+  "scraped_at": 1794355251452,
   "items": [
+    {
+      "slug": "34jsf-street-fighter",
+      "imdb_id": "tt27419420",
+      "title": "Street Fighter",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "8nP4lF51Ea861YfHEEqhZBLYv3e.jpg",
+      "description": "In 1993, estranged Street Fighters Ryu and Ken Masters are thrown back into combat when the mysterious Chun-Li recruits them for the next World Warrior Tournament: a brutal clash of fists, fate, and fury. But behind this battle royale lies a deadly conspiracy that forces them to face off against each other and the demons of their past. And if they don't, it's GAME OVER!",
+      "digital_release_date": "2026-11-11"
+    },
     {
       "slug": "3q8w0-other-mommy",
       "imdb_id": "tt36586020",
@@ -35,6 +45,16 @@
       "digital_release_date": "2026-11-09"
     },
     {
+      "slug": "3ocdm-misty-green",
+      "imdb_id": "tt34385184",
+      "title": "Misty Green",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "dUFtfnSfUK5IUfC5XMlMEY36EAp.jpg",
+      "description": "Years after her Hollywood breakthrough, a talented actress whose career has stalled fights for her second act.",
+      "digital_release_date": "2026-11-06"
+    },
+    {
       "slug": "3opj4-the-vvaan",
       "imdb_id": "tt34498564",
       "title": "The Vvaan",
@@ -63,6 +83,16 @@
       "poster_path": "1GWVlPM1v6k84LsmDkfDzLlGf0O.jpg",
       "description": "When Lord Murashige rises up against the tyrannical Oda, he finds himself besieged within the walls of his own castle. Isolated, he is confronted with a series of mysterious crimes that shatter the fragile order of his court, plunging the fortress into fear and suspicion. With Oda's army closing in and a traitor hiding among his ranks, Murashige is forced into an uneasy alliance with Kanbei, a brilliant and dangerous strategist held prisoner in the dungeon, as he must outwit his enemies and uncover the truth before time runs out.",
       "digital_release_date": "2026-11-06"
+    },
+    {
+      "slug": "45fiv-one-year-to-live-buy-a-man",
+      "imdb_id": "tt39400541",
+      "title": "One Year to Live, Buy a Man",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "fez7kLyGzpowduJapTFZZ1feCS0.jpg",
+      "description": "Given a year to live, frugal 40-year-old Yui finally lets herself spend: \"buying\" nightclub host Sena. What begins as a contract takes an unexpected turn.",
+      "digital_release_date": "2026-11-05"
     },
     {
       "slug": "3gtq9-the-mongoose",
@@ -650,7 +680,7 @@
       "title": "De Gaulle: Résistance",
       "year": 2026,
       "score": 8,
-      "poster_path": "ylXQDz9eAQuC785UQaz5wum2GSe.jpg",
+      "poster_path": "39rtqWTBIUHxo6yLvRbpOHN9tK5.jpg",
       "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
       "digital_release_date": "2026-10-01"
     },
@@ -1413,36 +1443,6 @@
       "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
       "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
       "digital_release_date": "2026-08-18"
-    },
-    {
-      "slug": "3lgk2-the-birthday-party",
-      "imdb_id": "tt33269988",
-      "title": "The Birthday Party",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "sXN4IvB4hM2AYYx9BhdzhokrjvH.jpg",
-      "description": "The late 1970s, somewhere in the Mediterranean: Marcos Timoleon, a tycoon, is throwing a lavish, extravagant birthday party for Sofia on his exclusive private island. The party is a perfect excuse for various people in his life to approach him with their own agendas.",
-      "digital_release_date": "2026-08-14"
-    },
-    {
-      "slug": "3pc8k-cocktail-2",
-      "imdb_id": "tt35064672",
-      "title": "Cocktail 2",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "oIQmtByV1LtEQSwM4EpdLTyoSlM.jpg",
-      "description": "A vacation in Sicily forces longtime partners Diya and Kunal to question their love and commitment after they reunite with Diya's old friend Ally.",
-      "digital_release_date": "2026-08-14"
-    },
-    {
-      "slug": "43so4-to-the-max",
-      "imdb_id": "tt36454145",
-      "title": "To the Max",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "7KtjwHzp2EB5N63bZtxVb2gImjf.jpg",
-      "description": "A group of friends bonded by their love for extreme sports discovers BASE jumping in wingsuits — but feeling like flying carries the highest risks.",
-      "digital_release_date": "2026-08-14"
     }
   ]
 }
