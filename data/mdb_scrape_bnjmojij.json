@@ -2,15 +2,25 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794398448099,
+  "scraped_at": 1794441650445,
   "items": [
+    {
+      "slug": "449cr-last-call",
+      "imdb_id": "tt37202764",
+      "title": "Last Call",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "cLgbupB4xCyBnGeiDOfYXepM632.jpg",
+      "description": "New Year’s Eve 1999, Athens: a desperate fugitive armed with a live grenade takes a family hostage and demands to go on live TV as the world counts down to the new millennium. Broadcast in real time, the situation pulls in a young journalist, media executives and a divided police force, as an entire nation watches events spiral toward a tragic and irreversible outcome.",
+      "digital_release_date": "2026-11-12"
+    },
     {
       "slug": "34jsf-street-fighter",
       "imdb_id": "tt27419420",
       "title": "Street Fighter",
       "year": 2026,
       "score": 5,
-      "poster_path": "8nP4lF51Ea861YfHEEqhZBLYv3e.jpg",
+      "poster_path": "dJPT2Uf12X6aFg8i5N67NTpIZ9t.jpg",
       "description": "In 1993, estranged Street Fighters Ryu and Ken Masters are thrown back into combat when the mysterious Chun-Li recruits them for the next World Warrior Tournament: a brutal clash of fists, fate, and fury. But behind this battle royale lies a deadly conspiracy that forces them to face off against each other and the demons of their past. And if they don't, it's GAME OVER!",
       "digital_release_date": "2026-11-11"
     },
@@ -83,6 +93,16 @@
       "poster_path": "1GWVlPM1v6k84LsmDkfDzLlGf0O.jpg",
       "description": "When Lord Murashige rises up against the tyrannical Oda, he finds himself besieged within the walls of his own castle. Isolated, he is confronted with a series of mysterious crimes that shatter the fragile order of his court, plunging the fortress into fear and suspicion. With Oda's army closing in and a traitor hiding among his ranks, Murashige is forced into an uneasy alliance with Kanbei, a brilliant and dangerous strategist held prisoner in the dungeon, as he must outwit his enemies and uncover the truth before time runs out.",
       "digital_release_date": "2026-11-06"
+    },
+    {
+      "slug": "44bnj-the-12-dates-of-christmas",
+      "imdb_id": "tt39219651",
+      "title": "The 12 Dates of Christmas",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "w82vKEoYNZ9SxYxvccxO85CnZKE.jpg",
+      "description": "Christina Walker, a successful shop owner who has devoted her energy to her career at the expense of her dating life, goes on 12 dates in the 12 weeks leading up to Christmas hoping to find Mr. Right.",
+      "digital_release_date": "2026-11-05"
     },
     {
       "slug": "45fiv-one-year-to-live-buy-a-man",
@@ -385,16 +405,6 @@
       "digital_release_date": "2026-10-20"
     },
     {
-      "slug": "3olba-rise-of-the-footsoldier-retribution",
-      "imdb_id": "tt34470118",
-      "title": "Rise of the Footsoldier: Retribution",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "5Czi3k9zc8BhJFaz6XNDKC4AUtm.jpg",
-      "description": "Tate battles ruthless mercenaries throughout Ibiza as he avenges his friend's death.  Get ready for the biggest and most action packed film in the successful independent crime saga.",
-      "digital_release_date": "2026-10-20"
-    },
-    {
       "slug": "3v0eb-the-weight",
       "imdb_id": "tt10794054",
       "title": "The Weight",
@@ -485,6 +495,16 @@
       "digital_release_date": "2026-10-15"
     },
     {
+      "slug": "36c7s-deathgasm-ii-goremageddon",
+      "imdb_id": "tt32606305",
+      "title": "Deathgasm II: Goremageddon",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "e4iLDxqe8fcIG42YORNlh3t1ZJb.jpg",
+      "description": "After failing to reform his heavy metal band DEATHGASM for a battle-of-the-bands to win back his girlfriend Medina, Brodie decides to use black magic to raise his ex-band members Zakk and Dion from the dead. However, his resurrected friends become unpredictable and dangerous, leading to chaos in the town.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
       "slug": "3hlbi-practical-magic-2",
       "imdb_id": "tt32588798",
       "title": "Practical Magic 2",
@@ -502,6 +522,16 @@
       "score": 7,
       "poster_path": "vJk2TW1QZAmBiD7oj9ZF9EPTYY1.jpg",
       "description": "A former soldier is thrown into a brutal race against time when a critical medical delivery makes him and his unlikely partner the targets of a ruthless cartel. As the mission spirals into a deadly manhunt, every detour, delay, and bullet pushes them closer to failure. With betrayal closing in from every side, they must survive the chase and deliver their cargo to save the life of a little girl.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
+      "slug": "3olba-rise-of-the-footsoldier-retribution",
+      "imdb_id": "tt34470118",
+      "title": "Rise of the Footsoldier: Retribution",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "5Czi3k9zc8BhJFaz6XNDKC4AUtm.jpg",
+      "description": "Tate battles ruthless mercenaries throughout Ibiza as he avenges his friend's death.  Get ready for the biggest and most action packed film in the successful independent crime saga.",
       "digital_release_date": "2026-10-13"
     },
     {
@@ -1405,44 +1435,14 @@
       "digital_release_date": "2026-08-21"
     },
     {
-      "slug": "2z2cy-toy-story-5",
-      "imdb_id": "tt29355505",
-      "title": "Toy Story 5",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
-      "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
-      "digital_release_date": "2026-08-18"
-    },
-    {
-      "slug": "3sewg-here-the-whole-time",
-      "imdb_id": "tt40001699",
-      "title": "Here the Whole Time",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "y3zqa6qmLz2C2bUImOgYs6JxDNT.jpg",
-      "description": "An insecure teenager's vacation plans are ruined by an unexpected visitor: his neighbor and school crush who will spend two weeks sleeping at his house. The days that promised peace, tranquility and epic series marathons end up bringing a whirlwind of feelings and unresolved issues.",
-      "digital_release_date": "2026-08-18"
-    },
-    {
-      "slug": "3lgk2-the-birthday-party",
-      "imdb_id": "tt33269988",
-      "title": "The Birthday Party",
+      "slug": "44qt0-back-to-the-90s",
+      "imdb_id": "tt37540328",
+      "title": "Back to the 90s",
       "year": 2026,
       "score": 4,
-      "poster_path": "sXN4IvB4hM2AYYx9BhdzhokrjvH.jpg",
-      "description": "The late 1970s, somewhere in the Mediterranean: Marcos Timoleon, a tycoon, is throwing a lavish, extravagant birthday party for Sofia on his exclusive private island. The party is a perfect excuse for various people in his life to approach him with their own agendas.",
-      "digital_release_date": "2026-08-14"
-    },
-    {
-      "slug": "3pc8k-cocktail-2",
-      "imdb_id": "tt35064672",
-      "title": "Cocktail 2",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "oIQmtByV1LtEQSwM4EpdLTyoSlM.jpg",
-      "description": "A vacation in Sicily forces longtime partners Diya and Kunal to question their love and commitment after they reunite with Diya's old friend Ally.",
-      "digital_release_date": "2026-08-14"
+      "poster_path": "2T0j25ofU6aUei6J6ek2hlTL1wc.jpg",
+      "description": "When a mysterious glitch sends a rising boyband back to 1995 - just days before the biggest showcase of their lives - the five friends race to reverse the time slip. But as unexpected connections form and the past pulls them in deeper, getting home means confronting what they're willing to leave behind - and who they truly are to each other.",
+      "digital_release_date": "2026-08-21"
     }
   ]
 }

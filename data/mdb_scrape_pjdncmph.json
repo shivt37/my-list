@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1794398464651,
+  "scraped_at": 1794441666903,
   "items": [
+    {
+      "slug": "34jsf-street-fighter",
+      "imdb_id": "tt27419420",
+      "title": "Street Fighter",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "dJPT2Uf12X6aFg8i5N67NTpIZ9t.jpg",
+      "description": "In 1993, estranged Street Fighters Ryu and Ken Masters are thrown back into combat when the mysterious Chun-Li recruits them for the next World Warrior Tournament: a brutal clash of fists, fate, and fury. But behind this battle royale lies a deadly conspiracy that forces them to face off against each other and the demons of their past. And if they don't, it's GAME OVER!",
+      "digital_release_date": null
+    },
     {
       "slug": "3b9qz-the-floaters",
       "imdb_id": "tt31145438",
@@ -1432,16 +1442,6 @@
       "score": 8,
       "poster_path": "4k3ph6BoeZr7IMiQx8ioEV8d9cJ.jpg",
       "description": "In the early 17th century, a soldier arrives at an isolated Protestant village in Germany claiming to be the heir to an abandoned farmstead. Even though he proves to be a good man, the villagers’ suspicions about his identity grow and they force a reckoning.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44q7u-bigfoot-i-love-you",
-      "imdb_id": "tt28109112",
-      "title": "Bigfoot I Love You",
-      "year": 2026,
-      "score": null,
-      "poster_path": "eTMSS2K3qGRLiwJoveBqRUiNQJG.jpg",
-      "description": "When two young filmmakers search for Bigfoot in the forests of Normandy, they first must get through the crazy French townspeople who guard his secret.",
       "digital_release_date": null
     }
   ]
