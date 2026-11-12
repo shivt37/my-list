@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1794398518847,
+  "scraped_at": 1794441718413,
   "items": [
     {
       "imdb_id": "tt27995113",
@@ -1077,14 +1077,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/99PJSbcO2LeM10uOGWeFihNp77j.jpg"
     },
     {
-      "imdb_id": "tt0075578",
-      "type": "series",
-      "title": "Second City Television",
-      "year": 1976,
-      "release_date": "1976-09-21",
-      "poster": "https://image.tmdb.org/t/p/w200/nTvV8fC0qsikn2x8OtHrweKzU3M.jpg"
-    },
-    {
       "imdb_id": "tt1442437",
       "type": "series",
       "title": "Modern Family",
@@ -1187,6 +1179,14 @@
       "year": 2014,
       "release_date": "2014-10-02",
       "poster": "https://image.tmdb.org/t/p/w200/5BCQaZ8HrLjq6diLsIQxZuzXqiK.jpg"
+    },
+    {
+      "imdb_id": "tt0075578",
+      "type": "series",
+      "title": "Second City Television",
+      "year": 1976,
+      "release_date": "1976-09-21",
+      "poster": "https://image.tmdb.org/t/p/w200/nTvV8fC0qsikn2x8OtHrweKzU3M.jpg"
     },
     {
       "imdb_id": "tt22202452",

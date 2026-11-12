@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1794398510920,
+  "scraped_at": 1794441712850,
   "items": [
     {
       "imdb_id": "tt23289160",
@@ -349,14 +349,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/4jeFXQYytChdZYE9JYO7Un87IlW.jpg"
     },
     {
-      "imdb_id": "tt21097228",
-      "type": "movie",
-      "title": "A Different Man",
-      "year": 2024,
-      "release_date": "2024-08-24",
-      "poster": "https://image.tmdb.org/t/p/w200/lZZKTEvo92u1J5pm7QoEA5yN3du.jpg"
-    },
-    {
       "imdb_id": "tt0075148",
       "type": "movie",
       "title": "Rocky",
@@ -557,6 +549,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
     },
     {
+      "imdb_id": "tt21097228",
+      "type": "movie",
+      "title": "A Different Man",
+      "year": 2024,
+      "release_date": "2024-08-24",
+      "poster": "https://image.tmdb.org/t/p/w200/lZZKTEvo92u1J5pm7QoEA5yN3du.jpg"
+    },
+    {
       "imdb_id": "tt0120737",
       "type": "movie",
       "title": "The Lord of the Rings: The Fellowship of the Ring",
@@ -611,14 +611,6 @@
       "year": 1993,
       "release_date": "1993-06-11",
       "poster": "https://image.tmdb.org/t/p/w200/d9mtMGQDLANKieb9PbD3yK7xxzo.jpg"
-    },
-    {
-      "imdb_id": "tt0085636",
-      "type": "movie",
-      "title": "Halloween III: Season of the Witch",
-      "year": 1982,
-      "release_date": "1982-10-22",
-      "poster": "https://image.tmdb.org/t/p/w200/WABfdeaThFYXCySGIOvRNv2sSW.jpg"
     },
     {
       "imdb_id": "tt2692904",
@@ -741,6 +733,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/u21ImPnHHX2SFgkdHIjwlpEwRux.jpg"
     },
     {
+      "imdb_id": "tt0085636",
+      "type": "movie",
+      "title": "Halloween III: Season of the Witch",
+      "year": 1982,
+      "release_date": "1982-10-22",
+      "poster": "https://image.tmdb.org/t/p/w200/WABfdeaThFYXCySGIOvRNv2sSW.jpg"
+    },
+    {
       "imdb_id": "tt32268992",
       "type": "movie",
       "title": "Sacrifice",
@@ -859,14 +859,6 @@
       "year": 2014,
       "release_date": "2014-09-05",
       "poster": "https://image.tmdb.org/t/p/w200/gvlEFHu9FuYLmBZwsARTtuNIiDO.jpg"
-    },
-    {
-      "imdb_id": "tt0460740",
-      "type": "movie",
-      "title": "Cashback",
-      "year": 2007,
-      "release_date": "2007-01-17",
-      "poster": "https://image.tmdb.org/t/p/w200/iXJKrcjHXrL148OfmovdGPBvnSw.jpg"
     },
     {
       "imdb_id": "tt0120791",
@@ -1019,6 +1011,14 @@
       "year": 2014,
       "release_date": "2014-04-06",
       "poster": "https://image.tmdb.org/t/p/w200/ezUtb9m5DeLwL2gxi4gktzNCvQv.jpg"
+    },
+    {
+      "imdb_id": "tt0460740",
+      "type": "movie",
+      "title": "Cashback",
+      "year": 2007,
+      "release_date": "2007-01-17",
+      "poster": "https://image.tmdb.org/t/p/w200/iXJKrcjHXrL148OfmovdGPBvnSw.jpg"
     },
     {
       "imdb_id": "tt0098635",
