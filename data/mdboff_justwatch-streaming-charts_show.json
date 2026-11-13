@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1794484916105,
+  "scraped_at": 1794528126251,
   "items": [
     {
       "imdb_id": "tt27995113",
@@ -1013,20 +1013,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/s55mHZ5q68IUtRsQdy2oC3nPpG7.jpg"
     },
     {
-      "imdb_id": "tt39957390",
-      "type": "series",
-      "title": "Bass X Machina",
-      "year": 2026,
-      "release_date": "2026-11-03",
-      "poster": "https://image.tmdb.org/t/p/w200/y9c1AwrldWRsY9edSf21cOgbI0h.jpg"
-    },
-    {
       "imdb_id": "tt3526078",
       "type": "series",
       "title": "Schitt's Creek",
       "year": 2015,
       "release_date": "2015-01-13",
       "poster": "https://image.tmdb.org/t/p/w200/iRfSzrPS5VYWQv7KVSEg2BZZL6C.jpg"
+    },
+    {
+      "imdb_id": "tt39957390",
+      "type": "series",
+      "title": "Bass X Machina",
+      "year": 2026,
+      "release_date": "2026-11-03",
+      "poster": "https://image.tmdb.org/t/p/w200/y9c1AwrldWRsY9edSf21cOgbI0h.jpg"
     },
     {
       "imdb_id": "tt2249364",
@@ -1157,14 +1157,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/z7Nga7Q9IGFWs5OEduY2gGFxnX3.jpg"
     },
     {
-      "imdb_id": "tt33359676",
-      "type": "series",
-      "title": "Maigret",
-      "year": 2025,
-      "release_date": "2025-10-05",
-      "poster": "https://image.tmdb.org/t/p/w200/j4Ns1AoYHkMJfFhH0wqYnipu3uI.jpg"
-    },
-    {
       "imdb_id": "tt0388629",
       "type": "series",
       "title": "One Piece",
@@ -1179,6 +1171,14 @@
       "year": 2013,
       "release_date": "2013-12-02",
       "poster": "https://image.tmdb.org/t/p/w200/owhkU6KRqdXoUQpjV8uyZGPtX58.jpg"
+    },
+    {
+      "imdb_id": "tt12590266",
+      "type": "series",
+      "title": "Cyberpunk: Edgerunners",
+      "year": 2022,
+      "release_date": "2022-09-13",
+      "poster": "https://image.tmdb.org/t/p/w200/v3JuB15WybKmxDeT1hWdK3j6eSJ.jpg"
     }
   ]
 }
