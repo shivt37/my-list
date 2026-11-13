@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794484851119,
+  "scraped_at": 1794528047792,
   "items": [
+    {
+      "slug": "3e6qv-the-desert-child",
+      "imdb_id": "tt37495239",
+      "title": "The Desert Child",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "8qPtHYpeRgRQUDVYk5M8X37Rkbb.jpg",
+      "description": "14-year-old Sun has written and successfully published a story based on an incredible story told by her late grandfather about a wild child called Hadara, who is saved by a group of ostriches when he becomes separated from his family in a storm, and is then raised in the desert amid a host of wild animals, including his best friend, a desert fox. When Sun is invited to travel to the Sahara by a local community who has heard about her book, she meets Kharouba, a Nomad girl of her own age, and realizes there may be much more to Hadara than just a character in a bedtime story.",
+      "digital_release_date": "2026-11-13"
+    },
     {
       "slug": "449cr-last-call",
       "imdb_id": "tt37202764",
@@ -429,7 +439,7 @@
       "imdb_id": "tt36271247",
       "title": "Clean Hands",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "szIEtkFLOMsPX6AVQSfzalNEEDd.jpg",
       "description": "Based on a true story, a veteran narcotics officer turned recovery advocate and his daughter, who struggles with addiction, confront the American drug crisis from opposing sides of the law while navigating their complicated family bond.",
       "digital_release_date": "2026-10-16"
@@ -732,16 +742,6 @@
       "score": 6,
       "poster_path": "7TUl15TOsIvndKlgMWTtLgtEzZP.jpg",
       "description": "As war and plague devastate 14th-century England, a humble peasant ignites a rebellion, uniting an army of commoners to defy the King’s might in a desperate fight for justice and survival.",
-      "digital_release_date": "2026-09-29"
-    },
-    {
-      "slug": "36say-paw-patrol-the-dino-movie",
-      "imdb_id": "tt29356163",
-      "title": "PAW Patrol: The Dino Movie",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "cxXSF4aY5N2cOGwaga5OnpPFHzk.jpg",
-      "description": "The Paw Patrol lands on a mysterious dinosaur island after a storm, where they meet Rex, a stranded pup. When Humdinger's reckless mining triggers a volcano, the team faces their biggest rescue mission yet to save the island.",
       "digital_release_date": "2026-09-29"
     },
     {
