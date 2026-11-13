@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794528047792,
+  "scraped_at": 1794571248002,
   "items": [
     {
       "slug": "3e6qv-the-desert-child",
@@ -75,16 +75,6 @@
       "digital_release_date": "2026-11-06"
     },
     {
-      "slug": "3ysj8-haiwaan",
-      "imdb_id": "tt32378175",
-      "title": "Haiwaan",
-      "year": 2026,
-      "score": 1,
-      "poster_path": "ykXYDPPvoPhTaBeQ90OibCaCOWX.jpg",
-      "description": "A retired judge faces difficulty keeping his daughter safe from a convict he imprisoned. Later, when he gets murdered, a man with visual impairment who was loyal to him tries to defend his daughter.",
-      "digital_release_date": "2026-11-06"
-    },
-    {
       "slug": "441sj-the-samurai-and-the-prisoner",
       "imdb_id": "tt39602215",
       "title": "The Samurai and the Prisoner",
@@ -109,7 +99,7 @@
       "imdb_id": "tt39400541",
       "title": "One Year to Live, Buy a Man",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "fez7kLyGzpowduJapTFZZ1feCS0.jpg",
       "description": "Given a year to live, frugal 40-year-old Yui finally lets herself spend: \"buying\" nightclub host Sena. What begins as a contract takes an unexpected turn.",
       "digital_release_date": "2026-11-05"
@@ -1443,6 +1433,16 @@
       "poster_path": "2T0j25ofU6aUei6J6ek2hlTL1wc.jpg",
       "description": "When a mysterious glitch sends a rising boyband back to 1995 - just days before the biggest showcase of their lives - the five friends race to reverse the time slip. But as unexpected connections form and the past pulls them in deeper, getting home means confronting what they're willing to leave behind - and who they truly are to each other.",
       "digital_release_date": "2026-08-21"
+    },
+    {
+      "slug": "2z2cy-toy-story-5",
+      "imdb_id": "tt29355505",
+      "title": "Toy Story 5",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
+      "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
+      "digital_release_date": "2026-08-18"
     }
   ]
 }

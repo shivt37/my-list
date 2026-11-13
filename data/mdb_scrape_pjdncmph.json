@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1794528063618,
+  "scraped_at": 1794571261654,
   "items": [
+    {
+      "slug": "1fp2-avengers-endgame",
+      "imdb_id": "tt4154796",
+      "title": "Avengers: Endgame",
+      "year": 2019,
+      "score": 8,
+      "poster_path": "jtDv3lCnST0fZRvdYFwR5CVwK2x.jpg",
+      "description": "After the devastating events of Avengers: Infinity War, the universe is in ruins due to the efforts of the Mad Titan, Thanos. With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos' actions and restore order to the universe once and for all, no matter what consequences may be in store.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "42iej-heartland",
+      "imdb_id": "tt38213251",
+      "title": "Heartland",
+      "year": 2026,
+      "score": null,
+      "poster_path": "zhxlzxBlO1sWB1rPn7RmAoeQ2na.jpg",
+      "description": "A former country star, Misty Jones, comes out of seclusion to investigate the disappearance of her missing niece, a rising country musician and must grapple with her own past and Nashville’s seedy underbelly. Her search uncovers a murky side of Nashville where no one, including Misty, is who they seem.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "2ya9g-being-heumann",
+      "imdb_id": "tt15095848",
+      "title": "Being Heumann",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "ouGH1PS0xjDyfTQOhppn7QzJqQZ.jpg",
+      "description": "Scrappy, defiant, and done being treated like a burden, Judy Heumann turns her outrage into a revolution. In 1977, she and more than 100 disability rights protestors send a very loud message: The system is broken—not us.",
+      "digital_release_date": null
+    },
     {
       "slug": "3fsm4-urchin",
       "imdb_id": "tt35715953",
@@ -149,7 +179,7 @@
       "imdb_id": "tt39850240",
       "title": "Angel and the Badman",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "mJe53zlhGBdcjtN1GqncNZ5Unm0.jpg",
       "description": "A wounded outlaw finds unexpected mercy in the care of a rancher's daughter. The hope of love pulls him toward a different life until the law, and his violent past, close in on his new home. Now he must choose the kind of man he'll become.",
       "digital_release_date": null
@@ -1412,36 +1442,6 @@
       "score": null,
       "poster_path": "sFFmc37zA5ELhALNfOlfNn45dfx.jpg",
       "description": "Ada and her partner Rino move into a secluded villa surrounded by nature. Expecting their second child, Ada finds herself haunted by the unresolved grief of losing their firstborn. As the due date approaches, the sorrow she has long suppressed resurfaces, and she begins to sense a disturbing presence-convinced that her late son has returned from beyond to prevent the birth of his sibling. Is something truly supernatural at play, or is Ada slowly losing her grip on reality?",
-      "digital_release_date": null
-    },
-    {
-      "slug": "44cyd-the-other-people",
-      "imdb_id": "tt32844466",
-      "title": "The Other People",
-      "year": 2025,
-      "score": null,
-      "poster_path": "qU9TnSJ5g6xn9upRT8z9az2O1Ee.jpg",
-      "description": "In a town plagued with sudden deaths and missing persons, a troubled eight-year-old girl befriends a boy that lives in the shadows, and her new stepmom learns why things that live in the dark don’t want to be seen.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3jo0c-the-last-kiss",
-      "imdb_id": "tt33253206",
-      "title": "The Last Kiss",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "cLZ7iFZc25vluSIKt3XtdSTait4.jpg",
-      "description": "A young woman discovers she can foresee the death of anyone she kisses, and when a vision predicts her crush will die in a murder spree targeting her closest friends, she races to uncover the killer before more lives are lost.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3uut9-nimrods",
-      "imdb_id": "tt34895535",
-      "title": "Nimrods",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "4h2WtFCLZPXbydbpi248uqOT9yz.jpg",
-      "description": "Three friends journey from Kansas City to Los Angeles, mistakenly believing that their band is opening for Green Day on New Year’s Eve.",
       "digital_release_date": null
     }
   ]
