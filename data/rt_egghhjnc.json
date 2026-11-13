@@ -2,21 +2,21 @@
   "catalog_id": "rt_egghhjnc",
   "name": "Today's Most Popular Shows on Rotten Tomatoes",
   "type": "series",
-  "scraped_at": 1794445224748,
+  "scraped_at": 1794531623939,
   "items": [
-    {
-      "id": "tt26598805",
-      "type": "series",
-      "name": "Nocturne",
-      "poster": "https://resizing.flixster.com/QmHAF4Pb91YC5pxTQn4_H7MP1OQ=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZmU3NzIxZTMtMWFjOC00NTRjLWJiNmQtNTg2OTlhODA2ZWJkLnBuZw==",
-      "releaseInfo": "2026-10-29"
-    },
     {
       "id": "tt27995113",
       "type": "series",
       "name": "Black Doves",
       "poster": "https://resizing.flixster.com/5qXgdwXLLNuW0MHwGGOlkmGi6Yo=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMWI4YTI2ZWQtMDY3ZC00ODJjLWEzYTgtNjlmZmFlNDViMTcyLmpwZw==",
       "releaseInfo": "2024-12-05"
+    },
+    {
+      "id": "tt26598805",
+      "type": "series",
+      "name": "Nocturne",
+      "poster": "https://resizing.flixster.com/QmHAF4Pb91YC5pxTQn4_H7MP1OQ=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZmU3NzIxZTMtMWFjOC00NTRjLWJiNmQtNTg2OTlhODA2ZWJkLnBuZw==",
+      "releaseInfo": "2026-10-29"
     },
     {
       "id": "tt13138834",
@@ -33,11 +33,18 @@
       "releaseInfo": "2026-10-20"
     },
     {
-      "id": "tt11743610",
+      "id": "tt7631058",
       "type": "series",
-      "name": "The Terminal List",
-      "poster": "https://resizing.flixster.com/I49RIYOmlDt0Hk73g9F4gvEkuvw=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYWVmOGRjODctZmUwMC00Y2ZiLWE4MTEtMzcyMmM3OWUxYWE1LmpwZw==",
-      "releaseInfo": "2022-06-30"
+      "name": "The Lord of the Rings: The Rings of Power",
+      "poster": "https://resizing.flixster.com/Njc1wi8WgXh2uhJ6nx-6XPBgo_Q=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvM2M3YzNlMDItYmQ1Yy00NGIzLWEwYzctZDc3MDlmMWZmZDhhLmpwZw==",
+      "releaseInfo": "2022-09-01"
+    },
+    {
+      "id": "tt23112594",
+      "type": "series",
+      "name": "VisionQuest",
+      "poster": "https://resizing.flixster.com/R2c-hSJpIDhifCMsLn-s8VEGtZc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYjU5ZjEwNzQtYTJhMC00YjkyLTlkNTAtZjVhNWQ1OGU5MGI5LmpwZw==",
+      "releaseInfo": "2026-10-13"
     },
     {
       "id": "tt39325975",
@@ -47,11 +54,18 @@
       "releaseInfo": "2026-11-03"
     },
     {
-      "id": "tt23112594",
+      "id": "tt11743610",
       "type": "series",
-      "name": "VisionQuest",
-      "poster": "https://resizing.flixster.com/R2c-hSJpIDhifCMsLn-s8VEGtZc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYjU5ZjEwNzQtYTJhMC00YjkyLTlkNTAtZjVhNWQ1OGU5MGI5LmpwZw==",
-      "releaseInfo": "2026-10-13"
+      "name": "The Terminal List",
+      "poster": "https://resizing.flixster.com/I49RIYOmlDt0Hk73g9F4gvEkuvw=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYWVmOGRjODctZmUwMC00Y2ZiLWE4MTEtMzcyMmM3OWUxYWE1LmpwZw==",
+      "releaseInfo": "2022-06-30"
+    },
+    {
+      "id": "tt8014982",
+      "type": "series",
+      "name": "The Body",
+      "poster": "https://resizing.flixster.com/ont4LnIFD7821ArXK7tZI8zTXRI=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvM2I5MDQ5MjItYjlmMy00NTk1LWFkNDktMWJlNDVkY2U4ZGExLmpwZw==",
+      "releaseInfo": "2026-11-11"
     },
     {
       "id": "tt15715850",
@@ -75,6 +89,13 @@
       "releaseInfo": "2026-10-08"
     },
     {
+      "id": "tt27370649",
+      "type": "series",
+      "name": "North of North",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p28951464_b_v12_ac.jpg",
+      "releaseInfo": "2025-01-07"
+    },
+    {
       "id": "tt31710249",
       "type": "series",
       "name": "Stick",
@@ -89,18 +110,11 @@
       "releaseInfo": "2025-07-13"
     },
     {
-      "id": "tt27370649",
+      "id": "tt37972251",
       "type": "series",
-      "name": "North of North",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p28951464_b_v12_ac.jpg",
-      "releaseInfo": "2025-01-07"
-    },
-    {
-      "id": "tt7631058",
-      "type": "series",
-      "name": "The Lord of the Rings: The Rings of Power",
-      "poster": "https://resizing.flixster.com/Njc1wi8WgXh2uhJ6nx-6XPBgo_Q=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvM2M3YzNlMDItYmQ1Yy00NGIzLWEwYzctZDc3MDlmMWZmZDhhLmpwZw==",
-      "releaseInfo": "2022-09-01"
+      "name": "War",
+      "poster": "https://resizing.flixster.com/pXMMWpodRzA_t_8M83GM45IYdeQ=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDU5MmEyMGYtNWNiNS00YjAzLTg3MmEtZDIwZjM0ZmNlYmNiLmpwZw==",
+      "releaseInfo": "2026-10-02"
     },
     {
       "id": "tt21097264",
@@ -110,39 +124,18 @@
       "releaseInfo": "2026-10-01"
     },
     {
+      "id": "tt21906238",
+      "type": "series",
+      "name": "Rivals",
+      "poster": "https://resizing.flixster.com/LXSXGuN6MYc4FSerfHo40pXije0=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMWNmMDBkMTctNTUzZS00NjM0LThmMDItMjAzNWRiOTFmYmFiLmpwZw==",
+      "releaseInfo": "2024-10-18"
+    },
+    {
       "id": "tt30291387",
       "type": "series",
       "name": "All's Fair",
       "poster": "https://resizing.flixster.com/GpiyGlNcLr0OzYX_tc1K68jSbzE=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNzAzYzE2OGQtMzY0Ni00M2NhLTkxNTYtYjNmNmFiN2Y2YjYwLmpwZw==",
       "releaseInfo": "2025-11-04"
-    },
-    {
-      "id": "tt37972251",
-      "type": "series",
-      "name": "War",
-      "poster": "https://resizing.flixster.com/pXMMWpodRzA_t_8M83GM45IYdeQ=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDU5MmEyMGYtNWNiNS00YjAzLTg3MmEtZDIwZjM0ZmNlYmNiLmpwZw==",
-      "releaseInfo": "2026-10-02"
-    },
-    {
-      "id": "tt39957390",
-      "type": "series",
-      "name": "Bass X Machina",
-      "poster": "https://resizing.flixster.com/_h-pc67ffCaIIlBn0otxIZlJTfM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDAwZDZlNGUtMWQ5Ni00ZTA1LWExOGEtNzZjNzNhZTA5YzkzLmpwZw==",
-      "releaseInfo": "2026-11-03"
-    },
-    {
-      "id": "tt36458668",
-      "type": "series",
-      "name": "Dead-End Job",
-      "poster": "https://resizing.flixster.com/SxI14_Yr4Dy_jT6cCJVNSsy9qjw=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNWY0YjZlMTQtNzAyOS00MDhiLTgyNzctYTczZDRkZTc5YmQ5LmpwZw==",
-      "releaseInfo": "2026-10-30"
-    },
-    {
-      "id": "tt2531336",
-      "type": "series",
-      "name": "Lupin",
-      "poster": "https://resizing.flixster.com/xlxOZvR-mq8qMvrgipKhEUEp06Y=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvOTJkZTY2NTUtZGUzYi00NzBhLWFlOWMtMGNmYmQ1N2I2ZjI5LndlYnA=",
-      "releaseInfo": "2021-01-08"
     },
     {
       "id": "tt9813792",
@@ -152,6 +145,20 @@
       "releaseInfo": "2022-02-20"
     },
     {
+      "id": "tt2531336",
+      "type": "series",
+      "name": "Lupin",
+      "poster": "https://resizing.flixster.com/xlxOZvR-mq8qMvrgipKhEUEp06Y=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvOTJkZTY2NTUtZGUzYi00NzBhLWFlOWMtMGNmYmQ1N2I2ZjI5LndlYnA=",
+      "releaseInfo": "2021-01-08"
+    },
+    {
+      "id": "tt36458668",
+      "type": "series",
+      "name": "Dead-End Job",
+      "poster": "https://resizing.flixster.com/SxI14_Yr4Dy_jT6cCJVNSsy9qjw=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNWY0YjZlMTQtNzAyOS00MDhiLTgyNzctYTczZDRkZTc5YmQ5LmpwZw==",
+      "releaseInfo": "2026-10-30"
+    },
+    {
       "id": "tt11540908",
       "type": "series",
       "name": "Carrie",
@@ -159,25 +166,11 @@
       "releaseInfo": "2026-10-07"
     },
     {
-      "id": "tt21906238",
+      "id": "tt39957390",
       "type": "series",
-      "name": "Rivals",
-      "poster": "https://resizing.flixster.com/LXSXGuN6MYc4FSerfHo40pXije0=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMWNmMDBkMTctNTUzZS00NjM0LThmMDItMjAzNWRiOTFmYmFiLmpwZw==",
-      "releaseInfo": "2024-10-18"
-    },
-    {
-      "id": "tt36832679",
-      "type": "series",
-      "name": "The Final Problem",
-      "poster": "https://resizing.flixster.com/TatVyjgSLGD36IlRUaefcv--dWM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZmJkMjBhNGQtYTBhZS00NmVkLWFjNjMtNDI1MjFiMzVkMWIwLmpwZw==",
-      "releaseInfo": "2026-09-25"
-    },
-    {
-      "id": "tt4406178",
-      "type": "series",
-      "name": "The Gilded Age",
-      "poster": "https://resizing.flixster.com/kiAZTxL9DjpaBLi6TqD09AxNhI4=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZjlmOWY5NDEtNTQxZS00ZTBkLThiZDgtZmY4MDNjY2UwMzc2LmpwZw==",
-      "releaseInfo": "2022-01-24"
+      "name": "Bass X Machina",
+      "poster": "https://resizing.flixster.com/_h-pc67ffCaIIlBn0otxIZlJTfM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDAwZDZlNGUtMWQ5Ni00ZTA1LWExOGEtNzZjNzNhZTA5YzkzLmpwZw==",
+      "releaseInfo": "2026-11-03"
     },
     {
       "id": "tt17491088",
@@ -187,18 +180,11 @@
       "releaseInfo": "2023-04-20"
     },
     {
-      "id": "tt35926686",
+      "id": "tt36832679",
       "type": "series",
-      "name": "It Gets Worse",
-      "poster": "https://resizing.flixster.com/tC6eRqrOREZLMN-jKPLEbE36Kyc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDFiNjkyOTktMTc3My00MGQwLTlmOTUtYzFiNzZmODAzNDFlLnBuZw==",
-      "releaseInfo": "2026-10-22"
-    },
-    {
-      "id": "tt23148340",
-      "type": "series",
-      "name": "Crystal Lake",
-      "poster": "https://resizing.flixster.com/-83bOcyw7_dmn8K-PSoUfR9u_60=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNmFmMDMzM2YtOGI2OC00NTM2LTkyZjQtYjA5OGJkNmYxMDhkLmpwZw==",
-      "releaseInfo": "2026-10-15"
+      "name": "The Final Problem",
+      "poster": "https://resizing.flixster.com/TatVyjgSLGD36IlRUaefcv--dWM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZmJkMjBhNGQtYTBhZS00NmVkLWFjNjMtNDI1MjFiMzVkMWIwLmpwZw==",
+      "releaseInfo": "2026-09-25"
     },
     {
       "id": "tt39980704",
@@ -208,18 +194,11 @@
       "releaseInfo": "2026-10-23"
     },
     {
-      "id": "tt5875444",
+      "id": "tt4406178",
       "type": "series",
-      "name": "Slow Horses",
-      "poster": "https://resizing.flixster.com/BGMtJsGP5WfnzdELSHA_uqXPOGk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZmMyZWYwNjktMWYyNS00MGY3LTk1MmEtZjRlYzA4MzAxNmU1LnBuZw==",
-      "releaseInfo": "2022-04-01"
-    },
-    {
-      "id": "tt35854736",
-      "type": "series",
-      "name": "Avatar: Seven Havens",
-      "poster": "https://resizing.flixster.com/F0UZz0n0WnxTQPO75m1Pn4WdlvI=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYjhlN2ZjNTUtZDAzMC00NDBmLWFlMmEtODk0MjdjOThmOTlmLmpwZw==",
-      "releaseInfo": "2026-10-09"
+      "name": "The Gilded Age",
+      "poster": "https://resizing.flixster.com/kiAZTxL9DjpaBLi6TqD09AxNhI4=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZjlmOWY5NDEtNTQxZS00ZTBkLThiZDgtZmY4MDNjY2UwMzc2LmpwZw==",
+      "releaseInfo": "2022-01-24"
     },
     {
       "id": "tt31510819",
@@ -229,11 +208,18 @@
       "releaseInfo": "2025-03-30"
     },
     {
-      "id": "tt12590266",
+      "id": "tt5875444",
       "type": "series",
-      "name": "Cyberpunk: Edgerunners",
-      "poster": "https://resizing.flixster.com/YE4uzcnAdkywN_AGDjbwOwCaiNw=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZTQ0NzFmMWQtZjFlMS00MTFlLWIxZGYtZjQ0ZDdkOTY1MGNmLmpwZw==",
-      "releaseInfo": "2022-09-13"
+      "name": "Slow Horses",
+      "poster": "https://resizing.flixster.com/BGMtJsGP5WfnzdELSHA_uqXPOGk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZmMyZWYwNjktMWYyNS00MGY3LTk1MmEtZjRlYzA4MzAxNmU1LnBuZw==",
+      "releaseInfo": "2022-04-01"
+    },
+    {
+      "id": "tt35926686",
+      "type": "series",
+      "name": "It Gets Worse",
+      "poster": "https://resizing.flixster.com/tC6eRqrOREZLMN-jKPLEbE36Kyc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDFiNjkyOTktMTc3My00MGQwLTlmOTUtYzFiNzZmODAzNDFlLnBuZw==",
+      "releaseInfo": "2026-10-22"
     },
     {
       "id": "tt33270224",
@@ -243,6 +229,27 @@
       "releaseInfo": "2026-10-08"
     },
     {
+      "id": "tt35854736",
+      "type": "series",
+      "name": "Avatar: Seven Havens",
+      "poster": "https://resizing.flixster.com/F0UZz0n0WnxTQPO75m1Pn4WdlvI=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYjhlN2ZjNTUtZDAzMC00NDBmLWFlMmEtODk0MjdjOThmOTlmLmpwZw==",
+      "releaseInfo": "2026-10-09"
+    },
+    {
+      "id": "tt23148340",
+      "type": "series",
+      "name": "Crystal Lake",
+      "poster": "https://resizing.flixster.com/-83bOcyw7_dmn8K-PSoUfR9u_60=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNmFmMDMzM2YtOGI2OC00NTM2LTkyZjQtYjA5OGJkNmYxMDhkLmpwZw==",
+      "releaseInfo": "2026-10-15"
+    },
+    {
+      "id": "tt12590266",
+      "type": "series",
+      "name": "Cyberpunk: Edgerunners",
+      "poster": "https://resizing.flixster.com/YE4uzcnAdkywN_AGDjbwOwCaiNw=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZTQ0NzFmMWQtZjFlMS00MTFlLWIxZGYtZjQ0ZDdkOTY1MGNmLmpwZw==",
+      "releaseInfo": "2022-09-13"
+    },
+    {
       "id": "tt38504111",
       "type": "series",
       "name": "Small Prophets",
@@ -250,11 +257,32 @@
       "releaseInfo": "2026-02-09"
     },
     {
+      "id": "tt32375763",
+      "type": "series",
+      "name": "12 12 12",
+      "poster": "https://resizing.flixster.com/IfgYdHmUUBXQv64pZANVg6hPXeI=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZjUzMjBlMTgtMjI3Yy00NzI0LTlmZmYtNTc4NDQ1YmQwMjk3LnBuZw==",
+      "releaseInfo": "2026-11-12"
+    },
+    {
       "id": "tt11212276",
       "type": "series",
       "name": "The Sex Lives of College Girls",
       "poster": "https://resizing.flixster.com/5EU3vFUWqBZtFoNsnOCBGxyktM4=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMjNjZTNjOGYtNDc2MC00YjY4LWE2ZmYtZGVlYjk4NTBmNGY2LmpwZw==",
       "releaseInfo": "2021-11-18"
+    },
+    {
+      "id": "tt31842126",
+      "type": "series",
+      "name": "The Good Daughter",
+      "poster": "https://resizing.flixster.com/lk5xoFJrq1Zq2qvddA9dK-M_OD0=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZGNhMjU3YmUtOGQzNi00ZjgxLTg4YjAtMWQ3OTRmOTgxMzhjLmpwZw==",
+      "releaseInfo": "2026-11-12"
+    },
+    {
+      "id": "tt10946316",
+      "type": "series",
+      "name": "The Institute",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29861564_b_v12_ae.jpg",
+      "releaseInfo": "2025-07-13"
     },
     {
       "id": "tt42220724",
@@ -271,20 +299,6 @@
       "releaseInfo": "2024-09-26"
     },
     {
-      "id": "tt8014982",
-      "type": "series",
-      "name": "The Body",
-      "poster": "https://resizing.flixster.com/ont4LnIFD7821ArXK7tZI8zTXRI=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvM2I5MDQ5MjItYjlmMy00NTk1LWFkNDktMWJlNDVkY2U4ZGExLmpwZw==",
-      "releaseInfo": "2026-11-11"
-    },
-    {
-      "id": "tt32375763",
-      "type": "series",
-      "name": "12 12 12",
-      "poster": "https://resizing.flixster.com/IfgYdHmUUBXQv64pZANVg6hPXeI=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZjUzMjBlMTgtMjI3Yy00NzI0LTlmZmYtNTc4NDQ1YmQwMjk3LnBuZw==",
-      "releaseInfo": "2026-11-12"
-    },
-    {
       "id": "tt10986410",
       "type": "series",
       "name": "Ted Lasso",
@@ -299,18 +313,11 @@
       "releaseInfo": "2011-10-05"
     },
     {
-      "id": "tt10946316",
+      "id": "tt26545992",
       "type": "series",
-      "name": "The Institute",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29861564_b_v12_ae.jpg",
-      "releaseInfo": "2025-07-13"
-    },
-    {
-      "id": "tt31289994",
-      "type": "series",
-      "name": "The Lowdown",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p30237650_b_v12_ad.jpg",
-      "releaseInfo": "2025-09-23"
+      "name": "Lanterns",
+      "poster": "https://resizing.flixster.com/UCh0UP728hWIpF33hfgkX5HaA1U=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNjk3ZDI1OTEtNmZhYS00NjM3LTgwMmMtMTYxOWJlOTc5ZjZmLmpwZw==",
+      "releaseInfo": "2026-08-16"
     },
     {
       "id": "tt43681696",
@@ -320,11 +327,11 @@
       "releaseInfo": "2026-11-04"
     },
     {
-      "id": "tt13207736",
+      "id": "tt31289994",
       "type": "series",
-      "name": "Monster",
-      "poster": "https://resizing.flixster.com/ohznCM4UdJs5DD8CtWLhhMGQyMY=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvN2EwYzllZTUtNzgyNy00ODc4LTk1ZWQtMTM1NDNjOWM2MjQ5LndlYnA=",
-      "releaseInfo": "2022-09-21"
+      "name": "The Lowdown",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p30237650_b_v12_ad.jpg",
+      "releaseInfo": "2025-09-23"
     },
     {
       "id": "tt19231492",
@@ -334,18 +341,11 @@
       "releaseInfo": "2024-05-07"
     },
     {
-      "id": "tt31842126",
+      "id": "tt13207736",
       "type": "series",
-      "name": "The Good Daughter",
-      "poster": "https://resizing.flixster.com/lk5xoFJrq1Zq2qvddA9dK-M_OD0=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZGNhMjU3YmUtOGQzNi00ZjgxLTg4YjAtMWQ3OTRmOTgxMzhjLmpwZw==",
-      "releaseInfo": "2026-11-12"
-    },
-    {
-      "id": "tt26545992",
-      "type": "series",
-      "name": "Lanterns",
-      "poster": "https://resizing.flixster.com/UCh0UP728hWIpF33hfgkX5HaA1U=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNjk3ZDI1OTEtNmZhYS00NjM3LTgwMmMtMTYxOWJlOTc5ZjZmLmpwZw==",
-      "releaseInfo": "2026-08-16"
+      "name": "Monster",
+      "poster": "https://resizing.flixster.com/ohznCM4UdJs5DD8CtWLhhMGQyMY=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvN2EwYzllZTUtNzgyNy00ODc4LTk1ZWQtMTM1NDNjOWM2MjQ5LndlYnA=",
+      "releaseInfo": "2022-09-21"
     },
     {
       "id": "tt30051064",
@@ -355,18 +355,18 @@
       "releaseInfo": "2026-09-20"
     },
     {
-      "id": "tt32159809",
-      "type": "series",
-      "name": "The Paper",
-      "poster": "https://resizing.flixster.com/880nUj8KSXg1ugi2rm2OUn5JY00=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNWUyYWIyY2MtY2RhZS00OGFiLTkwNGQtZDEwYjkwOTVjMDMzLnBuZw==",
-      "releaseInfo": "2025-09-04"
-    },
-    {
       "id": "tt13210838",
       "type": "series",
       "name": "The Gentlemen",
       "poster": "https://resizing.flixster.com/Nd2iz5z5MJkPNDBCgmdCD1hFNaM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZTE2NWRlY2MtN2YxZC00NTg3LWFiMjktZTM3ZGJjNDViYzljLnBuZw==",
       "releaseInfo": "2024-03-07"
+    },
+    {
+      "id": "tt32159809",
+      "type": "series",
+      "name": "The Paper",
+      "poster": "https://resizing.flixster.com/880nUj8KSXg1ugi2rm2OUn5JY00=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNWUyYWIyY2MtY2RhZS00OGFiLTkwNGQtZDEwYjkwOTVjMDMzLnBuZw==",
+      "releaseInfo": "2025-09-04"
     },
     {
       "id": "tt39469996",
@@ -376,11 +376,11 @@
       "releaseInfo": "2026-10-23"
     },
     {
-      "id": "tt6773088",
+      "id": "tt0413573",
       "type": "series",
-      "name": "Brothers",
-      "poster": "https://resizing.flixster.com/oehUxBCPZR6lTmvrj8TtMLr7InA=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzgxMzI0ZmUtMDQ4MS00NmE3LTkxMmYtNGEzMWYyMmYzZmMyLnBuZw==",
-      "releaseInfo": "2026-09-22"
+      "name": "Grey's Anatomy",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p185019_b_v12_bw.jpg",
+      "releaseInfo": "2005-03-27"
     },
     {
       "id": "tt13406094",
@@ -388,13 +388,6 @@
       "name": "The White Lotus",
       "poster": "https://resizing.flixster.com/JLcQZZw-D8vYkMF6A4QDvOCkyzY=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvM2NjMDdiZmEtM2U4Yi00ZDc2LTljYWYtM2VlNDhiZjhmMDUzLmpwZw==",
       "releaseInfo": "2021-07-11"
-    },
-    {
-      "id": "tt0413573",
-      "type": "series",
-      "name": "Grey's Anatomy",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p185019_b_v12_bw.jpg",
-      "releaseInfo": "2005-03-27"
     },
     {
       "id": "tt6151526",
@@ -411,25 +404,18 @@
       "releaseInfo": "2022-03-03"
     },
     {
+      "id": "tt6773088",
+      "type": "series",
+      "name": "Brothers",
+      "poster": "https://resizing.flixster.com/oehUxBCPZR6lTmvrj8TtMLr7InA=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzgxMzI0ZmUtMDQ4MS00NmE3LTkxMmYtNGEzMWYyMmYzZmMyLnBuZw==",
+      "releaseInfo": "2026-09-22"
+    },
+    {
       "id": "tt31438328",
       "type": "series",
       "name": "This City Is Ours: A Crime Family Saga",
       "poster": "https://resizing.flixster.com/JNGweFus27BlG4qx40kD45IVYyk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYzY5YTE2OWUtNWNjMS00ODI4LTgwNDQtMDE0NDY3OGRiMmFkLmpwZw==",
       "releaseInfo": "2025"
-    },
-    {
-      "id": "tt44941753",
-      "type": "series",
-      "name": "The One About Matthew Perry",
-      "poster": "https://resizing.flixster.com/3k21gOjqPoNl-WQfM65wXj_4Cq8=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNTFiNTUzYzItYWY0ZC00YTBmLThlZjQtZjY0ODk2MjUyMDA0LmpwZw==",
-      "releaseInfo": "2026-10-27"
-    },
-    {
-      "id": "tt1196946",
-      "type": "series",
-      "name": "The Mentalist",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p186597_b_v11_au.jpg",
-      "releaseInfo": "2008-09-23"
     },
     {
       "id": "tt36153709",
@@ -453,11 +439,11 @@
       "releaseInfo": "2026-05-07"
     },
     {
-      "id": "tt17543592",
+      "id": "tt1196946",
       "type": "series",
-      "name": "Will Trent",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p23358611_b_v12_ak.jpg",
-      "releaseInfo": "2023-01-03"
+      "name": "The Mentalist",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p186597_b_v11_au.jpg",
+      "releaseInfo": "2008-09-23"
     },
     {
       "id": "tt22202452",
@@ -474,32 +460,25 @@
       "releaseInfo": "2023-05-04"
     },
     {
+      "id": "tt17543592",
+      "type": "series",
+      "name": "Will Trent",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p23358611_b_v12_ak.jpg",
+      "releaseInfo": "2023-01-03"
+    },
+    {
+      "id": "tt44941753",
+      "type": "series",
+      "name": "The One About Matthew Perry",
+      "poster": "https://resizing.flixster.com/3k21gOjqPoNl-WQfM65wXj_4Cq8=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNTFiNTUzYzItYWY0ZC00YTBmLThlZjQtZjY0ODk2MjUyMDA0LmpwZw==",
+      "releaseInfo": "2026-10-27"
+    },
+    {
       "id": "tt32378211",
       "type": "series",
       "name": "Mistletoe Murders",
       "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p28243292_b_v12_ak.jpg",
       "releaseInfo": "2024-10-31"
-    },
-    {
-      "id": "tt35949226",
-      "type": "series",
-      "name": "Youth",
-      "poster": "https://resizing.flixster.com/VZeBlLUR489EsKhmeeRCZ_tTMEo=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzhkNzg4MTItMGRhYS00NWYxLWFlYjItMmI3ODJlMDdmMTIzLmpwZw==",
-      "releaseInfo": "2026-09-21"
-    },
-    {
-      "id": "tt6719950",
-      "type": "series",
-      "name": "Muhammad Ali",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p20272918_b_v12_ab.jpg",
-      "releaseInfo": "2021-09-19"
-    },
-    {
-      "id": "tt16358384",
-      "type": "series",
-      "name": "Tulsa King",
-      "poster": "https://resizing.flixster.com/H3OOP7rKTbo-gSz4RS6y_Lo-MH4=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvY2U1ZGQyNzMtMGFhZC00MzA2LWFjOWEtZDg2NTg2NDViYzM0LmpwZw==",
-      "releaseInfo": "2022-11-13"
     },
     {
       "id": "tt14403178",
@@ -509,11 +488,11 @@
       "releaseInfo": "2023-04-06"
     },
     {
-      "id": "tt14466018",
+      "id": "tt6719950",
       "type": "series",
-      "name": "Blue Lights",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p24341439_b_v8_as.jpg",
-      "releaseInfo": "2023-03-27"
+      "name": "Muhammad Ali",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p20272918_b_v12_ab.jpg",
+      "releaseInfo": "2021-09-19"
     },
     {
       "id": "tt27846061",
@@ -523,25 +502,11 @@
       "releaseInfo": "2024-09-25"
     },
     {
-      "id": "tt4574334",
+      "id": "tt35949226",
       "type": "series",
-      "name": "Stranger Things",
-      "poster": "https://resizing.flixster.com/3kl0YaaOu8zAfi13ohK0kRnMdFc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzdiMGI2YTItOWU1My00ODNkLTgzNTItOGZmNzE3Y2M0MzBiLmpwZw==",
-      "releaseInfo": "2016-07-15"
-    },
-    {
-      "id": "tt36470958",
-      "type": "series",
-      "name": "The Trap",
-      "poster": "https://resizing.flixster.com/QqdcXdXtaaaOY5A8D79WH9_yc40=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZWYxODQzYzctMzgyZC00ZGZlLWE3NmEtYzFlN2ZjYzY1M2FkLmpwZw==",
-      "releaseInfo": "2026-10-13"
-    },
-    {
-      "id": "tt33332385",
-      "type": "series",
-      "name": "Widow's Bay",
-      "poster": "https://resizing.flixster.com/FBLr2H6SulNALtamrstRyoLPGnc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDZlZTNiYzItYTY4Yy00ZmZmLWJmNzktOTk4NGFjMGJkZTE0LnBuZw==",
-      "releaseInfo": "2026-04-28"
+      "name": "Youth",
+      "poster": "https://resizing.flixster.com/VZeBlLUR489EsKhmeeRCZ_tTMEo=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzhkNzg4MTItMGRhYS00NWYxLWFlYjItMmI3ODJlMDdmMTIzLmpwZw==",
+      "releaseInfo": "2026-09-21"
     },
     {
       "id": "tt23734948",
@@ -551,6 +516,34 @@
       "releaseInfo": "2026-01-22"
     },
     {
+      "id": "tt4574334",
+      "type": "series",
+      "name": "Stranger Things",
+      "poster": "https://resizing.flixster.com/3kl0YaaOu8zAfi13ohK0kRnMdFc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzdiMGI2YTItOWU1My00ODNkLTgzNTItOGZmNzE3Y2M0MzBiLmpwZw==",
+      "releaseInfo": "2016-07-15"
+    },
+    {
+      "id": "tt16358384",
+      "type": "series",
+      "name": "Tulsa King",
+      "poster": "https://resizing.flixster.com/H3OOP7rKTbo-gSz4RS6y_Lo-MH4=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvY2U1ZGQyNzMtMGFhZC00MzA2LWFjOWEtZDg2NTg2NDViYzM0LmpwZw==",
+      "releaseInfo": "2022-11-13"
+    },
+    {
+      "id": "tt33332385",
+      "type": "series",
+      "name": "Widow's Bay",
+      "poster": "https://resizing.flixster.com/FBLr2H6SulNALtamrstRyoLPGnc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDZlZTNiYzItYTY4Yy00ZmZmLWJmNzktOTk4NGFjMGJkZTE0LnBuZw==",
+      "releaseInfo": "2026-04-28"
+    },
+    {
+      "id": "tt14466018",
+      "type": "series",
+      "name": "Blue Lights",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p24341439_b_v8_as.jpg",
+      "releaseInfo": "2023-03-27"
+    },
+    {
       "id": "tt36303968",
       "type": "series",
       "name": "Furious",
@@ -558,18 +551,11 @@
       "releaseInfo": "2026-07-27"
     },
     {
-      "id": "tt2356777",
+      "id": "tt36470958",
       "type": "series",
-      "name": "True Detective",
-      "poster": "https://resizing.flixster.com/iBTDsDf7zD1To6HAvYUTjSgOjYk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZjc5OTFhMjAtMDdhOS00NWMxLTlhYjktZjYwNTBmNjE3ODJmLmpwZw==",
-      "releaseInfo": "2014-01-12"
-    },
-    {
-      "id": "tt9142920",
-      "type": "series",
-      "name": "High Value Target: The Hunt for Saddam",
-      "poster": "https://resizing.flixster.com/iB7MJalJ_PmbiW8Pcr4blDtraEU=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMmM0ODQxNGUtNjNhYi00MGIzLTlhNTMtYTYxMDFkMzEyYjlkLmpwZw==",
-      "releaseInfo": "2026"
+      "name": "The Trap",
+      "poster": "https://resizing.flixster.com/QqdcXdXtaaaOY5A8D79WH9_yc40=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZWYxODQzYzctMzgyZC00ZGZlLWE3NmEtYzFlN2ZjYzY1M2FkLmpwZw==",
+      "releaseInfo": "2026-10-13"
     },
     {
       "id": "tt9288030",
@@ -579,18 +565,11 @@
       "releaseInfo": "2022-02-03"
     },
     {
-      "id": "tt6037988",
+      "id": "tt2356777",
       "type": "series",
-      "name": "Last Seen",
-      "poster": "https://resizing.flixster.com/n2w7A7mJJTG3Hr3ksQrGwusw1zk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYWViYWQ3MjItM2I0NS00NjgwLWJlZmMtMzBhMzNmZjRmOGQ0LnBuZw==",
-      "releaseInfo": "2026-09-09"
-    },
-    {
-      "id": "tt11231226",
-      "type": "series",
-      "name": "Reasonable Doubt",
-      "poster": "https://resizing.flixster.com/cl73glnc7iTghDFNnBn08_yamgc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZTcwNDViNDEtMjkwZi00NWY0LThhODYtZGU4Y2I1MDRiZjUwLmpwZw==",
-      "releaseInfo": "2022-09-27"
+      "name": "True Detective",
+      "poster": "https://resizing.flixster.com/iBTDsDf7zD1To6HAvYUTjSgOjYk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZjc5OTFhMjAtMDdhOS00NWMxLTlhYjktZjYwNTBmNjE3ODJmLmpwZw==",
+      "releaseInfo": "2014-01-12"
     },
     {
       "id": "tt11198330",
@@ -600,18 +579,18 @@
       "releaseInfo": "2022-08-21"
     },
     {
-      "id": "tt6473300",
+      "id": "tt26748321",
       "type": "series",
-      "name": "Mirzapur",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p16201104_b_v11_ab.jpg",
-      "releaseInfo": "2018-11-15"
+      "name": "Doc",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p24472079_b_v12_ah.jpg",
+      "releaseInfo": "2025-01-07"
     },
     {
-      "id": "tt14417718",
+      "id": "tt6037988",
       "type": "series",
-      "name": "The Crowded Room",
-      "poster": "https://resizing.flixster.com/0psPiUvdt9kGKexhSNBVjD6v0kM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDE4OWQ1YTItOTVmZi00YmUzLWJlOTktY2YyMzU5ODIwOTEyLnBuZw==",
-      "releaseInfo": "2023-06-08"
+      "name": "Last Seen",
+      "poster": "https://resizing.flixster.com/n2w7A7mJJTG3Hr3ksQrGwusw1zk=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYWViYWQ3MjItM2I0NS00NjgwLWJlZmMtMzBhMzNmZjRmOGQ0LnBuZw==",
+      "releaseInfo": "2026-09-09"
     },
     {
       "id": "tt33049767",
@@ -621,18 +600,32 @@
       "releaseInfo": "2025-05-28"
     },
     {
+      "id": "tt9142920",
+      "type": "series",
+      "name": "High Value Target: The Hunt for Saddam",
+      "poster": "https://resizing.flixster.com/iB7MJalJ_PmbiW8Pcr4blDtraEU=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMmM0ODQxNGUtNjNhYi00MGIzLTlhNTMtYTYxMDFkMzEyYjlkLmpwZw==",
+      "releaseInfo": "2026"
+    },
+    {
+      "id": "tt11231226",
+      "type": "series",
+      "name": "Reasonable Doubt",
+      "poster": "https://resizing.flixster.com/cl73glnc7iTghDFNnBn08_yamgc=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZTcwNDViNDEtMjkwZi00NWY0LThhODYtZGU4Y2I1MDRiZjUwLmpwZw==",
+      "releaseInfo": "2022-09-27"
+    },
+    {
+      "id": "tt6473300",
+      "type": "series",
+      "name": "Mirzapur",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p16201104_b_v11_ab.jpg",
+      "releaseInfo": "2018-11-15"
+    },
+    {
       "id": "tt14063678",
       "type": "series",
       "name": "The Gold",
       "poster": "https://resizing.flixster.com/DzBj9g9TzSQDKfyiQHl4CBMHB5U=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZTYwZjZkYjUtZjJmOC00MTZlLWJiM2ItYWUxYmI4MmVkZTQ0LmpwZw==",
       "releaseInfo": "2023-02-12"
-    },
-    {
-      "id": "tt26748321",
-      "type": "series",
-      "name": "Doc",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p24472079_b_v12_ah.jpg",
-      "releaseInfo": "2025-01-07"
     },
     {
       "id": "tt27557666",
@@ -642,25 +635,18 @@
       "releaseInfo": "2026-02-08"
     },
     {
-      "id": "tt36849871",
+      "id": "tt39365612",
       "type": "series",
-      "name": "Marshals",
-      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p30177518_b_v12_af.jpg",
-      "releaseInfo": "2026-03-01"
+      "name": "Line of Fire",
+      "poster": "https://resizing.flixster.com/JwLU7OEpGyZmhNP3tFUDHV9zi9Q=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMmI1Yjk2MWEtYzU4Ny00NWIzLWFlMTEtNTEyNDVlYzU5N2JlLmpwZw==",
+      "releaseInfo": "2026-09-21"
     },
     {
-      "id": "tt35768911",
+      "id": "tt14417718",
       "type": "series",
-      "name": "Tip Toe",
-      "poster": "https://resizing.flixster.com/5fkK_-MtduRMsO-UId350yUdKW8=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYTNmNTNmZWItY2RhOS00NGRjLWFiNjMtN2FjZjE0NTJlZWQ4LmpwZw==",
-      "releaseInfo": "2026-05-31"
-    },
-    {
-      "id": "tt34866681",
-      "type": "series",
-      "name": "Lucky",
-      "poster": "https://resizing.flixster.com/APhNJ77uKcYVR1uLvgT411aKW4w=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZDMzODIxNzQtNmVhMC00ZjEyLTkzOTItZDg5NWNhOTdlZjIzLnBuZw==",
-      "releaseInfo": "2026-07-14"
+      "name": "The Crowded Room",
+      "poster": "https://resizing.flixster.com/0psPiUvdt9kGKexhSNBVjD6v0kM=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDE4OWQ1YTItOTVmZi00YmUzLWJlOTktY2YyMzU5ODIwOTEyLnBuZw==",
+      "releaseInfo": "2023-06-08"
     },
     {
       "id": "tt2802850",
@@ -670,11 +656,18 @@
       "releaseInfo": "2014-04-15"
     },
     {
-      "id": "tt39365612",
+      "id": "tt34866681",
       "type": "series",
-      "name": "Line of Fire",
-      "poster": "https://resizing.flixster.com/JwLU7OEpGyZmhNP3tFUDHV9zi9Q=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMmI1Yjk2MWEtYzU4Ny00NWIzLWFlMTEtNTEyNDVlYzU5N2JlLmpwZw==",
-      "releaseInfo": "2026-09-21"
+      "name": "Lucky",
+      "poster": "https://resizing.flixster.com/APhNJ77uKcYVR1uLvgT411aKW4w=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvZDMzODIxNzQtNmVhMC00ZjEyLTkzOTItZDg5NWNhOTdlZjIzLnBuZw==",
+      "releaseInfo": "2026-07-14"
+    },
+    {
+      "id": "tt35768911",
+      "type": "series",
+      "name": "Tip Toe",
+      "poster": "https://resizing.flixster.com/5fkK_-MtduRMsO-UId350yUdKW8=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYTNmNTNmZWItY2RhOS00NGRjLWFiNjMtN2FjZjE0NTJlZWQ4LmpwZw==",
+      "releaseInfo": "2026-05-31"
     },
     {
       "id": "tt37439410",
@@ -684,18 +677,11 @@
       "releaseInfo": "2026-09-10"
     },
     {
-      "id": "tt6473344",
+      "id": "tt36849871",
       "type": "series",
-      "name": "SEAL Team",
-      "poster": "https://resizing.flixster.com/-AR_Bn1r2CVWYYdFOlFKusKccpA=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDlmMjNkMjYtY2EyOS00YmI2LWE2ODctMzBlYzUzNzAxZjg2LmpwZw==",
-      "releaseInfo": "2017-09-27"
-    },
-    {
-      "id": "tt34771210",
-      "type": "series",
-      "name": "I Will Find You",
-      "poster": "https://resizing.flixster.com/e-gY-1qUSOGuCOgVblS4E31jBOg=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNmEzMGNiYmItMThkZS00NDI4LWE4NTEtOTgxMzJmYTNlOWYxLmpwZw==",
-      "releaseInfo": "2026-06-18"
+      "name": "Marshals",
+      "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p30177518_b_v12_af.jpg",
+      "releaseInfo": "2026-03-01"
     },
     {
       "id": "tt7491982",
@@ -703,6 +689,20 @@
       "name": "FBI",
       "poster": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p15528073_b_v12_bf.jpg",
       "releaseInfo": "2018-09-25"
+    },
+    {
+      "id": "tt6473344",
+      "type": "series",
+      "name": "SEAL Team",
+      "poster": "https://resizing.flixster.com/-AR_Bn1r2CVWYYdFOlFKusKccpA=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMDlmMjNkMjYtY2EyOS00YmI2LWE2ODctMzBlYzUzNzAxZjg2LmpwZw==",
+      "releaseInfo": "2017-09-27"
+    },
+    {
+      "id": "tt31974367",
+      "type": "series",
+      "name": "The Beast in Me",
+      "poster": "https://resizing.flixster.com/wVI-JliwKMpttuM3MjhCW2IUslo=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzY1OTQzOTYtMTMyNC00M2NmLWIyZDktOWZjODZlYjAwOWQ0LmpwZw==",
+      "releaseInfo": "2025-11-13"
     }
   ]
 }
