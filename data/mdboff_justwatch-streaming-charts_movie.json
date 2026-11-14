@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1794571305767,
+  "scraped_at": 1794614510828,
   "items": [
     {
       "imdb_id": "tt23289160",
@@ -613,6 +613,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/umSVjVdbVwtx5ryCA2QXL44Durm.jpg"
     },
     {
+      "imdb_id": "tt13087796",
+      "type": "movie",
+      "title": "I'm Your Man",
+      "year": 2021,
+      "release_date": "2021-07-01",
+      "poster": "https://image.tmdb.org/t/p/w200/v13p6KlgD7Y1Tas6X8GLJzv5zRe.jpg"
+    },
+    {
       "imdb_id": "tt30825738",
       "type": "movie",
       "title": "The Mandalorian and Grogu",
@@ -725,14 +733,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/gYTUNxLcFomCdXe3D4Hq8OLwgv0.jpg"
     },
     {
-      "imdb_id": "tt0088763",
-      "type": "movie",
-      "title": "Back to the Future",
-      "year": 1985,
-      "release_date": "1985-07-03",
-      "poster": "https://image.tmdb.org/t/p/w200/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg"
-    },
-    {
       "imdb_id": "tt27989255",
       "type": "movie",
       "title": "The Last Spark of Hope",
@@ -741,12 +741,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/eTuJI5HtppGBmjHi3L9BI3Scwrt.jpg"
     },
     {
-      "imdb_id": "tt13087796",
+      "imdb_id": "tt0088763",
       "type": "movie",
-      "title": "I'm Your Man",
-      "year": 2021,
-      "release_date": "2021-07-01",
-      "poster": "https://image.tmdb.org/t/p/w200/v13p6KlgD7Y1Tas6X8GLJzv5zRe.jpg"
+      "title": "Back to the Future",
+      "year": 1985,
+      "release_date": "1985-07-03",
+      "poster": "https://image.tmdb.org/t/p/w200/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg"
     },
     {
       "imdb_id": "tt28650488",
@@ -1069,6 +1069,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/rFOiFUhTMtDetqCGClC9PIgnC1P.jpg"
     },
     {
+      "imdb_id": "tt3553976",
+      "type": "movie",
+      "title": "Captain Fantastic",
+      "year": 2016,
+      "release_date": "2016-07-08",
+      "poster": "https://image.tmdb.org/t/p/w200/2sFME73GaD8UsUxPUKe60cPdLif.jpg"
+    },
+    {
       "imdb_id": "tt12300742",
       "type": "movie",
       "title": "Bugonia",
@@ -1179,14 +1187,6 @@
       "year": 2004,
       "release_date": "2004-11-10",
       "poster": "https://image.tmdb.org/t/p/w200/eOoCzH0MqeGr2taUZO4SwG416PF.jpg"
-    },
-    {
-      "imdb_id": "tt38515310",
-      "type": "movie",
-      "title": "A Dog's Perfect Christmas",
-      "year": 2026,
-      "release_date": "2026-11-04",
-      "poster": "https://image.tmdb.org/t/p/w200/zvsNAohDHRWcGvbPSD7r3WojpKb.jpg"
     }
   ]
 }
