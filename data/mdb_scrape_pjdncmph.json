@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1794571261654,
+  "scraped_at": 1794614467230,
   "items": [
+    {
+      "slug": "45gtz-snoopy-presents-12-days-of-snoopy",
+      "imdb_id": "tt47791876",
+      "title": "Snoopy Presents: 12 Days of Snoopy",
+      "year": 2026,
+      "score": null,
+      "poster_path": "9wZAvvAZgwp2Lxbhjkp9N6HHJBm.jpg",
+      "description": "Eager to get off Santa's naughty list, Snoopy goes all out to be the nicest beagle in town.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "44d1e-never-surrender",
+      "imdb_id": "tt39370926",
+      "title": "Never Surrender",
+      "year": 2026,
+      "score": null,
+      "poster_path": "hKROmLddpzpjkxKKVFYFRAOXX1b.jpg",
+      "description": "An ex-soldier and his grandchildren battle against ruthless criminals in a remote village. To survive, they must also confront their fears and regrets.",
+      "digital_release_date": null
+    },
     {
       "slug": "1fp2-avengers-endgame",
       "imdb_id": "tt4154796",
@@ -30,7 +50,7 @@
       "title": "Being Heumann",
       "year": 2026,
       "score": 7,
-      "poster_path": "ouGH1PS0xjDyfTQOhppn7QzJqQZ.jpg",
+      "poster_path": "Ai0cPxFka7bBOF7mPrLxQThPyS0.jpg",
       "description": "Scrappy, defiant, and done being treated like a burden, Judy Heumann turns her outrage into a revolution. In 1977, she and more than 100 disability rights protestors send a very loud message: The system is broken—not us.",
       "digital_release_date": null
     },
@@ -169,7 +189,7 @@
       "imdb_id": "tt36933185",
       "title": "Dead Howling",
       "year": 2026,
-      "score": null,
+      "score": 1,
       "poster_path": "i1vpLPnHVAZq1CyJlpVS8YI7a93.jpg",
       "description": "A werewolf hunts zombies after losing his family. He meets two humans seeking sanctuary and joins their quest, protecting them with his powers. Their journey grows perilous as zombies start evolving.",
       "digital_release_date": null
@@ -1299,7 +1319,7 @@
       "imdb_id": "tt37654454",
       "title": "Boorman and the Devil",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "4HJzmhP8iMzkIQ7cjr2zfIcReiK.jpg",
       "description": "Featuring commentary from surviving participants, as well as other filmmakers and critics, this documentary chronicles the career of director John Boorman and the tumultuous production of his film Exorcist II: The Heretic, exploring its critical and commercial failure, how it changed the industry, and the importance of risk-taking in art.",
       "digital_release_date": null
@@ -1422,26 +1442,6 @@
       "score": 2,
       "poster_path": "9DyaSMQ6W3NvJ9BYTV2piiAXlCX.jpg",
       "description": "During a prolonged home birth trapped by a raging blizzard, expecting parents and their midwife begin to suspect something sinister is lurking nearby as labor complications escalate and their sense of safety unravels.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "42m9u-cat-cam",
-      "imdb_id": "tt37070274",
-      "title": "Cat Cam",
-      "year": 2026,
-      "score": null,
-      "poster_path": "xq35gT1mjqbaM9admu1AHDa7nvg.jpg",
-      "description": "When two cat owners decide to put up pet cameras in their new home while they’re away on a trip, they soon make a terrifying discovery as to why their cat has been acting so strange.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "40adx-firstborn",
-      "imdb_id": "tt31617935",
-      "title": "Firstborn",
-      "year": 2025,
-      "score": null,
-      "poster_path": "sFFmc37zA5ELhALNfOlfNn45dfx.jpg",
-      "description": "Ada and her partner Rino move into a secluded villa surrounded by nature. Expecting their second child, Ada finds herself haunted by the unresolved grief of losing their firstborn. As the due date approaches, the sorrow she has long suppressed resurfaces, and she begins to sense a disturbing presence-convinced that her late son has returned from beyond to prevent the birth of his sibling. Is something truly supernatural at play, or is Ada slowly losing her grip on reality?",
       "digital_release_date": null
     }
   ]

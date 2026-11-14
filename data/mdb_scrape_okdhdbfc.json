@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1794571293138,
+  "scraped_at": 1794614498125,
   "items": [
+    {
+      "slug": "3z395-the-body",
+      "imdb_id": "tt8014982",
+      "title": "The Body",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "195kCuy2RqGaEAZDDpGTx7gBUBZ.jpg",
+      "description": "On Halloween night, an all-girls dance squad tumbles into Catholic guilt, unholy desires and ghostly visions when an initiation goes to hell.",
+      "first_air_date": "2026-11-11"
+    },
     {
       "slug": "435vh-campus-drivers",
       "imdb_id": "tt39943756",
@@ -1235,6 +1245,16 @@
       "first_air_date": "2026-07-17"
     },
     {
+      "slug": "44rj2-the-f-ward",
+      "imdb_id": "tt38689352",
+      "title": "The F Ward",
+      "year": 2026,
+      "score": null,
+      "poster_path": "7OGSrmR4U1cRwj9rNYVac8qVg5C.jpg",
+      "description": "Failed medical interns get their last shot at Sydney’s underfunded Pines Hospital, where they battle to overcome personal shortcomings and past mistakes in the hope of finally becoming doctors.",
+      "first_air_date": "2026-07-17"
+    },
+    {
       "slug": "39o43-ride-or-die",
       "imdb_id": "tt30494226",
       "title": "Ride or Die",
@@ -1423,26 +1443,6 @@
       "poster_path": "zTUuiutD2Kj8lwd552uX8dzxA24.jpg",
       "description": "When best friends Bobby and Romy mistakenly open up a gateway to another world, they turn their sleepy coastal town into a hotspot for terrifying creatures of doom. Roped into an epic supernatural mystery, they will cross paths with the so-called “Chosen One” and do battle with both literal and inner monsters.",
       "first_air_date": "2026-06-26"
-    },
-    {
-      "slug": "41fmt-life-larry-and-the-pursuit-of-unhappiness-an-almost-history-of-america",
-      "imdb_id": "tt37543147",
-      "title": "Life, Larry and the Pursuit of Unhappiness: An Almost History of America",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "eA8lwlHAuFQrZzek25xgGZCgImu.jpg",
-      "description": "An improvised, comedic approach to major events in American history in celebration of the 250th anniversary of the founding of the United States.",
-      "first_air_date": "2026-06-26"
-    },
-    {
-      "slug": "43gpz-the-killings-at-parrish-station",
-      "imdb_id": "tt38448408",
-      "title": "The Killings at Parrish Station",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "9XfUjpDmFKLG9EYLzSTX2jj5JR8.jpg",
-      "description": "It’s 1987, and Detective Georgia Cooke is called in to investigate the massacre of four scientists who have been brutally murdered in inexplicable ways, with a lone survivor the obvious suspect. But as Georgia digs deeper, unravelling a complex case entangled in mania, ritual, and the occult, her obsessive quest for the truth spirals into a nightmare that will put her family, career, and sanity on the line.  37 years later, a chilling new spree of murders will pull Georgia back into this nightmare as she confronts the terrifying possibility that the horrors at Parrish Station were never fully buried.",
-      "first_air_date": "2026-06-24"
     }
   ]
 }

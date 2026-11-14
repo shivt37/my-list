@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794571248002,
+  "scraped_at": 1794614450244,
   "items": [
+    {
+      "slug": "3qqly-just-an-illusion",
+      "imdb_id": "tt36842933",
+      "title": "Just an Illusion",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "eWPq3wSvJEMakESTXzaBECUNBYr.jpg",
+      "description": "In 1985 suburban Paris, 12-year-old Vincent lives with his distant older brother and quarrelling parents. Amid laughter and unease, he navigates friendship and first love, while beginning to confront the adult world.",
+      "digital_release_date": "2026-11-14"
+    },
     {
       "slug": "3e6qv-the-desert-child",
       "imdb_id": "tt37495239",
@@ -52,6 +62,16 @@
       "score": 5,
       "poster_path": "lNXeEpg4yLSRwXwOeR5lbPgwbqL.jpg",
       "description": "Tenants at Paradiso Palms apartments fight a deadly spider invasion while the cunning building manager might be their only hope for survival.",
+      "digital_release_date": "2026-11-09"
+    },
+    {
+      "slug": "43yuc-the-good-lawyer",
+      "imdb_id": "tt39453578",
+      "title": "The Good Lawyer",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "rVkMvD7CpBueGmNIz2uVgluhTjS.jpg",
+      "description": "After a courtroom overdose lands him in rehab, a lawyer has one week to save his career and prepare for his own trial, with the help of a dogged intern.",
       "digital_release_date": "2026-11-09"
     },
     {
@@ -222,6 +242,16 @@
       "score": 8,
       "poster_path": "vyI8RnUy0tV7F0rj0WUjlNKIIHx.jpg",
       "description": "While World War II is raging, General De Gaulle seeks to convince the world that the battle for France not lost. Reality seems determined to prove him wrong. Yet, little by little, resistance fighters, rebellious students and determined soldiers rise up. Their faith, audacity and thirst for freedom defy what history seemed to have written in advance.",
+      "digital_release_date": "2026-10-29"
+    },
+    {
+      "slug": "42frr-you-me-us",
+      "imdb_id": "tt38504402",
+      "title": "You, Me, Us",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "4Gw8ukw5aAUP1uzNtYZ0CNTUy5A.jpg",
+      "description": "A couple faces the difficult path to adoption, determined to become parents despite their complex vulnerabilities.",
       "digital_release_date": "2026-10-29"
     },
     {
@@ -1005,16 +1035,6 @@
       "digital_release_date": "2026-09-15"
     },
     {
-      "slug": "41kgx-above-below",
-      "imdb_id": "tt37603783",
-      "title": "Above & Below",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg",
-      "description": "A group of friends' dream diving vacation turns into a fight for survival when brutal criminals attack their boat in open waters.",
-      "digital_release_date": "2026-09-15"
-    },
-    {
       "slug": "36617-gerald-the-conqueror",
       "imdb_id": "tt29312656",
       "title": "Gerald the Conqueror",
@@ -1033,16 +1053,6 @@
       "poster_path": "jM8LRvzYIqZqw6Si5xNECiHFDgM.jpg",
       "description": "When their team-building event gets downgraded to a tiny village, a cheese company's staff think it can't get worse — then they learn about the layoffs.",
       "digital_release_date": "2026-09-11"
-    },
-    {
-      "slug": "33myp-my-tennis-maestro",
-      "imdb_id": "tt5179884",
-      "title": "My Tennis Maestro",
-      "year": 2025,
-      "score": 4,
-      "poster_path": "6tJSUT4sG1b5H1RLfxsv8mMjoCa.jpg",
-      "description": "Italy, 1989. After years of hard training, 13-year-old Felice, carrying his father's expectations on his shoulders, finally sets out to compete in the national tennis tournaments. While dreaming of a simple summer vacation, he's instead placed under the wing of ex tennis champion Raul, an unconventional coach hired by his father. Match after match, the two embark on a journey that will lead Felice to discover the taste of freedom, and Raul to glimpse the possibility of a fresh start. As they travel along the Italian coast, an unexpected, deep, and sincere bond between them develops.",
-      "digital_release_date": "2026-09-10"
     },
     {
       "slug": "3n8zr-call-my-agent-the-movie",
@@ -1255,16 +1265,6 @@
       "digital_release_date": "2026-08-30"
     },
     {
-      "slug": "3y0gw-spider-island",
-      "imdb_id": "tt22406048",
-      "title": "Spider Island",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "eKw6aF7oNEaTnVvN396Q1is9R1n.jpg",
-      "description": "A group of social media influencers go to the launch of a new hotel on a tropical island, where they find deadly spiders.",
-      "digital_release_date": "2026-08-28"
-    },
-    {
       "slug": "3yhtt-barreda",
       "imdb_id": "tt43706402",
       "title": "Barreda",
@@ -1345,6 +1345,16 @@
       "digital_release_date": "2026-08-27"
     },
     {
+      "slug": "3y0gw-spider-island",
+      "imdb_id": "tt22406048",
+      "title": "Spider Island",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "eKw6aF7oNEaTnVvN396Q1is9R1n.jpg",
+      "description": "A group of social media influencers go to the launch of a new hotel on a tropical island, where they find deadly spiders.",
+      "digital_release_date": "2026-08-26"
+    },
+    {
       "slug": "41myx-the-last-sunrise",
       "imdb_id": "tt37654096",
       "title": "The Last Sunrise",
@@ -1382,6 +1392,16 @@
       "score": 4,
       "poster_path": "pyIDpB5iZMRB5PdV9an146QEXAl.jpg",
       "description": "When a mysterious mist engulfs a futuristic metropolis, unleashing a deadly and elusive entity, a troubled young woman searches for her father. Her quest collides with an American GI on a harrowing odyssey to rescue his daughter from Hell.",
+      "digital_release_date": "2026-08-25"
+    },
+    {
+      "slug": "41kgx-above-below",
+      "imdb_id": "tt37603783",
+      "title": "Above & Below",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg",
+      "description": "A group of friends' dream diving vacation turns into a fight for survival when brutal criminals attack their boat in open waters.",
       "digital_release_date": "2026-08-25"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "yQ3GeVsebrhOPIBhIdoSslbndEv.jpg",
       "description": "When a hospice nurse finds herself trapped with a dementia patient, she begins to suspect something else is wrong with the woman, something otherworldly, and must fight to survive the night.",
       "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "44qt0-back-to-the-90s",
-      "imdb_id": "tt37540328",
-      "title": "Back to the 90s",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "2T0j25ofU6aUei6J6ek2hlTL1wc.jpg",
-      "description": "When a mysterious glitch sends a rising boyband back to 1995 - just days before the biggest showcase of their lives - the five friends race to reverse the time slip. But as unexpected connections form and the past pulls them in deeper, getting home means confronting what they're willing to leave behind - and who they truly are to each other.",
-      "digital_release_date": "2026-08-21"
-    },
-    {
-      "slug": "2z2cy-toy-story-5",
-      "imdb_id": "tt29355505",
-      "title": "Toy Story 5",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
-      "description": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
-      "digital_release_date": "2026-08-18"
     }
   ]
 }
