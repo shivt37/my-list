@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1794744102257,
+  "scraped_at": 1794787292188,
   "items": [
     {
       "slug": "3drgo-the-good-daughter",
@@ -15,12 +15,22 @@
       "first_air_date": "2026-11-12"
     },
     {
+      "slug": "3gjtw-12-12-12",
+      "imdb_id": "tt32375763",
+      "title": "12 12 12",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "bG4h6C6wRKmf3ryz8gdN6imXW4c.jpg",
+      "description": "A heist takes 12 months to plan, 12 hours to execute—and a thief not caught within 12 days won't be caught at all. Across three pulse-pounding timelines, an FBI agent and a career criminal face off in a deadly game of cat and mouse through Europe.",
+      "first_air_date": "2026-11-12"
+    },
+    {
       "slug": "3z395-the-body",
       "imdb_id": "tt8014982",
       "title": "The Body",
       "year": 2026,
       "score": 8,
-      "poster_path": "u2iDoQmXu86tMhMZSN1EPp0PHKQ.jpg",
+      "poster_path": "195kCuy2RqGaEAZDDpGTx7gBUBZ.jpg",
       "description": "On Halloween night, an all-girls dance squad tumbles into Catholic guilt, unholy desires and ghostly visions when an initiation goes to hell.",
       "first_air_date": "2026-11-11"
     },
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "9CzcOB5J2ld2mIRMzHIwYGYx1Cn.jpg",
       "description": "Young hero Finn and his magical dog best friend Jake embark on adventures across the fantastical land of Ooo — partying with cloud people and punching evil in the butt along the way.",
-      "first_air_date": "2026-06-29"
-    },
-    {
-      "slug": "44p2u-ms-x",
-      "imdb_id": "tt37094589",
-      "title": "Ms. X",
-      "year": 2026,
-      "score": null,
-      "poster_path": "rrAWtZvOPNyNqaUqXCjLUC9syKL.jpg",
-      "description": "A suburban mom and her high school friend plot to frighten her unfaithful husband straight, but their scheme spirals into murder, trapping her between law enforcement, drug lords, and ruthless PTA moms.",
       "first_air_date": "2026-06-29"
     }
   ]
