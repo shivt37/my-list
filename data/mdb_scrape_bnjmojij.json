@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1794830449422,
+  "scraped_at": 1794873649561,
   "items": [
+    {
+      "slug": "32iyx-the-optimist",
+      "imdb_id": "tt27803347",
+      "title": "The Optimist",
+      "year": 2026,
+      "score": null,
+      "poster_path": "kQvgYd8GaYkoovQZmE8IkbAMg2d.jpg",
+      "description": "Herbert Heller keeps his experience as a teenage boy surviving in Auschwitz hidden from his family. Until he meets Abby, a young teenager whose own brush with pain and death inspires him to open up as well, leading the two of them to exchange their stories as a meaningful and healing friendship is born.",
+      "digital_release_date": "2026-11-17"
+    },
+    {
+      "slug": "3ngta-the-odyssey",
+      "imdb_id": "tt33764258",
+      "title": "The Odyssey",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
+      "description": "Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.",
+      "digital_release_date": "2026-11-17"
+    },
+    {
+      "slug": "44srk-landship",
+      "imdb_id": "tt20564678",
+      "title": "Landship",
+      "year": 2026,
+      "score": null,
+      "poster_path": "iYMX7oUGxHn6Z9pSqcAgl5r0E4N.jpg",
+      "description": "The Battle of Passchendaele, 1917. For three years the great war has been waging, and the two armies find themselves entrenched along the four-hundred-mile Western Front. At the start of a pivotal allied offensive to break the stalemate, the nine-man crew of a British MKIV Tank set out to destroy a series of heavily defended German bunkers.",
+      "digital_release_date": "2026-11-17"
+    },
     {
       "slug": "3qqly-just-an-illusion",
       "imdb_id": "tt36842933",
@@ -299,7 +329,7 @@
       "imdb_id": "tt38999812",
       "title": "The Birthday​ Gift​",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "jqGFILLsEDwsLteNDQextojsYFV.jpg",
       "description": "Single mother Marlene Frischmann organizes a birthday party for her son Theo at her brother's chic country villa, which quickly spirals into family drama, world-view quarrels, and chaos.",
       "digital_release_date": "2026-10-30"
@@ -371,7 +401,7 @@
       "year": 2026,
       "score": 7,
       "poster_path": "64hnrTmeJEvUYoJyuOM7taE3CqT.jpg",
-      "description": "While working at an elite country club outside Manila, a 17-year-old Ilocana worker uncovers the violent truths of her workplace, her country, and her own past after attempting to return a lost golf club to the club's president.",
+      "description": "While working at an elite country club outside Manila, a 17-year-old Ilocana attendant uncovers the violent truths of her workplace, her country, and her own past after attempting to return a lost golf club to the club's president.",
       "digital_release_date": "2026-10-27"
     },
     {
@@ -500,7 +530,7 @@
       "title": "The Weight",
       "year": 2026,
       "score": 7,
-      "poster_path": "bsrd6ItRwNrg3DGlUDYrEy1S9C1.jpg",
+      "poster_path": "8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
       "description": "When Samuel is torn from his daughter and sent to a brutal prison, Warden Clancy offers him a high-stakes proposition: smuggle gold out of a remote mine with a dangerous crew of prisoners and he’ll win his freedom.",
       "digital_release_date": "2026-10-20"
     },
@@ -1413,36 +1443,6 @@
       "poster_path": "eKw6aF7oNEaTnVvN396Q1is9R1n.jpg",
       "description": "A group of social media influencers go to the launch of a new hotel on a tropical island, where they find deadly spiders.",
       "digital_release_date": "2026-08-26"
-    },
-    {
-      "slug": "41myx-the-last-sunrise",
-      "imdb_id": "tt37654096",
-      "title": "The Last Sunrise",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "3PWJqDfygN0YNNjWsDUOXclCp3h.jpg",
-      "description": "Ry, a college student with a chronic illness, escapes to Mallorca for the summer with her mother, where she unexpectedly falls for a local and begins to embrace living in the moment. But as her condition worsens and long-hidden family secrets come to light, everything she has found before summer's end is threatened.",
-      "digital_release_date": "2026-08-26"
-    },
-    {
-      "slug": "450qd-yellow-mirror",
-      "imdb_id": "tt43141030",
-      "title": "Yellow Mirror",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "1zdGvJAuuXC7dA3eV61OtUJNyjQ.jpg",
-      "description": "A defective lamp reveals a heartbreaking truth about what Homer believes is reality, and an AI-powered tablet befriends and controls Maggie. The Simpsons struggle to find the light through two dark tales of the curious and bizarre.",
-      "digital_release_date": "2026-08-26"
-    },
-    {
-      "slug": "3ankh-pinocchio-unstrung",
-      "imdb_id": "tt30887701",
-      "title": "Pinocchio: Unstrung",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "hJNdizFlxOW89edX3Rzr6OliSFI.jpg",
-      "description": "Influenced by a sinister Cricket and created by Geppetto, Pinocchio launches a violent crusade to carve himself into a real boy like his brother James, one piece at a time.",
-      "digital_release_date": "2026-08-25"
     }
   ]
 }
