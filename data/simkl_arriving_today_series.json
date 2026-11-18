@@ -3,8 +3,15 @@
   "name": "Arriving Today (Series) - Episodes & Premieres",
   "type": "series",
   "timezone": "UTC",
-  "scraped_at": 1794960142537,
+  "scraped_at": 1795003334733,
   "items": [
+    {
+      "id": "tmdb:336775",
+      "type": "series",
+      "name": "KL24/7",
+      "poster": "https://simkl.in/posters/21/21149097dd550cef99_m.webp",
+      "description": "🆕 New Show | S01E01 | 2026-11-18 19:30 UTC | ?? | genres: none | Simkl n/a | IMDb n/a"
+    },
     {
       "id": "tt31262522",
       "type": "series",
@@ -18,13 +25,6 @@
       "name": "Critical Role",
       "poster": "https://simkl.in/posters/50/50696907b6367beaa_m.webp",
       "description": "📺 New Episode | S00E279 | 2026-11-18 03:00 UTC | US | genres: Adventure, Fantasy | Simkl 8.2 (118) | IMDb 9.0 (15212)"
-    },
-    {
-      "id": "tt8050756",
-      "type": "series",
-      "name": "The Owl House",
-      "poster": "https://simkl.in/posters/93/93177366ed98708fc_m.webp",
-      "description": "📺 New Episode | S03E04 | 2026-11-18 02:30 UTC | US | genres: Action, Adventure, Animation, Children, Comedy, Drama, Family, Fantasy, Horror, Mystery | Simkl 8.6 (656) | IMDb 8.6 (27121)"
     },
     {
       "id": "tt20978970",
@@ -45,7 +45,7 @@
       "type": "series",
       "name": "NCIS",
       "poster": "https://simkl.in/posters/19/19492a111489208_m.webp",
-      "description": "📺 New Episode | S24E06 | 2026-11-18 01:00 UTC | US | genres: Action, Adventure, Crime, Drama, Mystery, Thriller | Simkl 7.8 (1130) | IMDb 7.8 (179452)"
+      "description": "📺 New Episode | S24E06 | 2026-11-18 01:00 UTC | US | genres: Action, Adventure, Crime, Drama, Mystery, Thriller | Simkl 7.8 (1132) | IMDb 7.8 (179452)"
     },
     {
       "id": "tt30796986",
@@ -87,14 +87,14 @@
       "type": "series",
       "name": "Best Medicine",
       "poster": "https://simkl.in/posters/19/191848792064a57f2d_m.webp",
-      "description": "📺 New Episode | S02E08 | 2026-11-18 01:00 UTC | US | genres: Comedy, Drama | Simkl 6.8 (111) | IMDb 6.8 (9269)"
+      "description": "📺 New Episode | S02E08 | 2026-11-18 01:00 UTC | US | genres: Comedy, Drama | Simkl 6.8 (112) | IMDb 6.8 (9269)"
     },
     {
       "id": "tt7631058",
       "type": "series",
       "name": "The Lord of the Rings: The Rings of Power",
       "poster": "https://simkl.in/posters/12/12241199f59a8d73ff_m.webp",
-      "description": "📺 New Episode | S03E06 · E05–E06 (2 eps today) | 2026-11-18 08:00 UTC | US | genres: Action, Adventure, Drama, Fantasy, Mystery | Simkl 6.9 (2832) | IMDb 6.8 (450128)"
+      "description": "📺 New Episode | S03E06 · E05–E06 (2 eps today) | 2026-11-18 08:00 UTC | US | genres: Action, Adventure, Drama, Fantasy, Mystery | Simkl 6.9 (2836) | IMDb 6.8 (450128)"
     }
   ]
 }
