@@ -3419,5 +3419,37 @@
     "title": "A Most Violent Year",
     "date": "2014",
     "kind": "movie"
+  },
+  "m/motor_city": {
+    "type": "movie",
+    "imdb": "tt2012616",
+    "tmdb": null,
+    "title": "Motor City",
+    "date": "2026",
+    "kind": "movie"
+  },
+  "tv/the_empress": {
+    "type": "series",
+    "imdb": "tt13720112",
+    "tmdb": null,
+    "title": "The Empress",
+    "date": "2022-09-29",
+    "kind": "tvSeries"
+  },
+  "tv/melania_the_series": {
+    "type": "series",
+    "imdb": "tt50666033",
+    "tmdb": null,
+    "title": "MELANIA, The Series",
+    "date": "2026-11-20",
+    "kind": "tvMiniSeries"
+  },
+  "tv/percy_jackson_and_the_olympians": {
+    "type": "series",
+    "imdb": "tt12324366",
+    "tmdb": null,
+    "title": "Percy Jackson and the Olympians",
+    "date": "2023-12-19",
+    "kind": "tvSeries"
   }
 }
