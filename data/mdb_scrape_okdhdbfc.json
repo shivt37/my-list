@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1794916900737,
+  "scraped_at": 1794960097649,
   "items": [
     {
       "slug": "3drgo-the-good-daughter",
@@ -25,12 +25,22 @@
       "first_air_date": "2026-11-12"
     },
     {
+      "slug": "45gyg-cunk-on-cinema",
+      "imdb_id": "tt47021035",
+      "title": "Cunk on Cinema",
+      "year": 2026,
+      "score": null,
+      "poster_path": "zrrRRvavkLQupkC6aEkdA8sX4E8.jpg",
+      "description": "Philomena Cunk asks experts all of the hard-hitting questions about the history of cinema, from the invention of the camera, to the New Wave filmmakers of the 60s, right up to the entrance of CGI and what the future of AI holds. Cunk will attempt to demystify it all while sitting in lumpy seats with stale popcorn, asking herself where did cinema come from? And why? What does it want? And why can't it tell us?",
+      "first_air_date": "2026-11-12"
+    },
+    {
       "slug": "3z395-the-body",
       "imdb_id": "tt8014982",
       "title": "The Body",
       "year": 2026,
       "score": 8,
-      "poster_path": "195kCuy2RqGaEAZDDpGTx7gBUBZ.jpg",
+      "poster_path": "zleCYDRbW5mKwgZwVK4SNIrKXWx.jpg",
       "description": "On Halloween night, an all-girls dance squad tumbles into Catholic guilt, unholy desires and ghostly visions when an initiation goes to hell.",
       "first_air_date": "2026-11-11"
     },
@@ -103,6 +113,16 @@
       "poster_path": "nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg",
       "description": "When a victim of notorious serial killer Jurek Walter unexpectedly turns up alive, detective Jonah Lynn races against time to find the one person still missing, while his protégé Saga Bauer goes undercover to get answers from the killer himself.",
       "first_air_date": "2026-10-29"
+    },
+    {
+      "slug": "45awx-the-gift-of-deceit",
+      "imdb_id": "tt45854934",
+      "title": "The Gift of Deceit",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "mAfYj5ZtR2V5ad6uham1PwAh0mc.jpg",
+      "description": "Desperate to find a cure for the unknown illness affecting her daughter, art collector Lúcia Rossetti turns to a spiritual healer. When Lúcia falls victim to a scam, a series of secrets is revealed, intertwining two families marked by love, control, resentment, and guilt.",
+      "first_air_date": "2026-10-28"
     },
     {
       "slug": "459ll-the-one-about-matthew-perry",
@@ -855,6 +875,16 @@
       "first_air_date": "2026-09-01"
     },
     {
+      "slug": "3vgoc-mr-fanboy",
+      "imdb_id": "tt35932166",
+      "title": "Mr. Fanboy",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "7WsSSjK2wWNpw3LHYY2ZXZ0icfX.jpg",
+      "description": "Cast in a BL drama with his idol, devoted fanboy Wan finds his heart pulled in a shocking new direction by the idol's protective partner, Third.",
+      "first_air_date": "2026-08-29"
+    },
+    {
       "slug": "43msm-you-maniac",
       "imdb_id": "tt39039439",
       "title": "You Maniac",
@@ -1413,36 +1443,6 @@
       "poster_path": "dpH7Lyrs7z7MlTGgfeibryGnWAv.jpg",
       "description": "Before Elle Woods was a fish-out-of-water at Harvard, we meet her in 1995 in the tumultuous waters of high school where she encounters tricky friendships, forbidden romance, and questionable fashion choices. In this unexpected chapter of her adolescence, we learn about the experiences that shaped Elle into the iconic young woman we've come to know and love.",
       "first_air_date": "2026-07-01"
-    },
-    {
-      "slug": "44r0r-worst-neighbor-ever",
-      "imdb_id": "tt43476716",
-      "title": "Worst Neighbor Ever",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "1WarGMl1xR0l7ut72putZcgrCJS.jpg",
-      "description": "This intense documentary series details true stories of neighbors gone bad, from heinous fraud schemes to senseless acts of violent retribution.",
-      "first_air_date": "2026-07-01"
-    },
-    {
-      "slug": "438n9-knot",
-      "imdb_id": "tt38916337",
-      "title": "Knot",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "8z62pp4K602d1y6079oU1GBeiAG.jpg",
-      "description": "A young man’s life changes forever when a powerful Alpha marks him, binding their fates together in an inescapable bond.",
-      "first_air_date": "2026-06-30"
-    },
-    {
-      "slug": "3hpiz-adventure-time-side-quests",
-      "imdb_id": "tt32603995",
-      "title": "Adventure Time: Side Quests",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "9CzcOB5J2ld2mIRMzHIwYGYx1Cn.jpg",
-      "description": "Young hero Finn and his magical dog best friend Jake embark on adventures across the fantastical land of Ooo — partying with cloud people and punching evil in the butt along the way.",
-      "first_air_date": "2026-06-29"
     }
   ]
 }
