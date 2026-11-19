@@ -3483,5 +3483,53 @@
     "title": "Mickey 17",
     "date": "2025",
     "kind": "movie"
+  },
+  "m/guarding_stars": {
+    "type": "movie",
+    "imdb": "tt6611324",
+    "tmdb": null,
+    "title": "Guarding Stars",
+    "date": "2026",
+    "kind": "movie"
+  },
+  "tv/chiaroscuro": {
+    "type": "series",
+    "imdb": "tt37214564",
+    "tmdb": null,
+    "title": "ChiaroScuro",
+    "date": "2026-11-11",
+    "kind": "tvSeries"
+  },
+  "tv/the_night_manager": {
+    "type": "series",
+    "imdb": "tt1399664",
+    "tmdb": null,
+    "title": "The Night Manager",
+    "date": "2016-02-21",
+    "kind": "tvSeries"
+  },
+  "tv/loki": {
+    "type": "series",
+    "imdb": "tt9140554",
+    "tmdb": null,
+    "title": "Loki",
+    "date": "2021-06-09",
+    "kind": "tvSeries"
+  },
+  "m/die_my_love_2025": {
+    "type": "movie",
+    "imdb": "tt9362736",
+    "tmdb": null,
+    "title": "Die My Love",
+    "date": "2025",
+    "kind": "movie"
+  },
+  "m/skyfall": {
+    "type": "movie",
+    "imdb": "tt1074638",
+    "tmdb": null,
+    "title": "Skyfall",
+    "date": "2012",
+    "kind": "movie"
   }
 }
