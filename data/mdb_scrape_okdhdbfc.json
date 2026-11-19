@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1795003300228,
+  "scraped_at": 1795046497086,
   "items": [
+    {
+      "slug": "435p6-murder-in-galicia",
+      "imdb_id": "tt38707741",
+      "title": "Murder in Galicia",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "pooxlKqgM7NhBHkgt9RjmrY7n2l.jpg",
+      "description": "In Pazos, Irene is brutally attacked, and Civil Guard sergeant Elías suspects her husband Aniceto, racing against time to uncover the truth before it’s too late.",
+      "first_air_date": "2026-11-13"
+    },
     {
       "slug": "3drgo-the-good-daughter",
       "imdb_id": "tt31842126",
@@ -42,6 +52,16 @@
       "score": 8,
       "poster_path": "zleCYDRbW5mKwgZwVK4SNIrKXWx.jpg",
       "description": "On Halloween night, an all-girls dance squad tumbles into Catholic guilt, unholy desires and ghostly visions when an initiation goes to hell.",
+      "first_air_date": "2026-11-11"
+    },
+    {
+      "slug": "45g8b-chiaroscuro",
+      "imdb_id": "tt37214564",
+      "title": "ChiaroScuro",
+      "year": 2026,
+      "score": null,
+      "poster_path": "m9eZy0jzWCHSUUzbzIpysOrLgFb.jpg",
+      "description": "After a body is found in a Roman museum, an art expert must apply his instincts and skills to help police solve a mystery connected to his own past.",
       "first_air_date": "2026-11-11"
     },
     {
@@ -1423,26 +1443,6 @@
       "poster_path": "uA5hAexR9Xis3BzSOMKjNuYQUsj.jpg",
       "description": "The dynamic between the two contrasting personalities, a seasoned cop who prefers old-school methods and a tech-savvy cop who relies on modern technology for investigations, as they navigate their partnership in solving crimes.",
       "first_air_date": "2026-07-03"
-    },
-    {
-      "slug": "3g4as-human-vapor",
-      "imdb_id": "tt33083249",
-      "title": "Human Vapor",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "gSYPd4icODc7QdRA7BK0VqBxBYp.jpg",
-      "description": "A death on live TV. A culprit who turns to gas. Behind it, a secret project that used and discarded the vulnerable. One detective pursues the dark truth.",
-      "first_air_date": "2026-07-02"
-    },
-    {
-      "slug": "3gft3-elle",
-      "imdb_id": "tt32020831",
-      "title": "Elle",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "dpH7Lyrs7z7MlTGgfeibryGnWAv.jpg",
-      "description": "Before Elle Woods was a fish-out-of-water at Harvard, we meet her in 1995 in the tumultuous waters of high school where she encounters tricky friendships, forbidden romance, and questionable fashion choices. In this unexpected chapter of her adolescence, we learn about the experiences that shaped Elle into the iconic young woman we've come to know and love.",
-      "first_air_date": "2026-07-01"
     }
   ]
 }

@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1795003268869,
+  "scraped_at": 1795046464631,
   "items": [
+    {
+      "slug": "3ymgc-gentle-monster",
+      "imdb_id": "tt37020296",
+      "title": "Gentle Monster",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "v7sbP2qv8ezCfo9FOI6DVUXDSaw.jpg",
+      "description": "After relocating with her family to the countryside, a renowned pianist uncovers a life-shattering truth that forces her to confront the complexities of love, trust, and deception.",
+      "digital_release_date": null
+    },
     {
       "slug": "42ru0-guarding-stars",
       "imdb_id": "tt6611324",
@@ -99,7 +109,7 @@
       "imdb_id": "tt39370926",
       "title": "Never Surrender",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "hKROmLddpzpjkxKKVFYFRAOXX1b.jpg",
       "description": "When a deadly gang descends on his remote home, a guilt-ridden veteran and the estranged grandchildren he barely knows must unite to survive.",
       "digital_release_date": null
@@ -310,7 +320,7 @@
       "title": "The Odyssey",
       "year": 2026,
       "score": 8,
-      "poster_path": "5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
+      "poster_path": "zG7hzAyqa9KIjM0Yse0bxty4Cq8.jpg",
       "description": "Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.",
       "digital_release_date": null
     },
@@ -320,8 +330,8 @@
       "title": "The Samurai and the Prisoner",
       "year": 2026,
       "score": 8,
-      "poster_path": "2cUo0JNk40q08STxMOKI3kW7lww.jpg",
-      "description": "When Lord Murashige rises up against the tyrannical Oda, he finds himself besieged within the walls of his own castle. Isolated, he is confronted with a series of mysterious crimes that shatter the fragile order of his court, forcing him into an uneasy alliance with Kanbei Kuroda, a brilliant yet dangerous strategist held prisoner in the dungeon.",
+      "poster_path": "1GWVlPM1v6k84LsmDkfDzLlGf0O.jpg",
+      "description": "When Lord Murashige rises up against the tyrannical Oda, he finds himself besieged within the walls of his own castle. Isolated, he is confronted with a series of mysterious crimes that shatter the fragile order of his court, plunging the fortress into fear and suspicion. With Oda's army closing in and a traitor hiding among his ranks, Murashige is forced into an uneasy alliance with Kanbei, a brilliant and dangerous strategist held prisoner in the dungeon, as he must outwit his enemies and uncover the truth before time runs out.",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 6,
       "poster_path": "niQ4NBh2jqAf1hDZP5m6ReWFAb7.jpg",
       "description": "Navy Seal Jake Harris must stop a team of mercenaries, led by his disillusioned former comrade, from disabling the US missile defense network.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "2wpwk-super-troopers-3",
-      "imdb_id": "tt8820258",
-      "title": "Super Troopers 3",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "VVU42nqsEmUtFpH1d9MHj5BIpF.jpg",
-      "description": "When Farva’s wildly over-the-top Indian engagement to Thorny’s sister spirals into chaos, the Super Troopers must navigate Thorny’s schemes to break up the relationship, while trying to crack a pernicious new drug ring  — all to save the day and maybe the wedding itself.",
       "digital_release_date": null
     }
   ]
