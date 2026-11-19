@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795003321964,
+  "scraped_at": 1795046532665,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -1045,6 +1045,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/w5u1PqBYfDyfrlkxADTA38jYG3I.jpg"
     },
     {
+      "imdb_id": "tt33550053",
+      "type": "series",
+      "title": "9-1-1: Nashville",
+      "year": 2025,
+      "release_date": "2025-10-09",
+      "poster": "https://image.tmdb.org/t/p/w200/63JFLM8L8H1Jlp62kZGPvSKc50j.jpg"
+    },
+    {
       "imdb_id": "tt14063678",
       "type": "series",
       "title": "The Gold",
@@ -1147,6 +1155,14 @@
       "year": 2013,
       "release_date": "2013-09-23",
       "poster": "https://image.tmdb.org/t/p/w200/4HTfd1PhgFUenJxVuBDNdLmdr0c.jpg"
+    },
+    {
+      "imdb_id": "tt12327578",
+      "type": "series",
+      "title": "Star Trek: Strange New Worlds",
+      "year": 2022,
+      "release_date": "2022-05-05",
+      "poster": "https://image.tmdb.org/t/p/w200/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg"
     },
     {
       "imdb_id": "tt22202452",
