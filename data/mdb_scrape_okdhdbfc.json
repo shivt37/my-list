@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1795089699386,
+  "scraped_at": 1795132901112,
   "items": [
     {
       "slug": "435p6-murder-in-galicia",
@@ -12,6 +12,16 @@
       "score": 3,
       "poster_path": "pk7ewQL2vAxtit0YmDEURmAInS9.jpg",
       "description": "In Pazos, Irene is brutally attacked, and Civil Guard sergeant Elías suspects her husband Aniceto, racing against time to uncover the truth before it’s too late.",
+      "first_air_date": "2026-11-13"
+    },
+    {
+      "slug": "45mhz-student-of-the-year-after-dark",
+      "imdb_id": "tt28450216",
+      "title": "Student of the Year: After Dark",
+      "year": 2026,
+      "score": null,
+      "poster_path": "qhIGdVcH2eSIRckuPTrjryJJxvv.jpg",
+      "description": "Student of the Year: After Dark reimagines the St. Teresa's campus as the setting of a murder mystery after the school's queen bee, Aayesha Malik, is found dead in a frozen lake. Refusing to believe it was an accident, her introverted twin sister Aditi goes undercover at the elite institution to investigate her death.",
       "first_air_date": "2026-11-13"
     },
     {
@@ -29,7 +39,7 @@
       "imdb_id": "tt32375763",
       "title": "12 12 12",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "8q6BvFQuKM1Rud4E9NQDaMGy9EL.jpg",
       "description": "A heist takes 12 months to plan, 12 hours to execute—and a thief not caught within 12 days won't be caught at all. Across three pulse-pounding timelines, an FBI agent and a career criminal face off in a deadly game of cat and mouse through Europe.",
       "first_air_date": "2026-11-12"
@@ -63,6 +73,16 @@
       "poster_path": "h4dM4FjqSJihwGpo3x0llMvNSfg.jpg",
       "description": "After a body is found in a Roman museum, an art expert must apply his instincts and skills to help police solve a mystery connected to his own past.",
       "first_air_date": "2026-11-11"
+    },
+    {
+      "slug": "41voq-under-siege",
+      "imdb_id": "tt37762350",
+      "title": "Under Siege",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "ikJ62NkEVyCwwar4UFrdyc0gMlq.jpg",
+      "description": "Caught in the crossfire, hostages, militaries and guerrillas are swept into a tragedy that brings turmoil to Colombia.",
+      "first_air_date": "2026-11-06"
     },
     {
       "slug": "435vh-campus-drivers",
@@ -559,7 +579,7 @@
       "imdb_id": "tt44934375",
       "title": "Hunkkaar: The Roar",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "uL2qCVBou6WYMRxMbP5olmBpTjD.jpg",
       "description": "When a teenager accuses a revered cult leader of sexual assault, it sparks a national conflict. As the truth unravels, the line between faith and justice blurs.",
       "first_air_date": "2026-09-25"
@@ -1423,26 +1443,6 @@
       "poster_path": "l9z65nDVteL88PmwDqyiTFmxCtF.jpg",
       "description": "After her husband's unexpected death and a very public breakdown, famed cook Hollis hosts her best friends for an elaborate weekend on Nantucket.",
       "first_air_date": "2026-07-09"
-    },
-    {
-      "slug": "3tqmr-little-house-on-the-prairie",
-      "imdb_id": "tt2431250",
-      "title": "Little House on the Prairie",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "oWUGSadxC9vQPOCeHDDVfDezmQC.jpg",
-      "description": "The close-knit Ingalls family builds a new life on the Western frontier, where the joys of nature and the struggle for survival are deeply intertwined.",
-      "first_air_date": "2026-07-09"
-    },
-    {
-      "slug": "3liuv-pritam-and-pedro",
-      "imdb_id": "tt28077038",
-      "title": "Pritam and Pedro",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "uA5hAexR9Xis3BzSOMKjNuYQUsj.jpg",
-      "description": "The dynamic between the two contrasting personalities, a seasoned cop who prefers old-school methods and a tech-savvy cop who relies on modern technology for investigations, as they navigate their partnership in solving crimes.",
-      "first_air_date": "2026-07-03"
     }
   ]
 }
