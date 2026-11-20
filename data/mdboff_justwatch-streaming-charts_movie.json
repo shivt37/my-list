@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1795089721772,
+  "scraped_at": 1795132931589,
   "items": [
     {
       "imdb_id": "tt27165187",
@@ -121,7 +121,7 @@
       "type": "movie",
       "title": "Madden",
       "year": 2026,
-      "release_date": "2026-11-11",
+      "release_date": "2026-11-18",
       "poster": "https://image.tmdb.org/t/p/w200/bRa83oPFFPqaAF3wrpVWPqqfFel.jpg"
     },
     {
@@ -1053,6 +1053,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/A0byHUHMwZ7dtBQtfZ44QIgDbjo.jpg"
     },
     {
+      "imdb_id": "tt35520290",
+      "type": "movie",
+      "title": "The Baltimorons",
+      "year": 2025,
+      "release_date": "2025-06-29",
+      "poster": "https://image.tmdb.org/t/p/w200/yZWcrfj3mFf9LGItIFwa7DSkedz.jpg"
+    },
+    {
       "imdb_id": "tt31434030",
       "type": "movie",
       "title": "Dracula",
@@ -1149,14 +1157,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/qvktm0BHcnmDpul4Hz01GIazWPr.jpg"
     },
     {
-      "imdb_id": "tt32499466",
-      "type": "movie",
-      "title": "Finding Emily",
-      "year": 2026,
-      "release_date": "2026-05-21",
-      "poster": "https://image.tmdb.org/t/p/w200/bfEQ6C702oPsN4kzIiY7n4JsrxF.jpg"
-    },
-    {
       "imdb_id": "tt7784604",
       "type": "movie",
       "title": "Hereditary",
@@ -1173,6 +1173,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg"
     },
     {
+      "imdb_id": "tt32499466",
+      "type": "movie",
+      "title": "Finding Emily",
+      "year": 2026,
+      "release_date": "2026-05-21",
+      "poster": "https://image.tmdb.org/t/p/w200/bfEQ6C702oPsN4kzIiY7n4JsrxF.jpg"
+    },
+    {
       "imdb_id": "tt0098635",
       "type": "movie",
       "title": "When Harry Met Sally...",
@@ -1187,14 +1195,6 @@
       "year": 2026,
       "release_date": "2026-10-22",
       "poster": "https://image.tmdb.org/t/p/w200/uTyVxPeWX8Ai30IQoyDDQONNcq.jpg"
-    },
-    {
-      "imdb_id": "tt0114369",
-      "type": "movie",
-      "title": "Se7en",
-      "year": 1995,
-      "release_date": "1995-09-22",
-      "poster": "https://image.tmdb.org/t/p/w200/191nKfP0ehp3uIvWqgPbFmI4lv9.jpg"
     }
   ]
 }

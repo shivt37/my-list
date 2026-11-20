@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795089725771,
+  "scraped_at": 1795132940370,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -58,7 +58,7 @@
       "title": "The Circle",
       "year": 2026,
       "release_date": "2026-11-17",
-      "poster": "https://image.tmdb.org/t/p/w200/5TQbfIkZWzymHHuzwWdh1aoohLj.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/aucWDMwWY2H6XDRaV68BZUvuDHt.jpg"
     },
     {
       "imdb_id": "tt27995113",
@@ -538,7 +538,7 @@
       "title": "Elsbeth",
       "year": 2024,
       "release_date": "2024-02-29",
-      "poster": "https://image.tmdb.org/t/p/w200/pU8T64vNT596oG0U4BG7c0QMXOi.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/7lnNSbT90qwtrn1h9TvEkVFMz2P.jpg"
     },
     {
       "imdb_id": "tt0436992",
@@ -1149,14 +1149,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/esU4D2XSA7hNHC8G2bmMkvX5g5H.jpg"
     },
     {
-      "imdb_id": "tt50940908",
-      "type": "series",
-      "title": "The Jigsaw Puzzle Murder",
-      "year": 2026,
-      "release_date": "2026-11-12",
-      "poster": "https://image.tmdb.org/t/p/w200/qRlAfJ2wyxEp6MQkX47fhet5Ls9.jpg"
-    },
-    {
       "imdb_id": "tt2741602",
       "type": "series",
       "title": "The Blacklist",
@@ -1187,6 +1179,14 @@
       "year": 2019,
       "release_date": "2019-03-27",
       "poster": "https://image.tmdb.org/t/p/w200/wa3ZQE9kLnqwN3vQ0NNjg1NPsCa.jpg"
+    },
+    {
+      "imdb_id": "tt3455408",
+      "type": "series",
+      "title": "The Curse of Oak Island",
+      "year": 2014,
+      "release_date": "2014-01-05",
+      "poster": "https://image.tmdb.org/t/p/w200/gtkxUUmHDF31iDUOlxQqUXmiU71.jpg"
     }
   ]
 }
