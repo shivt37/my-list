@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795132852679,
+  "scraped_at": 1795176072135,
   "items": [
+    {
+      "slug": "3ynkx-things-we-don-t-say",
+      "imdb_id": "tt37096260",
+      "title": "Things We Don't Say",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "1o0FTRrtcPFboam4pZRbkwPnDTX.jpg",
+      "description": "Carlo and Elisa are a successful couple. He’s a university professor and writer facing a creative block; she’s a brilliant, sharp-witted journalist, known for her internationally published editorials. They live in Rome, moving between accomplishments and routine, affection and something that might be fading. In search of new energy, they travel to Morocco with their lifelong friends, Anna and Paolo, and their thirteen-year-old daughter Vittoria—bright, curious, a little eccentric. Tensions soon rise.",
+      "digital_release_date": "2026-11-19"
+    },
     {
       "slug": "3ymgc-gentle-monster",
       "imdb_id": "tt37020296",
@@ -90,7 +100,7 @@
       "title": "Heartland",
       "year": 2026,
       "score": 5,
-      "poster_path": "zhxlzxBlO1sWB1rPn7RmAoeQ2na.jpg",
+      "poster_path": "azArOQaVxKa3367XJv2l4ewjsdB.jpg",
       "description": "Former country music legend Misty Jones returns to Nashville to unravel the truth behind her rising-star niece's disappearance.",
       "digital_release_date": "2026-11-13"
     },
@@ -775,6 +785,16 @@
       "digital_release_date": "2026-10-13"
     },
     {
+      "slug": "3fi95-sunny-dancer",
+      "imdb_id": "tt32212403",
+      "title": "Sunny Dancer",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "mXdejPfToSVFlEzv1QYoIh2N53e.jpg",
+      "description": "Reluctantly sent to a summer retreat for young cancer survivors, a teenager in remission unexpectedly finds deep connections and new beginnings among fellow campers.",
+      "digital_release_date": "2026-10-12"
+    },
+    {
       "slug": "45guj-remain-calm",
       "imdb_id": "tt49058294",
       "title": "Remain Calm",
@@ -1423,26 +1443,6 @@
       "poster_path": "i92X6pBSqZgHAvIX28p0AZJU8xz.jpg",
       "description": "Pregnant and recently widowed, Stella is taken in by her late husband’s estranged family. But beneath their generosity lies something deeply unsettling, leaving Stella fighting for her life as their obsession with her unborn child turns deadly.",
       "digital_release_date": "2026-09-01"
-    },
-    {
-      "slug": "2up8g-mobile-suit-gundam-hathaway-the-sorcery-of-nymph-circe",
-      "imdb_id": "tt32915652",
-      "title": "MOBILE SUIT GUNDAM HATHAWAY The Sorcery of Nymph Circe",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "6YkVpc9Dn1L2FHNlLOybpSKeGc7.jpg",
-      "description": "Hathaway Noa plans his attack on the Adelaide Conference while Federation officer Kenneth Sleg prepares to defend it. With each man pursuing his own goal, Gigi Andalucia heads to Hong Kong to fulfill a role of her own.",
-      "digital_release_date": "2026-08-30"
-    },
-    {
-      "slug": "3yhtt-barreda",
-      "imdb_id": "tt43706402",
-      "title": "Barreda",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "hnr0QkZSDLlrJTvU2ecco65wcHo.jpg",
-      "description": "A fictionalized drama film based on one of the most shocking crimes in Argentina's history. In 1992, Ricardo Barreda was an unassuming dentist, brutally murdered his wife, mother-in-law, and two adult daughters in their family home. Branding himself as a victim, Ricardo Barreda ignited a media storm and fueled a national scandal.",
-      "digital_release_date": "2026-08-28"
     }
   ]
 }
