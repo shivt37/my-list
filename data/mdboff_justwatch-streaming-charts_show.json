@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795176132634,
+  "scraped_at": 1795219314171,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -733,6 +733,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/i8ORB1biusVy703lGxUi5Rle6zA.jpg"
     },
     {
+      "imdb_id": "tt14186672",
+      "type": "series",
+      "title": "Landman",
+      "year": 2024,
+      "release_date": "2024-11-17",
+      "poster": "https://image.tmdb.org/t/p/w200/hYthRgS1nvQkGILn9YmqsF8kSk6.jpg"
+    },
+    {
       "imdb_id": "tt13720112",
       "type": "series",
       "title": "The Empress",
@@ -1053,6 +1061,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/iRfSzrPS5VYWQv7KVSEg2BZZL6C.jpg"
     },
     {
+      "imdb_id": "tt14063678",
+      "type": "series",
+      "title": "The Gold",
+      "year": 2023,
+      "release_date": "2023-02-12",
+      "poster": "https://image.tmdb.org/t/p/w200/9JY9Gza4HQhXjIPXg9uSy8FeiSM.jpg"
+    },
+    {
       "imdb_id": "tt4655480",
       "type": "series",
       "title": "Chicago Med",
@@ -1117,14 +1133,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/esU4D2XSA7hNHC8G2bmMkvX5g5H.jpg"
     },
     {
-      "imdb_id": "tt33550053",
-      "type": "series",
-      "title": "9-1-1: Nashville",
-      "year": 2025,
-      "release_date": "2025-10-09",
-      "poster": "https://image.tmdb.org/t/p/w200/63JFLM8L8H1Jlp62kZGPvSKc50j.jpg"
-    },
-    {
       "imdb_id": "tt5687612",
       "type": "series",
       "title": "Fleabag",
@@ -1171,14 +1179,6 @@
       "year": 2026,
       "release_date": "2026-09-22",
       "poster": "https://image.tmdb.org/t/p/w200/jD7ZQpDEZzAVReJzkOtmuFoIl2m.jpg"
-    },
-    {
-      "imdb_id": "tt4955642",
-      "type": "series",
-      "title": "The Good Place",
-      "year": 2016,
-      "release_date": "2016-09-19",
-      "poster": "https://image.tmdb.org/t/p/w200/qIhsuhoIYR5yTnDta0IL4senbeN.jpg"
     }
   ]
 }
