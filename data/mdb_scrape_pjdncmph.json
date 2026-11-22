@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1795329277539,
+  "scraped_at": 1795348861521,
   "items": [
+    {
+      "slug": "3qe0o-fjord",
+      "imdb_id": "tt35410859",
+      "title": "Fjord",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "3PPPIeSdeivjUn3O9RahGiaJ9b8.jpg",
+      "description": "Following the deaths of Mihai's parents, Mihai and Lisbet Gheorghiu leave their life behind in Romania and move with their children to a remote village in Norway, hoping to rebuild their lives near Lisbet's family. There, they grow close to their neighbors, the Halbergs, whose warmth gives them hope for a fresh start. But the fragile peace begins to unravel when the Gheorghiu family’s young daughter, Elia, arrives at school covered in bruises.",
+      "digital_release_date": null
+    },
     {
       "slug": "3kifh-my-undesirable-friends-part-i-last-air-in-moscow",
       "imdb_id": "tt33075192",
@@ -1432,16 +1442,6 @@
       "score": 3,
       "poster_path": "7FoNihuGcbhKsjLcCPalHZXq8Tf.jpg",
       "description": "Geddy Lee and Alex Lifeson team up with four revered drummers — Stewart Copeland, Danny Carey, Chad Smith, and Gavin Harrison — for an exhilarating and poignant tribute to late Rush legend Neil Peart.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "2xwba-the-love-hypothesis",
-      "imdb_id": "tt22526100",
-      "title": "The Love Hypothesis",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "vfZxVHextAGC70zrNhS8lsROqP1.jpg",
-      "description": "Olive Smith, a biology PhD candidate, and Dr. Adam Carlsen, a hotshot professor and well-known tyrant, enter into a fake relationship, seeing each of their carefully calculated theories on love get thrown into chaos.",
       "digital_release_date": null
     }
   ]
