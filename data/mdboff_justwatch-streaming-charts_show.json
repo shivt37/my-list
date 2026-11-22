@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795262510330,
+  "scraped_at": 1795305683027,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -1005,14 +1005,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/6XnA02VRG4dhBpTZWGZuXQdYGDW.jpg"
     },
     {
-      "imdb_id": "tt42006761",
-      "type": "series",
-      "title": "The Secret Lives of Mormon Wives: Orange County",
-      "year": 2026,
-      "release_date": "2026-11-12",
-      "poster": "https://image.tmdb.org/t/p/w200/rEcJkRhfs663zsjWCJhtsbRWv7g.jpg"
-    },
-    {
       "imdb_id": "tt24053860",
       "type": "series",
       "title": "The Day of the Jackal",
@@ -1115,6 +1107,14 @@
       "year": 2007,
       "release_date": "2007-10-14",
       "poster": "https://image.tmdb.org/t/p/w200/osAYIqIGtnVpqz4FDdGjCezE11z.jpg"
+    },
+    {
+      "imdb_id": "tt42006761",
+      "type": "series",
+      "title": "The Secret Lives of Mormon Wives: Orange County",
+      "year": 2026,
+      "release_date": "2026-11-12",
+      "poster": "https://image.tmdb.org/t/p/w200/rEcJkRhfs663zsjWCJhtsbRWv7g.jpg"
     },
     {
       "imdb_id": "tt4955642",
