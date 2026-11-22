@@ -492,7 +492,7 @@ export async function main({
       useGql = await probeHost("https://api.graphql.imdb.com/", probeCtx, {
         method: "POST",
         body: JSON.stringify({ query: "{__typename}" }),
-        headers: { "Content-Type": "application/json", Origin: "https://www.imdb.com", Referer: "https://www.imdb.com/" },
+        headers: { "Content-Type": "application/json", Origin: "https://www.imdb.com", Referer: "https://www.imdb.com/", "x-imdb-client-name": "imdb-web-next" },
       });
       if (!useGql) console.warn("[probe] the IMDb GraphQL is unreachable - the suggestion rung uses the suggestion labels only");
     }

@@ -83,14 +83,14 @@ const UA_BROWSER =
 
 const IMDB_SUGGEST_URL = "https://v3.sg.media-imdb.com/suggestion/x/";
 const IMDB_GQL_URL = "https://api.graphql.imdb.com/";
-// The exact header set rt.mjs already uses from CI (rt.mjs:1563-1570).
-// api.graphql.imdb.com answers HTTP 403 without Origin + Referer.
+// CloudFront answers HTTP 403 without Origin, Referer and a client name.
 const IMDB_GQL_HEADERS = {
   "User-Agent": UA_BROWSER,
   Accept: "application/json",
   "Content-Type": "application/json",
   Origin: "https://www.imdb.com",
   Referer: "https://www.imdb.com/",
+  "x-imdb-client-name": "imdb-web-next",
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -646,7 +646,7 @@ export async function probeHost(url, ctx, opts = {}) {
       headers: { "User-Agent": UA_BROWSER, Accept: "application/json", ...(opts.headers || {}) },
       signal: AbortSignal.timeout(REQ_TIMEOUT_MS),
     });
-    return !!res && res.status < 500;
+    return !!res && res.status < 500 && res.status !== 401 && res.status !== 403;
   } catch {
     return false;
   }
