@@ -238,19 +238,18 @@ export { pageProps, normTitle, normTitleKeepArticle, titleScore, titleTokens, ki
  */
 export function chartRows(kind, html) {
   const pp = pageProps(html);
-  const rows = kind === "movie" ? pp.movies || [] : pp.shows || [];
+  const rows = pp.o && Array.isArray(pp.o.rows)
+    ? pp.o.rows
+    : (kind === "movie" ? pp.movies || [] : pp.shows || []);
   return rows.map((r) => {
-    const it = kind === "movie" ? r.movie : r.show;
+    const it = r.movie || r.show || r;
     if (!it || !it.slug) throw new Error("chart row without slug");
     return {
       slug: it.slug,
-      // TV Stats' STABLE per-title id (present on 200/200 chart rows of both
-      // kinds). The identity cache is keyed on it: a slug can be reused for a
-      // different work, a stable id cannot.
       stableId: it.id || null,
-      title: (kind === "movie" ? it.title : it.name) || "",
-      poster: kind === "movie" ? it.poster_path || null : it.poster_image || it.poster_path || null,
-      date: (kind === "movie" ? it.release_date : it.first_air_date) || null,
+      title: it.title || it.name || "",
+      poster: it.poster_path || it.poster_image || it.poster || null,
+      date: it.release_date || it.first_air_date || null,
     };
   });
 }

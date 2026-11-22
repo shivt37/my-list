@@ -1246,12 +1246,12 @@ export async function resolveRow(row, ctxIn) {
     return out;
   }
 
-  // ---- the TS facts. A SHOW row needs the detail page for first_air_date
-  // before ANY year gate can run: the show chart carries last_air_date only
-  // (V4). A movie chart row already carries its release date.
+  // ---- the TS facts. The detail page must be read before ANY year gate
+  // when the row has no date: show charts carry last_air_date only (V4), and
+  // the new flat chart rows carry no release date at all.
   let facts = { title: tsTitle, date: row.date || null, poster: row.poster || null, runtime: null, overview: null, backdrop: null };
   let detail = null;
-  if (wantTv) {
+  if (wantTv || !yearOf(facts.date)) {
     try {
       detail = await fetchDetail(kind, row.slug, ctx);
     } catch (e) {
