@@ -256,9 +256,9 @@ async function scrapeOnePage(browser, url, type = "movie", pageIdx = 0) {
       containers.forEach((container) => {
         try {
           const itemLink = container.querySelector(`a[href^="${linkPrefix}"]`);
-          const imdbLink = container.querySelector('.idtext a[href*="imdb.com/title/"]');
+          const imdbLink = container.querySelector('a.card-rating[href*="imdb.com/title/tt"], .idtext a[href*="imdb.com/title/"]');
           const titleEl = container.querySelector(".header.movie-title, .header.show-title, .movie-title, .show-title");
-          const scoreEl = container.querySelector(".idscore.search-score-main");
+          const scoreEl = container.querySelector(".poster-score-overlay, .idscore.search-score-main");
           // Release date lives in a small overlay on the poster frame -
           // "Digital: 2026-08-25" / "Theater: ..." / "Release: ..." (DOM
           // redesign ~Aug 2026; the old [data-release-date] attr is gone).
