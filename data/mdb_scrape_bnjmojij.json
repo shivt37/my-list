@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795262448399,
+  "scraped_at": 1795329263001,
   "items": [
     {
       "slug": "3ynkx-things-we-don-t-say",
@@ -125,6 +125,16 @@
       "digital_release_date": "2026-11-13"
     },
     {
+      "slug": "41zzs-extra-geography",
+      "imdb_id": "tt34798706",
+      "title": "Extra Geography",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "yhHRpLhtaFXGYMsE5LuaRvZYs77.jpg",
+      "description": "In an English girls boarding school, two teenage best friends grapple with the challenges of girlhood—friendship, boys, studies, and growing up—and embark on their school project... falling in love.",
+      "digital_release_date": "2026-11-13"
+    },
+    {
       "slug": "42iej-heartland",
       "imdb_id": "tt38213251",
       "title": "Heartland",
@@ -209,20 +219,10 @@
       "imdb_id": "tt46082332",
       "title": "Confession",
       "year": 2026,
-      "score": 3,
+      "score": null,
       "poster_path": "kPId5qdaCPVOSeZYHaYXFYQmEFy.jpg",
       "description": "In 1938, in Stalin's Moscow, a disillusioned professor, Alexei, faces brutal interrogation by his former student, Vladimir, in Lubyanka Prison. Refusing to confess, he confronts his past sins and finds redemption through faith, sacrificing himself to save others in a haunting tale of morality and resistance.",
       "digital_release_date": "2026-11-11"
-    },
-    {
-      "slug": "3q8w0-other-mommy",
-      "imdb_id": "tt36586020",
-      "title": "Other Mommy",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "fGRNCssTRrhYZxNzykGGCoMsAVq.jpg",
-      "description": "Young Bela forms a relationship with a sinister entity in her home that looks uncannily like her own mother, drawing her into a terrifying and increasingly dark world.",
-      "digital_release_date": "2026-11-10"
     },
     {
       "slug": "3o1qd-crawlers",
@@ -1370,7 +1370,7 @@
       "title": "Dhamaal 4",
       "year": 2026,
       "score": 3,
-      "poster_path": "oVij5aEEE6iI4PxB4i0CgKp8h0m.jpg",
+      "poster_path": "qUkP6Njgg1RQGMkmNcfsnmFET1e.jpg",
       "description": "The Dhamaal boys are back for another treasure hunt, facing hilarious challenges in their quest for the Treasure of Life.",
       "digital_release_date": "2026-09-04"
     },
