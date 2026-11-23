@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795348904914,
+  "scraped_at": 1795392119389,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -1093,14 +1093,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/81IhL3ckAgJ9J8vHazlUA5BNs8G.jpg"
     },
     {
-      "imdb_id": "tt42006761",
-      "type": "series",
-      "title": "The Secret Lives of Mormon Wives: Orange County",
-      "year": 2026,
-      "release_date": "2026-11-12",
-      "poster": "https://image.tmdb.org/t/p/w200/rEcJkRhfs663zsjWCJhtsbRWv7g.jpg"
-    },
-    {
       "imdb_id": "tt0898266",
       "type": "series",
       "title": "The Big Bang Theory",
@@ -1171,6 +1163,14 @@
       "year": 2014,
       "release_date": "2014-01-12",
       "poster": "https://image.tmdb.org/t/p/w200/cuV2O5ZyDLHSOWzg3nLVljp1ubw.jpg"
+    },
+    {
+      "imdb_id": "tt1475582",
+      "type": "series",
+      "title": "Sherlock",
+      "year": 2010,
+      "release_date": "2010-07-25",
+      "poster": "https://image.tmdb.org/t/p/w200/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg"
     }
   ]
 }
