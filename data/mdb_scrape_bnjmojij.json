@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795348845579,
+  "scraped_at": 1795392050204,
   "items": [
+    {
+      "slug": "43vit-steps",
+      "imdb_id": "tt14413964",
+      "title": "Steps",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "jtfCcWZ3ZyKdgi0u7JVOxEOSSJP.jpg",
+      "description": "After being blamed for disrupting the Royal Ball with a stolen magic wand, a misunderstood stepsister accidentally turns her sister into a frog and must team up with Cinderella and an unlikely ally to save the kingdom and rewrite their fairytale ending.",
+      "digital_release_date": "2026-11-20"
+    },
     {
       "slug": "3ynkx-things-we-don-t-say",
       "imdb_id": "tt37096260",
@@ -862,16 +872,6 @@
       "score": 3,
       "poster_path": "xVabS4lTi6IMscr2FOucxydE6ZD.jpg",
       "description": "A young reporter and her reluctant cameraman chase a story, only to get entangled in an illegal sand-mining racket run by a ruthless syndicate.",
-      "digital_release_date": "2026-10-09"
-    },
-    {
-      "slug": "418z2-flush",
-      "imdb_id": "tt37520267",
-      "title": "Flush",
-      "year": 2025,
-      "score": 2,
-      "poster_path": "ypund0tJ6ucQDoWfvM7t0kn1FpC.jpg",
-      "description": "A middle-aged cocaine addict becomes trapped in a nightclub bathroom while trying to win back his ex-girlfriend, setting off a night of increasingly bizarre and grotesque chaos.",
       "digital_release_date": "2026-10-09"
     },
     {
