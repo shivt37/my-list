@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795478460657,
+  "scraped_at": 1795521647670,
   "items": [
     {
       "slug": "37lpb-wicker",
@@ -20,7 +20,7 @@
       "title": "The Social Reckoning",
       "year": 2026,
       "score": 6,
-      "poster_path": "7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg",
+      "poster_path": "vWbEuI3LuFOGYZIxESLAmwFwtvr.jpg",
       "description": "Frances Haugen, a young Facebook engineer, enlists the help of Jeff Horwitz, a Wall Street Journal reporter, to go on a dangerous journey that ends up blowing the whistle on the social network's most guarded secrets.",
       "digital_release_date": "2026-11-24"
     },
@@ -363,6 +363,16 @@
       "poster_path": "cV31QO65DA6mk4Hd6S7QncVq85T.jpg",
       "description": "Ansh Sikkha returns to his Punjabi family home for Diwali after years working abroad. As the Sikkas gather for the festival, their clashing views on what constitutes a fulfilling life create friction and connection.",
       "digital_release_date": "2026-11-05"
+    },
+    {
+      "slug": "3fi51-a-new-dawn",
+      "imdb_id": "tt32192760",
+      "title": "A New Dawn",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "4GafNuDJud38SeXWCBJjx2nJsa1.jpg",
+      "description": "The Obinata Fireworks Shop factory is getting prepared for an administrative action for confiscation tomorrow. It has been six years since Keitaro has been holed up in a closed-down factory creating fireworks by himself, chasing after an illusion of his father who vanished. It is a story about three young people who overcome the extreme weather conditions, disasters and environmental problems imposed on them and establish their own identities.",
+      "digital_release_date": "2026-11-04"
     },
     {
       "slug": "3gtq9-the-mongoose",
@@ -879,7 +889,7 @@
       "imdb_id": "tt14541160",
       "title": "Devour",
       "year": 2026,
-      "score": 2,
+      "score": 3,
       "poster_path": "uFyMcnWabsIwESf5odkMFvTRydp.jpg",
       "description": "Stranded after a disastrous gig, an all-girl heavy metal band finds a woman in danger in a town ruled by a warlock, and crawling with cannibals, vampires, and a deadly werewolf, forcing them to fight for survival.",
       "digital_release_date": "2026-10-13"
@@ -1433,16 +1443,6 @@
       "poster_path": "iqeF5Yr65hPlEJojJGESjVclf6h.jpg",
       "description": "A successful photographer gives up everything to devote himself to writing and discovers poverty.",
       "digital_release_date": "2026-09-07"
-    },
-    {
-      "slug": "3hni0-dhamaal-4",
-      "imdb_id": "tt27548557",
-      "title": "Dhamaal 4",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "qUkP6Njgg1RQGMkmNcfsnmFET1e.jpg",
-      "description": "The Dhamaal boys are back for another treasure hunt, facing hilarious challenges in their quest for the Treasure of Life.",
-      "digital_release_date": "2026-09-04"
     }
   ]
 }
