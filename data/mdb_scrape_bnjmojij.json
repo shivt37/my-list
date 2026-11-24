@@ -2,8 +2,58 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795435254975,
+  "scraped_at": 1795478460657,
   "items": [
+    {
+      "slug": "37lpb-wicker",
+      "imdb_id": "tt29611136",
+      "title": "Wicker",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "6FcBZOKvyrLCKGCyBG0ySCR4okt.jpg",
+      "description": "On the outskirts of a village by the sea, lives a Fisherwoman; smelly, single and perpetually ridiculed. One day, fed up with her stuffy, small-minded neighbours, she commissions herself a husband to be made from wicker. In an otherwise conservative town, this unconventional romance sparks outrage, jealousy and chaos.",
+      "digital_release_date": "2026-11-24"
+    },
+    {
+      "slug": "3fnxk-the-social-reckoning",
+      "imdb_id": "tt37510326",
+      "title": "The Social Reckoning",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg",
+      "description": "Frances Haugen, a young Facebook engineer, enlists the help of Jeff Horwitz, a Wall Street Journal reporter, to go on a dangerous journey that ends up blowing the whistle on the social network's most guarded secrets.",
+      "digital_release_date": "2026-11-24"
+    },
+    {
+      "slug": "3qe0o-fjord",
+      "imdb_id": "tt35410859",
+      "title": "Fjord",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "3PPPIeSdeivjUn3O9RahGiaJ9b8.jpg",
+      "description": "Following the deaths of Mihai's parents, Mihai and Lisbet Gheorghiu leave their life behind in Romania and move with their children to a remote village in Norway, hoping to rebuild their lives near Lisbet's family. There, they grow close to their neighbors, the Halbergs, whose warmth gives them hope for a fresh start. But the fragile peace begins to unravel when the Gheorghiu family’s young daughter, Elia, arrives at school covered in bruises.",
+      "digital_release_date": "2026-11-24"
+    },
+    {
+      "slug": "40dqe-breeder",
+      "imdb_id": "tt9213874",
+      "title": "Breeder",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "alsb3UC17kxIcytLWvwkmL0STgU.jpg",
+      "description": "An eccentric poodle breeder lures a broke college student to her remote ranch with a promise of research funding. But, as he soon learns, there’s a catch.",
+      "digital_release_date": "2026-11-24"
+    },
+    {
+      "slug": "43am3-perfect-liars",
+      "imdb_id": "tt18351090",
+      "title": "Perfect Liars",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "kej8EipJOvfHUHFg5wtT7gQ6bNb.jpg",
+      "description": "Jude Derry arrives at the exclusive Tagus university with a hidden mission: to infiltrate the circle of the Cash brothers and uncover the truth about her brother's death. What begins as revenge turns into a dangerous triangle of seduction, forbidden attraction and lies, drawing her toward a truth she may not be ready to face.",
+      "digital_release_date": "2026-11-20"
+    },
     {
       "slug": "43vit-steps",
       "imdb_id": "tt14413964",
@@ -229,7 +279,7 @@
       "imdb_id": "tt46082332",
       "title": "Confession",
       "year": 2026,
-      "score": null,
+      "score": 4,
       "poster_path": "kPId5qdaCPVOSeZYHaYXFYQmEFy.jpg",
       "description": "In 1938, in Stalin's Moscow, a disillusioned professor, Alexei, faces brutal interrogation by his former student, Vladimir, in Lubyanka Prison. Refusing to confess, he confronts his past sins and finds redemption through faith, sacrificing himself to save others in a haunting tale of morality and resistance.",
       "digital_release_date": "2026-11-11"
@@ -785,6 +835,16 @@
       "digital_release_date": "2026-10-13"
     },
     {
+      "slug": "3fq00-let-s-have-kids",
+      "imdb_id": "tt9174288",
+      "title": "Let's Have Kids!",
+      "year": 2026,
+      "score": 3,
+      "poster_path": "ciHBHFWAUn9tXNpm5NfDOkcgcMx.jpg",
+      "description": "Two best friends, Emma and Phoebe, decide to get pregnant simultaneously to navigate motherhood together, but their friendship is tested when only one of them conceives.",
+      "digital_release_date": "2026-10-13"
+    },
+    {
       "slug": "3hlbi-practical-magic-2",
       "imdb_id": "tt32588798",
       "title": "Practical Magic 2",
@@ -962,6 +1022,16 @@
       "score": 7,
       "poster_path": "1HW5lVwsuLo6CHW3i9Cm240jLL2.jpg",
       "description": "Assigned to a county-mandated drug court program, Cody Parsons embarks on the tenuous journey toward recovery amid the opioid epidemic in rural Ohio.",
+      "digital_release_date": "2026-10-02"
+    },
+    {
+      "slug": "45fri-stranglehold",
+      "imdb_id": "tt33038782",
+      "title": "Stranglehold",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "eTWcOmwSqC8Xr5o5VKFj7BFHKSI.jpg",
+      "description": "Fed up with their lives, barely eking by in small-town Arkansas, a stripper with dreams and her Army vet husband decide to rob the strip club that employs her.",
       "digital_release_date": "2026-10-02"
     },
     {
@@ -1373,76 +1443,6 @@
       "poster_path": "qUkP6Njgg1RQGMkmNcfsnmFET1e.jpg",
       "description": "The Dhamaal boys are back for another treasure hunt, facing hilarious challenges in their quest for the Treasure of Life.",
       "digital_release_date": "2026-09-04"
-    },
-    {
-      "slug": "3n6cj-come-with-me",
-      "imdb_id": "tt32500181",
-      "title": "Come with Me",
-      "year": 2026,
-      "score": null,
-      "poster_path": "pJmDaRNtiyuUZvfQpcSgcPlFCZB.jpg",
-      "description": "Working-class Simon Ward's life unravels after a traumatic home invasion, mounting problems at work and the loss of his best friend. Falling under the influence of rhetoric-spewing radio host Dalton Kirby, Simon spirals into a violent attempt to correct the injustice he believes surrounds him.",
-      "digital_release_date": "2026-09-04"
-    },
-    {
-      "slug": "33368-mayday",
-      "imdb_id": "tt28014327",
-      "title": "Mayday",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
-      "description": "When a U.S. Navy pilot on a top-secret mission during the Cold War gets trapped behind enemy lines, his only chance at survival is to form an alliance with an eccentric ex-KGB agent.",
-      "digital_release_date": "2026-09-03"
-    },
-    {
-      "slug": "3m8c8-gandhari",
-      "imdb_id": "tt33354945",
-      "title": "Gandhari",
-      "year": 2026,
-      "score": 4,
-      "poster_path": "hCHei97aPYCCsh4vicz9X0wmdFV.jpg",
-      "description": "When a mother loses her eyesight and her daughter in a kidnapping, she takes matters into her own hands to hunt down those responsible.",
-      "digital_release_date": "2026-09-03"
-    },
-    {
-      "slug": "3ou37-the-runner",
-      "imdb_id": "tt34564059",
-      "title": "The Runner",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg",
-      "description": "Maia Marten, a brilliant London lawyer, has her life shattered by a single call on her morning run: her son has been taken. To get him back, she must keep running, obey every ruthless command, and trust no one-each second a test of how far a mother will go to save her child.",
-      "digital_release_date": "2026-09-02"
-    },
-    {
-      "slug": "3a6x6-the-wrong-girls",
-      "imdb_id": "tt35060353",
-      "title": "The Wrong Girls",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "iEJshwO6g4WKTP4HJgCHRTJMWEd.jpg",
-      "description": "Two codependent best friends living paycheck to paycheck and bong rip to bong rip get caught in a case of mistaken identity that throws their lives into chaos.",
-      "digital_release_date": "2026-09-01"
-    },
-    {
-      "slug": "3g48q-i-want-your-sex",
-      "imdb_id": "tt32332915",
-      "title": "I Want Your Sex",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "pR7SIX3AwqdoD96OI44oLG98e7g.jpg",
-      "description": "When a naive young man becomes the sexual muse for a renowned and provocative artist, his dream job quickly turns dangerous as he is drawn into an obsessive world of power, betrayal, and murder.",
-      "digital_release_date": "2026-09-01"
-    },
-    {
-      "slug": "3gkic-sons",
-      "imdb_id": "tt5265480",
-      "title": "& Sons",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "slE4Q17nZe3Bd7PFCrgXXLm6reL.jpg",
-      "description": "A world-renowned but reclusive novelist, believing he is about to die, summons his estranged sons to his home. But instead of seeking forgiveness for their shattered family, he tells them a wild and unbelievable secret that could rewrite their past.",
-      "digital_release_date": "2026-09-01"
     }
   ]
 }

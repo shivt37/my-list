@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1795435267740,
+  "scraped_at": 1795478477560,
   "items": [
+    {
+      "slug": "3fnxk-the-social-reckoning",
+      "imdb_id": "tt37510326",
+      "title": "The Social Reckoning",
+      "year": 2026,
+      "score": 6,
+      "poster_path": "7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg",
+      "description": "Frances Haugen, a young Facebook engineer, enlists the help of Jeff Horwitz, a Wall Street Journal reporter, to go on a dangerous journey that ends up blowing the whistle on the social network's most guarded secrets.",
+      "digital_release_date": null
+    },
     {
       "slug": "43vfs-clashing-through-the-snow",
       "imdb_id": "tt39316936",
@@ -179,7 +189,7 @@
       "imdb_id": "tt47791876",
       "title": "Snoopy Presents: 12 Days of Snoopy",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "9wZAvvAZgwp2Lxbhjkp9N6HHJBm.jpg",
       "description": "Eager to get off Santa's naughty list, Snoopy goes all out to be the nicest beagle in town.",
       "digital_release_date": null
@@ -430,7 +440,7 @@
       "title": "Possible Love",
       "year": 2026,
       "score": 8,
-      "poster_path": "peucz3LYt0FnS9QV7THUcjUKYJk.jpg",
+      "poster_path": "dLz9yHeLw4x4sD0WTSNi7HuK2ke.jpg",
       "description": "A laid-off worker and his wife cross paths with a documentary filmmaker and her spouse and confront their hidden desires.",
       "digital_release_date": null
     },
@@ -591,7 +601,7 @@
       "year": 2026,
       "score": 8,
       "poster_path": "vBqVyTpzv5RzHSsQdu8ECxAqSvd.jpg",
-      "description": "Second City Television cast members reunite in this documentary for a funny and heartfelt celebration of how a scrappy Canadian sketch show made comedy history.",
+      "description": "The rise, fall, and enduring legacy of Second City Television, one of the most influential sketch comedy series in television history. Through intimate interviews with surviving members of its cast and an emotional reunion in Toronto, it explores the creative partnership that transformed a small Canadian television production into a cultural phenomenon that launched some of comedy's most celebrated icons.",
       "digital_release_date": null
     },
     {
@@ -1432,16 +1442,6 @@
       "score": 8,
       "poster_path": "4HJzmhP8iMzkIQ7cjr2zfIcReiK.jpg",
       "description": "Featuring commentary from surviving participants, as well as other filmmakers and critics, this documentary chronicles the career of director John Boorman and the tumultuous production of his film Exorcist II: The Heretic, exploring its critical and commercial failure, how it changed the industry, and the importance of risk-taking in art.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "452ud-neil-peart-no-one-s-disciple",
-      "imdb_id": "tt44085358",
-      "title": "Neil Peart: No One's Disciple",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "7FoNihuGcbhKsjLcCPalHZXq8Tf.jpg",
-      "description": "Geddy Lee and Alex Lifeson team up with four revered drummers — Stewart Copeland, Danny Carey, Chad Smith, and Gavin Harrison — for an exhilarating and poignant tribute to late Rush legend Neil Peart.",
       "digital_release_date": null
     }
   ]

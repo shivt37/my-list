@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1795435294764,
+  "scraped_at": 1795478508314,
   "items": [
     {
       "slug": "43srv-the-altruists",
@@ -493,6 +493,16 @@
       "poster_path": "8nAWtAkMOtmAyq0ZaqEI3Ia7w8M.jpg",
       "description": "A young vampire finds out he is not in fact a vampire at all, and has to live a double life.",
       "first_air_date": "2026-10-04"
+    },
+    {
+      "slug": "3q6ij-the-torment",
+      "imdb_id": "tt47816221",
+      "title": "The Torment",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "6crqt1vLWMyfXS1oKfGBM8aFyXg.jpg",
+      "description": "Kama returns to her hometown and gets entangled in an old missing case. Family secrets, passions and crime reveal that the past never falls silent.",
+      "first_air_date": "2026-10-02"
     },
     {
       "slug": "3v7tm-kill-jackie",
@@ -1433,16 +1443,6 @@
       "poster_path": "mcrx2gcVd5mVVOQrdEWXayFbvVB.jpg",
       "description": "A serial killer stalks the Scottish wilderness. When a young man’s body is discovered, DI Monica Kennedy must catch the murderer before a small community is torn apart.",
       "first_air_date": "2026-07-12"
-    },
-    {
-      "slug": "44t6m-peach-and-me",
-      "imdb_id": "tt43618445",
-      "title": "Peach and Me",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "af9uPoollWKPT7L4uv4mnaopXgb.jpg",
-      "description": "After their wedding, Thee and Peach embrace the joys and chaos of married life while finding their own rhythm together.",
-      "first_air_date": "2026-07-11"
     }
   ]
 }
