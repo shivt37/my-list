@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795435308841,
+  "scraped_at": 1795478532704,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -781,14 +781,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/9AWkNkZHwNLuM6H5u6dToioHMAI.jpg"
     },
     {
-      "imdb_id": "tt11680642",
-      "type": "series",
-      "title": "Pantheon",
-      "year": 2022,
-      "release_date": "2022-09-01",
-      "poster": "https://image.tmdb.org/t/p/w200/28xQt18ryWRcx9tBkK0MBsNNRw5.jpg"
-    },
-    {
       "imdb_id": "tt2261391",
       "type": "series",
       "title": "Chicago Fire",
@@ -907,6 +899,14 @@
       "year": 2005,
       "release_date": "2005-08-04",
       "poster": "https://image.tmdb.org/t/p/w200/o0tMMK33JqmtpcWw0H41cEr9xQB.jpg"
+    },
+    {
+      "imdb_id": "tt11680642",
+      "type": "series",
+      "title": "Pantheon",
+      "year": 2022,
+      "release_date": "2022-09-01",
+      "poster": "https://image.tmdb.org/t/p/w200/28xQt18ryWRcx9tBkK0MBsNNRw5.jpg"
     },
     {
       "imdb_id": "tt44079238",
