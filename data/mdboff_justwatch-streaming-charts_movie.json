@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_movie",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "movie",
-  "scraped_at": 1795521709287,
+  "scraped_at": 1795564926463,
   "items": [
     {
       "imdb_id": "tt27165187",
@@ -581,6 +581,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/uhviyknTT5cEQXbn6vWIqfM4vGm.jpg"
     },
     {
+      "imdb_id": "tt21192142",
+      "type": "movie",
+      "title": "All of Us Strangers",
+      "year": 2023,
+      "release_date": "2023-12-22",
+      "poster": "https://image.tmdb.org/t/p/w200/aviJMFZSnnCAsCVyJGaPNx4Ef3i.jpg"
+    },
+    {
       "imdb_id": "tt0113321",
       "type": "movie",
       "title": "Home for the Holidays",
@@ -635,14 +643,6 @@
       "year": 2026,
       "release_date": "2026-11-23",
       "poster": "https://image.tmdb.org/t/p/w200/95K1Y96ELBDL3M8kyTVb5wocCtX.jpg"
-    },
-    {
-      "imdb_id": "tt3908142",
-      "type": "movie",
-      "title": "The Love Witch",
-      "year": 2016,
-      "release_date": "2016-11-11",
-      "poster": "https://image.tmdb.org/t/p/w200/q6mZjCwGn9KCTrStTRM88pui0is.jpg"
     },
     {
       "imdb_id": "tt0970866",
@@ -781,20 +781,12 @@
       "poster": "https://image.tmdb.org/t/p/w200/99O8HLHklXGzvF2TqiRqr7WddzT.jpg"
     },
     {
-      "imdb_id": "tt21192142",
-      "type": "movie",
-      "title": "All of Us Strangers",
-      "year": 2023,
-      "release_date": "2023-12-22",
-      "poster": "https://image.tmdb.org/t/p/w200/aviJMFZSnnCAsCVyJGaPNx4Ef3i.jpg"
-    },
-    {
       "imdb_id": "tt34385184",
       "type": "movie",
       "title": "Misty Green",
       "year": 2026,
       "release_date": "2026-10-09",
-      "poster": "https://image.tmdb.org/t/p/w200/j8NF67FguTCH8tGu7Du6n8DMcSt.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/dUFtfnSfUK5IUfC5XMlMEY36EAp.jpg"
     },
     {
       "imdb_id": "tt15398776",
@@ -885,14 +877,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/uwMKWjcNID0D9jjplsjkQS2OrB4.jpg"
     },
     {
-      "imdb_id": "tt39195686",
-      "type": "movie",
-      "title": "Saayavanam",
-      "year": 2025,
-      "release_date": "2025-12-19",
-      "poster": "https://image.tmdb.org/t/p/w200/tSuqCq3YYLS8VOdiU9ikKOBs5Tz.jpg"
-    },
-    {
       "imdb_id": "tt0093779",
       "type": "movie",
       "title": "The Princess Bride",
@@ -909,20 +893,20 @@
       "poster": "https://image.tmdb.org/t/p/w200/9zCOLJmLNst0sCPZlkW1IRoH65E.jpg"
     },
     {
-      "imdb_id": "tt33763941",
-      "type": "movie",
-      "title": "Passenger",
-      "year": 2026,
-      "release_date": "2026-05-20",
-      "poster": "https://image.tmdb.org/t/p/w200/2sOEJzhPzjTkZSlPbGxOJ7xgIyS.jpg"
-    },
-    {
       "imdb_id": "tt12300742",
       "type": "movie",
       "title": "Bugonia",
       "year": 2025,
       "release_date": "2025-10-23",
       "poster": "https://image.tmdb.org/t/p/w200/rSdOua3wKMEaFWDcKAYWRjXQWOt.jpg"
+    },
+    {
+      "imdb_id": "tt3908142",
+      "type": "movie",
+      "title": "The Love Witch",
+      "year": 2016,
+      "release_date": "2016-11-11",
+      "poster": "https://image.tmdb.org/t/p/w200/q6mZjCwGn9KCTrStTRM88pui0is.jpg"
     },
     {
       "imdb_id": "tt35674521",
@@ -965,6 +949,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/jPNShaWZMpVF0iQ7j1dvTuZLD20.jpg"
     },
     {
+      "imdb_id": "tt8296030",
+      "type": "movie",
+      "title": "You Won't Be Alone",
+      "year": 2022,
+      "release_date": "2022-04-01",
+      "poster": "https://image.tmdb.org/t/p/w200/qVRADANU3JpMyapKjV3eM41VlDG.jpg"
+    },
+    {
       "imdb_id": "tt11813216",
       "type": "movie",
       "title": "The Banshees of Inisherin",
@@ -1003,14 +995,6 @@
       "year": 2023,
       "release_date": "2023-11-16",
       "poster": "https://image.tmdb.org/t/p/w200/f5f3TEVst1nHHyqgn7Z3tlwnBIH.jpg"
-    },
-    {
-      "imdb_id": "tt8296030",
-      "type": "movie",
-      "title": "You Won't Be Alone",
-      "year": 2022,
-      "release_date": "2022-04-01",
-      "poster": "https://image.tmdb.org/t/p/w200/qVRADANU3JpMyapKjV3eM41VlDG.jpg"
     },
     {
       "imdb_id": "tt0314331",
@@ -1179,6 +1163,14 @@
       "year": 2026,
       "release_date": "2026-11-14",
       "poster": "https://image.tmdb.org/t/p/w200/ilFRKYUhsYyW0mpSifpFZmpR9yo.jpg"
+    },
+    {
+      "imdb_id": "tt8814476",
+      "type": "movie",
+      "title": "Supergirl",
+      "year": 2026,
+      "release_date": "2026-06-24",
+      "poster": "https://image.tmdb.org/t/p/w200/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg"
     }
   ]
 }
