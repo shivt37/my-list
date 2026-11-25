@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_pjdncmph",
   "name": "r/movieleaks Movie",
   "type": "movie",
-  "scraped_at": 1795564872572,
+  "scraped_at": 1795608078561,
   "items": [
+    {
+      "slug": "3xica-the-mosquito-bowl",
+      "imdb_id": "tt36413910",
+      "title": "The Mosquito Bowl",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "zbT4sxoCEeFWlQG4SC5X9Q8v6PC.jpg",
+      "description": "In the aftermath of Pearl Harbor, four college football stars enlist in the US Marines, discovering the strength of brotherhood and the cost of war.",
+      "digital_release_date": null
+    },
+    {
+      "slug": "3fibl-way-of-the-warrior-kid",
+      "imdb_id": "tt32213169",
+      "title": "Way of the Warrior Kid",
+      "year": 2026,
+      "score": null,
+      "poster_path": "atI81xXKNVah7PJFBo3aXqQKtnG.jpg",
+      "description": "Jake is an injured Navy SEAL who becomes a mentor for his shy, struggling nephew Marc. Using the principles of his military training, Jake teaches Marc how to be a Warrior Kid as he enters high school.",
+      "digital_release_date": null
+    },
     {
       "slug": "2x9g0-love-and-cameras-in-america",
       "imdb_id": "tt6688234",
@@ -71,7 +91,7 @@
       "year": 2026,
       "score": null,
       "poster_path": "95K1Y96ELBDL3M8kyTVb5wocCtX.jpg",
-      "description": "After weather grounds all flights east for the holidays, two work rivals competing for the same job begrudgingly embark on a cross-country road trip that brings them closer together in ways they never imagined.",
+      "description": "Rival publishing editors Ryan Mitchell and Hannah Hendricks are stranded by a holiday snowstorm and forced to share a rental car to New York, where a career-saving deal awaits them both. As roadside mishaps and small-town detours pile up, the holiday spirit begins to melt their fierce rivalry into something unexpected.",
       "digital_release_date": null
     },
     {
@@ -1422,26 +1442,6 @@
       "score": 8,
       "poster_path": "kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
       "description": "After Acme products fail him one too many times in his dogged pursuit of the Roadrunner, Wile E. Coyote decides to hire a billboard lawyer to sue the Acme Corporation.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "3ks7i-tony",
-      "imdb_id": "tt33095251",
-      "title": "Tony",
-      "year": 2026,
-      "score": 8,
-      "poster_path": "uwZF5guNR5EnXkjIVTk4UPTVGiS.jpg",
-      "description": "A 19-year-old Anthony Bourdain travels to Provincetown and stumbles into the chaotic world of a restaurant kitchen, setting off a summer that will shape the course of his life.",
-      "digital_release_date": null
-    },
-    {
-      "slug": "45dko-kill-bury-print",
-      "imdb_id": "tt46076019",
-      "title": "Kill. Bury. Print.",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "lW2E1jC61YNJq46Wald6kvcUInF.jpg",
-      "description": "When the McCurtain Gazette, a small family-run newspaper, begins reporting on alleged sex, drugs, and violence within the county sheriff's office, they find themselves the target of the sheriff's retaliation. Tensions escalate when the paper obtains a secret recording revealing the sheriff and local officials allegedly discussing having the family killed, turning a local investigation into international news.",
       "digital_release_date": null
     }
   ]
