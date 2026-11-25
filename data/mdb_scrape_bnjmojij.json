@@ -2,8 +2,18 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795521647670,
+  "scraped_at": 1795564856362,
   "items": [
+    {
+      "slug": "3xica-the-mosquito-bowl",
+      "imdb_id": "tt36413910",
+      "title": "The Mosquito Bowl",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "zbT4sxoCEeFWlQG4SC5X9Q8v6PC.jpg",
+      "description": "In the aftermath of Pearl Harbor, four college football stars enlist in the US Marines, discovering the strength of brotherhood and the cost of war.",
+      "digital_release_date": "2026-11-25"
+    },
     {
       "slug": "37lpb-wicker",
       "imdb_id": "tt29611136",
@@ -219,7 +229,7 @@
       "imdb_id": "tt37200939",
       "title": "Parivarik ManuRanjan",
       "year": 2026,
-      "score": null,
+      "score": 2,
       "poster_path": "2gKGkD0pN2Ss9LrHA6tv5hEjHOs.jpg",
       "description": "Ranjan Dubey, Lucknow's most eligible bachelor, finds his search for a bride taking an unexpected turn when Helen, his charming new househelp, walks into his life. With everyone having an opinion on this unlikely duo, will their companionship blossom into love?",
       "digital_release_date": "2026-11-12"
@@ -310,14 +320,14 @@
       "title": "Misty Green",
       "year": 2026,
       "score": 6,
-      "poster_path": "j8NF67FguTCH8tGu7Du6n8DMcSt.jpg",
+      "poster_path": "dUFtfnSfUK5IUfC5XMlMEY36EAp.jpg",
       "description": "Years after her Hollywood breakthrough, a talented actress whose career has stalled fights for her second act.",
       "digital_release_date": "2026-11-06"
     },
     {
-      "slug": "3opj4-the-vvaan",
+      "slug": "3opj4-the-vvaan-force-of-the-forrest",
       "imdb_id": "tt34498564",
-      "title": "The Vvaan",
+      "title": "The Vvaan: Force of the Forrest",
       "year": 2026,
       "score": 5,
       "poster_path": "fygsmzrKBGV3O4ky6l26wKF8QBA.jpg",
@@ -1050,7 +1060,7 @@
       "title": "De Gaulle: Résistance",
       "year": 2026,
       "score": 8,
-      "poster_path": "5mD1wVMawcq7a10ypT37NDUaP64.jpg",
+      "poster_path": "ylXQDz9eAQuC785UQaz5wum2GSe.jpg",
       "description": "June, 1940. France collapses and signs the armistice. In the midst of the chaos, one man refuses to give up. Alone against the odds, this unknown general flees to London to save what remains of freedom.",
       "digital_release_date": "2026-10-01"
     },
@@ -1433,16 +1443,6 @@
       "poster_path": "sxAwnj01pLfDBTA4WobJtJw7y9q.jpg",
       "description": "In the near future, architect Otone Komoto is married to Kensuke, who runs a construction company. The married couple decide to welcome a humanoid robot into their home as their son.",
       "digital_release_date": "2026-09-08"
-    },
-    {
-      "slug": "3uiam-at-work",
-      "imdb_id": "tt37660587",
-      "title": "At Work",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "iqeF5Yr65hPlEJojJGESjVclf6h.jpg",
-      "description": "A successful photographer gives up everything to devote himself to writing and discovers poverty.",
-      "digital_release_date": "2026-09-07"
     }
   ]
 }
