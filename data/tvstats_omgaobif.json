@@ -2,7 +2,7 @@
   "catalog_id": "tvstats_omgaobif",
   "name": "Today's Top Shows (Television Stats)",
   "type": "series",
-  "scraped_at": 1795564991445,
+  "scraped_at": 1795651404027,
   "items": [
     {
       "id": "tt8014982",
@@ -12,20 +12,6 @@
       "releaseInfo": "2026-11-11"
     },
     {
-      "id": "tt31510819",
-      "type": "series",
-      "name": "MobLand",
-      "poster": "https://image.tmdb.org/t/p/w500/5Xc7WpWsgflfgEMoBlf9TmWhfbH.jpg",
-      "releaseInfo": "2025-03-30"
-    },
-    {
-      "id": "tt36843594",
-      "type": "series",
-      "name": "Dig",
-      "poster": "https://image.tmdb.org/t/p/w500/l44uAt5yfDOxJeiB0t3B6xNlbxu.jpg",
-      "releaseInfo": "2026-11-23"
-    },
-    {
       "id": "tt7631058",
       "type": "series",
       "name": "The Lord of the Rings: The Rings of Power",
@@ -33,53 +19,18 @@
       "releaseInfo": "2022-09-01"
     },
     {
-      "id": "tt36786185",
+      "id": "tt31510819",
       "type": "series",
-      "name": "The Altruists",
-      "poster": "https://image.tmdb.org/t/p/w500/hiX70sXdvEPVE11QqmLuaX16gdh.jpg",
-      "releaseInfo": "2026-11-19"
+      "name": "MobLand",
+      "poster": "https://image.tmdb.org/t/p/w500/5Xc7WpWsgflfgEMoBlf9TmWhfbH.jpg",
+      "releaseInfo": "2025-03-30"
     },
     {
-      "id": "tt4406178",
+      "id": "tt0463398",
       "type": "series",
-      "name": "The Gilded Age",
-      "poster": "https://image.tmdb.org/t/p/w500/tdsuFe0JVLqjxfptElRA9YFJcUE.jpg",
-      "releaseInfo": "2022-01-24"
-    },
-    {
-      "id": "tt23112594",
-      "type": "series",
-      "name": "VisionQuest",
-      "poster": "https://image.tmdb.org/t/p/w500/WGyAyBPncfuu8MZhLY9RtfZPM0.jpg",
-      "releaseInfo": "2026-10-13"
-    },
-    {
-      "id": "tt27995113",
-      "type": "series",
-      "name": "Black Doves",
-      "poster": "https://image.tmdb.org/t/p/w500/srlsyEfIBz2MNWBndVc3opOaNGS.jpg",
-      "releaseInfo": "2024-12-05"
-    },
-    {
-      "id": "tt11041332",
-      "type": "series",
-      "name": "Yellowjackets",
-      "poster": "https://image.tmdb.org/t/p/w500/xRnGrn7Z7SC0KIBodocoU1QgDZF.jpg",
-      "releaseInfo": "2021-11-14"
-    },
-    {
-      "id": "tt18224594",
-      "type": "series",
-      "name": "Blade Runner 2099",
-      "poster": "https://image.tmdb.org/t/p/w500/qAcXaAoJiYry9nGEyxTirnJ82Jj.jpg",
-      "releaseInfo": "2026-11-25"
-    },
-    {
-      "id": "tt26598805",
-      "type": "series",
-      "name": "Nocturne",
-      "poster": "https://image.tmdb.org/t/p/w500/nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg",
-      "releaseInfo": "2026-10-29"
+      "name": "Dancing with the Stars",
+      "poster": "https://image.tmdb.org/t/p/w500/iisHVZ6we56PE4BcV1csB46SbiG.jpg",
+      "releaseInfo": "2005-06-01"
     },
     {
       "id": "tt9813792",
@@ -89,11 +40,60 @@
       "releaseInfo": "2022-02-20"
     },
     {
-      "id": "tt37972251",
+      "id": "tt18224594",
       "type": "series",
-      "name": "WAR",
-      "poster": "https://image.tmdb.org/t/p/w500/AtCR5LMuvwepTi1kipKq878Rbuq.jpg",
-      "releaseInfo": "2026-10-02"
+      "name": "Blade Runner 2099",
+      "poster": "https://image.tmdb.org/t/p/w500/qAcXaAoJiYry9nGEyxTirnJ82Jj.jpg",
+      "releaseInfo": "2026-11-25"
+    },
+    {
+      "id": "tt36843594",
+      "type": "series",
+      "name": "DIG",
+      "poster": "https://image.tmdb.org/t/p/w500/eyW6V0R0SzG3BqtYKhlZKGBaUCn.jpg",
+      "releaseInfo": "2026-11-23"
+    },
+    {
+      "id": "tt36786185",
+      "type": "series",
+      "name": "The Altruists",
+      "poster": "https://image.tmdb.org/t/p/w500/hiX70sXdvEPVE11QqmLuaX16gdh.jpg",
+      "releaseInfo": "2026-11-19"
+    },
+    {
+      "id": "tt23112594",
+      "type": "series",
+      "name": "VisionQuest",
+      "poster": "https://image.tmdb.org/t/p/w500/WGyAyBPncfuu8MZhLY9RtfZPM0.jpg",
+      "releaseInfo": "2026-10-13"
+    },
+    {
+      "id": "tt26598805",
+      "type": "series",
+      "name": "Nocturne",
+      "poster": "https://image.tmdb.org/t/p/w500/nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg",
+      "releaseInfo": "2026-10-29"
+    },
+    {
+      "id": "tt11041332",
+      "type": "series",
+      "name": "Yellowjackets",
+      "poster": "https://image.tmdb.org/t/p/w500/xRnGrn7Z7SC0KIBodocoU1QgDZF.jpg",
+      "releaseInfo": "2021-11-14"
+    },
+    {
+      "id": "tt27995113",
+      "type": "series",
+      "name": "Black Doves",
+      "poster": "https://image.tmdb.org/t/p/w500/srlsyEfIBz2MNWBndVc3opOaNGS.jpg",
+      "releaseInfo": "2024-12-05"
+    },
+    {
+      "id": "tt4406178",
+      "type": "series",
+      "name": "The Gilded Age",
+      "poster": "https://image.tmdb.org/t/p/w500/tdsuFe0JVLqjxfptElRA9YFJcUE.jpg",
+      "releaseInfo": "2022-01-24"
     },
     {
       "id": "tt33043892",
@@ -103,18 +103,25 @@
       "releaseInfo": "2025-07-13"
     },
     {
-      "id": "tt12324366",
-      "type": "series",
-      "name": "Percy Jackson and the Olympians",
-      "poster": "https://image.tmdb.org/t/p/w500/zofPiEpwCRYaezOncTlQwXebHFU.jpg",
-      "releaseInfo": "2023-12-19"
-    },
-    {
       "id": "tt5875444",
       "type": "series",
       "name": "Slow Horses",
       "poster": "https://image.tmdb.org/t/p/w500/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg",
       "releaseInfo": "2022-04-01"
+    },
+    {
+      "id": "tt37972251",
+      "type": "series",
+      "name": "WAR",
+      "poster": "https://image.tmdb.org/t/p/w500/AtCR5LMuvwepTi1kipKq878Rbuq.jpg",
+      "releaseInfo": "2026-10-02"
+    },
+    {
+      "id": "tt12324366",
+      "type": "series",
+      "name": "Percy Jackson and the Olympians",
+      "poster": "https://image.tmdb.org/t/p/w500/zofPiEpwCRYaezOncTlQwXebHFU.jpg",
+      "releaseInfo": "2023-12-19"
     },
     {
       "id": "tt31842126",
@@ -131,39 +138,18 @@
       "releaseInfo": "2022-11-13"
     },
     {
+      "id": "tt10166622",
+      "type": "series",
+      "name": "The Dropout",
+      "poster": "https://image.tmdb.org/t/p/w500/9SkOJF92FE0H1UXeOgLz7lAnoMb.jpg",
+      "releaseInfo": "2022-03-03"
+    },
+    {
       "id": "tt21097264",
       "type": "series",
       "name": "East of Eden",
       "poster": "https://image.tmdb.org/t/p/w500/axdUor6gLMTrrB1UF4Qfy0TTSyX.jpg",
       "releaseInfo": "2026-10-01"
-    },
-    {
-      "id": "tt0436992",
-      "type": "series",
-      "name": "Doctor Who",
-      "poster": "https://image.tmdb.org/t/p/w500/lHfmc6d8pOVFrD0eOKPiDbjeucG.jpg",
-      "releaseInfo": "2005-03-26"
-    },
-    {
-      "id": "tt10986410",
-      "type": "series",
-      "name": "Ted Lasso",
-      "poster": "https://image.tmdb.org/t/p/w500/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
-      "releaseInfo": "2020-08-14"
-    },
-    {
-      "id": "tt38336631",
-      "type": "series",
-      "name": "The Blue Road",
-      "poster": "https://image.tmdb.org/t/p/w500/cVbilrgtgKi7gN74KK4voyV7iDR.jpg",
-      "releaseInfo": "2026-11-20"
-    },
-    {
-      "id": "tt17491088",
-      "type": "series",
-      "name": "The Diplomat",
-      "poster": "https://image.tmdb.org/t/p/w500/cUy0ZYme43lop08nOtbQLWL0dX.jpg",
-      "releaseInfo": "2023-04-20"
     },
     {
       "id": "tt21906238",
@@ -173,18 +159,18 @@
       "releaseInfo": "2024-10-18"
     },
     {
-      "id": "tt36849871",
+      "id": "tt10986410",
       "type": "series",
-      "name": "Marshals",
-      "poster": "https://image.tmdb.org/t/p/w500/zV1MRb6eqx6Uj3NSXquZFfz75pa.jpg",
-      "releaseInfo": "2026-03-01"
+      "name": "Ted Lasso",
+      "poster": "https://image.tmdb.org/t/p/w500/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
+      "releaseInfo": "2020-08-14"
     },
     {
-      "id": "tt0413573",
+      "id": "tt17491088",
       "type": "series",
-      "name": "Grey's Anatomy",
-      "poster": "https://image.tmdb.org/t/p/w500/gO8Fo47KV1opiutRDdBS5jclTQB.jpg",
-      "releaseInfo": "2005-03-27"
+      "name": "The Diplomat",
+      "poster": "https://image.tmdb.org/t/p/w500/cUy0ZYme43lop08nOtbQLWL0dX.jpg",
+      "releaseInfo": "2023-04-20"
     },
     {
       "id": "tt39325975",
@@ -194,18 +180,39 @@
       "releaseInfo": "2026-11-03"
     },
     {
-      "id": "tt39201866",
+      "id": "tt21952924",
       "type": "series",
-      "name": "100 Days of Deception",
-      "poster": "https://image.tmdb.org/t/p/w500/nzZRLsIPf4545w2vwvBz5xTdp3.jpg",
-      "releaseInfo": "2026-10-10"
+      "name": "Phony",
+      "poster": "https://image.tmdb.org/t/p/w500/iCyQc8cSSHkxUHbkvzbC77owALt.jpg",
+      "releaseInfo": "2026-10-20"
     },
     {
-      "id": "tt35854736",
+      "id": "tt39365612",
       "type": "series",
-      "name": "Avatar: Seven Havens",
-      "poster": "https://image.tmdb.org/t/p/w500/u62d0BPqsdv2TUDifcMmoePbHPL.jpg",
-      "releaseInfo": "2026-10-09"
+      "name": "Line of Fire",
+      "poster": "https://image.tmdb.org/t/p/w500/cXG4WDOPNog1kt6pkDqEDQCkJyz.jpg",
+      "releaseInfo": "2026-09-21"
+    },
+    {
+      "id": "tt38336631",
+      "type": "series",
+      "name": "The Blue Road",
+      "poster": "https://image.tmdb.org/t/p/w500/cVbilrgtgKi7gN74KK4voyV7iDR.jpg",
+      "releaseInfo": "2026-11-20"
+    },
+    {
+      "id": "tt0413573",
+      "type": "series",
+      "name": "Grey's Anatomy",
+      "poster": "https://image.tmdb.org/t/p/w500/gO8Fo47KV1opiutRDdBS5jclTQB.jpg",
+      "releaseInfo": "2005-03-27"
+    },
+    {
+      "id": "tt27995115",
+      "type": "series",
+      "name": "The Devil's Plan",
+      "poster": "https://image.tmdb.org/t/p/w500/jNY6UVgvKz03yrSgCflkF5NF25K.jpg",
+      "releaseInfo": "2023-09-26"
     },
     {
       "id": "tt11540908",
@@ -215,32 +222,18 @@
       "releaseInfo": "2026-10-07"
     },
     {
-      "id": "tt10166622",
+      "id": "tt1877368",
       "type": "series",
-      "name": "The Dropout",
-      "poster": "https://image.tmdb.org/t/p/w500/9SkOJF92FE0H1UXeOgLz7lAnoMb.jpg",
-      "releaseInfo": "2022-03-03"
+      "name": "The Great British Bake Off",
+      "poster": "https://image.tmdb.org/t/p/w500/bNa02AorKSBRfWfVPmsL7SJrdfs.jpg",
+      "releaseInfo": "2010-08-17"
     },
     {
-      "id": "tt11743610",
+      "id": "tt35854736",
       "type": "series",
-      "name": "The Terminal List",
-      "poster": "https://image.tmdb.org/t/p/w500/xyFAzP7RKK8cARCSalIZ9A9T0jV.jpg",
-      "releaseInfo": "2022-06-30"
-    },
-    {
-      "id": "tt14688458",
-      "type": "series",
-      "name": "Silo",
-      "poster": "https://image.tmdb.org/t/p/w500/r2QXomqKjkKHVtYGGtkf2l2Y7go.jpg",
-      "releaseInfo": "2023-05-04"
-    },
-    {
-      "id": "tt13210838",
-      "type": "series",
-      "name": "The Gentlemen",
-      "poster": "https://image.tmdb.org/t/p/w500/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg",
-      "releaseInfo": "2024-03-07"
+      "name": "Avatar: Seven Havens",
+      "poster": "https://image.tmdb.org/t/p/w500/u62d0BPqsdv2TUDifcMmoePbHPL.jpg",
+      "releaseInfo": "2026-10-09"
     },
     {
       "id": "tt0903747",
@@ -257,95 +250,32 @@
       "releaseInfo": "1997-08-13"
     },
     {
-      "id": "tt39980704",
+      "id": "tt11743610",
       "type": "series",
-      "name": "YAGA",
-      "poster": "https://image.tmdb.org/t/p/w500/kp8xgZ8SrikHQrPn2lC3hb50KD5.jpg",
-      "releaseInfo": "2026-10-23"
+      "name": "The Terminal List",
+      "poster": "https://image.tmdb.org/t/p/w500/xyFAzP7RKK8cARCSalIZ9A9T0jV.jpg",
+      "releaseInfo": "2022-06-30"
     },
     {
-      "id": "tt13875494",
+      "id": "tt13210838",
       "type": "series",
-      "name": "Tracker",
-      "poster": "https://image.tmdb.org/t/p/w500/otula4h1ITZ0eV84eg7Lb8u614C.jpg",
-      "releaseInfo": "2024-02-11"
+      "name": "The Gentlemen",
+      "poster": "https://image.tmdb.org/t/p/w500/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg",
+      "releaseInfo": "2024-03-07"
     },
     {
-      "id": "tt13720112",
+      "id": "tt14688458",
       "type": "series",
-      "name": "The Empress",
-      "poster": "https://image.tmdb.org/t/p/w500/9AWkNkZHwNLuM6H5u6dToioHMAI.jpg",
-      "releaseInfo": "2022-09-29"
+      "name": "Silo",
+      "poster": "https://image.tmdb.org/t/p/w500/r2QXomqKjkKHVtYGGtkf2l2Y7go.jpg",
+      "releaseInfo": "2023-05-04"
     },
     {
-      "id": "tt32375763",
+      "id": "tt39201866",
       "type": "series",
-      "name": "12 12 12",
-      "poster": "https://image.tmdb.org/t/p/w500/8q6BvFQuKM1Rud4E9NQDaMGy9EL.jpg",
-      "releaseInfo": "2026-11-12"
-    },
-    {
-      "id": "tt1196946",
-      "type": "series",
-      "name": "The Mentalist",
-      "poster": "https://image.tmdb.org/t/p/w500/k0kMdO52LpC5JWgd0uWEH7gqcCe.jpg",
-      "releaseInfo": "2008-09-23"
-    },
-    {
-      "id": "tt35934755",
-      "type": "series",
-      "name": "Below",
-      "poster": "https://image.tmdb.org/t/p/w500/vgLqqhMUbljp585qPp1EFCyJtcz.jpg",
-      "releaseInfo": "2026-10-08"
-    },
-    {
-      "id": "tt33332385",
-      "type": "series",
-      "name": "Widow's Bay",
-      "poster": "https://image.tmdb.org/t/p/w500/5lcxWLVAEICkFpuAiV1aMy7ZZj3.jpg",
-      "releaseInfo": "2026-04-28"
-    },
-    {
-      "id": "tt12661338",
-      "type": "series",
-      "name": "A Friend of the Family",
-      "poster": "https://image.tmdb.org/t/p/w500/bmJkzDE6s0QYBGtpA4i2JLBco0j.jpg",
-      "releaseInfo": "2022-10-06"
-    },
-    {
-      "id": "tt15557874",
-      "type": "series",
-      "name": "The Traitors",
-      "poster": "https://image.tmdb.org/t/p/w500/ulYR2NMKwnWoRWiw3KnFpaT2qjj.jpg",
-      "releaseInfo": "2023-01-12"
-    },
-    {
-      "id": "tt31589662",
-      "type": "series",
-      "name": "Georgie & Mandy's First Marriage",
-      "poster": "https://image.tmdb.org/t/p/w500/3z2mYFxUkzanb2eeIcVyfJq0G3q.jpg",
-      "releaseInfo": "2024-10-17"
-    },
-    {
-      "id": "tt0944947",
-      "type": "series",
-      "name": "Game of Thrones",
-      "poster": "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
-      "releaseInfo": "2011-04-17"
-    },
-    {
-      "id": "tt39365612",
-      "type": "series",
-      "name": "Line of Fire",
-      "poster": "https://image.tmdb.org/t/p/w500/cXG4WDOPNog1kt6pkDqEDQCkJyz.jpg",
-      "releaseInfo": "2026-09-21"
-    },
-    {
-      "id": "tt13918446",
-      "type": "series",
-      "name": "Harry Potter",
-      "poster": "https://image.tmdb.org/t/p/w500/6spxkjxCcog8HR3cLsDVROsjz3h.jpg",
-      "releaseInfo": "2026-12-25"
+      "name": "100 Days of Deception",
+      "poster": "https://image.tmdb.org/t/p/w500/nzZRLsIPf4545w2vwvBz5xTdp3.jpg",
+      "releaseInfo": "2026-10-10"
     },
     {
       "id": "tt31038430",
@@ -355,18 +285,60 @@
       "releaseInfo": "2025-07-21"
     },
     {
+      "id": "tt32375763",
+      "type": "series",
+      "name": "12 12 12",
+      "poster": "https://image.tmdb.org/t/p/w500/8q6BvFQuKM1Rud4E9NQDaMGy9EL.jpg",
+      "releaseInfo": "2026-11-12"
+    },
+    {
+      "id": "tt36849871",
+      "type": "series",
+      "name": "Marshals",
+      "poster": "https://image.tmdb.org/t/p/w500/zV1MRb6eqx6Uj3NSXquZFfz75pa.jpg",
+      "releaseInfo": "2026-03-01"
+    },
+    {
+      "id": "tt11691774",
+      "type": "series",
+      "name": "Only Murders in the Building",
+      "poster": "https://image.tmdb.org/t/p/w500/tvdmO28R440JQVdThrNPrOl5vBm.jpg",
+      "releaseInfo": "2021-08-31"
+    },
+    {
+      "id": "tt33332385",
+      "type": "series",
+      "name": "Widow's Bay",
+      "poster": "https://image.tmdb.org/t/p/w500/5lcxWLVAEICkFpuAiV1aMy7ZZj3.jpg",
+      "releaseInfo": "2026-04-28"
+    },
+    {
+      "id": "tt13918446",
+      "type": "series",
+      "name": "Harry Potter",
+      "poster": "https://image.tmdb.org/t/p/w500/6spxkjxCcog8HR3cLsDVROsjz3h.jpg",
+      "releaseInfo": "2026-12-25"
+    },
+    {
+      "id": "tt1196946",
+      "type": "series",
+      "name": "The Mentalist",
+      "poster": "https://image.tmdb.org/t/p/w500/k0kMdO52LpC5JWgd0uWEH7gqcCe.jpg",
+      "releaseInfo": "2008-09-23"
+    },
+    {
+      "id": "tt13720112",
+      "type": "series",
+      "name": "The Empress",
+      "poster": "https://image.tmdb.org/t/p/w500/9AWkNkZHwNLuM6H5u6dToioHMAI.jpg",
+      "releaseInfo": "2022-09-29"
+    },
+    {
       "id": "tt14218830",
       "type": "series",
       "name": "Abbott Elementary",
       "poster": "https://image.tmdb.org/t/p/w500/zk2aNVIHoapdWKOcaYp7PhX9SxD.jpg",
       "releaseInfo": "2021-12-07"
-    },
-    {
-      "id": "tt21952924",
-      "type": "series",
-      "name": "Phony",
-      "poster": "https://image.tmdb.org/t/p/w500/iCyQc8cSSHkxUHbkvzbC77owALt.jpg",
-      "releaseInfo": "2026-10-20"
     },
     {
       "id": "tt17543592",
@@ -376,25 +348,53 @@
       "releaseInfo": "2023-01-03"
     },
     {
+      "id": "tt0944947",
+      "type": "series",
+      "name": "Game of Thrones",
+      "poster": "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
+      "releaseInfo": "2011-04-17"
+    },
+    {
+      "id": "tt39980704",
+      "type": "series",
+      "name": "YAGA",
+      "poster": "https://image.tmdb.org/t/p/w500/kp8xgZ8SrikHQrPn2lC3hb50KD5.jpg",
+      "releaseInfo": "2026-10-23"
+    },
+    {
+      "id": "tt31589662",
+      "type": "series",
+      "name": "Georgie & Mandy's First Marriage",
+      "poster": "https://image.tmdb.org/t/p/w500/3z2mYFxUkzanb2eeIcVyfJq0G3q.jpg",
+      "releaseInfo": "2024-10-17"
+    },
+    {
+      "id": "tt15557874",
+      "type": "series",
+      "name": "The Traitors",
+      "poster": "https://image.tmdb.org/t/p/w500/ulYR2NMKwnWoRWiw3KnFpaT2qjj.jpg",
+      "releaseInfo": "2023-01-12"
+    },
+    {
+      "id": "tt12661338",
+      "type": "series",
+      "name": "A Friend of the Family",
+      "poster": "https://image.tmdb.org/t/p/w500/bmJkzDE6s0QYBGtpA4i2JLBco0j.jpg",
+      "releaseInfo": "2022-10-06"
+    },
+    {
+      "id": "tt35934755",
+      "type": "series",
+      "name": "Below",
+      "poster": "https://image.tmdb.org/t/p/w500/vgLqqhMUbljp585qPp1EFCyJtcz.jpg",
+      "releaseInfo": "2026-10-08"
+    },
+    {
       "id": "tt11379026",
       "type": "series",
       "name": "Ghosts",
       "poster": "https://image.tmdb.org/t/p/w500/8yBQYa6AdvMY5H9CiAv0HkvF3UE.jpg",
       "releaseInfo": "2021-10-07"
-    },
-    {
-      "id": "tt0096697",
-      "type": "series",
-      "name": "The Simpsons",
-      "poster": "https://image.tmdb.org/t/p/w500/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg",
-      "releaseInfo": "1989-12-17"
-    },
-    {
-      "id": "tt26933824",
-      "type": "series",
-      "name": "Nobody Wants This",
-      "poster": "https://image.tmdb.org/t/p/w500/1RNtqMeSNNBkXqK8WPUMf72vGrt.jpg",
-      "releaseInfo": "2024-09-26"
     },
     {
       "id": "tt0773262",
@@ -411,60 +411,11 @@
       "releaseInfo": "2023-07-23"
     },
     {
-      "id": "tt11691774",
+      "id": "tt0096697",
       "type": "series",
-      "name": "Only Murders in the Building",
-      "poster": "https://image.tmdb.org/t/p/w500/tvdmO28R440JQVdThrNPrOl5vBm.jpg",
-      "releaseInfo": "2021-08-31"
-    },
-    {
-      "id": "tt31438328",
-      "type": "series",
-      "name": "This City Is Ours",
-      "poster": "https://image.tmdb.org/t/p/w500/75BwofwAZbf6GlhP2m6NPpP3bW2.jpg",
-      "releaseInfo": "2025-03-23"
-    },
-    {
-      "id": "tt13016388",
-      "type": "series",
-      "name": "3 Body Problem",
-      "poster": "https://image.tmdb.org/t/p/w500/ykZ7hlShkdRQaL2aiieXdEMmrLb.jpg",
-      "releaseInfo": "2024-03-21"
-    },
-    {
-      "id": "tt23148340",
-      "type": "series",
-      "name": "Crystal Lake",
-      "poster": "https://image.tmdb.org/t/p/w500/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg",
-      "releaseInfo": "2026-10-15"
-    },
-    {
-      "id": "tt0141842",
-      "type": "series",
-      "name": "The Sopranos",
-      "poster": "https://image.tmdb.org/t/p/w500/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
-      "releaseInfo": "1999-01-10"
-    },
-    {
-      "id": "tt7587890",
-      "type": "series",
-      "name": "The Rookie",
-      "poster": "https://image.tmdb.org/t/p/w500/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg",
-      "releaseInfo": "2018-10-16"
-    },
-    {
-      "id": "tt0463398",
-      "type": "series",
-      "name": "Dancing with the Stars",
-      "poster": "https://image.tmdb.org/t/p/w500/iisHVZ6we56PE4BcV1csB46SbiG.jpg",
-      "releaseInfo": "2005-06-01"
-    },
-    {
-      "id": "tt2531336",
-      "type": "series",
-      "name": "Lupin",
-      "poster": "https://image.tmdb.org/t/p/w500/h6Z2oogE4mJk2uffdtIlLhb0EHx.jpg",
-      "releaseInfo": "2021-01-08"
+      "name": "The Simpsons",
+      "poster": "https://image.tmdb.org/t/p/w500/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg",
+      "releaseInfo": "1989-12-17"
     },
     {
       "id": "tt4574334",
@@ -474,46 +425,18 @@
       "releaseInfo": "2016-07-15"
     },
     {
-      "id": "tt11198330",
+      "id": "tt31710249",
       "type": "series",
-      "name": "House of the Dragon",
-      "poster": "https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg",
-      "releaseInfo": "2022-08-21"
+      "name": "Stick",
+      "poster": "https://image.tmdb.org/t/p/w500/3zkHz1s4PpukMJRs3npzbGK10iV.jpg",
+      "releaseInfo": "2025-06-03"
     },
     {
-      "id": "tt14186672",
+      "id": "tt13875494",
       "type": "series",
-      "name": "Landman",
-      "poster": "https://image.tmdb.org/t/p/w500/hYthRgS1nvQkGILn9YmqsF8kSk6.jpg",
-      "releaseInfo": "2024-11-17"
-    },
-    {
-      "id": "tt26545992",
-      "type": "series",
-      "name": "Lanterns",
-      "poster": "https://image.tmdb.org/t/p/w500/rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
-      "releaseInfo": "2026-08-16"
-    },
-    {
-      "id": "tt31938062",
-      "type": "series",
-      "name": "The Pitt",
-      "poster": "https://image.tmdb.org/t/p/w500/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg",
-      "releaseInfo": "2025-01-09"
-    },
-    {
-      "id": "tt33270224",
-      "type": "series",
-      "name": "Cupertino",
-      "poster": "https://image.tmdb.org/t/p/w500/70AhJpOqU2oKyQF2paJA764CSje.jpg",
-      "releaseInfo": "2026-10-08"
-    },
-    {
-      "id": "tt11280740",
-      "type": "series",
-      "name": "Severance",
-      "poster": "https://image.tmdb.org/t/p/w500/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg",
-      "releaseInfo": "2022-02-17"
+      "name": "Tracker",
+      "poster": "https://image.tmdb.org/t/p/w500/otula4h1ITZ0eV84eg7Lb8u614C.jpg",
+      "releaseInfo": "2024-02-11"
     },
     {
       "id": "tt10802170",
@@ -523,88 +446,60 @@
       "releaseInfo": "2022-07-15"
     },
     {
-      "id": "tt4236770",
+      "id": "tt11198330",
       "type": "series",
-      "name": "Yellowstone",
-      "poster": "https://image.tmdb.org/t/p/w500/peNC0eyc3TQJa6x4TdKcBPNP4t0.jpg",
-      "releaseInfo": "2018-06-20"
+      "name": "House of the Dragon",
+      "poster": "https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg",
+      "releaseInfo": "2022-08-21"
     },
     {
-      "id": "tt31710249",
+      "id": "tt7587890",
       "type": "series",
-      "name": "Stick",
-      "poster": "https://image.tmdb.org/t/p/w500/3zkHz1s4PpukMJRs3npzbGK10iV.jpg",
-      "releaseInfo": "2025-06-03"
+      "name": "The Rookie",
+      "poster": "https://image.tmdb.org/t/p/w500/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg",
+      "releaseInfo": "2018-10-16"
     },
     {
-      "id": "tt7235466",
+      "id": "tt23148340",
       "type": "series",
-      "name": "9-1-1",
-      "poster": "https://image.tmdb.org/t/p/w500/u6HuWWohheyzAj5PUn4rBd0eH92.jpg",
-      "releaseInfo": "2018-01-03"
+      "name": "Crystal Lake",
+      "poster": "https://image.tmdb.org/t/p/w500/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg",
+      "releaseInfo": "2026-10-15"
     },
     {
-      "id": "tt6151526",
+      "id": "tt26933824",
       "type": "series",
-      "name": "The Rainmaker",
-      "poster": "https://image.tmdb.org/t/p/w500/q8l0lj20amBFi0SBs8NI9yJpaHq.jpg",
-      "releaseInfo": "2025-08-15"
+      "name": "Nobody Wants This",
+      "poster": "https://image.tmdb.org/t/p/w500/1RNtqMeSNNBkXqK8WPUMf72vGrt.jpg",
+      "releaseInfo": "2024-09-26"
     },
     {
-      "id": "tt19231492",
+      "id": "tt31938062",
       "type": "series",
-      "name": "Dark Matter",
-      "poster": "https://image.tmdb.org/t/p/w500/2DPmTlv8F0V1TQBPmlsGOVOhtWk.jpg",
-      "releaseInfo": "2024-05-07"
+      "name": "The Pitt",
+      "poster": "https://image.tmdb.org/t/p/w500/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg",
+      "releaseInfo": "2025-01-09"
     },
     {
-      "id": "tt5622316",
+      "id": "tt26545992",
       "type": "series",
-      "name": "The Chosen",
-      "poster": "https://image.tmdb.org/t/p/w500/nr0r7YTn1l84KLG1iCSO5ofHTvO.jpg",
-      "releaseInfo": "2019-04-21"
+      "name": "Lanterns",
+      "poster": "https://image.tmdb.org/t/p/w500/rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
+      "releaseInfo": "2026-08-16"
     },
     {
-      "id": "tt9288030",
+      "id": "tt13016388",
       "type": "series",
-      "name": "Reacher",
-      "poster": "https://image.tmdb.org/t/p/w500/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg",
-      "releaseInfo": "2022-02-03"
+      "name": "3 Body Problem",
+      "poster": "https://image.tmdb.org/t/p/w500/ykZ7hlShkdRQaL2aiieXdEMmrLb.jpg",
+      "releaseInfo": "2024-03-21"
     },
     {
-      "id": "tt27995115",
+      "id": "tt0141842",
       "type": "series",
-      "name": "The Devil's Plan",
-      "poster": "https://image.tmdb.org/t/p/w500/jNY6UVgvKz03yrSgCflkF5NF25K.jpg",
-      "releaseInfo": "2023-09-26"
-    },
-    {
-      "id": "tt0386676",
-      "type": "series",
-      "name": "The Office",
-      "poster": "https://image.tmdb.org/t/p/w500/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg",
-      "releaseInfo": "2005-03-24"
-    },
-    {
-      "id": "tt40197357",
-      "type": "series",
-      "name": "Scrubs",
-      "poster": "https://image.tmdb.org/t/p/w500/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg",
-      "releaseInfo": "2026-02-25"
-    },
-    {
-      "id": "tt0072562",
-      "type": "series",
-      "name": "Saturday Night Live",
-      "poster": "https://image.tmdb.org/t/p/w500/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg",
-      "releaseInfo": "1975-10-11"
-    },
-    {
-      "id": "tt3914054",
-      "type": "series",
-      "name": "We Were Liars",
-      "poster": "https://image.tmdb.org/t/p/w500/3RQoNwSkJkh92KL2TwpMlHP5FkT.jpg",
-      "releaseInfo": "2025-06-18"
+      "name": "The Sopranos",
+      "poster": "https://image.tmdb.org/t/p/w500/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      "releaseInfo": "1999-01-10"
     },
     {
       "id": "tt0364845",
@@ -614,11 +509,46 @@
       "releaseInfo": "2003-09-23"
     },
     {
+      "id": "tt36885662",
+      "type": "series",
+      "name": "Best Medicine",
+      "poster": "https://image.tmdb.org/t/p/w500/gRf2g2iR8j2uMlClrNTaiHbrZ6c.jpg",
+      "releaseInfo": "2026-01-04"
+    },
+    {
+      "id": "tt11280740",
+      "type": "series",
+      "name": "Severance",
+      "poster": "https://image.tmdb.org/t/p/w500/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg",
+      "releaseInfo": "2022-02-17"
+    },
+    {
+      "id": "tt14186672",
+      "type": "series",
+      "name": "Landman",
+      "poster": "https://image.tmdb.org/t/p/w500/hYthRgS1nvQkGILn9YmqsF8kSk6.jpg",
+      "releaseInfo": "2024-11-17"
+    },
+    {
       "id": "tt31289994",
       "type": "series",
       "name": "The Lowdown",
       "poster": "https://image.tmdb.org/t/p/w500/jgfHT7oLJtBDlRABiTTEp2AEret.jpg",
       "releaseInfo": "2025-09-23"
+    },
+    {
+      "id": "tt2531336",
+      "type": "series",
+      "name": "Lupin",
+      "poster": "https://image.tmdb.org/t/p/w500/h6Z2oogE4mJk2uffdtIlLhb0EHx.jpg",
+      "releaseInfo": "2021-01-08"
+    },
+    {
+      "id": "tt31438328",
+      "type": "series",
+      "name": "This City Is Ours",
+      "poster": "https://image.tmdb.org/t/p/w500/75BwofwAZbf6GlhP2m6NPpP3bW2.jpg",
+      "releaseInfo": "2025-03-23"
     },
     {
       "id": "tt9140554",
@@ -628,48 +558,6 @@
       "releaseInfo": "2021-06-09"
     },
     {
-      "id": "tt0098936",
-      "type": "series",
-      "name": "Twin Peaks",
-      "poster": "https://image.tmdb.org/t/p/w500/lA9CNSdo50iQPZ8A2fyVpMvJZAf.jpg",
-      "releaseInfo": "1990-04-08"
-    },
-    {
-      "id": "tt1520211",
-      "type": "series",
-      "name": "The Walking Dead",
-      "poster": "https://image.tmdb.org/t/p/w500/ng3cMtxYKt1OSQYqFlnKWnVsqNO.jpg",
-      "releaseInfo": "2010-10-31"
-    },
-    {
-      "id": "tt0108778",
-      "type": "series",
-      "name": "Friends",
-      "poster": "https://image.tmdb.org/t/p/w500/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg",
-      "releaseInfo": "1994-09-22"
-    },
-    {
-      "id": "tt2805096",
-      "type": "series",
-      "name": "Chicago P.D.",
-      "poster": "https://image.tmdb.org/t/p/w500/w7R4ooo2IbOfBKOoMDwaiMGsNQf.jpg",
-      "releaseInfo": "2014-01-08"
-    },
-    {
-      "id": "tt12004706",
-      "type": "series",
-      "name": "Panchayat",
-      "poster": "https://image.tmdb.org/t/p/w500/cPPhduQk1eX0MAE2JDaQRh3UZB5.jpg",
-      "releaseInfo": "2020-03-05"
-    },
-    {
-      "id": "tt3032476",
-      "type": "series",
-      "name": "Better Call Saul",
-      "poster": "https://image.tmdb.org/t/p/w500/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
-      "releaseInfo": "2015-02-08"
-    },
-    {
       "id": "tt22202452",
       "type": "series",
       "name": "Pluribus",
@@ -677,11 +565,60 @@
       "releaseInfo": "2025-11-06"
     },
     {
-      "id": "tt13406094",
+      "id": "tt0436992",
       "type": "series",
-      "name": "The White Lotus",
-      "poster": "https://image.tmdb.org/t/p/w500/gbSaK9v1CbcYH1ISgbM7XObD2dW.jpg",
-      "releaseInfo": "2021-07-11"
+      "name": "Doctor Who",
+      "poster": "https://image.tmdb.org/t/p/w500/lHfmc6d8pOVFrD0eOKPiDbjeucG.jpg",
+      "releaseInfo": "2005-03-26"
+    },
+    {
+      "id": "tt33270224",
+      "type": "series",
+      "name": "Cupertino",
+      "poster": "https://image.tmdb.org/t/p/w500/70AhJpOqU2oKyQF2paJA764CSje.jpg",
+      "releaseInfo": "2026-10-08"
+    },
+    {
+      "id": "tt0386676",
+      "type": "series",
+      "name": "The Office",
+      "poster": "https://image.tmdb.org/t/p/w500/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg",
+      "releaseInfo": "2005-03-24"
+    },
+    {
+      "id": "tt7235466",
+      "type": "series",
+      "name": "9-1-1",
+      "poster": "https://image.tmdb.org/t/p/w500/u6HuWWohheyzAj5PUn4rBd0eH92.jpg",
+      "releaseInfo": "2018-01-03"
+    },
+    {
+      "id": "tt36153709",
+      "type": "series",
+      "name": "The Fall and Rise of Reggie Dinkins",
+      "poster": "https://image.tmdb.org/t/p/w500/tqWQdIdzDj9gBgVg5Sd50mpcx65.jpg",
+      "releaseInfo": "2026-01-18"
+    },
+    {
+      "id": "tt9288030",
+      "type": "series",
+      "name": "Reacher",
+      "poster": "https://image.tmdb.org/t/p/w500/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg",
+      "releaseInfo": "2022-02-03"
+    },
+    {
+      "id": "tt19231492",
+      "type": "series",
+      "name": "Dark Matter",
+      "poster": "https://image.tmdb.org/t/p/w500/2DPmTlv8F0V1TQBPmlsGOVOhtWk.jpg",
+      "releaseInfo": "2024-05-07"
+    },
+    {
+      "id": "tt40197357",
+      "type": "series",
+      "name": "Scrubs",
+      "poster": "https://image.tmdb.org/t/p/w500/l1EzNg0WMaoAu7oPa2oMXLizc4W.jpg",
+      "releaseInfo": "2026-02-25"
     },
     {
       "id": "tt15571732",
@@ -691,18 +628,74 @@
       "releaseInfo": "2024-09-18"
     },
     {
-      "id": "tt1877368",
+      "id": "tt6151526",
       "type": "series",
-      "name": "The Great British Bake Off",
-      "poster": "https://image.tmdb.org/t/p/w500/bNa02AorKSBRfWfVPmsL7SJrdfs.jpg",
-      "releaseInfo": "2010-08-17"
+      "name": "The Rainmaker",
+      "poster": "https://image.tmdb.org/t/p/w500/q8l0lj20amBFi0SBs8NI9yJpaHq.jpg",
+      "releaseInfo": "2025-08-15"
     },
     {
-      "id": "tt24053860",
+      "id": "tt0098936",
       "type": "series",
-      "name": "The Day of the Jackal",
-      "poster": "https://image.tmdb.org/t/p/w500/tYLecM3WSEjlkKhkGiH5G68Dprm.jpg",
-      "releaseInfo": "2024-11-07"
+      "name": "Twin Peaks",
+      "poster": "https://image.tmdb.org/t/p/w500/lA9CNSdo50iQPZ8A2fyVpMvJZAf.jpg",
+      "releaseInfo": "1990-04-08"
+    },
+    {
+      "id": "tt0072562",
+      "type": "series",
+      "name": "Saturday Night Live",
+      "poster": "https://image.tmdb.org/t/p/w500/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg",
+      "releaseInfo": "1975-10-11"
+    },
+    {
+      "id": "tt1520211",
+      "type": "series",
+      "name": "The Walking Dead",
+      "poster": "https://image.tmdb.org/t/p/w500/ng3cMtxYKt1OSQYqFlnKWnVsqNO.jpg",
+      "releaseInfo": "2010-10-31"
+    },
+    {
+      "id": "tt5290382",
+      "type": "series",
+      "name": "MINDHUNTER",
+      "poster": "https://image.tmdb.org/t/p/w500/fbKE87mojpIETWepSbD5Qt741fp.jpg",
+      "releaseInfo": "2017-10-13"
+    },
+    {
+      "id": "tt0108778",
+      "type": "series",
+      "name": "Friends",
+      "poster": "https://image.tmdb.org/t/p/w500/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg",
+      "releaseInfo": "1994-09-22"
+    },
+    {
+      "id": "tt5622316",
+      "type": "series",
+      "name": "The Chosen",
+      "poster": "https://image.tmdb.org/t/p/w500/nr0r7YTn1l84KLG1iCSO5ofHTvO.jpg",
+      "releaseInfo": "2019-04-21"
+    },
+    {
+      "id": "tt13406094",
+      "type": "series",
+      "name": "The White Lotus",
+      "poster": "https://image.tmdb.org/t/p/w500/gbSaK9v1CbcYH1ISgbM7XObD2dW.jpg",
+      "releaseInfo": "2021-07-11"
+    },
+    {
+      "id": "tt3914054",
+      "type": "series",
+      "name": "We Were Liars",
+      "poster": "https://image.tmdb.org/t/p/w500/3RQoNwSkJkh92KL2TwpMlHP5FkT.jpg",
+      "releaseInfo": "2025-06-18"
+    },
+    {
+      "id": "tt4934214",
+      "type": "series",
+      "name": "Taskmaster",
+      "poster": "https://image.tmdb.org/t/p/w500/3dD3EdDy3Br06YU6j40ddVH7EVW.jpg",
+      "releaseInfo": "2015-07-28"
     }
   ]
 }
