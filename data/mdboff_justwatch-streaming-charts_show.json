@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795608128695,
+  "scraped_at": 1795651338150,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -75,6 +75,14 @@
       "year": 2026,
       "release_date": "2026-10-29",
       "poster": "https://image.tmdb.org/t/p/w200/nyvXVcPnHEwVmqCdzjjCsu1jqhm.jpg"
+    },
+    {
+      "imdb_id": "tt36843594",
+      "type": "series",
+      "title": "DIG",
+      "year": 2026,
+      "release_date": "2026-11-23",
+      "poster": "https://image.tmdb.org/t/p/w200/eyW6V0R0SzG3BqtYKhlZKGBaUCn.jpg"
     },
     {
       "imdb_id": "tt31842126",
@@ -1011,14 +1019,6 @@
       "year": 2026,
       "release_date": "2026-10-06",
       "poster": "https://image.tmdb.org/t/p/w200/ifmi1Rr9v2qckSsxhNiQIVLE51p.jpg"
-    },
-    {
-      "imdb_id": "tt8005176",
-      "type": "series",
-      "title": "The Feed",
-      "year": 2019,
-      "release_date": "2019-09-16",
-      "poster": "https://image.tmdb.org/t/p/w200/qLC4AyssOIIF4oacH3WC78hBZv7.jpg"
     },
     {
       "imdb_id": "tt3530232",
