@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1795608109139,
+  "scraped_at": 1795651314007,
   "items": [
     {
       "slug": "43srv-the-altruists",
@@ -25,6 +25,16 @@
       "first_air_date": "2026-11-18"
     },
     {
+      "slug": "45lje-gordon",
+      "imdb_id": "tt41559886",
+      "title": "Gordon",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "yLgl70D5Up0MlvBWP2MJTLAbFAF.jpg",
+      "description": "Aníbal Gordon rises from a small-time thief to a convicted murderer in Argentina during the '70s.",
+      "first_air_date": "2026-11-18"
+    },
+    {
       "slug": "3x7hg-honey",
       "imdb_id": "tt36329495",
       "title": "Honey",
@@ -39,7 +49,7 @@
       "imdb_id": "tt38707741",
       "title": "Murder in Galicia",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "pk7ewQL2vAxtit0YmDEURmAInS9.jpg",
       "description": "In Pazos, Irene is brutally attacked, and Civil Guard sergeant Elías suspects her husband Aniceto, racing against time to uncover the truth before it’s too late.",
       "first_air_date": "2026-11-13"
@@ -1230,7 +1240,7 @@
       "title": "Fightland",
       "year": 2026,
       "score": 5,
-      "poster_path": "dPHG2GEIFHkjMtswYltBAEU4UK4.jpg",
+      "poster_path": "qRlOEIiwkfLy6ERRMbyQNGQQ6Lc.jpg",
       "description": "A disgraced, formerly incarcerated boxing champion returns to London to seek vengeance against the crime syndicate he thinks betrayed him.",
       "first_air_date": "2026-07-31"
     },
@@ -1433,16 +1443,6 @@
       "poster_path": "uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
       "description": "Best friends Debbie and Judith are forced on the run when Debbie discovers Judith isn't a forensic accountant, she's an international assassin! With a mysterious figure chasing them, and Debbie's husband involved in something deeply corrupt, it's a race against time and a road trip across Europe to untangle the truth and stay alive.",
       "first_air_date": "2026-07-15"
-    },
-    {
-      "slug": "3pl85-lucky",
-      "imdb_id": "tt34866681",
-      "title": "Lucky",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "xsrkiXg8EuNNtbPtbmvCxg95gK7.jpg",
-      "description": "When a multi-million-dollar heist goes sideways, con artist Lucky is forced to go on the run. Pursued by both the FBI and a ruthless crime boss, Lucky must fight for her life—and a way out.",
-      "first_air_date": "2026-07-14"
     }
   ]
 }
