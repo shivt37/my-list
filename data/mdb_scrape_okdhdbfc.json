@@ -2,8 +2,38 @@
   "catalog_id": "mdb_scrape_okdhdbfc",
   "name": "Latest Shows",
   "type": "series",
-  "scraped_at": 1795694510973,
+  "scraped_at": 1795737689265,
   "items": [
+    {
+      "slug": "2vsfw-blade-runner-2099",
+      "imdb_id": "tt18224594",
+      "title": "Blade Runner 2099",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "d8IKBDXQvj3d6clsjqydT4xcw14.jpg",
+      "description": "Fifty years after the events of Blade Runner 2049, Los Angeles has been reborn, just not by humanity. Cora, a fugitive in a final bid to stop running, takes on one last identity: a Blade Runner. Forced to partner with Olwen, a Replicant days from dying, she hunts down a runaway hiding a truth that could collapse their fragile city.",
+      "first_air_date": "2026-11-24"
+    },
+    {
+      "slug": "3yvaj-dig",
+      "imdb_id": "tt36843594",
+      "title": "DIG",
+      "year": 2026,
+      "score": 4,
+      "poster_path": "eyW6V0R0SzG3BqtYKhlZKGBaUCn.jpg",
+      "description": "Follow four women who work at an archeological dig in Greece. When the team uncovers a long-buried secret with the potential to rewrite history, they find themselves at the center of a high-stakes international conspiracy.",
+      "first_air_date": "2026-11-23"
+    },
+    {
+      "slug": "45onz-the-trials-of-karen-read",
+      "imdb_id": "tt33004920",
+      "title": "The Trials of Karen Read",
+      "year": 2026,
+      "score": null,
+      "poster_path": "449rpusr7ZtAqSsLcYHXqiIJfw7.jpg",
+      "description": "An accident, a deadly fight or an elaborate cover-up? This true-crime series digs into the murder trials of Karen Read that sparked viral conspiracies.",
+      "first_air_date": "2026-11-23"
+    },
     {
       "slug": "43srv-the-altruists",
       "imdb_id": "tt36786185",
@@ -19,7 +49,7 @@
       "imdb_id": "tt44079238",
       "title": "The Law of Beasts",
       "year": 2026,
-      "score": 3,
+      "score": 4,
       "poster_path": "jnftYgGREN8IN1SgbYRdvHTUkJC.jpg",
       "description": "When the case of a child serial killer resurfaces after 25 years as an unresolved legal and social problem, two former friends are forced to confront the choices that broke their friendship and shaped their lives.",
       "first_air_date": "2026-11-18"
@@ -285,6 +315,16 @@
       "first_air_date": "2026-10-23"
     },
     {
+      "slug": "42l4q-did-someone-happen-to-mention-me",
+      "imdb_id": "tt38337376",
+      "title": "Did Someone Happen to Mention Me?",
+      "year": 2026,
+      "score": 2,
+      "poster_path": "wC91d4hwTv4fqeUzXy8RzE9nGQD.jpg",
+      "description": "Once Japan's most renowned actor, Gen is suddenly forgotten. Fueled by a need for recognition, he claws his way back from zero in this comedy.",
+      "first_air_date": "2026-10-22"
+    },
+    {
       "slug": "45a7p-it-gets-worse",
       "imdb_id": "tt35926686",
       "title": "It Gets Worse",
@@ -389,7 +429,7 @@
       "imdb_id": "tt40385667",
       "title": "Treasure Island",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "xZQ5ABJF1iLjGq9xR4MthpgQEFF.jpg",
       "description": "Young Jim Hawkins and his mother Bess come into possession of a legendary pirate’s treasure map and are drawn into a deadly voyage across the Atlantic, where Jim is forced to navigate mutiny, violence and betrayal, leaving him forever changed.",
       "first_air_date": "2026-10-11"
@@ -1179,7 +1219,7 @@
       "imdb_id": "tt36643714",
       "title": "Operation Safed Sagar: The Untold Story of the Kargil War",
       "year": 2026,
-      "score": 7,
+      "score": 8,
       "poster_path": "v4i6T3oDXMYJsYMKFH0Dvnd1laD.jpg",
       "description": "As the Kargil War erupts between India and Pakistan, the Golden Arrows squadron of the Air Force takes flight on a dangerous mission behind enemy lines.",
       "first_air_date": "2026-08-07"
@@ -1403,46 +1443,6 @@
       "poster_path": "rgg7vCZ9HIdT4vYGxOvg84L7ngF.jpg",
       "description": "It’s Sue’s worst nightmare - an overly attentive, socially inept, second-hand robot carer. But maybe this droid has its uses...",
       "first_air_date": "2026-07-17"
-    },
-    {
-      "slug": "42kl2-the-hairdresser-mysteries",
-      "imdb_id": "tt38264348",
-      "title": "The Hairdresser Mysteries",
-      "year": 2026,
-      "score": null,
-      "poster_path": "7DfK1BwJb3GEBsudU2eLvuK4QZL.jpg",
-      "description": "High-end hairdresser Lily Petal opts out of the competitive city scene to buy a small village shop at the top of a cobbled street.",
-      "first_air_date": "2026-07-17"
-    },
-    {
-      "slug": "44l1m-until-death-do-us-part",
-      "imdb_id": "tt38573695",
-      "title": "Until Death Do Us Part",
-      "year": 2026,
-      "score": null,
-      "poster_path": "ioVQIqzTkyaB020jNC1849U7A9D.jpg",
-      "description": "When family lawyer Malin and her husband Tobias have the neighbours over for a drink, the police come knocking. The babysitter supposed to be looking after Malin and Tobias's children has been murdered, and Tobias is the primary suspect.",
-      "first_air_date": "2026-07-17"
-    },
-    {
-      "slug": "44rj2-the-f-ward",
-      "imdb_id": "tt38689352",
-      "title": "The F Ward",
-      "year": 2026,
-      "score": null,
-      "poster_path": "7OGSrmR4U1cRwj9rNYVac8qVg5C.jpg",
-      "description": "Failed medical interns get their last shot at Sydney’s underfunded Pines Hospital, where they battle to overcome personal shortcomings and past mistakes in the hope of finally becoming doctors.",
-      "first_air_date": "2026-07-17"
-    },
-    {
-      "slug": "39o43-ride-or-die",
-      "imdb_id": "tt30494226",
-      "title": "Ride or Die",
-      "year": 2026,
-      "score": 7,
-      "poster_path": "uWqEnvpwa2U28QheMdUdEcr4U0M.jpg",
-      "description": "Best friends Debbie and Judith are forced on the run when Debbie discovers Judith isn't a forensic accountant, she's an international assassin! With a mysterious figure chasing them, and Debbie's husband involved in something deeply corrupt, it's a race against time and a road trip across Europe to untangle the truth and stay alive.",
-      "first_air_date": "2026-07-15"
     }
   ]
 }

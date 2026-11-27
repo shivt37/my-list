@@ -2,8 +2,28 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795694462941,
+  "scraped_at": 1795737646632,
   "items": [
+    {
+      "slug": "3ed3g-drishyam-the-conclusion",
+      "imdb_id": "tt27050858",
+      "title": "Drishyam: The Conclusion",
+      "year": 2026,
+      "score": 8,
+      "poster_path": "67FsF2kpgEZ1T5Qos4adgqm9dLf.jpg",
+      "description": "Years after outsmarting the police, Vijay Salgaonkar's past resurfaces when a new evidence threatens to expose his secret. As the investigation reopens, he must outwit the system once again to save his family.",
+      "digital_release_date": "2026-11-27"
+    },
+    {
+      "slug": "44pta-hanuman-ansh",
+      "imdb_id": "tt39390582",
+      "title": "Hanuman Ansh",
+      "year": 2026,
+      "score": 7,
+      "poster_path": "as2Y3zGUa2IUS3uAx2sh6Ano3es.jpg",
+      "description": "A grieving boy seeks God to meet his departed mother, and in finding the divine, learns to serve humanity with miracles of love, food and silent blessings, becoming Hanuman Ansh, Neem Karoli Baba.",
+      "digital_release_date": "2026-11-27"
+    },
     {
       "slug": "3xica-the-mosquito-bowl",
       "imdb_id": "tt36413910",
@@ -79,7 +99,7 @@
       "imdb_id": "tt38258118",
       "title": "Best Pancakes in the County",
       "year": 2026,
-      "score": 5,
+      "score": 4,
       "poster_path": "wXVYDQl2ENk3NhT1ETS4C8cAEOC.jpg",
       "description": "Over the course of one explosive night, a small-town diner becomes the epicenter of a deadly standoff involving rogue federal agents, a fast-talking con man with a dangerous past, and a waitress harboring secrets of her own.",
       "digital_release_date": "2026-11-20"
@@ -189,7 +209,7 @@
       "imdb_id": "tt32634611",
       "title": "Daayra",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "eAsR8oCZGCOqaxDVt0c0WrRFjrn.jpg",
       "description": "Raman, who has had a shady record with staged encounters and police brutality, finds himself cornered as Ajooni challenges him on every step.",
       "digital_release_date": "2026-11-13"
@@ -209,7 +229,7 @@
       "imdb_id": "tt34798706",
       "title": "Extra Geography",
       "year": 2026,
-      "score": 4,
+      "score": 5,
       "poster_path": "yhHRpLhtaFXGYMsE5LuaRvZYs77.jpg",
       "description": "In an English girls boarding school, two teenage best friends grapple with the challenges of girlhood—friendship, boys, studies, and growing up—and embark on their school project... falling in love.",
       "digital_release_date": "2026-11-13"
@@ -462,6 +482,16 @@
       "score": 7,
       "poster_path": "58g3PjU11nBszOWc836lC8t2Mzi.jpg",
       "description": "Latif, a devoutly religious hitman, struggles to balance work, faith and fatherhood. When his wife dies, he embarks on a desperate journey across Houston to protect his children, confronting the forces closing in around him – and the beliefs threatening to unravel within.",
+      "digital_release_date": "2026-11-03"
+    },
+    {
+      "slug": "4406c-marrow",
+      "imdb_id": "tt34686688",
+      "title": "Marrow",
+      "year": 2026,
+      "score": null,
+      "poster_path": "jBDIainOGJbpjiyCrfRgPvzpiia.jpg",
+      "description": "A Vodcast host declining in popularity receives the career opportunity of a lifetime when a mysterious stranger invites her into its dangerous world.",
       "digital_release_date": "2026-11-03"
     },
     {
@@ -1413,36 +1443,6 @@
       "poster_path": "sxAwnj01pLfDBTA4WobJtJw7y9q.jpg",
       "description": "In the near future, architect Otone Komoto is married to Kensuke, who runs a construction company. The married couple decide to welcome a humanoid robot into their home as their son.",
       "digital_release_date": "2026-09-08"
-    },
-    {
-      "slug": "3uiam-at-work",
-      "imdb_id": "tt37660587",
-      "title": "At Work",
-      "year": 2026,
-      "score": 6,
-      "poster_path": "iqeF5Yr65hPlEJojJGESjVclf6h.jpg",
-      "description": "A successful photographer gives up everything to devote himself to writing and discovers poverty.",
-      "digital_release_date": "2026-09-07"
-    },
-    {
-      "slug": "3hni0-dhamaal-4",
-      "imdb_id": "tt27548557",
-      "title": "Dhamaal 4",
-      "year": 2026,
-      "score": 3,
-      "poster_path": "qUkP6Njgg1RQGMkmNcfsnmFET1e.jpg",
-      "description": "The Dhamaal boys are back for another treasure hunt, facing hilarious challenges in their quest for the Treasure of Life.",
-      "digital_release_date": "2026-09-04"
-    },
-    {
-      "slug": "3n6cj-come-with-me",
-      "imdb_id": "tt32500181",
-      "title": "Come with Me",
-      "year": 2026,
-      "score": null,
-      "poster_path": "pJmDaRNtiyuUZvfQpcSgcPlFCZB.jpg",
-      "description": "Working-class Simon Ward's life unravels after a traumatic home invasion, mounting problems at work and the loss of his best friend. Falling under the influence of rhetoric-spewing radio host Dalton Kirby, Simon spirals into a violent attempt to correct the injustice he believes surrounds him.",
-      "digital_release_date": "2026-09-04"
     }
   ]
 }
