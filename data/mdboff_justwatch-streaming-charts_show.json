@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795694527933,
+  "scraped_at": 1795737706092,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -605,6 +605,14 @@
       "poster": "https://image.tmdb.org/t/p/w200/h2dXm0CXMkycA9LrZbXMUD8SuTL.jpg"
     },
     {
+      "imdb_id": "tt36937503",
+      "type": "series",
+      "title": "Anna Pigeon",
+      "year": 2026,
+      "release_date": "2026-08-07",
+      "poster": "https://image.tmdb.org/t/p/w200/iLhi3wqsLOdHB61vySJRm7y09XS.jpg"
+    },
+    {
       "imdb_id": "tt0460681",
       "type": "series",
       "title": "Supernatural",
@@ -659,14 +667,6 @@
       "year": 1993,
       "release_date": "1993-09-10",
       "poster": "https://image.tmdb.org/t/p/w200/rcBx0p8h51LHceyhquYMxbspJQu.jpg"
-    },
-    {
-      "imdb_id": "tt36937503",
-      "type": "series",
-      "title": "Anna Pigeon",
-      "year": 2026,
-      "release_date": "2026-08-07",
-      "poster": "https://image.tmdb.org/t/p/w200/iLhi3wqsLOdHB61vySJRm7y09XS.jpg"
     },
     {
       "imdb_id": "tt35934755",
@@ -738,7 +738,7 @@
       "title": "The Hunting Wives",
       "year": 2025,
       "release_date": "2025-07-21",
-      "poster": "https://image.tmdb.org/t/p/w200/knR0tDKgFwsUMxe0MqZSWQYhwpL.jpg"
+      "poster": "https://image.tmdb.org/t/p/w200/iKL02GmejLCGBJr7XHU82vvqA1C.jpg"
     },
     {
       "imdb_id": "tt2805096",
@@ -973,14 +973,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/br3xWBUu7W0dXsMev0XXVvoMxuE.jpg"
     },
     {
-      "imdb_id": "tt38448408",
-      "type": "series",
-      "title": "The Killings at Parrish Station",
-      "year": 2026,
-      "release_date": "2026-06-24",
-      "poster": "https://image.tmdb.org/t/p/w200/9XfUjpDmFKLG9EYLzSTX2jj5JR8.jpg"
-    },
-    {
       "imdb_id": "tt30796986",
       "type": "series",
       "title": "NCIS: Origins",
@@ -1155,6 +1147,14 @@
       "year": 2016,
       "release_date": "2016-02-21",
       "poster": "https://image.tmdb.org/t/p/w200/1MccRnw41qQjREuZkovqP2UX1i3.jpg"
+    },
+    {
+      "imdb_id": "tt11680642",
+      "type": "series",
+      "title": "Pantheon",
+      "year": 2022,
+      "release_date": "2022-09-01",
+      "poster": "https://image.tmdb.org/t/p/w200/28xQt18ryWRcx9tBkK0MBsNNRw5.jpg"
     },
     {
       "imdb_id": "tt35515227",
