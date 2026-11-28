@@ -2,7 +2,7 @@
   "catalog_id": "mdboff_justwatch-streaming-charts_show",
   "name": "JustWatch Streaming Charts Movies & Shows",
   "type": "series",
-  "scraped_at": 1795780915923,
+  "scraped_at": 1795824139728,
   "items": [
     {
       "imdb_id": "tt8014982",
@@ -901,14 +901,6 @@
       "poster": "https://image.tmdb.org/t/p/w200/esU4D2XSA7hNHC8G2bmMkvX5g5H.jpg"
     },
     {
-      "imdb_id": "tt39469996",
-      "type": "series",
-      "title": "Newlyweds",
-      "year": 2026,
-      "release_date": "2026-10-23",
-      "poster": "https://image.tmdb.org/t/p/w200/9ZAPU2IRSdI9xdVb42z2F1momJc.jpg"
-    },
-    {
       "imdb_id": "tt3647998",
       "type": "series",
       "title": "Taboo",
@@ -995,6 +987,14 @@
       "year": 2026,
       "release_date": "2026-04-27",
       "poster": "https://image.tmdb.org/t/p/w200/xfMN8liyfR06b4yRg8bkZMV9KTQ.jpg"
+    },
+    {
+      "imdb_id": "tt39469996",
+      "type": "series",
+      "title": "Newlyweds",
+      "year": 2026,
+      "release_date": "2026-10-23",
+      "poster": "https://image.tmdb.org/t/p/w200/9ZAPU2IRSdI9xdVb42z2F1momJc.jpg"
     },
     {
       "imdb_id": "tt36303968",
