@@ -2,7 +2,7 @@
   "catalog_id": "mdb_scrape_bnjmojij",
   "name": "Latest Movie (Digital Releases)",
   "type": "movie",
-  "scraped_at": 1795780851500,
+  "scraped_at": 1795824055708,
   "items": [
     {
       "slug": "3ed3g-drishyam-the-conclusion",
@@ -25,6 +25,16 @@
       "digital_release_date": "2026-11-27"
     },
     {
+      "slug": "34jsf-street-fighter",
+      "imdb_id": "tt27419420",
+      "title": "Street Fighter",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "dJPT2Uf12X6aFg8i5N67NTpIZ9t.jpg",
+      "description": "In 1993, estranged Street Fighters Ryu and Ken Masters are thrown back into combat when the mysterious Chun-Li recruits them for the next World Warrior Tournament: a brutal clash of fists, fate, and fury. But behind this battle royale lies a deadly conspiracy that forces them to face off against each other and the demons of their past. And if they don't, it's GAME OVER!",
+      "digital_release_date": "2026-11-26"
+    },
+    {
       "slug": "3xica-the-mosquito-bowl",
       "imdb_id": "tt36413910",
       "title": "The Mosquito Bowl",
@@ -42,6 +52,16 @@
       "score": 7,
       "poster_path": "5sVi66aTT9X2uMldmIwu9JW3hZ2.jpg",
       "description": "On the outskirts of a village by the sea, lives a Fisherwoman; smelly, single and perpetually ridiculed. One day, fed up with her stuffy, small-minded neighbours, she commissions herself a husband to be made from wicker. In an otherwise conservative town, this unconventional romance sparks outrage, jealousy and chaos.",
+      "digital_release_date": "2026-11-24"
+    },
+    {
+      "slug": "3fibl-way-of-the-warrior-kid",
+      "imdb_id": "tt32213169",
+      "title": "Way of the Warrior Kid",
+      "year": 2026,
+      "score": 5,
+      "poster_path": "atI81xXKNVah7PJFBo3aXqQKtnG.jpg",
+      "description": "Jake is an injured Navy SEAL who becomes a mentor for his shy, struggling nephew Marc. Using the principles of his military training, Jake teaches Marc how to be a Warrior Kid as he enters high school.",
       "digital_release_date": "2026-11-24"
     },
     {
@@ -765,16 +785,6 @@
       "digital_release_date": "2026-10-20"
     },
     {
-      "slug": "40adx-firstborn",
-      "imdb_id": "tt31617935",
-      "title": "Firstborn",
-      "year": 2025,
-      "score": null,
-      "poster_path": "sFFmc37zA5ELhALNfOlfNn45dfx.jpg",
-      "description": "Ada and her partner Rino move into a secluded villa surrounded by nature. Expecting their second child, Ada finds herself haunted by the unresolved grief of losing their firstborn. As the due date approaches, the sorrow she has long suppressed resurfaces, and she begins to sense a disturbing presence-convinced that her late son has returned from beyond to prevent the birth of his sibling. Is something truly supernatural at play, or is Ada slowly losing her grip on reality?",
-      "digital_release_date": "2026-10-20"
-    },
-    {
       "slug": "41iqj-tiny-fugitives",
       "imdb_id": "tt32827454",
       "title": "Tiny Fugitives",
@@ -1433,16 +1443,6 @@
       "poster_path": "bzzybUph7A2nrzKvXsGWXZlNquP.jpg",
       "description": "Five years after ASK Agency closed, debut director Andréa loses her lead actor just days before filming and reunited with her old team — for better or worse.",
       "digital_release_date": "2026-09-10"
-    },
-    {
-      "slug": "3vs1j-drawn-together",
-      "imdb_id": "tt36073210",
-      "title": "Drawn Together",
-      "year": 2026,
-      "score": 5,
-      "poster_path": "6rpvddXbaQPOi0fB2HKWbZ3uUSg.jpg",
-      "description": "Marfil, daughter of a powerful Spanish businessman, sees her life in New York turned upside down when she is kidnapped and released without explanation. Her father hires Sebastian Moore as bodyguard and, forced to spend every minute together, an inevitable attraction ignites in a world where nothing is as it seems.",
-      "digital_release_date": "2026-09-09"
     }
   ]
 }
